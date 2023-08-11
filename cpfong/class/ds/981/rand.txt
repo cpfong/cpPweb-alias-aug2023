@@ -1,0 +1,2 @@
+        Randomize()
+        Console.Write(Int(6 * Rnd() + 1))

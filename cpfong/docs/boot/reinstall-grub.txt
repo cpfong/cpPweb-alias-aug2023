@@ -1,0 +1,10 @@
+Try this to recover grub:
+--
+1    Open the live version of Ubuntu (either brun the LiveCD or install the image to a bootable USB device using Startup Disk Creator)
+2    Open terminal and run sudo fdisk -l to see where Linux is installed on
+3    Run sudo mount /dev/sdxY /mnt where x is altter and Y a number you have found in the previous step
+4    Run sudo grub-install --root-directory=/mnt /dev/sdx to install grub
+5    Run sudo update-grub to update grub
+6    Reboot
+
+

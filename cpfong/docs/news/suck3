@@ -1,0 +1,33 @@
+發信人: Leeym.bbs@bbs.leeym.com (倒數 77 天的 CAEer), 看板: NetNews
+標  題: Re: suck 抓信一問
+發信站: 臥龍居 (Tue Mar 13 23:57:15 2001) (null)
+轉信站: Maxwell!bbs.ee.ntu!freebsd.ntu!news.leeym.com!LeeymBBS
+
+※ 引述《everywhere.bbs@bbs.cs.nthu.edu.tw》之銘言：
+: ※ 引述《everywhere (北斗星空的夜晚~)》之銘言：
+: > 我看 原文的說明檔 suck 的history 為 /usr/news/db/history
+: > 說明書上說用 configure -HF 我試了好久也改不出來 請問誰知道
+: > 可以跟我說 謝謝 後來只想到 到ln指令 把我的history指向/usr/news/db
+: > 勉強可以..........不過我還是想知道要怎麼改它的路徑
+:    呵呵 我好像找到了 suck_config.h 吧 沒事
+        改程式？太狠了吧.. 貼一下我的設定檔..
+
+# cat /usr/local/news/.suck/suckrc
+-dd /usr/local/news/.suck/data
+-dm /usr/local/news/.suck/msgs
+-dt /usr/local/news/.suck/temp
+-bp
+-hl localhost
+-c
+-HF /usr/local/news/db/history
+-M
+-f
+-F
+-A
+
+--
+ Yen-Ming Lee [李彥明]          | http://cae.ce.ntu.edu.tw/~leeym/
+ CAE Group, Civil Engineering, NTU, Taipei, Taiwan
+--
+※ From: bbs.leeym.com
+

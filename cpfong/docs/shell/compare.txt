@@ -1,0 +1,20 @@
+https://www.computerhope.com/unix/test.htm
+
+Note: Some shells also accept "==" for string comparison; this is NOT portable, 
+a single "=" should be used for strings, and "-eq" for integers.
+
+if [ "$a" = "myString" ] # note [ is test
+test 100 -gt 199 && printf "100>99\n" || printf "less"
+
+string OP
+	=	note: ==  no good for its bad portability
+	!=
+
+int OP
+	-ge -gt :great_or_equal greter
+	-le -lt :less_or_equal less
+	-eq -ne :equal not_equal
+
+Q: mutiple operation using test?
+A: using &&
+test 5 -gt 4 && printf "5 " && printf "> 4\n" 

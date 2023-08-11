@@ -1,0 +1,41 @@
+steps 2021feb03
+--
+ref
+https://docs.freebsd.org/en/articles/nanobsd/howto.html
+https://forums.freebsd.org/threads/nanobsd-adding-packages-on-freebsd-10-or-later.51803/
+https://forums.freebsd.org/threads/nanobsd-build-filesystem-full-error-code.73499/page-2#post-449204
+
+mkdir /usr/src/tools/tools/nanobsd/Pkg
+cd Pkg
+pkg fetch -o ./ -d pkg tmux
+cp All/*.txz .
+
+@sun-> cat defaults.sh | grep ^NANO_PACKAGE_DIR
+NANO_PACKAGE_DIR=${NANO_SRC}/${NANO_TOOLS}/Pkg
+
+
+-- ref on FreeBSD9.1 
+Q: how to add one package into nanoBSD? ex: dhcpd
+--
+cd /usr/ports/dirABC/dhcpd; make -DBATCH package
+mkdir /usr/src/tools/tools/nanobsd/dump_pkgs; cd to dump_pkgs; pkg_create -b xxx_ver_aa_bb (pkg_info can help)
+nanobsd/fill_pkg.sh /usr/.../dump_pkgs(full path!!) Pkg /usr/ports/dir/foo other port ...
+now you can put cust_pkg into your.config (for nanobsd.sh)
+
+pkg install:
+done it in /usr/ports and then vi nanobsd/fill_pkg.sh, so nanobsd.sh can put this package into /usr/local
+
+steps:
+--
+cd /usr/ports/net/isc-dhcp41-server/
+make package
+when done it will say
+===> Building package for isc... and all related files now under this port directory
+
+pkg_info
+mkdir /usr/src/tools/tools/nanobsd/dump_pkgs; cd to dump_pkgs; pkg_create -b isc-dhcp41-server-4.1.e_7,2
+sh ./fill_pkg.sh /usr/src/tools/tools/nanobsd/dump_pkgs/ Pkg /usr/ports/sysutils/screen /usr/orts/net/isc-dhcp41-server
+
+note: real packages installed into nanoBSD will be on Pkg dir, and you should put them use fill_pkg.sh
+
+ok now it will create dir Pkg and synlink this file

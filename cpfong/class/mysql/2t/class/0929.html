@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0064)http://center.fjtc.edu.tw/~cpfong/class/mysql/2t/class/0929.html -->
+<HTML><HEAD>
+<META http-equiv=Content-Type content="text/html; charset=big5">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>0927 <BR>
+<OL type=disc>
+  <LI>更動 ~/.profile 檔使得一進入 cpfong 主機即有主機提示的 prompt 
+  <LI>更多的 vi <A href="http://info.sayya.org/~edt1023/vim/node1.html">譯者 Edward 
+  G.J. Lee 李果正</A> 
+  <LI>給我多些 unix <A 
+  href="http://center.fjtc.edu.tw/~cpfong/docs/old/unix1.html">作者 李志祥 
+</A></LI></OL>
+<OL type=disc>MySQL 學習手札 
+  <LI>P1-10 1.5 檢查 MySQL 系統是否正常 ? mysql 及 mysql -p 
+  <OL>管理人員須知 (學生如為系統管理者則必需要知, 如只為使用者則可以不必知) 
+    <LI>mysql -p 進入後 mysql&gt; use mysql; 
+    <LI>desc user; select user from user where user = 'root'; 
+    <LI>grant create, create, delete, index, insert, select, update on tta to 
+    p2136101; 
+    <LI>P1-11 1.6 設定使用者的密碼 SET PASSWORD FOR 'bob'@'localhost' = PASSWORD('newpass'); 
+    <LI>P1-12 1.8 生成一個平時使用的帳號 
+  </OL>
+
+  <LI>P2-6 2.4 MySQL 終端機的快速簡介 
+  <ol>
+	<li>mysql -u p2136101 -p
+	<li>mysql -h localhost -u p2136101 -p
+	<li>mysql> show databases;
+	<li>mysql> use tta;
+	<li>mysql> show tables;
+	<li>mysql> \h
+	<li>mysql> \q
+	<li>mysql> quit;
+	<li>mysql -u username -p < test.mysql
+	<li> > < | 在 unix 所代表的意義為何 ?
+  </ol>
+</OL></BODY></HTML>

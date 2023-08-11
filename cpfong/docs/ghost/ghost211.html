@@ -1,0 +1,224 @@
+<html>
+<head>
+<title>北一女中 211 電腦教室硬碟複製備忘錄</title>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+</head>
+
+<body bgcolor="#FFFFFF">
+<p><b><font size="+1">北一女中 211 電腦教室硬碟複製備忘錄</font></b></p>
+<p>原文引自 &quot;<i><a href="http://www.yhps.tn.edu.tw/doc/GHOST%BCs%BC%BD.htm" target="_blank">Ghost廣播快速複製多台電腦的方法，作者：朱國光</a></i>&quot;</p>
+<hr>
+<p><b>零、寫在最前</b></p>
+<blockquote> 
+  <p>1.本校 211 電腦教室的神盾硬碟保護卡，已<font color="#FF0000">更新至 7.05 版以上</font>。</p>
+  <p>2.開機鍵入神盾卡密碼後，可按<font color="#FF0000"> F10 </font>暫時解除神盾卡防護，重新開機後，電腦仍會在神盾卡的保護狀態下。</p>
+  <p>3.<font color="#FF0000">上述模式並不適合用來做整間電腦教室的硬碟複製工作</font>，因為每部電腦或多或少有些不一樣的地方需要事後調整 
+    (如：<font color="#FF0000">IP 自動取得</font>、整間教室的介面卡不完全一致等等) 。建議開機時，先按 shift-F10，再選 
+    6，進入安裝模式，直到複製及調整完畢後，才重新取消安裝模式。（<font color="#FF0000">經實機測試結果，似乎必須以 F10 進入才能真正把資料複製到硬碟去</font>）</p>
+  <p>4.請記得整理 source disk 時，<font color="#FF0000">要把 Windows 98 的關機預設選項設成 &quot;關閉這台電腦&quot;</font>，而不是 
+    &quot;重新啟動電腦&quot;。</p>
+  <p>5.<font color="#FF0000">開機磁片使用 NDIS 連線模式</font>，網路硬碟複製的速度會比使用 Packet Driver 
+    的方式快上三倍以上。</p>
+  <p>6.所謂 <font color="#FF0000">&quot;Load To Client&quot;</font> 是指把 image 複製到 
+    client 端；所謂 <font color="#FF0000">&quot;Dump From Client&quot;</font> 是把 client 
+    端的硬碟做成 image 後複製到 Ghost Server 上。<br>
+    7.<font color="#FF0000">以本校的 211 電腦教室使用的神盾卡為例，在 &quot;Load to Client&quot; 
+    的相關設定上必須使用 Partition to Partition 的方式複製才能成功。</font></p>
+  <p>&nbsp;</p>
+</blockquote>
+<p><b>一、 安裝母機的作業系統與所有軟體，並進行測試。</b></p>
+<blockquote> 
+  <p>建議將母機(要拷貝到其它機器上的原始機器)的硬碟分割成兩個分割區(partitions) ，一個用來安裝系統，一個用來備份或是存放資料。在所有軟體安裝完成後，請確實對此台機器進行開關機及各軟體的操作，發現有任何問題一定要確實解決，最後再進行<font color="#FF0000">硬碟重整</font>動作。朱國光先生曾發生原母機所安裝之win98系統不穩，常常無法正常關機，以致由它所複製之所有電腦有都有類似的情況發生，希望大家引以為鑑。</p>
+</blockquote>
+<p> </p>
+<p>&nbsp;</p>
+<p><b>二 、將client端ghost映像檔送到ghost server。</b></p>
+<p><b>　　<font color="#FF0000">使用神盾卡的電腦在開機時須按 F10 開機後，才能順利地將 image 送到 ghost server。</font></b></p>
+<blockquote> 
+  <p>若您有分割硬碟，<font color="#FF0000">建議製作 partition image</font> ,如此對於還原在不同大小的硬碟上有較大的彈性；當然您堅持製作disk 
+    image我也不反對，經筆者實際實驗的結果發現，若硬碟中的其它分割區是空的，則製作disk or partition image的時間幾乎是相同的。以ghost所製成的映像檔請命名為image.gho，以方便接下來的批次檔設定。</p>
+  <p>以ghost廣播方式製作client端映像檔時，必須先啟動ghost sever在一台機器中，而client端則必須由DOS開機，先執行網路卡驅動程式，再執行ghost程式，才能將client的映像檔直接送上ghost 
+    server。以下分別說明client端與server端的設定方式：</p>
+  <p>(一)client端的設定</p>
+  <blockquote> 
+    <p>1. 製作開機軟碟片。</p>
+    <blockquote> 
+      <p>可以用sys a: 或是format a: /s的方式製作開機磁片。</p>
+    </blockquote>
+    <p>2. 安裝packet driver interface</p>
+    <blockquote> 
+      <p>找到網路卡所附驅動程式中的packet driver ，通常其副檔名是.COM，可在packet目錄中找到，閱讀內附之讀我說明檔以了解如何驅動它。並將此檔複製到上步驟所製成的開機磁片中。</p>
+    </blockquote>
+    <p>3. 複製ghost.exe及wattcp.cfg</p>
+    <blockquote> 
+      <p>將ghost目錄中的ghost.exe及mcast目錄中wattcp.cfg複製到磁片。</p>
+    </blockquote>
+    <p>4. 修改wattcp.cfg檔</p>
+    <blockquote> 
+      <p>用編輯器將wattcp.cfg打開，其內容的範例如下：</p>
+      <p>IP = 192.168.100.3</p>
+      <p>NETMASK = 255.255.255.0</p>
+      <p>請依各校實際狀況，將資料填入其中，再儲存檔案。</p>
+      <p>若貴校已安裝了DHCP and BOOTP Servers, 各client端機器可以自動取得IP時，上述的IP及NETMASK可以留空白不填。</p>
+    </blockquote>
+    <p>5. 修改autoexec.bat檔</p>
+    <blockquote> 
+      <p>用編輯器將autoexec.bat打開，其內容的範例如下：</p>
+      <p>RTSPKT 0x60</p>
+      <p>(依各網路卡不同程式及語法會不同，以北一女中電腦教室中學生電腦所使用的100/10M PCI網路卡為例，此行設定應改為rtspkt 0x60 
+        )</p>
+      <p>GHOST</p>
+    </blockquote>
+    <p>6. 重新開機，連線ghost server。</p>
+    <blockquote> 
+      <p>等待 ghost server 完成 seesion 設定後，client 端即可重新開機，進入 ghos t程式中，選擇 multicasting 
+        功能，將 client 端的 partition/disk 製成 image。此時，您可以選擇是否壓縮 partition image，<font color="#FF0000">以北一女中為例，壓縮與否差異不大</font>。</p>
+    </blockquote>
+  </blockquote>
+</blockquote>
+<p> </p>
+<blockquote> 
+  <p>(二)server端的設定</p>
+  <blockquote> 
+    <p>ghost server 端建議使用 Windows NT 或 98 作業系統，可以直接執行 ghostsrv 程式。</p>
+    <p>1. 建立 ghost session</p>
+    <p>2. 輸入 Session 的名稱，例如： 211</p>
+    <p>3. 選擇 Dump From Client，表示 server 端可接收 client 端送來之 image</p>
+    <p>4. 輸入欲建立之映像檔名稱及所在位置，例如 c:\image.gho</p>
+    <p>5. 按下<font color="#FF0000"> Accept Clients </font>後即完成設定，等待 client 端開機將映像檔送來。</p>
+  </blockquote>
+</blockquote>
+<p>&nbsp;</p>
+<p><b>三、設定ghsot廣播server</b></p>
+<blockquote> 
+  <p>1. 開啟 ghost server，輸入 session 名稱</p>
+  <p>2. 選擇 Load To Client 表示將 server 的映像檔廣播給各台機器</p>
+  <p>3. 輸入映像檔之所在位置及名稱</p>
+  <p>4. 選擇 Disk 或 Partition，若選擇 Partition 時必須在右邊點還哪個 partition</p>
+  <p>5. 按下 Accept Clients，即可完成 server 端設定。</p>
+  <p>若想讓 server 自動啟動時可在 Auto Start 中輸入 Client Count 的數目，等到 client 端的電腦連線數達到時，server 
+    就會自動啟動開始複製程序。</p>
+  <p>&nbsp;</p>
+</blockquote>
+<p> </p>
+<p><b>四、製作client端開機自動複製機器磁片</b></p>
+<blockquote> 
+  <p>首先要製作 client 端 DOS 開機片，並複製程式到磁片中，然後將此磁片放入各台欲複製的電腦中開機即可。由於驅動程式的相容性問題，有時會造成無法 
+    client 端無法動作的情情，故以下提供兩種方法，大家可以依照自己機器的相容性決定最適合的方法。</p>
+</blockquote>
+<p> </p>
+<blockquote> 
+  <p><b>&lt;&lt;法一&gt;&gt;、使用NDIS with supplied Packet Driver Shim</b></p>
+  <p>特色</p>
+  <p>優點：相容性佳</p>
+  <p>缺點：設定複雜</p>
+  <p>步驟如下：</p>
+  <p>1.複製網路卡之NDIS驅動程式到磁片。(通常是其副檔名是.dos,如pnpnd.dos)</p>
+  <p>2.建立及修改PROTOCOL.INI, CONFIG.SYS和AUTOEXEC.BAT三個檔。</p>
+  <blockquote> 
+    <p><b>PROTOCOL.INI的範例如下：</b></p>
+    <blockquote> 
+      <p>[PROTMAN]<br>
+        drivername = PROTMAN$</p>
+      <p> [PKTDRV]<br>
+        drivername = PKTDRV$<br>
+        bindings = PC_CARD<br>
+        intvec = 0x60<br>
+        chainvec =0x66</p>
+      <p> [PC_CARD]<br>
+        drivername = PNPND$</p>
+    </blockquote>
+    <p><b>CONFIG.SYS的範例如下：</b></p>
+    <blockquote> 
+      <p>device=protman.dos /I:\<br>
+        device=dis_pkt.dos<br>
+        device=rtsnd.dos</p>
+      <p>註： </p>
+      <p>PROTMAN.DOS首先被載入後，其中/I: 指出PROTOCOL.INI所在位置。</p>
+      <p>如/I:\ 表示在根目錄，若為/I:A:\NET表示在A:\NET中。</p>
+      <p>DIS_PKT.DOS已含在Ghost廣播版中。</p>
+    </blockquote>
+    <p><b>AUTOEXEC.BAT 檔的範例：</b></p>
+    <blockquote> 
+      <p>prompt $p$g</p>
+      <p>netbind</p>
+    </blockquote>
+  </blockquote>
+  <p>3.複製以下三個檔</p>
+  <blockquote> 
+    <p> NETBIND.COM<br>
+      PROTMAN.DOS<br>
+      PROTMAN.EXE</p>
+    <p>若您沒有這些檔，可以到下列網址取得：ftp://ftp.microsoft.com/bussys/Clients/MSCLIENT/</p>
+    <p>或 ftp://ftp.yhps.tn.edu.tw/ghoclint。<font color="#FF0000">如果您無法找到上述的程式，請找 
+      Windows NT 4.0</font></p>
+    <p><font color="#FF0000">的原版光碟，在其 client 目錄中，有一個名為 msclient 的目錄，可以找到上述程式。</font></p>
+    <p>註：請檢查你的開機磁片中除了原有之開機程式外，還應包括下列檔案：</p>
+    <p>CONFIG.SYS<br>
+      AUTOEXEC.BAT<br>
+      PROTOCOL.INI<br>
+      DIS_PKT.DOS<br>
+      NETBIND.COM<br>
+      PROTMAN.DOS<br>
+      PROTMAN.EXE<br>
+      <font color="#000000"><b>RTSND.DOS</b></font> (你的網路卡驅動程式)</p>
+  </blockquote>
+  <p>4.複製ghost.exe，wattcp.cfg，修改wattcp.cfg</p>
+  <blockquote> 
+    <p><b>WATTCP.CFG檔的內容範例如下：</b></p>
+    <blockquote> 
+      <p>IP = 192.168.100.3<br>
+        NETMASK = 255.255.255.0<br>
+        GATEWAY = 192.168.100.254</p>
+      <p>註：若是都IP、NETMASK、GATEWAY為空白或為不正確的數字時，系統會預設由BOOTP/DHCP自動取得相關資料。</p>
+    </blockquote>
+  </blockquote>
+  <p>5.修改AUTOEXEC.BAT加入自動啟動ghost批次檔，重新開機即可大功告成。</p>
+  <blockquote> 
+    <p><b>AUTOEXEC.BAT的內容修改如下：</b></p>
+    <blockquote> 
+      <p>prompt $p$g<br>
+        netbind<br>
+        GHOST -clone,src=@mcsession,dst=1:1 -sure</p>
+    </blockquote>
+    <p>註：</p>
+    <blockquote> 
+      <p>1. @MC 是 Ghost 程式廣播指令專用的保留字，請一定要有，其後所接的 session name 是 Ghost Server 上的用來廣播檔所取得名稱。</p>
+      <p>2. dst=1 表示是目的硬碟以 disk 方式來還原，若是想還原至第一顆硬碟的第二個 partition 則語法改為dst=1:2</p>
+      <p>3. –sure 指令的目的是將最後的確認對話選擇「是」</p>
+    </blockquote>
+    <p>&nbsp; </p>
+  </blockquote>
+  <p><b>&lt;&lt;法二&gt;&gt;、Network card dependent Packet Driver.</b></p>
+  <p>特色</p>
+  <p>優點：簡單容易</p>
+  <p>缺點：相容性差，造成許多電腦網路無法連線，或是連線後傳輸速度慢。</p>
+  <p>步驟如下：</p>
+  <blockquote> 
+    <p>1. 複製網路卡 Packet Driver (通副檔名是 .COM )到磁片</p>
+    <p>2. 找到啟動 Packet Driver 的方法</p>
+    <blockquote> 
+      <p>不同網路卡的啟動方法不同，以3Com 509 PCI 網路卡為例如下：</p>
+      <p>A:\ &gt; 3c5x9pd</p>
+      <p>以NE2000相容型在IRQ 10，IO base 0x280使用軟體中斷0x60如下：</p>
+      <p>A:\ &gt; ne2000PD 0x60 10 0x280</p>
+      <p>以32-Bit PCI Fast Ethernet Adapter為例 <font color="#FF0000">(211 電腦教室的網路卡)</font></p>
+      <p><font color="#FF0000">A:\ &gt; RTSPKT 0x60</font></p>
+    </blockquote>
+    <p>3. 複製 ghost.exe 及 wattcp.cfg，修改 WATTCP.CFG。</p>
+    <p>4. 修改 Autoexec.bat，加入自動啟動 ghost 批次檔，重新開機。</p>
+    <blockquote> 
+      <p><b>AUTOEXEC.BAT內容如下：</b></p>
+      <blockquote> 
+        <p>Rtspkt 0x60 (依上一步驟的設定為準)</p>
+        <p>GHOST -CLONE,SRC=@MC<font color="#FF0000">211</font>,dst=1:1 -sure</p>
+      </blockquote>
+    </blockquote>
+  </blockquote>
+</blockquote>
+<hr>
+<p align="center">Last update : 
+  <!-- #BeginDate format:Am1 -->September 12, 2001<!-- #EndDate -->
+</p>
+</body>
+</html>

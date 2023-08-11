@@ -1,0 +1,5 @@
+@venus-> ls /usr/mbedded
+images		: result 
+obj		:
+qemu-i386	:
+

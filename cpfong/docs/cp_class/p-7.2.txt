@@ -1,0 +1,1 @@
+form binary seach tree with 10 data: 20 30 10 50 60 40 45 5 15 25

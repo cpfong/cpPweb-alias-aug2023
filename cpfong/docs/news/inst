@@ -1,0 +1,6 @@
+hiedoc# pwd
+/usr/ports/news/inn-stable
+make --with-perl --with-python --with-tcl --with-openssl install
+
+----------- log is important ------------------------
+cd /var/log; mv news news.ORG

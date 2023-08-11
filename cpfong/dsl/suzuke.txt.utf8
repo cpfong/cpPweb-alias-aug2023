@@ -1,0 +1,67 @@
+作者: suzuke (suzuke) 看板: Linux
+標題: [分享] TinyCore Linux 簡單中文化
+時間: Sun Feb 19 02:00:22 2012
+
+
+不知道有沒有人在關注這個發行版?
+
+http://distro.ibiblio.org/tinycorelinux/welcome.html
+
+雖然圖形化介面醜了點, 不過自訂性很高, 體積也很小(原約10MB左右)
+
+
+最近花了點時間研究一下怎麼中文化(網路上對岸好像也有人中文化了, 但是僅限於簡體
+中文, 而且輸入法是fcitx, 我用不習慣)
+
+分享一下流程
+
+1. 當然是先安裝系統
+
+
+2. tce-load -wil getlocale (這個套件是可以客製化locale的資料)
+tce-load download完會自己執行, 選擇zh_TW.UTF-8, zh_TW.BIG5(基本上應該選
+zh_TW.UTF-8應該就可以了)
+
+
+
+3. 然後安裝scim1.4.9, scim-chewing-0.3.4, libchewing-0.3.3
+不過這幾個都沒有官方的tcz, 所以我自己包了tcz檔, 直接拿來用就可以了,
+
+載點: http://goo.gl/AcVK3
+
+(注意: 這幾個tcz並不完全符合官方規範的作法, 所以目前並不打算送至TCZ
+Repository)
+ps. scim所需要的設定文件都包在scim-config.tcz裡, 不需要額外再去設定了~
+(至於怎麼包tcz請參考官方wiki:
+http://wiki.tinycorelinux.net/wiki:creating_extensions )
+
+
+
+4. 下載下來TCscim.tar.gz之後, tar -xvf TCscim.tar.gz 解開
+把裡面全部的tcz都cp到你的tce/optional裡面
+
+
+
+5. 修改onboot.lst加入scim-chewing-0.3.4.tcz, scim-1.4.9.tcz
+(其他相關tcz, 已經寫入各自的dep檔裡, 會自行掛載)
+
+
+
+6. 接著安裝中文字型, 嫌麻煩可以直接使用官方的tcz檔
+tce-load -wi fireflysung.tcz
+也可以自己把字型包成tcz來掛載(怎麼包呢, 可以找官方wiki:
+http://wiki.tinycorelinux.net/wiki:extension_for_settings )
+
+
+
+7. reboot
+
+
+
+8. 打開terminal 輸入 scim -d 應該就可以正常使用了
+
+
+
+9. 如果想一開機就自動執行scim的話
+可以在/home/tc/.X.d/ 底下建立一個autostart檔案
+內容是scim -d , 然後filetool.sh -b存檔

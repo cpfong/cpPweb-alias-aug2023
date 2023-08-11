@@ -1,0 +1,11 @@
+NS@Blade1500/home/s>tail -F /var/log/ldap.log
+Aug 12 17:32:56 ns slapd[77826]: conn=1298 fd=11 ACCEPT from IP=03.133:64781 (IP=0.0.0.0:389)
+Aug 12 17:32:56 ns slapd[77826]: conn=1298 op=0 BIND dn="cn=pam_ldap,ou=services,dc=tech,dc=mis" method=128
+Aug 12 17:32:56 ns slapd[77826]: conn=1298 op=0 BIND dn="cn=pam_ldap,ou=services,dc=tech,dc=mis" mech=SIMPLE ssf=0
+Aug 12 17:32:56 ns slapd[77826]: conn=1298 op=0 RESULT tag=97 err=0 text=
+Aug 12 17:32:56 ns slapd[77826]: conn=1298 op=1 SRCH base="dc=tech,dc=mis" scope=2 deref=0 filter="(&(objectClass=posixGroup))"
+Aug 12 17:32:56 ns slapd[77826]: conn=1298 op=1 SRCH attr=cn userPassword memberUid uniqueMember gidNumber
+Aug 12 17:32:56 ns slapd[77826]: <= bdb_equality_candidates: (objectClass) not indexed
+Aug 12 17:32:56 ns slapd[77826]: <= bdb_equality_candidates: (objectClass) not indexed
+Aug 12 17:32:56 ns slapd[77826]: conn=1298 op=1 SEARCH RESULT tag=101 err=0 nentries=0 text=
+Aug 12 17:32:56 ns slapd[77826]: conn=1298 fd=11 closed (connection lost)

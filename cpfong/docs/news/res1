@@ -1,0 +1,27 @@
+原本在 log 下沒有 innfeed.log 的
+Comaq-> ls
+errlog          news            news.crit       news.err        news.notice
+
+Comaq-> cat news
+Dec 27 23:01:24.630 + not-for-mail <auhq04$gju$1@hiedoc.fjtc.edu.tw> 957
+
+Comaq-> s /usr/local/etc/rc.d/innd.sh stop
+Comaq-> s /usr/local/etc/rc.d/innd.sh start
+Starting innd.
+Scheduled start of /usr/local/news/bin/innwatch.
+ inn
+
+現在出現了
+Comaq-> ls -la
+total 42
+drwxr-xr-x   2 news  news     512 12 28 01:24 .
+drwxr-xr-x  10 root  wheel    512 12 27 20:34 ..
+-rw-rw-r--   1 news  news       0 12 27 21:42 errlog
+-rw-rw-r--   1 news  news       0 12 28 01:24 innfeed.log
+-rw-rw-r--   1 news  news    2824 12 28 01:24 innfeed.status
+-rw-rw-r--   1 news  news     438 12 28 01:24 news
+-rw-r--r--   1 news  news     134 12 28 01:24 news.crit
+-rw-r--r--   1 news  news    2082 12 28 01:24 news.err
+-rw-r--r--   1 news  news   32424 12 28 01:24 news.notice
+
+但此時 innfeed.log 長度為 0 (已 post 了一篇文章了)

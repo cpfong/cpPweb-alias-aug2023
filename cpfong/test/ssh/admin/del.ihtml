@@ -1,0 +1,11 @@
+<form  method="post" action="?menu=action&type=del">
+<? 
+if( $name == admin){
+	echo "Sorry, An administrator's information cannot be deleted. <BR>";
+	exit;
+}
+echo "$name is delete OK?";
+?>
+<INPUT type="hidden" name=deluser value=<? echo $name ?>>
+<INPUT type="submit" value="OK">
+</form>

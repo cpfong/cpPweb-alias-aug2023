@@ -1,0 +1,8 @@
+Q: no ssh?
+A: tce-load -wi openssh
+
+Q: simple browser
+A: dillo
+
+Q: firefox
+A: get latest then install with tce-load -wi

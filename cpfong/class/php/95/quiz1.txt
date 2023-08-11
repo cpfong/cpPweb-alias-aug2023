@@ -1,0 +1,12 @@
+小考一
+
+1. 請同學在你的家目錄下的 public_html 即 ~/public_html 目錄下寫一個名為 402-quiz.html 的檔,
+可以有以下的畫面. http://vnc.mis.fotech.edu.tw/~o1506999/402-quiz.html
+
+2. 承題 1, 在點到題二答案之超連結時可以顯示出 I'll be free later. 的英文字在上面
+
+3.
+
+4. 試以 php 撰寫一個有 for 迴圈的程式可以達到如下圖
+
+5. 課本第 34 頁, 習題 5

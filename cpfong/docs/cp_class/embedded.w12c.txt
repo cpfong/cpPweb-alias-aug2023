@@ -1,0 +1,5 @@
+on FreeBSD simulate nanobsd image boot ok, but root password cannot input
+--
+#!/bin/sh
+# booting ok, but root cannot login
+echo 'qemu-system-x86_64 -nographic -m 2048 -hda _.disk.image.qemu-i386.qcow2 -netdev user,id=mynet0,hostfwd=tcp:127.0.0.1:7722-:22 -device e1000,netdev=mynet0'

@@ -1,0 +1,16 @@
+IMPORTXML
+Imports data from any of various structured data types including XML, HTML, CSV, TSV, and RSS and ATOM XML feeds.
+# from XML extract info i need
+
+IMPORTXML(url, xpath_query)
+
+url: site with stock id
+xpath_query: XPath get from firefox source
+
+this is a real xpath
+--
+/html/body/div[1]/div/div/div/div/div[5]/div/div[1]/div/div[1]/div/div[2]/div[1]/div/span[1]
+
+final 
+--
+=IMPORTXML(concat(concat("https://tw.stock.yahoo.com/quote/", A2),".TW"), "")

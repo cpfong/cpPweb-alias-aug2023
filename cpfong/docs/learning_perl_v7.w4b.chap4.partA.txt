@@ -1,0 +1,31 @@
+chap 4 subroutine
+--
+sub marine{
+ $n += 1; # n is a global variable
+ print "hello, silor number $n!\n";
+} #end marine
+
+sub marine{
+}
+&marine;
+
+marine; #FAIL, you must to use &marine if you put sub behind
+sub marine{
+}
+
+return value
+--
+becare about the last cmd inside sub (p73)
+
+
+passing parameter
+--
+&n= &max(10,15);
+sub max{
+ if ($_[0] > $_[1]){
+  $_[0];
+ }
+ else {
+  $_[1];
+ }
+}

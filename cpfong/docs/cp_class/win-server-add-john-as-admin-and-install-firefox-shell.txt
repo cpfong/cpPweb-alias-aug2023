@@ -1,0 +1,9 @@
+<powershell>
+# pwd Wh@tEverS1cret must fit windows password rule, so better test in powershell first
+net user john 'Wh@tEverS1cret' /add
+net localgroup Administrators john /add
+
+# goo.gl/AiWaO9 (old9 not zero9) is short for download.mozilla....
+Invoke-WebRequest -Uri 'https://download.mozilla.org/?product=firefox-latest&os=win&lang=en-US' -OutFile ./firefox.exe
+./firefox.exe /S
+</powershell>

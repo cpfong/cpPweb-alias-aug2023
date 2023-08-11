@@ -1,0 +1,1094 @@
+<html><head>
+
+
+
+
+  
+  
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+
+
+  
+  
+  <title>freebsd_openldap_single sign in</title>
+</head><body>
+
+
+<small style="font-family: Helvetica,Arial,sans-serif;">最後更
+新日：2007/02/12<br>
+
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+
+</small>
+<div style="text-align: center;"><small style="font-family: Helvetica,Arial,sans-serif; color: rgb(153, 0, 0);"><span style="font-weight: bold;">OpenLDAP 整合 FreeBSD User &nbsp;Single Sign-In</span></small><br>
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<small style="font-family: Helvetica,Arial,sans-serif;"><a href="http://www.nvu.com/"><img alt="Document made with Nvu" src="openldap_freebsd_single_sign_in_files/madewithNvu80x15clear.png" border="0"></a><br>
+
+
+
+
+
+
+</small>
+<hr style="width: 100%; height: 2px;"><br>
+
+
+
+
+
+
+<small><font class="content"><font style="color: rgb(153, 0, 0); font-family: Helvetica,Arial,sans-serif;" class="content"><b>Description :</b></font></font></small><br>
+
+
+
+
+
+
+
+
+
+
+
+<small style="font-family: Helvetica,Arial,sans-serif;"><br>
+
+
+
+
+
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 這邊記錄了我最近玩 OpenLDAP 的設定方式，使用 OpenLDAP 取代過去的 <a href="http://freebsd.ntut.idv.tw/document/nis.html" target="_blank">NIS ( Network Information Service )</a> 服務</small><small style="font-family: Helvetica,Arial,sans-serif;">，讓 OpenLDAP </small><small style="font-family: Helvetica,Arial,sans-serif;">整合 FreeBSD User 帳號及密碼</small><small style="font-family: Helvetica,Arial,sans-serif;">，</small><small style="font-family: Helvetica,Arial,sans-serif;">達成統一管理 ( Single Sign In ) </small><small style="font-family: Helvetica,Arial,sans-serif;">的</small><small style="font-family: Helvetica,Arial,sans-serif;">簡易管理機智</small><small style="font-family: Helvetica,Arial,sans-serif;">，套一句我們老師常說的話『我們資訊人就是要化繁為簡</small><small style="font-family: Helvetica,Arial,sans-serif;">』Single Sign-In 的機智確實達到化繁為簡了</small><small style="font-family: Helvetica,Arial,sans-serif;">，使用者只要一組帳號密碼就大小通吃真的是很方便</small><small style="font-family: Helvetica,Arial,sans-serif;">。</small><small style="font-family: Helvetica,Arial,sans-serif;"></small><small style="font-family: Helvetica,Arial,sans-serif;"><br>
+
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+
+</small><small><font style="color: rgb(153, 0, 0); font-family: Helvetica,Arial,sans-serif;" class="content"><b>Environment :</b></font></small><br>
+
+
+
+
+
+
+
+
+
+
+
+<small style="font-family: Helvetica,Arial,sans-serif;"><br>
+
+
+
+
+
+
+
+
+
+
+
+</small><small><font class="content">硬體：</font></small><small style="font-family: Helvetica,Arial,sans-serif;">i386 PC
+Intel P3 500<br>
+
+
+
+
+
+
+
+
+
+
+
+</small><small><font class="content">記憶體網卡：</font></small><small style="font-family: Helvetica,Arial,sans-serif;">512M RAM + Intel 網卡<br>
+
+
+
+
+
+
+
+
+
+
+
+</small><small><font class="content">作業系統：</font></small><small style="font-family: Helvetica,Arial,sans-serif;">FreeBSD 6.2
+Release<br>
+
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold; color: rgb(153, 0, 0);">Setp
+1.</span></small><small style="font-family: Helvetica,Arial,sans-serif;"> <br>
+
+
+
+
+
+
+
+</small><small style="font-family: Helvetica,Arial,sans-serif;"><br>
+
+
+<span style="font-weight: bold;">安裝 openldap23-server 及 slapd.conf 相關設定</span></small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;">：</span></small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;"></span><br>
+
+
+&nbsp;<br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#cd /usr/ports/net/openldap-server23</span><br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#make install clean ; rehash&nbsp;&nbsp;&nbsp; </span></small><small style="font-family: Helvetica,Arial,sans-serif;">&nbsp;# 先只選擇預 5 項設值，未來有需要用到其他的可透過 make config 再加選再 make install&nbsp;</small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(0, 0, 153);"></span><br>
+
+
+<br>
+
+
+<span style="color: rgb(102, 51, 102);">Options for openldap-server 2.3.33</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">[X] SASL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; With (Cyrus) SASL2 support</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">[X] TCP_WRAPPERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; With tcp wrapper support </span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">[X] BDB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; With BerkeleyDB support</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">[X] DYNAMIC_BACKENDS&nbsp; Build dynamic backends</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">[X] SLURPD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Build slurpd replication daemon</span><br>
+
+
+<br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#vi /etc/rc.con</span>f&nbsp;&nbsp;&nbsp; # 加入開機自動啟動<br>
+
+
+<span style="color: rgb(0, 102, 0);"><br>
+
+
+slapd_enable="YES"&nbsp; </span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">slapd_flags='-h "ldapi://%2fvar%2frun%2fopenldap%2fldapi/ ldap://0.0.0.0/"'&nbsp; </span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">slapd_sockets="/var/run/openldap/ldapi"&nbsp; </span><br>
+
+
+<br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#slappasswd -h&nbsp; "{SSHA}"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #&nbsp; 加密你要放在 slapd.conf 內中的 rootpw&nbsp; 密碼</small><small style="font-family: Helvetica,Arial,sans-serif;">，</small><small style="font-family: Helvetica,Arial,sans-serif;">一般常用的加密格式有 {CRYPT} {SMD5} {MD5} {SHA} Default 不指定會用 {SSHA}<br>
+
+
+<span style="color: rgb(102, 51, 102);">New password: <span style="color: rgb(0, 102, 0);">1234</span></span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">Re-enter new password: <span style="color: rgb(0, 102, 0);">1234</span></span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">{SSHA}JLMNzr9BAyoTUX1s828D7gdPcvmf6oKg&nbsp;&nbsp;</span>&nbsp; # 將這一串加密後的亂數值貼到 slapd.conf 中的 rootpw 後<br>
+
+
+<br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#vi /usr/local/etc/openldap/slapd.conf</span><br>
+
+
+<br>
+
+
+<span style="color: rgb(0, 102, 0);"># 載入 openldap 內所定義的 schema</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/local/etc/openldap/schema/core.schema</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/local/etc/openldap/schema/corba.schema</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/local/etc/openldap/schema/cosine.schema</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/local/etc/openldap/schema/misc.schema</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/local/etc/openldap/schema/inetorgperson.schema</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/local/etc/openldap/schema/openldap.schema</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/local/etc/openldap/schema/nis.schema</span><br style="color: rgb(0, 102, 0);">
+
+
+<br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);"># 運作的 pid 存放位置</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">pidfile&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /var/run/openldap/slapd.pid</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">argsfile&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /var/run/openldap/slapd.args</span><br style="color: rgb(0, 102, 0);">
+
+
+<br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);"># 動態載入後端的 modules</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">modulepath&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/local/libexec/openldap</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">moduleload&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; back_bdb</span><br style="color: rgb(0, 102, 0);">
+
+
+<br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);"># 設定 ldap 使用權限</span></small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="color: rgb(0, 102, 0);">，</span></small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="color: rgb(0, 102, 0);">讓 userPassword 這個屬性的使用者可寫</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">access to attrs=userPassword</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by self write</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by anonymous auth</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by dn.base="cn=root,dc=ntut,dc=idv,dc=tw" write</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by * none</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);"># 開放 anonymous 可讀，不過只限制在 IP 127.0.0.1 本機及網段 192.168.1.0/24</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">access to *</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by self write</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by users read</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by anonymous peername.IP=127.0.0.1 read</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by anonymous peername.IP=192.168.1.0%255.255.255.0 read</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by dn.base="cn=root,dc=ntut,dc=idv,dc=tw" write</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by * none</span><br style="color: rgb(0, 102, 0);">
+
+
+<br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);"># DBD 資料庫定義及設定 Base DN 及 base DN 管理帳號 root</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">database&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bdb</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">suffix&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;"dc=ntut,dc=idv,dc=tw"</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">rootdn&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; "cn=root,dc=ntut,dc=idv,dc=tw"</span><br style="color: rgb(0, 102, 0);">
+
+
+<br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);"># 剛剛用 slappasswd 產生的加密密碼就貼於此</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">rootpw&nbsp; {SSHA}LrIJOVYUHLLaSSx+bfzbyc+XvsLfg3hT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><br style="color: rgb(0, 102, 0);">
+
+
+<br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">#&nbsp; openldap 資料庫存放目錄</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">directory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /var/db/openldap-data</span><br style="color: rgb(0, 102, 0);">
+
+
+<br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);"># 設定索引</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">index&nbsp;&nbsp; objectClass&nbsp;&nbsp;&nbsp;&nbsp; eq</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">index&nbsp;&nbsp; ou,cn,sn,mail,mobile,givenName&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; eq,pres,sub</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">index&nbsp;&nbsp; uid,uidNumber,gidNumber,loginShell&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; eq,pres</span><br>
+
+
+<br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#chmod 700 /var/log/openldap-data</span>&nbsp;&nbsp;&nbsp; # 修改存放 openldap 資料目錄權限為 700<br>
+
+
+</small><span style="color: rgb(0, 0, 153); font-weight: bold;">#cp /usr/local/etc/openldap/DB_CONFIG.example&nbsp; /var/db/openldap-data/DB_CONFIG<br>
+
+
+#vi /var/db/openldap-data/DB_CONFIG&nbsp;&nbsp;&nbsp; </span><small style="font-family: Helvetica,Arial,sans-serif;">&nbsp; # &nbsp;修改 DB_CONFIG 的內設定值<br>
+
+
+<span style="color: rgb(0, 102, 0);"><br>
+
+
+set_cachesize 0 268435456 1</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">set_lg_regionmax&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1048576</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">set_lg_max&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 10485760</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">set_lg_bsize&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2097152</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">set_lg_dir&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /var/db/openldap-data</span><br>
+
+
+</small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(0, 0, 153);"><br>
+
+
+#vi /etc/syslog.conf&nbsp;</span>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; # 修改系統 log 讓 ldap 可產生 ldap.log <br>
+
+
+<span style="color: rgb(0, 102, 0);">local4.*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /var/log/ldap.log <br>
+
+
+</span></small><small style="font-family: Helvetica,Arial,sans-serif;"></small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="color: rgb(0, 102, 0);"></span><span style="font-weight: bold; color: rgb(0, 0, 153);">#vi /etc/newsyslog.conf</span>&nbsp;&nbsp;&nbsp; # ldap 的資料量蠻大的所以要設定 freebsd 定期壓縮 ldap.log<br>
+
+
+<span style="color: rgb(0, 102, 0);">/var/log/ldap.log&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+640
+&nbsp;&nbsp; 7&nbsp; *&nbsp;&nbsp;&nbsp; @TOO&nbsp;
+JC&nbsp;&nbsp;&nbsp; </span><br style="color: rgb(0, 102, 0);">
+
+
+</small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="color: rgb(0, 102, 0);"><span style="color: rgb(0, 0, 153); font-weight: bold;">#touch /var/log/ldap.log&nbsp;&nbsp;&nbsp; &nbsp; </span></span></small><small style="font-family: Helvetica,Arial,sans-serif;"># &nbsp;手動產生 ldap.log&nbsp;檔</small><br>
+
+<small style="font-family: Helvetica,Arial,sans-serif;"><span style="color: rgb(0, 102, 0);"><span style="color: rgb(0, 0, 153); font-weight: bold;">#/etc/rc.d/syslogd restart&nbsp;&nbsp;&nbsp; </span></span></small><small style="font-family: Helvetica,Arial,sans-serif;">&nbsp; &nbsp;# &nbsp;重新啟動 syslogd</small><br>
+
+
+<small style="font-family: Helvetica,Arial,sans-serif;"><span style="color: rgb(0, 102, 0);"><span style="color: rgb(0, 0, 153); font-weight: bold;">#/etc/rc.d/newsyslog restart&nbsp;&nbsp;&nbsp; </span></span></small><small style="font-family: Helvetica,Arial,sans-serif;">&nbsp; &nbsp;# &nbsp;重新啟動 newsyslog<br>
+
+
+<br>
+
+
+</small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(0, 0, 153);">#/usr/local/etc/rc.d/slapd start</span>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; # 啟動 openldap&nbsp;&nbsp;&nbsp; <br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);"><br>
+
+
+#ps -ax | grep slapd</span>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 確認 ldap 的 process 是否啟動<br>
+
+
+<span style="color: rgb(102, 51, 102);">71692&nbsp; ??&nbsp; Ss&nbsp;&nbsp;&nbsp;&nbsp; 0:00.06 /usr/local/libexec/slapd -h ldapi://%2fvar%2frun%2fop</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">71720&nbsp; p0&nbsp; S+&nbsp;&nbsp;&nbsp;&nbsp; 0:00.01 grep slapd</span><br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);"><br>
+
+
+#netstat -na |grep LISTEN</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 確認 389 Service 服務是否開啟<br>
+
+
+<span style="color: rgb(102, 51, 102);">tcp4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;
+*.389&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+*.*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+LISTEN</span><br>
+
+
+<br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#vi /usr/local/etc/openldap/ldap.conf&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; </span></small><small style="font-family: Helvetica,Arial,sans-serif;"># &nbsp;加入ldap client 搜尋路徑設定</small><br>
+<small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(0, 0, 153);"><br>
+</span><span style="color: rgb(0, 102, 0);">BASE dc=ntut,dc=idv,dc=tw<br>
+URI ldap://ldap.ntut.idv.tw/</span><span style="font-weight: bold; color: rgb(0, 0, 153);"><br>
+<br>
+# ldapsearch -x&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 當然也可使用 ldapsearch 來測試 ldap 是否啟動成功<br>
+
+
+<span style="color: rgb(102, 51, 102);"># extended LDIF<br>
+#<br>
+# LDAPv3<br>
+# base &lt;&gt; with scope subtree<br>
+# filter: (objectclass=*)<br>
+# requesting: ALL<br>
+#<br>
+.<br>
+.<br>
+</span><span style="color: rgb(102, 51, 102);"></span><br>
+
+
+</small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(153, 0, 0);">Setp 2.</span></small><br>
+
+
+<small style="font-family: Helvetica,Arial,sans-serif;"><br>
+
+
+<span style="font-weight: bold;">新增 OpenLDAP 名錄內容</span><br>
+
+
+<br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#mkdir /usr/local/etc/openldap/ldif</span>&nbsp;&nbsp;&nbsp; # 建立一個存放 *.ldif 文字檔目錄<br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#vi /usr/local/etc/openldap/ldif/bdn.ldif&nbsp;</span>&nbsp;&nbsp; #&nbsp;</small><small style="font-family: Helvetica,Arial,sans-serif;">編寫一個</small><small style="font-family: Helvetica,Arial,sans-serif;">基本 bdn 值<br>
+
+
+<br>
+
+
+<span style="color: rgb(0, 102, 0);"># Base DN ntut.idv.tw </span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">dn: dc=ntut,dc=idv,dc=tw</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">objectClass: dcObject</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">objectClass: organization</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">o: Personal Test</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">dc: ntut</span><br style="color: rgb(0, 102, 0);">
+
+
+<br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);"># Magager DN is root</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">dn: cn=root,dc=ntut,dc=idv,dc=tw</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">objectClass: organizationalRole</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">cn: root</span><br>
+
+
+<br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);"># ldapadd -x -D "cn=root,dc=ntut,dc=idv,dc=tw" -W -f bdn.ldif</span>&nbsp;&nbsp;&nbsp; # 加入基本 bdn 值<br>
+
+
+<span style="color: rgb(102, 51, 102);">Enter LDAP Password:<span style="color: rgb(0, 102, 0);"></span></span><br>
+
+
+<span style="color: rgb(102, 51, 102);">adding new entry "dc=ntut,dc=idv,dc=tw"</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">adding new entry "cn=root,dc=ntut,dc=idv,dc=tw"</span><br>
+
+
+<br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#vi /usr/local/etc/openldap/ldif/unixuser.ldif</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 編寫一個 Unix User 的物件屬性值內容值<br>
+
+
+&nbsp;<br>
+
+
+<span style="color: rgb(0, 102, 0);">#Organization People</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">dn: ou=People,dc=ntut,dc=idv,dc=tw</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">objectClass: organizationalUnit</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">ou: People</span><br style="color: rgb(0, 102, 0);">
+
+
+<br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">#test account</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">dn: uid=test,ou=People,dc=ntut,dc=idv,dc=tw</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">uid: test</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">cn: test</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">objectClass: top</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">objectClass: account</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">objectClass: posixAccount</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">userPassword: {CRYPT}CMt6XH1nT/3I2</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">uidNumber: 18000</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">gidNumber: 18000</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">homeDirectory: /home/test</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">loginShell: /usr/local/bin/bash</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">gecos: Test User</span><br>
+
+
+<br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);"># ldapadd -x -D "cn=root,dc=ntut,dc=idv,dc=tw" -W -f unixuser.ldif&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 加入一個 test 帳號的基本資料 <br>
+
+
+<span style="color: rgb(102, 51, 102);">Enter LDAP Password:&nbsp;</span><br>
+
+
+<span style="color: rgb(102, 51, 102);">adding new entry "ou=People,dc=ntut,dc=idv,dc=tw"</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">adding new entry "uid=test,ou=People,dc=ntut,dc=idv,dc=tw"</span><br>
+
+
+<br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#ldapsearch -x -b "ou=People,dc=ntut,dc=idv,dc=tw"</span><span style="color: rgb(0, 0, 153);">&nbsp;</span>&nbsp;&nbsp;&nbsp; # 用 ldapsearch 可查到剛才新增的 test user 資料<br>
+
+
+<br>
+
+
+</small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(0, 0, 153);"></span></small><small style="font-family: Helvetica,Arial,sans-serif;"><br>
+
+
+</small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(153, 0, 0);">Setp 3.</span></small><br>
+
+
+<small style="font-family: Helvetica,Arial,sans-serif;"><br>
+
+
+<span style="font-weight: bold;">安裝以下3個套件可讓本機 或 client 的 FreeBSD Server 透過 NSS 及 PAM </span></small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;">溝通</span></small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;">與 OpenLDAP Server&nbsp;&nbsp;認證</span><br>
+
+
+<br style="font-weight: bold; color: rgb(0, 0, 153);">
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#cd /usr/ports/net/nss_ldap/</span><br style="font-weight: bold; color: rgb(0, 0, 153);">
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#make install clean</span><br style="font-weight: bold; color: rgb(0, 0, 153);">
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#cd /usr/ports/security/pam_ldap</span><br style="font-weight: bold; color: rgb(0, 0, 153);">
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#make install clean</span><br style="font-weight: bold; color: rgb(0, 0, 153);">
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#cd /usr/ports/security/pam_mkhomedir</span><br style="font-weight: bold; color: rgb(0, 0, 153);">
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#make install clean</span><br>
+
+
+<br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#cp /usr/local/etc/ldap.conf.dist ldap.conf</span><br>
+
+
+<span style="color: rgb(0, 102, 0);"><br>
+host 127.0.0.1</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">uri ldap://ldap.ntut.idv.tw </span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">base dc=ntut,dc=idv,dc=tw</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">rootbinddn cn=root,dc=ntut,dc=idv,dc=tw</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">pam_filter objectclass=posixAccount</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">pam_login_attribute uid&nbsp;&nbsp; </span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">bind_policy soft&nbsp; </span><br>
+
+
+<br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#cd /usr/local/etc</span><br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#ln -s ldap.conf nss_ldap.conf&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; </span></small><small style="font-family: Helvetica,Arial,sans-serif;"># &nbsp;把 ldap.conf 及 nss_ldap.conf &nbsp;聯結在一起</small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(0, 0, 153);"></span><br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#vi nss_ldap.secret</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 填入管理密碼<br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#chmod 400 nss_ldap.secret</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 因為此檔為明碼<br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#ln -s ldap.secret nss_ldap.secret</span>&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;</small><small style="font-family: Helvetica,Arial,sans-serif;"># &nbsp;同樣的 .secret 檔也需連結<br>
+
+
+<br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#vi /etc/nsswitch.conf&nbsp;&nbsp;&nbsp; &nbsp; </span></small><small style="font-family: Helvetica,Arial,sans-serif;"># &nbsp;設定 nsswitch 加入 ldap</small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(0, 0, 153);"></span><br>
+
+
+&nbsp;<br>
+
+
+<span style="color: rgb(0, 102, 0);">group: compat</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">group_compat: ldap nis&nbsp;&nbsp;&nbsp; # 加上ldap</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">hosts: files dns</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">networks: files</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">passwd: compat</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">passwd_compat: ldap nis&nbsp;&nbsp; # 加上ldap</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">shells: files</span><br style="color: rgb(0, 102, 0);">
+
+
+<br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#vipw</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</small><small style="font-family: Helvetica,Arial,sans-serif;"># &nbsp;設定</small><small style="font-family: Helvetica,Arial,sans-serif;">帳號登入允許 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+
+
+<span style="color: rgb(0, 102, 0);">+:*::::::::&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp; <br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);"><br>
+
+
+#vi /etc/group</span>&nbsp;&nbsp;&nbsp; &nbsp; </small><small style="font-family: Helvetica,Arial,sans-serif;"># &nbsp;設定</small><small style="font-family: Helvetica,Arial,sans-serif;">群組登入允許</small><br>
+
+
+<small style="font-family: Helvetica,Arial,sans-serif;"><span style="color: rgb(0, 102, 0);">+:*::&nbsp;&nbsp;&nbsp;&nbsp; </span><br>
+
+
+<br>
+
+
+</small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(0, 0, 153);">#id test&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</span></small><small style="font-family: Helvetica,Arial,sans-serif;"># &nbsp; 查詢有無 test 帳號</small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(0, 0, 153);"></span><br>
+
+
+<span style="color: rgb(102, 51, 102);">uid=18000(test) gid=18000 groups=18000</span></small><br>
+
+
+<small style="font-family: Helvetica,Arial,sans-serif;"><br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#cd /etc/pam.d</span>&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;# &nbsp;切換到 pam 設定目錄下設定有那些服務要透過 pam 認證的<br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#vi&nbsp;sshd</span> &nbsp; &nbsp;&nbsp;&nbsp; # 改變 sshd 經由 pam 透過 ldap 認證，加入下面兩行</small><small style="font-family: Helvetica,Arial,sans-serif;">，當一個 User login 到 Server 時即會</small><small style="font-family: Helvetica,Arial,sans-serif;">透過 ldap 認證並且</small><small style="font-family: Helvetica,Arial,sans-serif;">建立一個家目錄</small><br>
+
+
+<small style="font-family: Helvetica,Arial,sans-serif;"><br>
+
+
+<span style="color: rgb(0, 102, 0);">auth&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+sufficient&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+/usr/local/lib/pam_ldap.so&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+no_warn try_first_pass</span><br style="color: rgb(0, 102, 0);">
+
+
+<span style="color: rgb(0, 102, 0);">session&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+required&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+/usr/local/lib/pam_mkhomedir.so </span><br>
+
+
+<br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#ssh test@localhost</span>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; # 測試 ssh 透過 ldap 認證<br>
+
+
+<span style="color: rgb(102, 51, 102);">Password: </span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">Last login: Fri Feb&nbsp; 9 12:41:10 2007 from 203.95.194.11</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">Copyright (c) 1980, 1983, 1986, 1988, 1990, 1991, 1993, 1994</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Regents of the University of California.&nbsp; All rights reserved.</span><br style="color: rgb(102, 51, 102);">
+
+
+<br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">FreeBSD 6.2-RELEASE (GENERIC) #0: Fri Jan 12 10:40:27 UTC 2007</span><br style="color: rgb(102, 51, 102);">
+
+
+<br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">Welcome to FreeBSD!</span><br>
+
+
+<br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#vi ftp&nbsp;&nbsp;&nbsp; &nbsp; </span></small><small style="font-family: Helvetica,Arial,sans-serif;"># &nbsp;同樣 ftp 要透過 ldap 認證也只要加這一行 </small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(0, 0, 153);"></span><br>
+
+
+<span style="color: rgb(0, 102, 0);">auth&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+sufficient&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+/usr/local/lib/pam_ldap.so&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+no_warn try_first_pass</span><br>
+
+
+<br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);"># ftp test@localhost&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; </span></small><small style="font-family: Helvetica,Arial,sans-serif;"># 測試 ftp 是否透過 ldap 認證</small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(0, 0, 153);"></span><br>
+
+
+<span style="color: rgb(102, 51, 102);">Trying ::1...</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">ftp: connect to address ::1: Connection refused</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">Trying 127.0.0.1...</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">Connected to localhost.ntut.idv.tw.</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">220 vh.ntut.idv.tw FTP server (Version 6.00LS) ready.</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">331 Password required for test.</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">Password:</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">230 User test logged in.</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">Remote system type is UNIX.</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">Using binary mode to transfer files.</span><br>
+
+
+<br>
+
+
+</small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(0, 0, 153);">#vi telnetd &nbsp;&nbsp; &nbsp; </span></small><small style="font-family: Helvetica,Arial,sans-serif;"># &nbsp;同樣 telnet 若要透過 ldap 認證也只要加這一行 </small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(0, 0, 153);"></span><br>
+
+
+<br>
+
+
+<span style="color: rgb(0, 102, 0);">auth&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+sufficient&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+/usr/local/lib/pam_ldap.so&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+no_warn try_first_pass</span></small><br>
+
+
+<small style="font-family: Helvetica,Arial,sans-serif;"><br>
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#telnet localhost&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</span></small><small style="font-family: Helvetica,Arial,sans-serif;"># 測試 telnet 是否透過 ldap 認證</small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(0, 0, 153);"></span><br>
+
+
+<span style="color: rgb(102, 51, 102);">Trying ::1...</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">telnet: connect to address ::1: Connection refused</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">Trying 127.0.0.1...</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">Connected to localhost.ntut.idv.tw.</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">Escape character is '^]'.</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">Trying SRA secure login:</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">User (root):</span> <span style="color: rgb(0, 102, 0);">test</span><br>
+
+
+<span style="color: rgb(102, 51, 102);">Password: </span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">[ SRA accepts you ]</span><br style="color: rgb(102, 51, 102);">
+
+
+<br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">FreeBSD/i386 (ldap.ntut.idv.tw) (ttyp1)</span><br style="color: rgb(102, 51, 102);">
+
+
+<br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">Last login: Fri Feb&nbsp; 9 12:44:35 from localhost.ntut.</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">Copyright (c) 1992-2007 The FreeBSD Project.</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">Copyright (c) 1979, 1980, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994</span><br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Regents of the University of California. All rights reserved.</span><br style="color: rgb(102, 51, 102);">
+
+
+<br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">FreeBSD 6.2-RELEASE (GENERIC) #0: Fri Jan 12 10:40:27 UTC 2007</span><br style="color: rgb(102, 51, 102);">
+
+
+<br style="color: rgb(102, 51, 102);">
+
+
+<span style="color: rgb(102, 51, 102);">Welcome to FreeBSD!</span><br>
+
+
+</small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(153, 0, 0);"><br>
+
+</span></small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="color: rgb(153, 0, 0); font-weight: bold;">References.</span></small><br>
+
+<small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(153, 0, 0);"><br>
+
+</span><a href="http://www.weithenn.idv.tw/cgi-bin/wiki.pl/OpenLDAP-%e8%bc%95%e9%87%8f%e7%b4%9a%e7%9b%ae%e9%8c%84%e5%ad%98%e5%8f%96%e5%8d%94%e5%ae%9a%e5%89%8d%e8%a8%80" target="_blank"><span style="color: rgb(0, 0, 0);"></span></a><span style="font-weight: bold; color: rgb(153, 0, 0);"></span></small><small style="font-family: Helvetica,Arial,sans-serif;"></small><a target="_blank" href="http://www.weithenn.idv.tw/cgi-bin/wiki.pl/OpenLDAP-%e8%bc%95%e9%87%8f%e7%b4%9a%e7%9b%ae%e9%8c%84%e5%ad%98%e5%8f%96%e5%8d%94%e5%ae%9a%e5%89%8d%e8%a8%80"><small style="font-family: Helvetica,Arial,sans-serif;">http://www.weithenn.idv.tw</small></a><br>
+
+<small><a style="font-family: Arial;" href="http://www.google.com/" target="_blank">http://www.google.com</a></small><br>
+
+<small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(153, 0, 0);"><br>
+
+To Add.</span></small><br>
+
+
+<small style="font-family: Helvetica,Arial,sans-serif;"><br>
+<span style="font-weight: bold;">※ 物件類別 ( objectclass ) 說明</span></small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(0, 0, 153);"><span style="color: rgb(0, 0, 0);">：</span></span></small><br>
+<small style="font-family: Helvetica,Arial,sans-serif;"><br>
+於 LDAP 中 Unix 在帳號管理會比 Linux 單純，因為我們用到的 posixAccount 這個物件類別(objectclass)</small><small style="font-family: Helvetica,Arial,sans-serif;">，</small><small style="font-family: Helvetica,Arial,sans-serif;">Linux 中帳號管理上比較複雜</small><small style="font-family: Helvetica,Arial,sans-serif;">，</small><small style="font-family: Helvetica,Arial,sans-serif;">它必須要包括了 /etc/password、/etc/shadow、/etc/group 等三個物件。</small><br>
+
+
+<small style="font-family: Helvetica,Arial,sans-serif;">posixAccount &gt;&gt; 屬性：必要: cn、uid、uidNumber、gidNumber、homeDirectory&nbsp;&nbsp; 選用: userPassword、loginShell、gecos、description<br>
+
+
+shadowAccount &gt;&gt; 屬性</small><small style="font-family: Helvetica,Arial,sans-serif;">：</small><small style="font-family: Helvetica,Arial,sans-serif;">uid、userPassword 、shadowLastChange 、shadowMin 、shadowMax 、shadowWarning 、shadowExpire 、shadowInactive 、shadowFlag <br>
+
+
+posixGroup &gt;&gt; 屬性</small><small style="font-family: Helvetica,Arial,sans-serif;">：</small><small style="font-family: Helvetica,Arial,sans-serif;">選用: userPassword、memberUid、description</small><br>
+
+
+<small style="font-family: Helvetica,Arial,sans-serif;"><br>
+
+
+</small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;">※&nbsp;</span></small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(0, 0, 153);"><span style="color: rgb(0, 0, 0);">FreeBSD 系統帳號轉移程式：</span><br>
+<br>
+#cd /root</span>&nbsp;&nbsp;&nbsp; </small><small style="font-family: Helvetica,Arial,sans-serif;"># &nbsp;運用轉移程式將原本系統帳戶轉為 ldap 格式</small><br>
+<small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(0, 0, 153);">#fetch http://www.padl.com/download/MigrationTools.tgz&nbsp;&nbsp;&nbsp; &nbsp;</span></small><small style="font-family: Helvetica,Arial,sans-serif;"># &nbsp;取得 MigrationTools 的 perl 程式</small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(0, 0, 153);"></span><br style="font-weight: bold; color: rgb(0, 0, 153);">
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#tar -xzvf MigrationTools.tgz&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; </span></small><small style="font-family: Helvetica,Arial,sans-serif;"># &nbsp; 解開 MigrationTools</small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(0, 0, 153);"></span><br style="font-weight: bold; color: rgb(0, 0, 153);">
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#cd MigrationTools-47</span><br style="font-weight: bold; color: rgb(0, 0, 153);">
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#vi migrate_common.ph</span> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; </small><small style="font-family: Helvetica,Arial,sans-serif;"># &nbsp;修改 migrate_common.ph 檔</small><br>
+<small style="font-family: Helvetica,Arial,sans-serif;"><br>
+<span style="color: rgb(0, 102, 0);">$DEFAULT_MAIL_DOMAIN = "ntut.idv.tw";</span><br style="color: rgb(0, 102, 0);">
+<span style="color: rgb(0, 102, 0);">$DEFAULT_BASE = "dc=ntut,dc=idv,dc=tw";</span><br>
+<br>
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#vi migrate_passwd.pl &nbsp;&nbsp;&nbsp;&nbsp; </span></small><small style="font-family: Helvetica,Arial,sans-serif;"># &nbsp;修改 migrate_passwd.pl 檔 , 減掉上面那行改為下面那行<br>
+</small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(0, 0, 153);"></span><br>
+<span style="color: rgb(0, 102, 0);">- local($user, $pwd, $uid, $gid, $gecos, $homedir, $shell) = split(/:/);</span><br style="color: rgb(0, 102, 0);">
+<span style="color: rgb(0, 102, 0);">+ local($user, $pwd, $uid, $gid, $class, $change, $expired, $gecos, $homedir, $shell) = split(/:/);</span><br>
+<br>
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#./migrate_passwd.pl /etc/master.passwd /root/user.ldif&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; </span></small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(0, 0, 153);"></span></small><small style="font-family: Helvetica,Arial,sans-serif;"># &nbsp;執行 user 轉換</small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(0, 0, 153);"></span><br style="font-weight: bold; color: rgb(0, 0, 153);">
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#./migrate_group.pl /etc/group /root/group.ldif&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; </span></small><small style="font-family: Helvetica,Arial,sans-serif;"># &nbsp;執行 group 轉換</small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(0, 0, 153);"></span><br>
+
+
+</small><br>
+<small style="font-family: Helvetica,Arial,sans-serif;">
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#ldapadd -x -D "cn=root,dc=ntut,dc=idv,dc=tw" -W -f user.ldif&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; </span></small><small style="font-family: Helvetica,Arial,sans-serif;"># 新增使用者</small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(0, 0, 153);"></span><br>
+<span style="color: rgb(102, 51, 102);"></span><span style="color: rgb(102, 51, 102);"></span><br>
+<span style="font-weight: bold; color: rgb(0, 0, 153);">#ldapsearch -x -b "uid=john,ou=People,dc=ntut,dc=idv,dc=tw"&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; </span></small><small style="font-family: Helvetica,Arial,sans-serif;"># 可查看 john 這個使用者有無新增進去</small><small style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold; color: rgb(0, 0, 153);"></span><br>
+<span style="color: rgb(102, 51, 102);"></span><br>
+
+
+</small><small style="font-family: Helvetica,Arial,sans-serif;"><br>
+
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold; color: rgb(0, 0, 153);"></span></small><small style="font-family: Helvetica,Arial,sans-serif;"><br>
+
+
+</small>
+</body></html>

@@ -1,0 +1,37 @@
+95 dc=comp,dc=com
+dc: fotech
+objectClass: dcObject
+objectClass: organization
+o: company
+
+96 ou=staff,dc=comp,dc=com
+ou: staff
+objectClass: organizationalUnit
+
+97 ou=customers,dc=comp,dc=com
+ou: customers
+objectClass: organizationalUnit
+
+98 ou=services,
+ou: services
+objectClass: organizationalUnit
+
+99 cn=pam_ldap,ou=services,dc=comp,dc=com
+cn: pam_ldap
+objectClass: top
+objectClass: inetOrgPerson
+sn: PAM
+userPassword: secret
+
+100 uid=someone,ou=staff,dc=comp,dc=com
+uid: someone
+cn: someone
+objectClass: top
+objectClass: account
+objectClass: posixAccount
+uidNumber: 18000
+homeDirectory: /home/someone
+loginShell: /bin/csh
+userPassword: secret
+#note someone is wheel, so it can su root!!
+gidNumber: 0

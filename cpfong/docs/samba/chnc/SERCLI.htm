@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0040)http://www.tp.edu.tw/documents/samba.htm -->
+<HTML><HEAD><TITLE>FreeBSD下的Samba Server</TITLE>
+<META content="text/html; charset=big5" http-equiv=Content-Type>
+<META content="Microsoft FrontPage 4.0" name=GENERATOR>
+<META content=FrontPage.Editor.Document name=ProgId></HEAD>
+<BODY>
+<H2 align="center"><img border="0" src="SERCLI1.gif" width="442" height="51">
+<br><br>
+</H2> 
+<H2 align="left"><span style="background-color: #FFFF00">安裝Samba Server 
+(SERVER 端)</span></H2> 
+<p><font FACE="新細明體" LANG="ZH-TW">■ 前述</font></p>
+<p><font face="新細明體" lang="ZH-TW">SMB(Server Message Blocks)</font></p>
+<p><font face="新細明體" lang="ZH-TW">SMB 是一種通訊協定就如http,ftp,telnet這一些通訊協定一樣</font>，<font face="新細明體" lang="ZH-TW">用來取的資源或傳送命令給伺服器SMB可以控制檔案或印表的開啟關閉建立與刪除或檔案權限的變更</font>，<font face="新細明體" lang="ZH-TW">也可以傳送訊息給其他電腦</font>，<font face="新細明體" lang="ZH-TW">如Windows作業系統提供的WinPopup程式就是使用SMB的訊息服務功能</font>。</p>
+<p><font FACE="新細明體" LANG="ZH-TW">■<b>安裝/升級</b></font></p>
+<p style="line-height: 150%; text-indent: 10">要使用Samba Server其實相當容易，在安裝好FreeBSD的Server套件後，只要設定好工作群組，啟動Samba    
+Server後就可以正常運作，您可以立即在 Windows 95/98/NT 下的『網路上的芳鄰』裡看到執行Samba服務的FreeBSD主機名稱。</p>
+<p class="MsoNormal"><font FACE="新細明體" LANG="ZH-TW">■<b></b></font><span lang="EN-US"> 
+</span><span style="font-family:新細明體;
+mso-ascii-font-family:&quot;Times New Roman&quot;">網路上的芳鄰</span></p>
+<p class="MsoNormal"><span style="font-family:新細明體;mso-ascii-font-family:&quot;Times New Roman&quot;">在</span><span lang="EN-US">Windows 
+</span><span style="font-family:新細明體;mso-ascii-font-family:
+&quot;Times New Roman&quot;">作業系統中我們把焦點放到</span> <span lang="EN-US">“</span><span style="font-family:新細明體;mso-ascii-font-family:&quot;Times New Roman&quot;">網路上的芳鄰</span> 
+<span lang="EN-US">“</span>。<span lang="EN-US"> Windows</span><span style="font-family:新細明體;mso-ascii-font-family:
+&quot;Times New Roman&quot;">作業系統把往網路的資源集中在</span><span lang="EN-US">“</span><span style="font-family:新細明體;mso-ascii-font-family:&quot;Times New Roman&quot;">網路上的芳鄰</span> 
+<span lang="EN-US">“ </span><span style="font-family:新細明體;mso-ascii-font-family:&quot;Times New Roman&quot;">上</span> 
+<span style="font-size:10.0pt;font-family:新細明體;
+mso-ascii-font-family:Verdana;mso-hansi-font-family:Verdana;mso-bidi-font-family:
+&quot;Times New Roman&quot;;mso-font-kerning:1.0pt;mso-ansi-language:EN-US;mso-fareast-language:
+ZH-TW;mso-bidi-language:AR-SA">，</span><span lang="EN-US"> </span><span style="font-family:新細明體;mso-ascii-font-family:
+&quot;Times New Roman&quot;">我們可以在網路上的芳鄰中找到其它電腦分享出來的資源並使用它</span> 
+<span lang="EN-US">但是</span>，<span lang="EN-US">如果萬一在網路上的芳鄰中找不到</span>，<span lang="EN-US">先別著急</span>，<span lang="EN-US">此時用開始/尋找/電腦 
+將電腦名稱輸入一樣可以使用</span>。</p>
+<p class="MsoNormal"><font FACE="新細明體" LANG="ZH-TW">■</font>登入WINDOWS NT網域<br> 
+<br> 
+我們並不一定需要使用"WINDOWS NT網域"，但是如果經過評估<br> 
+認為應該使用"WINDOWS NT網域"時，在WINDOWS作業系統上要<br> 
+做相關的設定與啟動登入"WINDOWS NT網域"。<br> 
+<br> 
+"工作群組"與"WINDOWS NT網域"雖相似，但是功能上並不竟相<br> 
+同，在同一公司可以使用一個&quot;WINDOSW NT網域"及多個"工作<br> 
+群組"的方式應用在區域網路中。應用"WINDOWS NT網域"的功<br> 
+能配合" 系統原則"功能來管理網路中的WINDOWS作業系統是<br> 
+很方便的。而"工作群組"讓我們可以在眾多的網路資源中，過<br> 
+濾出常用的資源，如電話簿的索引一樣。<br> 
+<br> 
+<br> 
+系統原則<br> 
+<br> 
+在WINDOWS作業系統中有一套稱為"系統原則"的功能。雖然<br> 
+WINDOWS作業系統是針對大不份的電腦使用者而設計的，但是在<br> 
+不同環境下我們希望WINDOWS作業系統可以提供不同的功能與<br> 
+作業方式，也就是因人而異，所以WINDOWS作業系統提供了"系<br> 
+統原則"。<br> 
+<br> 
+WINDOWS作業系統提供了"系統原則編輯程式"。他可以編輯系<br> 
+統原則應用在WINDOWS作業系統上。這就好像是為我們WINDOWS<br> 
+作業系統訂製模具一樣，可以根據不同的需求供應給不同的<br> 
+使用者或針對不同的電腦在WINDOWS作業系統上而已，還可<br> 
+以應用在其他的程式上，例如MICROSOFT Officer5這一套軟體<br> 
+，我們可以利用MICROSOFT Officer的原則範本，制定符合自己<br> 
+要求的系統原則，如此這一套系統原則還可以自己變更MICROSOFT<br> 
+ Office軟體中的選項設定，這樣不同的使者就不需要經常的選<br> 
+擇變更設定。也不用擔心別人變更的變更了設定造成造成困擾，<br> 
+因為每次使用登入都會自動在一規範主動一在依賴更新WINDOWS作業系統。<br> 
+</p> 
+<p class="MsoNormal"><span lang="EN-US">&nbsp;<o:p>
+</o:p>
+</span></p>
+<p class="MsoNormal"><font FACE="新細明體" LANG="ZH-TW">■<b></b></font><span lang="EN-US"> 
+</span><span style="font-family:新細明體;
+mso-ascii-font-family:&quot;Times New Roman&quot;">基本元件</span></p>
+<p class="MsoNormal"><span lang="EN-US">Windows </span><span style="font-family:
+新細明體;mso-ascii-font-family:&quot;Times New Roman&quot;">作業系統可以使用多種的通訊協定<span style="font-size:10.0pt;font-family:新細明體;
+mso-ascii-font-family:Verdana;mso-hansi-font-family:Verdana;mso-bidi-font-family:
+&quot;Times New Roman&quot;;mso-font-kerning:1.0pt;mso-ansi-language:EN-US;mso-fareast-language:
+ZH-TW;mso-bidi-language:AR-SA">，</span></span><span style="font-family:新細明體;mso-ascii-font-family:&quot;Times New Roman&quot;">如</span> 
+<span lang="EN-US">NETBEUI , IPX / SPX<span style="font-size:10.0pt;font-family:新細明體;
+mso-ascii-font-family:Verdana;mso-hansi-font-family:Verdana;mso-bidi-font-family:
+&quot;Times New Roman&quot;;mso-font-kerning:1.0pt;mso-ansi-language:EN-US;mso-fareast-language:
+ZH-TW;mso-bidi-language:AR-SA">，</span></span></p>
+<p class="MsoNormal"><span lang="EN-US">TCP/IP </span>。<span lang="EN-US"> </span><span style="font-family:
+新細明體;mso-ascii-font-family:&quot;Times New Roman&quot;">在透過</span> 
+<span lang="EN-US">NETBIOS </span><span style="font-family:新細明體;mso-ascii-font-family:&quot;Times New Roman&quot;">的介面讓每一部電腦有一個識別符號以便進行資源分享</span> 
+。<span style="font-family:新細明體;mso-ascii-font-family:
+&quot;Times New Roman&quot;">不過</span> <span lang="EN-US">SAMBA </span><span style="font-family:新細明體;mso-ascii-font-family:&quot;Times New Roman&quot;">只使用</span> 
+<span lang="EN-US">TCP / IP </span><span style="font-family:新細明體;mso-ascii-font-family:
+&quot;Times New Roman&quot;">的通訊協定</span><span lang="EN-US"><span style="font-size:10.0pt;font-family:新細明體;
+mso-ascii-font-family:Verdana;mso-hansi-font-family:Verdana;mso-bidi-font-family:
+&quot;Times New Roman&quot;;mso-font-kerning:1.0pt;mso-ansi-language:EN-US;mso-fareast-language:
+ZH-TW;mso-bidi-language:AR-SA">，</span> </span><span style="font-family:新細明體;mso-ascii-font-family:&quot;Times New Roman&quot;">所以在</span> 
+<span lang="EN-US">Windows </span><span style="font-family:新細明體;mso-ascii-font-family:
+&quot;Times New Roman&quot;">作業系統上只要安裝</span><span lang="EN-US"> 
+TCP / IP </span><span style="font-family:新細明體;mso-ascii-font-family:&quot;Times New Roman&quot;">通訊協定就可以了</span>。</p>
+<p class="MsoNormal"><span lang="EN-US">&nbsp;<img border="0" src="Setclip3.JPG" width="453" height="468"><o:p>
+</o:p>
+</span></p>
+<p class="MsoNormal"><span lang="EN-US">&nbsp;<o:p>
+</o:p>
+</span></p>
+<p class="MsoNormal" style="text-indent:12.0pt"><span style="font-family:新細明體;
+mso-ascii-font-family:&quot;Times New Roman&quot;">如上圖的設定</span> <span lang="EN-US">; 
+“ Client for Microsoft Networks “ </span><span style="font-family:新細明體;
+mso-ascii-font-family:&quot;Times New Roman&quot;">這是讓</span> <span lang="EN-US">Windows 
+</span><span style="font-family:新細明體;mso-ascii-font-family:&quot;Times New Roman&quot;">作業系統可以存取及管理</span> 
+<span lang="EN-US">Microsoft Networks </span><span style="font-family:新細明體;
+mso-ascii-font-family:&quot;Times New Roman&quot;">資源的元件</span> <span lang="EN-US"><span style="font-size:10.0pt;font-family:新細明體;
+mso-ascii-font-family:Verdana;mso-hansi-font-family:Verdana;mso-bidi-font-family:
+&quot;Times New Roman&quot;;mso-font-kerning:1.0pt;mso-ansi-language:EN-US;mso-fareast-language:
+ZH-TW;mso-bidi-language:AR-SA">，</span> </span><span style="font-family:新細明體;mso-ascii-font-family:&quot;Times New Roman&quot;">再來是網路卡的界面負責資料的傳輸媒介</span> 
+<span lang="EN-US">. “ TCP / IP “ </span><span style="font-family:新細明體;
+mso-ascii-font-family:&quot;Times New Roman&quot;">是通訊協定</span> <span lang="EN-US"><span style="font-size:10.0pt;font-family:新細明體;
+mso-ascii-font-family:Verdana;mso-hansi-font-family:Verdana;mso-bidi-font-family:
+&quot;Times New Roman&quot;;mso-font-kerning:1.0pt;mso-ansi-language:EN-US;mso-fareast-language:
+ZH-TW;mso-bidi-language:AR-SA">，</span></span><span style="font-family:新細明體;mso-ascii-font-family:&quot;Times New Roman&quot;">有這三個元件</span><span lang="EN-US">Windows 
+</span><span style="font-family:新細明體;mso-ascii-font-family:
+&quot;Times New Roman&quot;">作業系統就可以與</span> <span lang="EN-US">SAMBA 
+</span><span style="font-family:新細明體;mso-ascii-font-family:&quot;Times New Roman&quot;">連線</span> 
+。</p>
+<p class="MsoNormal" style="text-indent:12.0pt"><img border="0" src="Setclip4.JPG" width="368" height="434"></p>
+<p class="MsoNormal" style="text-indent:12.0pt"><font FACE="新細明體" LANG="ZH-TW">■<b></b></font><span lang="EN-US"> 
+<font face="新細明體">存取控制</font></span></p>
+<p class="MsoNormal" style="text-indent:12.0pt"><font face="新細明體"><span lang="EN-US">SAMBA 
+使用security這參數來控制資源分享的作業方式</span></font><span lang="EN-US"><span style="font-size:10.0pt;font-family:新細明體;
+mso-ascii-font-family:Verdana;mso-hansi-font-family:Verdana;mso-bidi-font-family:
+&quot;Times New Roman&quot;;mso-font-kerning:1.0pt;mso-ansi-language:EN-US;mso-fareast-language:
+ZH-TW;mso-bidi-language:AR-SA">，</span> </span><font face="新細明體"><span lang="EN-US">SAMBA提供下列的方式:</span></font></p>
+<ul>
+  <li>
+    <p class="MsoNormal" style="text-indent:12.0pt"><font face="新細明體"><span lang="EN-US">SHARE</span></font></li>
+  <li>
+    <p class="MsoNormal" style="text-indent:12.0pt"><font face="新細明體"><span lang="EN-US">USER</span></font></li>
+  <li>
+    <p class="MsoNormal" style="text-indent:12.0pt"><font face="新細明體"><span lang="EN-US">SERVER</span></font></li>
+  <li>
+    <p class="MsoNormal" style="text-indent:12.0pt"><font face="新細明體"><span lang="EN-US">DOMAIN</span></font></li>
+</ul>
+<p class="MsoNormal" style="text-indent:12.0pt"><font face="新細明體"><span lang="EN-US">基本上這一些方法與Windows作業系統的[共用級存取控制]及[使用者級存取控制]方式相同</span></font><span lang="EN-US"><span style="font-size:10.0pt;font-family:新細明體;
+mso-ascii-font-family:Verdana;mso-hansi-font-family:Verdana;mso-bidi-font-family:
+&quot;Times New Roman&quot;;mso-font-kerning:1.0pt;mso-ansi-language:EN-US;mso-fareast-language:
+ZH-TW;mso-bidi-language:AR-SA">，</span></span><font face="新細明體"><span lang="EN-US">主要分別在使用者存取資源的控制及使用者的管理的方式上有所不同</span></font>。</p>
+<p class="MsoNormal" style="text-indent:12.0pt"><img border="0" src="Setclip5.JPG" width="368" height="437"></p>
+<p class="MsoNormal" style="text-indent:12.0pt">　</p>
+<p class="MsoNormal" style="text-indent:12.0pt"><span lang="EN-US">再來說到FreeBSD跑TCP/IP而Windows 
+NT跑的是Netbios<span style="font-size:10.0pt;font-family:新細明體;
+mso-ascii-font-family:Verdana;mso-hansi-font-family:Verdana;mso-bidi-font-family:
+&quot;Times New Roman&quot;;mso-font-kerning:1.0pt;mso-ansi-language:EN-US;mso-fareast-language:
+ZH-TW;mso-bidi-language:AR-SA">，</span> 兩者是如何溝通的呢?答案就是</span></p>
+<p class="MsoNormal" style="text-indent:12.0pt"><span lang="EN-US">NetBIOS over 
+TCP/IP</span></p>
+<p style="text-indent:12.0pt">　</p>
+<p class="MsoNormal" style="text-indent:12.0pt"><span style="font-family:新細明體;
+mso-ascii-font-family:&quot;Times New Roman&quot;">P.S &lt;很多人誤以為還需要安裝</span><span lang="EN-US"> 
+IPX/SPX </span><span style="font-family:新細明體;mso-ascii-font-family:&quot;Times New Roman&quot;">或</span> 
+<span lang="EN-US">NetBEUI </span><span style="font-family:新細明體;mso-ascii-font-family:
+&quot;Times New Roman&quot;">等通訊協定</span><span lang="EN-US"><span style="font-size:10.0pt;font-family:新細明體;
+mso-ascii-font-family:Verdana;mso-hansi-font-family:Verdana;mso-bidi-font-family:
+&quot;Times New Roman&quot;;mso-font-kerning:1.0pt;mso-ansi-language:EN-US;mso-fareast-language:
+ZH-TW;mso-bidi-language:AR-SA">，</span></span><span style="font-family:新細明體;mso-ascii-font-family:
+&quot;Times New Roman&quot;">這並不是正確的</span>。<span lang="EN-US">&gt;</span></p>
+<p class="MsoNormal" style="text-indent:12.0pt">　</p>
+<p class="MsoNormal" style="text-indent:12.0pt"><font FACE="新細明體" LANG="ZH-TW">■<b></b></font><span lang="EN-US"> 
+密碼的建立 (smbpasswd)</span></p>
+<p class="MsoNormal" style="text-indent:12.0pt"><span lang="EN-US">SAMBA 
+並不直接使用FreeBSD的密碼系統而是自己有一個密碼檔案使用FreeBSD 
+CD安裝的SAMBA密碼檔案放在/usr/local/private/smbpasswd 
+這檔案中在安裝的過程會自動產生及轉換FreeBSD的帳戶到這一檔案中如果是自行編譯的SAMBA則它預設的路徑在/usr/local/samba/private/smbpasswd</span></p>
+<p class="MsoNormal" style="text-indent:12.0pt">　</p>
+<p class="MsoNormal" style="text-indent:12.0pt">　</p>
+<p class="MsoNormal" style="text-indent:12.0pt">　</p>
+<p><br>
+</p>
+<pre style="margin-top:0cm;margin-right:36.0pt;margin-bottom:0cm;margin-left:36.0pt;
+margin-bottom:.0001pt;line-height:150%"><span lang="EN-US" style="font-size:11.0pt;
+mso-bidi-font-size:10.0pt;mso-bidi-font-family:&quot;Courier New&quot;;color:#CC3399"></o:p>
+</span><span lang="EN-US" style="font-size:11.0pt;
+mso-bidi-font-size:10.0pt;mso-bidi-font-family:&quot;Courier New&quot;">
+</span></pre>
+</BODY></HTML>

@@ -1,0 +1,15 @@
+Q: 何謂 tcp wrappers? 
+A: 包在 daemon 外的一個 tcp listener
+
+tcpd 可以在 inetd 中實作, 即編寫 /etc/inetd.conf
+telnet stream tcp nowiat root /usr/sbin/tcpd /usr/sbin/in.telnetd
+上例中要跑 in.telnetd (即 telnet 的 daemon) 先要經過 tcpd
+
+Q: centOS 的 tcpd 是否也由 inetd ?
+A: centOS 使用 xinetd 不用 inetd, 另外 tcpd 是內建啟動的, 所以不必
+額外再去設定其它的檔案, 要動的只有 hosts.allow hosts.deny
+
+Q: 網路進來的 traffic 示意:
+A: http://centos.org/docs/4/html/rhel-rg-en-4/ch-tcpwrappers.html
+
+實作: 把 echo 打開後觀察 /var/log/messages 可看到 tcpd 的作為 

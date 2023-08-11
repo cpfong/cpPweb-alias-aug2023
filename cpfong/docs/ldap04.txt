@@ -1,0 +1,10 @@
+cp@mail /usr/local/etc] ls -l nss_ldap.conf
+-r--r--r--  1 root  wheel  9723  8 12 19:44 nss_ldap.conf
+lrwxr-xr-x  1 root  wheel  13  8 12 19:54 ldap.conf -> nss_ldap.conf
+
+/etc/pam.d/sshd
+/etc/pam.d/system
+/etc/nsswitch.conf
+/usr/local/etc/openldap/ca.crt
+
+ln -s /usr/local/lib/pam_ldap.so /usr/lib

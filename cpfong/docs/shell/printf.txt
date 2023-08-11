@@ -1,0 +1,16 @@
+$ printf "this is a test"		#this is a test
+$ printf 'this' 'is' 'a' 'test'		#missing format character
+
+$ var="this is a test"
+$ printf %s $var			#thisisatest ## all in one just like printf %s this is a test
+$ printf %s "$var"			#this is a test ## var is a whole string input
+
+printf "My name is \"%s\".\nIt's a pleasure to meet you." "John"
+printf "%s\n" "hello printf" "in" "bash script" # format string will apply to each argument.
+
+now="$(date)" #command substution
+$ printf "Current date and time %s\n" "$now"
+$ printf "today is %s" "`date`"
+
+header="\n %-10s %8s %10s %11s\n"
+printf "$header" "ITEM NAME" "ITEM ID" "COLOR" "PRICE"

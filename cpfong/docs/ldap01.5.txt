@@ -1,0 +1,4 @@
+slapd_enable="YES"
+# note: port 389 and I use TLS (check end of slapd.conf)
+slapd_flags='-h "ldapi://%2fvar%2frun%2fopenldap%2fldapi/ ldap://0.0.0.0/"'
+slapd_sockets="/var/run/openldap/ldapi"

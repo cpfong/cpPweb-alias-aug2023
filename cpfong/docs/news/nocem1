@@ -1,0 +1,59 @@
+                        NoCeM 簡介
+
+1.NoCeM簡介
+
+  NoCeM的發音為(No See 'Em, 也就是No See Them), 其主要的目的是處理現在
+  常見的 SPAM, 適用的對像相當廣泛, 從 news server 的管理員到一般閱讀  
+  NEWS 的使用者都可加入.                                            
+
+  每位使用者可將他在網路上認為不值得閱讀(或值得閱讀的文章), 整理出來, 
+  按照一定的格式 (NoCeM有特別規定格式), 將相關的資料(message-id)製成一
+  篇文章 (在NoCeM中稱為notice), 利用各種管道將這些資料散播給其他的使用
+  者, 散播的管道並沒有限制, mailing list, web, news都是常見的方式.    
+
+  特別重要的一點, 所有的notice必須經過發文者的 PGP 簽名, 如此可以確定
+  notice不會被任何人偽造或竄改.                                      
+
+  news server管理者:
+  主要的原理和上面所寫的大致相同, 不過原來修改.newsrc檔的動作, 現在變成
+  直接將文章從 news server 中刪除, 同樣地, 管理者有絕對的權利選擇是否加入
+  NoCeM 或是加入後只接受某些人的notice.        
+
+4.NoCeM的延伸
+  NoCeM notice可以由任何人發出, 也可以被任何人接收, 根據這樣的概念, 就發
+  展出pseudo moderator; 當某個使用者對某些特定的討論區有著較多的經驗時, 
+  可以自告奮勇的送出notice, 針對特定的討論區內的文章作一篩選, 建議其他的
+  那幾篇可以詳加閱讀, 那幾篇不值得一看, 而其他的讀者, 如果相信他的經驗和
+  判斷, 就可以設定接收他的notice, 這就是pseudo moderator.
+
+  一般的newsgroup moderator產生的方法較為嚴謹, 所有的文章必需經過moderator
+  認同後, 才能送上newsgroup, 因此並不是所有的newsgroup都有moderator來為文
+  章品質把關.
+
+  事實上pseudo moderator的觀念, 就像一般BBS中每個板的板主一樣, 只不過
+  pseudo moderator並沒有權利刪除任何文章, 除非讀者接受他送出的notice, 因
+  此, 較不易發生 "板主管理不公"  "板主濫砍文章",  諸如此類的情形, 只要讀
+  者懷疑或不能接受pseudo moderator的判斷, 隨時可以停止接受pseudo moderator
+  送出的notice, 讀者可以自由的做出決定.
+
+news server管理者:
+  這方面相關的程式已經頗多, 也支援數種不同的news server程式, 以inn為例
+  http://sites.inka.de/~bigred/sw/c-nocem.html                        
+  c-nocem可支援inn2.x以下的板本               
+
+6.其他
+
+  A.目前 NoCeM notice大部份都是透過 news 傳送, alt.nocem.misc是主要傳送
+    這些notice的newsgroup
+
+7.參考
+
+  http://www.cm.org
+  http://sites.inka.de/~bigred/sw/c-nocem.html
+  http://www.civil.ncku.edu.tw/~leeym/dl/ncm-innbbsd-0.5.tgz
+  news:news.admin.nocem
+  news:alt.nocem.misc
+
+
+
+

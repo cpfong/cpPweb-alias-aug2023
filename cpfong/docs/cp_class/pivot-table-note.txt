@@ -1,0 +1,13 @@
+You can use formulas to log data within these cells and when your spreadsheet is small, it's simple enough to read through and understand the numbers.
+But as your spreadsheet begins to grow, drawing conclusions requires a bit more power. That's where pivot tables come in. A pivot table takes a large set of data and summarizes it.
+
+ex
+--
+Father food	2021/10/09
+Mother shopping	2021/10/07
+You	drink	2021/11/01
+Mother food	2021/10/25
+You	3c	2021/10/11
+Father drink	2021/11/03
+
+how can easily tell what you 3 buy?

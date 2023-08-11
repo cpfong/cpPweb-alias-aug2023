@@ -1,0 +1,84 @@
+<html><head><title>Sendmail-8.11.0 重新安裝 + Virtual User Table</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=big5"><!--
+.small {  font-family: "細明體"; font-size: 9pt; line-height: 15pt}
+td {  font-family: "細明體"; font-size: 9pt; line-height: 15pt}
+.big {  font-family: "細明體"; font-size: 11pt; line-height: 17pt}
+a:link {  text-decoration: underline}
+a:visited {  text-decoration: underline;}
+a:hover {  text-decoration: underline; color=008000}
+--></head>
+<body bgcolor="#ffffff">
+<hr>
+<br>
+<div align="center"> <a href="http://solaris.tophk.net/index.php"><img src="_files/title.gif" border="0" height="30" width="309"></a> 
+  <p><font face="Arial, Helvetica, sans-serif" size="2">TCP/IP Address + Router 
+    or Gateway + 主機名稱 + DNS IP + Domain 設定</font></p>
+  <p> <font face="Arial, Helvetica, sans-serif" size="2">Last Update : 21 Apr
+      2004 </font></p>
+</div>
+<font face="Arial, Helvetica, sans-serif" size="2"><a href="http://solaris.tophk.net/index.php"><img src="_files/button_gototop.gif" border="0" height="12" width="52"></a> 
+</font> 
+<hr>
+<p><font face="Arial, Helvetica, sans-serif" size="2"> 例子 : -<br>
+  Server Name = haha123 <br>
+  Domain Name = coxford.net <br>
+  TCP/IP address = 201.65.7.2<br>
+  Router IP = 201.65.7.1<br>
+  IP Range </font><font face="Arial, Helvetica, sans-serif" size="2">= 201.65.7.0 
+  至 201.65.7.255<br>
+  DNS IP = 202.134.105.130, 202.134.105.135 </font></p>
+<p><font face="Arial, Helvetica, sans-serif" size="2"> 主機名稱設定 </font></p>
+<blockquote> 
+  <p><font face="Arial, Helvetica, sans-serif" size="2">把主機名稱 <font color="#990000">haha123</font> 
+    放入 <a href="http://solaris.tophk.net/tcpip/nodename">/etc/nodename</a></font></p>
+  <p><font face="Arial, Helvetica, sans-serif" size="2">把主機名稱 <font color="#990000">haha123</font> 
+    放入 /etc/hostname.???0 的網絡介面卡 <br>
+    ( 此例為 elxl0 是網卡的名稱，<a href="http://solaris.tophk.net/tcpip/hostname.elxl0">/etc/hostname.elxl0</a>，在安裝 Solaris 
+    時，只要你選擇網絡連線，這個檔案便會自動產生。) </font></p>
+</blockquote>
+<p><font face="Arial, Helvetica, sans-serif" size="2">TCP/IP address 設定</font></p>
+<blockquote> 
+  <p><font face="Arial, Helvetica, sans-serif" size="2">把 <font color="#990000">201.65.7.2 
+    　haha123</font> 放入 <a href="http://solaris.tophk.net/tcpip/hosts">/etc/inet/hosts</a></font></p>
+  <p><font face="Arial, Helvetica, sans-serif" size="2">把</font> <font color="#990000" face="Arial, Helvetica, sans-serif" size="2">201.65.7.0 
+    　255.255.255.0</font><font face="Arial, Helvetica, sans-serif" size="2"> 放入 
+    <a href="http://solaris.tophk.net/tcpip/netmarks">/etc/inet/netmarks</a> </font></p>
+</blockquote>
+<p><font face="Arial, Helvetica, sans-serif" size="2">Router IP 或 Gateway 設定</font></p>
+<blockquote> 
+  <p><font face="Arial, Helvetica, sans-serif" size="2">把 <font color="#990000">201.65.7.1</font> 
+    放入 <a href="http://solaris.tophk.net/tcpip/defaultrouter">/etc/defaultrouter</a></font></p>
+</blockquote>
+<p><font face="Arial, Helvetica, sans-serif" size="2">Domain Name 設定</font></p>
+<blockquote> 
+  <p><font face="Arial, Helvetica, sans-serif" size="2">把</font> <font color="#990000" face="Arial, Helvetica, sans-serif" size="2">coxford.net</font><font face="Arial, Helvetica, sans-serif" size="2"> 
+    放入 <a href="http://solaris.tophk.net/tcpip/defaultdomain">/etc/defaultdomain</a></font></p>
+</blockquote>
+<p><font face="Arial, Helvetica, sans-serif" size="2">DNS IP 設定</font></p>
+<blockquote> 
+  <p><font face="Arial, Helvetica, sans-serif" size="2">把 <br>
+    <font color="#990000">search </font><font face="Arial, Helvetica, sans-serif" size="2"><font color="#990000">haha123</font></font><font color="#990000"><br>
+    nameserver 202.134.105.130 <br>
+    nameserver 202.134.105.135 </font><br>
+    放入 <a href="http://solaris.tophk.net/tcpip/resolv.conf">/etc/resolv.conf</a></font></p>
+</blockquote>
+<p><font face="Arial, Helvetica, sans-serif" size="2">更改 <a href="http://solaris.tophk.net/tcpip/nsswitch.conf">/etc/nsswitch.conf</a> 
+  的設定</font></p>
+<blockquote> 
+  <p><font face="Arial, Helvetica, sans-serif" size="2">把<font color="#990000"> 
+    hosts: files</font> 改為<font color="#990000"> hosts: files dns</font></font></p>
+  <p><font face="Arial, Helvetica, sans-serif" size="2">或</font></p>
+  <p><font color="#990000" face="Arial, Helvetica, sans-serif" size="2"># cd
+      /etc<br>
+      # mv nsswitch.conf nsswitch.conf.orig<br>
+      # cp nsswitch.dns nsswitch.conf</font></p>
+  <p>&#160;</p>
+</blockquote>
+<p><font face="Arial, Helvetica, sans-serif" size="2">最後電腦從新啟動便完成</font></p>
+<font face="Arial, Helvetica, sans-serif">
+<hr>
+</font> <font face="Arial, Helvetica, sans-serif" size="2"> <a href="http://solaris.tophk.net/index.php"><img src="_files/button_gototop.gif" border="0" height="12" width="52"></a> 
+</font> 
+<p><font face="Arial, Helvetica, sans-serif" size="2">E-mail : <a href="mailto:andrew@tophk.net">andrew@tophk.net</a></font></p>
+</body></html>

@@ -1,0 +1,101 @@
+4/27
+第六章和第七章應一起 study
+chap6 是提供 chap7 如何計算的方法
+
+chap7,8,9 則為 ANOVA 此為做實驗時使用之最基本初等統計之方法
+chap7: hypothesis about population propostion
+
+實驗時收集 data 要驗証 null hypo 總統的支持度 40%, 發出 1300 份問, 有效的的回收為 1200
+吃檳榔的有多少比例會得到口腔, 流行病理學定家知約有 1/3 會笭得到, 要收集資料 prove 
+雙英辯論完後調查滿意度不同: null hypo 為兩人的滿意度相同
+
+difference of population propotision 一定要使用 norm dist
+
+bionormal dist: random varialbe 生成一個 event 之 probability 為多少? succeed 若 p 則 failure
+的機率為 1-p 
+
+textbook 最前頁的架構為 :
+propotion (比例問題) 由 bi-nominal 開始, 當 sample size 向上增成很大時會近似 norm dist
+1 propotion , several prop 使用 chi-square
+
+normal dist 使用 mean, ordinal 不是 continous 使用 median
+extreme nonnormal propotional : wilcon signed, signed test 都是無母數分析
+
+p75 在解釋 null hypo 
+T-dist 很接近 norm dist, T-dist 的 mean wider, 而 norm dist 則 narrow 些
+
+chap7 全使用 T-dist 
+7.4 比較二組的 menau
+contr	exp
+1	1
+2	2
+..	..
+n1	n2
+要比較二組的 mean difference
+1. control 和 exp 的 subject 是相互 indepent 的
+control grp 可以得到一個 mean 和 varience
+exp grp 會有另外電個 mean 和 varience
+
+1/2 <= var1/var2 <= 2 則這二個 variecne 為 equal
+可以把這二組 data spool 起來以得到更多的 data , 如不在 1/2 內則不 equal 
+要使用 7.6 的 unqueal varience
+
+但如果二組的 subject 使用相同的, 則為 paired T-test
+
+做實驗前應思考是否要用不同的 subject 或是相同的 subject ,若用相同的費用可
+省一半, 但 control grp 的 control treatment effect 是否會 carry over 到 exp grp
+中, 果真如此則不能使用相同的 subject
+
+二組的 subjects 則有較多的量, 數據有代表性但有可能有 varience 的問題存在
+
+chap7 中提到的 one sample 即表示使用一組資料, 在這種情況下通常是要驗証
+population prop 是多少
+two sample 則為使用二組資料通常是要比較二組的 population propo 的不同
+
+p89 的圖要仔細的研究
+p130 chap6 使用 95% conference interval 
+chap7 使用 95% conf inte 去 agree null hypo
+
+p88 公式來解釋 estimate conf inte prop 使用 norm dist
+下一章 mean 使用 T-dist 相似 norm dist, 在標準的 norm dist 中 conf inte = u +- 1.96sd
+
+p71 課本的例題: 右半面第二段文字寫道: let us calculate 95% and 99% 調查得到的 popu prop
+94% (實驗得到的) 依 p88 則 conf inte 為 0.94+1.96sd (這個為 bi-nominal dist)
+sample size=54, succeed = 0.94, fail=0.06
+p88 Sprop= [(1-0.94)(0.94)/54] ^ 0.5 = 0.032 這個值為 sd 後再代入上一行的 conf inte
+以得到 95 inte 為 (0.88, 1.00)
+
+下面要驗証 null hypo 根據觀察 90% 女人有甲狀腺問題, p=0.9 (null hypo) 此由 54 筆資料
+得到之結果, 想要驗証 90% 否, 因為 0.9 落在 (0.88, 1.00) 中間所以 accept null hypo
+
+而 99% 求出的 interval 為 (0.86, 1.02) 則 0.9 還是落在這個之間, 也是 accept null hypo
+
+牛頓力學中的直線是在光速以內觀察到的, 當超過光速之後甲地到乙地不再是直線, 而是 randomly
+只能看得到結果但不知是如何抵達的, 而血壓的變化也是 random variable 因為不會固定要某一點
+上而是不時在變化.
+
+以課本 p72 為例子 6.3 小節
+實驗出來的 p1=0.5 p2=0.21 二種藥的成功率分別為 p1, p2 sd 依 p88 計算得到 Sdiff=0.13
+p1^ - p2^ = 0.50-0.21=0.29 diff conf inte = 0.29 +- 1.96sd=(0.04, 0.54) 這個 interval
+沒有通過 0 所以表示這二種藥有很大的差別, 在目前以 p1^-p2^ 為主來計算得到的 inter
+0.04, 0.54 表示第一種藥的成功 >> 第二種
+
+假定以第二種來計算 p2-p1=-0.29 則 inerv = (-0.04, -0.54) 表示第二種藥比第一種差很多
+
+6.4 小節 p75 由 table 6.1 資料算出 95 conf inte 在那兒 1.51 +- 0.33 
+依據 p75 公式 6.5 看 arfa = 0.001 則 1/2 arfa = 0.0005
+查 T-dist 表 p383 n=10 (11-1) p384 --> 4.587
+1.51 +- (4.587) 0.33/sqrt(11)  
+95 conf interval = (1.05, 1.97) 要驗証的為 1.3 所以應 accept null nypo
+
+
+control grp 和 exp grp 中的 sample size 可以不同, 使用 Spool= ...
+注意: (n1-1)s^2 代表的即是 varience, 在此因為 equal varience , equal weight 所以把
+兩組平均, 在公式中的 n1+n2-2 為 degree of freedom
+
+倒數第二個公式則為不是 equal varience 的例子 (即 >=2 或 <= 1/2 時)
+
+而在 paired sample 時 Sd= sqrt(sum(di-d^)^2/n-1)  Di 為 diff 它是把 
+control grp 的值和 exp grp 的值減去後的結果, d^ 則為 diff 的平均值, 它們也有 sd
+
+

@@ -1,0 +1,90 @@
+chapter 5 輸入與輸出
+5.1 讀取標準輸入
+5.2 從鑽石形算符輸入
+5.3 調用引數
+5.4 寫到標準輸出
+5.5 用 printf 來編排輸出結果
+5.6 檔案代號
+5.7 開啟檔案代號
+5.8 使用 die 來處理嚴重錯誤
+5.9 使用檔案代號
+5.10 重新開啟標準檔案代號
+5.11 以 say 輸出資料
+
+5.1
+	$line=<STDIN>;chomp($line);
+	chomp($line=<STDIN>); # 同上
+	chomp($_=<STDIN>)   ; # 同上
+
+	foreach (<>){
+		print;
+	}
+	while (<>){
+		print;
+	}
+	以上二者有何不同 ? foreach 期待一個 array
+	所以會等到整個結束才到 print
+	while 則不會期待, 是每一個即到下去印一次
+
+	所以 for 和 while 最大的不同在於: while 
+	使用 memory 較節省, 因為每次只處理一個, 不必所有東西住進 memory
+
+5.2
+	./my_program fred barney betty
+	invoking argument 全代表檔名
+	沒有跟則使用 STDIN, 另外 - 也可代表 STDIN
+
+	另外可以使用  - 來代表 stdin
+
+5.3
+	invoation arguments 即是把東西放在 @ARGV 中
+	print @ARGV
+
+5.4
+	print  @array ;
+	print "@array"; # 以上二行不同點在下方會解譯, 也就是會自動放空白到二二之間
+
+	所以要使用有 " 或沒有來列印 array 要看需要而定,
+	例如以下以 \n 為結束的, 則不應加入 " 否則會多一個空白出來 
+
+	$array[0]="a\n";
+	$array[1]="b\n";
+	print  @array ;
+	print "@array";
+
+5.5
+	$a = 2/3;			print "$a\n"
+	$b = sprintf "%2.2f", $a;	print "$b\n";
+
+5.6	perl 保留的六大檔案名稱: STDIN STDOUT STDERR DATA ARGV ARGVOUT
+	filehandle 檔案代號為一個 "連繫" 的名稱, process 和外界, input 和 output 時的 connection
+
+5.7
+	open CONFIG, "dino";
+	open CONFIG, "<dino";
+	open BEDROCK, ">fred";
+	open LOG, ">>logfile";
+
+5.8
+	if (! open LOG, "<xxx"){
+		die "cannot open $!";
+	}
+	
+	if (@ARGV < 2){
+		die " 參數不足 \n";
+	}
+
+5.9
+	if (! open PASSWD, "/etc/passwd"){
+		die "cannot open passwd $!";
+	}
+
+	while (<PASSWD>){
+		print;
+	}
+
+5.11
+	使用 say
+	my $name='Fred';
+	print "$name\n";
+	say $name;

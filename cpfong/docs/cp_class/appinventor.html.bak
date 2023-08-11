@@ -1,0 +1,67 @@
+<html>
+ref: -
+<a href=./App2F4770/install_emulater.html> install emulator @ windows </a> --
+<a href=http://sourceforge.net/projects/ai2u/> ultimate ai2 project @sourceforge</a>--
+<a href=http://appinventor.mit.edu/explore/ai2/setup-device-wifi.html> setup wifi </a> --
+<br><br>
+1st: -
+<a href=http://ai2.appinventor.mit.edu> ai2 home </a> --
+<a href=./chromeSetup.exe> mid app inv using chrome browser </a> --
+apply gmail account --
+<a href=./MIT_App_Inventor_Tools_2.3.0_win_setup_working.exe> app inv2 simulater on PC new vesion </a> --
+Desktop: aiStarter -- login Gmail --
+<!-- original app invertor home
+<a href=http://appinventor.mit.edu>mit app inventor</a> --
+-->
+<a href=http://ai2.appinventor.mit.edu> ai2 home </a> --
+top right global for lang selection --
+how 2 sign in and out --
+<a href=./kitty.png> kitty png file </a> --
+<a href=./meow.mp3> sound of cat </a> --
+<a href=https://play.google.com/store/apps/details?id=edu.mit.appinventor.aicompanion3> mobile phone AI2 app </a> --
+<a href=./F4770-Ch01.ppt> cat ppt</a>
+<br><br>
+2nd: --
+<a href=./F4770-Ch02.ppt> piano ppt</a>-- <a href=./piano> piano related </a> -- 
+<br>
+3nd:
+<a href=./F4770-Ch03.ppt> temparature ppt</a> -- <a href=./App2F4770/aia/03Temp.aia> temp.aia</a>
+<br>
+4th: --
+<a href=./F4770-Ch04.ppt> paint ppt</a> --
+<a href=./App2F4770/aia/Paint04.aia> paint.aia</a> --
+<a href=./App2F4770/aia/Paint04_1.aia> 小畫家 1 aia</a> --
+<a href=./App2F4770/aia/Paint04_2.aia> 小畫家 2 aia</a> --
+<br><br>
+5th:<br>
+<a href=./App2F4770/aia/Ballot05.aia> 抽籤 </a> -
+<br>
+6th: --
+<a href=./App2F4770/aia/Dice06.aia> 骰子遊戲 </a> -
+<br>
+7th: --
+<a href=./App2F4770/aia/Weather07.aia>台北天氣(36_01)</a> -
+<a href=./App2F4770/aia/Movie07.aia>新北市電影院查詢</a> -
+<a href=./App2F4770/aia/Speak07.aia>翻譯機</a> -
+<a href=./App2F4770/aia/F4770-Ch07.ppt> ch07.ppt </a> 
+<br>
+9th:--
+<a href=./App2F4770/aia/Addressbook09.aia> 通訊錄 </a> -
+<a href=./App2F4770/aia/TinyDB09.aia>小小資料庫</a> -
+<a href=./App2F4770/aia/F4770-Ch09.ppt> chap9 ppt </a>
+<br>
+10th: --
+<a href=./App2F4770/aia/LocationSensor10.aia> 位置感應/a> -
+<a href=./App2F4770/aia/WebViewer10.aia>Web 觀看</a> -
+<a href=./App2F4770/aia/WhereAmI10.aia>我在哪兒?</a> -
+<br><br>
+<a href=http://turing.cs.trincoll.edu/~ram/cpsc110/homework/hw-listsandloops2/> list ex </a>-
+<br>
+<a href=./android-intro-20160324-97.ppt> 20160234 ppt</a><br><br>
+2016/3/30 part2: 目標為建立一個和第九章電話查詢相近的 app, 學習 list, tinyDB, 多畫面的掌控...  <br>
+<a href=./template.png> 樣版</a> --
+<a href=http://appinventor.mit.edu/explore/ai2/support/concepts/lists.html>何謂 list </a> --
+<a href=./local-var-list.png> 1+1 (改成看 list?) </a> --
+<a href=./init-list-picker.png> init listpicker </a> --
+<a href=./list-picker-after.png> listpicker item and index (using index?)</a> --
+</html>

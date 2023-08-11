@@ -1,0 +1,11 @@
+n@ccproxy ~]$ ls /var/db/pkg/|grep ldap
+nss_ldap-1.257
+openldap-client-2.3.27
+pam_ldap-1.8.4
+
+--
+note:
+nss_ldap: /usr/ports/net/nss_ldap
+pam_ldap: /usr/ports/security/pam_ldap
+mail# ls /usr/ports/net/openldap23-client/
+

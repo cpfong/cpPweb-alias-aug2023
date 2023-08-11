@@ -1,0 +1,15 @@
+obj: 使用 ipfw 來完成 jail (note: pf is easier)
+files: rc.conf  natd.conf  ipfw.rules (ipfw.rules is the most complicated part)
+os: FreeBSD 10.0 
+
+note:
+1. using jail
+2. kernel: VIMAGE, NULLFS
+3. host ipfw.rules you should use tail -f /var/log/security to debug
+4. jail rc.conf: filewall_type="open"
+5. gateway_enable, natd_flags=/etc/natd.conf
+6. natd.conf
+redirect_port udp 192.168.0.1:53 53 (0.1 is jail DNS)
+redirect_port tcp 192.168.0.5:80 80 (0.5 is jail WWW)
+7. ipfw.rules for HOST
+8. service ns start

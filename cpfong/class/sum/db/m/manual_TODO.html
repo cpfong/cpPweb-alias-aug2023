@@ -1,0 +1,596 @@
+  <HTML>
+  <HEAD>
+  
+  <TITLE>MySQL Reference Manual for version 5.0.3-alpha - C  MySQL and the Future (the TODO)</TITLE>
+   <style> code {color:purple} tt {color:green} samp {color:navy} pre {color:maroon} </style>
+  </HEAD>
+  <BODY BGCOLOR=silver TEXT=#000000 LINK=#101090 VLINK=#7030B0>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_Credits.html">previous</A>, <A HREF="manual_News.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="TODO" HREF="manual_toc.html#TODO">C  MySQL and the Future (the TODO)</A></H1>
+
+<P>
+<A NAME="IDX2378"></A>
+
+</P>
+
+<P>
+This section summarizes the features that we plan to implement in
+MySQL Server. The items are ordered by release series. Within a list,
+items are shown in approximately the order they will be done.
+
+</P>
+<P>
+<strong>Note</strong>: If you are an enterprise-level user with an urgent need
+for a particular feature, please contact <a HREF="mailto:sales@mysql.com">sales@mysql.com</a> to
+discuss sponsoring options. Targeted financing by sponsor companies
+allows us to allocate additional resources for specific purposes.
+One example of a feature sponsored in the past is replication.
+
+</P>
+
+
+
+<H2><A NAME="TODO_MySQL_5.0" HREF="manual_toc.html#TODO_MySQL_5.0">C.1  New Features Planned for 5.0</A></H2>
+
+<P>
+The following features are planned for inclusion into MySQL 5.0.
+Some of the features such as stored procedures are complete and are
+included in MySQL 5.0 alpha, which is available now.  Others such
+as cursors are only partially available. Expect these and other
+features to mature and be fully supported in upcoming releases.
+
+</P>
+<P>
+Note that because we have many developers that are working on different
+projects, there will also be many additional features. There is also a
+small chance that some of these features will be added to MySQL 4.1.
+For a list what is already done in MySQL 4.1, see section <A HREF="manual_Introduction.html#Nutshell_4.1_features">1.3.2.1  Features Available in MySQL 4.1</A>.
+
+</P>
+<P>
+For those wishing to take a look at the bleeding edge of MySQL
+development, we make our BitKeeper repository for
+MySQL version 5.0 publicly available.
+See section <A HREF="manual_Installing.html#Installing_source_tree">2.8.3  Installing from the Development Source Tree</A>.
+As of December 2003, binary builds of version 5.0 are also available.
+
+</P>
+<DL COMPACT>
+
+<DT>Views
+<DD>
+
+<UL>
+<LI>
+
+Views, implemented in stepwise fashion up to full functionality.
+See section <A HREF="manual_Introduction.html#ANSI_diff_Views">1.5.5.6  Views</A>. See section <A HREF="manual_SQL_Syntax.html#CREATE_VIEW">13.2.7  <code>CREATE VIEW</code> Syntax</A>.
+</UL>
+
+<DT>Stored Procedures
+<DD>
+
+<UL>
+<LI>
+
+Stored procedures currently are implemented, based on the SQL:2003
+standard.
+See section <A HREF="manual_Stored_Procedures.html#Stored_Procedures">19  Stored Procedures and Functions</A>.
+
+</UL>
+
+<DT>New functionality
+<DD>
+
+<UL>
+<LI>
+
+Elementary cursor support.
+See section <A HREF="manual_Stored_Procedures.html#Cursors">19.1.8  Cursors</A>.
+<LI>
+
+The ability to specify explicitly for <code>MyISAM</code> tables that an index
+should be created as an <code>RTREE</code> index.  (In MySQL 4.1, <code>RTREE</code> indexes
+are used internally for geometrical data that use GIS data types, but cannot be
+created on request.)
+<LI>
+
+Dynamic length rows for <code>MEMORY</code> tables.
+</UL>
+
+<DT>Standards compliance, portability and migration
+<DD>
+
+<UL>
+<LI>
+
+Support for Data Dictionary / <code>INFORMATION_SCHEMA</code>.
+<LI>
+
+Add true <code>VARCHAR</code> support (column lengths longer than 255, and
+no stripping of trailing whitespace).
+There is already support for this in the <code>MyISAM</code> storage engine,
+but it is not yet available at the user level.
+</UL>
+
+<DT>Speed enhancements
+<DD>
+
+<UL>
+<LI>
+
+<code>SHOW COLUMNS FROM <var>tbl_name</var></code> (used by the <code>mysql</code> client to allow
+expansions of column names) should not open the table, only the
+definition file. This will require less memory and be much faster.
+<LI>
+
+Allow <code>DELETE</code> on <code>MyISAM</code> tables to use the record cache.
+To do this, we need to update the threads record cache when we update
+the <tt>`.MYD'</tt> file.
+<LI>
+
+Better support for <code>MEMORY</code> tables:
+
+<UL>
+<LI>
+
+Dynamic length rows.
+<LI>
+
+Faster row handling (less copying).
+</UL>
+
+</UL>
+
+<DT>Usability enhancements
+<DD>
+
+<UL>
+<LI>
+
+Resolving the issue of <code>RENAME TABLE</code> on a table used in an active
+<code>MERGE</code> table possibly corrupting the table.
+</UL>
+
+</DL>
+
+<P>
+The news section of this manual includes a more in-depth list of features.
+See section <A HREF="manual_News.html#News-5.0.x">D.1  Changes in release 5.0.x (Development)</A>.
+
+</P>
+
+
+
+<H2><A NAME="TODO_MySQL_5.1" HREF="manual_toc.html#TODO_MySQL_5.1">C.2  New Features Planned for 5.1</A></H2>
+
+<DL COMPACT>
+
+<DT>New functionality
+<DD>
+
+<UL>
+<LI>
+
+<code>FOREIGN KEY</code> support for all table types, not just <code>InnoDB</code>.
+<LI>
+
+Column-level constraints.
+See section <A HREF="manual_Introduction.html#Constraints">1.5.6  How MySQL Deals with Constraints</A>.
+<LI>
+
+Online backup with very low performance penalty.  The online backup will
+make it easy to add a new replication slave without taking down the
+master.
+</UL>
+
+<DT>Speed enhancements
+<DD>
+
+<UL>
+<LI>
+
+New text based table definition file format (<tt>`.frm'</tt> files) and a
+table cache for table definitions.  This will enable us to do faster
+queries of table structures and do more efficient foreign key support.
+<LI>
+
+Optimize the <code>BIT</code> type to take one bit. (<code>BIT</code> now takes one byte;
+it is treated as a synonym for <code>TINYINT</code>.)
+</UL>
+
+<DT>Usability enhancements
+<DD>
+
+<UL>
+<LI>
+
+Add options to the client/server protocol to get progress notes
+for long running commands.
+<LI>
+
+Implement <code>RENAME DATABASE</code>. To make this safe for all storage engines,
+it should work as follows:
+
+<OL>
+<LI>
+
+Create the new database.
+<LI>
+
+For every table, do a rename of the table to another database, as
+we do with the <code>RENAME</code> command.
+<LI>
+
+Drop the old database.
+</OL>
+
+<LI>
+
+New internal file interface change.  This will make all file handling much
+more general and make it easier to add extensions like RAID.
+</UL>
+
+</DL>
+
+
+
+<H2><A NAME="TODO_future" HREF="manual_toc.html#TODO_future">C.3  New Features Planned for the Near Future</A></H2>
+
+<DL COMPACT>
+
+<DT>New functionality
+<DD>
+
+<UL>
+<LI>
+
+Oracle-like <code>CONNECT BY PRIOR</code> to search tree-like (hierarchical)
+structures.
+<LI>
+
+Add all missing standard SQL and ODBC 3.0 types.
+<LI>
+
+Add <code>SUM(DISTINCT)</code>.
+<LI>
+
+<code>INSERT SQL_CONCURRENT</code> and <code>mysqld --concurrent-insert</code> to do
+a concurrent insert at the end of a table if the table is read-locked.
+<LI>
+
+Allow variables to be updated in <code>UPDATE</code> statements. For example:
+<code>UPDATE foo SET @a:=a+b,a=@a, b=@a+c</code>.
+<LI>
+
+Change when user variables are updated so that you can use them with
+<code>GROUP BY</code>, as in the following statement:
+<code>SELECT id, @a:=COUNT(*), SUM(<var>sum_col</var>)/@a FROM <var>tbl_name</var> GROUP BY id</code>.
+<LI>
+
+Add an <code>IMAGE</code> option to <code>LOAD DATA INFILE</code> to not update
+<code>TIMESTAMP</code> and <code>AUTO_INCREMENT</code> columns.
+<LI>
+
+Add <code>LOAD DATA INFILE ... UPDATE</code> syntax that works like this:
+
+<UL>
+<LI>
+
+For tables with primary keys, if an input record contains a primary key
+value, existing rows matching that primary key value are updated from the
+remainder of the input columns. However, columns corresponding to columns
+that are <em>missing</em> from the input record are not touched.
+<LI>
+
+For tables with primary keys, if an input record does not contain the primary
+key value or is missing some part of the key, the record is treated as
+<code>LOAD DATA INFILE ... REPLACE INTO</code>.
+</UL>
+
+<LI>
+
+Make <code>LOAD DATA INFILE</code> understand syntax like this:
+
+<PRE>
+LOAD DATA INFILE '<var>file_name</var>.txt' INTO TABLE <var>tbl_name</var>
+     TEXT_FIELDS (text_col1, text_col2, text_col3)
+     SET table_col1=CONCAT(text_col1, text_col2),
+         table_col3=23
+     IGNORE text_col3
+</PRE>
+
+This can be used to skip over extra columns in the text file,
+or update columns based on expressions of the read data.
+<LI>
+
+New functions for working with <code>SET</code> type columns:
+
+<UL>
+<LI><code>ADD_TO_SET(<var>value</var>,<var>set</var>)</code>
+
+<LI><code>REMOVE_FROM_SET(<var>value</var>,<var>set</var>)</code>
+
+</UL>
+
+<LI>
+
+If you abort <code>mysql</code> in the middle of a query, you should open
+another connection and kill the old running query.
+Alternatively, an attempt should be made to detect this in the server.
+<LI>
+
+Add a storage engine interface for table information so that you can use it as a system
+table. This would be a bit slow if you requested information about all tables,
+but very flexible.  <code>SHOW INFO FROM <var>tbl_name</var></code> for basic table information
+should be implemented.
+<LI>
+
+Allow <code>SELECT a FROM <var>tbl_name1</var> LEFT JOIN <var>tbl_name2</var> USING (a)</code>; in this
+case <code>a</code> is assumed to come from <var>tbl_name1</var>.
+<LI>
+
+<code>DELETE</code> and <code>REPLACE</code> options to the <code>UPDATE</code> statement
+(this will delete rows when a duplicate-key error occurs while updating).
+<LI>
+
+Change the format of <code>DATETIME</code> to store fractions of seconds.
+<LI>
+
+Make it possible to use the new GNU <code>regexp</code> library instead of the current
+one (the new library should be much faster than the current one).
+</UL>
+
+<DT>Standards compliance, portability and migration
+<DD>
+
+<UL>
+<LI>
+
+Add <code>ANY()</code>, <code>EVERY()</code>, and <code>SOME()</code> group functions. In
+standard SQL, these work only on boolean columns, but we can extend these to
+work on any columns or expressions by treating a value of zero as FALSE and
+non-zero values as TRUE.
+<LI>
+
+Fix the type of <code>MAX(column)</code> to be the same as the column type:
+
+<PRE>
+mysql&#62; CREATE TABLE t1 (a DATE);
+mysql&#62; INSERT INTO t1 VALUES (NOW());
+mysql&#62; CREATE TABLE t2 SELECT MAX(a) FROM t1;
+mysql&#62; SHOW COLUMNS FROM t2;
+</PRE>
+
+</UL>
+
+<DT>Speed enhancements
+<DD>
+
+<UL>
+<LI>
+
+Don't allow more than a defined number of threads to run <code>MyISAM</code>
+recovery at the same time.
+<LI>
+
+Change <code>INSERT INTO ... SELECT</code> to optionally use concurrent inserts.
+<LI>
+
+Add an option to periodically flush key pages for tables with delayed
+keys if they haven't been used in a while.
+<LI>
+
+Allow join on key parts (optimization issue).
+<LI>
+
+Add a log file analyzer that can extract information about which tables
+are hit most often, how often multiple-table joins are executed, and so on. This
+should help users identify areas of table design that could be optimized
+to execute much more efficient queries.
+</UL>
+
+<DT>Usability enhancements
+<DD>
+
+<UL>
+<LI>
+
+Return the original column types when doing
+<code>SELECT MIN(column) ... GROUP BY</code>.
+<LI>
+
+Make it possible to specify <code>long_query_time</code> with a granularity
+in microseconds.
+<LI>
+
+Link the <code>myisampack</code> code into the server so that it can perform
+<code>PACK</code> or <code>COMPRESS</code> operations.
+<LI>
+
+Add a temporary key buffer cache during <code>INSERT/DELETE/UPDATE</code> so that we
+can gracefully recover if the index file gets full.
+<LI>
+
+If you perform an <code>ALTER TABLE</code> on a table that is symlinked to another
+disk, create temporary tables on that disk.
+<LI>
+
+Implement a <code>DATE/DATETIME</code> type that handles time zone information
+properly, to make dealing with dates in different time zones easier.
+<LI>
+
+Fix <code>configure</code> so that all libraries (like <code>MyISAM</code>)
+can be compiled without threads.
+<LI>
+
+Allow user variables as <code>LIMIT</code> arguments; for example,
+<code>LIMIT @a,@b</code>.
+<LI>
+
+Automatic output from <code>mysql</code> to a Web browser.
+<LI>
+
+<code>LOCK DATABASES</code> (with various options).
+<LI>
+
+Many more variables for <code>SHOW STATUS</code>.  Record reads and
+updates.  Selects on a single table and selects with joins.  Mean number of
+tables in selects. Number of <code>ORDER BY</code> and <code>GROUP BY</code> queries.
+<LI>
+
+<code>mysqladmin copy database new-database</code>; this requires a <code>COPY</code>
+operation to be added to <code>mysqld</code>.
+<LI>
+
+Processlist output should indicate the number of queries/threads.
+<LI>
+
+<code>SHOW HOSTS</code> for printing information about the hostname cache.
+<LI>
+
+Change table names from empty strings to <code>NULL</code> for calculated columns.
+<LI>
+
+Don't use <code>Item_copy_string</code> on numerical values to avoid
+number-to-string-to-number conversion in case of
+<code>SELECT COUNT(*)*(id+0) FROM <var>tbl_name</var> GROUP BY id</code>.
+<LI>
+
+Change so that <code>ALTER TABLE</code> doesn't abort clients
+that execute <code>INSERT DELAYED</code>.
+<LI>
+
+Fix so that when columns are referenced in an <code>UPDATE</code> clause,
+they contain the old values from before the update started.
+</UL>
+
+<DT>New operating systems
+<DD>
+
+<UL>
+<LI>
+
+Port the MySQL clients to LynxOS.
+</UL>
+
+</DL>
+
+
+
+<H2><A NAME="TODO_sometime" HREF="manual_toc.html#TODO_sometime">C.4  New Features Planned for the Mid-Term Future</A></H2>
+
+
+<UL>
+<LI>
+
+Implement function: <code>get_changed_tables(timeout,table1,table2,...)</code>.
+<LI>
+
+Change reading through tables to use <code>mmap()</code> when possible. Now only
+compressed tables use <code>mmap()</code>.
+<LI>
+
+Make the automatic timestamp code nicer.  Add timestamps to the update
+log with <code>SET TIMESTAMP=val;</code>.
+<LI>
+
+Use read/write mutex in some places to get more speed.
+<LI>
+
+Automatically close some tables if a table, temporary table, or temporary file
+gets error 23 (too many open files).
+<LI>
+
+Better constant propagation. When an occurrence of <var>col_name=n</var>
+is found in an expression, for some constant <code>n</code>, replace other
+occurrences of <var>col_name</var> within the expression with <code>n</code>.
+Currently, this is done only for some simple cases.
+<LI>
+
+Change all const expressions with calculated expressions if possible.
+<LI>
+
+Optimize <var>key</var> = <var>expr</var> comparisons. At the moment, only
+<var>key</var> = <var>column</var> or <var>key</var> = <var>constant</var> comparisons are
+optimized.
+<LI>
+
+Join some of the copy functions for nicer code.
+<LI>
+
+Change <tt>`sql_yacc.yy'</tt> to an inline parser to reduce its size and get
+better error messages.
+<LI>
+
+Change the parser to use only one rule per different number of arguments
+in function.
+<LI>
+
+Use of full calculation names in the order part (for Access97).
+<LI>
+
+<code>MINUS</code>, <code>INTERSECT</code>, and <code>FULL OUTER JOIN</code>.
+(Currently <code>UNION</code> and <code>LEFT|RIGHT OUTER JOIN</code> are supported.)
+<LI>
+
+Allow <code>SQL_OPTION MAX_SELECT_TIME=val</code>, for placing a time limit on a query.
+<LI>
+
+Allow updates to be logged to a database.
+<LI>
+
+Enhance <code>LIMIT</code> to allow retrieval of data from the end of a result set.
+<LI>
+
+Alarm around client connect/read/write functions.
+<LI>
+
+Please note the changes to <code>mysqld_safe</code>: According to FSSTND (which
+Debian tries to follow), PID files should go into <tt>`/var/run/&#60;progname&#62;.pid'</tt>
+and log files into <tt>`/var/log'</tt>. It would be nice if you could put the
+"DATADIR" in the first declaration of "pidfile" and "log" so that the
+placement of these files can be changed with a single statement.
+<LI>
+
+Allow a client to request logging.
+<LI>
+
+Allow the <code>LOAD DATA INFILE</code> statement
+to read files that have been compressed with <code>gzip</code>.
+<LI>
+
+Fix sorting and grouping of <code>BLOB</code> columns (partly solved now).
+<LI>
+
+Change to use semaphores when counting threads.  One should first implement
+a semaphore library for MIT-pthreads.
+<LI>
+
+Add full support for <code>JOIN</code> with parentheses.
+<LI>
+
+As an alternative to the one-thread-per-connection model, manage a pool
+of threads to handle queries.
+<LI>
+
+Allow <code>GET_LOCK()</code> to obtain more than one lock.  When doing this, it is
+also necessary to handle the possible deadlocks this change will introduce.
+</UL>
+
+
+
+<H2><A NAME="TODO_unplanned" HREF="manual_toc.html#TODO_unplanned">C.5  New Features We Don't Plan to Implement</A></H2>
+
+<P>
+We aim toward full compliance with ANSI/ISO SQL. There are no features
+we plan not to implement.
+
+</P>
+<P><HR><P>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_Credits.html">previous</A>, <A HREF="manual_News.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+ </BODY>
+ </HTML>

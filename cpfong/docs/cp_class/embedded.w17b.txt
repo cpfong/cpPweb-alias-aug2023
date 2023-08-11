@@ -1,0 +1,12 @@
+@venus-> cat /usr/src/tools/tools/nanobsd/defaults.sh | grep NANO_KERNEL=
+NANO_KERNEL=GENERIC
+
+# i am going to simulate i386
+vi /usr/src/sys/i386/conf/GENERIC
+
+--
+other way is modify defaults.sh NANO_KERNEL=NEW-Kernel
+vi /usr/src/sys/i386/conf/NEW-Kernel
+
+em0 -> keep this ethernet, comment out all others is fine
+device          em                      # Intel PRO/1000 Gigabit Ethernet Family

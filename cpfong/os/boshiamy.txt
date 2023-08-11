@@ -1,0 +1,105 @@
+緣起: 有鑑於自己在xcin2.5跟嘸蝦米的問題上花很了很多時間
+      所以想把xcin2.5與嘸蝦米相關的文件做一番整理，提供給新手參考
+
+
+一、cin轉tab失敗的問題; 原作:Arbro.bbs@miou.twbbs.org (月光小俠)
+
+1.編輯 liu57.cin 如下： ( 詳情 請勤勞一些 參閱 Cin 檔 )
+=================  liu57.cin 檔案範例  ==============
+%gen_inp
+%ename  liu
+%cname 無蝦米
+%selkey 1234567890
+%keyname begin
+a Ａ
+.
+.
+. ( 中間省略 )
+.
+z Ｚ
+, ，
+. ．
+' ’
+[ 〔
+] 〔
+%keyname end
+%endkey
+%chardef begin
+a 對
+aa 寸
+.
+.
+. ( 中間省略 )
+.
+]]v ﹄
+]]v ︼
+]]v ︾
+%chardef end
+===================== End of liu57.cin ============
+
+2.
+#./cin2tab liu57.cin
+CIN2TAB version (xcin 2.5.2) encoding=big5
+cin2tab: cin file: liu55.cin, use module: gencin version 20000827.
+cin2tab: number of keyname: 31
+cin2tab: max length of keystroke: 5
+cin2tab: total char number of this encoding: 13973
+cin2tab: number of char defined: 26032
+cin2tab: number of keystroke code defined: 26032
+cin2tab: number of defined char ignored: 0
+cin2tab: memory model: 1
+
+
+
+二、嘸蝦米在xcin2.5下的設定; 原作: wearty.bbs@bbs.ntnu.edu.tw (. . . . .)
+
+將產生的 liu57.tab 放到 /usr/X11R6/lib/X11/xcin/tab/big5/
+再來修改 /usr/X11R6/etc/xcinrc  【註】Linux下是/etc/chinese/xcin/xcinrc
+將其中這段
+ (define zh_TW.Big5
+  '((DEFAULT_IM         "cj")
+    ...
+    (CINPUT             (cj ...)
+修改為
+ (define zh_TW.Big5
+  '((DEFAULT_IM         "liu57")
+    ...
+    (CINPUT             (liu57 ...)
+並且加入這段：
+ (define liu57@big5
+        '((SETKEY      9)
+         (AUTO_COMPOSE YES)
+         (AUTO_UPCHAR  YES)
+         (AUTO_FULLUP  NO)
+         (SPACE_AUTOUP YES)
+         (SELKEY_SHIFT YES)
+         (SPACE_IGNOR  YES)
+         (SPACE_RESET  YES)
+         (AUTO_RESET   YES)
+         (WILD_ENABLE  YES)
+         (BEEP_WRONG   NO)
+         (BEEP_DUPCHAR NO)))
+
+重新啟動 xcin，這樣您就可以用 Ctrl-Alt-9 叫出嘸蝦米輸入法了。
+【註】若想了解以上設定詳情
+      可閱讀 /usr/X11R6/lib/X11/xcin25/doc/modules/gen_inp
+
+
+
+三、最簡碼(快嘸)的設定; 原作: Wyvern.bbs@bbs.nsysu.edu.tw (飛龍之子)
+
+1.快嘸(zmdbosh)要有 zmdbosh.cin，再依上面所說的方式依樣畫葫蘆生出
+  一個 zmdbosh.tab，然後給放到 /usr/X11R6/lib/X11/xcin/tab/big5/ 目錄下即可
+
+2.一樣修改xcinrc檔
+
+(define zh_TW.Big5                      ; 定義big5的輸入環境
+    '((DEFAULT_IM         "liu57")      ; 內定輸入法，嘸蝦米，我的最愛
+      (DEFAULT_IM_MODULE  "gen_inp")    ; xcin 所用，不用改
+      (DEFAULT_IM_SINMD   "zmdbosh")    ; 最簡碼查詢用zmdbosh(我取名叫快嘸)
+      (PHRASE             "default.phr")
+      (CINPUT             (bimsphone … liu57 zmdbosh)) ; 有哪些輸入法可使用
+
+有如上例有一般的注音(沒辦法，還是有些字不會打，只好靠注音幫忙)、嘸蝦米，
+及快嘸(這是我自己取的名字，表示這個模式只有在最簡碼的情況下才有效)。
+

@@ -1,0 +1,96 @@
+as root
+cd /usr/local/news/log
+touch news.crit news.err news.notice
+chown news news.*
+
+/etc/syslog.conf
+news.crit                                       /usr/local/news/log/news.crit
+news.err                                        /usr/local/news/log/news.err
+news.notice                                     /usr/local/news/log/news.notice
+kill `cat /var/run/syslog.pid`
+
+cd /usr/local/news/db
+touch history history.pag
+../makedbz -i -o
+chown news *
+
+cd /usr/local/news/spool/
+mkdir cycbuffs
+dd if=/dev/zero of=/usr/local/news/spool/cycbuffs/one bs=32k count=16k
+dd if=/dev/zero of=/usr/local/news/spool/cycbuffs/two bs=32k count=16k
+dd if=/dev/zero of=/usr/local/news/spool/cycbuffs/big bs=32k count=32k
+dd if=/dev/zero of=/usr/local/news/spool/cycbuffs/tiny bs=1k count=10
+chown -R news cycbuffs
+
+cd /usr/local/news/etc/
+vi cycbuff.conf
+# one, two 512M, big 1G, tiny 10k
+cycbuff:ONE:/usr/local/news/spool/cycbuffs/one:524288
+cycbuff:TWO:/usr/local/news/spool/cycbuffs/two:524288
+cycbuff:BIG:/usr/local/news/spool/cycbuffs/big:1048576
+cycbuff:SSS:/usr/local/news/spool/cycbuffs/tiny:10
+
+metacycbuff:SAREA:ONE
+metacycbuff:MAREA:TWO
+metacycbuff:BAREA:BIG
+metacycbuff:TAREA:SSS
+
+vi storage.conf
+method timecaf {
+        newsgroups: tw.*
+        class: 1
+}
+method cnfs {
+        newsgroups: test
+        class: 2
+        size: 0,512
+        options: TAREA
+}
+method cnfs {
+        newsgroups: aaa.*,bbb.*
+        class: 3
+        size: 0,3999
+        expires: 0s,4d
+        options: SAREA
+}
+method cnfs {
+        newsgroups: ccc.*,ddd.*
+        class: 4  
+        size: 0,3999
+        expires: 0s,4d
+        options: MAREA
+}
+method cnfs {
+        newsgroups: *
+        class: 5
+        expires: 0s,4d
+        options: BAREA
+
+put innd.sh into /usr/local/etc/rc.d
+#!/bin/sh
+if [ $# -eq 0 -o x$1 = xstart ]; then
+   if [ -x /usr/local/news/bin/rc.news -a -f /usr/local/news/db/history.pag ]; then
+	su - news -c /usr/local/news/bin/rc.news start
+   fi
+fi
+if [ x$1 = xstop ]; then
+   /usr/local/news/bin/ctlinnd shutdown machine is going down && echo 'innd down'
+fi
+chmod +x /usr/local/etc/rc.d/innd.sh
+
+vi db/newsgroups
+pub.post                Public Posting (2 news server can sharing articles)
+loc.post                Local Use Only
+test                    Local Testing Site
+aaa.1                   For cnfs one small
+aaa.2                   For ncfs one small
+bbb.1                   For ncfs one small
+bbb.2                   For ncfs one small
+ccc.1                   For ncfs two medium
+ccc.2                   For ncfs two medium
+ddd.1                   For ncfs two medium
+ddd.2                   For ncfs two medium
+other                   For ncfs big Big
+
+/usr/local/news/bin/ctlinnd newgroup pub.post
+....

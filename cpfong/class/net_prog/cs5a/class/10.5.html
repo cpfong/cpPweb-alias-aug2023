@@ -1,0 +1,25 @@
+<html>
+	chap3 3.8 context <br>
+	<ol>
+		<li> 5 + something
+		<li> sort something
+		<li> @people = qw / 張三 李四 /; $number = @people;
+	</ol>
+
+	<ol> 串列語境下的  <STDIN>
+		<li> @lines = <STDIN>; chomp(@lines); 
+		<li> chomp(@lines=<STDIN>);
+	</ol>
+
+	<ol> chap 4 副程式
+		<li> & 以叫用
+		<li> sub marine { } 來宣告
+		<li> var 為 global
+		<li> 副程式結束前的一行即為傳回值
+		<li> p74 argument (傳遞參數) @_ (argument array), $_[0], $_o
+		<li> 副程式中的私用變數 my 例如: my($a,$b)=@_;
+		<li> argument 的個數 $n = @_; print $n;
+		<li> shift 以把所有的 argument 給取出
+		<li> 省略 &
+	</ol>
+</html>

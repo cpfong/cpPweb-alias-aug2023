@@ -1,0 +1,63 @@
+一些小經驗，有使用的人可以參考看看
+
+OpenOffice 中文設定
+
+(1).用 ports 或是 package 安裝好 OpenOffice 1.0 後，預設是在
+    /usr/local/OpenOffice.org1.0/
+
+(2).任何使用者執行 /usr/local/OpenOffice.org1.0/program/soffice
+    都會出現是否要 repair 畫面(in X)，選擇 Yes，並選擇 Complete
+    會把一些東西裝到 ~/OpenOffice.org1.0/，並跳出 setup
+
+(3).再次執行 /usr/local/OpenOffice.org1.0/program/soffice
+    就可以看到 soffice 的 doc 文書處理畫面了
+
+Q: 如何加入中文字型？
+A: GUI 的加入方式：
+     執行 /usr/local/OpenOffice.org1.0/program/spadmin 列印管理程式，
+     Fonts -> Add -> Source directory: /usr/local/share/fonts/TrueType/
+     -> ˇCreate soft links only -> 文鼎PL細上海宋(bsmi00lp.ttf) -> Ok
+   CLI 的加入方式：
+     cd /usr/local/OpenOffice.org1.0/share/fonts/truetype
+     ln -s /usr/local/share/fonts/TrueType//bsmi00lp.ttf bsmi00lp.ttf
+     在加入完字型後，OpenOffice 在每次進入軟體前都會自動建立 fonts.dir
+
+Q: 畫面很醜，英文字很寬？
+A: 修改分成兩個部份，一個是將 Interface User 改成文鼎PL細上海宋，
+   另一個則是調整字型大小，字型稍微大一點就會有 AntiAlias 的效果，
+   建議值是 >= 120%
+   GUI 的修改方式：
+   啟動 soffice 後修改 Interface User
+     Tools -> Options -> OpenOffice.org -> Font Replacement ->
+     ˇApply replacement table -> Font: Interface User
+     Replace with: 文鼎 PL 細上海宋 -> ˇ -> ˇalways -> Ok
+   修改字型大小
+     Tools -> Options -> OpenOffice.org -> View -> Scale: 120% -> Ok
+   CLI 的修改方式：
+cd ~/
+mkdir -p OpenOffice.org1.0/user/config/registry/instance/org/openoffice/Office
+cd ~/OpenOffice.org1.0/user/config/registry/instance/org/openoffice/Office
+fetch fetch http://140.138.2.234/~statue/OpenOffice/Common.xml
+
+Q: 輸入中文變成方塊？
+A: 因為預設的 Thorndale 並不能顯示中文，筆者會讓預設成文鼎PL細上海宋
+   GUI 的修改方式：
+   啟動 soffice 後修改 Basic Fonts(Western)
+     Tools -> Options -> OpenOffice.org -> Text Document ->
+     Basic Fonts(Western) -> Default: 文鼎PL細上海宋 ->
+     Heading: 文鼎PL細上海宋 -> Ok
+   CLI 的修改方式：
+cd ~/
+mkdir -p OpenOffice.org1.0/user/config/registry/instance/org/openoffice/Office
+cd OpenOffice.org1.0/user/config/registry/instance/org/openoffice/Office
+fetch http://140.138.2.234/~statue/OpenOffice/Writer.xml
+--
+# unzip statue
+# mount /dev/lover /home/statue
+# make love
+done.
+# zip statue
+# make clean
+--
+ [1;32m※ Origin:  [33m元智大學 風之塔  [37m<bbs.yzu.edu.tw>  [m
+ [1;32m※ From  :  [36mu8-177.u203-204.giga.net.tw [m

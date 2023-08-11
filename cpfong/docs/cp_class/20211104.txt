@@ -1,0 +1,54 @@
+#P82-cars.py
+cars = ['honda', 'toyota', 'bmw']
+
+for car in cars:
+ if car == 'bmw':
+  print(car.upper())
+ else:
+  print(car.title())
+
+#p87-banned.py (does this value in the list?)
+import random
+
+a=[random.randint(1,50) for _ in range(10)]
+print(a)
+
+target=30
+if target not in a:
+# print("%d not in the list" % target)
+ print(f"{target} not in the list")
+else:
+ print("Bingo")
+
+#p104-alien.py
+alien = {'color': 'green', 'points': 5} # {} in hash [] in list and , is sep : means imply
+#print(alien['color'])
+print(alien)
+
+#exercise: add 2 sid and scores
+#sid -> scores
+
+# initialize
+p = {'muffin': 39, 'scone': 25, 'biscuit': 30}
+
+i=input("what would you like?")
+print(f"{i} is NT${p[i]}")
+
+# {} , : key value
+
+# hash keys and values list:  p.keys() p.values()
+
+favorite_languages = {
+    'jen': 'python',
+    'sarah': 'c',
+    'edward': 'ruby',
+    'phil': 'python',
+    }
+
+friends = ['phil', 'sarah']
+for name in favorite_languages.keys():
+    print(name.title())
+    
+    if name in friends:
+        language = favorite_languages[name].title()
+        print(f"\t{name.title()}, I see you love {language}!")

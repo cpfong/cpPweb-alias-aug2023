@@ -1,0 +1,50 @@
+chap12 檔案測試
+
+12.1 檔案測試算符
+	12.1.1 測試同一個檔案的多個屬性
+	12.1.2 疊接檔案測試算符
+12.2 關於 stat 和 lstat 函式 
+12.3 localtime 函式 
+12.4 逐位操作算符
+	12.4.1 使用位元字串
+
+12.1 只是想檢查檔案, 而不是要開來寫或讀, 例如: 查長度, 多久沒使用, 檔案太大否 ?
+
+	先介紹 ls 和 ls -l 的結果所代表的意義. 
+
+	die "file EXISTS !" if -e $filename;
+	warn "the config file almost expire\n" if -M CONFIG > 28 # note: CONFIG is a file handler
+	# 參閱課本 p186 的 表 12-1
+
+	ls -l |grep ^-|perl -p -e '@a=split; $_=$a[8]."\n"' | perl test.pl
+	上例中把 ls 長檔名的輸出給 grep 找第一個中線的(表檔案)後分解出第 8 個即為檔名
+
+	-s 會回傳一個檔案的大小. 
+
+	-M modify
+	-A access
+	-C inode change
+
+	以上三個和檔案的時間有相關, 但傳回的為 floating point
+
+	注意: $_ 在這兒也可以省略, 所以 -M $_ > 5 和  -M > 5 是相同的.
+	
+12.1.1 測試同一個檔案的多個屬性
+	if (-r $file and -w $file){ ...}
+	if (-r $file and -w _    ){ ...} 如此可以少一次的 access 檔
+
+12.2 關於 stat 和 lstat
+	要更一步的檔案詳細資料即叫用 stat
+	my ($dev, $ino, $mode, $nlink ...) = stat($filename) 
+	另一個用法為 (stat $filename)[2]
+	但這個 $mode 要經過 bit 的運算才可以變成有用的資訊 (先 skip 到 12.4)
+	open(my $fh, "<", "foo");
+        my $perm = (stat $fh)[2] & 07777;
+	my @a= stat F;
+	print "@a\n";
+	print "permission = $perm\n";
+
+12.4
+	10 & 12 = 8
+	1010 & 1100 = 1000 = 8
+	範例在課本 p195

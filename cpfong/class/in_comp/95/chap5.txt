@@ -1,0 +1,22 @@
+chap5: 戈矪瞶
+
+计╰参: 秈, 秈, せ秈
+じ㎝じ舱: (bit and byte) 8 bits = 1 byte
+ゅ絏: ASCII ㎝ 10 秈が传, ASCII ノ 8 bits ㄓじ
+ウ㎝ 10 秈传衡р 16*蔼じ + じ
+xxxx xxxx 
+16   1
+
+秈: 硔秈嘿秈, 贺计╰参いΤ 0 ㎝ 1 计
+秈: 硔秈嘿秈, 计Τ 0 1 2 3 4 5 6 7 8 9
+せ秈: 计Τ 0 1 2 3 4 5 6 7 8 9 a b c d e f
+
+秈–じ種竡:
+0000
+8421
+
+せ秈–じ種竡:
+0	0	0	0
+16^3	16^2	16^1	1	 
+
+

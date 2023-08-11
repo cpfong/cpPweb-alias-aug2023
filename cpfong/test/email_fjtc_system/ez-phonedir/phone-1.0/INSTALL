@@ -1,0 +1,60 @@
+# CREDITS
+# ========
+# Kimmie Dicaire (kdicaire@ipschannel.com)
+
+# LICENSE
+# ========
+# EZ Phone Directory falls under the Artistic License
+
+# A copy of this license is contained in the standard
+# EZ Phone Directory distribution package in a file called COPYING.
+# If you did not recieve this file, please point your Web
+# browser to :
+#    http://www.activestate.com/corporate/artistic_license.htm
+
+
+# In terms of Warranty, no warranty is guaranteed or implied.
+# If this eats your hard drive, kills your cat, or rotates your
+# tires, you have no legal recourse anywhere. None of the authors
+# nor users of this code may be held liable, legally or otherwise,
+# for any damages or benefits that arise from use of this code.
+
+Homepage for the EZ Phone Directory is located at:
+Http://matrix.linux-help.org/phone
+
+Install Note:
+We will not go into how to install PostgreSQL or PHP3,
+it is assumed that PostgreSQL and PHP3 is already installed and
+functioning on your computer.
+
+INSTALL:
+
+1. Download and untar the source (presumably in your webtree)
+  
+   tar zxfv ez-phonedir-1.0.tar.gz
+
+2. Run the install script:
+   
+   ./Install.sh
+
+3. As Your Postgres user do:
+
+   createdb phonelist
+
+4. Install the schema from /phone-1.0/PostgreSQL to your postgres database
+
+   psql -e phonelist < phonelist.schema
+
+5. Run the adduser script in /PostgreSQL to add the user/pass from the 
+   Install.sh 
+
+       psql -e phonelist < adduser   
+
+   NOTE: If you used a user/pass that is already in your postgres database
+         then you can skip using the adduser script.
+
+6. Point your browser to /path/to/phone-0.1/phone.php3 to begin using.
+
+7. You might want to keep your phonelist files password protected by placing a
+   .htaccess file in the /phone-1.0 directory
+

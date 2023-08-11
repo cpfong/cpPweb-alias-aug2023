@@ -1,0 +1,35 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class Quiz3 extends JFrame implements ActionListener{
+	private JButton but;
+
+	public static void main(String[] args){
+		Quiz3 frame=new Quiz3();
+		frame.setSize(400,300);
+		frame.createGUI(frame);
+		frame.setVisible(true);
+	}
+
+	private void createGUI(Quiz3 mw){
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		mw.setLayout(new FlowLayout());
+
+		but = new JButton("и璸衡キАだ计");
+		mw.add(but);
+		but.addActionListener(this);
+	}
+
+	public void actionPerformed(ActionEvent e){
+		String t;
+		int i, j, k;
+		double d;
+
+		t=JOptionPane.showInputDialog("材1计"); i=Integer.parseInt(t);
+		t=JOptionPane.showInputDialog("材2计"); j=Integer.parseInt(t);
+		t=JOptionPane.showInputDialog("材3计"); k=Integer.parseInt(t);
+		d = ((double)i+(double)j+(double)k) / 3;
+		JOptionPane.showMessageDialog(null,  "" + i + "," + j + "," + k + "キА: " + d);
+	}
+}

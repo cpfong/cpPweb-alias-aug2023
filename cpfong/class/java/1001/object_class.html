@@ -1,0 +1,212 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<title>類別與物件</title>
+</head>
+<body>
+<h3>類別與物件的基本概念</h3>
+<p>所謂物件,說得白話一點,可稱之為"東西"。這是個很抽象的名詞,我們若以它具體的特性來描述,會比較清楚:
+</p>
+<ul>
+<li>Object有生命週期,會"產生"和"消滅"
+<li>Object具有其內部狀態, 同一類別的不同Object, 其的內部狀態可能都不一樣
+<li>Object可以接收"訊息",並依據訊息的參數以及該物件的內部狀態,做出反應,並可能因而改變該物件的內部狀態
+</ul>
+<p>屬於同一個Class的Object,會具有該Class所定義的以上三種特質。</p>
+<p>除此之外,Class之間可以定義繼承(Inheritance)關係,子類別(Sub Class)繼承父類別(Super Class)的所有特性,子類別還可以定義其專屬的特性。
+</p>
+<p>以Object-Oriented(物件導向) Language寫作程式時,寫作的主體是Class。Class定義了所有屬於該Class的Object的特性,這些特性可分類如下:
+<ul>
+<li>Object產生時一定要呼叫的方法, 稱為Constructor(建構子)
+<li>Objec消滅需要呼叫的方法, 稱為Destructor(解構子)
+<li>表達Object內部狀態的變數, 稱為Object Variable(物件變數成員)
+<li>Object可以接收的訊息, 稱為Object Method(物件方法成員)
+<li>上述兩個可總稱為Object Member
+<li>屬於Class的變數, 稱為Class Variable(類別變數)
+<li>屬於Class的方法, 成為Class Method(類別方法)
+<li>上述兩個可總稱為Class Member
+<li>和其他Class間的繼承關係
+</ul>
+<h3>如何以Java撰寫類別</h3>
+<p>Java規定公共類別(public class)必須寫在該公共類別名稱的.java檔案內, 例如public class Example就必須寫在Example.java這個檔案內。Example.java裡面也可以定義其他的類別,但是只有class Example能夠宣告為public,其他Example.java裡的class都不能宣告為public。當Java Virtual Machine啟動時,它會去找命令列上所指定的class裡的public static void main(String[] argv)方法,當做是程式的進入點。這有點像是C語言的main, 不同處在於每個java class都可以定義自己的public static void main(String[] argv)。
+<pre>
+java Example
+</pre>
+<p>啟動上述的JVM時, JVM會去執行class Example裡的public static void main(String[] argv)。以下範例Example.java說明如何定義Java的class。</p>
+<pre>
+<font color="#2e8b57"><b>class</b></font> Vehicle {
+    <font color="#2e8b57"><b>private</b></font> <font color="#2e8b57"><b>int</b></font> speed; <font color="#0000ff">// Object Variable</font>
+    <font color="#2e8b57"><b>private</b></font> String direction; <font color="#0000ff">// Object Variable, direction is a reference to String Object</font>
+    <font color="#2e8b57"><b>private</b></font> <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font> numVehicle = <font color="#ff00ff">0</font>; <font color="#0000ff">// Class Variable</font>
+    <font color="#2e8b57"><b>public</b></font> Vehicle() { <font color="#0000ff">// Constructor, called when new a Object</font>
+        <font color="#2e8b57"><b>this</b></font>(<font color="#ff00ff">0</font>,<font color="#ff00ff">&quot;north&quot;</font>); <font color="#0000ff">// call another constructor to do initialization</font>
+    }
+    <font color="#2e8b57"><b>public</b></font> Vehicle(<font color="#2e8b57"><b>int</b></font> s, String dir) { <font color="#0000ff">// Another Constructor. Use overloading to define two constructors</font>
+        <font color="#2e8b57"><b>float</b></font> speed; <font color="#0000ff">// define a local variable</font>
+        speed = s; <font color="#0000ff">// the speed here refers to the above local variable</font>
+        <font color="#2e8b57"><b>this</b></font>.speed = s; <font color="#0000ff">// If we want to set object variable, use this.speed to refer object variable speed</font>
+        direction = dir; <font color="#0000ff">// dir is a reference to object, not the object itself</font>
+        numVehicle++;   <font color="#0000ff">// increase the Vehicle number</font>
+    }
+    <font color="#2e8b57"><b>protected</b></font> <font color="#2e8b57"><b>void</b></font> finalize() { <font color="#0000ff">// Destructor, called when the object is garbage collected by JVM</font>
+        System.out.println(<font color="#ff00ff">&quot;finalize has been called&quot;</font>);
+        numVehicle--;
+    }
+    <font color="#2e8b57"><b>void</b></font> setSpeed(<font color="#2e8b57"><b>int</b></font> newSpeed) { <font color="#0000ff">// Object Method</font>
+        <font color="#2e8b57"><b>this</b></font>.speed = newSpeed;
+    }
+    <font color="#2e8b57"><b>void</b></font> setDir(String dir) { <font color="#0000ff">// Object Method</font>
+        <font color="#2e8b57"><b>this</b></font>.direction = dir;
+    }
+    <font color="#2e8b57"><b>int</b></font> getSpeed() { <font color="#0000ff">// Object Method</font>
+        <font color="#804040"><b>return</b></font> speed;
+    }
+    String getDir() { <font color="#0000ff">// Object Method</font>
+        <font color="#804040"><b>return</b></font> direction;
+    }
+    <font color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font> totalVehicle() { <font color="#0000ff">// Class Method</font>
+        <font color="#804040"><b>return</b></font> numVehicle;
+    }
+}
+<font color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>class</b></font> Example {
+    <font color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>void</b></font> main(String[] argv) {
+        Vehicle v1 = <font color="#804040"><b>new</b></font> Vehicle(<font color="#ff00ff">50</font>, <font color="#ff00ff">&quot;west&quot;</font>); <font color="#0000ff">// new 敘述用來產生物件. 物件產生時需要呼叫Constructor來初始化物件</font>
+        Vehicle v2;
+        v1.setSpeed(<font color="#ff00ff">30</font>);
+        v1.setDir(<font color="#ff00ff">&quot;north&quot;</font>);
+        System.out.println(<font color="#ff00ff">&quot;V1: speed is &quot;</font>+v1.getSpeed()+<font color="#ff00ff">&quot;, direction is &quot;</font>+v1.getDir()+<font color="#ff00ff">&quot;.</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        v2 = <font color="#804040"><b>new</b></font> Vehicle(<font color="#ff00ff">40</font>, <font color="#ff00ff">&quot;south&quot;</font>);
+        System.out.println(<font color="#ff00ff">&quot;There are &quot;</font>+Vehicle.totalVehicle()+<font color="#ff00ff">&quot; Vehicles in the world.</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        v1 = v2; <font color="#0000ff">// let reference v1 point to where v2 is pointing</font>
+        System.out.println(<font color="#ff00ff">&quot;V1: speed is &quot;</font>+v1.getSpeed()+<font color="#ff00ff">&quot;, direction is &quot;</font>+v1.getDir()+<font color="#ff00ff">&quot;.</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        System.gc(); <font color="#0000ff">// force system to do garbage collection, the object previously pointed by v1 shall be destroyed</font>
+        System.out.println(<font color="#ff00ff">&quot;There are &quot;</font>+Vehicle.totalVehicle()+<font color="#ff00ff">&quot; Vehicles in the world.</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+    }
+}
+</pre>
+<p>上述例子裡所用到的關鍵字或類別名稱說明如下:</p>
+<ul>
+<li>public:可用在
+<ul>
+<li>class前面表示此class可以供其他package裡的類別使用。同一個目錄下的class均可視為屬於同一個package。
+<li>object or class member前面, 表示所有的class均可存取此member。
+</ul>
+</li>
+<li>private:可用在object or class member前面, 表示只有定義這些member的class才可存取。
+<li>static:可用在member前面。如果member前面有static, 表示該member屬於class,否則屬於object。不論系統創造了多少object,class variable只有一個;而每個object都有其object variable。存取class method的語法是ClassName.classMethod();存取object method時,則必須以reference.objectMethod()來呼叫。在Object Method裡,可用this表示目前的物件。但在Class Method裡就不能存取object member了。
+<li>this:表示目前這個物件
+<li>String:定義於java.lang package下面的類別, 屬於Java語言定義的標準程式庫。
+<li>System:定義於java.lang package下面的類別, 屬於Java語言定義的標準程式庫。
+<li>System.out是class System裡面的一個Class Variable, 其型態為reference to 定義於java.io package裡面的PrintStream。我們可透過該變數所指到的物件, 將訊息印到螢幕上。
+<li>System.gc是class System裡面的一個Class Method, 呼叫該方法可強迫JVM回收沒有被任何reference指到的物件。當物件被回收時, 該物件的finalize方法會被呼叫。
+<li>new:用來產生新的物件。後面必須跟著某個constructor, 以便進行初始化的動作。
+</ul>
+<p><b>Object Method的名稱如果和Class的名稱相同, 則表示該Method為Constructor。Constructor不能宣告傳回值。</b></p>
+<p>要附帶說明的是, Java以new指令來產生物件, 但不像C++有提供相對應的delete指令來消滅物件。Java採用Garbage Collection的觀念,當系統於閒置期間自動呼叫或由使用者強制呼叫System.gc()時,沒有被任何reference指到的Object就會被回收。</p>
+<p>Class裡面一定要定義一個以上的Constructor, 但為了方便起見,如果Compiler發現某Class沒有定義Constructor,則Compiler會幫我們產生一個不做任何事的Constructor:</p>
+<pre>
+public class A {
+}
+</pre>
+<p>就相當於</p>
+<pre>
+public class A {
+    public A() {}
+}
+</pre>
+<h3>Overloading</h3>
+<p>同一個class裡的Method名稱可以重複使用,只要可以由Method的參數個數和型態來區分就可以了。這種觀念稱為overloading。</p>
+<p>不只一般的method可以overloading, constructor也可以overloading。</p>
+<pre>
+<font color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>class</b></font> Overloading {
+    <font color="#2e8b57"><b>int</b></font> data;
+    <font color="#2e8b57"><b>public</b></font> Overloading() {
+        <font color="#2e8b57"><b>this</b></font>(<font color="#ff00ff">0</font>); <font color="#0000ff">// call constructor Overloading(int)</font>
+    }
+    <font color="#2e8b57"><b>public</b></font> Overloading(<font color="#2e8b57"><b>int</b></font> data) {
+        <font color="#2e8b57"><b>this</b></font>.data = data;
+    }
+    <font color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>void</b></font> print() {
+        <font color="#2e8b57"><b>this</b></font>.print(<font color="#ff00ff">0</font>); <font color="#0000ff">// call method print(int)</font>
+    }
+    <font color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>void</b></font> print(<font color="#2e8b57"><b>int</b></font> msg) {
+    }
+    <font color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>void</b></font> print(<font color="#2e8b57"><b>float</b></font> msg) {
+    }
+    <font color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>void</b></font> print(<font color="#2e8b57"><b>int</b></font> msg, String others) {
+    }
+}
+</pre>
+<p>上面的例子裡說明constructor也可以overloading。要特別注意的是,傳回值並不能用來分辨要呼叫哪個method,因此若再加上public int print()的宣告,就會造成編譯錯誤了。</p>
+<h3>初始化的執行順序</h3>
+<p>Class variable是在該類別載入JVM時進行初始化的, 因此寫作上經常在class variable的宣告後面加上初始化的動作。對Object Variable來說, 是在產生Object時進行初始化的, 但初始化的步驟可以寫在變數宣告後, 也可以寫在constructor內, 因此必須對其執行順序有所了解。步驟如下:</p>
+<ol>
+<li>先將所有變數設為內定值。對數值型態來說, 其值為0;對reference來說, 其值為null;對boolean來說, 其值為false。
+<li>呼叫父類別的constructor。
+<li>執行變數宣告的初始化動作。
+<li>執行自己的constructor。
+</ol>
+<p>因此在如下的範例內</p>
+<pre>
+<font color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>class</b></font> InitSequence {
+    <font color="#2e8b57"><b>int</b></font> data = <font color="#ff00ff">2</font>;
+    <font color="#2e8b57"><b>public</b></font> InitSequence(<font color="#2e8b57"><b>int</b></font> data) {
+        <font color="#2e8b57"><b>this</b></font>.data = data;
+    }
+    <font color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>void</b></font> main(String[] argv) {
+        InitSequence s = <font color="#804040"><b>new</b></font> InitSequence(<font color="#ff00ff">3</font>);
+        System.out.println(s.data);
+    }
+}
+</pre>
+data的變化如下
+<ol>
+<li>設為內定值0
+<li>呼叫父類別的Constructor。因為類別InitSequence沒有宣告繼承任何類別, Java規定此情況會自動繼承java.lang.Object這個類別。Object的Constructor不做任何事。
+<li>執行變數宣告的初始動作,成為2
+<li>執行自己的constructor,成為3
+</ol>
+<p>因此最後執行的結果會在螢幕上印出數字3。</p>
+<p>Java語言還可以定義static block:</p>
+<pre>
+<font color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>class</b></font> StaticBlock {
+    <font color="#2e8b57"><b>static</b></font> { <font color="#0000ff">// this is a static block</font>
+        data = (<font color="#2e8b57"><b>int</b></font>)(Math.random()*<font color="#ff00ff">100</font>);
+    }
+    <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font> data;
+    <font color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>void</b></font> main(String[] argv) {
+        System.out.println(data);
+    }
+}
+
+</pre>
+<p>static block內的程式碼, 是在該class載入JVM之後, 進行class variable初始化之前的時間內執行。一般比較會使用static block的場合, 是該class用到一些非Java的程式庫, 需要透過System.loadLibrary(String libName)方法把外界的程式碼載入時。這樣寫的好處是只有當該class第一次被使用到時, 才會下載相關軟體, 以節省記憶體空間, 避免重複下載, 並可以把實作的細節和外界隔離開來。對沒有這種機制的C語言來說, 很可能就必須在主程式內寫上一堆很難懂的啟動程式碼。</p>
+<pre>
+<font color="#2e8b57"><b>class</b></font> ClassNeedToLoadLibrary {
+    <font color="#2e8b57"><b>static</b></font> {
+        System.loadLibrary(<font color="#ff00ff">&quot;mylib&quot;</font>);
+    }
+}
+<font color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>class</b></font> Main {
+    <font color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>void</b></font> main(String[] argv) {
+    }
+}
+</pre>
+<h3>final關鍵字</h3>
+<p>final關鍵字用在變數宣告時,表示該變數的值只能在宣告時給定,然後就不能再更改了。
+<pre>
+<font color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>class</b></font> Main {
+    <font color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>final</b></font> <font color="#2e8b57"><b>double</b></font> PI = <font color="#ff00ff">3.14159</font>;
+    <font color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>final</b></font> <font color="#2e8b57"><b>int</b></font> x = <font color="#ff00ff">10</font>;
+    <font color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>void</b></font> main(String[] argv) {
+        <font color="#2e8b57"><b>final</b></font> <font color="#2e8b57"><b>int</b></font> local = <font color="#ff00ff">10</font>;
+        Main m = <font color="#804040"><b>new</b></font> Main();
+        PI = <font color="#ff00ff">100</font>; <font color="#0000ff">// Compile Error, final variable can only be set at initialization</font>
+        m.x = <font color="#ff00ff">10</font>; <font color="#0000ff">// Compile Error</font>
+        local = <font color="#ff00ff">100</font>; <font color="#0000ff">// Compile Error</font>
+    }
+}
+</pre>
+</body>
+</html>

@@ -1,0 +1,27 @@
+Some people have that erroneous notion that read is the command to read a line. It's NOT.
+read reads words from a (possibly backslash-continued) line, where words are $IFS delimited and backslash can be used to escape the delimiters (or continue lines).
+
+The generic syntax is:
+read word1 word2... remaining_words
+
+#!/bin/sh
+IFS=','
+read this that
+printf "$that"		#that is a pen
+
+pluto@Oregon % sh ./test.sh
+'this is a test', 'that is a pen'
+
+$ read a b c
+        foo bar\ baz   bl\ah   blah\
+whatever whatever
+
+$ printf "$a\n"		#foo
+$ printf "$b\n"		#bar baz
+$ printf "$c\n"		#blah   blahwhatever whatever
+
+$read -r a b c		#note: \ does NOT have any function now, so whatever whatever cannot be included
+$ printf "$a"		#foo
+$ printf "$b"		#bar\
+$ printf "$c"		#baz     blh     blah\
+

@@ -1,0 +1,42 @@
+host
+--
+mount -t nullfs /usr/ports/ /home/j/ssh/usr/ports/
+
+jail
+--
+#port install step: (take lots of time)
+cd /usr/ports/databases/mysql55-server/
+make DISABLE_VULNERABILITIES=yes -DBATCH
+make DISABLE_VULNERABILITIES=yes -DBATCH install
+
+#start server
+root@ssh:/usr/ports/databases/mysql55-server # cat /etc/rc.conf | tail -1
+mysql_enable="YES"
+/usr/local/etc/rc.d/mysql-server start
+
+# setup root password
+mysqladmin -u root password 'ILoveMyCountry'
+
+# login mysql database using root account
+root@ssh:/usr/ports/databases/mysql55-server # mysql -u root
+ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: NO)
+
+root@ssh:/usr/ports/databases/mysql55-server # mysql -u root -p
+
+# user create
+https://dev.mysql.com/doc/refman/5.5/en/create-user.html
+
+# input password from command line by Jeff Dege
+# googling password command-line option jeff dege
+These work:
+-uuser_name -ppassword
+-u user_name -ppassword
+--user user_name --password=password
+--user=user_name --password=password
+
+This does not:
+-u user_name -p password
+--user user_name --password password 
+
+# update root password
+mysql> set password for 'root'@'localhost' = password('www.ifong.org');

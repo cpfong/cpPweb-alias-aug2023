@@ -1,0 +1,6 @@
+n@ccproxy ~]$ cat /etc/nsswitch.conf 
+#group: compat
+group: files [NOTFOUND=continue] ldap
+#passwd: compat
+passwd: files [NOTFOUND=continue] ldap 
+

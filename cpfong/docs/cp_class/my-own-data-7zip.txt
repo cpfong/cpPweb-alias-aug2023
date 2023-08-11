@@ -1,0 +1,66 @@
+<powershell>
+#
+# NOTE: modify 1.root pwd 2.ddns key 3.ddns private to make it work
+#
+# testing powershell script by setup the executionPolicy
+# Set-ExecutionPolicy cmdlet enables Windows PowerShell scripts run
+#    Restricted - No scripts can be run. default one
+#    AllSigned - Only scripts signed by a trusted publisher
+#    RemoteSigned - Downloaded scripts must be signed by a trusted publisher
+#    Unrestricted - No restrictions; all Windows PowerShell scripts can be run.
+# comment: Set-ExecutionPolicy RemoteSigned  CAN make thing work
+
+net user administrator mySecretPwd
+
+# save to /users/administrator instend of /windows/system32 (default)
+cd c:\users\administrator
+
+# get 7zip since windows 2008 does NOT have command line unzip capability
+Invoke-WebRequest -Uri 'https://drive.google.com/uc?id=0B4ptjtfKqcukcVNjZ0dlWk9FY2M&export=download' -Outfile ./7z1604-w32.exe
+./7z1604-w32.exe /S
+
+# nsupdate.exe of bind package is needed to implement DDNS
+mkdir bind
+cd bind
+Invoke-WebRequest -Uri 'https://drive.google.com/uc?id=0B4ptjtfKqcukQWZjcHlva2YyRzA&export=download' -Outfile ./BIND9.10.4-P8.x86.zip
+# note: unzip at current dir which is bind (not use x but i use e option)
+& 'C:\Program Files\7-Zip\7z.exe' e .\BIND9.10.4-P8.x86.zip
+./vcredist_x86.exe /S
+
+# back to home
+cd c:\users\administrator
+
+# nsupdate.exe need this DLL on \windows\system32
+Invoke-WebRequest -Uri 'https://drive.google.com/uc?id=0B4ptjtfKqcukZU5mQlEwa2k0aFk&export=download' -Outfile ./msvcr110.dll
+mv ./msvcr110.dll /windows/system32
+
+# using curl to get my public IP
+Invoke-WebRequest -Uri 'https://drive.google.com/uc?id=0B4ptjtfKqcukVXJ0ZUFYVW9lVUE&export=download' -Outfile ./curl.exe
+$myip=./curl.exe http://myexternalip.com/raw
+
+#FAIL!
+#echo 'server ns.ifong.org.' >> nsupdate.txt
+#echo 'zone ddns.ifong.org' >> nsupdate.txt
+#echo 'update delete mdeelw08.ddns.ifong.org. 60 A' >> nsupdate.txt
+#$text="update add mdeelw08.ddns.ifong.org. 60 A $myip"
+#echo $text >> nsupdate.txt
+#echo 'send' >> nsupdate.txt
+
+Add-Content nsupdate.txt "server ns.ifong.org."
+Add-Content nsupdate.txt "zone ddns.ifong.org"
+Add-Content nsupdate.txt "update delete mdeelw08.ddns.ifong.org. 60 A"
+$text="update add mdeelw08.ddns.ifong.org. 60 A $myip"
+Add-Content nsupdate.txt $text
+Add-Content nsupdate.txt "send"
+
+# get DDNS private and key
+Invoke-WebRequest -Uri 'https://drive.google.com/uc?id=mdeel-0B4ptjtfKqcukY05hUk4tdnh1VDA&export=download' -Outfile ./Kmyddns.dnssec.key.+157+04451.private
+Invoke-WebRequest -Uri 'https://drive.google.com/uc?id=mdeel-0B4ptjtfKqcukUXJKU0pVUkp2U2M&export=download' -Outfile ./Kmyddns.dnssec.key.+157+04451.key
+
+# GO update
+c:\users\administrator\bind\nsupdate.exe -k c:\users\administrator\Kmyddns.dnssec.key.+157+04451.key -d c:\users\administrator\nsupdate.txt
+
+#firefox
+Invoke-WebRequest -Uri 'https://download.mozilla.org/?product=firefox-latest&os=win&lang=en-US' -OutFile ./firefox.exe
+./firefox.exe /S
+</powershell>

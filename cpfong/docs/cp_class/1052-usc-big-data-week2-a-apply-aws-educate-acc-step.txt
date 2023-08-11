@@ -1,0 +1,9 @@
+apply aws educate account steps
+* https://aws.amazon.com - top header 2 find 'Solutions' - Education - AWS Educate (web site show as next)
+* https://aws.amazon.com/education/awseducate/
+* select 'Students' follow the step - step1 i am a student - Shih Chien University, ... school email is a MUST, 
+* you recive 1st email from aws verify your email (school account) with 6 digits and select i am not a robot
+* click ok and sent 
+* you receive another email (2nd eamil from aws)
+* wait for mail confirm 
+* show students of my 2 replied email by aws

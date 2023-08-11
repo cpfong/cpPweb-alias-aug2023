@@ -1,0 +1,41 @@
+//latest template  24/sep
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+class Squares extends JFrame implements ActionListener {
+
+    private JButton button;
+    private JTextArea textArea;
+
+    public static void main (String []  args) {
+        Squares demo = new Squares();
+        demo.setSize(400,300);
+        demo.createGUI();
+        demo.show();
+    }
+
+    private void createGUI() {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        Container win = getContentPane();
+        win.setLayout(new FlowLayout());
+
+        textArea = new JTextArea();
+        win.add(textArea);
+
+        button = new JButton("go");
+        win.add(button);
+        button.addActionListener(this);
+    }
+
+
+    public void actionPerformed(ActionEvent event) {
+        int number = 1;
+        while (number <= 5) {
+            textArea.setText(textArea.getText() + Integer.toString(number) + " " +
+                Integer.toString(number * number) + "\r\n");
+            number++;                                   
+        }
+
+    }
+}

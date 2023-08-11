@@ -1,0 +1,23 @@
+news (2.3) 提供了五種方式來存文章. 分別為
+cnfs, tradspool, timehash, timecaf, trash
+
+1. cnfs 為一全新的方式發明的目的為提升速度, concept
+   為一個大的檔案 (可到 1g or 10g ...) 內全放 articles, 一但 full
+   了則最新的文章會取代最前的文章 (FIFO), 這種方式不必
+   依 expire 來把過期文章刪除, 因它是自動刪的. 注意: 文
+   章在此不能永久保存.
+2. tradspool 為傳統的 spool 方式, 一篇文章一個 file,
+   (文章多時則....) 要依 expire 否則會一直增大, 另速度慢
+   因太多檔案了
+3. timehash 依 article 到的時間來分門別類, 為改良 tradspool
+   而生, 把目錄數變多, 每個 dir 下的 files 變少.
+4. timecaf 為和 timehash 改良, 不必一篇 article 一個 file
+5. trash 為 test 之用, 不佔空間, 所以也查不到
+
+method		expensive	expire necessary
+-----------------------------------------
+cnfs		0		0
+tradspool	1		1
+timehash	1		1
+timecaf		0		1
+trash		0		0

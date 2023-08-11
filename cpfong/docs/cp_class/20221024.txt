@@ -1,0 +1,41 @@
+身份証號 -> 姓名
+單字出現次數
+
+my %family_name;
+
+$family_name{'fred'}   = 'flintstone';
+$family_name{'barney'} = 'rubble';
+
+foreach my $person (qw /barney fred/){
+ print "我聽過 $person $family_name{$person}. \n";
+}
+
+my %hash1 =('Jack', 'Chue', 'Danel', 'Eng');
+
+my %hash2 = (
+ 'foo'  => 35,
+ 'bar'  => 12.4,
+ 2.5    => 'hello');
+
+
+my %hash3 = (
+ foo    => 35,
+ bar    => 12.4,
+ 2.5    => 'hello');
+
+foreach (keys %hash3){
+ print "$_ $hash{$_}\n";
+}
+
+my %h=('a' => 1, 'b' => 2, 'c' => 3);
+
+while (my ($k, $v) = each %h){
+ print "$k $v\n";
+}
+
+if (exists $h{'d'}){
+ print "there is d\n";
+}
+else {
+ print "no d\n";
+}

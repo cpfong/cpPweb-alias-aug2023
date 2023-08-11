@@ -1,0 +1,5 @@
+Comaq-> sudo /usr/local/etc/rc.d/innd.sh start
+Starting innd.
+Scheduled start of /usr/local/news/bin/innwatch.
+ inn
+

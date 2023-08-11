@@ -1,0 +1,39 @@
+ <meta http-equiv='Content-Type' content='text/html; charset=big5'>
+<html>
+<ol>
+	<li> 工欲善其事, 必先利其器
+	<ol type=disc>
+		<li> 注意<a href=./alog>所有</a>的 log
+		<li> feeder 為 Hiedoc 而 reader 為 news.FJTC
+	</ol>
+	<br>
+
+	<li> 專門處理 feeder 部份 (Hiedoc)
+	<ol type=disc>
+		<li> 二個檔要處理 innfeed.conf, newsfeeds 
+		<li> <a href=./inf1>innfeed.conf</a> 告知 peer 的訂義, <a href=./nf3>newsfeeds</a> 則告知處理方式
+		<li> feeder(Hiedoc)要送, 但 reader(news.FJTC) 沒開權限, 則 log <a href=./msg2>如次 </a>, 即無善意回應.
+		<li> feeder 送, 且 reader 開放, log <a href=./msg3>如次 </a>
+		<li> 上 feeder 的 localhost 去 post 一篇文章在 pub.post 的版上 <a href=./msg4> 如次 </a>
+		<li> 另把原先的 <a href=./nf2>newsfeed</a> 的 log 改一下增加 log, 事後再改回來, , 再 post 一篇文章, 再看 <a href=./msg5> msg </a>
+	</ol>
+	<br>
+	
+	<li> 專門處理 reader 部份 (news.FJTC)
+	<ol type=disc>
+		<li> 二個檔要處理 incoming.conf, readers.conf
+		<li> <a href=./in2>incoming.conf</a> 告知 peer 的訂義 , <a href=./r2>readers.conf</a> 則定義那些人可以讀那些 group.
+		<li> feeder 已設定好, 但我方 (reader) 不讓它進來
+	</ol>
+	<br>
+	
+	<li> reader 角色不一定全是 reader, 因為不 feed 則不能把你的 post 傳給別人
+	<ol type=disc>
+		<li> news.FJTC 如只是 reader, 則在 news.FJTC 上 post 之文章不會到 中山 (hiedoc)
+		<li> 所以 news.FJTC 也要 feed 中山 (hiedoc)
+	<ol type=disc>
+	</ol>
+	<br>
+	
+</ol>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+ <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.9">
+ <TITLE>Mail2News Mini-Howto: The mailing list remailer</TITLE>
+ <LINK HREF="Mail2News-6.html" REL=previous>
+ <LINK HREF="Mail2News.html#toc7" REL=contents>
+</HEAD>
+<BODY>
+Next
+<A HREF="Mail2News-6.html">Previous</A>
+<A HREF="Mail2News.html#toc7">Contents</A>
+<HR>
+<H2><A NAME="s7">7. The mailing list remailer</A></H2>
+
+<H2><A NAME="ss7.1">7.1 Subscribing</A>
+</H2>
+
+<P>The method of subscribing to each e-mail list is different, although
+most involve sending some kind of e-mail message.  Please be very careful
+not to send to the replicating address of the mailgroup.  This is a
+sure way to annoy the members of the list.  Most remailers (but not
+all) have a separate address for subscribing.  In confctrl, the 
+administration address is confctrl-request@isi.edu as 
+explained by http://www.ietf.org/html.charters/mmusic-charter.html.
+<P>
+<P>When you successfully subscribe you should (hopefully) see 
+a welcome message in the newsgroup.
+<P>
+<P>Some mailing lists do not let you subscribe an address you are
+not mailing from.  In this case you will need to forge the return
+address of an e-mail.
+<P>
+<H2><A NAME="ss7.2">7.2 Forging mail</A>
+</H2>
+
+<P>Forgeing mail is easiest to do with an old Netscape client.  It
+would accept anything for a return address.  Fortunately, modern
+browsers require you to retreive mail successfully for an address
+before they will let you send.  Thus, you are required to fall back
+the tried and true method....telnet.
+<P>
+<H3>Looking up MX hosts</H3>
+
+<P>When you speficy a web page, your browser does a DNS lookup
+to convert the domain name into an IP address.  This is a lookup
+of an "A" record.  (Also "CNAME" records are considered.)  When
+sending mail a "MX" record is looked up.  If this is missing a
+"CNAME" or "A" one is used.  Thus, to forge mail you need to do
+an MX lookup.
+<BLOCKQUOTE><CODE>
+<PRE>
+dig mx isi.edu
+</PRE>
+</CODE></BLOCKQUOTE>
+
+will give...
+<BLOCKQUOTE><CODE>
+<PRE>
+; &lt;&lt;>> DiG 8.2 &lt;&lt;>> mx isi.edu 
+;; res options: init recurs defnam dnsrch
+;; got answer:
+;; ->>HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 6
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 3, ADDITIONAL: 4
+;; QUERY SECTION:
+;;      isi.edu, type = MX, class = IN
+
+;; ANSWER SECTION:
+isi.edu.                1D IN MX        0 tnt.isi.edu.
+isi.edu.                1D IN MX        10 venera.isi.edu.
+
+;; AUTHORITY SECTION:
+isi.edu.                1D IN NS        venera.isi.edu.
+isi.edu.                1D IN NS        ns.isi.edu.
+isi.edu.                1D IN NS        east.isi.edu.
+
+;; ADDITIONAL SECTION:
+tnt.isi.edu.            1D IN A         128.9.128.128
+venera.isi.edu.         1D IN A         128.9.176.32
+ns.isi.edu.             1D IN A         128.9.128.127
+east.isi.edu.           1D IN A         38.245.76.2
+
+;; Total query time: 448 msec
+;; FROM: fdd.com to SERVER: default -- 127.0.0.1
+;; WHEN: Sun Jul 25 15:49:32 1999
+;; MSG SIZE  sent: 25  rcvd: 182
+</PRE>
+</CODE></BLOCKQUOTE>
+
+thus you would use tnt.isi.edu.  (If you don't have dig,
+<CODE>nslookup</CODE> will do.)
+<P>
+<H3>SMTP</H3>
+
+<P>Mail is delivered using the Simple Mail Transport Protocol (SMTP).
+Like most good Internet protocols, it is ASCII based to make troubleshooting
+and development easier.  I will not explain everything, but simply give
+an example.  Hopefully, this is enough.
+<P>
+<P>The protocol is line oriented.  Each email as specified in RFC822, is
+composed of headers and body which are separated by the first blank line
+(no characters, not even spaces).  SMTP specifies the end of an e-mail 
+with a line containing only a period.
+<BLOCKQUOTE><CODE>
+<PRE>
+
+halyard$ telnet tnt.isi.edu 25
+Trying 128.9.128.128...
+Connected to tnt.isi.edu.
+Escape character is '^]'.
+220 tnt.isi.edu ESMTP Sendmail 8.8.7/8.8.6; Sun, 25 Jul 1999 14:01:25 -0700 (PDT)
+helo isi.edu
+250 tnt.isi.edu Hello howto@node-d8e9822 [216.233.8.34] (may be forged), pleased to meet you
+mail from:&lt;confctrl@news.sfour.com>
+250 &lt;confctrl@news.sfour.com>... Sender ok
+rcpt to:&lt;confctrl-request@isi.edu>
+250 &lt;confctrl-request@isi.edu>... Recipient ok
+data
+354 Enter mail, end with "." on a line by itself
+From:&lt;confctrl@news.sfour.com>
+Subject: help
+
+help
+.
+250 OAA26778 Message accepted for delivery
+quit
+221 tnt.isi.edu closing connection
+Connection closed by foreign host.
+halyard$ 
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>
+<H2><A NAME="ss7.3">7.3 Be patient</A>
+</H2>
+
+<P>The mailing list is last because in part it is the slowest.
+When you mail to the reflected address, it may take up to an hour
+to see the response.
+<P>
+<HR>
+Next
+<A HREF="Mail2News-6.html">Previous</A>
+<A HREF="Mail2News.html#toc7">Contents</A>
+</BODY>
+</HTML>

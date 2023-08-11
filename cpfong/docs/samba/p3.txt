@@ -1,0 +1,4 @@
+3. first, run the regedit.exe program and then add a new register in:
+   HKEY_LOCAL_MACHINE\system\CurrentControlSet\Services\VxD\VNETSUP
+   select VNETSUP an then in the edit menu, new, DWORD value
+   add "EnablePlainTextPassword" with the value 1 good luck

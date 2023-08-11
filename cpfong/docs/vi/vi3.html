@@ -1,0 +1,285 @@
+<!-- BBS2HTML[880619756] Areicle by wcf@CCCA.NCTU.edu.tw  -->
+<HTML><HEAD><TITLE>◇ vi Tutorial (2)</TITLE></HEAD>
+<BODY background="(null)" bgcolor=#000000 text=#ddffdd vlink=#ffff00 link=#ffff11>
+<center><H1>◇ vi Tutorial (2)</H1>
+<table><tr><td><pre><hr>From:      bbs@bbs.ncku.edu.tw via BBS mail gateway
+Title:     (none)
+Date:      Fri Nov  1 16:09:12 1996
+
+發信人: cfliu@csie.nctu (劉醇豐), 信區: unix
+標  題: 給vi初學者: Vi Tutorial (2)
+發信站: 交大資工 十舍333室 (Thu Jul  6 16:42:58 1995)
+
+----------------------------------------------------------------------
+原作: Jill Kliger and Wesley Craig.
+中譯: 交大資工86 劉醇豐 cfliu@csie.nctu.edu.tw   1995.Jul.6
+
+譯註:
+     這是從交大資工計中的vilearn所抓出來的文件.原文是英文寫的.
+     這系列的文章有五六篇,都不長但應對vi初學者有所幫助.我自己也算vi初
+     學者,所以若翻譯有錯誤或有不通順有錯誤的地方都歡迎各位前輩指點.
+     有興趣的朋友請將這些文章抓下來直接用vi閱讀並跟著文中的指示跟著實
+     作,相信一定能學的更快.這幾天有空就會陸續將其他的部份都翻譯完.
+----------------------------------------------------------------------
+                                                        
+-----------------------------------------
+輕鬆學 vi 第二課 : 快速有效的穿梭於檔案間
+-----------------------------------------
+
+接下來的這門課將花約15到20分鐘.在這門課裏所教的內容將用在第三課中:
+vi的剪貼功能.有[實作]的部份請你務必跟著實地演練一次.如果你想離開
+這門課程請按大寫的Z兩次離開.
+
+
+WORDS
+-----
+
+有不少的方法可以讓游標從一個word跳到其他的word.
+
+        w       游標跳到下個word的開頭
+        e       游標跳到下個word的字尾
+        b       游標回到上個word的開頭
+
+大寫的 W E B也有著相同的功能.大寫和小寫的 w e b 指令的差別在於小寫的
+w e b 指令把任何非數字或字母的字元當成一個新word的開始,而大寫的 W E B
+則是用空白字元來區隔兩個word.
+
+[實作]現在用下面兩行來試試 w b e 和 B W E 這些指令
+
+    EX-PER-IMENT on these lines;test moving back &ampforth.
+    EX-PER-IMENT on these lines;test moving back &ampforth.
+
+
+ON THE LINE
+-----------
+你可以很快的將游標移到所在行的任何位置
+
+        $       移到游標所在行的行尾
+        ^       移到該行第一個非空白的字元
+
+        0       移到該行的開頭位置
+        #|      移到該行的第 # 個位置   例:  5| 12|
+
+[實作]現在試試 $ 和 ^ 這兩個指令,請注意 ^ 會移到第一個非空白的字元,並
+      不是那一行的開頭位置
+
+    This is a PRACTICE LINE.  There is white space at the front.  END
+
+0 (zero) 會把游標移到該行的最左邊.
+
+#| ( | 和 \ 在同一鍵上) 是用來直接移動游標到該行的第 # 個位置
+先按 # (範圍介於 1-80 之間) 再按 | . 舉例來說:  5|   20|   30|
+
+
+尋找字元
+--------
+有時你可能須要尋找一行中的某個字元.
+
+    f char      尋找(FIND) 本行中下一個 char 字元 
+    t char      將游標移到本行中下一個 char 字元之前
+
+    F char      尋找本行中前一個char所在的位置
+    T char      移到本行中前一個 char 字元之後
+
+        ;       重覆上一個 f, t, F, 或 T 的動作
+        ,       反向重覆上一個 f, t, F, 或 T 的動作
+
+f 和 F 會讓游標停在找到的字元上,t 和 T 將游標停在找到的字元旁.
+f 和 t 往後找,F 和 T 往前找.
+如果要找的字元找不到,vi會發出聲音告訴你.
+
+[實作]現下下面有一行文字,試試 f t F T ; , 這些指令
+
+    &quotPRACTICE line?&quot &quotEach and Every?&quot &quotFind thE char@cter and move to it.END
+
+
+MATCHING
+--------
+
+vi有一個很方便的功能,尤其對寫C程式的人來說更是好用.它可以幫你判斷
+() {} [] 有沒有成對,如果找不到對應的括號,vi會發出聲音告訴你,如果有找
+到就直接跳到對應的括號上.
+
+        %       尋找有無對應的 () {} 或 []
+
+[實作]在下面的練習中,移動你的游標到(,),[,],{,}上面,再按 %
+
+    [TRY THIS.  ((Whether) the pairs match up is the question.)  [One] 
+    pair is incomplete].  Can you tell {which one? ]} END
+
+
+WINDOW POSITIONS
+----------------
+在vi裏你可以移動游標到畫面的上方,中間,和下方.
+
+        H    移到游標到畫面的最上方 (HIGHEST) 
+        M    移到游標到畫面的中間 (MIDDLE) 
+        L    移到游標到畫面的最下方
+
+[實作]好,現在試試 H M 和 L 這三個指令.
+
+
+標示位置
+--------
+
+你可以在檔案裏做些標記再隨時返回被標記的位置.
+
+     m char     (MARK) 把這個地方標示成 char
+     ' char     (quote character) 跳到被標為 char的那一行        
+     ''         (按兩次') 回到剛才的位置
+
+char 可以是小寫的 a-z中的任一個 .  一個標記在除了下面的這兩種情況
+外會一直存在
+
+     1) 重覆使用相同的標示  char . 
+  或 2) 刪掉了被標示的那一行.
+
+[實作]
+&gt&gt&gt  移到這一行,按  ma  把這行標成  a
+&gt&gt&gt  移到這一行,按  mb  把這行標成  b
+&gt&gt&gt  移到這一行,按  mz  把這行標成  z
+&gt&gt&gt  移到這一行,按  mb  把這行標成  b
+&gt&gt&gt  移到這一行,按  mz  把這行標成  z
+&gt&gt&gt  現在按 'a 讓vi回到標示為 a 的那一行.
+&gt&gt&gt  現在按 'b 讓vi回到標示為 b 的那一行.
+&gt&gt&gt  現在按 'z 讓vi回到標示為 z 的那一行.
+
+這些指令可以讓你來回切換於檔案中兩個相距很遠的地方.
+vi會記住你剛才是從那一行跳躍過來,你可以按 '' 來回的切換
+
+[實作]按 'b 回到標示為 b 的那行,再按 '' 回到這行
+
+
+跳到某一行
+------------
+
+         G      (GO)  跳到檔案的最後一行.
+        #G      (GO to line #). 跳到第 # 行  (例: 3G , 5G , 124G )
+
+[實作]按 1G 跳到檔頭,再按 '' 回到這行.再來按 G 跳到檔尾再按 ''回到這行
+
+
+文字段落
+--------------
+
+有時候一段一段的移動游標會比較方便.我們可以用 {,},(,) 來達到這些功能
+
+        {       (左大括號) 跳到上一段的開頭
+        }       (右大括號) 跳到下一段的的開頭.
+
+        (       (左小括號) 移到這個句子的開頭
+        )       (右小括號) 移到下一個句子的開頭
+
+[實作]現在試著利用下面兩段文字來學習使用 { 和 }的功能.
+
+        EXPERIMENT on this first paragraph.  The quick brown fox jumped
+    over the seven lazy dogs.  The fox must have been very large to
+    jump over seven dogs!
+
+        EXPERIMENT on this second paragraph.  The quick brown dog
+    jumped over the seven lazy foxes.  The dog didn't have to be nearly
+    as large, since foxes aren't too big.
+
+[實作]現在用上面的兩段文字來試試 ( 和 )
+
+C的程式設計者對接下來的這兩個指令可能會感興趣.
+C的函式(function)都是用 { 和 } 括起來的,如果你把各函式的 { 都放在一行
+的第一個位置那麼vi便可以讓你用 [[ 和 ]] 輕鬆穿梭於各函式之間
+
+        [[     跳往上一個函式
+        ]]     跳往下一個函式
+
+若vi在整個檔裏都找不到最左邊是行首是 { 的符號時, 按[[ 和 ]] 就會跳到
+檔頭和檔尾
+
+[實作] 現在下面有幾個函式,試著用 ]] 和 [[ 來回切換於各函式間.
+
+main()
+{
+    helloworld();
+}
+
+helloworld()
+{
+    printf( &quotHello world\n&quot );
+}
+
+
+搜尋
+-----
+
+    /string      向後尋找 string 這個字串 
+    ?string      往前尋找 string 這個字串
+
+        n        重覆上一個 / 或 ? 的指令,繼續尋找
+        N        重覆上一個 / 或 ? 的指令,反向繼續尋找
+
+vi may search past the bottom of the file and then start again at the top. 
+(Or, vi may search past the top and then start again at the bottom.)
+
+[實作]現在請你詢找 &quotthe&quot 這個字串三次,再反向找三次回到這個位置
+步驟如下
+        先按   /the   再按 RETURN.  
+        按三次  n  
+        按  N  直到你再次回到這個位置
+
+
+總結
+-------
+
+        w       游標跳到下個word的開頭
+        e       游標跳到下個word的字尾
+        b       游標回到上個word的開頭
+
+        $       移到游標所在行的行尾
+        ^       移到該行第一個非空白的字元
+
+        0       移到該行的開頭位置
+        #|      移到該行的第 # 個位置   例:  5| 12|
+
+    f char      尋找(FIND) 本行中下一個 char 字元 
+    t char      將游標移到本行中下一個 char 字元之前
+
+    F char      尋找本行中前一個char所在的位置
+    T char      移到本行中前一個 char 字元之後
+
+        ;       重覆上一個 f, t, F, 或 T 的動作
+        ,       反向重覆上一個 f, t, F, 或 T 的動作
+
+        %       尋找有無對應的 () {} 或 []
+
+        H    移到游標到畫面的最上方 (HIGHEST) 
+        M    移到游標到畫面的中間 (MIDDLE) 
+        L    移到游標到畫面的最下方
+
+     m char     (MARK) 把這個地方標示成 char
+     ' char     (quote character) 跳到被標為 char的那一行        
+     ''         (按兩次') 回到剛才的位置
+
+         G      GO to the last line in the file
+        #G      GO to line #.  (e.g., 3G , 5G , 175G )
+
+         G      (GO)  跳到檔案的最後一行.
+        #G      (GO to line #). 跳到第 # 行  (例: 3G , 5G , 124G )
+
+        {       (左大括號) 跳到上一段的開頭
+        }       (右大括號) 跳到下一段的的開頭.
+
+        (       (左小括號) 移到這個句子的開頭
+        )       (右小括號) 移到下一個句子的開頭
+
+        [[     跳往上一個函式
+        ]]     跳往下一個函式
+
+    /string      向後尋找 string 這個字串 
+    ?string      往前尋找 string 這個字串
+
+        n        重覆上一個 / 或 ? 的指令,繼續尋找
+        N        重覆上一個 / 或 ? 的指令,反向繼續尋找
+
+現在你應該已經能夠很順暢的在檔案中自由的移動游標了.尤其是若你的數
+據機(modem)速度很慢時,這些指令更加顯的有用.請你繼續練習這些指令,
+接下來再進行第三課: vi的剪貼功能 或第四課: vi的一些其他特殊的插入
+技巧.加油!
+
+</pre></td></tr></table></center></BODY></HTML>

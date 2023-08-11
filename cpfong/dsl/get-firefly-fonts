@@ -1,0 +1,22 @@
+#!/usr/bin/perl
+# note: you have to be ROOT 
+# usage: perl ./get-firefly-fonts.txt | sh
+
+my $site_dir="http://cle.linux.org.tw/fonts/FireFly/bitmaps/bdf/";
+my $file_h="fireflyR";
+my $file_t=".bdf";
+my @files=();
+foreach (11..16){ push @files, $file_h . $_ . $file_t; }
+
+foreach (@files){
+	print "wget ", $site_dir , $_, "\n";
+	my $t = $_; $t =~ s/\.bdf/\.pcf/; 
+	print "cat $_ |  bdftopcf -t > $t \n";
+	print "gzip $t \n";
+}
+
+print "mv *.gz /usr/X11R6/lib/X11/fonts/misc/\n";
+print "cd /usr/X11R6/lib/X11/fonts/misc/\n";
+print "mkfontdir .\n";
+print "xset fp rehash\n";
+print "cd ~\n";

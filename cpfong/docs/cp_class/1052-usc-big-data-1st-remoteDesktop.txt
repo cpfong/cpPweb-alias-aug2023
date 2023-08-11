@@ -1,0 +1,4 @@
+run mstsc (note: may run cmd notepad pbrush write. where are they?  c:\windows\system32)
+server: cpvm.mooo.com
+acc: sid (with cap A)
+pwd: usc1234

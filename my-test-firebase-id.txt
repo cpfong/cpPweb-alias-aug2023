@@ -1,0 +1,9 @@
+      var config = {
+	apiKey: "abc AIzaSyB8p7zTPVqH7CfhC3l45KZljeBOnLHHELk",
+	authDomain: "abc-fb-proj-2017may-test.firebaseapp.com",
+	databaseURL: "https://abc-fb-proj-2017may-test.firebaseio.com",
+
+	//projectId: "fb-proj-2017may-test",
+	//storageBucket: "fb-proj-2017may-test.appspot.com",
+	//messagingSenderId: "372097846478"
+      };

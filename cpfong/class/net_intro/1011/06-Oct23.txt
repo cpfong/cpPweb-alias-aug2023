@@ -1,0 +1,10 @@
+tce-load lftp
+tce-load vsftpd
+
+edit /usr/local/etc/vsftpd.conf, make sure these lines are present/changed to:
+   anonymous_enable=NO
+   local_enable=YES
+   write_enable=YES
+
+
+/usr/local/etc$ sudo /usr/local/sbin/vsftpd

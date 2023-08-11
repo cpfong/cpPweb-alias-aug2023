@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+ <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.9">
+ <TITLE>Mail2News Mini-Howto: Overview</TITLE>
+ <LINK HREF="Mail2News-3.html" REL=next>
+ <LINK HREF="Mail2News-1.html" REL=previous>
+ <LINK HREF="Mail2News.html#toc2" REL=contents>
+</HEAD>
+<BODY>
+<A HREF="Mail2News-3.html">Next</A>
+<A HREF="Mail2News-1.html">Previous</A>
+<A HREF="Mail2News.html#toc2">Contents</A>
+<HR>
+<H2><A NAME="s2">2. Overview</A></H2>
+
+<H2><A NAME="ss2.1">2.1 What? Why? and some definitions</A>
+</H2>
+
+<P>This document describes how to feed a mailing list to a news server 
+using a Linux box.  It is called a mini-HOWTO, specifically the Mail2news mini-HOWTO.
+<P>
+<P>A mailing list (also known as a remailer), is an address
+where e-mail will be resent to a list of other addresses.
+This is useful for colaboration of geographically disperse 
+groups.  Many standards bodies like the working groups of the IETF use mailing lists.
+<P>
+<P>Unfortunately, if one is subscribed to several mailing lists, one's
+inbox may be routinely flooded.  
+Furthermore, some companies (such as 3Com) 
+specify which e-mail client
+(such as Lotus Notes) their employees must suffer with.  Redirecting
+these e-mails to a news server frees people to choose a
+news reader and utilize refined
+features specifically designed for the task (of deriving signal
+from noise).
+<P>
+<P>News servers started on the Internet long ago,
+many years before the WWW.  They (and the news reader clients) have
+features such as...
+<UL>
+<LI>threading - responses are grouped with the e-mails they refer to </LI>
+<LI>read indication - the computer keeps track of what you have seen (even
+across newsgroups!) so you don't have to.</LI>
+<LI>subject kill - mark threads as read by thread.</LI>
+<LI>archiving</LI>
+<LI>segregation by newsgroup (i.e. mailing list)</LI>
+<LI>a quick standardized method subscribing/unsubscribing</LI>
+<LI>and more..</LI>
+</UL>
+<P>
+<P>A big focus of news servers is sharing news between servers.  The
+largest of these groups became known as USENET.  This mini-HOWTO
+does not address that.  You could
+share the newsgroups created with this mini-HOWTO on your own, but you will
+live just fine without it.  Like a web server, ubiquitous
+Internet connectivity has made  
+centralized news servers acceptable.  Furthermore,
+recent benchmarks have shown single-processor Linux boxes can handle 1300+ 
+HTTP hits per second, so scalability is a minor issue.
+<P>
+<P>Athough you do not need to own the mailing list to use mail2news, it
+is a good idea to own the news server. 
+<P>
+<H2><A NAME="ss2.2">2.2 Assumed environment</A>
+</H2>
+
+<P>This document assumes you are using Linux, but other Unices are nice.  
+Currently only sendmail (for a mail delivery agent) is described, but as
+<CODE>qmail</CODE> grows in popularity (in part because it is easier to configure).
+Hopefully someone with submit configuration notes for it too.  For a
+news server, this document describes <CODE>innd</CODE>.  It is pretty dominant
+as news servers go, but any NNTP compliant one should work.
+A bit of glue called mail2news.pl is a perl script, thus you
+need the Perl interpreter, but it is
+very common and probably already installed.  Finally, I assume
+you are running all this (except the mailing list remailer) on 
+one machine.  Dividing it up is left as an exercise for the
+reader. :-)
+<P>
+<P>At the time of this writing this mini-HOWTO 
+was only tested against a RedHat-6.0 distribution.
+As a good computer scientist, you should not believe anything
+works until it has been specifically tested.  Any feedback or notes
+relating to other distributions would be welcomed by the
+author.
+<P>
+<P>For most of this mini-HOWTO you will need root access unless otherwise specified.
+<P>
+<H2><A NAME="ss2.3">2.3 Methodology</A>
+</H2>
+
+<P>This mini-HOWTO is presented backwards, as this is the easiest way to
+build and debug it.  Backwards means we start with the newsreader and work
+upstream to the mailing list remailer, the opposite direction
+of normal data flow.  This systems uses several hairy pieces (like
+sendmail and innd) which are sizeable mini-HOWTO's in thier own right.
+<P>
+<H2><A NAME="ss2.4">2.4 Not covered</A>
+</H2>
+
+<P>This mini-HOWTO does not cover...
+<UL>
+<LI>setting up a mailing list remailer.</LI>
+<LI>exchanging news between news servers.</LI>
+<LI>a complete list of things not covered.</LI>
+</UL>
+<P>
+<P>Please do not e-mail me about these subjects (or SPAM).
+<P>
+<HR>
+<A HREF="Mail2News-3.html">Next</A>
+<A HREF="Mail2News-1.html">Previous</A>
+<A HREF="Mail2News.html#toc2">Contents</A>
+</BODY>
+</HTML>

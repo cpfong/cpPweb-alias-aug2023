@@ -1,0 +1,43 @@
+// start from a clean one
+rm -fr ~/.gnupg/
+
+// generate new keys (make it exitst only 5 days)
+// name for testing purpose use fake
+// email use fake@email.com
+
+gpg -h // for help
+gpg --gen-key
+[cp@mail ~]$ ls ~/.gnupg/
+
+你可以把你的 key 放到 mit 的 server 上去, 但是一旦放上去即不能刪除, 因為它把你的 keys 傳到其它地方去了,
+不可以刪除但可以讓它失效, 要讓它沒效你要先做出一個 revoke 的 key  
+
+// check public key (note: public not private) 
+/09_xxx]$ gpg -k
+pub   2048R/C48948D2 2010-01-11 [到期: 2010-01-16]
+
+// it will output to stdout, you can use -o xxx to output to file xxx
+[cp@mail ~]$ gpg --gen-revoke C48948D2
+[cp@mail ~]$ gpg -o revoke.asc --gen-revoke C48948D2
+[cp@mail ~]$ head revoke.asc 
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v2.0.13 (FreeBSD)
+
+// export it first
+09_xxx]$ gpg --export BB582780  -a >~/.gnupg/my.exp
+
+// send it to MIT and should be found
+09_xxx]$ gpg --keyserver pgp.mit.edu --send-key BB582780
+/09_xxx]$ gpg --keyserver pgp.mit.edu --search-keys fake@email.com
+
+// import this revoke in 
+// then revoke to mit
+$ pgp --import ~/.gnupg/revoke.asc
+_xxx]$ gpg --keyserver pgp.mit.edu --send-key BB582780
+
+// now should say revoked!
+/09_xxx]$ gpg --keyserver pgp.mit.edu --search-keys fake@email.com
+
+// manage your keyrings
+
+

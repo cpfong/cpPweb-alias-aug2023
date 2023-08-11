@@ -1,0 +1,38 @@
+. install FreeBSD8.1 only one user cp with group is wheel
+. install sudo
+. recompile kernel
+. pkg_add -r screen (in case of logout by ldap server)
+
+. slave slapd
+	. master should work properly !! 
+	you need a operational master slapd in the first place
+	copy all stuff to slave
+
+. install /usr/ports/net/openldap23-server
+. syslog
+	sudo vi /etc/syslog.conf
+	local4.*                                        /var/log/ldap.log
+	sudo touch /var/log/ldap.log
+	sudo vi /etc/newsyslog.conf
+	/var/log/ldap.log                       640  7     *    @T00  JC
+	[cp@gaea ~]$ sudo /etc/rc.d/syslogd restart
+. slave slapd should be identifical with master
+	only minor diff with master 
+	1. no replica
+	2. no replogfile
+	3. no updatedn
+	4. the DN given in the updatedn directive has permission to write the database 
+. vi /etc/rc.conf to allow slapd
+. ready to up the slapd on slave
+	. duplicate master config
+	cp sudo.schema into /usr/local/etc/openldap/schema
+	ftp master-slapd.conf to slave
+	. on master
+	db_checkpoint-4.4 -1 -h /var/db/openldap-data/
+	down master-slapd
+	tar cfvz /tmp/data.tgz /var/db/openldap-data/
+	. ftp data.tgz to slave  and unzip to /var/db/openldap-data
+. master slapd and slurpd
+	slapd --> dlapd.conf (must add three more items in)
+	slurpd --> /etc/rc.conf (must put in -t /tmp or other dir name 
+	or it will cp xxx xxxx and make cpu 100%

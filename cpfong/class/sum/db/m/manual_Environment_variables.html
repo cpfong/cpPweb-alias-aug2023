@@ -1,0 +1,132 @@
+  <HTML>
+  <HEAD>
+  
+  <TITLE>MySQL Reference Manual for version 5.0.3-alpha - F  Environment Variables</TITLE>
+   <style> code {color:purple} tt {color:green} samp {color:navy} pre {color:maroon} </style>
+  </HEAD>
+  <BODY BGCOLOR=silver TEXT=#000000 LINK=#101090 VLINK=#7030B0>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_Porting.html">previous</A>, <A HREF="manual_Regexp.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="Environment_variables" HREF="manual_toc.html#Environment_variables">F  Environment Variables</A></H1>
+
+<P>
+<A NAME="IDX2409"></A>
+
+</P>
+<P>
+This appendix lists all the environment variables that are used directly or
+indirectly by MySQL. Most of these can also be found in other
+places in this manual.
+
+</P>
+<P>
+Note that any options on the command line take precedence over
+values specified in option files and environment variables, and
+values in option files take precedence over values in environment
+variables.
+
+</P>
+<P>
+In many cases, it's preferable to use an option file instead of environment
+variables to modify the behavior of MySQL. See section <A HREF="manual_Using_MySQL_Programs.html#Option_files">4.3.2  Using Option Files</A>.
+
+</P>
+<P>
+<A NAME="IDX2410"></A>
+<A NAME="IDX2411"></A>
+<A NAME="IDX2412"></A>
+<A NAME="IDX2413"></A>
+<A NAME="IDX2414"></A>
+<A NAME="IDX2415"></A>
+<A NAME="IDX2416"></A>
+<A NAME="IDX2417"></A>
+<A NAME="IDX2418"></A>
+<A NAME="IDX2419"></A>
+<A NAME="IDX2420"></A>
+<A NAME="IDX2421"></A>
+<A NAME="IDX2422"></A>
+<A NAME="IDX2423"></A>
+<A NAME="IDX2424"></A>
+<A NAME="IDX2425"></A>
+<A NAME="IDX2426"></A>
+<A NAME="IDX2427"></A>
+<A NAME="IDX2428"></A>
+<A NAME="IDX2429"></A>
+<A NAME="IDX2430"></A>
+<A NAME="IDX2431"></A>
+<A NAME="IDX2432"></A>
+<A NAME="IDX2433"></A>
+<A NAME="IDX2434"></A>
+<A NAME="IDX2435"></A>
+<A NAME="IDX2436"></A>
+<A NAME="IDX2437"></A>
+<A NAME="IDX2438"></A>
+<A NAME="IDX2439"></A>
+<A NAME="IDX2440"></A>
+<A NAME="IDX2441"></A>
+<A NAME="IDX2442"></A>
+<A NAME="IDX2443"></A>
+<A NAME="IDX2444"></A>
+<A NAME="IDX2445"></A>
+<A NAME="IDX2446"></A>
+<A NAME="IDX2447"></A>
+<A NAME="IDX2448"></A>
+<A NAME="IDX2449"></A>
+<A NAME="IDX2450"></A>
+<A NAME="IDX2451"></A>
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Variable</strong> </TD><TD> <strong>Description</strong>
+</TD></TR>
+<TR><TD><code>CXX</code> </TD><TD> The name of your C++ compiler (for running <code>configure</code>).
+</TD></TR>
+<TR><TD><code>CC</code> </TD><TD> The name of your C compiler (for running <code>configure</code>).
+</TD></TR>
+<TR><TD><code>CFLAGS</code> </TD><TD> Flags for your C compiler (for running <code>configure</code>).
+</TD></TR>
+<TR><TD><code>CXXFLAGS</code> </TD><TD> Flags for your C++ compiler (for running <code>configure</code>).
+</TD></TR>
+<TR><TD><code>DBI_USER</code> </TD><TD> The default username for Perl DBI.
+</TD></TR>
+<TR><TD><code>DBI_TRACE</code> </TD><TD> Trace options for Perl DBI.
+</TD></TR>
+<TR><TD><code>HOME</code> </TD><TD> The default path for the <code>mysql</code> history file is <tt>`$HOME/.mysql_history'</tt>.
+</TD></TR>
+<TR><TD><code>LD_RUN_PATH</code> </TD><TD> Used to specify where your <tt>`libmysqlclient.so'</tt> is located.
+</TD></TR>
+<TR><TD><code>MYSQL_DEBUG</code> </TD><TD> Debug trace options when debugging.
+</TD></TR>
+<TR><TD><code>MYSQL_HISTFILE</code> </TD><TD> The path to the <code>mysql</code> history file. If this variable is set, its value overrides the default of <tt>`$HOME/.mysql_history'</tt>.
+</TD></TR>
+<TR><TD><code>MYSQL_HOST</code> </TD><TD> The default hostname used by the <code>mysql</code> command-line client.
+</TD></TR>
+<TR><TD><code>MYSQL_PS1</code> </TD><TD> The command prompt to use in the <code>mysql</code> command-line client.
+</TD></TR>
+<TR><TD><code>MYSQL_PWD</code> </TD><TD> The default password when connecting to <code>mysqld</code>. Note that use of this is insecure!  See section <A HREF="manual_MySQL_Database_Administration.html#Password_security">5.6.6  Keeping Your Password Secure</A>.
+</TD></TR>
+<TR><TD><code>MYSQL_TCP_PORT</code> </TD><TD> The default TCP/IP port number.
+</TD></TR>
+<TR><TD><code>MYSQL_UNIX_PORT</code> </TD><TD> The default Unix socket filename; used for connections to <code>localhost</code>.
+</TD></TR>
+<TR><TD><code>PATH</code> </TD><TD> Used by the shell to find MySQL programs.
+</TD></TR>
+<TR><TD><code>TMPDIR</code> </TD><TD> The directory where temporary files are created.
+</TD></TR>
+<TR><TD><code>TZ</code> </TD><TD> This should be set to your local time zone. See section <A HREF="manual_Problems.html#Timezone_problems">A.4.6  Time Zone Problems</A>.
+</TD></TR>
+<TR><TD><code>UMASK_DIR</code> </TD><TD> The user-directory creation mask when creating directories. Note that this is ANDed with <code>UMASK</code>!
+</TD></TR>
+<TR><TD><code>UMASK</code> </TD><TD> The user-file creation mask when creating files.
+</TD></TR>
+<TR><TD><code>USER</code> </TD><TD> The default username on Windows and NetWare to use when
+connecting to <code>mysqld</code>.
+</TD></TR>
+</TABLE>
+
+<P><HR><P>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_Porting.html">previous</A>, <A HREF="manual_Regexp.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+ </BODY>
+ </HTML>

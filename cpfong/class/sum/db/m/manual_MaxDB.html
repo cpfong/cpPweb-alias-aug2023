@@ -1,0 +1,500 @@
+  <HTML>
+  <HEAD>
+  
+  <TITLE>MySQL Reference Manual for version 5.0.3-alpha - 17  Introduction to MaxDB</TITLE>
+   <style> code {color:purple} tt {color:green} samp {color:navy} pre {color:maroon} </style>
+  </HEAD>
+  <BODY BGCOLOR=silver TEXT=#000000 LINK=#101090 VLINK=#7030B0>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_NDBCluster.html">previous</A>, <A HREF="manual_Spatial_extensions_in_MySQL.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="MaxDB" HREF="manual_toc.html#MaxDB">17  Introduction to MaxDB</A></H1>
+
+<P>
+MaxDB is an enterprise-level database. MaxDB is the new name of a database management system formerly called SAP DB.
+
+</P>
+
+
+
+<H2><A NAME="MaxDB_History" HREF="manual_toc.html#MaxDB_History">17.1  History of MaxDB</A></H2>
+
+<P>
+The  history of SAP DB goes back to the early 1980s when it was developed as
+a commercial product (Adabas). The database has changed names several times
+since then. When SAP AG, a company based in Walldorf, Germany, took over the
+development of that database system, it was called SAP DB.
+
+</P>
+<P>
+SAP developed that database system to serve as a storage system
+for all heavy-duty SAP applications, namely R/3. SAP DB was meant
+to provide an alternative to third-party database systems such as
+Oracle, Microsoft SQL Server, and DB2 by IBM. In October 2000, SAP
+AG released SAP DB under the GNU GPL license (see section <A HREF="manual_GPL_license.html#GPL_license">H  GNU General Public License</A>), 
+thus making it Open Source software. In October 2003, more than 2,000 
+customers of SAP AG were using SAP DB as their main database system, 
+and more than another 2,000 customers were using it as a separate 
+database system besides their main database, as part of the 
+APO/LiveCache solution.
+
+</P>
+<P>
+In May 2003, a technology partnership was formed between MySQL AB
+and SAP AG. That partnership entitles MySQL AB to further develop SAP
+DB, rename it, and sell commercial licenses of the renamed SAP DB
+to customers who do not want to be bound to the restrictions imposed
+on them when using that database system under the GNU GPL (see section <A HREF="manual_GPL_license.html#GPL_license">H  GNU General Public License</A>). In August 2003, SAP DB was renamed MaxDB by MySQL AB.
+
+</P>
+
+
+<H2><A NAME="MaxDB_Licensing" HREF="manual_toc.html#MaxDB_Licensing">17.2  Licensing and Support</A></H2>
+
+<P>
+MaxDB can be used under the same licenses available for the other
+products distributed by MySQL AB. Thus, MaxDB will be available under 
+the GNU General Public License, and a commercial license. For more information
+on licensing, see <a HREF="http://www.mysql.com/company/legal/licensing/">http://www.mysql.com/company/legal/licensing/</a>.
+
+</P>
+<P>
+MySQL will offer MaxDB support to non-SAP customers.
+
+</P>
+<P>
+The first rebranded version was MaxDB 7.5.00, which was
+released in November 2003.
+
+</P>
+
+
+<H2><A NAME="MaxDB_Links" HREF="manual_toc.html#MaxDB_Links">17.3  MaxDB-Related Links</A></H2>
+
+<P>
+The main page for information about MaxDB is
+<a HREF="http://www.mysql.com/products/maxdb">http://www.mysql.com/products/maxdb</a>. Information formerly
+available at <a HREF="http://www.sapdb.org">http://www.sapdb.org</a> has been moved there.
+
+</P>
+
+
+<H2><A NAME="MaxDB_Basics" HREF="manual_toc.html#MaxDB_Basics">17.4  Basic Concepts of MaxDB</A></H2>
+
+<P>
+MaxDB operates as a client/server product. It was developed to meet
+the demands of installations processing a high volume of online
+transactions. Both online backup and expansion of the database are
+supported. Microsoft Clustered Server is supported directly for
+multiple server implementations; other failover solutions must be
+scripted manually. Database management tools are provided in both
+Windows and browser-based implementations.
+
+</P>
+
+
+<H2><A NAME="MaxDB-MySQL_Differences" HREF="manual_toc.html#MaxDB-MySQL_Differences">17.5  Feature Differences Between MaxDB and MySQL</A></H2>
+
+<P>
+The following list provides a short summary of the main differences
+between MaxDB and MySQL; it is not complete.
+
+</P>
+
+<UL>
+<LI>
+
+MaxDB runs as a client/server system. MySQL can run as a client/server system
+or as an embedded system.
+<LI>
+
+MaxDB might not run on all platforms supported by MySQL. For example,
+MaxDB does not run on IBM's OS/2.
+<LI>
+
+MaxDB uses a proprietary network protocol for client/server
+communication. MySQL uses either TCP/IP (with or without SSL
+encryption), sockets (under Unix-like systems), or named pipes
+(under Windows NT-family systems).
+<LI>
+
+MaxDB supports stored procedures. For MySQL, stored procedures are
+implemented in version 5.0. MaxDB also supports programming of
+triggers through an SQL extension, which is scheduled for MySQL
+5.1. MaxDB contains a debugger for stored procedure languages,
+can cascade nested triggers, and supports multiple triggers per
+action and row.
+<LI>
+
+MaxDB is distributed with user interfaces that are text-based,
+graphical, or Web-based. MySQL is distributed with text-based user
+interfaces only; graphical user interface (MySQL Control Center, MySQL
+Administrator)
+are shipped separately from the main distributions. Web-based user
+interfaces for MySQL are offered by third parties.
+<LI>
+
+MaxDB supports a number of programming interfaces that also are supported
+by MySQL. However, MaxDB does not support RDO, ADO, or .NET, all of which are
+supported by MySQL. MaxDB
+supports embedded SQL only with C/C++.
+<LI>
+
+MaxDB includes administrative features that MySQL does not have:
+job scheduling by time, event, and alert, and sending
+messages to a database administrator on alert thresholds.
+</UL>
+
+
+
+<H2><A NAME="MaxDB-MySQL_Interoperability" HREF="manual_toc.html#MaxDB-MySQL_Interoperability">17.6  Interoperability Features Between MaxDB and MySQL</A></H2>
+
+<P>
+The following features will be included in MaxDB versions to be
+released shortly after the first 7.5.00 version. These features
+will allow interoperation between MaxDB and MySQL.
+
+</P>
+
+<UL>
+<LI>
+
+There will be a MySQL proxy enabling connections to MaxDB using
+the MySQL protocol. This makes it possible to use MySQL client
+programs for MaxDB, such as the <code>mysql</code> command-line user interface,
+the <code>mysqldump</code> dump utility, or the <code>mysqlimport</code> import
+program. Using <code>mysqldump</code>, you can easily dump data from one
+database system and export (or even pipe) those data to the other
+database system.
+<LI>
+
+Replication between MySQL and MaxDB will be supported in both
+directions. That is, either MySQL or MaxDB can be used as the master
+replication server. The long-range plan is to converge and extend the
+replication syntax so that both database systems understand the same syntax.
+See section <A HREF="manual_Replication.html#Replication_Intro">6.1  Introduction to Replication</A>.
+</UL>
+
+
+
+<H2><A NAME="MaxDB_Reserved_Words" HREF="manual_toc.html#MaxDB_Reserved_Words">17.7  Reserved Words in MaxDB</A></H2>
+
+<P>
+Like MySQL, MaxDB has a number of reserved words that have special meanings.
+Normally, they cannot be used
+as names of identifiers, such as database or table names. The following
+table lists reserved words in MaxDB, indicates the context in which
+those words are used, and indicates whether or not they have
+counterparts in MySQL. If such a counterpart exists, the meaning
+in MySQL might be identical or differing in some aspects. The main
+purpose is to list in which respects MaxDB differs from MySQL;
+therefore, this list is not complete.
+
+</P>
+<P>
+For the list of reserved words in MySQL, see section <A HREF="manual_Language_Structure.html#Reserved_words">9.6  Treatment of Reserved Words in MySQL</A>.
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Reserved in MaxDB</strong>
+ </TD><TD> <strong>Context of usage in MaxDB</strong>
+ </TD><TD> <strong>MySQL counterpart</strong>
+</TD></TR>
+<TR><TD><code>@</code>
+ </TD><TD> Can prefix identifier, like ``@table''
+ </TD><TD> Not allowed
+</TD></TR>
+<TR><TD><code>ADDDATE()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>ADDDATE()</code>; new in MySQL 4.1.1
+</TD></TR>
+<TR><TD><code>ADDTIME()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>ADDTIME()</code>; new in MySQL 4.1.1
+</TD></TR>
+<TR><TD><code>ALPHA</code>
+ </TD><TD> SQL function
+ </TD><TD> Nothing comparable
+</TD></TR>
+<TR><TD><code>ARRAY</code>
+ </TD><TD> Data type
+ </TD><TD> Not implemented
+</TD></TR>
+<TR><TD><code>ASCII()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>ASCII()</code>, but implemented with a different meaning
+</TD></TR>
+<TR><TD><code>AUTOCOMMIT</code>
+ </TD><TD> Transactions; <code>ON</code> by default
+ </TD><TD> Transactions; <code>OFF</code> by default
+</TD></TR>
+<TR><TD><code>BOOLEAN</code>
+ </TD><TD> Column types; <code>BOOLEAN</code> accepts as values only <code>TRUE</code>, <code>FALSE</code>, and <code>NULL</code>
+ </TD><TD> <code>BOOLEAN</code> was added in MySQL 4.1.0; it is a synonym for <code>BOOL</code> which is mapped to <code>TINYINT(1)</code>. It accepts integer values in the same range as <code>TINYINT</code> as well as <code>NULL</code>. <code>TRUE</code> and <code>FALSE</code> can be used as aliases for <code>1</code> and <code>0</code>.
+</TD></TR>
+<TR><TD><code>CHECK</code>
+ </TD><TD> <code>CHECK TABLE</code>
+ </TD><TD> <code>CHECK TABLE</code>; similar, but not identical usage
+</TD></TR>
+<TR><TD><code>COLUMN</code>
+ </TD><TD> Column types
+ </TD><TD> <code>COLUMN</code>; noise word
+</TD></TR>
+<TR><TD><code>CHAR()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>CHAR()</code>; identical syntax; similar, not identical usage
+</TD></TR>
+<TR><TD><code>COMMIT</code>
+ </TD><TD> Implicit commits of transactions happen when data definition statements are issued
+ </TD><TD> Implicit commits of transactions happen when data definition statements are issued, and also with a number of other statements
+</TD></TR>
+<TR><TD><code>COSH()</code>
+ </TD><TD> SQL function
+ </TD><TD> Nothing comparable
+</TD></TR>
+<TR><TD><code>COT()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>COT()</code>; identical syntax and implementation
+</TD></TR>
+<TR><TD><code>CREATE</code>
+ </TD><TD> SQL, data definition language
+ </TD><TD> <code>CREATE</code>
+</TD></TR>
+<TR><TD><code>DATABASE</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>DATABASE()</code>; <code>DATABASE</code> is used in a different context; for example, <code>CREATE DATABASE</code>
+</TD></TR>
+<TR><TD><code>DATE()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>CURRENT_DATE</code>
+</TD></TR>
+<TR><TD><code>DATEDIFF()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>DATEDIFF()</code>; new in MySQL 4.1.1
+</TD></TR>
+<TR><TD><code>DAY()</code>
+ </TD><TD> SQL function
+ </TD><TD> Nothing comparable
+</TD></TR>
+<TR><TD><code>DAYOFWEEK()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>DAYOFWEEK()</code>; by default, <code>1</code> represents Monday in MaxDB and Sunday in MySQL
+</TD></TR>
+<TR><TD><code>DISTINCT</code>
+ </TD><TD> SQL functions <code>AVG</code>, <code>MAX</code>, <code>MIN</code>, <code>SUM</code>
+ </TD><TD> <code>DISTINCT</code>; but used in a different context: <code>SELECT DISTINCT</code>
+</TD></TR>
+<TR><TD><code>DROP</code>
+ </TD><TD> <code>DROP INDEX</code>, for example
+ </TD><TD> <code>DROP INDEX</code>; similar, but not identical usage
+</TD></TR>
+<TR><TD><code>EBCDIC()</code>
+ </TD><TD> SQL function
+ </TD><TD> Nothing comparable
+</TD></TR>
+<TR><TD><code>EXPAND()</code>
+ </TD><TD> SQL function
+ </TD><TD> Nothing comparable
+</TD></TR>
+<TR><TD><code>EXPLAIN</code>
+ </TD><TD> Optimization
+ </TD><TD> <code>EXPLAIN</code>; similar, but not identical usage
+</TD></TR>
+<TR><TD><code>FIXED()</code>
+ </TD><TD> SQL function
+ </TD><TD> Nothing comparable
+</TD></TR>
+<TR><TD><code>FLOAT()</code>
+ </TD><TD> SQL function
+ </TD><TD> Nothing comparable
+</TD></TR>
+<TR><TD><code>HEX()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>HEX()</code>; similar, but not identical usage
+</TD></TR>
+<TR><TD><code>INDEX()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>INSTR()</code> or <code>LOCATE()</code>; similar, but not identical syntaxes and meanings
+</TD></TR>
+<TR><TD><code>INDEX</code>
+ </TD><TD> <code>USE INDEX</code>, <code>IGNORE INDEX</code> and similar hints are used right after <code>SELECT</code>; for example, <code>SELECT ... USE INDEX</code>
+ </TD><TD> <code>USE INDEX</code>, <code>IGNORE INDEX</code> and similar hints are used in the <code>FROM</code> clause of a <code>SELECT</code> query; for example, in <code>SELECT ... FROM ... USE INDEX</code>
+</TD></TR>
+<TR><TD><code>INITCAP()</code>
+ </TD><TD> SQL function
+ </TD><TD> Nothing comparable
+</TD></TR>
+<TR><TD><code>LENGTH()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>LENGTH()</code>; identical syntax, but slightly different implementation
+</TD></TR>
+<TR><TD><code>LFILL()</code>
+ </TD><TD> SQL function
+ </TD><TD> Nothing comparable
+</TD></TR>
+<TR><TD><code>LIKE</code>
+ </TD><TD> Comparisons
+ </TD><TD> <code>LIKE</code>; but the extended <code>LIKE</code> MaxDB provides rather resembles the MySQL <code>REGEX</code>
+</TD></TR>
+<TR><TD><code>LIKE</code> wildcards
+ </TD><TD> MaxDB supports ``%'', ``_'', ``Control-underline'', ``Control-up arrow'', ``*'', and ``?'' as wildcards in <code>LIKE</code> comparisons
+ </TD><TD> MySQL supports ``%'', and ``_'' as wildcards in <code>LIKE</code> comparisons
+</TD></TR>
+<TR><TD><code>LPAD()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>LPAD()</code>; slightly different implementation
+</TD></TR>
+<TR><TD><code>LTRIM()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>LTRIM()</code>; slightly different implementation
+</TD></TR>
+<TR><TD><code>MAKEDATE()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>MAKEDATE()</code>; new in MySQL 4.1.1
+</TD></TR>
+<TR><TD><code>MAKETIME()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>MAKETIME()</code>; new in MySQL 4.1.1
+</TD></TR>
+<TR><TD><code>MAPCHAR()</code>
+ </TD><TD> SQL function
+ </TD><TD> Nothing comparable
+</TD></TR>
+<TR><TD><code>MICROSECOND()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>MICROSECOND()</code>; new in MySQL 4.1.1
+</TD></TR>
+<TR><TD><code>NOROUND()</code>
+ </TD><TD> SQL function
+ </TD><TD> Nothing comparable
+</TD></TR>
+<TR><TD><code>NULL</code>
+ </TD><TD> Column types; comparisons
+ </TD><TD> <code>NULL</code>; MaxDB supports special <code>NULL</code> values that are returned by arithmetic operations that lead to an overflow or a division by zero; MySQL does not support such special values
+</TD></TR>
+<TR><TD><code>PI</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>PI()</code>; identical syntax and implementation, but parentheses are mandatory in MySQL
+</TD></TR>
+<TR><TD><code>REF</code>
+ </TD><TD> Data type
+ </TD><TD> Nothing comparable
+</TD></TR>
+<TR><TD><code>RFILL()</code>
+ </TD><TD> SQL function
+ </TD><TD> Nothing comparable
+</TD></TR>
+<TR><TD><code>ROWNO</code>
+ </TD><TD> Predicate in <code>WHERE</code> clause
+ </TD><TD> Similar to <code>LIMIT</code> clause
+</TD></TR>
+<TR><TD><code>RPAD()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>RPAD()</code>; slightly different implementation
+</TD></TR>
+<TR><TD><code>RTRIM()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>RTRIM()</code>; slightly different implementation
+</TD></TR>
+<TR><TD><code>SEQUENCE</code>
+ </TD><TD> <code>CREATE SEQUENCE</code>, <code>DROP SEQUENCE</code>
+ </TD><TD> <code>AUTO_INCREMENT</code>; similar concept, but different implementation
+</TD></TR>
+<TR><TD><code>SINH()</code>
+ </TD><TD> SQL function
+ </TD><TD> Nothing comparable
+</TD></TR>
+<TR><TD><code>SOUNDS()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>SOUNDEX()</code>; slightly different syntax
+</TD></TR>
+<TR><TD><code>STATISTICS</code>
+ </TD><TD> <code>UPDATE STATISTICS</code>
+ </TD><TD> <code>ANALYZE TABLE</code>; similar concept, but different implementation
+</TD></TR>
+<TR><TD><code>SUBSTR()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>SUBSTRING()</code>; slightly different implementation
+</TD></TR>
+<TR><TD><code>SUBTIME()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>SUBTIME()</code>; new in MySQL 4.1.1
+</TD></TR>
+<TR><TD><code>SYNONYM</code>
+ </TD><TD> Data definition language: <code>CREATE [PUBLIC] SYNONYM</code>, <code>RENAME SYNONYM</code>, <code>DROP SYNONYM</code>
+ </TD><TD> Nothing comparable
+</TD></TR>
+<TR><TD><code>TANH()</code>
+ </TD><TD> SQL function
+ </TD><TD> Nothing comparable
+</TD></TR>
+<TR><TD><code>TIME()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>CURRENT_TIME</code>
+</TD></TR>
+<TR><TD><code>TIMEDIFF()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>TIMEDIFF()</code>; new in MySQL 4.1.1
+</TD></TR>
+<TR><TD><code>TIMESTAMP()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>TIMESTAMP()</code>; new in MySQL 4.1.1
+</TD></TR>
+<TR><TD><code>TIMESTAMP()</code> as argument to <code>DAYOFMONTH()</code> and <code>DAYOFYEAR()</code>
+ </TD><TD> SQL function
+ </TD><TD> Nothing comparable
+</TD></TR>
+<TR><TD><code>TIMEZONE()</code>
+ </TD><TD> SQL function
+ </TD><TD> Nothing comparable
+</TD></TR>
+<TR><TD><code>TRANSACTION()</code>
+ </TD><TD> Returns the ID of the current transaction
+ </TD><TD> Nothing comparable
+</TD></TR>
+<TR><TD><code>TRANSLATE()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>REPLACE()</code>; identical syntax and implementation
+</TD></TR>
+<TR><TD><code>TRIM()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>TRIM()</code>; slightly different implementation
+</TD></TR>
+<TR><TD><code>TRUNC()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>TRUNCATE()</code>; slightly different syntax and implementation
+</TD></TR>
+<TR><TD><code>USE</code>
+ </TD><TD> Switches to a new database instance; terminates the connection to the 
+	current database instance; all subsequent commands are referred to this 
+	database instance
+ </TD><TD> <code>USE</code>; identical syntax, but does not terminate the connection to
+	the current database
+</TD></TR>
+<TR><TD><code>USER</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>USER()</code>; identical syntax, but slightly different implementation, and parentheses are mandatory in MySQL
+</TD></TR>
+<TR><TD><code>UTC_DIFF()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>UTC_DATE()</code>; provides a means to calculate the same result as <code>UTC_DIFF()</code>
+</TD></TR>
+<TR><TD><code>VALUE()</code>
+ </TD><TD> SQL function, alias for <code>COALESCE()</code>
+ </TD><TD> <code>COALESCE()</code>; identical syntax and implementation
+</TD></TR>
+<TR><TD><code>VARIANCE()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>VARIANCE()</code>; new in MySQL 4.1.0
+</TD></TR>
+<TR><TD><code>WEEKOFYEAR()</code>
+ </TD><TD> SQL function
+ </TD><TD> <code>WEEKOFYEAR()</code>; new in MySQL 4.1.1
+</TD></TR>
+</TABLE>
+
+<P><HR><P>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_NDBCluster.html">previous</A>, <A HREF="manual_Spatial_extensions_in_MySQL.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+ </BODY>
+ </HTML>

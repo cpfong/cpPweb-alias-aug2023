@@ -1,0 +1,17 @@
+# 20 MiB /cfg
+NANO_CONFSIZE=2048
+
+# 20 MiB /cfg (https://ogris.de/nanobsd/nanobsd-rasp.conf)
+#NANO_CONFSIZE=$((20*1024*1024/512))
+
+# 2 GB SD card
+NANO_MEDIASIZE=$((2*1000*1000*1000/512))
+dmesg
+--
+ada0: 199MB (409216 512 byte sectors)
+
+# 10 MiB /etc
+NANO_RAM_ETCSIZE=$((10*1024*1024/512))
+# 48 MiB /tmp + /var
+NANO_RAM_TMPVARSIZE=$((48*1024*1024/512))
+NANO_NEWFS="-m 0 -b 4096 -f 512 -i 8192 -O1"

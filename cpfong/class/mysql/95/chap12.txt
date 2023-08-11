@@ -1,0 +1,51 @@
+內建函式
+
+database() 傳回目前使用的資料庫名
+user() 傳回目前的使用者 
+version() 傳回目前 mysql 的版本
+
+p12-5 case 的使用方法1:
+CASE 一個值 
+	WHEN 值1
+		THEN 傳回值1
+	WHEN 值2
+		THEN 傳回值2
+	....
+	ELSE	
+		內定值
+END
+
+
+p12-6 case 的使用方法2: (在 CASE 後沒有一個值, 此會把所有的東東全算一次)
+CASE
+	WHEN 值1
+		THEN 傳回值1
+	WHEN 值2
+		THEN 傳回值2
+	....
+	ELSE	
+		內定值
+END
+
+-------------------------
+if (a === 1) {
+	xxxx;
+}
+else if (a == 2){
+	yyyy;
+}
+else if (a == 3){
+} 
+....
+else    zzzz;
+--------------------------
+switch (a){
+	case 1:
+		xxxxx
+	case 2:
+		yyyyy
+	csee 3:
+		....
+	default:
+		zzzzz
+}

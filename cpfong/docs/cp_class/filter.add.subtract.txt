@@ -1,0 +1,38 @@
+count
+--
+	wc -l file.csv
+	cat -n file.csv | tail -n1 | cut -f1
+filter:
+--
+	grep
+	>
+	cat test.csv | grep '
+
+	while read line; do
+          echo $line
+        done
+
+#!/bin/sh
+while read line; do
+ if echo "$line" | grep -q "TypeB"; then
+#    echo "It's there!"
+ else
+    echo $line
+ fi
+done
+
+add:
+--
+#!/bin/sh
+
+while read line; do
+ if echo "$line" | grep -q "TypeB"; then
+    echo "$line,Medium"
+ else
+    echo "$line,Large"
+ fi
+done
+
+substract:
+--
+pluto@Oregon % cat data2 | grep @ | cut -d\@ -f2 | cut -d\  -f1

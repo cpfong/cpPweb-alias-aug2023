@@ -1,0 +1,505 @@
+<HTML>
+<HEAD>
+<TITLE>Unix¤Jªù¤Î¹ê¥Î«ü¥O¤¶²Ð</TITLE>
+</HEAD>
+
+<BODY>
+<CENTER><B><H1>Unix¤Jªù¤Î¹ê¥Î«ü¥O¤¶²Ð</H1></B></CENTER>
+
+<H6>
+<A HREF="ftp://ftp.nchu.edu.tw/nchu/doc/unix.ps>Unix.ps</A><I>¥»¤åªºPostscriptÀÉ®×         </I><A HREF="ftp://ftp.nchu.edu.tw/nchu/doc/unix.zip>Unix.zip </A><I>¥»¤åªºPostscriptÀ£ÁYÀÉ®×</I><P>
+§@ªÌ:<A HREF="http://www.nchu.edu.tw/people/cslee.html">§õ§Ó²» cslee@netcentral.nchu.edu.tw</A>
+</H6>
+
+<HR>
+<DL>
+     <H2><DT><A HREF="#[1]"> ¤@. UnixÂ²¤¶</A></H2>
+          <DD><A HREF="#[1-1]">¢°. ¯SÂI</A>
+          <DD><A HREF="#[1-2]">¢±. ª©¥»</A>
+     <H2><DT><A HREF="#[2]"> ¤G. °ò¥»¨Ï¥Î</A></H2>
+          <DD><A HREF="#[2-1]">¢°. Ã±¤J</A>
+          <DD><A HREF="#[2-2]">¢±. ¤£¯àÃ±¤J­ì¦]</A>
+          <DD><A HREF="#[2-3]">¢². Ã±¥X«ü¥O</A>
+          <DD><A HREF="#[2-4]">¢³. §ó§ï±K½X</A>
+          <DD><A HREF="#[2-5]">¢´. ½u¤W¨D§U«ü¥O</A>
+          <DD><A HREF="#[2-6]">¢µ. ¨Ï¥ÎÀô¹Ò</A>
+     <H2><DT><A HREF="#[3]">¤T. ÀÉ®×¨t²Î</A></H2>
+          <DD><A HREF="#[3-1]">¢°. ÀÉ¦W</A>
+          <DD><A HREF="#[3-2]">¢±. ¥Ø¿ý</A>
+          <DD><A HREF="#[3-3]">¢². UnixÀÉ®×¬ÛÃö¸ê°T</A>
+          <DD><A HREF="#[3-4]">¢³. ÀÉ®×¨t²ÎºÞ²z«ü¥O</A>
+          <DD><A HREF="#[3-5]">¢´. ÀÉ®×Åv­­¤Î¬ÛÃö«ü¥O</A>
+          <DD><A HREF="#[3-6]">¢µ. ¤@¨ÇÀÉ®×³B²z¤u¨ã</A>
+     <H2><DT><A HREF="#[4]">¥|. ½s¿è¾¹vi</A></H2>
+          <DD><A HREF="#[4-1]">¢°. viªº¨âºØ¼Ò¦¡</A>
+          <DD><A HREF="#[4-2]">¢±. ¶i¤Jvi</A>
+          <DD><A HREF="#[4-3]">¢². Â÷¶}vi</A>
+          <DD><A HREF="#[4-4]">¢³. ¤@¨Çvi«ü¥O</A>
+     <H2><DT><A HREF="#[5]">¤­. ¨ä¥L¤½¥Îµ{¦¡</A></H2>
+     <H2><DT><A HREF="#[A]">ªþ¿ý¤@.  Dos©MUnixªº«ü¥O¤ñ¸û</A></H2>
+</DL>
+<HR>
+
+<PRE>
+<A NAME="[1]"></A>
+<H2>¤@. UnixÂ²¤¶</H2>
+<A NAME="[1-1]"></A>
+¢°. ¯SÂI
+  ¡· ¾A¦X¤£¦PµwÅé
+  ¡· ³nÅé¨ã¦³¥iÄâ©Ê
+  ¡· ¦h¤H¦h¤uÀô¹Ò
+  ¡· ºÞ¹D¥\¯à±j¤j
+  ¡· ´£¨Ñ³\¦h¤½¥Îµ{¦¡
+  ¡· ±j¤jªº©R¥O¸ÑÄ¶¾¹(Shell)
+
+<A NAME="[1-2]"></A>
+¢±. ª©¥»
+  ¡· AT&T  SYSTEM  V
+  ¡· Berkeley  BSD
+
+
+<A NAME="[2]"></A>
+¤G. °ò¥»¨Ï¥Î
+<A NAME="[2-1]"></A>
+¢°. Ã±¤J
+  ¡· Áä¤J±b¸¹
+  ¡· Áä¤J±K½X
+
+<A NAME="[2-2]"></A>
+¢±. ¤£¯àÃ±¤J­ì¦]
+  ¡· ¤j¤p¼g¤£¦P
+  ¡· ±b¸¹¹L´Á
+  ¡· ±K½X¿ù»~
+
+<A NAME="[2-3]"></A>
+¢². Ã±¥X«ü¥O
+  ¡· exit
+  ¡· logout
+
+<A NAME="[2-4]"></A>
+¢³. §ó§ï±K½X
+  ¡· passwd
+    ¡E ¥Îªk¡G passwd
+    ¡E ¦b¨S¦³YP©ÎNISªº¨t²Î¤W¨Ï¥Î¡C
+  ¡· yppasswd
+    ¡E ¥Îªk¡G yppasswd
+    ¡E ¦b¦³YP©ÎNISªº¨t²Î¤W¨Ï¥Î¡C
+  ¡· ±K½X¿ï¾Ü
+    ¡E ¤£­n¨Ï¥Î¦³·N¸qªº¤ù»y¡A¨Ò¦p¦r¨å§ä±o¨ìªº¦r»y¡C
+    ¡E ¤£­n¨Ï¥Î­Ó¤H¸ê®Æ¡A¨Ò¦p¥Í¤é¤é´Á¡B©m¦W¡B¨­¥÷ÃÒ¦r¸¹µ¥¡C
+    ¡E ±b¸¹©M±K½X¤£­n¦³¬ÛÃö©Ê¡C
+    ¡E ¤£­n§â±K½X§Û¼g¦b¯È¤W¡C
+    ¡E «ØÄ³¨Ï¥Î¤j¤p¼g¡B¼Æ¦r¤Î¯S®í¦r¤¸²Õ¦¨±K½X¡C¨Ò¦pk3=M4n¡C
+
+<A NAME="[2-5]"></A>
+¢´. ½u¤W¨D§U«ü¥O
+  ¡· help
+    ¡E ¥Îªk¡Ghelp
+  ¡· man
+    ¡E ¥Îªk¡Gman  [<command>]
+    ¡E ¨Ò¤l¡Gman  ls
+
+<A NAME="[2-6]"></A>
+¢µ. ¨Ï¥ÎÀô¹Ò
+  ¡· Bourne  Shell
+    ¡E ¨Ï¥Î.profile¬°³]©w¨Ï¥ÎÀô¹Òªº¦Û°Ê°õ¦æÀÉ¡C
+    ¡E ¤º®e¨Ò¤l¡J
+       PATH=/bin:/usr/bin:$HOME/bin:.
+       MAIL=/usr/spool/mail/cslee
+       export  PATH  MAIL
+       umask  077
+    ¡E ±`¥ÎÀô¹ÒÅÜ¼Æ¥]¬A
+       PATH   µ{¦¡·j´M¸ô®|
+       PS1    ¥D­nªº´£¥Ü²Å¸¹
+       MAIL   ¹q¤l«H¥óÀÉ®×¦ì¸m
+       TERM   ²×ºÝ¾÷¦W¦r
+       HOME   ®a¥Ø¿ý
+  ¡· C Shell
+    ¡E C Shell¨Ï¥Î.login¤Î.cshrc¨Ó³]©w¨Ï¥ÎÀô¹Òªº¦Û°Ê°õ¦æÀÉ¡C
+    ¡E ¤º®e¨Ò¤l¡J
+           set  term=vt100
+           set  path=/bin:/usr/bin:/usr/local/bin:$home/bin:.
+           setenv  LC_CTYPE  iso8859_1
+           setenv  EDITOR  /usr/local/bin/joe
+           alias  dir  'ls  -la'
+    ¡E stty  ³]©w¿Ã¹õªº°Ñ¼Æ
+       ¥Îªk¡Gstty  [options]
+       ¨Ò¤l¡Gstty  pass8
+                 stty  cs8
+                 stty  -istrip
+                 stty  erase  ^H
+    ¡E set   ³]©wÅÜ¼Æ
+       ¥Îªk¡Gset  [<varname>=<value>]
+       ¨Ò¤l¡Gset  term=vt100
+    ¡E setenv        ³]©wÀô¹ÒÅÜ¼Æ
+       ¥Îªk¡Gsetenv  [<varname>  <value>]
+       ¨Ò¤l¡Gsetenv  EDITOR  /usr/local/bin/joe
+                 setenv  LC_CTYPE  iso_8859_1
+                 setenv  LC_CTYPE  tchinese
+    ¡E alias ³]©w«ü¥O§O¦W
+       ¥Îªk¡Galias  [<aliasname>  <command>]
+       ¨Ò¤l¡Galias  dir  'ls -la'
+
+
+<A NAME="[3]"></A>
+¤T. ÀÉ®×¨t²Î
+<A NAME="[3-1]"></A>
+  ¢°. ÀÉ¦W
+    ¡E ¥i¨Ï¥Îªº¦r¤¸¦³A-Z  a-z  0-9  =  -  _  .  ,µ¥¡C
+    ¡E ÀÉ¦W³Ì¦n©w¦³·N¸q¦Ó¥B¯àªí¥ÜÀÉ®×¤º®eªº¤å¦r¡C
+    ¡E ¥i¨Ï¥Î¶W¹L8­Ó¦r¤¸¬°ÀÉ¦W¡Aªþ¥[ÀÉ¦W¤]¥i¶W¹L3­Ó¦r¤¸¡C
+    ¡E ÀÉ¦W¤¤¥i¥]§t¼Æ­ÓÂI¡C¨Ò¦pmy.test.file¡C
+    ¡E ¥HÂI¶}ÀYªºÀÉ®×ÄÝ©óÁôÂÃÀÉ¡C¨Ò¦p.cshrc¡C
+
+<A NAME="[3-2]"></A>
+  ¢±. ¥Ø¿ý
+    ¡· ¤u§@¥Ø¿ý
+      ¡E ¨Ï¥ÎpwdÅã¥Ü¥Ø«e¤u§@¥Ø¿ý¡C
+      ¡E ¨Ò¤l¡Gpwd
+      ¡E µ²ªG¡G/usr/users/cslee
+    ¡· ®a¥Ø¿ý
+      ¡E Àô¹ÒÅÜ¼Æ$home©Î$HOMEªí¥Ü®a¥Ø¿ý¡C
+      ¡E ª½±µÁä¤Jcd§Y¥i¦^¨ì®a¥Ø¿ý¡C
+      ¡E ¦b/etc/passwd³Ì«á²Ä¤GÄæ¦ì§Y¬O«ü©w¨Ï¥ÎªÌªº®a¥Ø¿ý¡C
+    ¡· ÂI¥Ø¿ý
+      ¡E ¡Dªí¥Ü¥Ø«e©Ò¦b¥Ø¿ý¡C
+      ¡E ¡D¡Dªí¥Ü¤W¤@¼h¥Ø¿ý¡C
+    ¡· ®Ú¥Ø¿ý
+      ¡E ¡þªí¥Ü®Ú¥Ø¿ý¡C
+      ¡E ¥ô¦ó¥Ø¿ý¤ÎÀÉ®×¥Ñ¦¹¶}©l©¹¤U«Ø¥ß¡C
+    ¡· µ´¹ï¸ô®|
+      ¡E ¥H®Ú¥Ø¿ý( / )¶}©lªº¥ô¦ó¸ô®|ºÙ¬°µ´¹ï¸ô®|¡C
+      ¡E ¨Ò¦p¡G/usr/local/bin/elm¡B/usr/users/csleeµ¥¡C
+    ¡· ¬Û¹ï¸ô®|
+      ¡E ¤£¬O¥H®Ú¥Ø¿ý( / )¶}©lªº¥ô¦ó¸ô®|ºÙ¬°¬Û¹ï¸ô®|¡C
+      ¡E ¨Ò¦p¡Gbin/mosaic¡B../cslee/bin¡B./mailµ¥¡C
+
+<A NAME="[3-3]"></A>
+  ¢². UnixÀÉ®×¬ÛÃö¸ê°T
+    ¡E ¨Ï¥Îls  -lg«ü¥O¥i¦C¥X¤@¨ÇÀÉ®×¬ÛÃö¸ê°T¡C
+    ¡E ls  -lg©ÒÅã¥Üªº¨Ò¤l¡G
+       -rwxr--r-x  2  cslee  users  2936  Mar  29  10:15  unix.doc
+    ¡E ¬ÛÃö¸ê°T»¡©ú¡G
+       -              ÀÉ®×«¬ºA¡Cd¥Nªí¥Ø¿ý¡A-¥NªíÀÉ®×¡C
+       rwxr--r-x      ÀÉ®×¨Ï¥ÎÅv­­¡C
+       2              ¦¹ÀÉ³sµ²(Link)¼Æ¡C
+       cslee          ÀÉ®×¾Ö¦³ªÌ¡C
+       users¡@¡@¡@¡@¡@ÀÉ®×¸s²Õ¡C
+       2936           ÀÉ®×¤j¤p¡C
+       Mar  29  10:15 ÀÉ®×¤W¦¸­×§ï¤é´Á¡C
+       unix.doc       ÀÉ®×¦WºÙ¡C
+
+<A NAME="[3-4]"></A>
+  ¢³. ÀÉ®×¨t²ÎºÞ²z«ü¥O
+    ¡· ¸U¥Î¦r¤¸
+      ¡E ¡¯¥Nªí¼Æ­Ó¦r¤¸ªº¦r¦ê
+         ¨Ò¤l¡Gte*.dat
+               exe*se
+      ¡E ¡H¥Nªí¥ô¤@¦r¤¸¡C
+         ¨Ò¤l¡Gex?.doc
+               te???.dat
+    ¡· Åã¥ÜÀÉ®×¦Cªí¡C
+      ¡E ¥Îªk¡Gls  <-options>  [filename]
+      ¡E ­«­n°Ñ¼Æ¦³¡G
+         -l     Åã¥Ü¸Ô²Ó°T®§¡C
+         -a     ¥]¬AÅã¥ÜÁôÂÃÀÉ¡C
+         -F     Åã¥ÜÀÉ®×«¬ºA¡C
+      ¡E ¨Ò¤l¡Gls  -la
+               ls  -F  ex*
+    ¡· ¤Á´«¤u§@¥Ø¿ý
+      ¡E ¥Îªk¡Gcd  <dirname>
+      ¡E ¨Ò¤l¡Gcd  ..
+               cd  /usr/local/bin
+    ¡· «þ¨©ÀÉ®×
+      ¡E ¥Îªk¡Gcp  <-options>  [source]  [target]
+      ¡E ­«­n°Ñ¼Æ¦³¡G
+         -i     ¥æ½Í¦¡«þ¨©¡C
+      ¡E ¥²¶·«ü©w¥ØªºÀÉ¦aÂI¡C
+      ¡E ¨Ò¤l¡Gcp  ex1.dat  /usr/users/cslee/exercise1.dat
+               cp  /usr/users/cslee/exercise1.dat  .
+    ¡· «þ³Æ¥Ø¿ý
+      ¡E ¥Îªk¡Gcp  -r  [source]  [target]
+      ¡E cp¥[¤W-r°Ñ¼Æªí¥Ü³s¤l¥Ø¿ý¤]«þ¨©¡C
+      ¡E ¥²¶·«ü©w¥ØªºÀÉ¦aÂI¡C
+      ¡E ¨Ò¤l¡Gcp  -r  /usr/users/cslee  /tmp
+               cp  -r  /usr/users/cslee  .
+    ¡· ·h²¾©Î§ó¦WÀÉ®×¤Î¥Ø¿ý
+      ¡E ¥Îªk¡Gmv  [old]  [new]
+      ¡E ¨Ò¤l¡Gmv  mbox  mbox.old
+               mv  /tmp/ex1.dat  ./ex2.dat
+    ¡· §R°£ÀÉ®×
+      ¡E ¥Îªk¡Grm  [-option]  [filename]
+      ¡E ­«­n°Ñ¼Æ¡G
+         -r     ³s¤l¥Ø¿ý¤Î¨ä¤ºªºÀÉ®×¤]·|§R°£¡C
+         -f     ¸I¨ì°ßÅªÀÉ¤]·|ª½±µ§R°£¡C
+         -i     ¥æ½Í¦¡§R°£¡C
+      ¡E ¨Ò¤l¡Grm  tempfil
+               rm  -rf  News
+    ¡· «Ø¥ß·s¥Ø¿ý
+      ¡E ¥Îªk¡Gmkdir  [dirname]
+      ¡E ¨Ò¤l¡Gmkdir  mydir
+    ¡· §R°£¥Ø¿ý
+      ¡E ¥Îªk¡Grmdir  [dirname]
+      ¡E ³Q§R°£ªº¥Ø¿ý¤º¤£¯à¦³¥ô¦óÀÉ®×©Î¤l¥Ø¿ý¡C
+      ¡E ¦pªG­n§R°£¥Ø¿ý¤Î¨ä¤ºªºÀÉ®×¤Î¤l¥Ø¿ý¥i¥Îrm  -rf  [dirname]¡C
+      ¡E ¨Ò¤l¡Grmdir  [mydir]
+    ¡· Åã¥Ü¨t²ÎºÏºÐ¨Ï¥Îª¬ºA
+      ¡E ¥Îªk¡Gdf  <filesystem>
+    ¡· Åã¥ÜÀÉ®×¦û¥ÎºÏºÐªÅ¶¡ª¬ºA
+      ¡E ¥Îªk¡Gdu <filename>
+
+<A NAME="[3-5]"></A>
+  ¢´. ÀÉ®×Åv­­¤Î¬ÛÃö«ü¥O
+    ¡· Åv­­»¡©ú
+      ¡E Åv­­¤À¤TºØ¡G¾Ö¦³ªÌ¡B¦P¸s²Õªº¨Ï¥ÎªÌ¡B¨ä¥L¨Ï¥ÎªÌ¡C
+      ¡E Åv­­¸ê°T¨ú±o¥i¥Ñls  -lgÅã¥Ü¡C
+         ls  -lg©ÒÅã¥Üªº¨Ò¤l¡G
+         -rwxr--r-x   2   cslee   users   2936   Mar   29   10:15   unix.doc
+      ¡E ¥H¤WÅã¥Ü¥X¦¹ÀÉ¾Ö¦³¬°ªÌcslee¡AÄÝ©óusers¸s²Õ¡C
+      ¡E rwxr--r-xªí¥Ü¨Ï¥ÎÅv­­¡C
+      ¡E rªí¥Ü¦³ÅªªºÅv§Q¡Awªí¥Ü¦³¼gªºÅv§Q¡Axªí¥Ü¦³°õ¦æªºÅv§Q¡C
+      ¡E «e¤T­Ó¦r¥À(rwx)ªí¥ÜÀÉ®×¾Ö¦³ªÌªºÅv§Q¡C³o¨Ò¤lªí¥Ücslee¥iÅª¡B
+         ¥i¼g¤Î¥i°õ¦æ¦¹ÀÉ¡C
+      ¡E ¤¤¶¡¤T­Ó¦r¥À(r--)ªí¥Ü¦P¸s²Õ¨Ï¥ÎªÌªºÅv§Q¡C³o¨Ò¤lªí¥Ü¦P¬°
+         users¸s²Õªº¨Ï¥ÎªÌ¥iÅª¡B¤£¥i¼g¤Î¤£¥i°õ¦æ¦¹ÀÉ¡C
+      ¡E «á­±¤T­Ó¦r¥À(r-x)ªí¥Ü¨ä¥L¨Ï¥ÎªÌªºÅv§Q¡C³o¨Ò¤lªí¥Ü¨ä¥L¨Ï
+         ¥ÎªÌ¥iÅª¡B¤£¥i¼g¦ý¥i°õ¦æ¦¹ÀÉ¡C
+    ¡· §ó§ïÅv­­
+      ¡E permission¦³¨âºØªí¥Üªk¡G¥[´îªk¡B¼Æ¦rªk¡C
+      ¡E ¥[´îªk¬Oª½±µ±NÅv­­±q¨Ï¥ÎªÌªºÅv­­¤¤¥[¤J©Î´î¥h¡C
+         ¥Îªk¡Gchmod  [who][op][permission]  [filename]
+         who ªí¥Ü¨Ï¥ÎªÌ¡A¦³®Ä­È¬°a(©Ò¦³¨Ï¥ÎªÌ),u(ÀÉ®×¾Ö¦³ªÌ),g(¦P¸s
+             ²Õªº¨Ï¥ÎªÌ),o(¨ä¥L¨Ï¥ÎªÌ)¡C
+         op  ªí¥Ü°Ê§@¡A¦³®Ä­È¬°+(¼W¥[Åv­­)¡A-(¥¢¥hÅv­­)¡C
+         permission  ªí¥ÜÅv­­¡A¦³®Ä­È¬°r(ÅªªºÅv§Q),w(¼gªºÅv§Q),x(°õ¦æ
+                     ªºÅv§Q)¡C
+         ¨Ò¤l¡Gchmod  u-rx  unix.doc
+               chmod  o+w  unix.doc
+      ¡E ¼Æ¦rªk¬Oª½±µ¨Ï¥Î¼Æ¦rªí¥ÜÅv­­¡C
+         ¥Îªk¡Gchmod  [permission]  [filename]
+         ³o¸Ìªºpermission¨Ï¥Î¤@­Ó¤T¦ì¼Æ¤K¶i¦ìªº¼Æ¦r¡A¨C¦ì¼Æ¤À§O¥Nªí¸Ó
+         ÀÉ¾Ö¦³ªÌªºÅv­­¡B¸s²ÕªºÅv­­¡B¨ä¥L¤HªºÅv­­¡C¨Ò¦p755ªí¥ÜÀÉ®×¾Ö
+         ¦³ªÌ¥iÅª¼g¤Î°õ¦æ¦¹ÀÉ¡A¦Ó¦P¸s²Õ¨Ï¥ÎªÌ©M¨ä¥L¨Ï¥ÎªÌ¥u¥iÅª¤Î°õ¦æ
+         ¦¹ÀÉ¡C
+         rªº­È¬O4¡Bwªº­È¬O2¡Bxªº­È¬O1¡C¨C¦ì¼Æ¬O¥Ñ³o¤T­Ó­Èªº©M²Õ¦¨¡Aªí
+         ¥Ü¬Y¤@Ãþ¨Ï¥ÎªÌ¹ï¦¹ÀÉªºÅv­­¡C¨Ò¦p5ªí¥Ü¥iÅª¤Î¥i°õ¦æ(4+1)¡C
+         ¨Ò¤l¡Gchmod  745  unix.doc
+    ¡· ÅÜ§óÀÉ®×¾Ö¦³¤H
+      ¡E ¥Îªk¡Gchown  [owner]  [filename]
+      ¡E ¥u¦³root¥iÅÜ§óÀÉ®×¾Ö¦³¤H¡C
+      ¡E ¨Ò¤l¡Gchown  guest  unix.doc
+    ¡· ÅÜ§óÀÉ®×¸s²Õ
+      ¡E ¥Îªk¡Gchgrp  [group]  [filename]
+      ¡E ¥u¦³root¥iÅÜ§óÀÉ®×¸s²Õ¡C
+      ¡E ¨Ò¤l¡Gchgrp  staff  unix.doc
+    ¡· ÀÉ®×«Ø¥ß³\¥iªº¾B¸n
+      ¡E ¥Îªk¡Gumask  [mask]
+      ¡E ¬°¤@­Ó¤T¦ì¼Æ¤K¶i¦ìªº¼Æ¦r¡A¨C¦ì¼Æ¤À§O¥Nªí¸ÓÀÉ¾Ö¦³¤Hªº
+         Åv­­¡B¸s²ÕªºÅv­­¡B¨ä¥L¤HªºÅv­­¡C
+      ¡E ¦¹©R¥O³q±`¥X²{¦b.profile¡B.cshrc©Î.login¤¤¡C
+      ¡E ¥Î777´î±¼umask­È«á§Y¬OÀÉ®×«Ø¥ß®Éªº¤º©wÅv­­¡C
+      ¡E ¨Ò¤l¡Gumask  022
+         «h777-022=755    (¤º©wÅv­­¬°755©Îrwxr-xr-x)
+
+<A NAME="[3-6]"></A>
+  ¢µ. ¤@¨ÇÀÉ®×³B²z¤u¨ã
+    ¡· cat
+      ¡E Åã¥ÜÀÉ®×¤º®e¡C
+      ¡E ¥Îªk¡Gcat  [filename]
+    ¡· more
+      ¡E ¤@­¶¤@­¶Åã¥ÜÀÉ®×¡C
+         ¥Îªk¡Gmore  [filename]
+      ¡E °t¦Xpipe¥i±N¥ô¦ó¿é¥XÅÜ¦¨¤@­¶¤@­¶ªºÅã¥Ü¡C
+         ¥Îªk¡G[command]  |  more
+    ¡· tail
+      ¡E Åã¥ÜÀÉ®×ªº³Ì«á³¡¥÷¡C
+      ¡E ¥Îªk¡Gtail  [<+n>  <-n>]  [filename]
+      ¡E +¸¹ªí¬O¦ÛÀÉÀY¶}©l¸õ¹Ln¦æ«áÅã¥Ü¡C
+      ¡E -¸¹ªí¥Ü¦ÛÀÉ§À¶}©l©¹¦^²Än¦æÅã¥Ü¡C
+      ¡E ¨Ò¤l¡Gtail  -10  /etc/passwd
+               tail  +20  unix.doc
+    ¡· find
+      ¡E §ä´MÀÉ®×¡C
+      ¡E ¥Îªk¡Gfind  [directory]  -name  [dirname]  -print
+      ¡E ¨Ò¤l¡Gfind  /usr  -name  elm  -print
+    ¡· wc
+      ¡E Åã¥ÜÀÉ®×¤¤ªº¦æ¼Æ¡B¦r»y¼Æ¤Î¦r¤¸¼Æ¡C
+      ¡E ¥Îªk¡Gwc  [file]
+      ¡E ¨Ò¤l¡Gwc  unix.doc
+         ¿é¥X¡G5          31          146          unix.doc
+         »¡©ú¡Gunix.doc§t5¦æ¡B31­Ó¦r»y¡B146¦r¤¸¡C
+    ¡· grep
+      ¡E ¦bÀÉ®×¤¤·j´M¦r¦ê¡C
+      ¡E ¥Îªk¡Ggrep  [pattern]  [file]
+      ¡E ¨Ò¤l¡Ggrep  copy  unix.doc
+
+<A NAME="[4]"></A>
+¥|. ½s¿è¾¹ vi
+<A NAME="[4-1]"></A>
+  ¢°. viªº¨âºØ¼Ò¦¡
+    ¡· Command ¼Ò¦¡
+      ¡E ¦bCommand¼Ò¦¡¡Avi±µ¨üÁä½L¿é¤Jªº«ü¥O¡C
+      ¡E ¦bCommand¼Ò¦¡¡A¦pªG«ü¥OÁä¤J¿ù»~¡A¨t²Î·|µo¥XBeep¤@Án¡C
+    ¡· Edit¼Ò¦¡
+      ¡E ¨Ï¥Îviªº«ü¥O¶i¤J½s­×¼Ò¦¡«á¥i¶i¦æ¦r¤¸½s¿è¡C
+      ¡E ¨Ï¥ÎEscape«öÁäÂ÷¶}Edit¼Ò¦¡¦^¨ìCommand¼Ò¦¡¡C
+
+<A NAME="[4-2]"></A>
+  ¢±. ¶i¤Jvi
+    ¡· vi  filename
+      ¡E ¨Ò¤l¡Gvi  ex1.txt
+
+<A NAME="[4-3]"></A>
+  ¢². Â÷¶}vi
+    ¡· :wq
+      ¡E ¦sÀÉ«áÂ÷¶}vi¡C
+    ¡· :q
+      ¡E ª½±µÂ÷¶}vi¡C
+    ¡· :q!
+      ¡E ¤£¦sÀÉÂ÷¶}vi¡C
+
+<A NAME="[4-4]"></A>
+  ¢³. ¤@¨Çvi«ü¥O
+    ¡· ²¾°Ê´å¼Ð
+      ¡E l¡Bà  ´å¼Ð¦V¥k²¾°Ê¡C
+      ¡E h¡Bß  ´å¼Ð¦V¥ª²¾°Ê¡C
+      ¡E j¡Bâ  ´å¼Ð¦V¤U²¾°Ê¡C
+      ¡E k¡Bá  ´å¼Ð¦V¤W²¾°Ê¡C
+      ¡E w     ´å¼Ð¦V¥k²¾°Ê¦Ü¤U¤@­Ó¦r»y¡C
+      ¡E <n>w  ´å¼Ð¦V¥k²¾°Ê¦Ü²Än­Ó¦r»y¡Cn¬O¤@­Ó¼Æ¦r¡C
+      ¡E b     ´å¼Ð¦V¤W²¾°Ê¦Ü¤W¤@­Ó¦r»y¡C
+      ¡E <n>b  ´å¼Ð¦V¤W²¾°Ê¦Ü²Än­Ó¦r»y¡Cn¬O¤@­Ó¼Æ¦r¡C
+      ¡E 0     ´å¼Ð²¾°Ê¦Ü¥»¦æªº¶}ÀY³B¡C
+      ¡E $     ´å¼Ð²¾°Ê¦Ü¥»¦æªºµ²§À³B¡C
+      ¡E ^F    ©¹¤U²¾°Ê¤@­¶¡C
+      ¡E <n>^F ©¹¤U²¾°Ên­¶¡Cn¬O¤@­Ó¼Æ¦r¡C
+      ¡E ^B    ©¹¤W²¾°Ê¤@­¶¡C
+      ¡E <n>^B ©¹¤W²¾°Ên­¶¡Cn¬O¤@­Ó¼Æ¦r¡C
+    ¡· ¥[¤J¤å¦r
+      ¡E i     ¦b´å¼Ð³B¼W¥[¤å¦r¡A¥HEscÁäÂ÷¶}¥[¤J¼Ò¦¡¡C
+      ¡E I     ¦b¥»¦æªº±Ò©l³B¼W¥[¤å¦r¡A¥HEscÁäÂ÷¶}¥[¤J¼Ò¦¡¡C
+      ¡E a     ¦b´å¼Ð«áªþ¥[¤å¦r¡A¥HEscÁäÂ÷¶}¥[¤J¼Ò¦¡¡C
+      ¡E A     ¦b¥»¦æªº³Ì«áªþ¥[¤å¦r¡A¥HEscÁäÂ÷¶}¥[¤J¼Ò¦¡¡C
+      ¡E o     ¦b´å¼Ð¤U­±¶}±Ò·sªº¤@¦æ¡A¥HEscÁäÂ÷¶}¥[¤J¼Ò¦¡¡C
+      ¡E O     ¦b´å¼Ð¤W­±¶}±Ò·sªº¤@¦æ¡A¥HEscÁäÂ÷¶}¥[¤J¼Ò¦¡¡C
+    ¡· ­×§ï¤å¦r
+      ¡E r     ­×§ï´å¼Ð©Ò¦b¦r¤¸¡C
+      ¡E R     ¤@¦¸­×§ï¦h­Ó¦r¤¸¡A¥HEscÁäÂ÷¶}­×§ï¼Ò¦¡¡C
+    ¡· §R°£¤å¦r
+      ¡E x     §R°£´å¼Ð©Ò¦b¦r¤¸¡C
+      ¡E dd    §R°£¤@¾ã¦æ¡C
+      ¡E <n>dd §R°£n¦æ¡Cn¬O¤@­Ó¼Æ¦r¡C
+      ¡E dw    §R°£n­Ó¦r»y¡Cn¬O¤@­Ó¼Æ¦r¡C
+      ¡E <n>dw §R°£n­Ó¦r»y¡Cn¬O¤@­Ó¼Æ¦r¡C
+    ¡· ÁÙ­ì­×§ï
+      ¡E ¡·    ¨ú®ø¤W¤@­Ó«ü¥Oªº­×§ï¡C
+      ¡E ¡·    ¨ú®ø¤@¾ã¦æªº­×§ï¡C
+    ¡· ·j´M
+      ¡E /string       ·j´M¦r¦ê¡C
+      ¡E n     ·j´M¤U¤@­Ó²Å¦Xªº¦r¦ê¡C
+    ¡· ¨ú¥N
+      ¡E :s/oldtext/newtext/           ¥Înewtext¨ú¥Noldtext(¥u°µ¤@¦¸)¡C
+      ¡E :1,$s/oldtext/newtext/g       ±qÀÉ­º¨ìÀÉ§À¥Înewtext¨ú¥Noldtext¡C
+    ¡· ¦sÀÉ
+      ¡E :w            ¥H­ì¨ÓÀÉ¦W¦sÀÉ¡C
+      ¡E :w  [filename]        ¥H¥t¤@­ÓÀÉ¦W¦sÀÉ¡C
+      ¡E :w!  [filename]       ÂÐ»\¥H¦s¦bªºÀÉ®×¡C
+      ¡E :wq           ¦sÀÉ«á°¨¤WÂ÷¶}vi¡C
+    ¡· ´¡¤JÀÉ®×
+      ¡E :r  <filename>        ´¡¤J¤@­ÓÀÉ®×ªº¤º®e¡C
+    ¡· ¨ä¥L«ü¥O
+      ¡E J     ±N¨â¦æ¦X¨Ö¡C
+      ¡E P     ½Æ»s¤W¦¸³Q§R°£ªº¤º®e¡C
+      ¡E :shell        ¼È®É¦^¨ìshell¡A¨Ï¥Îexit¥i¦^¨ìvi¡C
+      ¡E :![cmd]       °õ¦æ¥~³¡«ü¥O¡C
+      ¡E :set  showmode        Åã¥Ü«ü¥Oª¬ºA¡C
+
+<A NAME="[5]"></A>
+¤­. ¨ä¥L¤½¥Îµ{¦¡
+    ¡· compress  [file.Z]
+      ¡E ¹ïÀÉ®×¶i¦æÀ£ÁY¡C
+      ¡E ¨Ï¥Î.Z¬°ªþ¥[ÀÉ¦W¡C
+      ¡E ¨Ò¤l¡Gcompress  unix.doc
+    ¡· uncompress  [file.Z]
+      ¡E ¹ï³QcompressÀ£ÁY¹LªºÀÉ®×¶i¦æ¸ÑÀ£ÁY¡C
+      ¡E ¨Ò¤l¡Guncompress  unix.doc.Z
+    ¡· tar  cvf  [tarfile]  [filelist]
+      ¡E ±N¤@¨ÇÀÉ®×¥]¸Ë¦¨³æ¤@ÀÉ®×¡C
+      ¡E ³q±`¥H.tar¬°ªþ¥[ÀÉ¦W¡C
+      ¡E ¨Ò¤l¡Gtar  cvf  exercise.tar  ex*.c  /tmp/pass*.dat
+    ¡· tar  xvf  [tarfile]
+      ¡E ±N¤@¨Ç³æ¤@À£ÁYÀÉ®×¸ÑÀ£¦¨¦h­ÓÀÉ®×¡C
+      ¡E ¨Ò¤l¡Gtar  xvf  exercise.tar
+    ¡· who
+      ¡E ¦C¥X²{¦b½u¤W¨Ï¥ÎªÌ¡C
+      ¡E Åã¥Ü¨Ï¥ÎªÌ±b¸¹¡B²×ºÝ¾÷¥N¸¹¡B°±¹y®É¶¡µ¥°T®§¡C
+    ¡· write  [user]  <ttyname>
+      ¡E °e°T®§µ¹¥t¤@­Ó¤´¦b½u¤Wªº¨Ï¥ÎªÌ¡C
+      ¡E ¨Ò¤l¡Gwrite  guest  "Hello!!  I  am  cslee  :)"
+    ¡· talk  [username]  <ttyname>
+      ¡E »P¨ä¥L¨Ï¥ÎªÌ¶i¦æ½u¤W¥æ½Í¡C
+      ¡E ¨Ï¥Î¦¹«ü¥O«á¡A¹ï¤èªº¿Ã¹õ¤W·|Åã¥Ü¦³¤HÁÜ½Íªº°T®§¡Cµ¥¹ï¤è¤]
+         ¨Ï¥Îtalk«ü¥O¦^µª¡A¥æ½Í¤~¥¿¦¡¶}©l¡C
+      ¡E ¥i¨Ï¥Îwho«ü¥O±o¨ì¹ï¤èªºusername¤Îttyname¡C
+      ¡E ¨Ò¤l¡Gtalk  guest
+               talk  cslee  tty01
+    ¡· nohup  [command]  &
+      ¡E ¨Ï¤@­Óµ{¦¡¦b¨Ï¥ÎªÌÃ±¥X«á¤´¯àÄ~Äò°õ¦æ¡C
+      ¡E °õ¦æ«áªº¿é¥X·|¦s¦bnohup.out¤¤¡C
+      ¡E ¨Ò¤l¡Gnohup  fcomp  &
+    ¡· [command]  &
+      ¡E ¨Ï¤@­Óµ{¦¡¦b¹õ«á°õ¦æ¡C
+      ¡E ¦pªGµ{¦¡©|¥¼°õ¦æ§¹²¦´N¾E¥X«hµ{¦¡·|¦Û°Ê°±¤î¡C
+      ¡E ¨Ò¤l¡Gcp  -r  .  /tmp  &
+    ¡· ps  <-options>
+      ¡E Åã¥Ü¨t²Î³B²zµ{§Çªº¦Cªí¡C
+      ¡E ­«­n°Ñ¼Æ¡G
+         -a     Åã¥Ü¨ä¥L¨Ï¥ÎªÌªºµ{§Ç¡C
+         -l     Åã¥Üµ{§Ç¸Ô²Óªº¸ê°T¡C
+      ¡E ¨Ò¤l¡Gps  -al
+    ¡· kill  -9  [pid]
+      ¡E °±¤î¬Y¤@³B²zµ{§Ç¡C
+      ¡E ¤@¯ë¨Ï¥ÎªÌ¥u¥i°±¤î¦Û¤vªº³B²zµ{§Ç¡C
+      ¡E ¥u¦³root¥i¥H°±¤î¥ô¦óµ{§Ç¡C
+      ¡E ¥i¨Ï¥ÎpsÅã¥Ü³B²zµ{§Çªºpid¡C
+    ¡· mail  <address>
+      ¡E ±H¤@«Ê¹q¤l«H¥ó¡C
+      ¡E ¦p¨SÁä¤Jaddress«h¶i¤J«H¥ó³B²zµ{¦¡¡C
+      ¡E ¨Ò¤l¡Gmail  cslee@netcentral.nchu.edu.tw
+    ¡· ftp  <host>
+      ¡E Â^¨ú»·ºÝ¥D¾÷ªºÀÉ®×¡C
+      ¡E ¨Ò¤l¡Gftp  ftp.nchu.edu.tw
+    ¡· telnet  host
+      ¡E Ã±¤J»·ºÝ¥D¾÷¡C
+      ¡E ¨Ò¤l¡Gtelnet  bbs.nchu.edu.tw
+
+<A NAME="[A]"></A>
+ªþ¿ý¤@. Dos©MUnixªº«ü¥O¤ñ¸û
+
+  DOS«ü¥O                         Unix«ü¥O
+  dir                             ls  -l
+  dir/w                           ls
+  dir/s                           ls -lR
+  type                            cat
+  type  [filename]  |  more       more  [filename]
+  more                            more
+  copy                            cp
+  find                            grep
+  comp                            diff
+  ren                             mv
+  del                             rm
+  rd                              rmdir
+  attrib                          chmod
+  md                              mkdir
+  cd                              cd
+  help                            man
+  date                            date
+  time                            date
+  chkdsk                          df
+  print                           lpr
+  mem/c                           ps -ax
+
+</PRE>
+
+</BODY>
+</HTML>

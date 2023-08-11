@@ -1,0 +1,403 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0042)http://www.hmes.kh.edu.tw/~jang/mysql.html -->
+<HTML><HEAD><TITLE>MySQL安裝使用手冊</TITLE>
+<META content="text/html; charset=big5" http-equiv=Content-Type>
+<META content=張宏明 name=Author>
+<META content="Microsoft FrontPage 4.0" name=GENERATOR></HEAD>
+<BODY aLink=#ff0000 bgColor=#000000 link=#66ffff text=#ffffff vLink=#cc33cc>
+<CENTER>
+<H1>MySQL安裝使用手冊</H1></CENTER>
+<H2>一、概述：</H2>　　MySQL為一個多使用者、多執行緒及多站台的快速反應資料庫系統，系統主要著眼於快速與多使用者，最大的好處是用於教育用途，免費使用。 
+<BR>　　它具有多種版本，從Unix到Windows  
+98(或NT)都有，很適合於一般教育界來使用開發一些資庫料的整合應用，把它當成後端資料庫系統，一個不錯的選擇。  
+<H2>二、資源：</H2> 
+<UL type=SQUARE> 
+  <LI>作業環境： <BR>RedHat 6.0 + CLE 0.8p1 <BR>&nbsp;  
+  <LI>原始出處： <BR><A href="http://www.mysql.net/">http://www.mysql.net/</A>  
+  <BR>台灣Mirror站：<A href="http://mysql.ht.net.tw/">http://mysql.ht.net.tw/</A>  
+  <BR>&nbsp;  
+  <LI>版本： <BR>MySQL-3.22.27中文修正版 <BR>&nbsp;  
+  <LI>檔案來源： <BR><A  
+  href="ftp://sql.hmes.kh.edu.tw/pub/apache_php3_mysql/mysql-3.22.27/">ftp://sql.hmes.kh.edu.tw/pub/apache_php3_mysql/mysql-3.22.27/</A>　或 
+  <BR>Mirror站 <A  
+  href="ftp://ftp.linuxer.nu/Linux/apache_php_mysql/rpms/mysql-3.22.27/">ftp://ftp.linuxer.nu/Linux/apache_php_mysql/rpms/mysql-3.22.27/</A>　或 
+  <BR>Mirror站&nbsp; <A  
+  href="http://linux.mcic.thu.edu.tw/download/pub/packages/apache+php+mysql/">http://linux.mcic.thu.edu.tw/download/pub/packages/apache+php+mysql/</A>  
+  <BR>&nbsp;  
+  <LI>檔案列表：  
+  <TABLE border=1> 
+    <TBODY> 
+    <TR> 
+      <TD>-rw-r--r--&nbsp;&nbsp; 1 root&nbsp;&nbsp;&nbsp;&nbsp;  
+        ftp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4693686 Nov 27 00:59  
+        MySQL-3.22.27-2c.i386.rpm&nbsp; <BR>-rw-r--r--&nbsp;&nbsp; 1  
+        root&nbsp;&nbsp;&nbsp;&nbsp; ftp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+        4041769 Nov 27 00:59 MySQL-3.22.27-2c.src.rpm&nbsp;  
+        <BR>-rw-r--r--&nbsp;&nbsp; 1 root&nbsp;&nbsp;&nbsp;&nbsp;  
+        ftp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 541043 Nov 27 00:59  
+        MySQL-bench-3.22.27-2c.i386.rpm&nbsp; <BR>-rw-r--r--&nbsp;&nbsp; 1  
+        root&nbsp;&nbsp;&nbsp;&nbsp; ftp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+        2050704 Nov 27 00:59 MySQL-client-3.22.27-2c.i386.rpm&nbsp;  
+        <BR>-rw-r--r--&nbsp;&nbsp; 1 root&nbsp;&nbsp;&nbsp;&nbsp;  
+        ftp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 601871 Nov 27 00:59  
+        MySQL-devel-3.22.27-2c.i386.rpm</TD></TR></TBODY></TABLE>　 
+  <LI>網路資源： <BR><A 
+  href="http://mark.ee.nctu.edu.tw:8888/qa/list.php3?num=2&amp;collapse=1">PHP-Zend  
+  Resources Center - 技術與資源交流中心 MySQL交流討論區</A> <BR><A  
+  href="http://php.paes.cy.edu.tw/wwwboard/list.php3?num=3">瑞琦資訊工作室  
+  MySQL交流討論區</A> <BR><A href="telnet://linux.twbbs.org/">linux.twbbs.org BBS站  
+  MySQL版</A></LI></UL> 
+<H2>三、安裝：</H2> 
+<OL> 
+  <LI>以 root 身份登入 Redhat 系統。 <BR>&nbsp;  
+  <LI>到「檔案來源」的其中一站下載上述五個檔案。 <BR>&nbsp;  
+  <LI>依序以 rpm -ivh 命令將所下載下來的檔案安裝入Redhat作業系統中。  
+  <TABLE border=1> 
+    <TBODY> 
+    <TR> 
+      <TD><FONT color=#3366ff>[root@test /root]#</FONT> <FONT  
+        color=#ffff00>rpm -ivh MySQL-3.22.27-2c.i386.rpm</FONT> <BR><FONT  
+        color=#3366ff>[root@test /root]#</FONT> <FONT color=#ffff00>rpm -ivh  
+        MySQL-client-3.22.27-2c.i386.rpm</FONT> <BR><FONT  
+        color=#3366ff>[root@test /root]#</FONT> <FONT color=#ffff00>rpm -ivh  
+        MySQL-devel-3.22.27-2c.i386.rpm</FONT></TD></TR></TBODY></TABLE> 
+  <LI>若您需要重新Compiler，則只要安裝 MySQL-3.22.27-2c.src.rpm 套件即可。 <BR>&nbsp;  
+  <LI>以 root 身份登入 Redhat 系統後，進入MySQL資料庫系統。  
+  <TABLE border=1> 
+    <TBODY> 
+    <TR> 
+      <TD><FONT color=#3366ff>[root@test /root]#</FONT> <FONT  
+        color=#ffff00>mysql mysql</FONT></TD></TR></TBODY></TABLE>　 
+  <LI>若安裝成功您可看到下列畫面，並看到mysql的提示號！ 
+  <TABLE border=1>
+    <TBODY>
+    <TR>
+      <TD><FONT color=#ff99ff>Reading table information for completion of  
+        table and column names&nbsp;</FONT> <BR><FONT color=#ff99ff>You can turn  
+        off this feature to get a quicker startup with -A</FONT>  
+        <P><FONT color=#ff99ff>Welcome to the MySQL monitor.&nbsp; Commands end  
+        with ; or \g.&nbsp;</FONT> <BR><FONT color=#ff99ff>Your MySQL connection  
+        id is 212 to server version: 3.22.27&nbsp;</FONT>  
+        <P><FONT color=#ff99ff>Type 'help' for help.&nbsp;</FONT>  
+        <P><FONT color=#3366ff>mysql&gt;</FONT></P></TD></TR></TBODY></TABLE>　 
+  <LI>更改MySQL系統之管理者密碼(新密碼的地方，換成您要設定的密碼) 
+  <TABLE border=1>
+    <TBODY>
+    <TR>
+      <TD><FONT color=#3366ff>mysql&gt;</FONT> <FONT color=#ffff00>UPDATE user  
+        SET password=password('</FONT><FONT color=#ffcc33>新密碼</FONT><FONT  
+        color=#ffff00>') where user='root';&nbsp;</FONT> <BR><FONT  
+        color=#ff99ff>Query OK, 0 rows affected (0.00 sec)</FONT> <BR><FONT  
+        color=#ff99ff>Rows matched: 2&nbsp; Changed: 0&nbsp; Warnings:  
+      0</FONT></TD></TR></TBODY></TABLE>　 
+  <LI>刪除空帳號，以維護系統安全 
+  <TABLE border=1>
+    <TBODY>
+    <TR>
+      <TD><FONT color=#3366ff>mysql&gt;</FONT> <FONT color=#ffff00>DELETE FROM  
+        user WHERE User = '';</FONT> <BR><FONT color=#ff99ff>Query OK, 0 rows  
+        affected (0.00 sec)</FONT> <BR><FONT color=#ff99ff>Rows matched: 2&nbsp;  
+        Changed: 0&nbsp; Warnings: 0</FONT></TD></TR></TBODY></TABLE>(最後是兩個單引號)  
+  <BR>&nbsp;  
+  <LI>即時更新上述修正之資料  
+  <TABLE border=1> 
+    <TBODY> 
+    <TR> 
+      <TD><FONT color=#3366ff>mysql&gt;</FONT> <FONT color=#ffff00>FLUSH  
+        PRIVILEGES;</FONT> <BR><FONT color=#ff99ff>Query OK, 0 rows affected  
+        (0.00 sec)</FONT></TD></TR></TBODY></TABLE>　 
+  <LI>離開MySQL資料庫系統 
+  <TABLE border=1>
+    <TBODY>
+    <TR>
+      <TD><FONT color=#3366ff>mysql&gt;</FONT> <FONT color=#ffff00>exit</FONT>  
+        <BR><FONT color=#ff99ff>Bye</FONT> <BR><FONT color=#3366ff>[root@test  
+        root]#</FONT></TD></TR></TBODY></TABLE>　 
+  <LI>測試一下剛剛更新的密碼是否正常： <BR>&nbsp; 
+  <TABLE border=1>
+    <TBODY>
+    <TR>
+      <TD><FONT color=#3366ff>[root@test root]#</FONT><FONT color=#ffff00>  
+        mysql mysql -u</FONT><FONT color=#ff9900>root</FONT><FONT color=#ffff00>  
+        -p</FONT><FONT color=#ff9900>新密碼</FONT> <BR><FONT color=#ff99ff>Reading  
+        table information for completion of table and column names</FONT>  
+        <BR><FONT color=#ff99ff>You can turn off this feature to get a quicker  
+        startup with -A</FONT>  
+        <P><FONT color=#ff99ff>Welcome to the MySQL monitor.&nbsp; Commands end  
+        with ; or \g.</FONT> <BR><FONT color=#ff99ff>Your MySQL connection id is  
+        29 to server version: 3.22.27</FONT>  
+        <P><FONT color=#ff99ff>Type 'help' for help.</FONT>  
+        <P><FONT color=#3366ff>mysql&gt;</FONT> <FONT color=#ffff00>exit</FONT>  
+        <BR><FONT color=#ff99ff>Bye</FONT> <BR><FONT color=#3366ff>[root@test  
+        root]#</FONT></P></TD></TR></TBODY></TABLE>說明：(1)<FONT color=#ffff00>mysql  
+  mysql</FONT>為連結MySQL資料庫，資料庫名稱為mysql。 <BR>　　　(2)<FONT 
+  color=#ffff00>-u</FONT><FONT color=#ff9900>root</FONT>：-u宣告使用者，root為使用者名稱。 
+  <BR>　　　(3)<FONT color=#ffff00>-p</FONT><FONT 
+  color=#ff9900>新密碼</FONT>：-p宣告密碼，後面接root新設的密碼。 <BR>&nbsp; 
+  <LI>以後進入使用MySQL資料庫系統，須以下列格式進入： 
+  <TABLE border=1>
+    <TBODY>
+    <TR>
+      <TD><FONT color=#3366ff>[root@test root]# </FONT><FONT  
+        color=#ffff00>mysql </FONT><FONT color=#ff9900>資料庫名稱</FONT><FONT  
+        color=#ffff00> -u</FONT><FONT color=#ff9900>使用者名稱</FONT><FONT  
+        color=#ffff00> -p</FONT><FONT  
+  color=#ff9900>密碼</FONT></TD></TR></TBODY></TABLE>說明：[<FONT  
+  color=#ffff00>-u</FONT><FONT color=#ff9900>使用者名稱</FONT>]-u和使用者名稱間不可有空格。  
+  <BR>　　　[<FONT color=#ffff00>-p</FONT><FONT 
+  color=#ff9900>密碼</FONT>]-p和密碼間不可有空格。</LI></OL>
+<H2>四、mysqladmin公用程式的使用：</H2>
+<OL>
+  <LI>新增資料庫： 
+  <TABLE border=1>
+    <TBODY>
+    <TR>
+      <TD><FONT color=#3366ff>[root@test root]# </FONT><FONT  
+        color=#ffff00>mysqladmin -u</FONT><FONT color=#ff9900>root</FONT><FONT  
+        color=#ffff00> -p</FONT><FONT color=#ff9900>密碼</FONT><FONT  
+        color=#ffff00> create </FONT><FONT  
+    color=#ff9900>資料庫名稱</FONT></TD></TR></TBODY></TABLE>說明：用法與mysql一樣，-u緊接MySQL管理者帳號(通常為root)，-p緊接管理者密碼(通常為root之密碼)  
+  <BR>　　　資料庫名稱為您要新增的DataBase的名稱。 <BR>&nbsp; 
+  <LI>刪除資料庫： 
+  <TABLE border=1>
+    <TBODY>
+    <TR>
+      <TD><FONT color=#3366ff>[root@test root]# </FONT><FONT  
+        color=#ffff00>mysqladmin -u</FONT><FONT color=#ff9900>root</FONT><FONT  
+        color=#ffff00> -p</FONT><FONT color=#ff9900>密碼</FONT><FONT  
+        color=#ffff00> drop </FONT><FONT  
+  color=#ff9900>資料庫名稱</FONT></TD></TR></TBODY></TABLE>說明：用法與上述新增資料庫方式一樣。  
+  <BR>&nbsp;  
+  <LI>關閉MySQL服務：  
+  <TABLE border=1> 
+    <TBODY> 
+    <TR> 
+      <TD><FONT color=#3366ff>[root@test root]# </FONT><FONT  
+        color=#ffff00>mysqladmin -u</FONT><FONT color=#ff9900>root</FONT><FONT  
+        color=#ffff00> -p</FONT><FONT color=#ff9900>密碼 </FONT><FONT  
+        color=#ffff00>shutdown</FONT></TD></TR></TBODY></TABLE></LI></OL> 
+<H2>五、基本用法：</H2> 
+<OL> 
+  <LI>增加新的MySQL使用者：(方法一) <BR>(1)開啟mysql資料庫  
+  <TABLE border=1> 
+    <TBODY> 
+    <TR> 
+      <TD><FONT color=#3366ff>[root@test root]# </FONT><FONT  
+        color=#ffff00>mysql mysql -u</FONT><FONT color=#ff9900>root</FONT><FONT  
+        color=#ffff00> -p</FONT><FONT color=#ff9900>密碼</FONT> <BR><FONT  
+        color=#ff99ff>Reading table information for completion of table and  
+        column names</FONT> <BR><FONT color=#ff99ff>You can turn off this  
+        feature to get a quicker startup with -A</FONT>  
+        <P><FONT color=#ff99ff>Welcome to the MySQL monitor.&nbsp; Commands end  
+        with ; or \g.</FONT> <BR><FONT color=#ff99ff>Your MySQL connection id is  
+        29 to server version: 3.22.27</FONT>  
+        <P><FONT color=#ff99ff>Type 'help' for help.</FONT>  
+        <P><FONT color=#3366ff>mysql&gt;</FONT></P></TD></TR></TBODY></TABLE>　 
+  <BR>(2)增加一個新帳號，並設定權限 
+  <TABLE border=1>
+    <TBODY>
+    <TR>
+      <TD><FONT color=#3366ff>mysql&gt;</FONT> <FONT color=#ffff00>insert into  
+        user values ('</FONT><FONT color=#ff9900>host</FONT><FONT  
+        color=#ffff00>','</FONT><FONT color=#ff9900>user</FONT><FONT  
+        color=#ffff00>',password('</FONT><FONT color=#ff9900>密碼</FONT><FONT  
+        color=#ffff00>'),'y','y','y','y','y','y','y','y','y','y','y','y','y','y');</FONT></TD></TR></TBODY></TABLE>說明：host-&gt;填入您要連線的主機名稱(完整名稱hostname+domainname)，若位於本機則填localhost。  
+  <BR>　　　user--&gt;您要設定的帳號 <BR>　　　密碼--&gt;您要設定的密碼 <BR>　　　之後14個y代表著14個不同的權限，依序為 
+  <OL>&nbsp; 
+    <TABLE border=1>
+      <TBODY>
+      <TR>
+        <TD>1.Select_priv</TD>
+        <TD>2.Insert_priv</TD>
+        <TD>3.Update_priv</TD>
+        <TD>4.Delete_priv</TD>
+        <TD>5.Index_priv</TD></TR>
+      <TR>
+        <TD>6.Alter_priv</TD>
+        <TD>7.Create_priv</TD>
+        <TD>8.Drop_priv</TD>
+        <TD>9.Grant_priv</TD>
+        <TD>10.References_priv</TD></TR>
+      <TR>
+        <TD>11.Reload_priv</TD>
+        <TD>12.Shutdown_priv</TD>
+        <TD>13.Process_priv</TD>
+        <TD>14.File_priv</TD>
+        <TD></TD></TR></TBODY></TABLE></OL>　　　若您不開放權限，則在該項目下填n即可。 <BR>　 
+  <LI>增加新的MySQL使用者：(方法二)(較安全) <BR>格式： 
+  <TABLE border=1>
+    <TBODY>
+    <TR>
+      <TD><FONT color=#3366ff>mysql&gt;</FONT> <FONT color=#ffff00>GRANT  
+        </FONT><FONT color=#ff9900>權限</FONT><FONT color=#ffff00> ON </FONT><FONT  
+        color=#ff9900>資料庫(或資料表TABLE)</FONT><FONT color=#ffff00> TO </FONT><FONT  
+        color=#ff9900>user</FONT><FONT color=#ffff00>@</FONT><FONT  
+        color=#ff9900>host</FONT><FONT color=#ffff00> IDENTIFIED BY  
+      '密碼';</FONT></TD></TR></TBODY></TABLE>說明：權限授與共分三種：  
+  <UL type=SQUARE> 
+    <LI>對資料庫(DateBase)有十五種權限：  
+    <TABLE border=1> 
+      <TBODY> 
+      <TR> 
+        <TD>ALL PRIVILEGES</TD> 
+        <TD>ALTER</TD> 
+        <TD>CREATE</TD> 
+        <TD>DELETE</TD> 
+        <TD>DROP</TD></TR> 
+      <TR> 
+        <TD>FILE</TD> 
+        <TD>INDEX</TD> 
+        <TD>INSERT</TD> 
+        <TD>PROCESS</TD> 
+        <TD>REFERENCES</TD></TR> 
+      <TR> 
+        <TD>RELOAD</TD> 
+        <TD>SELECT</TD> 
+        <TD>SHUTDOWN</TD> 
+        <TD>UPDATE</TD> 
+        <TD>USAGE</TD></TR></TBODY></TABLE>　 
+    <LI>對資料表(Table)則只有八種權限： 
+    <TABLE border=1>
+      <TBODY>
+      <TR>
+        <TD>SELECT</TD>
+        <TD>INSERT</TD>
+        <TD>UPDATE</TD>
+        <TD>DELETE</TD>
+        <TD>CREATE</TD></TR>
+      <TR>
+        <TD>DROP</TD>
+        <TD>INDEX</TD>
+        <TD>ALTER</TD>
+        <TD></TD>
+        <TD></TD></TR></TBODY></TABLE>　 
+    <LI>對資料欄(column)則只有三種權限： 
+    <TABLE border=1>
+      <TBODY>
+      <TR>
+        <TD>SELECT</TD>
+        <TD>INSERT</TD>
+        <TD>UPDATE</TD></TR></TBODY></TABLE></LI></UL>　<FONT 
+  color=#ff9900>user</FONT><FONT color=#ffff00>@</FONT><FONT 
+  color=#ff9900>host</FONT>表示法：表示來自host主機的user使用者。user為您欲連線MySQL的帳號，host則必須填上你連線來源的主機完整名稱(hostname.domianname)；例如：我想要設定的帳號為coco，而且是從mail.hmes.kh.edu.tw這台主機連上來使用的，所以就寫成coco@mail.hmes.kh.edu.tw。若使用萬用字元，則必須加上括號，例如：('test%'@'%.hinet.net')==&gt;表示從.hinet.net網域連上來的test開頭的帳號。 
+
+  <P>　GRANT的特性：在MySQL資料庫，若找到相對應的entry則只作UPDATE，找不到才會CREATE一個新的帳號及權限。 
+  <UL type=SQUARE></UL><FONT color=#ff0000>　<B><I>權限設定建議：</I></B></FONT><FONT 
+  color=#33ff33>除了管理者外，其他user儘量避免設定全部權限全開。一般而言，只開</FONT><FONT 
+  color=#ffcccc>SELECT、INSERT、UPDATE</FONT><FONT 
+  color=#33ff33>三項權限；進階的user則加開</FONT><FONT 
+  color=#ffcccc>DELETE、CREAT、DROP、INDEX</FONT><FONT 
+  color=#33ff33>四項權限；其餘權限，</FONT><FONT color=#ffcccc>能不開，則不開</FONT><FONT 
+  color=#33ff33>，以確保整個MySQL的安全性。</FONT> 
+  <P>(1)新增帳號，並給予全部權限 
+  <TABLE border=1>
+    <TBODY>
+    <TR>
+      <TD><FONT color=#3366ff>mysql&gt;</FONT> <font color="#ffff00">GRANT ALL  
+        PRIVILEGES ON *.* TO </font><FONT color=#ff9900>user</FONT><FONT 
+        color=#ffff00>@</FONT><FONT color=#ff9900>host</FONT><FONT 
+        color=#ffff00> IDENTIFIED BY '</FONT><FONT color=#ff9900>密碼</FONT><FONT 
+        color=#ffff00>';</FONT></TD></TR></TBODY></TABLE>說明：將全部權限都設給<FONT 
+  color=#ffffcc>從host連線上來的user這個人</FONT>，並給定密碼為<FONT color=#ff9900>密碼</FONT>。 
+  <P>(2)新增帳號，並指定某資料庫與特定權限給該帳號 
+  <TABLE border=1>
+    <TBODY>
+    <TR>
+      <TD><FONT color=#3366ff>mysql&gt;</FONT> <font color="#ffff00">GRANT SELECT,INSERT,UPDATE ON 
+        </font><FONT color=#ff9900>資料庫名</FONT><FONT 
+        color=#ffff00>.* TO </FONT><FONT color=#ff9900>user</FONT><FONT 
+        color=#ffff00>@</FONT><FONT color=#ff9900>host</FONT><FONT 
+        color=#ffff00> IDENTIFIED BY '</FONT><FONT color=#ff9900>密碼</FONT><FONT 
+        color=#ffff00>';</FONT></TD></TR></TBODY></TABLE>說明：開放某資料庫給<FONT 
+  color=#ffffcc>從host連線上來的user這個人，</FONT>並給定密碼為<FONT color=#ff9900>密碼</FONT>。 
+  <BR>&nbsp;
+  <LI>刪除使用者帳號與權限： <BR>格式： 
+  <TABLE border=1>
+    <TBODY>
+    <TR>
+      <TD><FONT color=#3366ff>mysql&gt;</FONT> REVOKE<FONT color=#ffff00> 
+        </FONT><FONT color=#ff9900>權限</FONT><FONT color=#ffff00> ON </FONT><FONT 
+        color=#ff9900>資料庫(或資料表TABLE)</FONT><FONT color=#ffff00> TO </FONT><FONT 
+        color=#ff9900>user</FONT><FONT color=#ffff00>@</FONT><FONT 
+        color=#ff9900>host</FONT><FONT color=#ffff00> IDENTIFIED BY 
+      '密碼';</FONT></TD></TR></TBODY></TABLE>說明：命令與用法均與GRANT一樣，特性也一樣，但不做DELETE的動作，只是將權限關閉，真的要刪除時，須用到DELETE命令。 
+  <BR>&nbsp; 
+  <LI>對MySQL直接下命令作任何動作，離開MySQL系統時，必須先做即時更新(FLUSH)再離開吧！ 
+  <TABLE border=1>
+    <TBODY>
+    <TR>
+      <TD><FONT color=#3366ff>mysql&gt;</FONT> <FONT color=#ffff00>FLUSH 
+        PRIVILEGES;</FONT></TD></TR></TBODY></TABLE>　 
+  <LI>在作業系統中，檢查權限之命令： 
+  <TABLE border=1>
+    <TBODY>
+    <TR>
+      <TD><FONT color=#3366ff>[root@test root]# </FONT><FONT 
+        color=#ffff00>mysqlaccess </FONT><FONT color=#ff9900>host user 
+        資料庫名</FONT><FONT color=#ffff00> -U </FONT><FONT 
+        color=#ff9900>root</FONT><FONT color=#ffff00> -P </FONT><FONT 
+        color=#ff9900>密碼</FONT></TD></TR></TBODY></TABLE>說明：<FONT 
+  color=#ff9900>host</FONT>-&gt;填入您要檢查的來源主機名稱(完整名稱hostname+domainname)，若位於本機則填localhost。 
+  <BR>　　　<FONT color=#ff9900>user</FONT>--&gt;您要檢查的帳號 <BR>　　　<FONT 
+  color=#ff9900>資料庫名</FONT>--&gt;填入您要檢查的資料庫名稱 <BR>　　　<FONT color=#ffff00>-U 
+  </FONT><FONT color=#ff9900>root</FONT>--&gt;-u後面填入MySQL管理者的帳號(通常設root) 
+  <BR>　　　<FONT color=#ffff00>-P </FONT><FONT 
+  color=#ff9900>密碼</FONT>--&gt;-p後面填入MySQL管理者的密碼 
+  <BR>例如：我要檢查來自mail.hmes.kh.edu.tw這台機器的root帳號，對資料庫fm的權限為何？ <BR>　　　則在系統下輸入 
+  <OL>&nbsp; 
+    <TABLE border=1>
+      <TBODY>
+      <TR>
+        <TD><FONT color=#3366ff>[root@test root]# </FONT><FONT 
+          color=#ffff00>mysqlaccess mail.hmes.kh.edu.tw fm focalmail -U root -P 
+          nnyyjj</FONT></TD></TR></TBODY></TABLE>結果為 
+    <TABLE border=1>
+      <TBODY>
+      <TR>
+        <TD><FONT color=#ff99ff>mysqlaccess Version 2.03, 27 Feb 1997</FONT> 
+          <BR><FONT color=#ff99ff>By RUG-AIV, by Yves Carlier 
+          (Yves.Carlier@rug.ac.be)</FONT> <BR><FONT color=#ff99ff>This software 
+          comes with ABSOLUTELY NO WARRANTY.</FONT> <BR><FONT 
+          color=#ff99ff>+++USING FULL WHERE CLAUSE+++</FONT> <BR><FONT 
+          color=#ff99ff>+++USING FULL WHERE CLAUSE+++</FONT> <BR><FONT 
+          color=#ff99ff>+++USING FULL WHERE CLAUSE+++</FONT> 
+          <P><FONT color=#ff99ff>Access-rights</FONT> <BR><FONT 
+          color=#ff99ff>for USER 'fm', from HOST 'mail.hmes.kh.edu.tw', to DB 
+          'focalmail'</FONT> <BR><FONT 
+          color=#ff99ff>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+          +-----------------+---+ +-----------------+---+</FONT> <BR><FONT 
+          color=#ff99ff>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 
+          Select_priv&nbsp;&nbsp;&nbsp;&nbsp; | Y | | Shutdown_priv&nbsp;&nbsp; 
+          | Y |</FONT> <BR><FONT 
+          color=#ff99ff>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 
+          Insert_priv&nbsp;&nbsp;&nbsp;&nbsp; | Y | | 
+          Process_priv&nbsp;&nbsp;&nbsp; | Y |</FONT> <BR><FONT 
+          color=#ff99ff>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 
+          Update_priv&nbsp;&nbsp;&nbsp;&nbsp; | Y | | 
+          File_priv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Y |</FONT> <BR><FONT 
+          color=#ff99ff>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 
+          Delete_priv&nbsp;&nbsp;&nbsp;&nbsp; | Y | | 
+          Grant_priv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Y |</FONT> <BR><FONT 
+          color=#ff99ff>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 
+          Create_priv&nbsp;&nbsp;&nbsp;&nbsp; | Y | | References_priv | Y 
+          |</FONT> <BR><FONT 
+          color=#ff99ff>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 
+          Drop_priv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Y | | 
+          Index_priv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Y |</FONT> <BR><FONT 
+          color=#ff99ff>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 
+          Reload_priv&nbsp;&nbsp;&nbsp;&nbsp; | Y | | 
+          Alter_priv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Y |</FONT> <BR><FONT 
+          color=#ff99ff>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+          +-----------------+---+ +-----------------+---+</FONT> <BR><FONT 
+          color=#ff99ff>NOTE:&nbsp;&nbsp;&nbsp; A password is required for user 
+          `fm' :-(</FONT> 
+          <P><FONT color=#ff99ff>The following rules are used:</FONT> <BR><FONT 
+          color=#ff99ff>&nbsp;db&nbsp;&nbsp;&nbsp; : 'No matching rule'</FONT> 
+          <BR><FONT color=#ff99ff>&nbsp;host&nbsp; : 'Not processed: host-field 
+          is not empty in db-table.'</FONT> <BR><FONT 
+          color=#ff99ff>&nbsp;user&nbsp; : 
+          '','fm','017186377a52afaf','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y''</FONT> 
+
+          <P><FONT color=#ff99ff>BUGs can be reported by email to 
+          Yves.Carlier@rug.ac.be</FONT> <BR><FONT color=#3366ff>[root@test 
+          /root]#</FONT></P></TD></TR></TBODY></TABLE></OL></LI></OL></BODY></HTML>

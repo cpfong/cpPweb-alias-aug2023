@@ -1,0 +1,7 @@
+# /usr/bin/whoami
+foo=${my_name:-`whoami`}
+printf "name is %s" $my_name
+
+# use system variable $USER to get myname
+myname=`grep "^${USER}:" /etc/passwd | cut -d: -f5`
+grep "^games:" /etc/passwd | cut -d: -f5

@@ -1,0 +1,194 @@
+: 1. News server 似乎有多種餵信的方式，什麼 batch file,
+:     log file, funnel 的.... 但 Install.ms & INN-FAQ-1,2,3
+:    等文件中也只有提到這些方法和使用，卻沒有告訴你該怎麼
+:    用，何時該用什麼方法，各有何利弊得失? 能否請行家為我分
+:    析一下這些方法的差別?
+
+INN 所附的 manual pages 以及 nntplink 的 readme 有附一些說明.
+
+INN 作者, 設計這些不同的 mode, 是為了讓 user 在不同的 host 及網路
+環境下來用.
+
+ * 通常, 小站因需要傳出的 articles 少, 用 batch file mode. 就可以.
+   (設定比較簡單)
+   - NNTP, 就用 nntpsend (innxmit)
+   - UUCP
+
+ * 如果, 連接的 site 較多, 且必須傳往下游大量的 news articles,
+   那麼就值得, 考慮改用 nntplink. 比較有效率.
+
+   nntplink 可以跑大多數 innd 支援的 mode. 簡單地分,
+   ------------------------------------------------
+   * batch mode
+   * log mode
+   * stdin mode
+
+INN 強的地方, 在於如果能用 RAM, 就儘量不要透過 HD. 目前的系統, OS
+的 support 越來越好, 加上網路環境也改善很多. 所以通常, 直接就
+使用 stdin (為主) + batch mode.
+
+底下說名 INN 上的幾種 working mode ( 參閱 man newsfeeds )
+===========================================================
+1. batch mode 的作法,
+---------------------
+是 innd 收到 任一篇 article 時, 會根據 newsfeeds 的記載, 在每一個
+可能的 out-going feed 都登錄個entry. 內容是 path name 和 message-ID.
+如果10 個site 接收這個 newsgroups, 可能就得 update 10 個 batch files.
+
+然後, 每隔一段期間, 系統透過 cron 的運作, 執行nntpsend or send-nntp
+(跑起 innxmit,) 或者跑起 nntplink  來 scan news spool 準備 articles,
+再往各別的下游站傳. 如果有 10 個 batch, 就得有 10 組各別的 disk I/O 動作,
+(可能是傳同樣的 articles, 但也可能不同, 隨 newsfeeds 的define 而異)
+
+===========================================================
+2. log file mode 的作法
+------------------------
+和 batch file 不同. 如果你設定 log file mode, 所有的 out-going feed 的
+處理, 只會參考一個 file ( log file, 通常 /var/log/news/news ).
+innd 每收到一個新的 article, 相關的 資料就會 append 一筆在這個檔.
+
+如果要用 log file mode, 必須確定在 compile INN 前, 將 for nntplink
+log option 打開. ( NNTPLINK_LOG DO ) 這樣 innd 收到一篇 articles
+後, 就會將 pathname 一併寫到 log file 中.
+
+然後, 通常在你的 newsfeeds 的檔案中, 如果有 define 好幾個 nntplink 用
+log file mode, 那麼各別的 nntplink 便會時時去 check 各自所需要傳送的
+資料, 到 news spool (or Disk buffer cache ) 找出 artilces, 往外送.
+
+用 log mode, 只會牽涉一個 log file ( 不論幾個 nntplink ), 不像用
+batch file, 每一個 batch 都要一個. 這意味著, 整個系統 and/or innd
+在一段其間需要, 保持 open 的 file 數目, 可以減少很多. 而且, 通常
+從 innd 寫 articles 到 News spool, 到各 nntplink 經由讀取 innd 寫完
+log entry 再去取 news articles , 再準備外傳. 這一流程, 所經歷的時間,
+, 可能還不會太久. 因此, 有許多 articles 可能還在 disk buffer caceh,
+許多 disk I/O 或許就可以省下來. 再加上, 幾乎每一個 nntplink 都同時
+輪流在 run, 如果傳同一篇 article, 幾乎很可能是, 一次 Disk I/O 讀取
+or 寫入, 其它都是透過 buffer cache.
+
+batch file mode, 不太容易做到這一點. 因為, 下游站各自收錄的 newsgroups
+不見得相同, 造成各 batch file 大小及排列順序, 差異很大.
+
+再則, 如果每一個 batch file 都在同一時間, 被開始 run, 每一個 process 都
+搶著去 scan News Spool, 去塞 disk buffer cache, 去往外傳. .. 這時候的
+系統, 會很慘. 因此, 往外傳的 artilces 一多, 就不能在以 batch 為主.
+
+==================================================================
+3. channel mode ( nntplink 稱 stdin mode )
+===============
+用 Unix 上的 " ls | more " 來想像一下, 將 innd 和 nntplink 的關係,
+套成類似的 model 來看.   ( innd | nntplink )
+
+innd 每收到一篇 article, 馬上就丟給 nntplink. 然後, nntplink 很快,
+就將這一篇 articles 往外傳, e.g.
+
+ innd -> nntplink ...> remote-site (innd or nntpd )
+
+ 只要這個 channel 一直通暢無阻, innd 和 nntplink 間, 幾乎可以不用
+ 牽涉到 HD 的 disk I/O 動作, 完全靠 RAM, 就完成整個往外傳的動作.
+ 這個就是 INN 最強的地方, 能用 RAM 就儘量用.
+
+ 當然, 網路是變化多端, 這類的 channel, 無法一直保持通暢無組. 因此,
+ 就必須有程式做 buffer. 這時後,
+
+  case 1: 可以讓 innd 來作 ( newsfeeds 中 S option) buffering
+   ---------------------------------------------------------
+     但是, 如果 某個 nntplink 實在太慢, 在 inn1.4sec 中,
+     innd 超過 S 後, 便會轉成 batch file mode, 不再理會 nntplink.
+     一直到下一次, innd reload newsfeeds, 再 fork 另一個 nntplink.
+     另一方面, inn1.4unoff3, 則只是暫時將該瞬間的 articles 寫成
+     batch, 等 nntplink 恢復動作後, 繼續動作...
+
+  case 2: 也可以由 nntplink (-q) 來作 buffering
+  ------------------------------------------------
+
+  這兩者, 對於 buffering 的處理, 事實上, 還有很多細節部份.
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  前者, 如果 innd 一直快過 nntplink, 那麼 spooling batch, 有可能
+  越來越大. 必須另外, 想辦法處理. 相反地, 如果後來 nntplink 動作順暢,
+  順利趕上來, 甚至可以再將 spooling batch, 慢慢消化掉. 事實上, 整個
+  過程, 這些 batch 資料的 status (長度等), 都保留在 <...>.link 檔中.
+
+  第 2 個 case, nntplink 寫玩 batch 後, 就丟下不管, <...>.link
+  不會記得, 因此, 必須有人, 另外跑程式, 來消化這些 batch. 要不然,
+  這些 articles, 就不會被傳往 destination.
+
+ ==================================================================
+ 4. program mode
+ ===============
+  和 channel mode, 工作原理相近, 不過每處理一個 articles, fork 一次,
+  處理完, 該程式馬上結束. 不像 channel mode, 程式仍然一直 run 下去.
+
+---------------------------------------------------------------
+5. funnel mode, (漏斗 mode)
+ ==========================
+  有人稱為 pseudo-log mode.  可以看作, 是一種折衷的用法,
+
+  通常是適用一些特殊的情況, 如想準備許多 batch ( UUCP, NNTP),
+  但是受限於 system 的 limitation ( open file 數目, ...), 又不想
+  大家共用一個 log file (基於 efficiency ...), 一項變通的設計.
+  在目前的系統情況下, 使用的機會, 已經較少..
+
+
+整體而言, 如果調配得當, channel mode, 可以做到 Disk I/O 最少,
+系統 performance 維持在最理想的狀況, 再搭配 batch file mode
+的處理, 一般而言, 通常就可以最到接近 real-time processing 的程度.
+
+=============================================================
+: 2. 我想餵信給跑 innbbsd (in port 7777) 的 BBS 站，是否一定
+:    要用 nntplink? nntpsend 好像不行說? 因為我翻遍 nntpsend
+:    的說明文件也找不到如何餵給 port 7777.....
+
+ - inn1.4sec, 中 innxmit 沒有指定 tcp port 的功能.
+
+ - nntplink  有指定 tcp port 的功能.
+ - inn1.4unoff3, 中 innxmit 有加入, 指定 tcp port 的功能.
+
+
+: 3. 我想達到即時餵信的效果，因此讓 nntplink 以 stdin 的方式
+:    餵出，newsfeeds 的三，四欄這樣寫:
+:    :Tc,Wnm:/usr/lib/news/bin/nntplink -k -q -P 7777 (bbs DNS)
+:    這樣對嗎? 文件上說 -q option 會讓 nntplink 在網路中斷時把
+:    要餵的信放在一個 batch file 裡，但又說當網路恢復正常後你
+:    必須自己把這些信送出，但是又說得不清楚，真是...#@$%
+
+你如做過實驗, 自然就可以體會其中的意義.
+文字的描述, 總有限度. 畢竟, 這又不是在寫教科書.
+
+看過前段的說明, 應該有助於, 建立一些起碼的認知.
+
+:    後來查閱 nntplink 的 README-INN 裡面說可以用 links 來做．
+:    但 links 的文件也是說得很不清楚! 看了半天不很懂....:(
+:    我的問題是:
+:    a. links-list 到底該如何寫? 和 newsfeeds 有何關係?
+:    b. links 如何啟動? 直接 links boot 嗎....?
+:       那 links clean 又如何使用呢?
+
+這就是, 你應該做的功課.
+ * 如果, 覺得不好用, 何妨自己寫一個 shell or perl 程式來做同樣的事.
+
+: 4. innwatch 要如何使用.....?
+
+改 rc.news 將前面的一個變數, DOINNWATCH 由 false 改成 true.
+下次, 重跑 rc.news (innd) 時, innwatch 便會順便, 被叫起來..
+
+另外, 必須 check 一下, innwatch 的設定檔 innwatch.ctl.
+check 對應的 /var/spool/news, /usr/local/news, ...
+等是不是有對到你的系統的相對目錄, 以及這一些值 (value ) 大小是不是
+適中, 如有必要, 應加以修改.  ( default 不一定合用 )
+
+For more informatin, refer to:
+-------------------------------
+  * INN 的 manual pages
+  * INN 的 FAQ, Part 1-9
+
+  * 並常常閱讀 News 相關的 newsgroups:
+    - news.software.b
+    - news.software.nntp
+    - news.admin.*
+--
+   C.S.Chen [ 陳昌盛 ]                  * E-mail:  chen@cc.nctu.edu.tw
+   Computer Center of National Chiao-Tung University, Hsinchu, Taiwan, R.O.C.
+     ________________________________________________________________________________
+
+
+                                      (c)2002 Google

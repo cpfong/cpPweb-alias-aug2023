@@ -1,0 +1,447 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="ZyTrax">
+<meta name="keywords" content="Wireless IP, ISDN, QoS, Bandwidth Management, ZyTrax, Proxy, IP Telephony, VoIP,Firewall, Router">
+<title>Chapter 3 DNS Reverse Mapping</title>
+<!-- this page origonated from http://www.zytrax.com/books/dns/ch3/index.html -->
+<!-- HTTP_USER_AGENT=fetch libfetch/2.0 -->
+<style type="text/css">
+<!--
+/* ZYTRAX STYLE SHEET */
+a {text-decoration:none;}
+a:hover {text-decoration:underline;}
+a:hover.p-f-s {color:black}
+.g-c-n:hover {background:#eee;}
+.g-c-s:hover {background:#eee;}
+body {background-color:white;color:black;margin:0px;}
+div.n-l a:hover {color:#336;}
+div.g-sb a:hover {background-color:#DDD;}
+div.l-f table{width:100%;padding:4px;}
+div.codegray {font:9pt Verdana,sans-serif;background-color:#EEE; color:black;}
+h1 {font-size:14pt;background:#EEE;border-width:0 0 5px 0;border-style:solid;border-color:#9bf;padding:4px;color:#336}
+h2 {border-width:0 0 5px 0;border-color:#9bf;border-style:solid;font-size:12pt;font-weight:bold;padding:4px;color:#336}
+h3 {border-width:0 0 3px 0;border-color:#99BBFF;border-style:solid;font-size:12pt;padding:4px;color:#336;}
+h4 {border-width:0 0 2px 0;border-color:#99BBFF;border-style:solid;font-size:10pt;padding:2px;color:#336;}
+h5 {border-width:0 0 2px 0;border-color:silver;border-style:solid;font-size:10pt;font-weight:bold;padding:4px;}
+h6 {border-width:0 0 1px 0;border-color:silver;border-style:solid; font-size:10pt;color:silver;padding:4px;}
+.at {font-family:Verdana,sans-serif;font-size:9pt;margin:0px;text-indent:8px;}
+.b-1 {font-family:Verdana, sans-serif;}
+.b-r {border-width:0 0 0 1px;border-color:#336;border-style:solid;width:150px;}
+.b-l	{border-width:0 1px 0 0;border-color:#336;border-style:solid;width:110px;}
+.b-b {list-style:none;margin:2px;font: 9pt Arial, sans-serif;padding:0 1em;}
+li.b-b-l {visibility:hidden;margin:10px 0;}
+.b-b-a {background:#336;color:white; text-decoration:none;border:1px solid black;padding:0 0.25em 0 0;}
+a.b-b-a span {color:#336;background:white;padding:0 0.25em 0 0.33em;text-decoration:none;}
+.d {font-family:Verdana,sans-serif;font-size:9pt;margin:0px;}
+.dd {position:absolute;left:0;top:0;font-family:Verdana,sans-serif;font-size:9pt; visibility:hidden;background:cyan;color:black;margin:0px;}
+.f-d {font-weight:bold;}
+.f-bd {font-weight:bold;font-size: 12pt;}
+.g-e-t {font-weight:normal;}
+.g-e-d {font-weight:normal;}
+.g-f-n {font:10pt "Courier New", monospace;}
+.g-h-n {background:#336;color:white;padding:4px; font-size:10pt;font-weight:bold;}
+.g-h-s {background:#336;color:white;padding:4px; font-size:8pt;font-weight:bold;}
+.g-n {text-decoration:none;color:white;}
+.g-i1-n {margin:5px 5px 5px 20px;}
+.g-i2-n {margin:5px 5px 5px 30px;}
+.g-i3-n {margin:5px 5px 5px 40px;}
+.g-l-n {list-style:none;}
+.g-s-b {border-width:1px 5px;	border-color:black;border-style:solid;background:#EEE;color:black; font-family:Verdana,sans-serif;font-size:14pt;font-weight:bold; text-decoration:none;}
+.g-sb-h1 {background:#336;color:white;padding:4px; font-size:14pt;font-weight:bold;}
+.g-sb-h2 {background:#336;color:white;font-size:10pt;font-weight:bold;padding:2px;}
+.g-sb-n {color:blue;font-size:8pt;line-height:150%;margin:2px;}
+.g-s-n {background-color:#EEEEEE;color:black;font-size:10pt; text-decoration:none;}
+.g-s-nr {font-family:Verdana,sans-serif;background-color:red;color:white;font-size:10pt;font-weight:bold; text-decoration:none;}
+.g-s-gn {font-family:Verdana,sans-serif;background-color:silver;color:black;font-size:10pt;font-weight:bold; text-decoration:none;}
+.gs-h {font-family:Verdana,sans-serif;color:black;font-size:28pt;font-weight:bold;text-decoration:none;}
+.gs-m {font-family:Verdana,sans-serif;color:black;font-size:22pt;font-weight:bold;text-decoration:none; margin-left:100px;}
+.gs-f {font-family:Verdana,sans-serif;color:black;font-size:12pt; font-weight:normal;text-decoration:none;}
+.h-b {background:#ddd;color:black;font-weight:bold;}
+.l-f {margin:0 160px 0 125px;}
+
+div.l-r #layout {visibility:visible;}
+div.l-l-fp #layout {visibility:visible;}
+.l-l {position:absolute;top:60px;left:6px;width:110px;font:10pt Verdana,Helvetica, Arial, sans-serif;z-index:1;}
+.l-c {margin:0 160px 0 125px;padding:4px;font-family:Verdana,Helvetica, Arial sans-serif;border-width:0 1px;border-style:solid;border-color:#336;font-size:10pt;width:100%;z-index:5;}
+.l-r {font:10pt Verdana,Arial, Helvetica, sans-serif;position:absolute;top:60px;width:150px;left:92%;visibility:hide;z-index:2;}
+
+.l-l-fp {position:absolute;top:95px;left:6px;width:120px;z-index:10;}
+.l-p {margin:10px;padding:4px;font:10pt Verdana,Helvetica, Arial, sans-serif;}
+.l-100 {width:100%;margin:0;}
+.norm {font: 10pt Verdana, Helvetica, Arial, sans-serif;}
+.n-b-l {font:1pt Verdana, Arial, Helvetica, sans-serif;border-width:0 0 1px 0;border-style:solid;border-color:#CCF;margin:0px;padding:0px;}
+.n-l-s {font:8pt Verdana, Arial, Helvetica, sans-serif;visibility:hidden;}
+.n-t0 {float:right;position:relative;color:white;}
+.n-t-t {text-align:right;padding:1px 1px 8px 1px;margin:0;color:white;}
+.p-b {background:#eee;text-indent:3em;}
+.p-m-ni {font-family:Verdana,sans-serif;font-size:10pt;font-style:italic;}
+.navback {background:white;color:black;font-family:Verdana,sans-serif; text-decoration:none;font-weight:bold;font-size:10pt;}
+.nav-top {background:blue;color:white;font-family:Verdana,sans-serif; text-decoration:none;font-weight:bold;font-size:10pt;}
+.p-m-n {font: 10pt Verdana, Helvetica, Arial, sans-serif;}
+.p-m-s { font:8pt Verdana,Helvetica, Arial, sans-serif;}
+.p-m-si {font:italic 8pt Verdana, Helvetica, Arial, sans-serif;}
+.p-m-sp { background:white;font:8pt Verdana,Helvetica, Arial, sans-serif;}
+.section {background:#ddd;color:#666;font:bold 11pt Verdana,sans-serif;margin:4px; text-decoration:none;}
+.smallbold { font-family: Verdana, sans-serif; font-size: 8pt; font-weight:bold;}
+.t-db {color:blue;text-decoration:none;}
+.t-dd {color:blue;text-decoration:none;}
+.t-dd:hover {background:#ddd;}
+.t-gb {color:blue;background:#eee;}
+.t-dr {color:red;text-decoration:none;}
+.t-dw {color:#666;text-decoration:none;}
+.t-td1 {border-style:solid;border-width:1px 1px 1px 5px;border-color:#eee;}
+.t-td2 {border-style:solid;border-width:1px 1px 1px 5px;border-color:#acf;}
+.vital {font-family:Verdana, sans-serif;font-size:12pt;background-color:#ddd; color:black;border-color:red;}
+.w-db {color:blue;}
+
+/* NS4.x specific */
+.n-l-f a {color:black;}
+.codegray {font-family:"Courier New",monospace;font-size:9pt;background-color:#EEE; color:black;}
+.g-c-n {font-family:"Courier New",monospace;font-size:10pt;background-color:#ddd; color:black;}
+.g-c-nm {font: 10pt "Courier New",monospace;background-color:#ddd; color:black;margin:0 0 0 40px;}
+.g-c-s {font-family:"Courier New",monospace;font-size:8pt;background-color:#ddd; color:black;}
+.g-b-n {font:10pt "Courier New",monospace;background:#eee;}
+.g-b-s {font:9pt "Courier New",monospace;padding:2px;background:#eee;}
+.g-sb {font-family:Verdana, sans-serif;}
+.l-b {font:8pt Verdana, Arial, Helvetica, sans-serif;border:0;background:#336;color:#CCF;margin:0 0 5px 0;height:38px;padding:5px 5px 0 5%;z-index:9;}
+.l-b-fp {font:8pt Verdana, Arial, Helvetica, sans-serif;height:88px;padding:5px 5px 0 5%;margin:0 0 5px 0}
+.l-c-i {padding:10px;}
+.n-l {font-family:Verdana,sans-serif;position:fixed;top:60px;left:6px;visibility:hide;}
+.n-l-l {font-size:9pt;background:white; color:black; text-decoration:none;text-align:right;}				
+.n-l-f {font-size: 10pt;color:black; text-decoration:none;text-align:right;}
+.n-p-f {background:white;color:#336;font:10pt/16pt Verdana,sans-serif;text-decoration:none;text-align:right;}
+.n-p-n {background:#EEE;color:#336;font:9pt/16pt Verdana,sans-serif;text-decoration:none;text-indent:2px; width:100%;}
+.n-t-n {background:white;color:black;font:10pt Verdana,sans-serif;text-decoration:none;margin:0;padding:0;}
+.n-t-s {background:white;color:#336;font-family:Verdana,sans-serif;font-size:8pt;text-decoration:none;}
+.p-b-h {font:8pt Verdana,sans-serif;margin:0px;padding:0px;}
+.p-f-s { font-family:9pt Verdana, sans-serif; color:silver;background:white;text-decoration:none;}
+.popup {position:relative;font-family:Verdana,sans-serif;font-size:10pt; background:#EEE;color:blue;text-decoration:none;text-indent:8px;}
+
+//-->
+</style>
+
+
+<script type="text/javascript"><!--
+google_ad_client = "pub-9419480011552853";
+google_ad_width = 120;
+google_ad_height = 240;
+google_ad_format = "120x240_as";
+google_ad_channel ="";
+google_ad_type = "text";
+google_color_border = "CCCCCC";
+google_color_bg = "FFFFFF";
+google_color_link = "000000";
+google_color_url = "666666";
+google_color_text = "333333";
+//--></script>
+</head>
+<body>
+<!-- Page Header plus top nav bar -->
+
+
+<table id="pagetop" align="center" border="0" cellpadding="0" cellspacing="0" width="95%" class="n-t-s">
+  <tr valign="bottom" class="n-t-s">
+    <td id="logo" class="n-t-s"><a href="/"><img border="0" src="http://www.zytrax.com/images/zytrax-open.gif" alt="ZYTRAX OPEN LOGO" /></a></td>
+    <td align="right" class="n-t-s">
+		<a href="http://www.zytrax.com/feed_back.htm" class="n-t-s">mail us</a>
+		&nbsp;&#124;&nbsp;
+		<a href="http://www.zytrax.com/run/mailpage.php" class="n-t-s">mail this page</a><br /><br />
+		<a id="p3" href="http://www.zytrax.com/products/" onmouseover="pop(0,3,'v')" onmouseout="swapout()" class="n-t-s">products</a>
+		&nbsp;&#124;&nbsp;
+    <a id="p5" href="http://www.zytrax.com/Company/" onmouseover="pop(0,5,'v')" onmouseout="swapout()" class="n-t-s">company</a>
+		&nbsp;&#124;&nbsp;
+    <a id="p7" href="http://www.zytrax.com/support/" onmouseover="pop(0,7,'v')" onmouseout="swapout()" class="n-t-s">support</a>
+		&nbsp;&#124;&nbsp;
+    <a id="p6" href="http://www.zytrax.com/download/" onmouseover="pop(0,6,'v')" onmouseout="swapout()" class="n-t-s">downloads</a>
+		&nbsp;&#124;&nbsp;
+    <a href="http://www.zytrax.com/isp/" onmouseover="pop(0,15,'v')" class="n-t-s">isp services</a>
+		&nbsp;&#124;&nbsp;
+    <a href="http://www.zytrax.com/Company/contacts.html" class="n-t-s">contact us</a>
+		</td>
+	</tr>
+	<tr>
+	<td colspan="2" class="p-m-sp"><hr /></td>
+	</tr>
+</table>
+
+	
+
+<!-- begin body table -->
+<div class="l-c">
+<div class="l-11">
+<h1><a name="contents"></a>3. DNS Reverse Mapping</h1>
+<ul class="g-l-n">
+<li><a href="#overview" class="t-db">3.1 Reverse Mapping Overview</a> </li>
+<li><a href="#arpa" class="t-db">3.2 The IN-ADDR.ARPA Reverse Mapping Domain</a></li>
+<li><a href="#reverse" class="t-db">3.3 Reverse Map Delegation</a></li>
+</div>
+<h2><a name="overview"></a>3.1 Reverse Mapping Overview</h2>
+<div class="g-i1-n">
+<p>A normal DNS query would be of the form 'what is the IP of host=www in domain=mydomain.com'. There are times however when we want to be able to find out the name of the host whose IP address = x.x.x.x. Sometimes this is required for diagnostic purposes more frequently these days it is used for security purposes to trace a hacker or spammer, indeed many modern mailing systems use reverse mapping to provide simple authentication using dual look-up, IP to name and name to IP.</p>
+<p>In order to perform Reverse Mapping and to support normal recursive and Iterative (non-recursive) queries the DNS designers defined a special (reserved) <b>Domain Name</b> called IN-ADDR.ARPA. This domain allows for all supported Internet IPv4 addresses (and now IPv6).</p>  
+</div>
+<p><a href="#contents"><img border="0" src="../../../images/go_up.gif" width="27" height="20"></a></p>
+
+<h2><a name="arpa"></a>3.2 IN-ADDR.ARPA Reverse Mapping Domain</h2>
+<div class="g-i1-n">
+<p>Reverse Mapping looks horribly complicated. It is not. As with all things when we understand what is being done and why - all becomes as clear as mud!</p>
+<p>We defined the normal <a href="../ch2/index.html#domains" class="t-db">domain name structure as a tree</a> starting from the root. We write a normal domain name LEFT to RIGHT but the hierarchical structure is RIGHT to LEFT.</p>
+<p class="g-c-n">domain name = www.mydomain.com<br />
+highest node in tree is = .com<br />
+next (lower) = .mydomain<br />
+next (lower) = www
+</p>
+<p>An IPv4 address is written as:</p>
+<p class="g-c-n">
+192.168.23.17
+</p>
+<p>This IPv4 address defines a host = 17 in a Class C address range (192.168.23.x). In this case the most important part (the highest node) is on the LEFT (192) not the RIGHT. This is a tad awkward and would make it impossible to construct a sensible tree structure that could be searched in a single lifetime.</p>
+<p>The solution is to reverse the order of the address and place the result under the special domain IN-ADDR.ARPA (you will see this also written as in-addr.arpa which is OK since domains are case insensitive but the case should be preserved so we will use IN-ADDR.ARPA).</p>
+<p>Finally the last part of the IPv4 Address (17) is the host address and hosts, from our previous reading, are typically defined inside a <a href="../apa/zones.html" class="t-db">zone file</a> so we will ignore it and only use the Class C address base. The result of our manipulations are:</p>
+<p class="g-c-n">IP address =192.168.23.17<br />
+Class C base = 192.168.23 ; omits the host address = 17<br />
+Reversed Class C base = 23.168.192<br />
+Added to IN-ADDR.ARPA domain = 23.168.192.IN-ADDR.ARPA
+</p>
+<p>This is show in figure 3.0 below.</p>
+<p align="center"><img border="0" src="../../../images/dns_arpa.gif" width="527" height="165"></p>
+<p align="center"<b>Figure 3.0 IN-ADDR.ARPA Reverse Mapping</b</p>
+<p>Finally we construct a zone file to describe all the hosts (nodes) in the Reverse Mapped zone using <a href="../ch8/ptr.html" class="t-db">PTR Records</a>. The resulting file will look something like this:</p>
+<pre class="g-b-n">
+$ORIGIN 23.168.192.IN-ADDR.ARPA.
+@             IN      SOA   ns1.foo.com. root.foo.com. (
+                              2003080800 ; serial number
+                              3h         ; refresh
+                              15m        ; update retry
+                              3w         ; expiry
+                              3h         ; minimum
+                              )
+              IN      NS      ns1.foo.com.
+              IN      NS      ns2.foo.com.
+1             IN      PTR     www.foo.com. ; qualified name
+2             IN      PTR     joe.foo.com.
+.....
+17            IN      PTR     bill.foo.com.
+.....
+74            IN      PTR     fred.foo.com.
+.... 
+</pre>
+<p>We must use qualified names ending with a dot (in fact they are Fully Qualified Domain Names FQDN) in <a href="../apa/dot.html" class="t-db">this file</a> because if we did not our <a href="../apa/origin.html" class="t-db">$ORIGIN</a> directive would lead to some strange results.</p>
+</div>
+<p><a href="#contents"><img border="0" src="../../../images/go_up.gif" width="27" height="20"></a></p>
+
+<h2><a name="reverse"></a>3.3 Reverse Map Delegation</h2>
+<div class="g-i1-n">
+<p>Classless Reverse Map Delegation is defined by RFC 2317 which has Best Current Practice status and should be regarded as a definitive reference. <a href="../apa/classless.html" class="t-db">Classless routing allows allocation  of sub-nets on non-octet boundaries i.e. less that 256 addresses from a Class C address may be allocated and routed</a>. The technique defined in the RFC is attributed to Glen A. Herrmannsfeldt.</p>
+<p>Normal domain name mapping as we have seen maps the domain name to an IP address. This process is independent of the ISP or other authority that allocated the IP name space. If the addresses were to change then the owner of the domain that maps these addresses would be able to make the necessary changes directly with either the relevant registrar i.e. change the IP address of DNS's for the domain or change the zone file(s) that describe the domain.</p>  <p>The rule is that entities can be delegated only once in the domain name tree this includes IN-ADDR.ARPA. When a Class C subnet is assigned by an ISP or other authority e.g. 192.168.23.64/27 (a 32 IP address subnet) the responsibility for reverse mapping for the whole Class C address has already been assigned to the ISP or Authority. If you want to change the host names in the assigned subnet they must be notified to the authority for that Class C address. Generally this is unacceptable since such requests may encounter indifference, cost or questions. It is most desirable that responsibility for reverse mapping be delegated when the IP address subnet is assigned.</p>
+<p>The technique defined in RFC 2317 provides for such delegation to take place using <a href="../ch8/cname.html" class="t-db">CNAME Resource Records</a> (rather than the more normal <a href="../ch8/ptr.html" class="t-db">PTR Resource Records</a>) in an expanded IN-ADDR.ARPA name space.</p>
+<p>The following fragment shows our 192.168.23.64/27 subnet as a fragment of the reverse mapping zone file located at the ISP or other Authority that assigned the subnet:</p>
+<pre class="g-b-n">
+$ORIGIN 23.168.192.IN-ADDR.ARPA.
+@            IN  SOA   ns1.isp.com. root.isp.com. (
+                              2003080800 ; serial number
+                              3h         ; refresh
+                              15m        ; update retry
+                              3w         ; expiry
+                              3h      ; minimum
+                              )
+              IN  NS      ns1.isp.com.
+              IN  NS      ns2.isp.com.
+; definition of other IP address 0 - 63
+....
+
+; definition of our target 192.168.23.64/27 subnet 
+; name servers for subnet reverse map
+64/27         IN  NS  ns1.mydomain.com.
+64/27         IN  NS  ns2.mydomain.com.
+; IPs addresses in the subnet - all need to be defined
+; except 64 and 95 since they are the subnets
+; broadcast and multicast addresses not hosts/nodes
+65            IN  CNAME   65.64/27.23.168.192.IN-ADDR.ARPA. ;qualified
+66            IN  CNAME   66.64/27 ;unqualified name
+67            IN  CNAME   67.64/27 
+....
+93            IN  CNAME   93.64/27 
+94            IN  CNAME   94.64/27 
+; end of 192.168.23.64/27 subnet
+.....
+; other subnet definitions
+</pre>
+<p>The 64/27 construct is an artificial (but legitimate) way of constructing the additional space to allow delegation. This is not technically a domain name and therefore can use '/' (which is not allowed in a domain name) but could be replaced with say '-' which is allowed e.g. 64-27.</p>
+<p>The zone file at the DNS serving the Reverse Map (ns1.mydomain.com in the above example) looks like this:</p> 
+<pre class="g-b-n">
+$ORIGIN 64/27.23.168.192.IN-ADDR.ARPA.
+@            IN  SOA   ns1.mydomain.com. root.mydomain.com. (
+                              2003080800 ; serial number
+                              3h         ; refresh
+                              15m        ; update retry
+                              3w         ; expiry
+                              3h      ; minimum
+                              )
+              IN  NS      ns1.mydomain.com.
+              IN  NS      ns2.mydomain.com.
+; IPs addresses in the subnet - all need to be defined
+; except 64 and 95 since they are the subnets
+; broadcast and multicast addresses not hosts/nodes
+65            IN  PTR   fred.mydomain.com. ;qualified
+66            IN  PTR   joe.mydomain.com.
+67            IN  PTR   bill.mydomain.com.
+....
+93            IN  PTR   web.mydomain.com.
+94            IN  PTR   ftp.mydomain.com.
+; end of 192.168.23.64/27 subnet
+</pre>
+</div>
+<p>Now you have to change your reverse map zone names in the named.conf file to reflect the above change. The following examples shows the reverse map declaration before and after the change to reflect the configuration above:</p>
+<pre class="g-b-n">
+//  before change the reverse map zone declaration would look
+// something like this
+zone "23.168.192.in-addr.arpa" in{
+	type master;
+	file "192.168.23.rev";
+};
+</pre>
+<p>The above - normal - reverse map declaration resolves reverse lookups for 192.168.23.x locally and without the need for access to any other zone or DNS.</p>
+<p>Change to reflect the delegated zone name.</p>
+<pre class="g-b-n">
+//  after change the reverse map zone declaration would look
+// something like this
+zone "64/27.23.168.192.in-addr.arpa" in{
+	type master;
+	file "192.169.23.rev";
+};
+</pre>
+<p>The above configuration will only resolve by querying the master zone for 23.168.192.IN-ADDR.ARPA and following down the delegation back to itself. If changes are not made at the ISP or issuing Authority or have not yet propagated then this configuration will generate 'nslookup' and 'dig' errors.</p>
+<p><a href="#contents"><img border="0" src="../../../images/go_up.gif" width="27" height="20"></a></p>
+	<!-- end body table -->
+	</div>
+	</div>
+	
+
+<div class="l-f">
+<div class="l-100">
+<!-- standard footer full width -->
+<table border="0" cellspacing="0" align="center">
+  <tr>
+    <td class="p-f-s" align="left">
+		
+		Copyright &copy; 1994 - 2005 ZyTrax, Inc.<br /> All rights reserved. 
+		<a href="http://www.zytrax.com/legal.html" class="p-f-s">Legal and Privacy</a>
+		</td>
+		<td>&nbsp;<br />
+		<a href="http://www.zytrax.com/isp/web" target="_blank" class="p-f-s">site by zytrax</a></td>
+		<td class="p-f-s" align="right">
+		<a href="javascript:mailus('web-master','zytrax.com','About Web site')" class="p-f-s">web-master at zytrax</a><br />
+
+		Page modified: October 15 2005.
+		</td>
+  </tr>
+</table>
+</div>
+</div>
+	<div class="l-l">
+	<!-- left hand navigation -->
+<div class="n-l-u">
+<p align="center">
+<a href="http://www.netwidget.net/books/apress/dns" class="t-db"><img src="http://www.zytrax.com/images/dns_book_small.jpg" border="0" alt="Pro DNS and BIND by Ron Aitchison" /></a>
+</p>
+<h2 align="right">Contents</h2>
+<p class="n-l-f">
+<a href="http://www.zytrax.com/tech/">tech info</a><br />
+<a href="http://www.zytrax.com/books/">guides home</a><br />
+<b>intro</b><br />
+<a href="http://www.zytrax.com/books/dns/">contents</a><br />
+<a title="Some vaugie ramblings and explanation of terminolgy used" href="http://www.zytrax.com/books/dns/ch1">1 objectives</a><br />
+<b>big picture</b><br />
+<a title="The Domain Name hierarchy, queries, zone maintenance and security overview" href="http://www.zytrax.com/books/dns/ch2">2 concepts</a><br />
+<a title="Reverse-mapping (IP to Host) concepts and explanation" href="http://www.zytrax.com/books/dns/ch3">3 reverse map</a><br />
+<a title="Explanation of various DNS configurations" href="http://www.zytrax.com/books/dns/ch4">4 dns types</a><br />
+<b>quickstart</b><br />
+<a title="Installing BIND on Fedora Core 2, Windows 2000 and FreeeBSD" href="http://www.zytrax.com/books/dns/ch5">5 bind</a><br />
+<a title-"Chpater 4 types with worked examples" href="http://www.zytrax.com/books/dns/ch6">6 samples</a><br />
+<b>reference</b><br />
+<a title="BIND's named.conf clauses and statements" href="http://www.zytrax.com/books/dns/ch7">7 named.conf</a><br />
+<a title="Zone File Directives and Resource Records" href="http://www.zytrax.com/books/dns/ch8">8 dns records</a><br />
+<b>operations</b><br />
+<a title="Common HOWTOs for various requirements" href="http://www.zytrax.com/books/dns/ch9">9 howtos</a><br />
+<a title="when head-scratching does not work - nslookup, dig" href="http://www.zytrax.com/books/dns/ch10">10 tools</a><br />
+<a href="http://www.zytrax.com/books/dns/ch11">11 trouble</a><br />
+<b>programming</b><br />
+<a href="http://www.zytrax.com/books/dns/ch12">12 bind api's</a><br />
+<b>security</b><br />
+<a href="http://www.zytrax.com/books/dns/ch13">13 dns security</a><br />
+<b>bits &amp; bytes</b><br />
+<a title="On-the-wire DNS message format" href="http://www.zytrax.com/books/dns/ch15">15 messages</a><br />
+<b>resources</b><br />
+<a title="Mostly Explanations and Terminology" href="http://www.zytrax.com/books/dns/apa/">notes &amp; tips</a><br />
+<a title="How and where to register domains" href="http://www.zytrax.com/books/dns/apb/">registration FAQ</a><br />
+<a title="List of DNS sofware, web site and other resources" href="http://www.zytrax.com/books/dns/apc/">dns resources</a><br />
+<a title="RFCs applicable to DNS" href="http://www.zytrax.com/books/dns/apd/">dns rfc's</a><br />
+<a title="Changes made for each revision of the guide" href="http://www.zytrax.com/books/dns/changelog.html">change log</a><br />
+</p>
+<!-- Creative Commons License -->
+<p align="right" class="p-m-s"><a href="http://creativecommons.org/licenses/by-nc/2.0/"><img alt="Creative Commons License" border="0" src="../../../images/somerights.gif" /></a><br />
+This work is licensed under a
+<a href="http://creativecommons.org/licenses/by-nc/2.0/">Creative Commons License</a>.</p>
+<p align="right" class="p-b-h">If you are happy it's OK - but your browser is giving a less than optimal experience on our site. You could, at no charge, upgrade to a W3C STANDARDS COMPLIANT browser such as <a href="http://www.mozilla.org" class="t-db">Mozilla</a></p>
+</div>
+</div>
+<div class="l-r">
+<!-- left hand navigation -->
+<div class="g-sb">
+<p align="center">
+<script type="text/javascript"
+  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</p>
+<h3>Resources</h3>
+<h4>Systems</h4>
+<p class="g-sb-n">
+<a title="The biggest and most stable of the BSDs" href="http://www.freebsd.org" target="_blank" class="t-db">FreeBSD</a><br />
+<a title="NetBSD runs on just about every processor known to mankind and a few more besides" href="http://www.netbsd.org/" target="_blank" class="t-db">NetBSD</a><br />
+<a title="A high security version of BSD" href="http://www.openbsd.org/" target="_blank" class="t-db">OpenBSD</a><br />
+<a title="The latest major fork of BSD (from FreeBSD 4.x) - following a well-worn tradition of independent thought in the BSD community" href="http://www.dragonflybsd.org/" target="_blank" class="t-db">DragonFlyBSD</a><br />
+<a href="http://www.linux.org" target="_blank" class="t-db">Linux</a><br />
+</p>
+<h4>SCO vs IBM</h4>
+<p class="g-sb-n">
+<a href="http://www.linux.org/news/sco/index.html" title="The LINUX link page on the SCO vs IBM lawsuit" target="_blank" class="t-db">Linux Links</a><br />
+<a href="http://www.wikipedia.org/wiki/SCO_v._IBM_Linux_lawsuit" title="Wikipedia - the Free Encyclopedia - Link Page" target="_blank" class="t-db">Wikipedia Links</a><br />
+</p>
+<h4>Applications</h4>
+<p class="g-sb-n">
+<a title="Complete High Quality Office Productivity Suite - Word Processor, Spreadsheet, Drawing Tools and Presentation software. Runs on Linux and Windows. Full interworking with MS Office files. Great Software." href="http://www.openoffice.org/" target="_blank" class="t-db">OpenOffice</a><br />
+<a title="Home of the Gecko range of browsers. Excellent W3C DOM and CSS2 support. If you are not using one of the Mozilla family of browsers or email clients - you should be!" href="http://www.mozilla.org/" target="_blank" class="t-db">Mozilla</a><br />
+<a href="http://www.sourceforge.net/" title="Major source of Open software developments and applications" target="_blank" class="t-db">SourceForge</a><br />
+<a href="http://www.gnu.org/" title="Home of the extensive software collection of the Free Sofware Foundation" target="_blank" class="t-db">GNU-Free SW Foundation</a><br />
+</p>
+<h4>Organisations</h4>
+<p class="g-sb-n">
+<a href="http://www.opensource.org/" title="Excellent source for approved Open Source licences" target="_blank" class="t-db">Open Source Initiative</a><br />
+<a href="http://www.creativecommons.org/" title="Site devoted to making creative material as widely available as possible" target="_blank" class="t-db">Creative Commons</a><br />
+</p>
+<h4>Misc.</h4>
+<p class="g-sb-n">
+<a title="Open Libray of thousands of out of copyright books - plus many more associated projects" href="http://ibiblio.org" target="_blank" class="t-db">Ibiblio - Library</a><br />
+<a title="Part of the Ibiblio project - new works freely available" href="http://www.ibiblio.org/obp/books/" target="_blank" class="t-db">Open Book Project</a><br />
+<a href="http://dmoz.org/" title="Open Directory Project" target="_blank" class="t-db">Open Directory</a><br />
+<a href="http://www.wikipedia.org/" title="Open Encyclopedia project - staggering volume of high quality content and growing daily" target="_blank" class="t-db">Wikipedia</a><br />
+</p>
+</div>
+<ul class="b-b">
+<li class="b-b-l" id="layout"><a class="b-b-a" href="http://www.zytrax.com/about_site.htm#buttons"><span>CSS</span> Layout</a></li>
+<li class="b-b-l" id="popups"><a class="b-b-a" href="http://www.zytrax.com/about_site.htm#buttons"><span>CSS</span> Popup</a></li>
+</ul>
+<p align="center"><img src="http://www.zytrax.com/images/pf.gif" border="0" alt="" /><a href="http://www.zytrax.com/books/dns/ch3/index.html?pf=yes" class="t-db"> printer friendly</a></p>
+<p align="center"><a href="http://www.zytrax.com/security/spf.html" class="n-p-f"><img src="http://www.zytrax.com/images/protectedbyspf_13a.gif" border="0" width="51" height="51" alt="SPF Record Conformant Domain Logo" /></a></p>
+	</div>
+
+
+
+</body>
+</html>
+
+

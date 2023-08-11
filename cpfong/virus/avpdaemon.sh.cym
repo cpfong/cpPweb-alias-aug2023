@@ -1,0 +1,7 @@
+#!/bin/sh
+
+#exit 0;
+
+if [ -x /usr/local/avp/AvpBSDDaemon -a -f /usr/local/avp/AvpUnix.key -a -f /usr/local/avp/database/avp.set ]; then
+	(cd /usr/local/avp; /usr/local/avp/AvpBSDDaemon -I0 -Y > /dev/null 2>&1 &) && echo -n ' avpdaemon'
+fi

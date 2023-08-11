@@ -1,0 +1,4162 @@
+  <HTML>
+  <HEAD>
+  
+  <TITLE>MySQL Reference Manual for version 5.0.3-alpha - 16  MySQL Cluster</TITLE>
+   <style> code {color:purple} tt {color:green} samp {color:navy} pre {color:maroon} </style>
+  </HEAD>
+  <BODY BGCOLOR=silver TEXT=#000000 LINK=#101090 VLINK=#7030B0>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_InnoDB.html">previous</A>, <A HREF="manual_MaxDB.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="NDBCluster" HREF="manual_toc.html#NDBCluster">16  MySQL Cluster</A></H1>
+
+<P>
+MySQL Cluster uses the new <code>NDB Cluster</code> storage engine to enable running
+several MySQL servers in a cluster.
+The <code>NDB Cluster</code> storage engine is available in BitKeeper from MySQL
+release 4.1.2, and in binary releases from MySQL-Max 4.1.3.
+
+</P>
+<P>
+Currently supported operating systems are Linux, Mac OS X, and Solaris.
+We are working to make <code>NDB Cluster</code> run on all operating systems 
+supported by MySQL, including Windows.
+
+</P>
+<P>
+This chapter represents work in progress.
+Other documents describing MySQL Cluster can be found at
+<a HREF="http://www.mysql.com/cluster/">http://www.mysql.com/cluster/</a>.
+
+</P>
+<P>
+You may also wish to subscribe to the MySQL Cluster mailing list.
+See <a HREF="http://lists.mysql.com/">http://lists.mysql.com/</a>. You may also find the MySQL forums
+at <a HREF="http://forums.mysql.com/">http://forums.mysql.com/</a>to be useful.
+
+</P>
+
+
+
+<H2><A NAME="MySQL_Cluster_Overview" HREF="manual_toc.html#MySQL_Cluster_Overview">16.1  MySQL Cluster Overview</A></H2>
+
+<P>
+<code>MySQL Cluster</code> is a new technology to enable clustering of in-memory
+databases in a share-nothing system. The share-nothing architecture allows
+the system to work with very inexpensive hardware, and without any specific
+requirements on hardware or software. It also does not have any single
+point of failure because each component has its own memory and disk.
+
+</P>
+<P>
+MySQL Cluster integrates the standard MySQL server with an
+in-memory clustered storage engine called <code>NDB</code>. In our
+documentation, the term <code>NDB</code> refers to the 
+part of the setup that is specific to the storage engine, whereas 
+<code>MySQL Cluster</code> refers to the combination
+of MySQL and the new storage engine.
+
+</P>
+<P>
+A MySQL Cluster consists of a set of computers, each running a number of processes
+including MySQL servers, storage nodes for NDB Cluster, management servers
+and (possibly) specialized data access programs. All these programs work
+together to form MySQL Cluster. When data is stored in the NDB Cluster storage
+engine, the tables are stored in the storage nodes for NDB Cluster.
+Such tables are directly accessible from all other MySQL servers in
+the cluster. Thus, in a payroll application storing data in a cluster, if one 
+application updates the salary of an employee, all
+other MySQL servers that query this data can see the change immediately.
+
+</P>
+<P>
+The data stored in the storage nodes for MySQL Cluster can be mirrored;
+the cluster can handle failures of individual storage nodes with no other impact than
+that a number of transactions are aborted due to losing the transaction
+state. Since transactional applications are expected to handle transaction 
+failure, this should not be a source of problems.
+
+</P>
+<P>
+By bringing MySQL Cluster to the Open Source world, MySQL makes clustered
+data management with high availability, high performance, and scalability
+available to all who need it.
+
+</P>
+
+
+
+<H2><A NAME="MySQL_Cluster_Basics" HREF="manual_toc.html#MySQL_Cluster_Basics">16.2  Basic MySQL Cluster Concepts</A></H2>
+
+<P>
+<code>NDB</code> is an in-memory storage engine offering high-availability
+and data-persistence features.
+
+</P>
+<P>
+The <code>NDB</code> storage engine can be configured with a range of failover and
+load-balancing options, but it is easiest to start with the storage
+engine at the cluster level. MySQL Cluster's <code>NDB</code> storage engine 
+contains a complete set of data, dependent only on other data within
+the cluster itself. 
+
+</P>
+<P>
+We will now describe how to set up a MySQL Cluster consisting of an 
+<code>NDB</code> storage engine and some MySQL servers.
+
+</P>
+<P>
+The cluster portion of MySQL Cluster is currently configured independently
+of the MySQL servers. In a MySQL Cluster, each part of the cluster
+is considered to be a <code>node</code>.
+
+</P>
+<P>
+<strong>Note</strong>: A node is in many contexts a computer, but for
+MySQL Cluster it is a process. There can be any number of nodes on
+a single computer.
+
+</P>
+<P>
+Each node has a type, and there can be multiple nodes of each type 
+in a MySQL Cluster. In a minimal MySQL Cluster configuration, there
+will be at least three nodes:
+
+</P>
+
+<UL>
+<LI>
+
+The management (<code>MGM</code>) node: The role of this type of node is to
+manage the other nodes within the MySQL Cluster, such as providing
+configuration data, starting and stopping nodes, running backup, and so forth.
+Because this node type manages the configuration of the other nodes, a
+node of this type should be started first, before any other
+node. With a running cluster, the MGM node does not necessarily have to
+be running all the time. A MGM node is started with the command
+<code>ndb_mgmd</code>; for this reason NDB_MGMD is provided as an alias for
+MGM when configuring the cluster.
+
+<LI>
+
+The storage or database (<code>DB</code>) node: This is the type of node that
+manages and stores the database itself. There are as many DB nodes
+as you have replicas times the number of fragments. For example, with
+two replicas, each having two fragments, you will need four DB nodes.
+It is not necessary to have more than one replica, so a minimal
+MySQL Cluster may contain just one DB node. A DB node is started with the
+command <code>ndbd</code>, and so NDBD is provided as an alias for
+DB when configuring the cluster.
+
+<LI>
+
+The client (<code>API</code>) node: This is the client node that will access
+the cluster. In the case of MySQL Cluster, a client node is a traditional
+MySQL server that uses the <code>NDB Cluster</code> storage engine, enabling
+access to clustered tables. Basically, the MySQL server acts as a client 
+of the NDB cluster. Applications using the NDB API directly are also 
+considered API nodes. Since a MySQL server is typically started with the 
+command <code>mysqld</code> or <code>mysqld_safe</code>, MYSQLD is provided as 
+an alias for API when configuring the cluster.
+</UL>
+
+<P>
+Cluster processes are also referred to as cluster nodes. Configuration of 
+the cluster involves configuring each individual node in the cluster and 
+setting up individual communication links between nodes. MySQL Cluster 
+is currently designed with the intention that storage nodes are homogenous 
+in terms of processor power, memory space, and communication bandwidth. In 
+addition, in order to provide a single point of configuration, all configuration 
+data for the cluster as a whole is located in one configuration file.
+
+</P>
+<P>
+The management server manages the cluster configuration file and the
+cluster log.  Each node in the cluster retrieves the configuration data 
+from the management server, and so requires a way to determine
+where the management server resides. When interesting events occur in
+the storage nodes, the nodes transfer information about these events to the
+management server, which then writes the information to the cluster log.
+
+</P>
+<P>
+In addition, there can be any number of clients to the cluster. These
+are of two types.
+
+</P>
+
+<UL>
+
+<LI>
+
+<strong>Standard MySQL clients</strong>: These are no different for MySQL Cluster than 
+they are for standard (non-Cluster) MySQL. In other words, MySQL Cluster can 
+be accessed from existing MySQL applications written in PHP, Perl, C, C++, Java, 
+Python, Ruby, and so on.
+
+<LI>
+
+<strong>Management clients</strong>: These clients connect to the management
+server and provide commands for starting and stopping nodes gracefully, 
+starting and stopping message tracing (debug versions only), showing node versions 
+and status, starting and stopping backups, and so on.
+
+</UL>
+
+
+
+<H2><A NAME="MySQL_Cluster_Configuration" HREF="manual_toc.html#MySQL_Cluster_Configuration">16.3  MySQL Cluster Configuration</A></H2>
+
+<P>
+A MySQL server that is part of a MySQL Cluster differs in only one 
+respect from a normal (non-clustered) MySQL server, employing the 
+<code>NDBCLUSTER</code>) storage engine. This engine is also referred to 
+simply as <code>NDB</code>, and the two forms of the name are synonomous.
+
+</P>
+<P>
+In order to avoid unnecessary resources allocation, the server is 
+configured by default with the <code>NDB</code> storage engine disabled. To 
+enable <code>NDB</code>, you will need to modify the server's <tt>`my.cnf'</tt> 
+configuration file.
+
+</P>
+<P>
+Since the MySQL server is a part of the cluster, it will also need to 
+know how to access an MGM node in order to obtain the cluster 
+configuration data. The default behavior is to look for the MGM node on 
+<code>localhost</code>. However, should you need to specify its location 
+elsewhere, this is can be done in <tt>`my.cnf'</tt> or on the MySQL server 
+command line. Before the <code>NDB</code> storage engine can be used, at 
+least one MGM node must be operational, as well as any desired DB 
+nodes.
+
+</P>
+
+
+
+<H3><A NAME="MySQL_Cluster_building" HREF="manual_toc.html#MySQL_Cluster_building">16.3.1  Building from Source Code</A></H3>
+
+<P>
+<code>NDB</code>, the Cluster storage engine, is available in binary 
+distributions beginning with MySQL-Max 4.1.3 for Linux, Mac OS X, and 
+Solaris. It is not yet supported on Windows, but we intend to make it 
+available for win32 platforms in the near future.
+
+</P>
+<P>
+If you choose to build from a source tarball or the MySQL 4.1 BitKeeper 
+tree, be sure to use the <code>--with-ndbcluster</code> option when running
+<code>configure</code>. You can instead use the 
+<code>BUILD/compile-pentium-max</code> build script. Note that this script 
+includes OpenSSL, so you must have or obtain OpenSSL to build 
+successfully; otherwise you will need to modify 
+<code>compile-pentium-max</code> to exclude this requirement. Of course, you 
+can also just follow the standard instructions for compiling your own 
+binaries, then perform the usual tests and installation procedure.
+ See section <A HREF="manual_Installing.html#Installing_source_tree">2.8.3  Installing from the Development Source Tree</A>.
+
+</P>
+
+
+
+<H3><A NAME="MySQL_Cluster_installing" HREF="manual_toc.html#MySQL_Cluster_installing">16.3.2  Installing the Software</A></H3>
+
+<P>
+In the next few sections, we assume that you are already familiar with 
+installing MySQL, and here we cover only the differences between 
+configuring MySQL Cluster and configuring MySQL without clustering. 
+(See section <A HREF="manual_Installing.html#Installing">2  Installing MySQL</A> if you require more information about the 
+latter.)
+
+</P>
+<P>
+You will find Cluster configuration easiest if you have already have 
+all MGM and DB nodes running first; this is likely to be the most 
+time-consuming part of the configuration. Editing the <tt>`my.cnf'</tt> 
+file is fairly straightforward, and this section will cover only any 
+differences from configuring MySQL without clustering.
+
+</P>
+
+
+<H3><A NAME="MySQL_Cluster_quick" HREF="manual_toc.html#MySQL_Cluster_quick">16.3.3  Quick Test Setup of MySQL Cluster</A></H3>
+
+<P>
+In order to familiarise you with the basics, we will describe the 
+simplest possible configuration for a functional MySQL Cluster. After 
+this, you should be able to design your desired setup from the 
+information provided in the other relevant sections of this chapter.
+
+</P>
+<P>
+First, you need to create a configuration directory, for example 
+<tt>`/var/lib/mysql-cluster'</tt>, by executing the following command as 
+<code>root</code>:
+
+</P>
+
+<PRE>
+shell&#62; mkdir /var/lib/mysql-cluster
+</PRE>
+
+<P>
+In this directory, create a file named <tt>`config.ini'</tt> with the
+following information, substituting appropriate values for 
+<code>HostName</code> and <code>DataDir</code> as necessary for your system.
+
+</P>
+
+<PRE>
+# file "config.ini" - showing minimal setup consisting of 1 DB node,
+# 1 management server, and 3 MySQL servers.
+# The empty default sections are not required, and are shown only for 
+# the sake of completeness.
+# Storage nodes are required to provide a hostname but MySQL Servers 
+# are not.
+# If you don't know the hostname for your machine, use localhost.
+# The DataDir parameter also has a default value, but it is recommended to
+# set it explicitly.
+# NDBD, MYSQLD, and NDB_MGMD are aliases for DB, API, and MGM respectively
+#
+[NDBD DEFAULT]
+NoOfReplicas= 1
+
+[MYSQLD DEFAULT]
+[NDB_MGMD DEFAULT]
+[TCP DEFAULT]
+
+[NDB_MGMD]
+HostName= myhost.example.com 
+
+[NDBD]
+HostName= myhost.example.com 
+DataDir= /var/lib/mysql-cluster
+
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+</PRE>
+
+<P>
+You can now start the management server as follows:
+
+</P>
+
+<PRE>
+shell&#62; cd /var/lib/mysql-cluster
+shell&#62; ndb_mgmd
+</PRE>
+
+<P>
+Then start a single DB node by running <code>ndbd</code>. When starting 
+<code>ndbd</code> for a given DB node for the very first time, you should 
+use the <code>--initial</code> option:
+
+</P>
+
+<PRE>
+shell&#62; ndbd --initial
+</PRE>
+
+<P>
+For subsequent <code>ndbd</code> starts, you will generally not want to use 
+<code>--initial</code>:
+
+</P>
+
+<PRE>
+shell&#62; ndbd
+</PRE>
+
+<P>
+ 
+This is because the <code>--initial</code> option will delete all existing 
+data and log files (as well as all table metadata) for this storage 
+node and create new ones.
+
+</P>
+
+<P>
+By default, <code>ndbd</code> will look for the management server at
+<code>localhost</code> at port 1186. (Prior to MySQL 4.1.8, the default port 
+was 2200.)
+
+</P>
+<P>
+<strong>Note</strong>: If you have installed MySQL from a binary tarball, you 
+will need to specify the path of the <code>ndb_mgmd</code> and <code>ndbd</code>
+servers explicitly. (Normally, these will be found in 
+<tt>`/usr/local/mysql/bin'</tt>.)
+
+</P>
+<P>
+Finally, go to the MySQL data directory (usually <tt>`/var/lib/mysql'</tt> 
+or <tt>`/usr/local/mysql/data'</tt>), and make sure that the <tt>`my.cnf'</tt> 
+file contains the option necessary to enable the <code>NDB</code> storage 
+engine:
+
+</P>
+
+<PRE>
+[mysqld]
+ndbcluster
+</PRE>
+
+<P>
+You can now start the MySQL server as usual:
+
+</P>
+
+<PRE>
+shell&#62; mysqld_safe --user=mysql &#38;
+</PRE>
+
+<P>
+Wait a moment to make sure the MySQL server is running properly. If you 
+see the notice <code>mysql ended</code>, check the server's <tt>`.err'</tt> file 
+to find out what went wrong.
+ 
+If all has gone well so far, you now can start using the cluster:
+
+</P>
+
+<PRE>
+shell&#62; mysql
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 1 to server version: 4.1.7
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+mysql&#62; SHOW ENGINES;
++------------+---------+------------------------------------------------------------+
+| Engine     | Support | Comment                                                    |
++------------+---------+------------------------------------------------------------+
+...
+| NDBCLUSTER | DEFAULT | Clustered, fault-tolerant, memory-based tables             |
+| NDB        | YES     | Alias for NDBCLUSTER                                       |
+...
+
+mysql&#62; USE test;
+Database changed
+
+mysql&#62; CREATE TABLE ctest (i INT) ENGINE=NDBCLUSTER;
+Query OK, 0 rows affected (0.09 sec)
+
+mysql&#62; SHOW CREATE TABLE ctest \G
+*************************** 1. row ***************************
+       Table: ctest
+Create Table: CREATE TABLE `ctest` (
+  `i` int(11) default NULL
+) ENGINE=ndbcluster DEFAULT CHARSET=latin1
+1 row in set (0.00 sec)
+</PRE>
+
+<P>
+To check that your nodes were set up properly, start the management 
+client as shown:
+
+</P>
+
+<PRE>
+shell&#62; ndb_mgm
+</PRE>
+
+<P>
+You can then use the <code>SHOW</code> command from within the management 
+client in order to obtain a report on the cluster's status:
+
+</P>
+
+<PRE>
+NDB&#62; SHOW
+Cluster Configuration
+---------------------
+[ndbd(NDB)]     1 node(s)
+id=2    @127.0.0.1  (Version: 3.5.3, Nodegroup: 0, Master)
+
+[ndb_mgmd(MGM)] 1 node(s)
+id=1    @127.0.0.1  (Version: 3.5.3)
+
+[mysqld(API)]   3 node(s)
+id=3    @127.0.0.1  (Version: 3.5.3)
+id=4 (not connected, accepting connect from any host)
+id=5 (not connected, accepting connect from any host)
+</PRE>
+
+<P>
+At this point, you have successfully set up a working MySQL Cluster. 
+You can now store data in the cluster by using any table created with 
+<code>ENGINE=NDBCLUSTER</code> or its alias <code>ENGINE=NDB</code>.
+
+</P>
+
+
+<H3><A NAME="MySQL_Cluster_Config_File" HREF="manual_toc.html#MySQL_Cluster_Config_File">16.3.4  Configuration File</A></H3>
+
+<P>
+Configuring MySQL Cluster requires working with two files:
+
+</P>
+
+<UL>
+
+<LI>
+
+<tt>`my.cnf'</tt>: Specifies options for all MySQL Cluster executables. This 
+file, with which you should be familiar with from previous work with 
+MySQL, must be accessible by each executable running in the cluster.
+
+<LI>
+
+<tt>`config.ini'</tt>: This file is read only by the MySQL Cluster 
+management server, which then distributes the information contained in 
+this file to all processes participating in the cluster. 
+<tt>`config.ini'</tt> contains a description of each node involved in the 
+cluster. This includes configuration parameters for storage nodes and
+configuration parameters for connections between all nodes in the
+cluster.
+
+</UL>
+
+<P>
+We are continuously making improvements in Cluster configuration and 
+attempting to simplify this process. While we strive to maintain 
+backwards compatibility, there may be times when introduce an 
+incompatible change. In such cases we will try to let Cluster users
+know in advance if a change is not backwards compatible. If you 
+find such a change which we have not documented, please use our
+<a HREF="http://bugs.mysql.com"> Bugs Database</a> to report it.
+
+</P>
+
+
+<H4><A NAME="MySQL_Cluster_Config_Example" HREF="manual_toc.html#MySQL_Cluster_Config_Example">16.3.4.1  Example Configuration for a MySQL Cluster</A></H4>
+
+<P>
+In order to support MySQL Cluster, you will need to update 
+<tt>`my.cnf'</tt> as shown in the example below.
+
+</P>
+<P>
+From version 4.1.8 some simplifications in <tt>`my.cnf'</tt> were made, 
+including new sections for the <code>ndbcluster</code> executables. However, 
+these should not be confused with those occurring in <tt>`config.ini'</tt>
+files. As always, you may specify these parameters when invoking those 
+executables from the command line.
+
+</P>
+
+<PRE>
+# my.cnf
+# example additions to my.cnf for MySQL Cluster 
+# (valid from 4.1.8)
+
+# enable ndbcluster storage engine, and provide connectstring for 
+# management server host (default port is 1186) 
+[mysqld]
+ndbcluster
+ndb-connectstring=ndb_mgmd.mysql.com
+
+# provide connectstring for management server host (default port: 1186)
+[ndbd]
+connect-string=ndb_mgmd.mysql.com
+
+# provide connectstring for management server host (default port: 1186)
+[ndb_mgm]
+connect-string=ndb_mgmd.mysql.com
+
+# provide location of cluster configuration file
+[ndb_mgmd]
+config-file=/etc/config.ini
+</PRE>
+
+<P>
+(For more information on connectstrings, see 
+section <A HREF="manual_NDBCluster.html#MySQL_Cluster_Connectstring">16.3.4.2  The MySQL Cluster <code>connectstring</code></A>.)
+
+</P>
+
+<PRE>
+# my.cnf
+# example additions to my.cnf for MySQL Cluster
+# (will work on all versions)
+
+# enable ndbcluster storage engine, and provide connectstring for management 
+# server host to the default port 2200
+[mysqld]
+ndbcluster
+ndb-connectstring=ndb_mgmd.mysql.com:2200
+</PRE>
+
+<P>
+Also starting with MySQL 4.1.8, the <tt>`my.cnf'</tt> file supports a 
+separate <code>[mysql_cluster]</code> section for settings to be read by and 
+affecting all executables in the cluster:
+
+</P>
+
+<PRE>
+# cluster-specific settings
+[mysql_cluster]
+ndb-connectstring=ndb_mgmd.mysql.com:2200
+</PRE>
+
+<P>
+Currently the configuration file is in INI format, and is named
+<tt>`config.ini'</tt> by default. It is read by <code>ndb_mgmd</code> at
+startup and it can be placed anywhere. Its location and name are 
+specified by using <code>--config-file=[&#60;path&#62;]&#60;filename&#62;</code> on the 
+command line with <code>ndb_mgmd</code>. If the configuration file is not 
+specified, <code>ndb_mgmd</code> will by default try to read a 
+<tt>`config.ini'</tt> located in the current working directory.
+
+</P>
+<P>
+Default values are defined for most parameters, and can also be 
+specified in <tt>`config.ini'</tt>. To create a default value section, 
+simply add the word <code>DEFAULT</code> to the section name. For example, DB 
+nodes are configured using <code>[DB]</code> sections. If all DB nodes use the
+same data memory size, and this is not the same as the default size, 
+create a <code>[DB DEFAULT]</code> section containing a <code>DataMemory</code>
+line to specify the default data memory size for all DB nodes.
+
+</P>
+<P>
+The INI format consists of sections preceded by section headings 
+(surrounded by square brackets), followed by the appropriate parameter 
+names and values. One deviation from the standard format is that the 
+parameter name and value can be separated by a colon (<samp>`:'</samp>) as well 
+as the equals sign (<samp>`='</samp>); another is that sections are not 
+uniquely identified by name. Instead, unique entries (such as two 
+different nodes of the same type) are identified by a unique ID.
+
+</P>
+<P>
+At a minimum, the configuration file must define the computers and 
+nodes involved in the cluster and on which computers these nodes are 
+located. An example of a simple configuration file for a cluster 
+consisting of one management server, two storage nodes and two MySQL 
+servers is shown below:
+
+</P>
+
+<PRE>
+# file "config.ini" - 2 DB nodes and 2 mysqld
+# This file is placed in the startup directory of ndb_mgmd,
+# i.e., the management server.
+# The first MySQL Server can be started from any host and the second
+# can only be started at the host mysqld_5.mysql.com
+# NDBD, MYSQLD, and NDB_MGMD are aliases for DB, API, and MGM respectively
+#
+
+[NDBD DEFAULT]
+NoOfReplicas= 2
+DataDir= /var/lib/mysql-cluster
+
+[NDB_MGMD]
+Hostname= ndb_mgmd.mysql.com
+DataDir= /var/lib/mysql-cluster
+
+[NDBD]
+HostName= ndbd_2.mysql.com
+
+[NDBD]
+HostName= ndbd_3.mysql.com
+
+[MYSQLD]
+[MYSQLD]
+HostName= mysqld_5.mysql.com
+</PRE>
+
+<P>
+There are six different sections in this configuration file: 
+
+</P>
+
+<UL>
+
+<LI>
+
+<code>[COMPUTER]</code>: Defines the computers in the cluster. 
+
+<LI>
+
+<code>[DB|NDBD]</code>: Defines the cluster's storage nodes.
+
+<LI>
+
+<code>[API|MYSQLD]</code>: Defines the cluster's MySQL server nodes.
+
+<LI>
+
+<code>[MGM|NDB_MGMD]</code>: Defines the management server node in the cluster. 
+
+<LI>
+
+<code>[TCP]</code>: Defines TCP/IP connections between nodes in the cluster, 
+with TCP/IP being the default connection protocol. 
+
+<LI>
+
+<code>[SHM]</code>: Defines shared-memory connections between nodes. This 
+type of connection is available only in binaries
+that have been built with <code>--with-ndb-shm</code>.
+
+</UL>
+
+<P>
+Note that each node has its own section in the <tt>`config.ini'</tt>. For 
+instance, since this cluster has two storage nodes, the configuration 
+file contains two sections defining these nodes. (In the example above, 
+these sections are labelled with <code>[NDBD]</code>, but either or both of 
+them could have been labelled with <code>[DB]</code> instead.)
+
+</P>
+<P>
+One can define <code>DEFAULT</code> values for each section. As of MySQL 
+4.1.5, all parameter names are case insensitive.
+
+</P>
+
+
+<H4><A NAME="MySQL_Cluster_Connectstring" HREF="manual_toc.html#MySQL_Cluster_Connectstring">16.3.4.2  The MySQL Cluster <code>connectstring</code></A></H4>
+
+<P>
+With the exception of the MySQL Cluster management server 
+(<code>ndb_mgmd</code>), each node making up a MySQL Cluster requires a 
+<code>connectstring</code> which points to the management server's location. 
+This is used in establishing a connection to the management server as 
+well as in performing other tasks depending on the node's role in the 
+cluster. The syntax for a <code>connectstring</code> is as follows:
+
+</P>
+
+<PRE>
+&#60;connectstring&#62; := [&#60;nodeid-specification&#62;,]&#60;host-specification&#62;[,&#60;host-specification&#62;]
+&#60;nodeid-specification&#62; := nodeid=&#60;id&#62;
+&#60;host-specification&#62; := &#60;host&#62;[:&#60;port&#62;]
+&#60;id&#62; is an integer larger than 1 identifying a node in config.ini
+&#60;port&#62; is an integer referring to a regular unix port
+&#60;host&#62; is a string which is a valid Internet host address
+</PRE>
+
+
+<PRE>
+example 1 (long):    "nodeid=2,myhost1:1100,myhost2:1100,192.168.0.3:1200"
+example 2 (short):   "myhost1"
+</PRE>
+
+<P>
+All nodes will use <code>localhost:1186</code> as the default 
+<code>connectstring</code> value if none is provided. If <code>&#60;port&#62;</code> is 
+omitted from the <code>connectstring</code>, the default port is 1186. 
+(<strong>Note</strong>: Prior to MySQL 4.1.8, the default port was 2200.) This 
+port should always be available on the network, since it has been 
+assigned by IANA for this purpose (see 
+<a HREF="http://www.iana.org/assignments/port-numbers">http://www.iana.org/assignments/port-numbers</a> for details).
+
+</P>
+<P>
+By listing multiple <code>&#60;host-specification&#62;</code> values, it is possible 
+to designate several redundant management servers. A cluster node will 
+attempt to contact succesive management servers on each host in the 
+order specified, until a successful connection has been established.
+
+</P>
+<P>
+There are a number of different ways to specify the connectstring:
+
+</P>
+
+<UL>
+
+<LI>
+
+Each executable has its own command line option which enables 
+specifying the management server at startup. (See the documentation 
+for the respective executable.)
+
+<LI>
+
+Beginning with MySQL 4.1.8, it is also possible to set the 
+<code>connectstring</code> to be used by all nodes in the cluster by placing 
+it in a <code>[mysql-cluster]</code> section in the management server's 
+<tt>`my.cnf'</tt> file.
+
+<LI>
+
+For backwards compatibility, two other options are available, using the same
+syntax:
+
+
+<OL>
+
+<LI>
+
+Set the <code>NDB_CONNECTSTRING</code> environment variable to contain the 
+connectstring. 
+
+<LI>
+
+Write the <code>connectstring</code> for each executable into a text file 
+named <tt>`Ndb.cfg'</tt> and place this file in the executable's startup 
+directory.
+
+</OL>
+
+</UL>
+
+<P>
+The recommended method for specifying the <code>connectstring</code> is to 
+set it on the command line or <tt>`my.cnf'</tt> fiel for each executable.
+
+</P>
+
+
+<H4><A NAME="MySQL_Cluster_Computer_Definition" HREF="manual_toc.html#MySQL_Cluster_Computer_Definition">16.3.4.3  Defining the Computers Making up a MySQL Cluster</A></H4>
+
+<P>
+The <code>[COMPUTER]</code> section has no real significance other than serving as
+a way to avoid the need of defining host names for each node in the system.
+All parameters mentioned here are required.
+
+</P>
+<DL COMPACT>
+
+<DT><code>[COMPUTER]Id</code>
+<DD>
+This is an internal identity in the configuration file. Later on in the
+file one refers to this computer by the ID. It is an integer.
+
+<DT><code>[COMPUTER]HostName</code>
+<DD>
+This is the host name of the computer. It is also possible to use an
+IP address rather than the host name.
+</DL>
+
+
+
+<H4><A NAME="MySQL_Cluster_MGM_Definition" HREF="manual_toc.html#MySQL_Cluster_MGM_Definition">16.3.4.4  Defining the MySQL Cluster Management Server</A></H4>
+
+<P>
+The <code>[MGM]</code> section (or its alias <code>[NDB_MGMD]</code>) is used to 
+configure the behavior of the management server. Either the 
+<code>ExecuteOnComputer</code> or <code>HostName</code> parameter must be present. 
+All other parameters can be omitted and if so will assume their 
+default values.
+
+</P>
+<DL COMPACT>
+
+<DT><code>[MGM]Id</code>
+<DD>
+Each node in the cluster has a unique identity represented by an 
+integer value between 1 and 63 inclusive. This ID is used for 
+addressing the node by all internal cluster messages.
+
+<DT><code>[MGM]ExecuteOnComputer</code>
+<DD>
+This refers to one of the computers defined in the <code>[COMPUTER]</code> 
+section.
+
+<DT><code>[MGM]PortNumber</code>
+<DD>
+This is the port number on which the management server listens for 
+configuration requests and management commands.
+
+<DT><code>[MGM]LogDestination</code>
+<DD>
+This parameter specifies where to send cluster logging information. 
+There are three options in this regard: <code>CONSOLE</code>, <code>SYSLOG</code>, and 
+<code>FILE</code>.
+
+
+<UL>
+
+<LI>
+
+<code>CONSOLE</code> outputs the log to <code>stdout</code>:
+
+
+<PRE>
+CONSOLE
+</PRE>
+
+<LI>
+
+<code>SYSLOG</code> sends the log to a <code>syslog</code> facility, possible 
+values being one of <code>auth</code>, <code>authpriv</code>, <code>cron</code>, 
+<code>daemon</code>, <code>ftp</code>, <code>kern</code>, <code>lpr</code>, <code>mail</code>, 
+<code>news</code>, <code>syslog</code>, <code>user</code>, <code>uucp</code>, <code>local0</code>, 
+<code>local1</code>, <code>local2</code>, <code>local3</code>, <code>local4</code>, 
+<code>local5</code>, <code>local6</code>, or <code>local7</code>. (<strong>Note</strong>: Not 
+every facility is necessarily supported by every operating system.)
+
+
+<PRE>
+SYSLOG:facility=syslog
+</PRE>
+
+<LI>
+
+<code>FILE</code> pipes the cluster log ouput to a regular file on the same 
+machine. The following values can be specified:
+
+
+<UL>
+
+<LI>
+
+<code>filename</code>: The name of the logfile.
+
+<LI>
+
+<code>maxsize</code>: The maximum size to which the file can grow before 
+logging rolls over to a new file. When this occurs, the old logfile is 
+renamed by appending <tt>`.x'</tt> to the filename, where <code>x</code> is the 
+next number not yet used with this name.
+
+<LI>
+
+<code>maxfiles</code>: The maximum number of logfiles.
+
+</UL>
+
+
+<PRE>
+FILE:filename=cluster.log,maxsize=1000000,maxfiles=6
+</PRE>
+
+It is possible to specify multiple log destinations as shown here, 
+using a semicolon-delimited string:
+
+
+<PRE>
+CONSOLE;SYSLOG:facility=local0;FILE:filename=/var/log/mgmd
+</PRE>
+
+The default value for the <code>FILE</code> parameter is 
+<code>FILE:filename=ndb_&#60;id&#62;_cluster.log,maxsize=1000000,maxfiles=6</code>, 
+where <code>&#60;id&#62;</code> is the ID of the node.
+
+</UL>
+
+<DT><code>[MGM]ArbitrationRank</code>
+<DD>
+This parameter is used to define which nodes can act as arbitrators. 
+Only MGM nodes and API nodes can be arbitrators and can take one of the 
+following values:
+
+
+<UL>
+
+<LI>
+
+<code>0</code>: The node will never be used as an arbitrator. 
+
+<LI>
+
+<code>1</code>: The node has high priority; that is, it will be preferred as 
+an arbitrator over low-priority nodes.  
+
+<LI>
+
+<code>2</code>: Indicates a low-priority node which be used as an arbtrator 
+only if a node with a higher priority is not available for that 
+purpose.
+
+</UL>
+
+Normally, the management server should be configured as arbitrator by 
+setting its <code>ArbitrationRank</code> to 1 (the default) and that of all 
+API or server nodes to 0.
+
+<DT><code>[MGM]ArbitrationDelay</code>
+<DD>
+An integer value which causes the management server's responses to 
+arbitration requests to be delayed by that number of milliseconds.
+By default, this value is 0; it is normally not necessary to change it.
+
+<DT><code>[MGM]DataDir</code>
+<DD>
+This sets the directory where output files from the management server 
+will be placed. These files include cluster log files, process output 
+files, and the daemon's pid file. (For log files, this can be 
+overridden by setting the <code>FILE</code> parameter for 
+<code>[MGM]LogDestination</code> as discussed previously in this section.)
+
+</DL>
+
+
+
+<H4><A NAME="MySQL_Cluster_DB_Definition" HREF="manual_toc.html#MySQL_Cluster_DB_Definition">16.3.4.5  Defining MySQL Cluster Storage Nodes</A></H4>
+
+<P>
+The <code>[DB]</code> section (or its alias <code>[NDBD]</code>) is used to configure
+the behavior of the storage nodes.  There are many parameters specified that
+controls the buffer sizes, pool sizes, timeout parameters and so forth. The
+only mandatory parameter is either <code>ExecuteOnComputer</code> or
+<code>HostName</code> and the parameter <code>NoOfReplicas</code> which need to be
+defined in the <code>[DB DEFAULT]</code> section. Most parameters should be set in
+the <code>[DB DEFAULT]</code> section. Only parameters explicitly stated as
+possible to have local values are allowed to be changed in the <code>[DB]</code>
+section. <code>HostName</code>, <code>Id</code> and <code>ExecuteOnComputer</code> needs to be
+defined in the local <code>[DB]</code> section.
+
+</P>
+<P>
+The <code>Id</code> value (that is, the identification of the storage node) 
+can now be allocated when the node is started. It is still possible to 
+assign a node ID in the configuration file.
+
+</P>
+<P>
+For each parameter it is possible to use k, M, or G as a suffix to indicate
+units of 1024, 1024*1024, or 1024*1024*1024. For example, 100k means
+102400. Parameters and values are currently case sensitive.
+
+</P>
+<DL COMPACT>
+
+<DT><code>[DB]Id</code>
+<DD>
+This identity is the node ID used as the address of the node in all
+cluster internal messages. This is an integer between 1 and 63. Each
+node in the cluster has a unique identity.
+
+<DT><code>[DB]ExecuteOnComputer</code>
+<DD>
+This is referring to one of the computers defined in the computer section.
+
+<DT><code>[DB]HostName</code>
+<DD>
+This parameter is similar to specifying a computer to execute on. It defines
+the host name of the computer the storage node is to reside on. Either this
+parameter or <code>ExecuteOnComputer</code> is required.
+
+<DT><code>[DB]ServerPort</code>
+<DD>
+Each node in the cluster will use one port as the port other nodes use to
+connect the transporters to each other. This port is used also for non-TCP
+transporters in the connection setup phase. The default port will be
+calculated to ensure that no nodes on the same computer receive the same
+port number.
+
+<DT><code>[DB]NoOfReplicas</code>
+<DD>
+This parameter can be set only in the <code>[DB DEFAULT]</code> section because it is a
+global parameter. It defines the number of replicas for each table
+stored in the cluster. This parameter also specifies the size of node
+groups. A node group is a set of nodes that all store the same information.
+
+Node groups are formed implicitly. The first node group is formed by the
+storage nodes with the lowest node identities. And the next by the next
+lowest node identities. As an example presume we have 4 storage nodes and
+<code>NoOfReplicas</code> is set to 2. The four storage nodes have node IDs 2, 3,
+4 and 5. Then the first node group will be formed by node 2 and node 3. The
+second node group will be formed by node 4 and node 5. It is important to
+configure the cluster in such a manner such that nodes in the same node
+groups are not placed on the same computer. This would cause a single HW
+failure to cause a cluster crash.
+
+If no node identities are provided then the order of the storage nodes will
+be the determining factor for the node group. The actual node group assigned
+will be printed by the <code>SHOW</code> command in the management client.
+
+There is no default value and the maximum number is 4.
+
+<DT><code>[DB]DataDir</code>
+<DD>
+This parameter specifies the directory where trace files, log files, pid files
+and error logs are placed.
+
+<DT><code>[DB]FileSystemPath</code>
+<DD>
+This parameter specifies the directory where all files created for metadata,
+REDO logs, UNDO logs and data files are placed. The default value is to use
+the same directory as the <code>DataDir</code>. The directory must be created before
+starting the <code>ndbd</code> process.
+
+If you use the recommended directory hierarchy, you will use a directory
+<tt>`/var/lib/mysql-cluster'</tt>. Under this directory a directory <tt>`ndb_2_fs'</tt>
+will be created (if node ID was 2) which will be the file system for that
+node.
+
+<DT><code>[DB]BackupDataDir</code>
+<DD>
+It is possible also to specify the directory where backups will be placed.
+By default, the directory <code>FileSystemPath/</code><tt>`BACKUP'</tt> will be choosen.
+</DL>
+
+<P>
+<code>DataMemory</code> and <code>IndexMemory</code> are the parameters that specify
+the size of memory segments used to store the actual records and their
+indexes. It is important to understand how <code>DataMemory</code> and
+<code>IndexMemory</code> are used to understand how to set these parameters.
+For most uses, they need to be updated to reflect the usage of the
+cluster.
+
+</P>
+<DL COMPACT>
+
+<DT><code>[DB]DataMemory</code>
+<DD>
+This parameter is one of the most important parameters because it defines the
+space available to store the actual records in the database. The entire
+<code>DataMemory</code> will be allocated in memory so it is important that the
+machine contains enough memory to handle the <code>DataMemory</code> size.
+
+The <code>DataMemory</code> is used to store two things. It stores the actual
+records. Each record is currently of fixed size. So <code>VARCHAR</code> columns are
+stored as fixed size columns. There is an overhead on each record of 16
+bytes normally. Additionally each record is stored in a 32KB page with
+128 byte page overhead.  There will also be a small amount of waste for
+each page because records are only stored in one page.  The maximum record
+size for the columns currently is 8052 bytes.
+
+The <code>DataMemory</code> is also used to store ordered indexes. Ordered
+indexes uses about 10 bytes per record. Each record in the table is always
+represented in the ordered index.
+
+The <code>DataMemory</code> consists of 32KB pages. These pages are allocated
+to partitions of the tables. Each table is normally partitioned with the
+same number of partitions as there are storage nodes in the cluster.  Thus
+for each node there are the same number of partitions (=fragments) as the
+<code>NoOfReplicas</code> is set to.  Once a page has been allocated to a
+partition it is currently not possible to bring it back to the pool of
+free pages. The method to restore pages to the pool is by deleting the
+table. Performing a node recovery also will compress the partition because
+all records are inserted into an empty partition from another live node.
+
+Another important aspect is that the <code>DataMemory</code> also contains UNDO
+information for records. For each update of a record a copy record is
+allocated in the <code>DataMemory</code>. Also each copy record will also have an
+instance in the ordered indexes of the table. Unique hash indexes are
+updated only when the unique index columns are updated and in that case a new
+entry in the index table is inserted and at commit the old entry is
+deleted. Thus it is necessary also to allocate memory to be able to handle
+the largest transactions which are performed in the cluster.
+
+Performing large transactions has no advantage in MySQL Cluster other than
+the consistency of using transactions which is the whole idea of
+transactions. It is not faster and consumes large amounts of memory.
+
+The default <code>DataMemory</code> size is 80MB. The minimum size is 1MB.
+There is no maximum size, but in reality the
+maximum size has to be adapted so that the process doesn't start swapping
+when using the maximum size of the memory.
+
+<DT><code>[DB]IndexMemory</code>
+<DD>
+The <code>IndexMemory</code> is the parameter that controls the amount of storage
+used for hash indexes in MySQL Cluster. Hash indexes are always used for
+primary key indexes, unique indexes, and unique constraints.  Actually
+when defining a primary key and a unique index there will be two indexes
+created in MySQL Cluster.  One index is a hash index which is used for all
+tuple accesses and also for lock handling. It is also used to ensure unique
+constraints.
+
+The size of the hash index is 25 bytes plus the size of the primary key.
+For primary keys larger than 32 bytes another 8 bytes is added for some
+internal references.
+
+Thus for a table defined as
+
+
+<PRE>
+CREATE TABLE example
+(
+    a INT NOT NULL,
+    b INT NOT NULL,
+    c INT NOT NULL,
+    PRIMARY KEY(a),
+    UNIQUE(b)
+) ENGINE=NDBCLUSTER;
+</PRE>
+
+We will have 12 bytes overhead (having no nullable columns saves 4 bytes of
+overhead) plus 12 bytes of data per record. In addition we will have two
+ordered indexes on a and b consuming about 10 bytes each per record. We
+will also have a primary key hash index in the base table with roughly 29
+bytes per record. The unique constraint is implemented by a separate table
+with b as primary key and a as a column. This table will consume another 29
+bytes of index memory per record in the table and also 12 bytes of overhead
+plus 8 bytes of data in the record part.
+
+Thus for one million records, we will need 58MB of index memory to handle
+the hash indexes for the primary key and the unique constraint. For the
+<code>DataMemory</code> part we will need 64MB of memory to handle the
+records of the base table and the unique index table plus the two ordered
+index tables.
+
+The conclusion is that hash indexes takes up a fair amount of memory space
+but in return they provide very fast access to the data. They are also used
+in MySQL Cluster to handle uniqueness constraints.
+
+Currently the only partitioning algorithm is hashing and the ordered
+indexes are local to each node and can thus not be used to handle
+uniqueness constraints in the general case.
+
+An important point for both <code>IndexMemory</code> and <code>DataMemory</code> is
+that the total database size is the sum of all <code>DataMemory</code> and
+<code>IndexMemory</code> in each node group. Each node group is used to store
+replicated information, so if there are four nodes with 2 replicas there
+will be two node groups and thus the total <code>DataMemory</code> available is
+2*<code>DataMemory</code> in each of the nodes.
+
+Another important point is about changes of <code>DataMemory</code> and
+<code>IndexMemory</code>.  First of all, it is highly recommended to have the same
+amount of <code>DataMemory</code> and <code>IndexMemory</code> in all nodes. Since data
+is distributed evenly over all nodes in the cluster the size available is
+no better than the smallest sized node in the cluster times the number of
+node groups.
+
+<code>DataMemory</code> and <code>IndexMemory</code> can be changed, but it is dangerous to
+decrease them because that can easily lead to a node that will not be able to
+restart or even a cluster not being able to restart since there is not
+enough memory space for the tables needed to restore into the starting
+node. Increasing them should be quite okay, but it is recommended that such
+upgrades are performed in the same manner as a software upgrade where first
+the configuration file is updated, then the management server is restarted
+and then one storage node at a time is restarted by command.
+
+More <code>IndexMemory</code> is not used due to updates but inserts are inserted
+immediately and deletes are not deleted until the transaction is committed.
+
+The default <code>IndexMemory</code> size is 18MB. The minimum size is 1MB.
+</DL>
+
+<P>
+The next three parameters are important because they affect the number of
+parallel transactions and the sizes of transactions that can be handled by
+the system. <code>MaxNoOfConcurrentTransactions</code> sets the number of
+parallel transactions possible in a node and
+<code>MaxNoOfConcurrentOperations</code> sets the number of records that can be
+in update phase or locked simultaneously.
+
+</P>
+<P>
+Both of these parameters and particularly
+<code>MaxNoOfConcurrentOperations</code> are likely targets for users setting
+specific values and not using the default value. The default value is set
+for systems using small transactions and to ensure not using too much
+memory in the default case.
+
+</P>
+<DL COMPACT>
+
+<DT><code>[DB]MaxNoOfConcurrentTransactions</code>
+<DD>
+For each active transaction in the cluster there needs to be also a
+transaction record in one of the nodes in the cluster. The role of
+transaction coordination is spread among the nodes and thus the total
+number of transactions records in the cluster is the amount in one times
+the number of nodes in the cluster.
+
+Actually transaction records are allocated to MySQL servers, normally there
+is at least one transaction record allocated in the cluster per connection
+that uses or have used a table in the cluster. Thus one should ensure that
+there is more transaction records in the cluster than there are concurrent
+connections to all MySQL servers in the cluster.
+
+This parameter has to be the same in all nodes in the cluster.
+
+Changing this parameter is never safe and can cause a cluster crash. When a
+node crashes one of the node (actually the oldest surviving node) will
+build up the transaction state of all transactions ongoing in the crashed
+node at the time of the crash. It is thus important that this node has as
+many transaction records as the failed node.
+
+The default value for this parameter is 4096.
+
+<DT><code>[DB]MaxNoOfConcurrentOperations</code>
+<DD>
+This parameter is likely to be subject for change by users. Users
+performing only short, small transactions don't need to set this parameter very
+high. Applications desiring to be able to perform rather large transactions
+involving many records need to set this parameter higher.
+
+For each transaction that updates data in the cluster it is required to
+have operation records. There are operation records both in the transaction
+coordinator and in the nodes where the actual updates are performed.
+
+The operation records contain state information needed to be able to find
+UNDO records for rollback, lock queues, and much other state information.
+
+To dimension the cluster to handle transactions where one million records are
+updated simultaneously one should set this parameter to one million divided
+by the number of nodes. Thus for a cluster with four storage nodes one
+should set this parameter to 250000.
+
+Also read queries which set locks use up operation records. Some extra
+space is allocated in the local nodes to cater for cases where the
+distribution is not perfect over the nodes.
+
+When queries translate into using the unique hash index there will actually
+be two operation records used per record in the transaction. The first one
+represents the read in the index table and the second handles the operation
+on the base table.
+
+The default value for this parameter is 32768.
+
+This parameter actually handles two parts that can be configured separately.
+The first part specifies how many operation records are to be placed in the
+transaction coordinator part. The second part specifies how many operation
+records that are to be used in the local database part.
+
+If a very big transaction is performed on a 8-node cluster then this will
+need as many operation records in the transaction coordinator as there are
+reads, updates, deletes involved in the transaction. The transaction will
+however spread the operation records of the actual reads, updates, and
+inserts over all eight nodes. Thus if it is necessary to configure the
+system for one very big transaction then it is a good idea to configure
+those separately. <code>MaxNoOfConcurrentOperations</code> will always be used
+to calculate the number of operation records in the transaction coordinator
+part of the node.
+
+It is also important to have an idea of the memory requirements for those
+operation records. In MySQL 4.1.5, operation records consume
+about 1KB per record. This figure will shrink in future 5.x versions.
+
+<DT><code>[DB]MaxNoOfLocalOperations</code>
+<DD>
+By default this parameter is calculated as 1.1 * 
+<code>MaxNoOfConcurrentOperations</code>
+which fits systems with many simultaneous, not very large transactions. If
+the configuration needs to handle one very large transaction at a time and
+there are many nodes then it is a good idea to configure this separately.
+</DL>
+
+<P>
+The next set of parameters are used for temporary storage in the midst of
+executing a part of a query in the cluster. All of these records will have
+been released when the query part is completed and is waiting for the
+commit or rollback.
+
+</P>
+<P>
+Most of the defaults for these parameters will be okay for most users. Some
+high-end users might want to increase those to enable more parallelism in
+the system and some low-end users might want to decrease them to save
+memory.
+
+</P>
+<DL COMPACT>
+
+<DT><code>[DB]MaxNoOfConcurrentIndexOperations</code>
+<DD>
+For queries using a unique hash index another set of operation records are
+temporarily used in the execution phase of the query. This parameter sets
+the size of this pool. Thus this record is only allocated while executing a
+part of a query, as soon as this part has been executed the record is
+released. The state needed to handle aborts and commits is handled by the
+normal operation records where the pool size is set by the parameter
+<code>MaxNoOfConcurrentOperations</code>.
+
+The default value of this parameter is 8192. Only in rare cases of
+extremely high parallelism using unique hash indexes should this parameter
+be necessary to increase. To decrease could be performed for memory savings
+if the DBA is certain that such high parallelism is not occurring in the
+  cluster.
+
+<DT><code>[DB]MaxNoOfFiredTriggers</code>
+<DD>
+The default value of <code>MaxNoOfFiredTriggers</code> is 4000. Normally this
+value should be sufficient for most systems. In some cases it could be
+decreased if the DBA feels certain the parallelism in the cluster is not so
+high.
+
+This record is used when an operation is performed that affects a unique
+hash index. Updating a column that is part of a unique hash index or
+inserting/deleting a record in a table with unique hash indexes will fire
+an insert or delete in the index table. This record is used to represent
+this index table operation while its waiting for the original operation
+that fired it to complete.  Thus it is short lived but can still need a
+fair amount of records in its pool for temporary situations with many
+parallel write operations on a base table containing a set of unique hash
+indexes.
+
+<DT><code>[DB]TransactionBufferMemory</code>
+<DD>
+This parameter is also used for keeping fired operations to update index
+tables. This part keeps the key and column information for the fired
+operations. It should be very rare that this parameter needs to be updated.
+
+Also normal read and write operations use a similar buffer. This buffer is
+even more short term in its usage so this is a compile time parameter set to
+4000*128 bytes (500KB). The parameter is <code>ZATTRBUF_FILESIZE</code> in
+<var>Dbtc.hpp</var>. A similar buffer for key info exists which contains 4000*16
+bytes, 62.5KB of buffer space. The parameter in this case is
+<code>ZDATABUF_FILESIZE</code> in <var>Dbtc.hpp</var>. <code>Dbtc</code> is the module for
+handling the transaction coordination.
+
+Similar parameters exist in the <code>Dblqh</code> module taking care of the reads
+and updates where the data is located. In <tt>`Dblqh.hpp'</tt> with
+<code>ZATTRINBUF_FILESIZE</code> set to 10000*128 bytes (1250KB) and
+<code>ZDATABUF_FILE_SIZE</code>, set to 10000*16 bytes (roughly 156KB) of buffer
+space. No known instances of that any of those compile time limits haven't
+been big enough has been reported so far or discovered by any of our
+extensive test suites.
+
+The default size of the <code>TransactionBufferMemory</code> is 1MB.
+
+<DT><code>[DB]MaxNoOfConcurrentScans</code>
+<DD>
+This parameter is used to control the amount of parallel scans that can be
+performed in the cluster.  Each transaction coordinator can handle the
+amount of parallel scans defined by this parameter. Each scan query is
+performed by scanning all partitions in parallel. Each partition scan will
+use a scan record in the node where the partition is located. The number of
+those records is the size of this parameter times the number of nodes so
+that the cluster should be able to sustain maximum number of scans in
+parallel from all nodes in the cluster.
+
+Scans are performed in two cases. The first case is when no hash or ordered
+indexes exists to handle the query. In this case the query is executed by
+performing a full table scan. The second case is when there is no hash
+index to support the query but there is an ordered index. Using the ordered
+index means executing a parallel range scan. Since the order is only kept
+on the local partitions it is necessary to perform the index scan on all
+partitions.
+
+The default value of <code>MaxNoOfConcurrentScans</code> is 256. The maximum value
+is 500.
+
+This parameter will always specify the number of scans possible in the
+transaction coordinator. If the number of local scan records is not provided
+it is calculated as the product of <code>MaxNoOfConcurrentScans</code> and the number
+of storage nodes in the system.
+
+<DT><code>[DB]MaxNoOfLocalScans</code>
+<DD>
+Possible to specify the number of local scan records if many scans are not
+fully parallelized.
+
+<DT><code>[DB]BatchSizePerLocalScan</code>
+<DD>
+This parameter is used to calculate the number of lock records which needs
+to be there to handle many concurrent scan operations.
+
+The default value is 64 and this value has a strong connection to the
+<code>ScanBatchSize</code> defined in the API nodes.
+
+<DT><code>[DB]LongMessageBuffer</code>
+<DD>
+This is an internal buffer used for message passing internally in the node
+and for messages between nodes in the system. It is highly unlikely that
+anybody would need to change this parameter but for configurability it is
+now configurable. By default it is set to 1MB.
+</DL>
+
+<DL COMPACT>
+
+<DT><code>[DB]NoOfFragmentLogFiles</code>
+<DD>
+This is an important parameter that states the size of the REDO
+log files in the node. REDO log files are organized in a ring such that it
+is important that the tail and the head doesn't meet.  When the tail and
+head have come to close the each other the node will start aborting all
+updating transactions because there is no room for the log records.
+
+REDO log records aren't removed until three local checkpoints have
+completed since the log record was inserted. The speed of checkpoint is
+controlled by a set of other parameters so these parameters are all glued
+together.
+
+The default parameter value is 8, which means 8 sets of 4 16MB files. Thus in
+total 512MB. Thus the unit is 64MB of REDO log space. In high
+update scenarios this parameter needs to be set very high.  Test cases
+where it has been necessary to set it to over 300 have been performed.
+
+If the checkpointing is slow and there are so many writes to the database
+that the log files are full and the log tail cannot be cut for recovery
+reasons then all updating transactions will be aborted with internal error
+code 410 which will be translated to <code>Out of log file space temporarily</code>.
+This condition will prevail until a checkpoint has completed and the log tail
+can be moved forward.
+
+<DT><code>[DB]MaxNoOfSavedMessages</code>
+<DD>
+This parameter sets the maximum number of trace files that will be kept
+before overwriting old trace files. Trace files are generated when the node
+crashes for some reason.
+
+The default is 25 trace files.
+</DL>
+
+<P>
+The next set of parameters defines the pool sizes for metadata objects. It
+is necessary to define the maximum number of attributes, tables, indexes,
+and trigger objects used by indexes, events and replication between
+clusters.
+
+</P>
+<DL COMPACT>
+
+<DT><code>[DB]MaxNoOfAttributes</code>
+<DD>
+This parameter defines the number of attributes that can be defined in the
+cluster.
+
+The default value of this parameter is 1000. The minimum value is 32 and there is
+no maximum. Each attribute consumes around 200 bytes of storage in each node
+because metadata is fully replicated in the servers.
+
+<DT><code>[DB]MaxNoOfTables</code>
+<DD>
+A table object is allocated for each table, for each unique hash index, and
+for each ordered index.  This parameter sets the maximum number of table
+objects in the cluster.
+
+For each attribute that has a <code>BLOB</code> data type an extra table is used to
+store most of the <code>BLOB</code> data. These tables also must be taken into account
+when defining the number of tables.
+
+The default value of this parameter is 128. The minimum is 8 and the 
+maximum is 1600. Each table object consumes around 20KB in each node.
+
+<DT><code>[DB]MaxNoOfOrderedIndexes</code>
+<DD>
+For each ordered index in the cluster, objects are allocated to describe what
+it is indexing and its storage parts. By default each index defined will have
+an ordered index also defined. Unique indexes and primary key indexes have
+both an ordered index and a hash index.
+
+The default value of this parameter is 128. Each object consumes around 10KB
+of data per node.
+
+<DT><code>[DB]MaxNoOfUniqueHashIndexes</code>
+<DD>
+For each unique index (not for primary keys) a special table is allocated that
+maps the unique key to the primary key of the indexed table. By default there
+will be an ordered index also defined for each unique index. To avoid this,
+you must use the <code>USING HASH</code> option in the unique index definition.
+
+The default value is 64. Each index will consume around 15KB per node.
+
+<DT><code>[DB]MaxNoOfTriggers</code>
+<DD>
+For each unique hash index an internal update, insert and delete trigger is
+allocated. Thus three triggers per unique hash index. Ordered indexes use
+only one trigger object. Backups also use three trigger objects for each
+normal table in the cluster. When replication between clusters is supported
+it will also use internal triggers.
+
+This parameter sets the maximum number of trigger objects in the cluster.
+
+The default value of this parameter is 768.
+
+<DT><code>[DB]MaxNoOfIndexes</code>
+<DD>
+This parameter was deprecated in MySQL 4.1.5. Now you should use
+<code>MaxNoOfOrderedIndexes</code> and <code>MaxNoOfUniqueHashIndexes</code> instead.
+
+This parameter is only used by unique hash indexes. There needs to be one
+record in this pool for each unique hash index defined in the cluster.
+
+The default value of this parameter is 128.
+</DL>
+
+<P>
+There is a set of boolean parameters affecting the behavior of storage
+nodes. Boolean parameters can be specified to true by setting it to Y or 1
+and to false by setting it to N or 0.
+
+</P>
+<DL COMPACT>
+
+<DT><code>[DB]LockPagesInMainMemory</code>
+<DD>
+For a number of operating systems such as Solaris and Linux it is possible
+to lock a process into memory and avoid all swapping problems. This is an
+important feature to provide real-time characteristics of the cluster.
+
+The default is that this feature is not enabled.
+
+<DT><code>[DB]StopOnError</code>
+<DD>
+This parameter states whether the process is to exit on error condition or
+whether it is perform an automatic restart.
+
+The default is that this feature is enabled.
+
+<DT><code>[DB]Diskless</code>
+<DD>
+In the internal interfaces it is possible to set tables as diskless tables
+meaning that the tables are not checkpointed to disk and no logging occur.
+They only exist in main memory. The tables will still exist after a crash
+but not the records in the table.
+
+This feature makes the entire cluster <code>Diskless</code>, in this case even
+the tables doesn't exist anymore after a crash. Enabling this feature can
+be done by either setting it to Y or 1.
+
+When this feature is enabled, backups will be performed but will not be
+stored because there is no "disk". In future releases it is likely to make
+the backup diskless a separate configurable parameter.
+
+The default is that this feature is not enabled.
+
+<DT><code>[DB]RestartOnErrorInsert</code>
+<DD>
+This feature is only accessible when building the debug version where it is
+possible to insert errors in the execution of various code parts to test
+failure cases.
+
+The default is that this feature is not enabled.
+</DL>
+
+<P>
+There are quite a few parameters specifying timeouts and time intervals
+between various actions in the storage nodes. Most of the timeouts are
+specified in milliseconds with a few exceptions which will be mentioned
+below.
+
+</P>
+<DL COMPACT>
+
+<DT><code>[DB]TimeBetweenWatchDogCheck</code>
+<DD>
+To ensure that the main thread doesn't get stuck in an eternal loop
+somewhere there is a watch dog thread which checks the main thread. This
+parameter states the number of milliseconds between each check. After three
+checks and still being in the same state the process is stopped by the
+watch dog thread.
+
+This parameter can easily be changed and can be different in the nodes
+although there seems to be little reason for such a difference.
+
+The default timeout is 4000 milliseconds (4 seconds).
+
+<DT><code>[DB]StartPartialTimeout</code>
+<DD>
+This parameter specifies the time that the cluster will wait for all
+storage nodes to come up before the algorithm to start the cluster is
+invocated. This time out is used to avoid starting only a partial cluster
+if possible.
+
+The default value is 30000 milliseconds (30 seconds). 0 means eternal time
+out. Thus only start if all nodes are available.
+
+<DT><code>[DB]StartPartitionedTimeout</code>
+<DD>
+If the cluster is ready start after waiting <code>StartPartialTimeout</code> but
+is still in a possibly partitioned state one waits until also this timeout
+has passed.
+
+The default timeout is 60000 milliseconds (60 seconds).
+
+<DT><code>[DB]StartFailureTimeout</code>
+<DD>
+If the start is not completed within the time specified by this parameter
+the node start will fail. Setting this parameter to 0 means no time out is
+applied on the time to start the cluster.
+
+The default value is 60000 milliseconds (60 seconds). For storage nodes
+containing large data sets this parameter needs to be increased because it
+could very well take 10-15 minutes to perform a node restart of a storage
+node with a few gigabytes of data.
+
+<DT><code>[DB]HeartbeatIntervalDbDb</code>
+<DD>
+One of the main methods of discovering failed nodes is by heartbeats. This
+parameter states how often heartbeat signals are sent and how often to
+expect to receive them. After missing three heartbeat intervals in a row,
+the node is declared dead. Thus the maximum time of discovering a failure
+through the heartbeat mechanism is four times the heartbeat interval.
+
+The default heartbeat interval is 1500 milliseconds (1.5 seconds). This
+parameter must not be changed drastically. If one node uses 5000
+milliseconds and the node watching it uses 1000 milliseconds then obviously
+the node will be declared dead very quickly. So this parameter can be
+changed in small steps during an online software upgrade but not in large 
+steps.
+
+<DT><code>[DB]HeartbeatIntervalDbApi</code>
+<DD>
+In a similar manner each storage node sends heartbeats to each of the
+connected MySQL servers to ensure that they behave properly. If a MySQL
+server doesn't send a heartbeat in time (same algorithm as for storage node
+with three heartbeats missed causing failure) it is declared down and all
+ongoing transactions will be completed and all resources will be released
+and the MySQL server cannot reconnect until the completion of all
+activities started by the previous MySQL instance has been completed.
+
+The default interval is 1500 milliseconds. This interval can be different
+in the storage node because each storage node independently of all other
+storage nodes watches the MySQL servers connected to it.
+
+<DT><code>[DB]TimeBetweenLocalCheckpoints</code>
+<DD>
+This parameter is an exception in that it doesn't state any time to wait
+before starting a new local checkpoint. This parameter is used to ensure
+that in a cluster where not so many updates are taking place that we don't
+perform local checkpoints. In most clusters with high update rates it is
+likely that a new local checkpoint is started immediately after the
+previous was completed. 
+
+The size of all write operations executed since the start of the previous
+local checkpoints is added.  This parameter is specified as the logarithm
+of the number of words. So the default value 20 means 4MB of write
+operations, 21 would mean 8MB and so forth up until the maximum value
+31 which means 8GB of write operations.
+
+All the write operations in the cluster are added together.  Setting it to
+6 or lower means that local checkpoints will execute continuosly without
+any wait between them independent of the workload in the cluster.
+
+<DT><code>[DB]TimeBetweenGlobalCheckpoints</code>
+<DD>
+When a transaction is committed it is committed in main memory in all nodes
+where mirrors of the data existed. The log records of the transaction are
+not forced to disk as part of the commit however. The reasoning here is
+that having the transaction safely committed in at least two independent
+computers should be meeting standards of durability.
+
+At the same time it is also important to ensure that even the worst of
+cases when the cluster completely crashes is handled properly. To ensure
+this all transactions in a certain interval is put into a global
+checkpoint. A global checkpoint is very similar to a grouped commit of
+transactions. An entire group of transactions is sent to disk. Thus as part
+of the commit the transaction was put into a global checkpoint group. Later
+this groups log records are forced to disk and then the entire group of
+transaction is safely committed also on all computers disk storage as well.
+
+This parameter states the interval between global checkpoints. The default
+time is 2000 milliseconds.
+
+<DT><code>[DB]TimeBetweenInactiveTransactionAbortCheck</code>
+<DD>
+Time-out handling is performed by checking each timer on each transaction
+every period of time in accordance with this parameter. Thus if this
+parameter is set to 1000 milliseconds, then every transaction will be
+checked for timeout once every second.
+
+The default for this parameter is 1000 milliseconds (1 second). 
+
+<DT><code>[DB]TransactionInactiveTimeout</code>
+<DD>
+If the transaction is currently not performing any queries but is waiting
+for further user input, this parameter states the maximum time that the
+  user can wait before the transaction is aborted.
+
+The default for this parameter is no timeout. For a real-time database
+that needs to control that no transaction keeps locks for a too long time
+this parameter should be set to a much smaller value. The unit is
+milliseconds.
+
+<DT><code>[DB]TransactionDeadlockDetectionTimeout</code>
+<DD>
+When a transactioon is involved in executing a query it waits for other
+nodes. If the other nodes doesn't respond it could depend on three things.
+First, the node could be dead, second the operation could have entered a
+lock queue and finally the node requested to perform the action could be
+heavily overloaded.  This timeout parameter states how long the
+transaction coordinator will wait until it aborts the transaction when
+waiting for query execution of another node.
+
+Thus this parameter is important both for node failure handling and for
+deadlock detection. Setting it too high would cause a non-desirable
+behavior at deadlocks and node failures.
+
+The default time out is 1200 milliseconds (1.2 seconds).
+
+<DT><code>[DB]NoOfDiskPagesToDiskAfterRestartTUP</code>
+<DD>
+When executing a local checkpoint the algorithm sends all data pages to
+disk during the local checkpoint.  Simply sending them there as quickly as
+possible will cause unnecessary load on both processors, networks, and
+disks. Thus to control the write speed this parameter specifies how many
+pages per 100 milliseconds is to be written. A page is here defined as 8KB.
+The unit this parameter is specified in is thus 80KB per
+second. So setting it to 20 means writing 1.6MB of data pages to disk
+per second during a local checkpoint. Also writing of UNDO log records for
+data pages is part of this sum. Writing of index pages (see IndexMemory to
+understand what index pages are used for) and their UNDO log records is
+handled by the parameter <code>NoOfDiskPagesToDiskAfterRestartACC</code>. This
+parameter handles the limitation of writes from the <code>DataMemory</code>.
+
+So this parameter specifies how quickly local checkpoints will be executed.
+This parameter is important in connection with <code>NoOfFragmentLogFiles</code>,
+<code>DataMemory</code>, <code>IndexMemory</code>.
+
+The default value is 40 (3.2MB of data pages per second). 
+
+<DT><code>[DB]NoOfDiskPagesToDiskAfterRestartACC</code>
+<DD>
+This parameter has the same unit as
+<code>NoOfDiskPagesToDiskAfterRestartTUP</code> but limits the speed of writing
+index pages from <code>IndexMemory</code>.
+
+The default value of this parameter is 20 (1.6MB per second).
+
+<DT><code>[DB]NoOfDiskPagesToDiskDuringRestartTUP</code>
+<DD>
+This parameter specifies the same things as
+<code>NoOfDiskPagesToDiskAfterRestartTUP</code> and
+<code>NoOfDiskPagesToDiskAfterRestartACC</code>, only it does it for local
+checkpoints executed in the node as part of a local checkpoint when the
+node is restarting. As part of all node restarts a local checkpoint is
+always performed. Since during a node restart it is possible to use a
+higher speed of writing to disk because fewer activities are performed in the
+node due to the restart phase.
+
+This parameter handles the <code>DataMemory</code> part.
+
+The default value is 40 (3.2MB per second).
+
+<DT><code>[DB]NoOfDiskPagesToDiskDuringRestartACC</code>
+<DD>
+During Restart for <code>IndexMemory</code> part of local checkpoint.
+
+The default value is 20 (1.6MB per second).
+
+<DT><code>[DB]ArbitrationTimeout</code>
+<DD>
+This parameter specifies the time that the storage node will wait for a
+response from the arbitrator when sending an arbitration message in the
+case of a split network.
+
+The default value is 1000 milliseconds (1 second).
+</DL>
+
+<P>
+A number of new configuration parameters were introduced in MySQL 4.1.5.
+These correspond to values that
+previously were compile time parameters. The main reason for this is to
+enable the advanced user to have more control of the size of the process
+and adjust various buffer sizes according to his needs.
+
+</P>
+<P>
+All of these buffers are used as front-ends to the file system when
+writing log records of various kinds to disk. If the node runs with
+Diskless then these parameters can most definitely be set to their
+minimum values because all disk writes are faked as okay by the file system
+abstraction layer in the <code>NDB</code> storage engine.
+
+</P>
+<DL COMPACT>
+
+<DT><code>[DB]UndoIndexBuffer</code>
+<DD>
+This buffer is used during local checkpoints. The <code>NDB</code> storage engine
+uses a recovery scheme based on a consistent checkpoint together with an
+operational REDO log. In order to produce a consistent checkpoint without
+blocking the entire system for writes, UNDO logging is done while performing
+the local checkpoint. The UNDO logging is only activated on one fragment of
+one table at a time. This optimization is possible because tables are
+entirely stored in main memory.
+
+This buffer is used for the updates on the primary key hash index. Inserts
+and deletes rearrange the hash index and the <code>NDB</code> storage engine writes
+UNDO log records that map all physical changes to an index page such that
+they can be undone at a system restart. It also logs all active insert
+operations at the start of a local checkpoint for the fragment.
+
+Reads and updates only set lock bits and update a header in the hash index
+entry. These changes are handled by the page write algorithm to ensure that
+these operations need no UNDO logging.
+
+This buffer is 2MB by default. The minimum value is 1MB. For most
+applications this is good enough. Applications doing extremely heavy inserts
+and deletes together with large transactions using large primary keys
+might need to extend this buffer.
+
+If this buffer is too small, the <code>NDB</code> storage engine issues the internal
+error code 677 which will be translated into "Index UNDO buffers overloaded".
+
+<DT><code>[DB]UndoDataBuffer</code>
+<DD>
+This buffer has exactly the same role as the <code>UndoIndexBuffer</code> but is
+used for the data part. This buffer is used during local checkpoint of a
+fragment and inserts, deletes, and updates use the buffer.
+
+Since these UNDO log entries tend to be bigger and more things are logged,
+the buffer is also bigger by default. It is set to 16MB by default.
+For some applications this might be too conservative and they might want
+to decrease this size, the minimum size is 1MB. It should be rare that
+applications need to increase this buffer size. If there is a need for this
+it is a good idea to check if the disks can actually handle the load that
+the update activity in the database causes. If they cannot then no size of
+this buffer will be big enough.
+
+If this buffer is too small and gets congested, the <code>NDB</code> storage engine 
+issues the internal error code 891 which will be translated to
+"Data UNDO buffers overloaded".
+
+<DT><code>[DB]RedoBuffer</code>
+<DD>
+All update activities also need to be logged. This enables a replay of these
+updates at system restart. The recovery algorithm uses a consistent
+checkpoint produced by a "fuzzy" checkpoint of the data together with UNDO
+logging of the pages. Then it applies the REDO log to play back all changes
+up until the time that will be restored in the system restart.
+
+This buffer is 8MB by default. The minimum value is 1MB.
+
+If this buffer is too small, the <code>NDB</code> storage engine issues the internal
+error code 1221 which will be translated into "REDO log buffers overloaded".
+</DL>
+
+<P>
+For cluster management, it is important to be able to control the
+amount of log messages sent to stdout for various event types. The possible
+events will be listed in this manual soon.  There are 16 levels possible
+from level 0 to level 15. Setting event reporting to level 15 means
+receiving all event reports of that category and setting it to 0 means
+getting no event reports in that category.
+
+</P>
+<P>
+The reason why most defaults are set to 0 and thus not causing any output
+to stdout is that the same message is sent to the cluster log in the
+management server. Only the startup message is by default generated to
+stdout.
+
+</P>
+<P>
+A similar set of levels can be set in management client to define what
+levels to record in the cluster log.
+
+</P>
+<DL COMPACT>
+
+<DT><code>[DB]LogLevelStartup</code>
+<DD>
+Events generated during startup of the process.
+
+The default level is 1.
+
+<DT><code>[DB]LogLevelShutdown</code>
+<DD>
+Events generated as part of graceful shutdown of a node.
+
+The default level is 0.
+
+<DT><code>[DB]LogLevelStatistic</code>
+<DD>
+Statistical events such as how many primary key reads, updates, inserts and
+many other statistical information of buffer usage, and so forth.
+
+The default level is 0.
+
+<DT><code>[DB]LogLevelCheckpoint</code>
+<DD>
+Events generated by local and global checkpoints.
+
+The default level is 0.
+
+<DT><code>[DB]LogLevelNodeRestart</code>
+<DD>
+Events generated during node restart.
+
+The default level is 0.
+
+<DT><code>[DB]LogLevelConnection</code>
+<DD>
+Events generated by connections between nodes in the cluster.
+
+The default level is 0.
+
+<DT><code>[DB]LogLevelError</code>
+<DD>
+Events generated by errors and warnings in the cluster. These are errors
+not causing a node failure but still considered worth reporting.
+
+The default level is 0.
+
+<DT><code>[DB]LogLevelInfo</code>
+<DD>
+Events generated for information about state of cluster and so forth.
+
+The default level is 0.
+</DL>
+
+<P>
+There is a set of parameters defining memory buffers that are set aside for
+online backup execution.
+
+</P>
+<DL COMPACT>
+
+<DT><code>[DB]BackupDataBufferSize</code>
+<DD>
+When executing a backup there are two buffers used for sending data to the
+disk. This buffer is used to fill in data recorded by scanning the tables
+in the node. When filling this to a certain level the pages are sent to
+disk. This level is specified by the <code>BackupWriteSize</code> parameter.
+When sending data to the disk, the backup can continue filling this buffer
+until it runs out of buffer space. When running out of buffer space, it will
+simply stop the scan and wait until some disk writes return and thus free
+up memory buffers to use for further scanning.
+
+The default value is 2MB.
+
+<DT><code>[DB]BackupLogBufferSize</code>
+<DD>
+This parameter has a similar role but instead used for writing a log of all
+writes to the tables during execution of the backup. The same principles
+apply for writing those pages as for <code>BackupDataBufferSize</code> except
+that when this part runs out of buffer space, it causes the backup to
+fail due to lack of backup buffers. Thus the size of this buffer must be
+big enough to handle the load caused by write activities during the backup
+execution.
+
+The default parameter should be big enough. Actually it is more likely that
+a backup failure is caused by a disk not able to write as quickly as it
+should. If the disk subsystem is not dimensioned for the write load caused
+by the applications this will create a cluster which will have great
+difficulties to perform the desired actions.
+
+It is important to dimension the nodes in such a manner that the processors
+becomes the bottleneck rather than the disks or the network connections.
+
+The default value is 2MB.
+
+<DT><code>[DB]BackupMemory</code>
+<DD>
+This parameter is simply the sum of the two previous, the
+<code>BackupDataBufferSize</code> and <code>BackupLogBufferSize</code>.
+
+The default value is 4MB.
+
+<DT><code>[DB]BackupWriteSize</code>
+<DD>
+This parameter specifies the size of the write messages to disk for the log
+and data buffer used for backups.
+
+The default value is 32KB.
+</DL>
+
+
+
+<H4><A NAME="MySQL_Cluster_API_Definition" HREF="manual_toc.html#MySQL_Cluster_API_Definition">16.3.4.6  Defining the MySQL Servers for a MySQL Cluster</A></H4>
+
+<P>
+The <code>[API]</code> section (with its alias <code>[MYSQLD]</code>) defines the
+behavior of the MySQL server. No parameter is mandatory. If no computer or
+host name is provided, then any host can use this API node.
+
+</P>
+<DL COMPACT>
+
+<DT><code>[API]Id</code>
+<DD>
+This identity is the node ID used as the address of the node in all cluster
+internal messages. This is an integer between 1 and 63. Each node in the
+cluster must have a unique identity.
+
+<DT><code>[API]ExecuteOnComputer</code>
+<DD>
+This is referring to one of the computers defined in the computer section.
+
+<DT><code>[API]ArbitrationRank</code>
+<DD>
+This parameter is used to define which nodes can act as an arbitrator. MGM
+nodes and API nodes can be arbitrators. 0 means it isn't used as
+arbitrator, 1 high priority and 2 low priority. A normal configuration uses
+the management server as arbitrator setting the ArbitrationRank to 1 (which
+is the default) and setting all APIs to 0.
+
+<DT><code>[API]ArbitrationDelay</code>
+<DD>
+If setting this to anything else than 0 it means that the management server
+will delay responses to the arbitration requests. Default is no delay and
+this should not be necessary to change.
+<DT><code>[API]BatchByteSize</code>
+<DD>
+For queries that get translated into full table scans or range scans on
+indexes, it is important for best performance to fetch records in properly
+sized batches. It is possible to set the proper size both in terms of
+number of records and in terms of bytes. Real batch size will be limited
+by both parameters.
+
+Performance of queries can vary more than 40% due to how this parameter is
+set. In future releases, the MySQL Server will make educated guesses on
+what to set these parameters to, based on the query type.
+
+This parameter is measured in bytes and is by default equal to 32KB.
+<DT><code>[API]BatchSize</code>
+<DD>
+This parameter is measured in number of records and is by default set to
+64. The maximum size is 992.
+<DT><code>[API]MaxScanBatchSize</code>
+<DD>
+The batch size is the size of each batch sent from each storage node. Most
+scans are performed in parallel so to protect the MySQL Server from getting
+too much data from many nodes in parallel, this parameter sets a limit to
+the total batch size over all nodes.
+
+The default value of this parameter is set to 256KB. Its maximum size
+is 16MB.
+</DL>
+
+
+
+<H4><A NAME="MySQL_Cluster_TCP_Definition" HREF="manual_toc.html#MySQL_Cluster_TCP_Definition">16.3.4.7  MySQL Cluster TCP/IP Connections</A></H4>
+
+<P>
+TCP/IP is the default transport mechanism for establishing connections in
+MySQL Cluster. It
+is actually not necessary to define any connection because there will be a
+one connection setup between each of the storage nodes, between each
+storage node, and all MySQL server nodes and between each storage node and
+the management server.
+
+</P>
+<P>
+It is only necessary to define a connection if it is necessary to change
+the default values of the connection.  In that case it is necessary to
+define at least <code>NodeId1</code>, <code>NodeId2</code> and the parameters to
+change.
+
+</P>
+<P>
+It is also possible to change the default values by setting the parameters
+in the <code>[TCP DEFAULT]</code> section.
+
+</P>
+<DL COMPACT>
+
+<DT><code>[TCP]NodeId1</code>
+<DD>
+<DT><code>[TCP]NodeId2</code>
+<DD>
+To identify a connection between two nodes it is necessary to provide the
+node identity for both of them in <code>NodeId1</code> and <code>NodeId2</code>.
+
+<DT><code>[TCP]SendBufferMemory</code>
+<DD>
+TCP transporters use a buffer all messages before performing the send call
+to the operating system. When this buffer reaches 64KB it sends the
+buffer, the buffer is also sent when a round of messages have been
+executed. To handle temporary overload situations it is also possible to
+define a bigger send buffer.  The default size of the send buffer is 256KB.
+
+<DT><code>[TCP]SendSignalId</code>
+<DD>
+To be able to retrace a distributed message diagram it is necessary to
+identify each message with an identity. By setting this parameter to Y
+these message identities are also transported over the network.  This
+feature is not enabled by default.
+
+<DT><code>[TCP]Checksum</code>
+<DD>
+This parameter is also a Y/N parameter which is not enabled by default.
+When enabled all messages are checksummed before put into the send buffer.
+This feature enables control that messages are not corrupted while waiting
+in the send buffer. It is also a double check that the transport mechanism
+haven't corrupted the data.
+
+<DT><code>[TCP]PortNumber</code>
+<DD>
+This is the port number to use for listening to connections from other
+nodes. This port number should be specified in the <code>[TCP DEFAULT]</code> section
+normally.
+
+This parameter should no longer be used. Use the parameter ServerPort on
+storage nodes instead.
+
+<DT><code>[TCP]ReceiveBufferMemory</code>
+<DD>
+This parameter specifies the size of the buffer used when receiving data
+from the TCP/IP socket. There is seldom any need to change this parameter
+from its default value of 64KB. One possible reason could be to save memory.
+</DL>
+
+
+
+<H4><A NAME="MySQL_Cluster_SHM_Definition" HREF="manual_toc.html#MySQL_Cluster_SHM_Definition">16.3.4.8  MySQL Cluster Shared-Memory Connections</A></H4>
+
+<P>
+Shared memory segments are currently supported only for special builds of
+MySQL Cluster using the <code>configure</code> parameter <code>--with-ndb-shm</code>. Its
+implementation will most likely change. When defining shared memory as the
+connection method it is necessary to define at least <code>NodeId1</code>,
+<code>NodeId2</code> and <code>ShmKey</code>. All other parameters have default values
+that will work out fine in most cases.
+
+</P>
+<DL COMPACT>
+
+<DT><code>[SHM]NodeId1</code>
+<DD>
+<DT><code>[SHM]NodeId2</code>
+<DD>
+To identify a connection between two nodes it is necessary to provide the
+node identity for both of them in <code>NodeId1</code> and <code>NodeId2</code>.
+
+<DT><code>[SHM]ShmKey</code>
+<DD>
+When setting up shared memory segments an identifier is used to uniquely
+identify the shared memory segment to use for the communication. This is an
+integer which does not have a default value.
+
+<DT><code>[SHM]ShmSize</code>
+<DD>
+Each connection has a shared memory segment where messages between the
+nodes are put by the sender and read by the reader. This segment has a size
+defined by this parameter. Default value is 1MB.
+
+<DT><code>[SHM]SendSignalId</code>
+<DD>
+To be able to retrace a distributed message diagram it is necessary to
+identify each message with an identity. By setting this parameter to Y
+these message identities are also transported over the network.  This
+feature is not enabled by default.
+
+<DT><code>[SHM]Checksum</code>
+<DD>
+This parameter is also a Y/N parameter which is not enabled by default.
+When enabled all messages are checksummed before put into the send buffer.
+This feature enables control that messages are not corrupted while waiting
+in the send buffer. It is also a double check that the transport mechanism
+haven't corrupted the data.
+</DL>
+
+
+
+<H4><A NAME="MySQL_Cluster_SCI_Definition" HREF="manual_toc.html#MySQL_Cluster_SCI_Definition">16.3.4.9  MySQL Cluster SCI Transport Connections</A></H4>
+
+<P>
+SCI Transporters as connection between nodes in the MySQL Cluster is only
+supported for special builds of MySQL Cluster using the <code>configure</code>
+parameter <code>--with-ndb-sci=/your/path/to/SCI</code>. The path should point
+to a directory that contains at least a lib and a include directory where
+SISCI libraries and header files are provided.
+
+</P>
+<P>
+It is strongly recommended to only use SCI Transporters for communication
+between ndbd processes. Also using SCI Transporters will mean that the
+ndbd process will never sleep so use SCI Transporters only for machines
+with at least 2 CPU's which are dedicated for use by ndbd process(es). There
+should be at least 1 CPU per ndbd process in this case and in addition at 
+least one more is needed to also handle OS activities.
+
+</P>
+<DL COMPACT>
+
+<DT><code>[SCI]NodeId1</code>
+<DD>
+<DT><code>[SCI]NodeId2</code>
+<DD>
+To identify a connection between two nodes it is necessary to provide the
+node identity for both of them in <code>NodeId1</code> and <code>NodeId2</code>.
+
+<DT><code>[SCI]Host1SciId0</code>
+<DD>
+This identifies the SCI node id on the first node identified by NodeId1.
+
+<DT><code>[SCI]Host1SciId1</code>
+<DD>
+It is possible to set-up SCI Transporters for fail-over between two SCI
+cards which then should use separate networks between the nodes. This
+identifies the node id and the second SCI card to be used on the first
+node.
+
+<DT><code>[SCI]Host2SciId0</code>
+<DD>
+This identifies the SCI node id on the second node identified by NodeId2.
+
+<DT><code>[SCI]Host2SciId1</code>
+<DD>
+It is possible to set-up SCI Transporters for fail-over between two SCI
+cards which then should use separate networks between the nodes. This
+identifies the node id and the second SCI card to be used on the second
+node.
+
+<DT><code>[SCI]SharedBufferSize</code>
+<DD>
+Each SCI transporter has a shared memory segment between the two nodes. With
+this segment set to the default 1 MB most applications should be ok. Smaller
+sizes such as 256 kB has problems when performing many parallel inserts.
+If the buffer is too small it can cause crashes of the ndbd process.
+
+<DT><code>[SCI]SendLimit</code>
+<DD>
+A small buffer in front of the SCI media buffers up messages before sending
+them over the SCI network. By default this is set to 8kB. Most benchmark
+measurements shows that tops are reached at 64 kB but 16kB reaches within a
+few percent of the performance and for all MySQL Cluster benchmarks it was
+no measurable difference in increasing it beyond 8kB.
+
+<DT><code>[SCI]SendSignalId</code>
+<DD>
+To be able to retrace a distributed message diagram it is necessary to
+identify each message with an identity. By setting this parameter to Y
+these message identities are also transported over the network.  This
+feature is not enabled by default.
+
+<DT><code>[SCI]Checksum</code>
+<DD>
+This parameter is also a Y/N parameter which is not enabled by default.
+When enabled all messages are checksummed before put into the send buffer.
+This feature enables control that messages are not corrupted while waiting
+in the send buffer. It is also a double check that the transport mechanism
+haven't corrupted the data.
+</DL>
+
+
+
+<H2><A NAME="MySQL_Cluster_Process_Management" HREF="manual_toc.html#MySQL_Cluster_Process_Management">16.4  Process Management in MySQL Cluster</A></H2>
+
+<P>
+There are four processes that are important to know about when using MySQL
+Cluster. We will cover how to work with those processes, which options to
+use when starting and so forth.
+
+</P>
+
+
+
+<H3><A NAME="mysqld_process" HREF="manual_toc.html#mysqld_process">16.4.1  MySQL Server Process Usage for MySQL Cluster</A></H3>
+
+<P>
+<code>mysqld</code> is the traditional MySQL server process. To be used with
+MySQL Cluster it needs to be built with support for the NDB Cluster storage
+engine. If the <code>mysqld</code> binary has been built in such a manner, the
+NDB Cluster storage engine is still disabled by default.
+
+</P>
+<P>
+To enable the NDB Cluster storage engine there are two ways. Either use
+<code>--ndbcluster</code> as a startup option when starting <code>mysqld</code> or
+insert a line with <code>ndbcluster</code> in the <code>[mysqld]</code> section of your
+<tt>`my.cnf'</tt> file.
+An easy way to verify that your server runs with support for the
+<code>NDB Cluster</code> storage engine is to issue the command
+<code>SHOW ENGINES</code> from a <code>mysql</code> client.
+You should see <code>YES</code> for the row listing <code>NDBCLUSTER</code>.
+If you see <code>NO</code>, you are not running a <code>mysqld</code> that is compiled
+with <code>NDB Cluster</code> support enabled. If you see <code>DISABLED</code>, then you
+need to enable it in the <tt>`my.cnf'</tt> configuration file.
+
+</P>
+<P>
+The MySQL server needs to know how to get the configuration of the cluster.
+To access this configuration, it needs to know three things:
+
+</P>
+
+<UL>
+<LI>
+
+Its own node ID in the cluster.
+<LI>
+
+The hostname (or IP address) where the management server resides.
+<LI>
+
+The port on which it can connect to the management server.
+</UL>
+
+<P>
+The node ID can be skipped from MySQL 4.1.5 on, because a node ID can be
+dynamically allocated.
+
+</P>
+<P>
+The <code>mysqld</code> parameter <code>ndb-connectstring</code> is used to specify the
+connectstring either when starting <code>mysqld</code> or in <tt>`my.cnf'</tt>.
+See also section <A HREF="manual_NDBCluster.html#MySQL_Cluster_Connectstring">16.3.4.2  The MySQL Cluster <code>connectstring</code></A> for more info on connectstrings.
+
+</P>
+
+<PRE>
+shell&#62; mysqld --ndb-connectstring=ndb_mgmd.mysql.com:1186
+</PRE>
+
+<P>
+<code>ndb_mgmd.mysql.com</code> is the host where the management server resides,
+and it is listening to port 1186.
+
+</P>
+<P>
+With this setup the MySQL server will be a full citizen of MySQL Cluster
+and will be fully aware of all storage nodes in the cluster and their
+status. It will setup connection to all storage nodes and will be
+able to use any storage node as a transaction coordinator and to
+access their data for reading and updating.
+
+</P>
+
+
+
+<H3><A NAME="ndbd_process" HREF="manual_toc.html#ndbd_process">16.4.2  <code>ndbd</code>, the Storage Engine Node Process</A></H3>
+
+<P>
+<code>ndbd</code> is the process that is used to handle all the data in the
+tables using the NDB Cluster storage engine. This is the process that
+contains all the logic of distributed transaction handling, node recovery,
+checkpointing to disk, online backup, and lots of other functionality.
+
+</P>
+<P>
+In a cluster there is a set of <code>ndbd</code> processes cooperating in
+handling the data. These processes can execute on the same computer or on
+different computers, in a completely configurable manner.
+
+</P>
+<P>
+Before MySQL 4.1.5, <code>ndbd</code> process should start from a separate
+directory. The reason for this was that <code>ndbd</code> generates a set of log
+files in its starting directory.
+
+</P>
+<P>
+In MySQL 4.1.5, this was changed such that the files are placed in the
+directory specified by <code>DataDir</code> in the configuration file. Thus
+<code>ndbd</code> can be started from anywhere.
+
+</P>
+<P>
+These log files are (the 2 is the node ID):
+
+</P>
+
+<UL>
+<LI>
+
+<var>ndb_2_error.log</var> (was <tt>`error.log'</tt> in version 4.1.3) is a file that
+contains information of all the crashes which the <code>ndbd</code> process has
+encountered and a smaller error string and reference to a trace file for
+this crash. An entry could like this:
+
+
+<PRE>
+Date/Time: Saturday 31 January 2004 - 00:20:01
+Type of error: error
+Message: Internal program error (failed ndbrequire)
+Fault ID: 2341
+Problem data: DbtupFixAlloc.cpp
+Object of reference: DBTUP (Line: 173)
+ProgramName: NDB Kernel
+ProcessID: 14909
+TraceFile: ndb_2_trace.log.2
+***EOM***
+</PRE>
+
+<LI>
+
+<tt>`ndb_2_trace.log.1'</tt> (was <tt>`NDB_TraceFile_1.trace'</tt> in version 4.1.3) is a
+trace file describing exactly what
+happened before the error occurred. This information is useful for the
+MySQL Cluster team when analysing any bugs occurring in MySQL Cluster. The
+information in this file will be described in the section <code>MySQL
+Cluster Troubleshooting</code>. There can be a configurable number of those trace
+files in the directory before old files are overwritten. 1 in this context
+is simply the number of the trace file.
+
+<LI>
+
+<tt>`ndb_2_trace.log.next'</tt> (was <tt>`NextTraceFileNo.log'</tt> in version
+4.1.3) is the file that keeps track of what the next trace file number
+is to be.
+
+<LI>
+
+<tt>`ndb_2_out.log'</tt> is the file which
+contains any data printed by the <code>ndbd</code> process. 2 in this context
+is the node ID. (this file only applies if <code>ndbd</code> is started in dameon mode
+which is default from 4.1.5, was <tt>`node2.out'</tt> in version 4.1.3)
+
+<LI>
+
+<tt>`ndb_2.pid'</tt> is a file containing
+the process id of the ndbd when started as a daemon (default from 4.1.5 and
+named <tt>`node2.pid'</tt> in version 4.1.3). It also functions as a lock file to
+avoid the starting of nodes with the same id.
+
+<LI>
+
+<tt>`ndb_2_signal.log'</tt> (was <tt>`Signal.log'</tt> in version 4.1.3) is a file
+which is only used in debug versions of <code>ndbd</code> where it is possible to
+trace all incoming, outgoing and internal messages with their data in the
+<code>ndbd</code> process.
+
+</UL>
+
+<P>
+It is recommended to not use a directory mounted through NFS because in some
+environments that can cause problems with the lock on the pid-file remaining
+even after the process has stopped.
+
+</P>
+<P>
+Also when starting the <code>ndbd</code> process it may be necessary to specify
+the hostname of the management server and the port it is listening to,
+optionally one may specify node ID the process is to use, 
+see section <A HREF="manual_NDBCluster.html#MySQL_Cluster_Connectstring">16.3.4.2  The MySQL Cluster <code>connectstring</code></A>.
+
+</P>
+
+<PRE>
+shell&#62; ndbd --connect-string="nodeid=2;host=ndb_mgmd.mysql.com:1186"
+</PRE>
+
+<P>
+When <code>ndbd</code> starts it will actually start two processes. The starting
+process is called the "angel" and its only job is to discover when the
+execution process has completed, and then restart the <code>ndbd</code> process if
+configured to do so.  Thus if one attempts to kill <code>ndbd</code> through the
+<code>kill</code> command in Unix, it is necessary to kill both processes.  A
+more proper way to handle the stopping of <code>ndbd</code> processes is to use
+the management client and stop the process from there.
+
+</P>
+<P>
+The execution process uses one thread for all activities in reading,
+writing, and scanning data and all other activities. This thread is designed
+with asynchronous programming so it can easily handle thousands of
+concurrent activites. In addition there is a watch-dog thread supervising
+the execution thread to ensure it doesn't stop in an eternal loop or other
+problem. There is a pool of threads handling file I/O. Each thread can
+handle one open file. In addition threads can be used for connection
+activities of the transporters in the <code>ndbd</code> process. Thus in a system
+that performs a large number of activities including update activities the
+<code>ndbd</code> process will consume up to about 2 CPUs if allowed to. Thus in
+a large SMP box with many CPUs it is recommended to use several
+<code>ndbd</code> processes which are configured to be part of different node
+groups.
+
+</P>
+
+
+<H3><A NAME="ndb_mgmd_process" HREF="manual_toc.html#ndb_mgmd_process">16.4.3  <code>ndb_mgmd</code>, the Management Server Process</A></H3>
+
+<P>
+The management server is the process that reads the configuration file of
+the cluster and distributes this information to all nodes in the cluster
+requesting it. It also maintains the log of cluster activities.
+Management clients can connect to the management server and use commands to
+check status of the cluster in various aspects.
+
+</P>
+<P>
+As of MySQL 4.1.5, it is no longer necessary to specify a connectstring 
+when starting the management server. However, if you are using several 
+management servers, a connectstring should be provided and each node in 
+the cluster should specify its nodeid explicitly.
+
+</P>
+<P>
+The following files are created or used by <code>ndb_mgmd</code> in its starting
+directory of <code>ndb_mgmd</code>. From MySQL 4.1.5, the log and PID files will
+be placed in the <code>DataDir</code> specified in the configuration file:
+
+</P>
+
+<UL>
+<LI>
+
+<tt>`config.ini'</tt> is the configuration file of the cluster. This is created
+by the user and read by the management server. How to write this file is
+described in the section <code>MySQL Cluster Configuration</code>.
+
+<LI>
+
+<tt>`ndb_1_cluster.log'</tt> (was <tt>`cluster.log'</tt> in version 4.1.3) is the
+file where events in the cluster are reported.
+Examples of events are checkpoints started and completed, node failures and
+nodes starting, levels of memory usage passed and so forth. The events
+reported are described in the section section <A HREF="manual_NDBCluster.html#MySQL_Cluster_Management">16.5  Management of MySQL Cluster</A>.
+
+<LI>
+
+<tt>`ndb_1_out.log'</tt> (was <tt>`node1.out'</tt> in version 4.1.3) is the file used
+for stdout and stderr when executing the
+management server as a daemon process. 1 in this context is the node ID.
+
+<LI>
+
+<tt>`ndb_1.pid'</tt> (was <tt>`node1.pid'</tt> in version 4.1.3) is the PID file used
+when executing the management server as a daemon process. 1 in this context
+is the node ID.
+
+<LI>
+
+<tt>`ndb_1_cluster.log.1'</tt> (was <tt>`cluster.log.1'</tt> in version 4.1.3) when
+the cluster log becomes bigger than one million
+bytes then the file is renamed to this name where 1 is the number
+of the cluster log file, so if 1, 2, and 3 already exists the next will be
+having the number 4 instead.
+</UL>
+
+
+
+<H3><A NAME="ndb_mgm_process" HREF="manual_toc.html#ndb_mgm_process">16.4.4  <code>ndb_mgm</code>, the Management Client Process</A></H3>
+
+<P>
+The final important process to know about is the management client. This
+process is not needed to run the cluster. Its value lies in its ability to
+check status of the cluster, start backups, and perform other management
+activities.  It does so by providing access to a set of commands.
+
+</P>
+<P>
+Actually the management client is using a C API that is used to access the
+management server so for advanced users it is also possible to program
+dedicated management processes which can do similar things as the
+management client can do.
+
+</P>
+<P>
+When starting the management client, it is necessary to state the hostname
+and port of the management server as in the example below. The default is
+localhost as host and port number 1186 (was 2200 prior to version 4.1.8).
+
+</P>
+
+<PRE>
+shell&#62; ndb_mgm localhost 1186
+</PRE>
+
+
+
+<H3><A NAME="MySQL_Cluster_Command_Options" HREF="manual_toc.html#MySQL_Cluster_Command_Options">16.4.5  Command Options for MySQL Cluster Processes</A></H3>
+
+<P>
+All MySQL Cluster executables (except <code>mysqld</code>) takes the 
+following options as of 4.1.8. If you're running an earlier version 
+please read carefully, as we have made changes in some of these 
+switches in order to make them consistent between the different 
+executables and with <code>mysqld</code>. (For example: <code>-V</code> was 
+<code>-v</code> in earlier versions.) Note also that you can use the 
+<code>-?</code> option to see what is supported in your version.
+
+</P>
+<DL COMPACT>
+
+<DT><code>-?, --usage, --help</code>
+<DD>
+Prints a short description of the available command options.
+
+<DT><code>-V, --version</code>
+<DD>
+Prints the version number of the <code>ndbd</code> process. The version number is
+the MySQL Cluster version number. It is important because at
+startup the MySQL Cluster processes verifies that the versions of the
+processes in the cluster can co-exist in the cluster. It is also important
+for online software upgrade of MySQL Cluster (see section
+<code>Software Upgrade of MySQL Cluster</code>).
+
+<DT><code>-c <var>connect_string</var> (not <code>ndb_mgmd</code>), --connect-string <var>connect_string</var></code>
+<DD>
+Set the connect string to the management server as a command option.
+(for backwards compatability reasons the <code>ndb_mgmd</code> does not take 
+the -c option until 5.0, as it currently specifies the config file). 
+Available with <code>ndb_mgm</code> from 4.1.8.
+
+
+<PRE>
+shell&#62; ndbd --connect-string="nodeid=2;host=ndb_mgmd.mysql.com:1186"
+</PRE>
+
+<DT><code>--debug[=<var>options</var>]</code>
+<DD>
+This can only be used for versions compiled with debug information. It is
+used to enable printouts from debug calls in the same manner as for the
+<code>mysqld</code> process.
+
+</DL>
+
+
+
+<H4><A NAME="new_mysqld_command_options" HREF="manual_toc.html#new_mysqld_command_options">16.4.5.1  MySQL Cluster-Related Command Options for <code>mysqld</code></A></H4>
+
+<DL COMPACT>
+
+<DT><code>--ndbcluster</code>
+<DD>
+If the binary includes support for the <code>NDB Cluster</code> storage engine the
+default disabling of support for the <code>NDB</code> storage engine can be
+overruled by using this option. Using the <code>NDB Cluster</code> storage engine
+is necessary for using MySQL Cluster.
+
+<DT><code>--skip-ndbcluster</code>
+<DD>
+Disable the <code>NDB Cluster</code> storage engine. This is disabled by default
+for binaries where it is included. So this option only applies if the
+server was configured to use the <code>NDB Cluster</code> storage engine.
+
+<DT><code>--ndb-connectstring=<var>connect_string</var></code>
+<DD>
+When using the <code>NDB</code> storage engine, it is possible to point out the
+management server that distributes the cluster configuration by setting the
+connect string option.
+</DL>
+
+
+
+<H4><A NAME="ndbd_command_options" HREF="manual_toc.html#ndbd_command_options">16.4.5.2  Command Options for <code>ndbd</code></A></H4>
+
+<P>
+For common options see section <A HREF="manual_NDBCluster.html#MySQL_Cluster_Command_Options">16.4.5  Command Options for MySQL Cluster Processes</A>.
+
+</P>
+<DL COMPACT>
+
+<DT><code>-d, --daemon</code>
+<DD>
+Instructs <code>ndbd</code> to execute as a daemon process. From MySQL 4.1.5 on, this
+is the default behavior.
+
+<DT><code>--nodaemon</code>
+<DD>
+Instructs <code>ndbd</code> not to start as a daemon process. Useful when
+<code>ndbd</code> is debugged and one wants printouts on the screen.
+
+<DT><code>--initial</code>
+<DD>
+Instructs <code>ndbd</code> to perform an initial start. An initial start will
+erase any files created by earlier <code>ndbd</code> instances for recovery. It
+will also recreate recovery log files which on some operating systems can
+take a substantial amount of time.
+
+An initial start is only to be used at the very first start of the
+<code>ndbd</code> process. It removes all files from the file system and
+creates all REDO log files. When performing a software upgrade which has
+changed the file contents on any files it is also necessary to use this
+option when restarting the node with a new software version of
+<code>ndbd</code>. Finally it could also be used as a final resort if for some
+reason the node restart or system restart doesn't work. In this case be
+aware that destroying the contents of the file system means that this node
+can no longer be used to restore data.
+
+This option does not affect any backup files created.
+
+The previous possibility to use <code>-i</code> for this option was removed to
+ensure that this option is not used by mistake.
+
+<DT><code>--nostart</code>
+<DD>
+Instructs <code>ndbd</code> not to automatically start. <code>ndbd</code> will connect
+to the management server and get the configuration and initialise
+communication objects. It will not start the execution engine until
+requested to do so by the management server. The management server can
+request by command issued by the management client.
+
+</DL>
+
+
+
+<H4><A NAME="ndb_mgmd_command_options" HREF="manual_toc.html#ndb_mgmd_command_options">16.4.5.3  Command Options for <code>ndb_mgmd</code></A></H4>
+
+<P>
+For common options see section <A HREF="manual_NDBCluster.html#MySQL_Cluster_Command_Options">16.4.5  Command Options for MySQL Cluster Processes</A>.
+
+</P>
+<DL COMPACT>
+
+<DT><code>-f <var>filename</var> (from 4.1.8), --config-file=<var>filename</var>, -c <var>filename</var> (obsolete from 5.0)</code>
+<DD>
+Instructs the management server which file to use as configuration file.
+This option must be specified. The file name defaults to <code>config.ini</code>.
+
+<DT><code>-d, --daemon</code>
+<DD>
+Instructs <code>ndb_mgmd</code> to start as a daemon process. This is the
+default behavior.
+
+<DT><code>-nodaemon</code>
+<DD>
+Instructs the management server not to start as a daemon process.
+
+</DL>
+
+
+
+<H4><A NAME="ndb_mgm_command_options" HREF="manual_toc.html#ndb_mgm_command_options">16.4.5.4  Command Options for <code>ndb_mgm</code></A></H4>
+
+<P>
+For common options see section <A HREF="manual_NDBCluster.html#MySQL_Cluster_Command_Options">16.4.5  Command Options for MySQL Cluster Processes</A>.
+
+</P>
+<DL COMPACT>
+
+<DT><code>[<var>host_name</var> [<var>port_num</var>]]</code>
+<DD>
+To start the management client it is necessary to specify where the
+management server resides. This means specifying the hostname and the port.
+The default hostname is <code>localhost</code> and the default port is 1186 
+(was 2200 prior to version 4.1.8).
+
+<DT><code>--try-reconnect=<var>number</var></code>
+<DD>
+If the connection to the management server is broken it is possible to
+perform only a specified amount of retries before reporting a fault code to
+the user. The default is that it keeps retrying every 5 seconds until it
+succeeds.
+
+</DL>
+
+
+
+<H2><A NAME="MySQL_Cluster_Management" HREF="manual_toc.html#MySQL_Cluster_Management">16.5  Management of MySQL Cluster</A></H2>
+
+<P>
+Managing a MySQL Cluster involves a number of activities.
+The first activity is to configure and startup MySQL Cluster.
+This is covered by the sections section <A HREF="manual_NDBCluster.html#MySQL_Cluster_Configuration">16.3  MySQL Cluster Configuration</A>
+and section <A HREF="manual_NDBCluster.html#MySQL_Cluster_Process_Management">16.4  Process Management in MySQL Cluster</A>.
+This section covers how to manage a running MySQL Cluster.
+
+</P>
+<P>
+There are essentially two ways of actively managing a running MySQL Cluster.
+The first is by commands entered into the management client where status of
+cluster can be checked, log levels changed, backups started and stopped and
+nodes can be stopped and started. The second method is to study the output
+in the cluster log. The cluster log is directed towards the
+<tt>`ndb_2_cluster.log'</tt> in the <code>DataDir</code> directory of the management
+server.  The cluster log contains event reports generated from the
+<code>ndbd</code> processes in the cluster. It is also possible to send the
+cluster log entries to a Unix system log.
+
+</P>
+
+
+
+<H3><A NAME="mgm_client_commands" HREF="manual_toc.html#mgm_client_commands">16.5.1  Commands in the Management Client</A></H3>
+
+<P>
+In addition to the central configuration file, the cluster
+may also be controlled through a command line interface. The command
+line interface is available through a separate management client process.
+This is the main administrative interface to a running cluster.
+
+</P>
+<P>
+The management client has the following basic commands.
+Below, <code>&#60;id&#62;</code> denotes either a database node id (e.g. 21) or the
+keyword <code>ALL</code> that indicates that the command should be applied
+to all database nodes in the cluster.
+
+</P>
+<DL COMPACT>
+
+<DT><code>HELP</code>
+<DD>
+Prints information on all available commands.
+<DT><code>SHOW</code>
+<DD>
+Prints information on the status of the cluster.
+<DT><code>&#60;id&#62; START</code>
+<DD>
+Start a database node identified with <code>&#60;id&#62;</code> or all database nodes.
+<DT><code>&#60;id&#62; STOP</code>
+<DD>
+Stop a database node identified with <code>&#60;id&#62;</code> or all database nodes.
+<DT><code>&#60;id&#62; RESTART [-N] [-I]</code>
+<DD>
+Restart a database node identified with <code>&#60;id&#62;</code> or all database nodes.
+<DT><code>&#60;id&#62; STATUS</code>
+<DD>
+Displays status information for database node identified with <code>&#60;id&#62;</code>
+(or <code>ALL</code> database nodes).
+<DT><code>ENTER SINGLE USER MODE &#60;id&#62;</code>
+<DD>
+Enters single user mode where only the API with node <code>&#60;id&#62;</code> is
+allowed to access the database system.
+<DT><code>EXIT SINGLE USER MODE</code>
+<DD>
+Exists single user mode allowing all APIs to access the database system.
+<DT><code>QUIT</code>
+<DD>
+Terminates the management client.
+<DT><code>SHUTDOWN</code>
+<DD>
+Shuts down all cluster nodes (except mysql servers) and exits.
+</DL>
+
+<P>
+Commands for the event logs are given in the next section and commands
+for backup and restore are given in a separate section on these topics.
+
+</P>
+
+
+
+<H3><A NAME="MySQL_Cluster_Event_Reports" HREF="manual_toc.html#MySQL_Cluster_Event_Reports">16.5.2  Event Reports Generated in MySQL Cluster</A></H3>
+
+<P>
+MySQL Cluster has two event logs, the cluster log and the node log.
+
+</P>
+
+<UL>
+<LI>
+
+The cluster log is a log of the whole cluster and this log can have
+multiple destinations (file, management server console window or
+syslog).
+<LI>
+
+The node log is a log that is local to each database node and is
+written to the console window of the database node. The two logs can
+be set to log different subsets of the list of events.
+</UL>
+
+<P>
+Note: The cluster log is the recommended log.  The node log is only
+intended to be used during application development or for debugging
+application code.
+
+</P>
+<P>
+Each reportable event has the following properties:
+
+<UL>
+<LI>
+
+Category (STARTUP, SHUTDOWN, STATISTICS, CHECKPOINT, NODERESTART,
+CONNECTION, ERROR, INFO)
+<LI>
+
+Priority (1-15 where 1 - Most important, 15 - Least important)
+<LI>
+
+Severity (ALERT, CRITICAL, ERROR, WARNING, INFO, DEBUG)
+</UL>
+
+<P>
+The two logs (the cluster log and the node log) can be filtered on
+these properties.
+
+</P>
+
+
+
+<H4><A NAME="MySQL_Cluster_Logging_Management_Commands" HREF="manual_toc.html#MySQL_Cluster_Logging_Management_Commands">16.5.2.1  Logging Management Commands</A></H4>
+
+<P>
+The following management commands are related to the cluster log:
+
+</P>
+<DL COMPACT>
+
+<DT><code>CLUSTERLOG ON</code>
+<DD>
+Turn cluster log on.
+<DT><code>CLUSTERLOG OFF</code>
+<DD>
+Turn cluster log off.
+<DT><code>CLUSTERLOG INFO</code>
+<DD>
+Information about cluster log settings.
+<DT><code>&#60;id&#62; CLUSTERLOG &#60;category&#62;=&#60;threshold&#62;</code>
+<DD>
+Log category events with priority less than or equal to threshold in
+the cluster log.
+<DT><code>CLUSTERLOG FILTER &#60;severity&#62;</code>
+<DD>
+Toggles cluster logging of the specified severity type on/off.
+</DL>
+
+<P>
+The following table describes the default setting (for all database
+nodes) of the cluster log category threshold.  If an event has a
+priority with a value lower than or equal to the priority threshold,
+then it is reported in the cluster log.
+
+</P>
+<P>
+Note that the events are reported per database node and that the
+thresholds can be set differently on different nodes.
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Category</strong> </TD><TD> <strong>Default threshold (All database nodes)</strong>
+</TD></TR>
+<TR><TD>STARTUP </TD><TD> 7
+</TD></TR>
+<TR><TD>SHUTDOWN </TD><TD> 7
+</TD></TR>
+<TR><TD>STATISTICS </TD><TD> 7
+</TD></TR>
+<TR><TD>CHECKPOINT </TD><TD> 7
+</TD></TR>
+<TR><TD>NODERESTART </TD><TD> 7
+</TD></TR>
+<TR><TD>CONNECTION </TD><TD> 7
+</TD></TR>
+<TR><TD>ERROR </TD><TD> 15
+</TD></TR>
+<TR><TD>INFO </TD><TD> 7
+</TD></TR>
+</TABLE>
+
+<P>
+The threshold is used to filter events within each category.
+For example: a <code>STARTUP</code> event with a priority of 3 is never sent
+unless the threshold for <code>STARTUP</code> is changed to 3 or lower.
+Only events with priority 3 or lower are sent if the threshold is 3.
+The event severities are (corresponds to UNIX syslog levels):
+
+</P>
+<TABLE BORDER>
+<TR><TD>1 </TD><TD> ALERT </TD><TD> A condition that should be corrected immediately, such as a corrupted system database
+</TD></TR>
+<TR><TD>2 </TD><TD> CRITICAL </TD><TD> Critical conditions, such as device errors or out of resources
+</TD></TR>
+<TR><TD>3 </TD><TD> ERROR </TD><TD> Conditions that should be corrected, such as configuration errors
+</TD></TR>
+<TR><TD>4 </TD><TD> WARNING </TD><TD> Conditions that are not error conditions but might require handling
+</TD></TR>
+<TR><TD>5 </TD><TD> INFO </TD><TD> Informational messages
+</TD></TR>
+<TR><TD>6 </TD><TD> DEBUG </TD><TD> Messages used during development of NDB Cluster
+</TD></TR>
+</TABLE>
+
+<P>
+Syslog's <code>LOG_EMERG</code> and <code>LOG_NOTICE</code> are not used/mapped.
+
+</P>
+<P>
+The event severities can be turned on or off.  If the severity is on
+then all events with priority less than or equal to the category
+thresholds are logged. If the severity is off then no events belonging
+to the severity are logged.
+
+</P>
+
+
+
+<H4><A NAME="MySQL_Cluster_Log_Events" HREF="manual_toc.html#MySQL_Cluster_Log_Events">16.5.2.2  Log Events</A></H4>
+
+<P>
+All reportable events are listed below.
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Event</strong> </TD><TD> <strong>Category</strong> </TD><TD> <strong>Priority</strong> </TD><TD> <strong>Severity</strong> </TD><TD> <strong>Description</strong>
+
+</TD></TR>
+<TR><TD>DB nodes connected </TD><TD> CONNECTION </TD><TD> 8 </TD><TD> INFO </TD><TD>
+</TD></TR>
+<TR><TD>DB nodes disconnected </TD><TD> CONNECTION </TD><TD> 8 </TD><TD> INFO </TD><TD>
+</TD></TR>
+<TR><TD>Communication closed </TD><TD> CONNECTION </TD><TD> 8 </TD><TD> INFO </TD><TD> API &#38; DB nodes connection closed
+</TD></TR>
+<TR><TD>Communication opened </TD><TD> CONNECTION </TD><TD> 8 </TD><TD> INFO </TD><TD> API &#38; DB nodes connection opened
+
+</TD></TR>
+<TR><TD>Global checkpoint started </TD><TD> CHECKPOINT </TD><TD> 9 </TD><TD> INFO </TD><TD> Start of a GCP, i.e., REDO log is written to disk
+</TD></TR>
+<TR><TD>Global checkpoint completed </TD><TD> CHECKPOINT </TD><TD> 10 </TD><TD> INFO </TD><TD> GCP finished
+</TD></TR>
+<TR><TD>Local checkpoint started </TD><TD> CHECKPOINT </TD><TD> 7 </TD><TD> INFO </TD><TD> Start of local check pointing, i.e., data is written to disk. LCP Id and GCI Ids (keep and oldest restorable)
+</TD></TR>
+<TR><TD>Local checkpoint completed </TD><TD> CHECKPOINT </TD><TD> 8 </TD><TD> INFO </TD><TD> LCP finished
+</TD></TR>
+<TR><TD>LCP stopped in calc keep GCI </TD><TD> CHECKPOINT </TD><TD> 0 </TD><TD> ALERT </TD><TD> LCP stopped!
+</TD></TR>
+<TR><TD>Local checkpoint fragment completed </TD><TD> CHECKPOINT </TD><TD> 11 </TD><TD> INFO </TD><TD> A LCP on a fragment has been completed
+</TD></TR>
+<TR><TD>Report undo log blocked </TD><TD> CHECKPOINT </TD><TD> 7 </TD><TD> INFO </TD><TD> Reports undo logging blocked due buffer near to overflow
+
+</TD></TR>
+<TR><TD>DB node start phases initiated </TD><TD> STARTUP </TD><TD> 1 </TD><TD> INFO </TD><TD> NDB Cluster starting
+</TD></TR>
+<TR><TD>DB node all start phases completed </TD><TD> STARTUP </TD><TD> 1 </TD><TD> INFO </TD><TD> NDB Cluster started
+</TD></TR>
+<TR><TD>Internal start signal received STTORRY </TD><TD> STARTUP </TD><TD> 15 </TD><TD> INFO </TD><TD> Internal start signal to blocks received after restart finished
+</TD></TR>
+<TR><TD>DB node start phase X completed </TD><TD> STARTUP </TD><TD> 4 </TD><TD> INFO </TD><TD> A start phase has completed
+</TD></TR>
+<TR><TD>Node has been successfully included into the cluster </TD><TD> STARTUP </TD><TD> 3 </TD><TD> INFO </TD><TD> President node, own node and dynamic id is shown
+</TD></TR>
+<TR><TD>Node has been refused to be included into the cluster </TD><TD> STARTUP </TD><TD> 8 </TD><TD> INFO </TD><TD>
+</TD></TR>
+<TR><TD>DB node neighbours </TD><TD> STARTUP </TD><TD> 8 </TD><TD> INFO </TD><TD> Show left and right DB nodes neighbours
+</TD></TR>
+<TR><TD>DB node shutdown initiated </TD><TD> STARTUP </TD><TD> 1 </TD><TD> INFO </TD><TD>
+</TD></TR>
+<TR><TD>DB node shutdown aborted </TD><TD> STARTUP </TD><TD> 1 </TD><TD> INFO </TD><TD>
+</TD></TR>
+<TR><TD>New REDO log started </TD><TD> STARTUP </TD><TD> 10 </TD><TD> INFO </TD><TD> GCI keep X, newest restorable GCI Y
+</TD></TR>
+<TR><TD>New log started </TD><TD> STARTUP </TD><TD> 10 </TD><TD> INFO </TD><TD> Log part X, start MB Y, stop MB Z
+</TD></TR>
+<TR><TD>Undo records executed </TD><TD> STARTUP </TD><TD> 15 </TD><TD> INFO </TD><TD>
+
+</TD></TR>
+<TR><TD>Completed copying of dictionary information </TD><TD> NODERESTART </TD><TD> 8 </TD><TD> INFO </TD><TD>
+</TD></TR>
+<TR><TD>Completed copying distribution information </TD><TD> NODERESTART </TD><TD> 8 </TD><TD> INFO </TD><TD>
+</TD></TR>
+<TR><TD>Starting to copy fragments </TD><TD> NODERESTART </TD><TD> 8 </TD><TD> INFO </TD><TD>
+</TD></TR>
+<TR><TD>Completed copying a fragment </TD><TD> NODERESTART </TD><TD> 10 </TD><TD> INFO </TD><TD>
+</TD></TR>
+<TR><TD>Completed copying all fragments </TD><TD> NODERESTART </TD><TD> 8 </TD><TD> INFO </TD><TD>
+</TD></TR>
+<TR><TD>Node failure phase completed </TD><TD> NODERESTART </TD><TD> 8 </TD><TD> ALERT </TD><TD> Reports node failure phases
+</TD></TR>
+<TR><TD>Node has failed,  node state was X </TD><TD> NODERESTART </TD><TD> 8 </TD><TD> ALERT </TD><TD> Reports that a node has failed
+
+</TD></TR>
+<TR><TD>Report whether an arbitrator is found or not </TD><TD> NODERESTART </TD><TD> 6 </TD><TD> INFO </TD><TD> 7 different cases
+</TD></TR>
+<TR><TD></TD><TD> </TD><TD> </TD><TD> </TD><TD> - President restarts arbitration thread [state=X]
+</TD></TR>
+<TR><TD></TD><TD> </TD><TD> </TD><TD> </TD><TD> - Prepare arbitrator node X [ticket=Y]
+</TD></TR>
+<TR><TD></TD><TD> </TD><TD> </TD><TD> </TD><TD> - Receive arbitrator node X [ticket=Y]
+</TD></TR>
+<TR><TD></TD><TD> </TD><TD> </TD><TD> </TD><TD> - Started arbitrator node X [ticket=Y]
+</TD></TR>
+<TR><TD></TD><TD> </TD><TD> </TD><TD> </TD><TD> - Lost arbitrator node X - process failure [state=Y]
+</TD></TR>
+<TR><TD></TD><TD> </TD><TD> </TD><TD> </TD><TD> - Lost arbitrator node X - process exit [state=Y]
+</TD></TR>
+<TR><TD></TD><TD> </TD><TD> </TD><TD> </TD><TD> - Lost arbitrator node X &#60;error msg&#62;[state=Y]
+
+</TD></TR>
+<TR><TD>Report arbitrator results </TD><TD> NODERESTART </TD><TD> 2 </TD><TD> ALERT </TD><TD> 8 different results
+</TD></TR>
+<TR><TD></TD><TD> </TD><TD> </TD><TD> </TD><TD> - Arbitration check lost - less than 1/2 nodes left
+</TD></TR>
+<TR><TD></TD><TD> </TD><TD> </TD><TD> </TD><TD> - Arbitration check won - node group majority
+</TD></TR>
+<TR><TD></TD><TD> </TD><TD> </TD><TD> </TD><TD> - Arbitration check lost - missing node group
+</TD></TR>
+<TR><TD></TD><TD> </TD><TD> </TD><TD> </TD><TD> - Network partitioning - arbitration required
+</TD></TR>
+<TR><TD></TD><TD> </TD><TD> </TD><TD> </TD><TD> - Arbitration won - positive reply from node X
+</TD></TR>
+<TR><TD></TD><TD> </TD><TD> </TD><TD> </TD><TD> - Arbitration lost - negative reply from node X
+</TD></TR>
+<TR><TD></TD><TD> </TD><TD> </TD><TD> </TD><TD> - Network partitioning - no arbitrator available
+</TD></TR>
+<TR><TD></TD><TD> </TD><TD> </TD><TD> </TD><TD> - Network partitioning - no arbitrator configured
+
+</TD></TR>
+<TR><TD>GCP take over started </TD><TD> NODERESTART </TD><TD> 7 </TD><TD> INFO </TD><TD>
+</TD></TR>
+<TR><TD>GCP take over completed </TD><TD> NODERESTART </TD><TD> 7 </TD><TD> INFO </TD><TD>
+</TD></TR>
+<TR><TD>LCP take over started </TD><TD> NODERESTART </TD><TD> 7 </TD><TD> INFO </TD><TD>
+</TD></TR>
+<TR><TD>LCP take completed (state = X) </TD><TD> NODERESTART </TD><TD> 7 </TD><TD> INFO </TD><TD>
+
+</TD></TR>
+<TR><TD>Report transaction statistics </TD><TD> STATISTICS </TD><TD> 8 </TD><TD> INFO </TD><TD> # of: transactions, commits, reads, simple reads, writes, concurrent operations, attribute info, aborts
+</TD></TR>
+<TR><TD>Report operations </TD><TD> STATISTICS </TD><TD> 8 </TD><TD> INFO </TD><TD> # of operations
+</TD></TR>
+<TR><TD>Report table create </TD><TD> STATISTICS </TD><TD> 7 </TD><TD> INFO </TD><TD>
+</TD></TR>
+<TR><TD>Report job scheduling statistics </TD><TD> STATISTICS </TD><TD> 9 </TD><TD> INFO </TD><TD> Mean Internal job scheduling statistics
+</TD></TR>
+<TR><TD>Sent # of bytes </TD><TD> STATISTICS </TD><TD> 9 </TD><TD> INFO </TD><TD> Mean # of bytes sent to node X
+</TD></TR>
+<TR><TD>Received # of bytes </TD><TD> STATISTICS </TD><TD> 9 </TD><TD> INFO </TD><TD> Mean # of bytes received from node X
+</TD></TR>
+<TR><TD>Memory usage </TD><TD> STATISTICS </TD><TD> 5 </TD><TD> INFO </TD><TD> Data and Index memory usage (80%, 90% and 100%)
+
+</TD></TR>
+<TR><TD>Transporter errors </TD><TD> ERROR </TD><TD> 2 </TD><TD> ERROR </TD><TD>
+</TD></TR>
+<TR><TD>Transporter warnings </TD><TD> ERROR </TD><TD> 8 </TD><TD> WARNING </TD><TD>
+</TD></TR>
+<TR><TD>Missed heartbeats </TD><TD> ERROR </TD><TD> 8 </TD><TD> WARNING </TD><TD> Node X missed heartbeat # Y
+</TD></TR>
+<TR><TD>Dead due to missed heartbeat </TD><TD> ERROR </TD><TD> 8 </TD><TD> ALERT </TD><TD> Node X declared dead due to missed heartbeat
+</TD></TR>
+<TR><TD>General warning events </TD><TD> ERROR </TD><TD> 2 </TD><TD> WARNING </TD><TD>
+
+</TD></TR>
+<TR><TD>Sent heartbeat </TD><TD> INFO </TD><TD> 12 </TD><TD> INFO </TD><TD> Heartbeat sent to node X
+</TD></TR>
+<TR><TD>Create log bytes </TD><TD> INFO </TD><TD> 11 </TD><TD> INFO </TD><TD> Log part, log file, MB
+</TD></TR>
+<TR><TD>General info events </TD><TD> INFO </TD><TD> 2 </TD><TD> INFO </TD><TD>
+</TD></TR>
+</TABLE>
+
+<P>
+An event report has the following format in the logs:
+
+<PRE>
+&#60;date &#38; time in GMT&#62; [&#60;any string&#62;] &#60;event severity&#62; -- &#60;log message&#62;
+
+09:19:30 2003-04-24 [NDB] INFO -- Node 4 Start phase 4 completed
+</PRE>
+
+
+
+<H3><A NAME="MySQL_Cluster_Single_User_Mode" HREF="manual_toc.html#MySQL_Cluster_Single_User_Mode">16.5.3  Single User Mode</A></H3>
+
+<P>
+Single user mode allows the database administrator to restrict access
+to the database system to only one application (API node).  When
+entering single user mode all connections to all APIs will be
+gracefully closed and no transactions are allowed to be started.
+All running transactions are aborted.
+
+</P>
+<P>
+When the cluster has entered single user mode (use the all status
+command to see when the state has entered the single user mode), only
+the allowed API node is granted access to the database.
+
+</P>
+<P>
+Example:
+
+<PRE>
+ENTER SINGLE USER MODE 5
+</PRE>
+
+<P>
+After executing this command and after cluster has entered the single
+user mode, the API node with node id 5 becomes the single user of the
+cluster.
+
+</P>
+<P>
+The node specified in the command above must be a MySQL Server node.
+Any attempt to specify any other type of node will be rejected.
+
+</P>
+<P>
+Note: if the node with id 5 is running when executing
+<code>ENTER SINGLE USER MODE 5</code>, all transactions running on node 5
+will be aborted, the connection is closed, and the server must be
+restarted.
+
+</P>
+<P>
+The command <code>EXIT SINGLE USER MODE</code> alters the state of the
+cluster DB nodes from ``single user mode'' to ``started''.
+MySQL Servers waiting for a connection, i.e. for the cluster to become
+ready, are now allowed to connect.  The MySQL Server denoted as the
+single user continues to run, if it is connected, during and after the
+state transition. 
+
+</P>
+<P>
+Example:
+
+<PRE>
+EXIT SINGLE USER MODE
+</PRE>
+
+<P>
+Best practice in case of node failures when running in single user
+mode is to:
+
+</P>
+
+<OL>
+<LI>Finish all single user mode transactions
+
+<LI>Issue the command exit single user mode
+
+<LI>Restart database nodes
+
+</OL>
+
+<P>
+Or restart database nodes prior to entering single user mode.
+
+</P>
+
+
+
+<H3><A NAME="MySQL_Cluster_Backup" HREF="manual_toc.html#MySQL_Cluster_Backup">16.5.4  On-line Backup of MySQL Cluster</A></H3>
+
+<P>
+This section describes how to create a backup and later restore the
+backup to a database.
+
+</P>
+
+
+
+<H4><A NAME="MySQL_Cluster_Backup_Concepts" HREF="manual_toc.html#MySQL_Cluster_Backup_Concepts">16.5.4.1  Cluster Backup Concepts</A></H4>
+
+<P>
+A backup is a snapshot of the database at a given time.
+The backup contains three main parts:
+
+</P>
+
+<OL>
+<LI>Meta data (what tables exists etc)
+
+<LI>Table records (data in tables)
+
+<LI>A log of committed transactions
+
+</OL>
+
+<P>
+Each of these parts is saved on all nodes participating in a backup. 
+
+</P>
+<P>
+During backup each node saves these three parts to disk into three files:
+
+</P>
+<DL COMPACT>
+
+<DT><tt>`BACKUP-&#60;BackupId&#62;.&#60;NodeId&#62;.ctl'</tt>
+<DD>
+The control file which contain control information and meta data.
+<DT><tt>`BACKUP-&#60;BackupId&#62;-0.&#60;NodeId&#62;.data'</tt>
+<DD>
+The data file that contain the table records.
+<DT><tt>`BACKUP-&#60;BackupId&#62;.&#60;NodeId&#62;.log'</tt>
+<DD>
+The log file that contain the committed transactions.
+</DL>
+
+<P>
+Above &#60;BackupId&#62; is an identifier for the backup and &#60;NodeId&#62; is the
+node id of the node creating the file.
+
+</P>
+<DL COMPACT>
+
+<DT><strong>Meta data</strong>
+<DD>
+The meta data consists of table definitions. All nodes have the exact
+same table definitions saved on disk.
+<DT><strong>Table records</strong>
+<DD>
+The table records are saved per fragment. Each fragment contains a
+header that describes which table the records belong to.  After the
+list of records there is a footer that contains a checksum for the
+records. Different nodes save different fragments during the backup.
+<DT><strong>Committed log</strong>
+<DD>
+The committed log contains committed transaction made during the
+backup.  Only transactions on tables stored in the backup are stored
+in the log.  The different nodes in the backup saves different log
+records as they host different database fragments.
+</DL>
+
+
+
+<H4><A NAME="MySQL_Cluster_Backup_Using_Management_Server" HREF="manual_toc.html#MySQL_Cluster_Backup_Using_Management_Server">16.5.4.2  Using The Management Server to Create a Backup</A></H4>
+
+<P>
+Before starting make sure that the cluster is properly configured for
+backups.
+
+</P>
+
+<OL>
+<LI>
+
+Start management server.
+<LI>
+
+Execute the command <code>START BACKUP</code>.
+<LI>
+
+The management server will reply with a message
+``Start of backup ordered''.
+This means that the management server has submitted the request to the
+cluster, but has not yet received any response.
+<LI>
+
+The management server will reply ``Backup &#60;BackupId&#62; started'' where
+&#60;BackupId&#62; is the unique identifier for this particular backup.
+This will also be saved in the cluster log (if not configured otherwise).
+This means that the cluster has received and processed the backup
+request. It does not mean that the backup has completed.
+<LI>
+
+The management server will when the backup is finished reply
+``Backup &#60;BackupId&#62; completed''.
+</OL>
+
+<P>
+Using the management server to abort a backup:
+
+</P>
+
+<OL>
+<LI>
+
+Start management server.
+<LI>
+
+Execute the command <code>ABORT BACKUP &#60;BACKUPID&#62;</code>.
+The number &#60;BackupId&#62; is the identifier of the backup that is included
+in the response of the management server when the backup is started,
+i.e. in the message ``Backup &#60;BackupId&#62; started''.
+The identifier is also saved in the cluster log (cluster.log).
+<LI>
+
+The management server will reply ``Abort of backup &#60;BackupId&#62; ordered''
+This means that it has submitted the request to the cluster, but has
+not received any response.
+<LI>
+
+The management server will reply ``Backup &#60;BackupId&#62; has been aborted
+reason XYZ''. This means that the cluster has aborted the backup and
+removed everything belonging to it, including the files in the file
+system.
+</OL>
+
+<P>
+Note that if there is not any backup with id &#60;BackupId&#62; running when
+it is aborted, the management server will not reply anything.  However
+there will be a line in the cluster.log mentioning that an ``invalid''
+abort command has been filed.
+
+</P>
+
+
+
+<H4><A NAME="MySQL_Cluster_Restore" HREF="manual_toc.html#MySQL_Cluster_Restore">16.5.4.3  How to Restore a Cluster Backup</A></H4>
+
+<P>
+The restore program is implemented as seperate command line utility.
+It reads the files created from the backup and inserts the stored
+information into the database. The restore program has to be executed
+once for each set of backup files, i.e. as many times as there were
+database nodes running when the backup we created.
+
+</P>
+<P>
+The first time you run the restore program you also need to restore
+the meta data, i.e. create tables. The restore program acts as an
+API to the cluster and therefore needs a free connection to connect
+to. This can be verified with the <code>ndb_mgm</code> command SHOW. 
+The switch <code>-c &#60;connectstring&#62;</code> may 
+be used to locate the MGM node (see section <A HREF="manual_NDBCluster.html#MySQL_Cluster_Connectstring">16.3.4.2  The MySQL Cluster <code>connectstring</code></A> for
+info on connectstrings).  
+The backup files must be present in 
+the directory given as an argument to the restore program.  The backup 
+can be restored to a database with a different configuration than it was
+created from.  For example, consider if a backup (with id 12) created
+in a cluster with two database nodes (with node id 2 and node id 3)
+that should be restored to a cluster with four nodes.  The restore
+program then has to be executed two times (one for each database node
+in the cluster where the backup was taken) as described in the box
+below.
+
+</P>
+<P>
+Note: for rapid restore, the data may be restored in parallell
+(provided that there are enough free API connections available). Note
+however that the data files must always be applied before the logs.
+
+</P>
+<P>
+Note: the cluster should have an empty database when starting to
+restore a backup. 
+
+</P>
+
+
+
+<H4><A NAME="MySQL_Cluster_Backup_Configuration" HREF="manual_toc.html#MySQL_Cluster_Backup_Configuration">16.5.4.4  Configuration for Cluster Backup</A></H4>
+
+<P>
+There are four configuration parameters for backup:
+
+</P>
+<DL COMPACT>
+
+<DT><strong>BackupDataBufferSize</strong>
+<DD>
+Amount of memory (out of the total memory) used to buffer data before
+it is written to disk.
+<DT><strong>BackupLogBufferSize</strong>
+<DD>
+Amount of memory (out of the total memory) used to buffer log records
+before these are written to disk.
+<DT><strong>BackupMemory</strong>
+<DD>
+Total memory allocated in a database node for backups.  This should be
+the sum of the memory allocated for the two buffers.
+<DT><strong>BackupWriteSize</strong>
+<DD>
+Size of blocks written to disk.  This applies for both the data buffer
+and the log buffer.
+</DL>
+
+
+
+<H4><A NAME="MySQL_Cluster_Backup_Troubleshooting" HREF="manual_toc.html#MySQL_Cluster_Backup_Troubleshooting">16.5.4.5  Backup Troubleshooting</A></H4>
+
+<P>
+If an error code is returned when issuing a backup request, then check
+that there is enough memory allocated for the backup (i.e. the
+configuration parameters).  Also check that there is enough space on
+the hard drive partition of the backup target.
+
+</P>
+
+
+
+<H2><A NAME="MySQL_Cluster_Interconnects" HREF="manual_toc.html#MySQL_Cluster_Interconnects">16.6  Using High-Speed Interconnects with MySQL Cluster</A></H2>
+
+<P>
+Already before design of NDB Cluster started in 1996 it was evident that one
+of the major problems of building parallel databases is the communication
+between the nodes in the network. Thus from the very beginning NDB Cluster
+was designed with a transporter concept to allow for different transporters.
+
+</P>
+<P>
+At the moment the code base includes 4 different transporters where 3 of them
+are currently working. Most users today uses TCP/IP over Ethernet since this
+exists in all machines. This is also by far the most well-tested transporter
+in MySQL Cluster.
+
+</P>
+<P>
+Within MySQL we are working hard to ensure that communication with the ndbd
+process is made in as large chunks as possible since this will benefit all
+communication medias since all means of transportation benefits from sending
+large messages over small messages.
+
+</P>
+<P>
+For users which desire top performance it is however also possible to use
+cluster interconnects to increase performance even further. There are two
+ways to achieve this, either a transporter can be designed to handle this
+case, or one can use socket implementations that bypass the TCP/IP stack to
+a small or large extent.
+
+</P>
+<P>
+We have made some experiments with both those variants using SCI technology
+developed by Dolphin (www.dolphinics.no).
+
+</P>
+
+
+<H3><A NAME="SCI_Sockets" HREF="manual_toc.html#SCI_Sockets">16.6.1  Configuring MySQL Cluster to use SCI Sockets</A></H3>
+
+<P>
+In this section we will show how one can use a cluster configured for normal
+TCP/IP communication to instead use SCI Sockets. Prerequisites for doing this
+is that the machines to communicate needs to be equipped with SCI cards. This
+documentation is based on the SCI Socket version 2.3.0 as of 1 october 2004.
+
+</P>
+<P>
+To use SCI Sockets one can use any version of MySQL Cluster. The tests were
+performed on an early 4.1.6 version. No special builds are needed since
+it uses normal socket calls which is the normal configuration set-up for
+MySQL Cluster. SCI Sockets are only supported on Linux 2.4 and 2.6 kernels at the
+moment. SCI Transporters works on more OS's although only Linux 2.4 have been
+verified.
+
+</P>
+<P>
+There are essentially four things needed to enable SCI Sockets. First it is
+necessary to build the SCI Socket libraries. Second the SCI Socket kernel
+libraries need to be installed. Third one or two configuration files needs to
+be installed.
+At last the SCI Socket kernel library needs to be enabled either for the
+entire machine or for the shell where the MySQL Cluster processes are started
+from. This process needs to be repeated for each machine in cluster which will
+use SCI Sockets to communicate.
+
+</P>
+<P>
+Two packages need to be retrieved to get SCI Sockets working. The first package
+builds the libraries which SCI Sockets are built upon and the second is the
+actual SCI Socket libraries. Currently the distribution is only in source
+code format.
+
+</P>
+<P>
+The latest versions of these packages is currently found at. Check
+
+<PRE>
+http://www.dolphinics.no/support/downloads.html
+</PRE>
+
+<P>
+for latest versions.
+
+</P>
+
+<PRE>
+http://www.dolphinics.no/ftp/source/DIS_GPL_2_5_0_SEP_10_2004.tar.gz
+http://www.dolphinics.no/ftp/source/SCI_SOCKET_2_3_0_OKT_01_2004.tar.gz
+</PRE>
+
+<P>
+The next step is to unpack those directories, SCI Sockets is unpacked below
+the DIS code. Then the code base is compiled. The example below shows the
+commands used in Linux/x86 to perform this.
+
+</P>
+
+<PRE>
+shell&#62; tar xzf DIS_GPL_2_5_0_SEP_10_2004.tar.gz
+shell&#62; cd DIS_GPL_2_5_0_SEP_10_2004/src/
+shell&#62; tar xzf ../../SCI_SOCKET_2_3_0_OKT_01_2004.tar.gz
+shell&#62; cd ../adm/bin/Linux_pkgs
+shell&#62; ./make_PSB_66_release
+</PRE>
+
+<P>
+If the build is made on an Opteron box and is to use the 64 bit extensions
+then use make_PSB_66_X86_64_release instead, if the build is made on an
+Itanium box then use make_PSB_66_IA64_release instead. The X86-64 variant
+should work for Intel EM64T architectures but no known tests of this exists
+yet.
+
+</P>
+<P>
+After building the code base it has been put into a zipped tar filed DIS
+and OS and date. It is now time to install the package in the proper place.
+In this example we will place the installation in /opt/DIS. These actions
+will most likely require you to log in as root-user.
+
+</P>
+
+<PRE>
+shell&#62; cp DIS_Linux_2.4.20-8_181004.tar.gz /opt/
+shell&#62; cd /opt
+shell&#62; tar xzf DIS_Linux_2.4.20-8_181004.tar.gz
+shell&#62; mv DIS_Linux_2.4.20-8_181004 DIS
+</PRE>
+
+<P>
+Now that all the libraries and binaries are in their proper place we need to
+ensure that SCI cards gets proper node identities within the SCI address space.
+Since SCI is a networking gear it is necessary to decide on the network structure
+at first.
+
+</P>
+<P>
+There are three types of network structures, the first is a simple
+one-dimensional ring, the second uses SCI switch(es) with one ring per switch
+port and finally there are 2D/3D torus. Each has its standard of providing
+node ids.
+
+</P>
+<P>
+A simple ring uses simply node ids displaced by 4.
+
+<PRE>
+4, 8, 12, ....
+</PRE>
+
+<P>
+The next possibility uses switch(es). The SCI switch has 8 ports. On each port
+it is possible to place a ring. It is here necessary to ensure that the
+rings on the switch uses different node id spaces. So the first port uses
+node ids below 64 and the next 64 node ids are allocated for the next port and
+so forth.
+
+<PRE>
+4,8, 12, ... , 60  Ring on first port
+68, 72, .... , 124 Ring on second port
+132, 136, ..., 188 Ring on third port
+..
+452, 456, ..., 508 Ring on the eight port
+</PRE>
+
+<P>
+2D/3D torus network structures takes into account where each node is in each
+dimension, increment by 4 for each node in the first dimension, by 64 in the
+second dimension and by 1024 in the third dimension. Please look in the Dolphin
+for more thorough documentation on this.
+
+</P>
+<P>
+In our testing we have used switches. Most of the really big cluster
+installations uses 2D/3D torus. The extra feature which switches provide
+is that with dual SCI cards and dual switches we can easily build a
+redundant network where failover times on the SCI network is around 100
+microseconds. This feature is supported by the SCI transporter and is
+currently also developed for the SCI Socket implementation.
+
+</P>
+<P>
+Failover for 2D/3D torus is also possible but requires sending out new
+routing indexes to all nodes. Even this will complete in around 100
+milliseconds and should be ok for most high-availability cases.
+
+</P>
+<P>
+By placing the NDB nodes in proper places in the switched architecture it is
+possible to use 2 switches to build a structure where 16 computers can be
+interconnected and no single failure can hamper more than one computer.
+With 32 computers and 2 switches it is possible to configure the cluster in
+such a manner that no single failure can hamper more than two nodes and
+in this case it is also known which pair will be hit. Thus by placing those
+two in separate NDB node groups it is possible to build a safe MySQL Cluster
+installation. We won't go into details in how this is done, since it is
+likely to be only of interest for users wanting to go real deep into this.
+
+</P>
+<P>
+To set the node id of an SCI card use the following command still being
+in the <code>/opt/DIS/sbin</code> directory. -c 1 refers to the number of the SCI
+card, where 1 is this number if only 1 card is in the machine. In this case
+use adapter 0 always (set by -a 0). 68 is the node id set in this example.
+
+<PRE>
+shell&#62; ./sciconfig -c 1 -a 0 -n 68
+</PRE>
+
+<P>
+In case you have several SCI cards in your machine the only safe to discover
+which card has which slot is by issuing the following command
+
+<PRE>
+shell&#62; ./sciconfig -c 1 -gsn
+</PRE>
+
+<P>
+This will give the serial number which can be found at the back of the SCI
+card and on the card itself. Do this then for -c 2 and onwards as many cards
+there are in the machine. This will identify which cards uses which id. Then
+set node ids for all cards.
+
+</P>
+<P>
+Now we have installed the necessary libraries and binaries. We have also set the
+SCI node ids. The next step is to set the mapping from hostnames (or IP addresses)
+to SCI node ids.
+
+</P>
+<P>
+The configuration file for SCI Sockets is to be placed in the file
+<code>/etc/sci/scisock.conf</code>. This file contains a mapping from hostnames
+(or IP addresses) to SCI node ids. The SCI node id will map the hostname
+to communicate through the proper SCI card. Below is a very simple such
+configuration file.
+
+<PRE>
+#host           #nodeId 
+alpha           8
+beta            12
+192.168.10.20   16
+</PRE>
+
+<P>
+It is also possible to limit this configuration to only apply for a subset of
+the ports of these hostnames. To do this another configuration is used which
+is placed in <code>/etc/sci/scisock_opt.conf</code>.
+
+</P>
+
+<PRE>
+#-key                        -type        -values
+EnablePortsByDefault		          yes
+EnablePort                  tcp           2200
+DisablePort                 tcp           2201
+EnablePortRange             tcp           2202 2219 
+DisablePortRange            tcp           2220 2231 
+</PRE>
+
+<P>
+Now we ready to install the drivers. We need to first install the low-level drivers
+and then the SCI Socket driver.
+
+</P>
+
+<PRE>
+shell&#62; cd DIS/sbin/
+shell&#62; ./drv-install add PSB66
+shell&#62; ./scisocket-install add
+</PRE>
+
+<P>
+If desirable one can now check the installation by invoking a script which checks
+that all nodes in the SCI Socket config files are accessible.
+
+</P>
+
+<PRE>
+shell&#62; cd /opt/DIS/sbin/
+shell&#62; ./status.sh
+</PRE>
+
+<P>
+If you discover an error and need to change the SCI Socket config files then it is
+necessary to use a program ksocketconfig to change the configuration.
+
+</P>
+
+<PRE>
+shell&#62; cd /opt/DIS/util
+shell&#62; ./ksocketconfig -f
+</PRE>
+
+<P>
+To check that SCI Sockets are actually used you can use a test program
+<code>latency_bench</code> which needs to have a server component and clients can
+connect to the server to test the latency, whether SCI is enabled is very clear
+from the latency you get. Before you use those programs you also need to set
+the LD_PRELOAD variable in the same manner as shown below.
+
+</P>
+<P>
+To set up a server use the command
+
+<PRE>
+shell&#62; cd /opt/DIS/bin/socket
+shell&#62; ./latency_bench -server
+</PRE>
+
+<P>
+To run a client use the following command
+
+<PRE>
+shell&#62; cd /opt/DIS/bin/socket
+shell&#62; ./latency_bench -client hostname_of_server
+</PRE>
+
+<P>
+Now the SCI Socket configuration is completed. MySQL Cluster is now
+ready to use both SCI Sockets and the SCI transporter documented in
+section <A HREF="manual_NDBCluster.html#MySQL_Cluster_SCI_Definition">16.3.4.9  MySQL Cluster SCI Transport Connections</A>.
+
+</P>
+<P>
+The next step is to start-up MySQL Cluster. To enable usage of SCI Sockets
+it is necessary to set the environment variable LD_PRELOAD before starting
+the ndbd, mysqld and ndb_mgmd processes to use SCI Sockets. The LD_PRELOAD
+variable should point to the kernel library for SCI Sockets.
+
+</P>
+<P>
+So as an example to start up ndbd in a bash-shell use the following
+commands.
+
+</P>
+
+<PRE>
+bash-shell&#62; export LD_PRELOAD=/opt/DIS/lib/libkscisock.so
+bash-shell&#62; ndbd
+</PRE>
+
+<P>
+From a tcsh environment the same thing would be accomplished with
+the following commands.
+
+</P>
+
+<PRE>
+tcsh-shell&#62; setenv LD_PRELOAD=/opt/DIS/lib/libkscisock.so
+tcsh-shell&#62; ndbd
+</PRE>
+
+<P>
+Noteworthy here is that MySQL Cluster can only use the kernel variant of
+SCI Sockets.
+
+</P>
+
+
+<H3><A NAME="Performance_figures" HREF="manual_toc.html#Performance_figures">16.6.2  Low-level benchmarks to understand impact of cluster interconnects</A></H3>
+
+<P>
+The ndbd process has a number of simple constructs which are used to access
+the data in MySQL Cluster. We made a very simple benchmark to check the
+performance of each such statement and the effect various interconnects have
+on their performance.
+
+</P>
+<P>
+There are four access methods:
+<DL COMPACT>
+
+<DT><code>Primary key access</code>
+<DD>
+This is a simple access of one record through its primary key. In the simplest
+case only one record is accessed at a time. This means that the full cost of
+setting up a number of TCP/IP message and a number of costs for context
+switching is taken by this single request. In a batched case where e.g. 32
+primary key accesses are sent in one batch then those 32 accesses will share
+the set-up cost of TCP/IP messages and context switches (if the TCP/IP are
+for different destinations then naturally a number of TCP/IP messages needs
+to be set up.
+
+<DT><code>Unique key access</code>
+<DD>
+Unique key accesses are very similar to primary key accesses except that they
+are executed as a read of an index table followed by a primary key access on
+the table. However only one request is sent from the MySQL Server, the read
+of the index table is handled by the ndbd process. Thus again these requests
+benefit from being accessed in batches.
+
+<DT><code>Full table scan</code>
+<DD>
+When no indexes exist for the lookup on a table, then a full scan of a table
+is performed. This is one request to the ndbd process which divides the
+table scan into a set of parallel scans on all ndbd processes in the cluster.
+In future versions the MySQL server will be able to push down some filtering
+in those scans.
+When no indexes exist for the lookup on a table, then a full scan of a table
+is performed. This is one request to the ndbd process which divides the
+table scan into a set of parallel scans on all ndbd processes in the cluster.
+In future versions the MySQL server will be able to push down some filtering
+in those scans.
+
+<DT><code>Range scan using ordered index</code>
+<DD>
+When an ordered index is used it will perform a scan in the same manner as the
+full table scan except that it will only scan those records which are in the
+range used by the query set-up by the MySQL server. In future versions a
+special optimisation will ensure that when all index attributes that are
+bound includes all attributes in the partitioning key then only one partition
+will be scanned instead of all in parallel.
+</DL>
+
+<P>
+To check the base performance of these access methods we developed a set of
+benchmarks. One such benchmark, testReadPerf issues, simple primary and unique
+key access, batched primary and unique key accesses. The benchmark also
+measures the set-up cost of range scans by issuing scans returning a single
+record and finally there is a variant which uses a range scan to fetch a
+batch of records.
+
+</P>
+<P>
+In this manner we can test the cost of issuing single key access and single
+record scan accesses and measure the impact of the communication media
+implementation of these base access methods.
+
+</P>
+<P>
+We executed those base benchmark both using a normal transporter using TCP/IP
+sockets and a similar set-up using SCI sockets. The figures reported below
+is for small accesses of 20 records per of data per access. The difference
+between serial and batched goes down by a factor of 3-4 when using 2 kB
+records instead. SCI Sockets were not tested with 2 kB record2 kB records. Tests
+were performed on a 2-node cluster with 2 dual CPU machines equipped with
+AMD MP1900+ processors.
+
+</P>
+
+<PRE>
+Access type:         TCP/IP sockets           SCI Socket
+Serial pk access:    400 microseconds         160 microseconds
+Batched pk access:    28 microseconds          22 microseconds
+Serial uk access:    500 microseconds         250 microseconds
+Batched uk access:    70 microseconds          36 microseconds
+Indexed eq-bound:   1250 microseconds         750 microseconds
+Index range:          24 microseconds          12 microseconds
+</PRE>
+
+<P>
+We did also another set of tests to check the performance of SCI Sockets
+compared to using the SCI transporter and all compared to the TCP/IP
+transporter. All these tests used primary key accesses either serially,
+multi-threaded and multi-threaded and batched simultaneously.
+
+</P>
+<P>
+More or less all of these tests showed that SCI sockets were about
+100% faster compared to TCP/IP. The SCI transporter was faster in most cases
+compared to SCI sockets. One notable case however with many threads in the
+test program showed that the SCI transporter behaved really bad if used in the
+mysqld process.
+
+</P>
+<P>
+Thus our conclusion overall is that for most benchmarks SCI sockets improves
+performance with around 100% compared to TCP/IP except in rare cases when
+communication performance is not an issue such as when scan filters make up
+most of processing time or when very large batches of primary key accesses are
+achieved. In that case the CPU processing in the ndbd processes becomes a fairly
+large part of the cost.
+
+</P>
+<P>
+Using the SCI transporter instead of SCI Sockets is only of interest in
+communicating between ndbd processes. Using the SCI transporter is also only
+of interest if a CPU can be dedicated for the ndbd process since the SCI
+transporter ensures that the ndbd will never go to sleep. It is also
+important to ensure that the ndbd process priority is set in such a way that
+the process doesn't lose in priority due to running for a long time (as
+can be done by locking processes to CPU's in Linux 2.6). If this is a
+possible configuration then ndbd process will benefit by 10-70% compared to
+using SCI sockets (the larger figures when performing updates and probably
+also on parallel scan activities).
+
+</P>
+<P>
+There are several other implementations of optimised socket variants for
+clusters reported in various papers. These include optimised socket
+variants for Myrinet, Gigabit Ethernet, Infiniband and the VIA interface.
+We have only tested MySQL Cluster so far with SCI sockets and we also
+include documentation above on how to set-up SCI sockets using ordinary
+TCP/IP configuration for MySQL Cluster.
+
+</P>
+
+
+<H2><A NAME="MySQL_Cluster_Limitations_in_4.1" HREF="manual_toc.html#MySQL_Cluster_Limitations_in_4.1">16.7  MySQL Cluster Limitations in 4.1</A></H2>
+
+<P>
+Below is a list of known limitations with release 4.1 when comparing to the storage 
+engines MyISAM and InnoDB. Currently there are no plans to
+address these in coming releases of 4.1 (but well in 5.0 or later releases).
+At <a HREF="http://bugs.mysql.com">http://bugs.mysql.com</a>, category cluster,
+you fill find known bugs which are intended to be fixed in upcoming releases of 4.1 (if marked 4.1). 
+This list is intended to be complete with respect to the above, 
+please report discrepancies at <a HREF="http://bugs.mysql.com">http://bugs.mysql.com</a>, 
+category cluster. If this discrepancy will not be fixed in 4.1 it will be added to this list.
+
+</P>
+<DL COMPACT>
+
+<DT>Non compliance in syntax (resulting in error when running an existing application)
+<DD>
+
+<UL>
+<LI>Not all charsets and collations supported, see section <A HREF="manual_News.html#MySQL_Cluster_news-4.1.6">D.10.5  MySQL Cluster-4.1.6 (10 Oct 2004)</A> for a list of
+
+      the ones supported.
+<LI>No prefix indexes (can only index complete fields)
+
+<LI>No text indexes
+
+<LI>No geometry type support
+
+</UL>
+
+<DT>Non compliance in limits/behavior (may result in error when running an existing application)
+<DD>
+
+<UL>
+<LI>No partial rollback of transactions on error. As a result, e.g. duplicate key error, will result
+
+      in a rollback of the whole transaction.
+<LI>A number of hard limits exist which are configurable, but available main memory in the
+
+      cluster sets limits. See complete list of configuration parameters 
+      section <A HREF="manual_NDBCluster.html#MySQL_Cluster_Config_File">16.3.4  Configuration File</A>. Most configuration parameters can be upgraded on-line.
+
+<UL>
+<LI>Database memory size and index memory size, <code>DataMemory</code> and <code>IndexMemory</code>
+
+            repectively.
+<LI>How large transactions can be performed is set with config parameter
+
+            <code>MaxNoOfConcurrentOperations</code>
+            (bulk load, truncate table and alter table are handled specially by running 
+             several transactions, and thus does not have this limitation)
+<LI>Different limits related to tables and indexes, e.g. max number of ordered indexes,
+
+             <code>MaxNoOfOrderedIndexes</code> etc.
+</UL>
+
+<LI>Database names, table names and attribute names cannot be as long in
+
+      ndb tables as in other table handlers. Attibute names will be truncated to 31 characters,
+      and if they are not unique after truncation gives an error. Database name and table name
+      can be max a total of 122 characters together.
+<LI>Max number of meta data objects is limited to 1600 (includes tables, system tables, indexes and BLOBs)
+
+<LI>Max number of attributes per table limited to 128
+
+<LI>Max row size of 8k (not including BLOBs)
+
+<LI>Max number of attributes in a key is 32
+
+</UL>
+
+<DT>Not supported features (no error, but not supported/enforced)
+<DD>
+
+<UL>
+<LI>Foreign key construct is ignored (same behavior as MyISAM)
+
+<LI>Savepoint and rollback to savepoint ignored (same behavior as MyISAM)
+
+</UL>
+
+<DT>Performance and limitations related
+<DD>
+
+<UL>
+<LI>Query cache disabled since it is not invalidated if update occurs on other MySQL server
+
+<LI>Query performance issues due to sequential access to storage engine
+
+      and relatively more expensive to do many range scans.
+<LI>Records in range statistic not supported, giving non-optimal
+
+      query plans in some cases. Use constructs <code>USE INDEX</code> or <code>FORCE INDEX</code>
+      to work around non optimal query plans.
+<LI>Unique hash index (constructed with <code>USING HASH</code>) cannot be used for accessing table
+
+      if NULL is given as part of the key.
+</UL>
+
+<DT>Missing features
+<DD>
+
+<UL>
+<LI>Only support for READ_COMMITTED isolation level
+
+      (InnoDB supports READ_COMMITTED, REPEATABLE_READ and SERIALIZABLE)
+<LI>No disk durable commit (are replicated, but no guarantee that logs are
+
+      flushed to disk at commit)
+</UL>
+
+<DT>Problems related to multiple MySQL servers (not related to MyISAM or InnoDB)
+<DD>
+
+<UL>
+<LI>Alter table not fully blocking when running multiple MySQL servers (no distributed table lock)
+
+<LI>MySQL Replication will not work right off if updates are done on several MySQL servers.
+
+      If a partitioning scheme of the database is done at the application level, and no transactions
+      takes place across these partitions, it will work.
+</UL>
+
+<DT>Cluster only related (not related to MyISAM or InnoDB)
+<DD>
+
+<UL>
+<LI>All machines in the cluster must use the same architecture; that
+
+      is, all machines hosting nodes must be either big-endian or 
+      little-endian, and you cannot use a mixture of both. For example, 
+      you cannot have a management node running on a PPC which directs 
+      a server node that is running on an x86 machine. This restriction 
+      does not apply to machines simply running <code>mysql</code> clients 
+      that may be accessing the cluster.
+<LI>No on-line schema changes (no on-line alter table,
+
+      Ndb on-line create index not accessible)
+<LI>No on-line add/drop node
+
+<LI>When using multiple management servers one must give nodes an id explicitly in the
+
+      connect strings since the automatic allocation of node id's does not work across 
+      several management servers.
+<LI>When using multiple management servers one must take extreme care to have the same
+
+      configuration in all management servers.  No checks for this are performed.
+<LI>Max number of storage nodes 48
+
+<LI>Total max number of nodes 63 (MySQL Servers, storage nodes and management servers)
+
+</UL>
+
+</DL>
+
+<P><HR><P>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_InnoDB.html">previous</A>, <A HREF="manual_MaxDB.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+ </BODY>
+ </HTML>

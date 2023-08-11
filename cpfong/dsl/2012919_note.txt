@@ -1,0 +1,14 @@
+TC version 4.5 Control Panel Terminal Server work OK!
+
+1. you have to know your environment and put Real IP
+ex: at home my ip is 192.168.1.12 --> then dhcp start ip 192.168.1.30 --> 192.168.1.60
+dns use 8.8.8.8 gateway use 192.168.1.1 (do NOT use the default one!!)
+
+2. if you are at public ip environment ex 163.15.202.xx, you have to use 
+163.15.202.30 --> 163.15.202.60  (TC role will be another DHCPD, that is, 
+your TC box won't  be router or gateway or what ever)
+
+3. dhcpd timeout is ok, don't be panic
+
+4. some NIC is not working, for example, my home DELL desktop not work, but 
+irene toshiba notebook work great

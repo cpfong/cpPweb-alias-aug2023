@@ -1,0 +1,12 @@
+計算機概論期末考試
+
+班級:
+
+學號:
+
+姓名: 
+
+
+實作題一: sniffer 可以在區域網路中看到其它電腦的連絡資料, 請証明 telnet 程式是一個不安全的連線方式, 也就是說 telnet 到主機 vnc.mis.fotech.edu.tw 時傳送的密碼可以使用 sniffer 看到. (1.gif)
+實作題二: 李四可以使用訪客身份登入張三的 windows xp 電腦, 請把張三的 administrator 帳號的密碼改成 1234 (2.gif)
+實作題三: dropbox 可以上下載檔案, 請把本班同學的本科目成績上傳到你在 dropbox 上的帳號之下 (3.gif)

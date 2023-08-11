@@ -1,0 +1,3290 @@
+  <HTML>
+  <HEAD>
+  
+  <TITLE>MySQL Reference Manual for version 5.0.3-alpha - A  Problems and Common Errors</TITLE>
+   <style> code {color:purple} tt {color:green} samp {color:navy} pre {color:maroon} </style>
+  </HEAD>
+  <BODY BGCOLOR=silver TEXT=#000000 LINK=#101090 VLINK=#7030B0>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_Extending_MySQL.html">previous</A>, <A HREF="manual_Credits.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="Problems" HREF="manual_toc.html#Problems">A  Problems and Common Errors</A></H1>
+
+<P>
+<A NAME="IDX2296"></A>
+<A NAME="IDX2297"></A>
+
+</P>
+
+<P>
+This appendix lists some common problems and error messages that you may
+encounter.  It describes how to determine the causes of the
+problems and what to do to solve them.
+
+</P>
+
+
+
+<H2><A NAME="What_is_crashing" HREF="manual_toc.html#What_is_crashing">A.1  How to Determine What Is Causing a Problem</A></H2>
+
+<P>
+When you run into a problem, the first thing you should do is to find out
+which program or piece of equipment is causing it:
+
+</P>
+
+<UL>
+<LI>
+
+If you have one of the following symptoms, then it is probably a hardware
+problems (such as memory, motherboard, CPU, or hard disk) or kernel problem:
+
+<UL>
+<LI>
+
+The keyboard doesn't work.  This can normally be checked by pressing
+the Caps Lock key. If the Caps Lock light doesn't change, you have to replace
+your keyboard.  (Before doing this, you should try to restart
+your computer and check all cables to the keyboard.)
+<LI>
+
+The mouse pointer doesn't move.
+<LI>
+
+The machine doesn't answer to a remote machine's pings.
+<LI>
+
+Other programs that are not related to MySQL don't behave correctly.
+<LI>
+
+Your system restarted unexpectedly. (A faulty user-level program should
+never be able to take down your system.)
+</UL>
+
+In this case, you should start by checking all your cables and run some
+diagnostic tool to check your hardware!
+You should also check whether there are any patches, updates, or service
+packs for your operating system that could likely solve your problem.
+Check also that all your libraries (such as <code>glibc</code>) are up to date.
+
+It's always good to use a machine with ECC memory to discover
+memory problems early.
+<LI>
+
+If your keyboard is locked up, you may be able to recover by
+logging in to your machine from another machine and executing
+<code>kbd_mode -a</code>.
+
+<LI>
+
+Please examine your system log file (<tt>`/var/log/messages'</tt> or similar) for
+reasons for your problem.  If you think the problem is in MySQL,
+you should also examine MySQL's log files. See section <A HREF="manual_MySQL_Database_Administration.html#Log_Files">5.9  The MySQL Log Files</A>.
+
+<LI>
+
+If you don't think you have hardware problems, you should try to find
+out which program is causing problems.
+Try using <code>top</code>, <code>ps</code>, Task Manager, or some similar program,
+to check which program is taking all CPU or is locking the machine.
+
+<LI>
+
+Use <code>top</code>, <code>df</code>, or a similar program to check whether you are out
+of memory, disk space, file descriptors, or some other critical resource.
+
+<LI>
+
+If the problem is some runaway process, you can always try to kill it. If it
+doesn't want to die, there is probably a bug in the operating system.
+</UL>
+
+<P>
+If after you have examined all other possibilities and you have
+concluded that the MySQL server or a MySQL client
+is causing the problem, it's time to create a bug report for our
+mailing list or our support team.  In the bug report, try to give a
+very detailed description of how the system is behaving and what you think is
+happening. You should also state why you think that MySQL
+is causing the problem.  Take into consideration all the situations in
+this chapter. State any problems exactly how they appear when you
+examine your system. Use the ``copy and paste'' method for any output
+and error messages from programs and log files.
+
+</P>
+<P>
+Try to describe in detail which program is not working and all
+symptoms you see.  We have in the past received many bug reports that
+state only ``the system doesn't work.''  This doesn't provide us with any
+information about what could be the problem.
+
+</P>
+<P>
+If a program fails, it's always useful to know the following information:
+
+</P>
+
+<UL>
+<LI>
+
+Has the program in question made a segmentation fault (did it dump core)?
+<LI>
+
+Is the program taking up all available CPU time? Check with <code>top</code>. Let
+the program run for a while, it may simply be evaluating something
+computationally intensive.
+<LI>
+
+If the <code>mysqld</code> server is causing problems, can you get any response
+from it with <code>mysqladmin -u root ping</code> or <code>mysqladmin -u root
+processlist</code>?
+<LI>
+
+What does a client program say when you try to connect to the MySQL server?
+(Try with <code>mysql</code>, for example.) Does the client jam?  Do you get any
+output from the program?
+</UL>
+
+<P>
+When sending a bug report, you should follow the outline
+described in section <A HREF="manual_Introduction.html#Asking_questions">1.4.1.2  Asking Questions or Reporting Bugs</A>.
+
+</P>
+
+
+
+<H2><A NAME="Common_errors" HREF="manual_toc.html#Common_errors">A.2  Common Errors When Using MySQL Programs</A></H2>
+
+<P>
+<A NAME="IDX2298"></A>
+
+</P>
+
+<P>
+This section lists some errors that users frequently encounter when running
+MySQL programs. Although the problems show up when you try to run client
+programs, the solutions to many of the problems involves changing the
+configuration of the MySQL server.
+
+</P>
+
+
+
+<H3><A NAME="Error_Access_denied" HREF="manual_toc.html#Error_Access_denied">A.2.1  <code>Access denied</code></A></H3>
+
+<P>
+<A NAME="IDX2299"></A>
+<A NAME="IDX2300"></A>
+<A NAME="IDX2301"></A>
+
+</P>
+<P>
+An <code>Access denied</code> error can have many causes.  Often the problem is
+related to the MySQL accounts that the server allows client programs to
+use when connecting.
+See section <A HREF="manual_MySQL_Database_Administration.html#Access_denied">5.5.8  Causes of <code>Access denied</code> Errors</A>.
+See section <A HREF="manual_MySQL_Database_Administration.html#Privileges">5.5.2  How the Privilege System Works</A>.
+
+</P>
+
+
+
+<H3><A NAME="Can_not_connect_to_server" HREF="manual_toc.html#Can_not_connect_to_server">A.2.2  <code>Can't connect to [local] MySQL server</code></A></H3>
+
+<P>
+A MySQL client on Unix can connect to the <code>mysqld</code> server in two
+different ways: By using a Unix socket file to connect through a file in the
+filesystem (default <tt>`/tmp/mysql.sock'</tt>), or by using TCP/IP, which
+connects through a port number.  A Unix socket file connection is faster
+than TCP/IP, but can be used only when connecting to a server on the same
+computer.  A Unix socket file is used if you don't specify a hostname or if
+you specify the special hostname <code>localhost</code>.
+
+</P>
+<P>
+If the MySQL server is running on Windows 9x or Me, you can connect
+only via TCP/IP. If the server is running on Windows NT, 2000, XP, or 2003
+and is started with the <code>--enable-named-pipe</code> option, you can also
+connect with named pipes if you run the client on the host where the
+server is running. The name of the named pipe is <code>MySQL</code> by default.
+If you don't give a hostname when connecting to <code>mysqld</code>, a MySQL
+client first will try to connect to the named pipe. If that doesn't work,
+it will connect to the TCP/IP port.  You can force the use of named pipes
+on Windows by using <code>.</code> as the hostname.
+
+</P>
+<P>
+The error (2002) <code>Can't connect to ...</code> normally means that there is no
+MySQL server running on the system or that you are using an incorrect Unix
+socket filename or TCP/IP port number when trying to connect to the
+server.
+
+</P>
+<P>
+Start by checking whether there is a process named <code>mysqld</code> running on
+your server host.
+(Use <code>ps xa | grep mysqld</code> on Unix or the Task Manager on Windows.)
+If there is no such process, you should start the server.
+See section <A HREF="manual_Installing.html#Starting_server">2.9.2.3  Starting and Troubleshooting the MySQL Server</A>.
+
+</P>
+<P>
+If a <code>mysqld</code> process is running, you can check it by
+trying the following commands. The port number or Unix socket filename
+might be different in your setup. <code>host_ip</code> represents the IP number of
+the machine where the server is running.
+
+</P>
+
+<PRE>
+shell&#62; mysqladmin version
+shell&#62; mysqladmin variables
+shell&#62; mysqladmin -h `hostname` version variables
+shell&#62; mysqladmin -h `hostname` --port=3306 version
+shell&#62; mysqladmin -h host_ip version
+shell&#62; mysqladmin --protocol=socket --socket=/tmp/mysql.sock version
+</PRE>
+
+<P>
+Note the use of backticks rather than forward quotes with the <code>hostname</code>
+command; these cause the output of <code>hostname</code> (that is, the current
+hostname) to be substituted into the <code>mysqladmin</code> command.
+If you have no <code>hostname</code> command or are running on Windows, you can
+manually type the hostname of your machine (without backticks) following the
+<code>-h</code> option.
+You can also try <code>-h 127.0.0.1</code> to connect with TCP/IP to the local host.
+
+</P>
+<P>
+Here are some reasons the <code>Can't connect to local MySQL server</code>
+error might occur:
+
+</P>
+
+<UL>
+<LI>
+
+<code>mysqld</code> is not running. Check your operating system's process list to
+ensure the <code>mysqld</code> process is present.
+
+<LI>
+
+You are running on a system that uses MIT-pthreads.
+If you are running on a system that doesn't have native threads,
+<code>mysqld</code> uses the MIT-pthreads package.  See section <A HREF="manual_Installing.html#Which_OS">2.1.1  Operating Systems Supported by MySQL</A>.  However,
+not all MIT-pthreads versions support Unix socket files. On a system
+without socket file support, you must always specify the hostname explicitly
+when connecting to the server. Try using this command to check the
+connection to the server:
+
+
+<PRE>
+shell&#62; mysqladmin -h `hostname` version
+</PRE>
+
+<LI>
+
+Someone has removed the Unix socket file that <code>mysqld</code> uses
+(<tt>`/tmp/mysql.sock'</tt> by default).  For example, you might have a <code>cron</code> job that
+removes old files from the <tt>`/tmp'</tt> directory.  You can always run
+<code>mysqladmin version</code> to check whether the Unix socket file that
+<code>mysqladmin</code> is trying to use really exists.  The fix in this case is
+to change the <code>cron</code> job to not remove <tt>`mysql.sock'</tt> or to place
+the socket file somewhere else.
+See section <A HREF="manual_Problems.html#Problems_with_mysql.sock">A.4.5  How to Protect or Change the MySQL Socket File <tt>`/tmp/mysql.sock'</tt></A>.
+
+<LI>
+
+You have started the <code>mysqld</code> server with
+the <code>--socket=/path/to/socket</code> option, but forgotten to tell client
+programs the new name of the socket file.  If you change the socket
+pathname for the server, you must also notify the MySQL clients.
+You can do this by providing the same <code>--socket</code> option when you run
+client programs. You also need to ensure that clients have permission to access
+the <tt>`mysql.sock'</tt> file.
+To find out where the mysql server socket is, you can do:
+
+
+<PRE>
+shell&#62; netstat -l | grep mysql
+</PRE>
+
+See section <A HREF="manual_Problems.html#Problems_with_mysql.sock">A.4.5  How to Protect or Change the MySQL Socket File <tt>`/tmp/mysql.sock'</tt></A>.
+
+<LI>
+
+You are using Linux and one server thread has died (dumped core).  In this case,
+you must kill the other <code>mysqld</code> threads (for example, with <code>kill</code>
+or with the <code>mysql_zap</code> script) before you can restart the MySQL
+server.  See section <A HREF="manual_Problems.html#Crashing">A.4.2  What to Do If MySQL Keeps Crashing</A>.
+<LI>
+
+The server or client program might not have the proper access privileges for
+the directory that holds the Unix socket file or the socket file itself. In
+this case, you must either change the access privileges for the directory or
+socket file so that the server and clients can access them, or restart
+<code>mysqld</code> with a <code>--socket</code> option that specifies a socket filename
+in a directory where the server can create it and where client programs can
+access it.
+</UL>
+
+<P>
+If you get the error message <code>Can't connect to MySQL server on
+some_host</code>, you can try the following things to find out what the
+problem is:
+
+</P>
+
+<UL>
+
+<LI>
+
+Check whether the server is running on that host by executing <code>telnet
+some_host 3306</code> and pressing the Enter key a couple of times.  (3306 is the
+default MySQL port number. Change the value if your server is listening to a
+different port.) If there is a MySQL server running and listening to the
+port, you should get a response that includes the server's version number.
+If you get an error such as <code>telnet: Unable to connect to remote host:
+Connection refused</code>, then there is no server running on the given port.
+
+<LI>
+
+If the server is running on the local host, try using <code>mysqladmin -h
+localhost variables</code> to connect using the Unix socket file. Verify the
+TCP/IP port number that the server is configured to listen to (it is the
+value of the <code>port</code> variable.)
+
+<LI>
+
+Make sure that your <code>mysqld</code> server was not started with the
+<code>--skip-networking</code> option. If it was, you will not be able to connect
+to it using TCP/IP.
+
+<LI>
+
+Check to make sure that there is no firewall blocking access to MySQL. 
+Applications such as ZoneAlarm and the Windows XP personal firewall may need
+to be configured to allow external access to a MySQL server. 
+
+</UL>
+
+
+
+<H3><A NAME="Old_client" HREF="manual_toc.html#Old_client">A.2.3  <code>Client does not support authentication protocol</code></A></H3>
+
+<P>
+MySQL 4.1 and up uses an authentication protocol based on a password hashing
+algorithm that is incompatible with that used by older clients.
+If you upgrade the server to 4.1, attempts to connect to it with an
+older client may fail with the following message:
+
+</P>
+
+<PRE>
+shell&#62; mysql
+Client does not support authentication protocol requested
+by server; consider upgrading MySQL client
+</PRE>
+
+<P>
+To solve this problem, you should use one of the following approaches:
+
+</P>
+
+<UL>
+<LI>
+
+Upgrade all client programs to use a 4.1.1 or newer client library.
+<LI>
+
+When connecting to the server with a pre-4.1 client program, use an account
+that still has a pre-4.1-style password.
+<LI>
+
+Reset the password to pre-4.1 style for each user that needs to use a
+pre-4.1 client program. This can be done using the <code>SET PASSWORD</code>
+statement and the <code>OLD_PASSWORD()</code> function:
+
+
+<PRE>
+mysql&#62; SET PASSWORD FOR
+    -&#62; '<var>some_user</var>'@'<var>some_host</var>' = OLD_PASSWORD('<var>newpwd</var>');
+</PRE>
+
+Alternatively, use <code>UPDATE</code> and <code>FLUSH PRIVILEGES</code>:
+
+
+<PRE>
+mysql&#62; UPDATE mysql.user SET Password = OLD_PASSWORD('<var>newpwd</var>')
+    -&#62; WHERE Host = '<var>some_host</var>' AND User = '<var>some_user</var>';
+mysql&#62; FLUSH PRIVILEGES;
+</PRE>
+
+Substitute the password you want to use for ``<var>newpwd</var>'' in the preceding
+examples.  MySQL cannot tell you what the original password was, so you'll
+need to pick a new one.
+
+<LI>
+
+Tell the server to use the older password hashing algorithm:
+
+<OL>
+<LI>
+
+Start <code>mysqld</code> with the <code>--old-passwords</code> option.
+<LI>
+
+Assign an old-format password to each account that has had its password
+updated to the longer 4.1 format. You can identify these accounts with the
+following query:
+
+
+<PRE>
+mysql&#62; SELECT Host, User, Password FROM mysql.user
+    -&#62; WHERE LENGTH(Password) &#62; 16;
+</PRE>
+
+For each account record displayed by the query, use the <code>Host</code> and <code>User</code> values and assign
+a password using the <code>OLD_PASSWORD()</code> function and either <code>SET PASSWORD</code> or <code>UPDATE</code>, as described
+earlier.
+</OL>
+
+</UL>
+
+<P>
+For additional background on password hashing and authentication, see
+section <A HREF="manual_MySQL_Database_Administration.html#Password_hashing">5.5.9  Password Hashing in MySQL 4.1</A>.
+
+</P>
+
+
+
+<H3><A NAME="Password_too_long" HREF="manual_toc.html#Password_too_long">A.2.4  Password Fails When Entered Interactively</A></H3>
+
+<P>
+MySQL client programs prompt for a password when invoked with a
+<code>--password</code> or <code>-p</code> option that has no following password value:
+
+</P>
+
+<PRE>
+shell&#62; mysql -u <var>user_name</var> -p
+Enter password:
+</PRE>
+
+<P>
+On some systems, you may find that your password works when specified in an
+option file or on the command line, but not when you enter it interactively
+at the <code>Enter password:</code> prompt. This occurs when the library provided
+by the system to read passwords limits password values to a small number of
+characters (typically eight).  That is a problem with the system library, not
+with MySQL. To work around it, change your MySQL password to
+a value that is eight or fewer characters long, or put your password in an
+option file.
+
+</P>
+
+
+
+<H3><A NAME="Blocked_host" HREF="manual_toc.html#Blocked_host">A.2.5  <code>Host '<var>host_name</var>' is blocked</code></A></H3>
+
+<P>
+If you get the following error, it means that <code>mysqld</code> has received many
+connect requests from the host <code>'<var>host_name</var>'</code> that have been
+interrupted in the middle:
+
+</P>
+
+<PRE>
+Host '<var>host_name</var>' is blocked because of many connection errors.
+Unblock with 'mysqladmin flush-hosts'
+</PRE>
+
+<P>
+The number of interrupted connect requests allowed is determined by the
+value of the <code>max_connect_errors</code> system variable.  After
+<code>max_connect_errors</code> failed requests, <code>mysqld</code> assumes that
+something is wrong (for example, that someone is trying to break in), and
+blocks the host from further connections until you execute a
+<code>mysqladmin flush-hosts</code> command or issue a <code>FLUSH HOSTS</code>
+statement.
+See section <A HREF="manual_MySQL_Database_Administration.html#Server_system_variables">5.2.3  Server System Variables</A>.
+
+</P>
+<P>
+By default, <code>mysqld</code> blocks a host after 10 connection errors.
+You can adjust the value by starting the server like this:
+
+</P>
+
+<PRE>
+shell&#62; mysqld_safe --max_connect_errors=10000 &#38;
+</PRE>
+
+<P>
+If you get this error message for a given host, you should first
+verify that there isn't anything wrong with TCP/IP connections from that
+host.  If you are having network problems, it will do you no good to
+increase the value of the <code>max_connect_errors</code> variable.
+
+</P>
+
+
+
+<H3><A NAME="Too_many_connections" HREF="manual_toc.html#Too_many_connections">A.2.6  <code>Too many connections</code></A></H3>
+
+<P>
+If you get a <code>Too many connections</code> error when you try to connect to the
+<code>mysqld</code> server, this means that all available connections already
+are used by other clients.
+
+</P>
+<P>
+The number of connections allowed is controlled by the <code>max_connections</code>
+system variable. Its default value is 100.  If you need to support more
+connections, you should restart <code>mysqld</code> with a larger value for this
+variable.
+
+</P>
+<P>
+<code>mysqld</code> actually allows <code>max_connections+1</code> clients to
+connect.  The extra connection is reserved for use by accounts that have the
+<code>SUPER</code> privilege.  By granting the <code>SUPER</code> privilege to
+administrators and not to normal users (who should not need it), an
+administrator can connect to the server and use <code>SHOW PROCESSLIST</code> to
+diagnose problems even if the maximum number of unprivileged clients
+already are connected.
+See section <A HREF="manual_SQL_Syntax.html#SHOW_PROCESSLIST">13.5.4.15  <code>SHOW PROCESSLIST</code> Syntax</A>.
+
+</P>
+<P>
+The maximum number of connections MySQL can support depends on the quality of
+the thread library on a given platform. Linux or Solaris should be
+able to support 500-1000 simultaneous connections, depending on how much
+RAM you have and what your clients are doing. Static Linux binaries provided
+by MySQL AB can support up to 4000 connections.
+
+</P>
+
+
+
+<H3><A NAME="Out_of_memory" HREF="manual_toc.html#Out_of_memory">A.2.7  <code>Out of memory</code></A></H3>
+
+<P>
+If you issue a query using the <code>mysql</code> client program and receive an
+error like the following one, it means that <code>mysql</code> does not
+have enough memory to store the entire query result:
+
+</P>
+
+<PRE>
+mysql: Out of memory at line 42, 'malloc.c'
+mysql: needed 8136 byte (8k), memory in use: 12481367 bytes (12189k)
+ERROR 2008: MySQL client ran out of memory
+</PRE>
+
+<P>
+To remedy the problem, first check whether your query is correct. Is it
+reasonable that it should return so many rows? If not, correct the query and
+try again. Otherwise, you can invoke <code>mysql</code> with the <code>--quick</code>
+option. This causes it to use the <code>mysql_use_result()</code> C API function
+to retrieve the
+result set, which places less of a load on the client (but more on the
+server).
+
+</P>
+
+
+
+<H3><A NAME="Gone_away" HREF="manual_toc.html#Gone_away">A.2.8  <code>MySQL server has gone away</code></A></H3>
+
+<P>
+<A NAME="IDX2302"></A>
+<A NAME="IDX2303"></A>
+
+</P>
+<P>
+This section also covers the related <code>Lost connection to server
+during query</code> error.
+
+</P>
+<P>
+The most common reason for the <code>MySQL server has gone away</code> error
+is that the server timed out and closed the connection.  In this case,
+you normally get one of the following error codes (which one you get is
+operating system-dependent):
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Error Code</strong> </TD><TD> <strong>Description</strong>
+</TD></TR>
+<TR><TD><code>CR_SERVER_GONE_ERROR</code> </TD><TD> The client couldn't send a question to the
+server.
+</TD></TR>
+<TR><TD><code>CR_SERVER_LOST</code> </TD><TD> The client didn't get an error when writing
+to the server, but it didn't get a full answer (or any answer) to the question.
+</TD></TR>
+</TABLE>
+
+<P>
+By default, the
+server closes the connection after eight hours if nothing has happened. You
+can change the time limit by setting the <code>wait_timeout</code> variable when
+you start <code>mysqld</code>.
+See section <A HREF="manual_MySQL_Database_Administration.html#Server_system_variables">5.2.3  Server System Variables</A>.
+
+</P>
+<P>
+If you have a script, you just have to issue the query again for the client
+to do an automatic reconnection.  This assumes that you have automatic
+reconnection in the client enabled (which is the default for the <code>mysql</code>
+command-line client).
+
+</P>
+<P>
+Some other common reasons for the <code>MySQL server has gone away</code> error are:
+
+</P>
+
+<UL>
+<LI>
+
+You (or the db administrator) has killed the running thread with a
+<code>KILL</code> statement or a <code>mysqladmin kill</code> command.
+<LI>
+
+You tried to run a query after closing the connection to the server.
+This indicates a logic error in the application that should be corrected.
+<LI>
+
+You got a timeout from the TCP/IP connection on the client side.
+This may happens if you have been using the commands:
+<code>mysql_options(..., MYSQL_OPT_READ_TIMEOUT,...)</code> or
+<code>mysql_options(..., MYSQL_OPT_WRITE_TIMEOUT,...)</code>. In this case
+increasing the timeout may help solve the problem.
+<LI>
+
+You have encountered a timeout on the server side and the
+automatic reconnection in the client is disabled (the <code>reconnect</code> flag
+in the <code>MYSQL</code> structure is equal to 0).
+<LI>
+
+You are using a windows client and the server had dropped the connection
+(probably because <code>wait_timeout</code> expired) before the command was
+issued.
+
+The problem on windows is that in some cases MySQL doesn't get an error
+from the OS when writing to the TCP/IP connection to the server, but
+instead gets the error when trying to read the answer from connection.
+
+In this case, even if the <code>reconnect</code> flag in the <code>MYSQL</code> structure
+is equal to 1, MySQL will not automatically reconnect and re-issue the query as
+it doesn't know if the server did get the original query or not.
+
+The solution to this is to either do a <code>mysql_ping</code> on the
+connection if there has been a long time since the last query (this is
+what <code>MyODBC</code> does) or set <code>wait_timeout</code> on the <code>mysqld</code>
+server so high that it will in practice never time out.
+<LI>
+
+You can also get these errors if you send a query to the server that is
+incorrect or too large. If <code>mysqld</code> receives a packet that is too large
+or out of order, it assumes that something has gone wrong with the client and
+closes the connection.  If you need big queries (for example, if you are
+working with big <code>BLOB</code> columns), you can increase the query limit by
+setting the server's <code>max_allowed_packet</code> variable, which has a default
+value of 1MB.  You may also need to increase the maximum packet size on the
+client end.  More information on setting the packet size is given in
+section <A HREF="manual_Problems.html#Packet_too_large">A.2.9  <code>Packet too large</code></A>.
+
+<LI>
+
+You will also get a lost connection if you are sending a packet 16MB or larger
+if your client is older than 4.0.8 and your server is 4.0.8 and above, or
+the other way around.
+
+<LI>
+
+You may also see the <code>MySQL server has gone away</code> error if MySQL 
+is started with the <code>--skip-networking</code> option.
+
+<LI>
+
+You have encountered a bug where the server died while executing the query.
+</UL>
+
+<P>
+You can check whether the MySQL server died and restarted by executing
+<code>mysqladmin version</code> and examining the server's uptime.  If the
+client connection was broken because <code>mysqld</code> crashed and restarted,
+you should concentrate on finding the reason for the crash.  Start by
+checking whether issuing the query again kills the server again.
+See section <A HREF="manual_Problems.html#Crashing">A.4.2  What to Do If MySQL Keeps Crashing</A>.
+
+</P>
+<P>
+You can get more information about the lost connections by starting
+mysqld with the <code>--log-warnings=2</code> option.  This will log some of the
+disconnected errors in the <code>hostname.err</code> file. See section <A HREF="manual_MySQL_Database_Administration.html#Error_log">5.9.1  The Error Log</A>.
+
+</P>
+<P>
+If you want to create a bug report regarding this problem, be sure that
+you include the following information:
+
+</P>
+
+<UL>
+<LI>
+
+Indicate whether or not the MySQL server died. You can find information
+about this in the server error log.
+See section <A HREF="manual_Problems.html#Crashing">A.4.2  What to Do If MySQL Keeps Crashing</A>.
+<LI>
+
+If a specific query kills <code>mysqld</code> and the tables involved were
+checked with <code>CHECK TABLE</code> before you ran the query, can you provide a
+reproducible test case?
+See section <A HREF="manual_Porting.html#Reproduceable_test_case">E.1.6  Making a Test Case If You Experience Table Corruption</A>.
+<LI>
+
+What is the value of the <code>wait_timeout</code> system variable in the MySQL
+server?  (<code>mysqladmin variables</code> gives you the value of this variable.)
+<LI>
+
+Have you tried to run <code>mysqld</code> with the <code>--log</code> option to
+determine whether the problem query appears in the log?
+</UL>
+
+<P>
+See also See section <A HREF="manual_Problems.html#Communication_errors">A.2.10  Communication Errors and Aborted Connections</A>.
+
+</P>
+<P>
+See section <A HREF="manual_Introduction.html#Asking_questions">1.4.1.2  Asking Questions or Reporting Bugs</A>.
+
+</P>
+
+
+<H3><A NAME="Packet_too_large" HREF="manual_toc.html#Packet_too_large">A.2.9  <code>Packet too large</code></A></H3>
+
+<P>
+A communication packet is a single SQL statement sent to the MySQL server
+or a single row that is sent to the client.
+
+</P>
+<P>
+In MySQL 3.23, the largest possible packet is 16MB, due to limits in the
+client/server protocol. In MySQL 4.0.1 and up, the limit is 1GB.
+
+</P>
+
+<P>
+When a MySQL client or the <code>mysqld</code> server receives a packet bigger
+than <code>max_allowed_packet</code> bytes, it issues a <code>Packet too
+large</code> error and closes the connection.  With some clients, you may also
+get a <code>Lost connection to MySQL server during query</code> error if the
+communication packet is too large.
+
+</P>
+<P>
+Both the client and the server have their own
+<code>max_allowed_packet</code> variable, so if you want to handle big packets,
+you must increase this variable both in the client and in the server.
+
+</P>
+<P>
+If you are using the <code>mysql</code> client program, its default
+<code>max_allowed_packet</code> variable is 16MB. That is also the maximum value
+before MySQL 4.0. To set a larger value from 4.0 on, start <code>mysql</code> like
+this:
+
+</P>
+
+<PRE>
+mysql&#62; mysql --max_allowed_packet=32M
+</PRE>
+
+<P>
+That sets the packet size to 32MB.
+
+</P>
+<P>
+The server's default <code>max_allowed_packet</code> value is 1MB. You can increase
+this if the server needs to handle big queries (for example, if you are
+working with big <code>BLOB</code> columns).  For example, to set the variable to
+16MB, start the server like this:
+
+</P>
+
+<PRE>
+mysql&#62; mysqld --max_allowed_packet=16M
+</PRE>
+
+<P>
+Before MySQL 4.0, use this syntax instead:
+
+</P>
+
+<PRE>
+mysql&#62; mysqld --set-variable=max_allowed_packet=16M
+</PRE>
+
+<P>
+You can also use an option file to set <code>max_allowed_packet</code>.  For
+example, to set the size for the server to 16MB, add the following lines in
+an option file:
+
+</P>
+
+<PRE>
+[mysqld]
+max_allowed_packet=16M
+</PRE>
+
+<P>
+Before MySQL 4.0, use this syntax instead:
+
+</P>
+
+<PRE>
+[mysqld]
+set-variable = max_allowed_packet=16M
+</PRE>
+
+<P>
+It's safe to increase the value of this variable because the extra memory is
+allocated only when needed.  For example, <code>mysqld</code> allocates more
+memory only when you issue a long query or when <code>mysqld</code> must return a
+large result row.  The small default value of the variable is a
+precaution to catch incorrect packets between the client and server and also
+to ensure that you don't run out of memory by using large packets
+accidentally.
+
+</P>
+<P>
+You can also get strange problems with large packets if you are using large
+<code>BLOB</code> values but have not given <code>mysqld</code> access to enough memory
+to handle the query.  If you suspect this is the case, try adding
+<code>ulimit -d 256000</code> to the beginning of the <code>mysqld_safe</code> script
+and restarting <code>mysqld</code>.
+
+</P>
+
+
+
+<H3><A NAME="Communication_errors" HREF="manual_toc.html#Communication_errors">A.2.10  Communication Errors and Aborted Connections</A></H3>
+
+<P>
+<A NAME="IDX2304"></A>
+<A NAME="IDX2305"></A>
+<A NAME="IDX2306"></A>
+
+</P>
+<P>
+The server error log can be a useful source of information about connection
+problems.
+See section <A HREF="manual_MySQL_Database_Administration.html#Error_log">5.9.1  The Error Log</A>.
+Starting with MySQL 3.23.40, if you start the server with the
+<code>--warnings</code> option (or <code>--log-warnings</code> from MySQL 4.0.3 on), you
+might find messages like this in your error log:
+
+</P>
+
+<PRE>
+010301 14:38:23  Aborted connection 854 to db: 'users' user: 'josh'
+</PRE>
+
+<P>
+If <code>Aborted connections</code> messages appear in the error log, the cause
+can be any of the following:
+
+</P>
+
+<UL>
+<LI>
+
+The client program did not call <code>mysql_close()</code> before exiting.
+<LI>
+
+The client had been sleeping more than <code>wait_timeout</code> or
+<code>interactive_timeout</code> seconds without issuing any requests to the server.
+See section <A HREF="manual_MySQL_Database_Administration.html#Server_system_variables">5.2.3  Server System Variables</A>.
+<LI>
+
+The client program ended abruptly in the middle of a data transfer.
+</UL>
+
+<P>
+When any of these things happen, the server increments the
+<code>Aborted_clients</code> status variable.
+
+</P>
+<P>
+The server increments the <code>Aborted_connects</code> status variable when the
+following things happen:
+
+</P>
+
+<UL>
+<LI>
+
+A client doesn't have privileges to connect to a database.
+<LI>
+
+A client uses an incorrect password.
+<LI>
+
+A connection packet doesn't contain the right information.
+<LI>
+
+It takes more than <code>connect_timeout</code> seconds to get
+a connect packet.
+See section <A HREF="manual_MySQL_Database_Administration.html#Server_system_variables">5.2.3  Server System Variables</A>.
+</UL>
+
+<P>
+If these kinds of things happen, it might indicate that someone is
+trying to break into your server!
+
+</P>
+<P>
+Other reasons for problems with aborted clients or aborted connections:
+
+</P>
+
+<UL>
+<LI>
+
+Use of Ethernet protocol with Linux, both half and full duplex.
+Many Linux Ethernet drivers have this bug. You should test for this
+bug by transferring a huge file via FTP between the client and server machines.
+If a transfer goes in burst-pause-burst-pause mode, you are
+experiencing a Linux duplex syndrome.
+The only solution is switching the duplex mode for both your network card
+and hub/switch to either full duplex or to half duplex and testing the
+results to determine the best setting.
+<LI>
+
+Some problem with the thread library that causes interrupts on reads.
+<LI>
+
+Badly configured TCP/IP.
+<LI>
+
+Faulty Ethernets, hubs, switches, cables, and so forth. This can be diagnosed
+properly only by replacing hardware.
+<LI>
+
+The <code>max_allowed_packet</code> variable value is too small or queries require
+more memory than you have allocated for <code>mysqld</code>.
+See section <A HREF="manual_Problems.html#Packet_too_large">A.2.9  <code>Packet too large</code></A>.
+</UL>
+
+<P>
+See also See section <A HREF="manual_Problems.html#Gone_away">A.2.8  <code>MySQL server has gone away</code></A>.
+
+</P>
+
+
+<H3><A NAME="Full_table" HREF="manual_toc.html#Full_table">A.2.11  <code>The table is full</code></A></H3>
+
+<P>
+<A NAME="IDX2307"></A>
+
+</P>
+<P>
+There are several ways a full-table error can occur:
+
+</P>
+
+<UL>
+<LI>
+
+You are using a MySQL server older than 3.23 and an in-memory
+temporary table becomes larger than <code>tmp_table_size</code> bytes.
+To avoid this problem, you can use the <code>-O tmp_table_size=#</code> option
+to make <code>mysqld</code> increase the temporary table size or use the SQL
+option <code>SQL_BIG_TABLES</code> before you issue the problematic query.
+See section <A HREF="manual_SQL_Syntax.html#SET_OPTION">13.5.3  <code>SET</code> Syntax</A>.
+
+You can also start <code>mysqld</code> with the <code>--big-tables</code> option.
+This is exactly the same as using <code>SQL_BIG_TABLES</code> for all queries.
+
+As of MySQL 3.23, this problem should not occur. If an in-memory temporary
+table becomes larger than <code>tmp_table_size</code>, the server automatically
+converts it to a disk-based <code>MyISAM</code> table.
+<LI>
+
+You are using <code>InnoDB</code> tables and run out of room in the
+<code>InnoDB</code> tablespace. In this case, the solution is to extend the
+<code>InnoDB</code> tablespace.
+See section <A HREF="manual_InnoDB.html#Adding_and_removing">15.8  Adding and Removing <code>InnoDB</code> Data and Log Files</A>.
+<LI>
+
+You are using <code>ISAM</code> or <code>MyISAM</code> tables on an operating system
+that supports files only up to 2GB in size and you have hit this limit for the
+data file or index file.
+<LI>
+
+You are using a <code>MyISAM</code> table and the space required for the table
+exceeds what is allowed by the internal pointer size.  (If you don't specify
+the <code>MAX_ROWS</code> table option when you create a table, MySQL
+uses the <code>myisam_data_pointer_size</code> system variable. Its default value of
+4 bytes is enough to allow only 4GB of data.)
+See section <A HREF="manual_MySQL_Database_Administration.html#Server_system_variables">5.2.3  Server System Variables</A>.
+
+You can check the maximum data/index sizes by using this statement:
+
+<PRE>
+SHOW TABLE STATUS FROM database LIKE '<var>tbl_name</var>';
+</PRE>
+
+You also can use <code>myisamchk -dv /path/to/table-index-file</code>.
+
+If the pointer size is too small, you can fix the problem by using <code>ALTER
+TABLE</code>:
+
+
+<PRE>
+ALTER TABLE <var>tbl_name</var> MAX_ROWS=1000000000 AVG_ROW_LENGTH=<var>nnn</var>;
+</PRE>
+
+You have to specify <code>AVG_ROW_LENGTH</code> only for tables with <code>BLOB</code>
+or <code>TEXT</code> columns; in this case, MySQL can't optimize the space
+required based only on the number of rows.
+
+</UL>
+
+
+
+<H3><A NAME="Cannot_create" HREF="manual_toc.html#Cannot_create">A.2.12  <code>Can't create/write to file</code></A></H3>
+
+<P>
+<A NAME="IDX2308"></A>
+
+</P>
+<P>
+If you get an error of the following type for some queries, it means
+that MySQL cannot create a temporary file for the result set in the
+temporary directory:
+
+</P>
+
+<PRE>
+Can't create/write to file '\\sqla3fe_0.ism'.
+</PRE>
+
+<P>
+The preceding error is a
+typical message for Windows; the Unix message is similar.
+
+</P>
+<P>
+One fix is to start <code>mysqld</code> with the <code>--tmpdir</code> option or to
+add the option to the <code>[mysqld]</code> section of your option file.
+For example, to specify a directory of <tt>`C:\temp'</tt>, use these lines:
+
+</P>
+
+<PRE>
+[mysqld]
+tmpdir=C:/temp
+</PRE>
+
+<P>
+The <tt>`C:\temp'</tt> directory must already exist and have sufficient space for the
+MySQL server to write to. See section <A HREF="manual_Using_MySQL_Programs.html#Option_files">4.3.2  Using Option Files</A>.
+
+</P>
+<P>
+Another cause of this error can be permissions issues. Make sure that the MySQL
+server can write to the <code>tmpdir</code> directory.
+
+</P>
+<P>
+Check also the error code that you get with <code>perror</code>. One reason
+the server cannot write to a table is that the filesystem is full:
+
+</P>
+
+<PRE>
+shell&#62; perror 28
+Error code  28:  No space left on device
+</PRE>
+
+
+
+<H3><A NAME="Commands_out_of_sync" HREF="manual_toc.html#Commands_out_of_sync">A.2.13  <code>Commands out of sync</code></A></H3>
+
+<P>
+<A NAME="IDX2309"></A>
+
+</P>
+<P>
+If you get <code>Commands out of sync; you can't run this command now</code>
+in your client code, you are calling client functions in the wrong order.
+
+</P>
+<P>
+This can happen, for example, if you are using <code>mysql_use_result()</code> and
+try to execute a new query before you have called <code>mysql_free_result()</code>.
+It can also happen if you try to execute two queries that return data without
+calling <code>mysql_use_result()</code> or <code>mysql_store_result()</code> in between.
+
+</P>
+
+
+
+<H3><A NAME="Ignoring_user" HREF="manual_toc.html#Ignoring_user">A.2.14  <code>Ignoring user</code></A></H3>
+
+<P>
+If you get the following error, it means that when <code>mysqld</code> was started
+or when it reloaded the grant tables, it found an account in the <code>user</code>
+table that had an invalid password.
+
+</P>
+<P>
+<code>Found wrong password for user '<var>some_user</var>'@'<var>some_host</var>'; ignoring user</code>
+
+</P>
+<P>
+As a result, the account is simply ignored by the permission system.
+
+</P>
+<P>
+The following list indicates possible causes of and fixes for this problem:
+
+</P>
+
+<UL>
+<LI>
+
+You may be running a new version of <code>mysqld</code> with an old <code>user</code>
+table.  You can check this by executing <code>mysqlshow mysql user</code> to see
+whether the <code>Password</code> column is shorter than 16 characters. If so, you
+can correct this condition by running the <code>scripts/add_long_password</code>
+script.
+
+<LI>
+
+The account has an old password (eight characters long) and you didn't start
+<code>mysqld</code> with the <code>--old-protocol</code> option.
+Update the account in the <code>user</code> table to have a new password or
+restart <code>mysqld</code> with the <code>--old-protocol</code> option.
+
+<LI>
+
+<A NAME="IDX2310"></A>
+You have specified a password in the <code>user</code> table without using the
+<code>PASSWORD()</code> function.  Use <code>mysql</code> to update the account in the
+<code>user</code> table with a new password, making sure to use the <code>PASSWORD()</code>
+function:
+
+
+<PRE>
+mysql&#62; UPDATE user SET Password=PASSWORD('<var>newpwd</var>')
+    -&#62; WHERE User='<var>some_user</var>' AND Host='<var>some_host</var>';
+</PRE>
+
+</UL>
+
+
+
+<H3><A NAME="Cannot_find_table" HREF="manual_toc.html#Cannot_find_table">A.2.15  <code>Table '<var>tbl_name</var>' doesn't exist</code></A></H3>
+
+<P>
+If you get either of the following errors, it usually means that no table
+exists in the current database with the given name:
+
+</P>
+
+<PRE>
+Table '<var>tbl_name</var>' doesn't exist
+Can't find file: '<var>tbl_name</var>' (errno: 2)
+</PRE>
+
+<P>
+In some cases, it may be that the table does exist but that you are
+referring to it incorrectly:
+
+</P>
+
+<UL>
+<LI>
+
+Because MySQL uses directories and files to store databases and
+tables, database and table names are case sensitive if they are located on
+a filesystem that has case-sensitive filenames.
+
+<LI>
+
+Even for filesystems that are not case sensitive, such as on Windows, all
+references to a given table within a query must use the same lettercase.
+
+</UL>
+
+<P>
+You can check which tables are in the current database with
+<code>SHOW TABLES</code>. See section <A HREF="manual_SQL_Syntax.html#SHOW">13.5.4  <code>SHOW</code> Syntax</A>.
+
+</P>
+
+
+
+<H3><A NAME="Cannot_initialize_character_set" HREF="manual_toc.html#Cannot_initialize_character_set">A.2.16  <code>Can't initialize character set</code></A></H3>
+
+<P>
+<A NAME="IDX2311"></A>
+
+</P>
+<P>
+You might see an error like this if you have character set problems:
+
+</P>
+
+<PRE>
+MySQL Connection Failed: Can't initialize character set charset_name
+</PRE>
+
+<P>
+This error can have any of the following causes:
+
+</P>
+
+<UL>
+<LI>
+
+The character set is a multi-byte character set and you have no support
+for the character set in the client.
+In this case, you need to recompile the client by running <code>configure</code>
+with the <code>--with-charset=<var>charset_name</var></code> or
+<code>--with-extra-charsets=<var>charset_name</var></code>
+option.
+See section <A HREF="manual_Installing.html#configure_options">2.8.2  Typical <code>configure</code> Options</A>.
+
+All standard MySQL binaries are compiled with
+<code>--with-extra-character-sets=complex</code>, which enables support for
+all multi-byte character sets. See section <A HREF="manual_MySQL_Database_Administration.html#Character_sets">5.8.1  The Character Set Used for Data and Sorting</A>.
+
+<LI>
+
+The character set is a simple character set that is not compiled into
+<code>mysqld</code>, and the character set definition files are not in the place
+where the client expects to find them.
+
+In this case, you need to use one of the following methods to solve the problem:
+
+
+<UL>
+<LI>
+
+Recompile the client with support for the character set.
+See section <A HREF="manual_Installing.html#configure_options">2.8.2  Typical <code>configure</code> Options</A>.
+<LI>
+
+Specify to the client the directory where the character set definition files
+are located. For many clients, you can do this with the
+<code>--character-sets-dir</code> option.
+<LI>
+
+Copy the character definition files to the path where the client expects them
+to be.
+</UL>
+
+</UL>
+
+
+
+<H3><A NAME="Not_enough_file_handles" HREF="manual_toc.html#Not_enough_file_handles">A.2.17  File Not Found</A></H3>
+
+<P>
+If you get <code>ERROR '...' not found (errno: 23)</code>, <code>Can't open file:
+... (errno: 24)</code>, or any other error with <code>errno 23</code> or <code>errno 24</code>
+from MySQL, it means that you haven't allocated enough file descriptors for
+the MySQL server.  You can use the <code>perror</code> utility to get a
+description of what the error number means:
+
+</P>
+
+<PRE>
+shell&#62; perror 23
+Error code  23:  File table overflow
+shell&#62; perror 24
+Error code  24:  Too many open files
+shell&#62; perror 11
+Error code  11:  Resource temporarily unavailable
+</PRE>
+
+<P>
+The problem here is that <code>mysqld</code> is trying to keep open too many
+files simultaneously.  You can either tell <code>mysqld</code> not to open so
+many files at once or increase the number of file descriptors
+available to <code>mysqld</code>.
+
+</P>
+<P>
+To tell <code>mysqld</code> to keep open fewer files at a time, you can make the
+table cache smaller by reducing the value of the <code>table_cache</code> system
+variable (the default value is 64). Reducing the value of
+<code>max_connections</code> also will reduce the number of open files (the
+default value is 100).
+
+</P>
+<P>
+<A NAME="IDX2312"></A>
+To change the number of file descriptors available to <code>mysqld</code>, you can
+use the <code>--open-files-limit</code> option to <code>mysqld_safe</code> or (as of
+MySQL 3.23.30) set the <code>open_files_limit</code> system variable.
+See section <A HREF="manual_MySQL_Database_Administration.html#Server_system_variables">5.2.3  Server System Variables</A>.
+The easiest way to set these values is to add an option to your option file.
+See section <A HREF="manual_Using_MySQL_Programs.html#Option_files">4.3.2  Using Option Files</A>.  If you have an old version of <code>mysqld</code> that
+doesn't support setting the open files limit, you can edit the
+<code>mysqld_safe</code> script.  There is a commented-out line <code>ulimit -n
+256</code> in the script.  You can remove the <samp>`#'</samp> character to uncomment
+this line, and change the number <code>256</code> to set the number of file
+descriptors to be made available to <code>mysqld</code>.
+
+</P>
+<P>
+<code>--open-files-limit</code> and <code>ulimit</code> can increase the number of file
+descriptors, but only up to the limit imposed by the operating system. There
+is also a ``hard'' limit that can be overridden only if you start
+<code>mysqld_safe</code> or <code>mysqld</code> as <code>root</code> (just remember that you
+also need to start the server with the <code>--user</code> option in this case so
+that it does not continue to run as <code>root</code> after it starts up).
+If you need to increase the operating system limit on the number of file
+descriptors available to each process, consult the documentation for your
+system.
+
+</P>
+<P>
+<strong>Note</strong>: If you run the <code>tcsh</code> shell, <code>ulimit</code> will not work!
+<code>tcsh</code> will also report incorrect values when you ask for the current
+limits.  In this case, you should start <code>mysqld_safe</code> using <code>sh</code>.
+
+</P>
+
+
+
+<H2><A NAME="Installation_Issues" HREF="manual_toc.html#Installation_Issues">A.3  Installation-Related Issues</A></H2>
+
+
+
+<H3><A NAME="Link_errors" HREF="manual_toc.html#Link_errors">A.3.1  Problems Linking to the MySQL Client Library</A></H3>
+
+<P>
+<A NAME="IDX2313"></A>
+<A NAME="IDX2314"></A>
+<A NAME="IDX2315"></A>
+
+</P>
+<P>
+When you are linking an application program to use the MySQL client library,
+you might get undefined reference errors for symbols that start with <code>mysql_</code>,
+such as those shown here:
+
+</P>
+
+<PRE>
+/tmp/ccFKsdPa.o: In function `main':
+/tmp/ccFKsdPa.o(.text+0xb): undefined reference to `mysql_init'
+/tmp/ccFKsdPa.o(.text+0x31): undefined reference to `mysql_real_connect'
+/tmp/ccFKsdPa.o(.text+0x57): undefined reference to `mysql_real_connect'
+/tmp/ccFKsdPa.o(.text+0x69): undefined reference to `mysql_error'
+/tmp/ccFKsdPa.o(.text+0x9a): undefined reference to `mysql_close'
+</PRE>
+
+<P>
+You should be able to solve this problem by adding <code>-Ldir_path
+-lmysqlclient</code> at the end of your link command, where <code>dir_path</code>
+represents the pathname of the directory where the client library is
+located. To determine the correct directory, try this command:
+
+</P>
+
+<PRE>
+shell&#62; mysql_config --libs
+</PRE>
+
+<P>
+The output from <code>mysql_config</code> might indicate other libraries that
+should be specified on the link command as well.
+
+</P>
+<P>
+If you get <code>undefined reference</code> errors for the <code>uncompress</code>
+or <code>compress</code> function, add <code>-lz</code> to the end of your
+link command and try again.
+
+</P>
+<P>
+If you get <code>undefined reference</code> errors for a function that should
+exist on your system, such as <code>connect</code>, check the manual page for the
+function in question to determine which libraries you should add to the link
+command.
+
+</P>
+<P>
+You might get <code>undefined reference</code> errors such as the following for
+functions that don't exist on your system:
+
+</P>
+
+<PRE>
+mf_format.o(.text+0x201): undefined reference to `__lxstat'
+</PRE>
+
+<P>
+This usually means that your MySQL client library was compiled on a system
+that is not 100% compatible with yours.  In this case, you should download
+the latest MySQL source distribution and compile MySQL yourself.
+See section <A HREF="manual_Installing.html#Installing_source">2.8  MySQL Installation Using a Source Distribution</A>.
+
+</P>
+<P>
+You might get undefined reference errors at runtime when you try to execute a
+MySQL program. If these errors specify symbols that start with <code>mysql_</code>
+or indicate that the <code>mysqlclient</code> library can't be found, it means
+that your system can't find the shared <tt>`libmysqlclient.so'</tt> library.
+The fix for this is to tell your system to search for shared libraries
+where the library is located. Use whichever of the following methods is
+appropriate for your system:
+
+</P>
+
+<UL>
+<LI>
+
+Add the path to the directory where <tt>`libmysqlclient.so'</tt> is located to the
+<code>LD_LIBRARY_PATH</code> environment variable.
+<LI>
+
+Add the path to the directory where <tt>`libmysqlclient.so'</tt> is located to the
+<code>LD_LIBRARY</code> environment variable.
+<LI>
+
+Copy <tt>`libmysqlclient.so'</tt> to some directory that is searched by your system,
+such as <tt>`/lib'</tt>, and update the shared library information by executing
+<code>ldconfig</code>.
+</UL>
+
+<P>
+Another way to solve this problem is by linking your program statically with
+the <code>-static</code> option, or by removing the dynamic MySQL libraries
+before linking your code. Before trying the second method, you should be
+sure that no other programs are using the dynamic libraries.
+
+</P>
+
+
+
+<H3><A NAME="Changing_MySQL_user" HREF="manual_toc.html#Changing_MySQL_user">A.3.2  How to Run MySQL as a Normal User</A></H3>
+
+<P>
+<A NAME="IDX2316"></A>
+<A NAME="IDX2317"></A>
+
+</P>
+<P>
+On Windows, you can run the server as a Windows service using normal user
+accounts beginning with MySQL 4.0.17 and 4.1.2.  (Older MySQL versions
+required you to have administrator rights.  This was a bug introduced in
+MySQL 3.23.54.)
+
+</P>
+<P>
+On Unix, the MySQL server <code>mysqld</code> can be started and run by any user.
+However, you should avoid running the server as the Unix <code>root</code> user
+for security reasons.  In order to change <code>mysqld</code> to run as a normal
+unprivileged Unix user <var>user_name</var>, you must do the following:
+
+</P>
+
+<OL>
+<LI>
+
+Stop the server if it's running (use <code>mysqladmin shutdown</code>).
+
+<LI>
+
+Change the database directories and files so that <var>user_name</var> has
+privileges to read and write files in them (you might need to do this as
+the Unix <code>root</code> user):
+
+
+<PRE>
+shell&#62; chown -R <var>user_name</var> <var>/path/to/mysql/datadir</var>
+</PRE>
+
+If you do not do this, the server will not be able to access databases or tables when it
+runs as <var>user_name</var>.
+
+If directories or files within the MySQL data directory are symbolic links,
+you'll also need to follow those links and change the directories and files
+they point to.  <code>chown -R</code> might not follow symbolic links for you.
+
+<LI>
+
+Start the server as user <var>user_name</var>. If you are using MySQL 3.22 or
+later, another alternative is to start <code>mysqld</code> as the Unix <code>root</code>
+user and use the <code>--user=<var>user_name</var></code> option.  <code>mysqld</code> will start up,
+then switch
+to run as the Unix user <var>user_name</var> before accepting any connections.
+
+<LI>
+
+To start the server as the given user automatically at system
+startup time, specify the username by adding a <code>user</code> option to
+the <code>[mysqld]</code> group of the <tt>`/etc/my.cnf'</tt> option file or the
+<tt>`my.cnf'</tt> option file in the server's data directory. For example:
+
+
+<PRE>
+[mysqld]
+user=<var>user_name</var>
+</PRE>
+
+</OL>
+
+<P>
+If your Unix machine itself isn't secured, you should assign passwords
+to the MySQL <code>root</code> accounts in the grant tables.  Otherwise, any
+user with a login account on that machine can run the <code>mysql</code> client with a
+<code>--user=root</code> option and perform any operation.  (It is a good idea to
+assign passwords to MySQL accounts in any case, but especially so when
+other login accounts exist on the server host.)
+See section <A HREF="manual_Installing.html#Post-installation">2.9  Post-Installation Setup and Testing</A>.
+
+</P>
+
+
+
+<H3><A NAME="File_permissions" HREF="manual_toc.html#File_permissions">A.3.3  Problems with File Permissions</A></H3>
+
+<P>
+<A NAME="IDX2318"></A>
+<A NAME="IDX2319"></A>
+<A NAME="IDX2320"></A>
+
+</P>
+<P>
+<A NAME="IDX2321"></A>
+<A NAME="IDX2322"></A>
+If you have problems with file permissions, the <code>UMASK</code> environment
+variable might be set incorrectly when <code>mysqld</code> starts.  For example,
+MySQL might issue the following error message when you create a table:
+
+</P>
+
+<PRE>
+ERROR: Can't find file: 'path/with/filename.frm' (Errcode: 13)
+</PRE>
+
+<P>
+The default <code>UMASK</code> value is <code>0660</code>. You can change this behavior by
+starting <code>mysqld_safe</code> as follows:
+
+</P>
+
+<PRE>
+shell&#62; UMASK=384  # = 600 in octal
+shell&#62; export UMASK
+shell&#62; mysqld_safe &#38;
+</PRE>
+
+<P>
+<A NAME="IDX2323"></A>
+<A NAME="IDX2324"></A>
+
+</P>
+<P>
+By default, MySQL creates database and <code>RAID</code> directories
+with an access permission value of <code>0700</code>.  You can modify this
+behavior by setting the <code>UMASK_DIR</code> variable. If you set its value, new
+directories are created with the combined <code>UMASK</code> and <code>UMASK_DIR</code>
+values. For example, if you want to give group access to all new
+directories, you can do this:
+
+</P>
+
+<PRE>
+shell&#62; UMASK_DIR=504  # = 770 in octal
+shell&#62; export UMASK_DIR
+shell&#62; mysqld_safe &#38;
+</PRE>
+
+<P>
+In MySQL 3.23.25 and above, MySQL assumes that the
+value for <code>UMASK</code> and <code>UMASK_DIR</code> is in octal if it starts
+with a zero.
+
+</P>
+<P>
+See section <A HREF="manual_Environment_variables.html#Environment_variables">F  Environment Variables</A>.
+
+</P>
+
+
+
+<H2><A NAME="Administration_Issues" HREF="manual_toc.html#Administration_Issues">A.4  Administration-Related Issues</A></H2>
+
+
+
+<H3><A NAME="Resetting_permissions" HREF="manual_toc.html#Resetting_permissions">A.4.1  How to Reset the Root Password</A></H3>
+
+<P>
+<A NAME="IDX2325"></A>
+<A NAME="IDX2326"></A>
+<A NAME="IDX2327"></A>
+<A NAME="IDX2328"></A>
+
+</P>
+<P>
+If you have never set a <code>root</code> password for MySQL, the server will
+not require a password at all for connecting as <code>root</code>. However, it is
+recommended to set a password for each account. See section <A HREF="manual_MySQL_Database_Administration.html#Security_guidelines">5.4.1  General Security Guidelines</A>.
+
+</P>
+<P>
+If you set a <code>root</code> password previously, but have forgotten what it
+was, you can set a new password. The following procedure is for Windows
+systems. The procedure for Unix systems is given later in this section.
+
+</P>
+<P>
+The procedure under Windows:
+
+</P>
+
+<OL>
+<LI>
+
+Log on to your system as Administrator.
+<LI>
+
+Stop the MySQL server if it is running. For a server that is running as a
+Windows service, go to the Services manager:
+
+<PRE>
+Start Menu -&#62; Control Panel -&#62; Administrative Tools -&#62; Services
+</PRE>
+
+Then find the MySQL service in the list, and stop it.
+
+If your server is not running as a service, you may need to use the Task
+Manager to force it to stop.
+<LI>
+
+Open a console window to get to the DOS command prompt:
+
+<PRE>
+Start Menu -&#62; Run -&#62; cmd
+</PRE>
+
+<LI>
+
+We are assuming that you installed MySQL to <tt>`C:\mysql'</tt>. If you installed
+MySQL to another location, adjust the following commands accordingly.
+
+At the DOS command prompt, execute this command:
+
+<PRE>
+C:\&#62; C:\mysql\bin\mysqld-nt --skip-grant-tables
+</PRE>
+
+This starts the server in a special mode that does not check the grant
+tables to control access.
+<LI>
+
+Keeping the first console window open, open a second console window and
+execute the following commands (type each on a single line):
+
+<PRE>
+C:\&#62; C:\mysql\bin\mysqladmin -u root
+         flush-privileges password "<var>newpwd</var>"
+C:\&#62; C:\mysql\bin\mysqladmin -u root -p shutdown
+</PRE>
+
+Replace ``<var>newpwd</var>'' with the actual <code>root</code> password that you want
+to use.
+The second command will prompt you to enter the new password for access.
+Enter the password that you assigned in the first command.
+<LI>
+
+Stop the MySQL server, then restart it in normal mode again.
+If you run the server as a service, start it from the Windows Services
+window.  If you start the server manually, use whatever command you
+normally use.
+<LI>
+
+You should now be able to connect using the new password.
+</OL>
+
+<P>
+In a Unix environment, the procedure for resetting the <code>root</code> password
+is as follows:
+
+</P>
+
+<OL>
+<LI>
+
+Log on to your system as either the Unix <code>root</code> user or as the
+same user that the <code>mysqld</code> server runs as.
+<LI>
+
+Locate the <tt>`.pid'</tt> file that contains the server's process ID.
+The exact location and name of this file depend on your distribution,
+hostname, and configuration. Common locations are <tt>`/var/lib/mysql/'</tt>,
+<tt>`/var/run/mysqld/'</tt>, and <tt>`/usr/local/mysql/data/'</tt>. Generally, the
+filename has the extension of <tt>`.pid'</tt> and begins with either
+<tt>`mysqld'</tt> or your system's hostname.
+
+Now you can stop the MySQL server by sending a normal <code>kill</code>
+(not <code>kill -9</code>) to the <code>mysqld</code> process, using the pathname of the
+<tt>`.pid'</tt> file in the following command:
+
+<PRE>
+shell&#62; kill `cat /mysql-data-directory/host_name.pid`
+</PRE>
+
+Note the use of backticks rather than forward quotes with the <code>cat</code>
+command; these cause the output of <code>cat</code>
+to be substituted into the <code>kill</code> command.
+<LI>
+
+Restart the MySQL server with the special <code>--skip-grant-tables</code> option:
+
+<PRE>
+shell&#62; mysqld_safe --skip-grant-tables &#38;
+</PRE>
+
+<LI>
+
+Set a new password for the <code>root@localhost</code> MySQL account:
+
+<PRE>
+shell&#62; mysqladmin -u root flush-privileges password "<var>newpwd</var>"
+</PRE>
+
+Replace ``<var>newpwd</var>'' with the actual <code>root</code> password that you want
+to use.
+<LI>
+
+You should now be able to connect using the new password.
+</OL>
+
+<P>
+Alternatively, on any platform, you can set the new password using the <code>mysql</code> client:
+
+<OL>
+<LI>
+
+Stop <code>mysqld</code> and restart it with the <code>--skip-grant-tables</code>
+option as described earlier.
+<LI>
+
+Connect to the <code>mysqld</code> server with this command:
+
+<PRE>
+shell&#62; mysql -u root
+</PRE>
+
+<LI>
+
+Issue the following statements in the <code>mysql</code> client:
+
+<PRE>
+mysql&#62; UPDATE mysql.user SET Password=PASSWORD('<var>newpwd</var>')
+    -&#62;                   WHERE User='root';
+mysql&#62; FLUSH PRIVILEGES;
+</PRE>
+
+Replace ``<var>newpwd</var>'' with the actual <code>root</code> password that you want
+to use.
+<LI>
+
+You should now be able to connect using the new password.
+</OL>
+
+
+
+<H3><A NAME="Crashing" HREF="manual_toc.html#Crashing">A.4.2  What to Do If MySQL Keeps Crashing</A></H3>
+
+<P>
+<A NAME="IDX2329"></A>
+
+</P>
+<P>
+Each MySQL version is tested on many platforms before it is
+released.  This doesn't mean that there are no bugs in
+MySQL, but if there are bugs, they should be very few and can be
+hard to find.  If you have a problem, it will always help if you try to
+find out exactly what crashes your system, because you will have a much better
+chance of getting the problem fixed quickly.
+
+</P>
+<P>
+First, you should try to find out whether the problem is that the <code>mysqld</code> server dies or whether your problem has to do with your
+client.  You can check how long your <code>mysqld</code> server has been up by
+executing <code>mysqladmin version</code>.  If <code>mysqld</code> has died and
+restarted, you may find the reason by looking in the server's error log.
+See section <A HREF="manual_MySQL_Database_Administration.html#Error_log">5.9.1  The Error Log</A>.
+
+</P>
+<P>
+On some systems, you can find in the error log a stack trace of where
+<code>mysqld</code> died that you can resolve with the <code>resolve_stack_dump</code>
+program.  See section <A HREF="manual_Porting.html#Using_stack_trace">E.1.4  Using a Stack Trace</A>. Note that the variable values written in
+the error log may not always be 100% correct.
+
+</P>
+<P>
+Many server crashes are caused by corrupted data files or index files.  MySQL
+will update the files on disk with the <code>write()</code> system call after every
+SQL statement and before the client is notified about the result. (This is
+not true if you are running with <code>--delay-key-write</code>, in which case
+data files are written but not index files.) This means that data file
+contents are safe even
+if <code>mysqld</code> crashes, because the operating system will ensure that the
+unflushed data is written to disk.  You can force MySQL to flush everything
+to disk after every SQL statement by starting <code>mysqld</code> with the
+<code>--flush</code> option.
+
+</P>
+<P>
+The preceding means that normally you should not get corrupted tables unless
+one of the following happens:
+
+</P>
+
+<UL>
+<LI>
+
+The MySQL server or the server host was killed in the middle of an update.
+<LI>
+
+You have found a bug in <code>mysqld</code> that caused it to die in the
+middle of an update.
+<LI>
+
+Some external program is manipulating data files or index files at the same
+time as <code>mysqld</code> without locking the table properly.
+<LI>
+
+You are running many <code>mysqld</code> servers using the same data directory on
+a system that doesn't support good filesystem locks (normally handled by the
+<code>lockd</code> lock manager), or you are running multiple servers with the
+<code>--skip-external-locking</code> option.
+<LI>
+
+You have a crashed data file or index file that contains very corrupt data that
+confused <code>mysqld</code>.
+<LI>
+
+You have found a bug in the data storage code. This isn't likely, but it's
+at least possible.  In this case, you can try to change the table type to
+another storage engine by using <code>ALTER TABLE</code> on a repaired copy of the
+table.
+</UL>
+
+<P>
+Because it is very difficult to know why something is crashing, first try to
+check whether things that work for others crash for you.  Please try
+the following things:
+
+</P>
+
+<UL>
+<LI>
+
+Stop the <code>mysqld</code> server with <code>mysqladmin shutdown</code>, run
+<code>myisamchk --silent --force */*.MYI</code> from the data directory to check
+all <code>MyISAM</code> tables, and restart <code>mysqld</code>.  This will ensure that
+you are running from a clean state.
+See section <A HREF="manual_MySQL_Database_Administration.html#MySQL_Database_Administration">5  Database Administration</A>.
+
+<LI>
+
+Start <code>mysqld</code> with the <code>--log</code> option and try to determine
+from the information written to the log whether some specific query kills
+the server. About 95% of all bugs are related to a particular query.
+Normally, this will be one of the last queries in the log file just before
+the server restarts.
+See section <A HREF="manual_MySQL_Database_Administration.html#Query_log">5.9.2  The General Query Log</A>.
+If you can repeatedly kill MySQL with a specific query, even
+when you have checked all tables just before issuing it, then you
+have been able to locate the bug and should submit a bug report for it.
+See section <A HREF="manual_Introduction.html#Bug_reports">1.4.1.3  How to Report Bugs or Problems</A>.
+
+<LI>
+
+Try to make a test case that we can use to repeat the problem.
+See section <A HREF="manual_Porting.html#Reproduceable_test_case">E.1.6  Making a Test Case If You Experience Table Corruption</A>.
+
+<LI>
+
+Try running the tests in the <tt>`mysql-test'</tt> directory and the MySQL
+benchmarks.  See section <A HREF="manual_Extending_MySQL.html#MySQL_test_suite">24.1.2  MySQL Test Suite</A>.  They should test MySQL
+rather well.  You can also add code to the benchmarks that simulates
+your application.  The benchmarks can be found in the <tt>`sql-bench'</tt>
+directory in a source distribution or, for a binary distribution, in
+the <tt>`sql-bench'</tt> directory under your MySQL installation
+directory.
+
+<LI>
+
+Try the <code>fork_big.pl</code> script.  (It is located in the <tt>`tests'</tt>
+directory of source distributions.)
+
+<LI>
+
+If you configure MySQL for debugging, it will be much easier to
+gather information about possible errors if something goes wrong.
+Configuring MySQL for debugging causes a safe memory allocator to be
+included that can find some errors. It also provides a lot of output
+about what is happening.  Reconfigure MySQL with the <code>--with-debug</code>
+or <code>--with-debug=full</code> option to <code>configure</code> and then recompile.
+See section <A HREF="manual_Porting.html#Debugging_server">E.1  Debugging a MySQL Server</A>.
+
+<LI>
+
+Make sure that you have applied the latest patches for your operating system.
+
+<LI>
+
+Use the <code>--skip-external-locking</code> option to <code>mysqld</code>.  On some
+systems, the <code>lockd</code> lock manager does not work properly; the
+<code>--skip-external-locking</code> option tells <code>mysqld</code> not to use external
+locking.  (This means that you cannot run two <code>mysqld</code> servers on the same
+data directory and that you must be careful if you use <code>myisamchk</code>.
+Nevertheless, it may be instructive to try the option as a test.)
+
+<LI>
+
+Have you tried <code>mysqladmin -u root processlist</code> when <code>mysqld</code>
+appears to be running but not responding?  Sometimes <code>mysqld</code> is not
+comatose even though you might think so.  The problem may be that all
+connections are in use, or there may be some internal lock problem.
+<code>mysqladmin -u root processlist</code> usually will be able to make a
+connection even in these cases, and can provide useful information about the
+current number of connections and their status.
+
+<LI>
+
+Run the command <code>mysqladmin -i 5 status</code> or <code>mysqladmin -i 5
+-r status</code> in a separate window to produce statistics while you run
+your other queries.
+
+<LI>
+
+Try the following:
+
+<OL>
+<LI>
+
+Start <code>mysqld</code> from <code>gdb</code> (or another debugger).
+See section <A HREF="manual_Porting.html#Using_gdb_on_mysqld">E.1.3  Debugging <code>mysqld</code> under <code>gdb</code></A>.
+
+<LI>
+
+Run your test scripts.
+
+<LI>
+
+Print the backtrace and the local variables at the three lowest levels. In
+<code>gdb</code>, you can do this with the following commands when <code>mysqld</code>
+has crashed inside <code>gdb</code>:
+
+
+<PRE>
+backtrace
+info local
+up
+info local
+up
+info local
+</PRE>
+
+With <code>gdb</code>, you can also examine which threads exist with <code>info
+threads</code> and switch to a specific thread with <code>thread #</code>, where
+<code>#</code> is the thread ID.
+</OL>
+
+<LI>
+
+Try to simulate your application with a Perl script to force
+MySQL to crash or misbehave.
+
+<LI>
+
+Send a normal bug report. See section <A HREF="manual_Introduction.html#Bug_reports">1.4.1.3  How to Report Bugs or Problems</A>. Be even more detailed
+than usual.  Because MySQL works for many people, it may be that the
+crash results from something that exists only on your computer (for example,
+an error that is related to your particular system libraries).
+<LI>
+
+If you have a problem with tables containing dynamic-length rows and you are
+using only <code>VARCHAR</code> columns (not <code>BLOB</code> or <code>TEXT</code> columns), you
+can try to change all <code>VARCHAR</code> to <code>CHAR</code> with <code>ALTER
+TABLE</code>.  This will force MySQL to use fixed-size rows.
+Fixed-size rows take a little extra space, but are much more tolerant to
+corruption.
+
+The current dynamic row code has been in use at MySQL AB for several years
+with very few problems, but dynamic-length rows are by nature more prone to
+errors, so it may be a good idea to try this strategy to see whether it helps.
+
+<LI>
+
+Do not rule out your server hardware when diagnosing problems. Defective hardware
+can be the cause of data corruption. Particular attention should be paid to both
+RAMS and hard-drives when troubleshooting hardware.
+</UL>
+
+
+
+<H3><A NAME="Full_disk" HREF="manual_toc.html#Full_disk">A.4.3  How MySQL Handles a Full Disk</A></H3>
+
+<P>
+<A NAME="IDX2330"></A>
+<A NAME="IDX2331"></A>
+
+</P>
+<P>
+This section describes how MySQL responds to disk-full errors (such as ``no
+space left on device''), and, as of MySQL 4.0.22, to quota-exceeded errors
+(such as ``write failed'' or ``user block limit reached").
+
+</P>
+<P>
+This section is relevant for writes to <code>MyISAM</code> tables. As of MySQL
+4.1.9, it also applies for writes to binary log files and binary log index
+file, except that references to ``row'' and ``record'' should be understood
+to mean ``event.''
+
+</P>
+<P>
+When a disk-full condition occurs, MySQL does the following:
+
+</P>
+
+<UL>
+<LI>
+
+It checks once every minute to see whether there is enough space to write
+the current row. If there is enough space, it continues as if nothing had
+happened.
+<LI>
+
+Every 10 minutes it writes an entry to the log file, warning about the
+disk-full condition.
+</UL>
+
+<P>
+To alleviate the problem, you can take the following actions:
+
+</P>
+
+<UL>
+<LI>
+
+To continue, you only have to free enough disk space to insert all records.
+<LI>
+
+To abort the thread, you must use <code>mysqladmin kill</code>.
+The thread will be aborted the next time it checks the disk (in one minute).
+<LI>
+
+Other threads might be waiting for the table that caused the disk-full
+condition.  If you have several ``locked'' threads, killing the one thread
+that is waiting on the disk-full condition will allow the other threads to
+continue.
+</UL>
+
+<P>
+Exceptions to the preceding behavior are when you use <code>REPAIR TABLE</code> or
+<code>OPTIMIZE TABLE</code> or when the indexes are created in a batch after
+<code>LOAD DATA INFILE</code> or after an <code>ALTER TABLE</code> statement.
+All of these statements may create large temporary files that, if left to
+themselves, would cause big problems for the rest of the system.  If the disk
+becomes full while MySQL is doing any of these operations,
+it will remove the big temporary files and mark the table as crashed.
+The exception is that for <code>ALTER TABLE</code>, the old table will be left
+unchanged.
+
+</P>
+
+
+
+<H3><A NAME="Temporary_files" HREF="manual_toc.html#Temporary_files">A.4.4  Where MySQL Stores Temporary Files</A></H3>
+
+<P>
+MySQL uses the value of the <code>TMPDIR</code> environment variable as the
+pathname of the directory in which to store temporary files.  If you don't
+have <code>TMPDIR</code> set, MySQL uses the system default, which is normally
+<tt>`/tmp'</tt>, <tt>`/var/tmp'</tt>, or <tt>`/usr/tmp'</tt>.  If the filesystem
+containing your temporary file directory is too small, you can use the
+<code>--tmpdir</code> option to <code>mysqld</code> to specify a directory in a
+filesystem where you have enough space.
+
+</P>
+<P>
+Starting from MySQL 4.1, the <code>--tmpdir</code> option can be set to a list
+of several paths that are used in round-robin fashion. Paths should be
+separated by colon characters (<samp>`:'</samp>) on Unix and semicolon characters
+(<samp>`;'</samp>) on Windows, NetWare, and OS/2.  <strong>Note</strong>: To spread the load
+effectively, these paths should be located on different
+<em>physical</em> disks, not different partitions of the same disk.
+
+</P>
+<P>
+If the MySQL server is acting as a replication slave, you should not set
+<code>--tmpdir</code> to point to a directory on a memory-based filesystem or to a
+directory that is cleared when the server host restarts.  A replication
+slave needs some of its temporary files to survive a machine restart so that
+it can replicate temporary tables or <code>LOAD DATA INFILE</code> operations. If
+files in the temporary file directory are lost when the server restarts,
+replication will fail.
+
+</P>
+<P>
+MySQL creates all temporary files as hidden files. This ensures
+that the temporary files will be removed if <code>mysqld</code> is terminated.  The
+disadvantage of using hidden files is that you will not see a big temporary
+file that fills up the filesystem in which the temporary file directory is
+located.
+
+</P>
+<P>
+When sorting (<code>ORDER BY</code> or <code>GROUP BY</code>), MySQL normally
+uses one or two temporary files. The maximum disk space required is determined
+by the following expression:
+
+</P>
+
+<PRE>
+(length of what is sorted + sizeof(row pointer))
+* number of matched rows
+* 2
+</PRE>
+
+<P>
+The row pointer size is usually four bytes, but may grow in the future for
+really big tables.
+
+</P>
+<P>
+For some <code>SELECT</code> queries, MySQL also creates temporary SQL
+tables. These are not hidden and have names of the form <tt>`SQL_*'</tt>.
+
+</P>
+<P>
+<code>ALTER TABLE</code> creates a temporary table in the same directory as
+the original table.
+
+</P>
+
+
+<H3><A NAME="Problems_with_mysql.sock" HREF="manual_toc.html#Problems_with_mysql.sock">A.4.5  How to Protect or Change the MySQL Socket File <tt>`/tmp/mysql.sock'</tt></A></H3>
+
+<P>
+<A NAME="IDX2332"></A>
+<A NAME="IDX2333"></A>
+
+</P>
+<P>
+The default location for the Unix socket file that the server uses for
+communication with local clients is <tt>`/tmp/mysql.sock'</tt>.  This might
+cause problems, because on some versions of Unix, anyone can delete files
+in the <tt>`/tmp'</tt> directory.
+
+</P>
+<P>
+On most versions of Unix, you can protect your <tt>`/tmp'</tt> directory so that
+files can be deleted only by their owners or the superuser (<code>root</code>).
+To do this, set the <code>sticky</code> bit on the <tt>`/tmp'</tt> directory by
+logging in as <code>root</code> and using the following command:
+
+</P>
+
+<PRE>
+shell&#62; chmod +t /tmp
+</PRE>
+
+<P>
+You can check whether the <code>sticky</code> bit is set by executing <code>ls -ld
+/tmp</code>.  If the last permission character is <code>t</code>, the bit is set.
+
+</P>
+<P>
+<A NAME="IDX2334"></A>
+
+</P>
+<P>
+Another approach is to change the place where the server creates the Unix
+socket file. If you do this, you should also let client programs know the
+new location of the file.  You can specify the file location in several
+ways:
+
+</P>
+
+<UL>
+<LI>
+
+Specify the path in a global or local option file.
+For example, put the following lines in <code>/etc/my.cnf</code>:
+
+
+<PRE>
+[mysqld]
+socket=/path/to/socket
+
+[client]
+socket=/path/to/socket
+</PRE>
+
+See section <A HREF="manual_Using_MySQL_Programs.html#Option_files">4.3.2  Using Option Files</A>.
+
+<LI>
+
+Specify a <code>--socket</code> option on the command line
+to <code>mysqld_safe</code> and when you run client programs.
+
+<LI>
+
+Set the <code>MYSQL_UNIX_PORT</code> environment variable to the path of the Unix
+socket file.
+
+<LI>
+
+Recompile MySQL from source to use a different default Unix socket
+file location.  Define the path to the file with the
+<code>--with-unix-socket-path</code>  option when you run <code>configure</code>.
+See section <A HREF="manual_Installing.html#configure_options">2.8.2  Typical <code>configure</code> Options</A>.
+
+</UL>
+
+<P>
+You can test whether the new socket location works by attempting to connect to
+the server with this command:
+
+</P>
+
+<PRE>
+shell&#62; mysqladmin --socket=/path/to/socket version
+</PRE>
+
+
+
+<H3><A NAME="Timezone_problems" HREF="manual_toc.html#Timezone_problems">A.4.6  Time Zone Problems</A></H3>
+
+<P>
+<A NAME="IDX2335"></A>
+<A NAME="IDX2336"></A>
+
+</P>
+<P>
+<A NAME="IDX2337"></A>
+<A NAME="IDX2338"></A>
+
+</P>
+<P>
+If you have a problem with <code>SELECT NOW()</code> returning values in GMT and
+not your local time, you have to tell the server your current time zone.
+The same applies if <code>UNIX_TIMESTAMP()</code> returns the wrong value.
+This should be done for the environment in which the server runs; for
+example, in <code>mysqld_safe</code> or <code>mysql.server</code>.
+See section <A HREF="manual_Environment_variables.html#Environment_variables">F  Environment Variables</A>.
+
+</P>
+<P>
+You can set the time zone for the server with the
+<code>--timezone=timezone_name</code> option to <code>mysqld_safe</code>.  You can
+also set it by setting the <code>TZ</code> environment variable before you
+start <code>mysqld</code>.
+
+</P>
+<P>
+The allowable values for <code>--timezone</code> or <code>TZ</code> are
+system-dependent. Consult your operating system documentation to see
+what values are acceptable.
+
+</P>
+
+
+<H2><A NAME="Query_Issues" HREF="manual_toc.html#Query_Issues">A.5  Query-Related Issues</A></H2>
+
+
+
+<H3><A NAME="Case_sensitivity" HREF="manual_toc.html#Case_sensitivity">A.5.1  Case Sensitivity in Searches</A></H3>
+
+<P>
+<A NAME="IDX2339"></A>
+<A NAME="IDX2340"></A>
+<A NAME="IDX2341"></A>
+<A NAME="IDX2342"></A>
+
+</P>
+<P>
+By default, MySQL searches are not case sensitive (although there are
+some character sets that are never case insensitive, such as <code>czech</code>).
+This means that if you search with <code><var>col_name</var> LIKE 'a%'</code>, you will get all
+column values that start with <code>A</code> or <code>a</code>. If you want to make this
+search case sensitive, make sure that one of the operands is a binary string.
+You can do this with the <code>BINARY</code> operator. Write the condition as either
+<code>BINARY <var>col_name</var> LIKE 'a%'</code> or <code><var>col_name</var> LIKE BINARY 'a%'</code>.
+
+</P>
+<P>
+If you want a column always to be treated in case-sensitive fashion,
+declare it as <code>BINARY</code>. See section <A HREF="manual_SQL_Syntax.html#CREATE_TABLE">13.2.6  <code>CREATE TABLE</code> Syntax</A>.
+
+</P>
+<P>
+Simple comparison operations (<code>&#62;=, &#62;, =, &#60;, &#60;=</code>, sorting, and grouping)
+are based on each character's ``sort value.'' Characters with the same
+sort value (such as <samp>`E'</samp>, <samp>`e'</samp>, and <samp>`&eacute;'</samp>) are treated as the
+same character.
+
+</P>
+<P>
+If you are using Chinese data in the so-called <code>big5</code> encoding, you
+want to make all character columns <code>BINARY</code>. This works because the
+sorting order of <code>big5</code> encoding characters is based on the order of
+ASCII codes. As of MySQL 4.1, you can explicitly declare that a column should
+use the <code>big5</code> character set:
+
+</P>
+
+<PRE>
+CREATE TABLE t (name CHAR(40) CHARACTER SET big5);
+</PRE>
+
+
+
+<H3><A NAME="Using_DATE" HREF="manual_toc.html#Using_DATE">A.5.2  Problems Using <code>DATE</code> Columns</A></H3>
+
+<P>
+<A NAME="IDX2343"></A>
+
+</P>
+<P>
+<A NAME="IDX2344"></A>
+<A NAME="IDX2345"></A>
+
+</P>
+<P>
+The format of a <code>DATE</code> value is <code>'YYYY-MM-DD'</code>. According to
+standard SQL, no other format is allowed. You should use this format in
+<code>UPDATE</code> expressions and in the <code>WHERE</code> clause of <code>SELECT</code>
+statements.  For example:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT * FROM <var>tbl_name</var> WHERE date &#62;= '2003-05-05';
+</PRE>
+
+<P>
+As a convenience, MySQL automatically converts a date to a number if
+the date is used in a numeric context (and vice versa). It is also smart
+enough to allow a ``relaxed'' string form when updating and in a <code>WHERE</code>
+clause that compares a date to a <code>TIMESTAMP</code>, <code>DATE</code>, or
+<code>DATETIME</code> column.  (``Relaxed form'' means that any punctuation character
+may be used as the separator between parts. For example, <code>'2004-08-15'</code>
+and <code>'2004#08#15'</code> are equivalent.) MySQL can also convert a
+string containing no separators (such as <code>'20040815'</code>), provided it
+makes sense as a date.
+
+</P>
+<P>
+The special date <code>'0000-00-00'</code> can be stored and retrieved as
+<code>'0000-00-00'.</code> When using a <code>'0000-00-00'</code> date through
+MyODBC, it is automatically converted to <code>NULL</code> in
+MyODBC 2.50.12 and above, because ODBC can't handle this kind of
+date.
+
+</P>
+<P>
+Because MySQL performs the conversions described above, the following
+statements work:
+
+</P>
+
+<PRE>
+mysql&#62; INSERT INTO <var>tbl_name</var> (idate) VALUES (19970505);
+mysql&#62; INSERT INTO <var>tbl_name</var> (idate) VALUES ('19970505');
+mysql&#62; INSERT INTO <var>tbl_name</var> (idate) VALUES ('97-05-05');
+mysql&#62; INSERT INTO <var>tbl_name</var> (idate) VALUES ('1997.05.05');
+mysql&#62; INSERT INTO <var>tbl_name</var> (idate) VALUES ('1997 05 05');
+mysql&#62; INSERT INTO <var>tbl_name</var> (idate) VALUES ('0000-00-00');
+
+mysql&#62; SELECT idate FROM <var>tbl_name</var> WHERE idate &#62;= '1997-05-05';
+mysql&#62; SELECT idate FROM <var>tbl_name</var> WHERE idate &#62;= 19970505;
+mysql&#62; SELECT MOD(idate,100) FROM <var>tbl_name</var> WHERE idate &#62;= 19970505;
+mysql&#62; SELECT idate FROM <var>tbl_name</var> WHERE idate &#62;= '19970505';
+</PRE>
+
+<P>
+However, the following will not work:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT idate FROM <var>tbl_name</var> WHERE STRCMP(idate,'20030505')=0;
+</PRE>
+
+<P>
+<code>STRCMP()</code> is a string function, so it converts <code>idate</code> to a
+string in <code>'YYYY-MM-DD'</code> format and performs a string comparison.
+It does not convert <code>'20030505'</code> to the date <code>'2003-05-05'</code>
+and perform a date comparison.
+
+</P>
+<P>
+If you are using the <code>ALLOW_INVALID_DATES</code> SQL mode, MySQL allows you to
+store dates that are given only limited checking: MySQL ensures only that the
+day is in the range from 1 to 31 and the month is in the range from 1 to 12.
+
+</P>
+<P>
+This makes MySQL very convenient for Web applications where you obtain
+year, month, and day in three different fields and you want to store exactly
+what the user inserted (without date validation).
+
+</P>
+<P>
+If you are not using the <code>NO_ZERO_IN_DATE</code> SQL mode, the day or month
+part can be zero.  This is convenient if you want to store a birthdate
+in a <code>DATE</code> column and you know only part of the date.
+
+</P>
+<P>
+If you are not using the <code>NO_ZERO_DATE</code> SQL mode, MySQL also allows
+you to store <code>'0000-00-00'</code> as a ``dummy date.'' This is in some cases
+more convenient than using <code>NULL</code> values.
+
+</P>
+<P>
+If the date cannot be converted to any reasonable value, a <code>0</code> is
+stored in the <code>DATE</code> column, which will be retrieved as
+<code>'0000-00-00'</code>.  This is both a speed and a convenience issue. We believe
+that the database server's responsibility is to retrieve the same date you
+stored (even if the data was not logically correct in all cases).  We think
+it is up to the application and not the server to check the dates.
+
+</P>
+<P>
+If you want MySQL to check all dates and accept only legal dates
+(unless overriden by IGNORE), you should set <code>sql_mode</code> to
+<code>"NO_ZERO_IN_DATE,NO_ZERO_DATE"</code>.
+
+</P>
+<P>
+Date handling in MySQL 5.0.1 and earlier works like MySQL 5.0.2 with the
+<code>ALLOW_INVALID_DATES</code> SQL mode enabled.
+
+</P>
+
+
+
+<H3><A NAME="Problems_with_NULL" HREF="manual_toc.html#Problems_with_NULL">A.5.3  Problems with <code>NULL</code> Values</A></H3>
+
+<P>
+<A NAME="IDX2346"></A>
+
+</P>
+<P>
+<A NAME="IDX2347"></A>
+
+</P>
+<P>
+The concept of the <code>NULL</code> value is a common source of confusion for
+newcomers to SQL, who often think that <code>NULL</code> is the same thing as an
+empty string <code>''</code>.  This is not the case. For example, the following
+statements are completely different:
+
+</P>
+
+<PRE>
+mysql&#62; INSERT INTO my_table (phone) VALUES (NULL);
+mysql&#62; INSERT INTO my_table (phone) VALUES ('');
+</PRE>
+
+<P>
+Both statements insert a value into the <code>phone</code> column, but the first
+inserts a <code>NULL</code> value and the second inserts an empty string.  The
+meaning of the first can be regarded as ``phone number is not known'' and the
+meaning of the second can be regarded as ``the person is known to have no
+phone, and thus no phone number.''
+
+</P>
+<P>
+To help with <code>NULL</code> handling, you can use the <code>IS NULL</code> and
+<code>IS NOT NULL</code> operators and the <code>IFNULL()</code> function.
+
+</P>
+<P>
+In SQL, the <code>NULL</code> value is never true in comparison to any
+other value, even <code>NULL</code>.  An expression that contains <code>NULL</code>
+always produces a <code>NULL</code> value unless otherwise indicated in
+the documentation for the operators and functions involved in the
+expression. All columns in the following example return <code>NULL</code>:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT NULL, 1+NULL, CONCAT('Invisible',NULL);
+</PRE>
+
+<P>
+If you want to search for column values that are <code>NULL</code>, you
+cannot use an <code>expr = NULL</code> test. The following statement returns no
+rows, because <code>expr = NULL</code> is never true for any expression:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT * FROM my_table WHERE phone = NULL;
+</PRE>
+
+<P>
+To look for <code>NULL</code> values, you must use the <code>IS NULL</code> test.
+The following statements show how to find the <code>NULL</code> phone number and the
+empty phone number:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT * FROM my_table WHERE phone IS NULL;
+mysql&#62; SELECT * FROM my_table WHERE phone = '';
+</PRE>
+
+<P>
+You can add an index on a column that can have <code>NULL</code>
+values if you are using MySQL 3.23.2 or newer and are using the
+<code>MyISAM</code>, <code>InnoDB</code>, or <code>BDB</code> storage engine.
+As of MySQL 4.0.2, the <code>MEMORY</code> storage engine also supports <code>NULL</code>
+values in indexes.  Otherwise, you must declare an indexed column <code>NOT
+NULL</code> and you cannot insert <code>NULL</code> into the column.
+
+</P>
+<P>
+<A NAME="IDX2348"></A>
+When reading data with <code>LOAD DATA INFILE</code>, empty or missing columns
+are updated with <code>''</code>. If you want a <code>NULL</code> value in a column,
+you should use <code>\N</code> in the data file. The literal word ``<code>NULL</code>''
+may also be used under some circumstances.
+See section <A HREF="manual_SQL_Syntax.html#LOAD_DATA">13.1.5  <code>LOAD DATA INFILE</code> Syntax</A>.
+
+</P>
+<P>
+When using <code>DISTINCT</code>, <code>GROUP BY</code>, or <code>ORDER BY</code>, all
+<code>NULL</code> values are regarded as equal.
+
+</P>
+<P>
+When using <code>ORDER BY</code>, <code>NULL</code> values are presented first, or
+last if you specify <code>DESC</code> to sort in descending order. Exception:
+In MySQL 4.0.2 through 4.0.10, <code>NULL</code> values sort first
+regardless of sort order.
+
+</P>
+<P>
+Aggregate (summary) functions such as <code>COUNT()</code>, <code>MIN()</code>, and
+<code>SUM()</code> ignore <code>NULL</code> values. The exception to this is
+<code>COUNT(*)</code>, which counts rows and not individual column values.
+For example, the following statement produces two counts.
+The first is a count of the number of rows in the table, and the second
+is a count of the number of non-<code>NULL</code> values in the <code>age</code>
+column:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT COUNT(*), COUNT(age) FROM person;
+</PRE>
+
+<P>
+<A NAME="IDX2349"></A>
+<A NAME="IDX2350"></A>
+<A NAME="IDX2351"></A>
+<A NAME="IDX2352"></A>
+
+</P>
+<P>
+For some column types, MySQL handles <code>NULL</code> values specially.  If you
+insert <code>NULL</code> into a <code>TIMESTAMP</code> column, the
+current date and time is inserted.  If you insert <code>NULL</code> into an
+integer column that has the <code>AUTO_INCREMENT</code> attribute, the next
+number in the sequence is inserted.
+
+</P>
+
+
+
+<H3><A NAME="Problems_with_alias" HREF="manual_toc.html#Problems_with_alias">A.5.4  Problems with Column Aliases</A></H3>
+
+<P>
+<A NAME="IDX2353"></A>
+
+</P>
+<P>
+You can use an alias to refer to a column in <code>GROUP BY</code>,
+<code>ORDER BY</code>, or <code>HAVING</code> clauses.  Aliases can also be used
+to give columns better names:
+
+</P>
+
+<PRE>
+SELECT SQRT(a*b) AS root FROM <var>tbl_name</var> GROUP BY root HAVING root &#62; 0;
+SELECT id, COUNT(*) AS cnt FROM <var>tbl_name</var> GROUP BY id HAVING cnt &#62; 0;
+SELECT id AS 'Customer identity' FROM <var>tbl_name</var>;
+</PRE>
+
+<P>
+Standard SQL doesn't allow you to refer to a column alias in a
+<code>WHERE</code> clause.  This is because when the <code>WHERE</code> code is
+executed, the column value may not yet be determined. For example, the
+following query is illegal:
+
+</P>
+
+<PRE>
+SELECT id, COUNT(*) AS cnt FROM <var>tbl_name</var> WHERE cnt &#62; 0 GROUP BY id;
+</PRE>
+
+<P>
+The <code>WHERE</code> statement is executed to determine which rows should
+be included in the <code>GROUP BY</code> part, whereas <code>HAVING</code> is used to
+decide which rows from the result set should be used.
+
+</P>
+
+
+
+<H3><A NAME="Non-transactional_tables" HREF="manual_toc.html#Non-transactional_tables">A.5.5  Rollback Failure for Non-Transactional Tables</A></H3>
+
+<P>
+<A NAME="IDX2354"></A>
+
+</P>
+<P>
+If you receive the following message when trying to perform a
+<code>ROLLBACK</code>, it means that one or more of the tables you used in the
+transaction do not support transactions:
+
+</P>
+
+<PRE>
+Warning: Some non-transactional changed tables couldn't be rolled back
+</PRE>
+
+<P>
+These non-transactional tables will not be affected by the <code>ROLLBACK</code>
+statement.
+
+</P>
+<P>
+If you were not deliberately mixing transactional and non-transactional
+tables within the transaction, the most likely cause for this message is
+that a table you thought was transactional actually is not. This can happen
+if you try to create a table using a transactional storage engine that is
+not supported by your <code>mysqld</code> server (or that was disabled with a
+startup option).  If <code>mysqld</code> doesn't support a storage engine, it will
+instead create the table as a <code>MyISAM</code> table, which is
+non-transactional.
+
+</P>
+<P>
+You can check the table type for a table by using either of these statements:
+
+</P>
+
+<PRE>
+SHOW TABLE STATUS LIKE '<var>tbl_name</var>';
+SHOW CREATE TABLE <var>tbl_name</var>;
+</PRE>
+
+<P>
+See section <A HREF="manual_SQL_Syntax.html#SHOW_TABLE_STATUS">13.5.4.17  <code>SHOW TABLE STATUS</code> Syntax</A> and
+section <A HREF="manual_SQL_Syntax.html#SHOW_CREATE_TABLE">13.5.4.5  <code>SHOW CREATE TABLE</code> Syntax</A>.
+
+</P>
+<P>
+You can check which storage engines your <code>mysqld</code> server supports by
+using this statement:
+
+</P>
+
+<PRE>
+SHOW ENGINES;
+</PRE>
+
+<P>
+Before MySQL 4.1.2, <code>SHOW ENGINES</code> is unavailable. Use the following
+statement instead and check the value of the variable that is associated
+with the storage engine in which you are interested:
+
+</P>
+
+<PRE>
+SHOW VARIABLES LIKE 'have_%';
+</PRE>
+
+<P>
+For example, to determine whether the <code>InnoDB</code> storage engine is
+available, check the value of the <code>have_innodb</code> variable.
+
+</P>
+<P>
+See section <A HREF="manual_SQL_Syntax.html#SHOW_ENGINES">13.5.4.8  <code>SHOW ENGINES</code> Syntax</A> and
+section <A HREF="manual_SQL_Syntax.html#SHOW_VARIABLES">13.5.4.19  <code>SHOW VARIABLES</code> Syntax</A>.
+
+</P>
+
+
+
+<H3><A NAME="Deleting_from_related_tables" HREF="manual_toc.html#Deleting_from_related_tables">A.5.6  Deleting Rows from Related Tables</A></H3>
+
+<P>
+<A NAME="IDX2355"></A>
+<A NAME="IDX2356"></A>
+<A NAME="IDX2357"></A>
+
+</P>
+<P>
+MySQL does not support subqueries prior to Version 4.1, or the use of more
+than one table in the <code>DELETE</code> statement prior to Version 4.0. If your
+version of MySQL does not support subqueries or multiple-table <code>DELETE</code>
+statements, you can use the following approach to delete rows from two
+related tables:
+
+</P>
+
+<OL>
+<LI>
+
+<code>SELECT</code> the rows based on some <code>WHERE</code> condition in the main table.
+<LI>
+
+<code>DELETE</code> the rows in the main table based on the same condition.
+<LI>
+
+<code>DELETE FROM related_table WHERE related_column IN (selected_rows)</code>.
+</OL>
+
+<P>
+If the total length of the <code>DELETE</code> statement for <code>related_table</code> is
+more than 1MB (the default value of the <code>max_allowed_packet</code> system
+variable), you should split it into smaller parts and execute multiple
+<code>DELETE</code> statements.  You will probably get the fastest <code>DELETE</code>
+by specifying only 100 to 1,000 <code>related_column</code> values per statement if the
+<code>related_column</code> is indexed.  If the <code>related_column</code> isn't
+indexed, the speed is independent of the number of arguments in the
+<code>IN</code> clause.
+
+</P>
+
+
+
+<H3><A NAME="No_matching_rows" HREF="manual_toc.html#No_matching_rows">A.5.7  Solving Problems with No Matching Rows</A></H3>
+
+<P>
+<A NAME="IDX2358"></A>
+<A NAME="IDX2359"></A>
+
+</P>
+<P>
+If you have a complicated query that uses many tables but that doesn't
+return any rows, you should use the following procedure to find out what
+is wrong:
+
+</P>
+
+<OL>
+<LI>
+
+Test the query with <code>EXPLAIN</code> to check whether you can find something
+that is obviously wrong.
+See section <A HREF="manual_MySQL_Optimization.html#EXPLAIN">7.2.1  <code>EXPLAIN</code> Syntax (Get Information About a <code>SELECT</code>)</A>.
+
+<LI>
+
+Select only those columns that are used in the <code>WHERE</code> clause.
+
+<LI>
+
+Remove one table at a time from the query until it returns some rows.
+If the tables are large, it's a good idea to use <code>LIMIT 10</code> with the query.
+
+<LI>
+
+Issue a <code>SELECT</code> for the column that should have matched a row against
+the table that was last removed from the query.
+
+<LI>
+
+If you are comparing <code>FLOAT</code> or <code>DOUBLE</code> columns with numbers that
+have decimals, you can't use equality (<code>=</code>) comparisons. This problem
+is common in most computer languages because not all floating-point values
+can be stored with exact precision.  In some cases, changing the
+<code>FLOAT</code> to a <code>DOUBLE</code> will fix this.
+See section <A HREF="manual_Problems.html#Problems_with_float">A.5.8  Problems with Floating-Point Comparisons</A>.
+
+<LI>
+
+If you still can't figure out what's wrong, create a minimal test that can
+be run with <code>mysql test &#60; query.sql</code> that shows your problems.  You can
+create a test file by dumping the tables with <code>mysqldump --quick
+db_name <var>tbl_name_1</var> ... <var>tbl_name_n</var> &#62; query.sql</code>. Open the file in an editor,
+remove some insert lines (if there are more than needed to demonstrate
+the problem), and add your <code>SELECT</code> statement at the end of the file.
+
+Verify that the test file demonstrates the problem by executing these
+commands:
+
+
+<PRE>
+shell&#62; mysqladmin create test2
+shell&#62; mysql test2 &#60; query.sql
+</PRE>
+
+Post the test file using <code>mysqlbug</code> to the general MySQL mailing list.
+See section <A HREF="manual_Introduction.html#Mailing-list">1.4.1.1  The MySQL Mailing Lists</A>.
+</OL>
+
+
+
+<H3><A NAME="Problems_with_float" HREF="manual_toc.html#Problems_with_float">A.5.8  Problems with Floating-Point Comparisons</A></H3>
+
+<P>
+Floating-point numbers sometimes cause confusion because they
+are not stored as exact values inside computer architecture. What you
+can see on the screen usually is not the exact value of the number.
+The column types <code>FLOAT</code>, <code>DOUBLE</code>, and <code>DECIMAL</code> are such.
+<code>DECIMAL</code> columns store values with exact precision because they are
+represented as strings, but calculations on <code>DECIMAL</code> values may be done
+using floating-point operations.
+
+</P>
+<P>
+The following example demonstrate the problem. It shows that even for the
+<code>DECIMAL</code> column type, calculations that are done using floating-point
+operations are subject to floating-point error.
+
+</P>
+
+<PRE>
+mysql&#62; CREATE TABLE t1 (i INT, d1 DECIMAL(9,2), d2 DECIMAL(9,2));
+mysql&#62; INSERT INTO t1 VALUES (1, 101.40, 21.40), (1, -80.00, 0.00),
+    -&#62; (2, 0.00, 0.00), (2, -13.20, 0.00), (2, 59.60, 46.40),
+    -&#62; (2, 30.40, 30.40), (3, 37.00, 7.40), (3, -29.60, 0.00),
+    -&#62; (4, 60.00, 15.40), (4, -10.60, 0.00), (4, -34.00, 0.00),
+    -&#62; (5, 33.00, 0.00), (5, -25.80, 0.00), (5, 0.00, 7.20),
+    -&#62; (6, 0.00, 0.00), (6, -51.40, 0.00);
+
+mysql&#62; SELECT i, SUM(d1) AS a, SUM(d2) AS b
+    -&#62; FROM t1 GROUP BY i HAVING a &#60;&#62; b;
++------+--------+-------+
+| i    | a      | b     |
++------+--------+-------+
+|    1 |  21.40 | 21.40 |
+|    2 |  76.80 | 76.80 |
+|    3 |   7.40 |  7.40 |
+|    4 |  15.40 | 15.40 |
+|    5 |   7.20 |  7.20 |
+|    6 | -51.40 |  0.00 |
++------+--------+-------+
+</PRE>
+
+<P>
+The result is correct. Although the first five records look like they
+shouldn't pass the comparison test (the values of <code>a</code> and <code>b</code> do
+not appear to be different), they may do so because the difference between
+the numbers shows up around the tenth decimal or so, depending on computer
+architecture.
+
+</P>
+<P>
+The problem cannot be solved by using <code>ROUND()</code> or similar functions,
+because the result is still a floating-point number:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT i, ROUND(SUM(d1), 2) AS a, ROUND(SUM(d2), 2) AS b
+    -&#62; FROM t1 GROUP BY i HAVING a &#60;&#62; b;
++------+--------+-------+
+| i    | a      | b     |
++------+--------+-------+
+|    1 |  21.40 | 21.40 |
+|    2 |  76.80 | 76.80 |
+|    3 |   7.40 |  7.40 |
+|    4 |  15.40 | 15.40 |
+|    5 |   7.20 |  7.20 |
+|    6 | -51.40 |  0.00 |
++------+--------+-------+
+</PRE>
+
+<P>
+This is what the numbers in column <code>a</code> look like when displayed with more
+decimal places:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT i, ROUND(SUM(d1), 2)*1.0000000000000000 AS a,
+    -&#62; ROUND(SUM(d2), 2) AS b FROM t1 GROUP BY i HAVING a &#60;&#62; b;
++------+----------------------+-------+
+| i    | a                    | b     |
++------+----------------------+-------+
+|    1 |  21.3999999999999986 | 21.40 |
+|    2 |  76.7999999999999972 | 76.80 |
+|    3 |   7.4000000000000004 |  7.40 |
+|    4 |  15.4000000000000004 | 15.40 |
+|    5 |   7.2000000000000002 |  7.20 |
+|    6 | -51.3999999999999986 |  0.00 |
++------+----------------------+-------+
+</PRE>
+
+<P>
+Depending on your computer architecture, you may or may not see similar
+results.  Different CPUs may evaluate floating-point numbers differently.
+For example, on some machines you may get the ``correct'' results by
+multiplying both arguments by 1, as the following example shows.
+
+</P>
+<P>
+<strong>Warning:</strong> Never use this method in your applications. It is not
+an example of a trustworthy method!
+
+</P>
+
+<PRE>
+mysql&#62; SELECT i, ROUND(SUM(d1), 2)*1 AS a, ROUND(SUM(d2), 2)*1 AS b
+    -&#62; FROM t1 GROUP BY i HAVING a &#60;&#62; b;
++------+--------+------+
+| i    | a      | b    |
++------+--------+------+
+|    6 | -51.40 | 0.00 |
++------+--------+------+
+</PRE>
+
+<P>
+The reason that the preceding example seems to work is that on the particular
+machine where the test was done, CPU floating-point arithmetic happens to
+round the numbers to the same value. However, there is no rule that any CPU
+should do so, so this method cannot be trusted.
+
+</P>
+<P>
+The correct way to do floating-point number comparison is to first
+decide on an acceptable tolerance for differences between the numbers and
+then do the comparison against the tolerance value. For example, if we
+agree that floating-point numbers should be regarded the same if they are
+same within a precision of one in ten thousand (0.0001), the comparison
+should be written to find differences larger than the tolerance value:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT i, SUM(d1) AS a, SUM(d2) AS b FROM t1
+    -&#62; GROUP BY i HAVING ABS(a - b) &#62; 0.0001;
++------+--------+------+
+| i    | a      | b    |
++------+--------+------+
+|    6 | -51.40 | 0.00 |
++------+--------+------+
+1 row in set (0.00 sec)
+</PRE>
+
+<P>
+Conversely, to get rows where the numbers are the same, the test should
+find differences within the tolerance value:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT i, SUM(d1) AS a, SUM(d2) AS b FROM t1
+    -&#62; GROUP BY i HAVING ABS(a - b) &#60;= 0.0001;
++------+-------+-------+
+| i    | a     | b     |
++------+-------+-------+
+|    1 | 21.40 | 21.40 |
+|    2 | 76.80 | 76.80 |
+|    3 |  7.40 |  7.40 |
+|    4 | 15.40 | 15.40 |
+|    5 |  7.20 |  7.20 |
++------+-------+-------+
+</PRE>
+
+
+
+<H2><A NAME="Optimizer_Issues" HREF="manual_toc.html#Optimizer_Issues">A.6  Optimizer-Related Issues</A></H2>
+
+<P>
+MySQL uses a cost-based optimizer to determine the best way to resolve a
+query.  In many cases, MySQL can calculate the best possible query plan,
+but sometimes MySQL doesn't have enough information about the data
+at hand and has to make ``educated'' guesses about the data.
+
+</P>
+<P>
+For the cases when MySQL does not do the "right" thing, tools that you
+have available to help MySQL are:
+
+</P>
+
+<UL>
+
+<LI>
+
+Use the <code>EXPLAIN</code> statement to get information about how MySQL will
+process a query. To use it, just add the keyword <code>EXPLAIN</code> to the
+front of your <code>SELECT</code> statement:
+
+
+<PRE>
+mysql&#62; EXPLAIN SELECT * FROM t1, t2 WHERE t1.i = t2.i;
+</PRE>
+
+<code>EXPLAIN</code> is discussed in more detail in section <A HREF="manual_MySQL_Optimization.html#EXPLAIN">7.2.1  <code>EXPLAIN</code> Syntax (Get Information About a <code>SELECT</code>)</A>.
+
+<LI>
+
+Use <code>ANALYZE TABLE <var>tbl_name</var></code> to update the key distributions for the
+scanned table.  See section <A HREF="manual_SQL_Syntax.html#ANALYZE_TABLE">13.5.2.1  <code>ANALYZE TABLE</code> Syntax</A>.
+
+<LI>
+
+<A NAME="IDX2360"></A>
+Use <code>FORCE INDEX</code> for the scanned table to tell MySQL that table
+scans are very expensive compared to using the given index.
+See section <A HREF="manual_SQL_Syntax.html#SELECT">13.1.7  <code>SELECT</code> Syntax</A>.
+
+
+<PRE>
+SELECT * FROM t1, t2 FORCE INDEX (index_for_column)
+WHERE t1.col_name=t2.col_name;
+</PRE>
+
+<code>USE INDEX</code> and <code>IGNORE INDEX</code> may also be useful.
+
+<LI>
+
+Global and table-level <code>STRAIGHT_JOIN</code>. See section <A HREF="manual_SQL_Syntax.html#SELECT">13.1.7  <code>SELECT</code> Syntax</A>.
+
+<LI>
+
+You can tune global or thread-specific system variables.  For example,
+Start <code>mysqld</code> with the <code>--max-seeks-for-key=1000</code> option or use
+<code>SET max_seeks_for_key=1000</code> to tell the optimizer to assume that no
+key scan will cause more than 1,000 key seeks.
+See section <A HREF="manual_MySQL_Database_Administration.html#Server_system_variables">5.2.3  Server System Variables</A>.
+
+</UL>
+
+
+
+<H2><A NAME="Table_Definition_Issues" HREF="manual_toc.html#Table_Definition_Issues">A.7  Table Definition-Related Issues</A></H2>
+
+
+
+<H3><A NAME="ALTER_TABLE_problems" HREF="manual_toc.html#ALTER_TABLE_problems">A.7.1  Problems with <code>ALTER TABLE</code></A></H3>
+
+<P>
+<A NAME="IDX2361"></A>
+<A NAME="IDX2362"></A>
+<A NAME="IDX2363"></A>
+
+</P>
+<P>
+<code>ALTER TABLE</code> changes a table to the current character set.
+If you get a duplicate-key error during <code>ALTER TABLE</code>, the cause
+is either that the new character sets maps two keys to the same value
+or that the table is corrupted. In the latter case, you should run
+<code>REPAIR TABLE</code> on the table.
+
+</P>
+<P>
+If <code>ALTER TABLE</code> dies with the following error, the problem may be that
+MySQL crashed during an earlier <code>ALTER TABLE</code> operation and there is an
+old table named <tt>`A-<var>xxx</var>'</tt> or <tt>`B-<var>xxx</var>'</tt> lying around:
+
+</P>
+
+<PRE>
+Error on rename of './database/name.frm'
+to './database/B-<var>xxx</var>.frm' (Errcode: 17)
+</PRE>
+
+<P>
+In this case, go to the MySQL data directory and delete all files that have
+names starting with <code>A-</code> or <code>B-</code>.  (You may want to move them
+elsewhere instead of deleting them.)
+
+</P>
+<P>
+<code>ALTER TABLE</code> works in the following way:
+
+</P>
+
+<UL>
+<LI>
+
+Create a new table named <tt>`A-<var>xxx</var>'</tt> with the requested structural changes.
+<LI>
+
+Copy all rows from the original table to <tt>`A-<var>xxx</var>'</tt>.
+<LI>
+
+Rename the original table to <tt>`B-<var>xxx</var>'</tt>.
+<LI>
+
+Rename <tt>`A-<var>xxx</var>'</tt> to your original table name.
+<LI>
+
+Delete <tt>`B-<var>xxx</var>'</tt>.
+</UL>
+
+<P>
+If something goes wrong with the renaming operation, MySQL tries to
+undo the changes.  If something goes seriously wrong (although this shouldn't
+happen), MySQL may leave the old table as <tt>`B-<var>xxx</var>'</tt>. A
+simple rename of the table files at the system level should get your data back.
+
+</P>
+<P>
+If you use <code>ALTER TABLE</code> on a transactional table or if you are using
+Windows or OS/2, <code>ALTER TABLE</code> will <code>UNLOCK</code> the table if you had
+done a <code>LOCK TABLE</code> on it. This is because <code>InnoDB</code> and these
+operating systems cannot drop a table that is in use.
+
+</P>
+
+
+
+<H3><A NAME="Change_column_order" HREF="manual_toc.html#Change_column_order">A.7.2  How to Change the Order of Columns in a Table</A></H3>
+
+<P>
+<A NAME="IDX2364"></A>
+<A NAME="IDX2365"></A>
+<A NAME="IDX2366"></A>
+<A NAME="IDX2367"></A>
+
+</P>
+<P>
+First, consider whether you really need to change the column order in a
+table.  The whole point of SQL is to abstract the application from the data
+storage format.  You should always specify the order in which you wish to
+retrieve your data.  The first of the following statements returns columns
+in the order <var>col_name1</var>, <var>col_name2</var>, <var>col_name3</var>, whereas
+the second returns them in the order <var>col_name1</var>, <var>col_name3</var>,
+<var>col_name2</var>:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT <var>col_name1</var>, <var>col_name2</var>, <var>col_name3</var> FROM <var>tbl_name</var>;
+mysql&#62; SELECT <var>col_name1</var>, <var>col_name3</var>, <var>col_name2</var> FROM <var>tbl_name</var>;
+</PRE>
+
+<P>
+If you decide to change the order of table columns anyway, you can do so as
+follows:
+
+</P>
+
+<OL>
+<LI>
+
+Create a new table with the columns in the new order. 
+<LI>
+
+Execute this statement:
+
+
+<PRE>
+mysql&#62; INSERT INTO new_table
+    -&#62; SELECT columns-in-new-order FROM old_table;
+</PRE>
+
+<LI>
+
+Drop or rename <code>old_table</code>.
+<LI>
+
+Rename the new table to the original name:
+
+
+<PRE>
+mysql&#62; ALTER TABLE new_table RENAME old_table;
+</PRE>
+
+</OL>
+
+<P>
+<code>SELECT *</code> is quite suitable for testing queries. However, in an
+application, you should <em>never</em> rely on using <code>SELECT *</code> and
+retrieving the columns based on their position. The order and position
+in which columns are returned will not remain the same if you add, move,
+or delete columns. A simple change to your table structure will cause
+your application to fail.
+
+</P>
+
+
+
+<H3><A NAME="Temporary_table_problems" HREF="manual_toc.html#Temporary_table_problems">A.7.3  <code>TEMPORARY TABLE</code> Problems</A></H3>
+
+<P>
+<A NAME="IDX2368"></A>
+
+</P>
+<P>
+The following list indicates limitations on the use of <code>TEMPORARY</code>
+tables:
+
+</P>
+
+<UL>
+<LI>
+
+A <code>TEMPORARY</code> table can only be of type <code>HEAP</code>, <code>ISAM</code>,
+<code>MyISAM</code>, <code>MERGE</code>, or <code>InnoDB</code>.
+
+<LI>
+
+You cannot refer to a <code>TEMPORARY</code> table more than once in the same query.
+For example, the following does not work:
+
+
+<PRE>
+mysql&#62; SELECT * FROM temp_table, temp_table AS t2;
+ERROR 1137: Can't reopen table: 'temp_table'
+</PRE>
+
+<LI>
+
+The <code>SHOW TABLES</code> statement does not list <code>TEMPORARY</code> tables.
+
+<LI>
+
+You cannot use <code>RENAME</code> to rename a <code>TEMPORARY</code> table.  However,
+you can use <code>ALTER TABLE</code> instead:
+
+
+<PRE>
+mysql&#62; ALTER TABLE orig_name RENAME new_name;
+</PRE>
+
+</UL>
+
+<P><HR><P>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_Extending_MySQL.html">previous</A>, <A HREF="manual_Credits.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+ </BODY>
+ </HTML>

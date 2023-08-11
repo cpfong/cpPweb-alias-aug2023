@@ -1,0 +1,13 @@
+news.crit <tab鍵> /usr/local/news/log/news.crit
+news.err <tab鍵> /usr/local/news/log/news.err
+news.notice <tab鍵> /usr/local/news/log/news.notice 
+
+--- 以上為網路上一些人的設定, 但我認為以 ln 為佳, 因為不必 worry 任何事 --
+cd /usr/local/news
+mkdir log; cd log; touch news.crit news.err news.notice
+cd ..; chown -R news.news log;
+note: no need for v2.3.3 (since default to /usr/local/news/log, but syslog 
+still need to redo it)
+cd /var/log; ln -s /usr/local/news/log news
+
+don't forget kill -HUP `cat /var/run/syslog.pid`

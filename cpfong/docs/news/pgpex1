@@ -1,0 +1,32 @@
+使用時機: 當您想將某一個檔案予以加密之後寄給我.
+以下將用 trace.c 這個檔名為例.
+
+   1. 首先, 下載我的公開金鑰(Public Key)檔: ols3.gpg
+   2. 其次, 將我的 Public Key 放入您的 Public KeyRing(公開金鑰環) 中: gpg --import ols3.gpg
+   3. 再來, 將 trace.c 予以加密 : gpg --output trace.gpg --encrypt --recipient ols3@mail.tnc.idv.tw trace.c
+   4. 最後, 將加密檔 trace.gpg 寄至 ols3@mail.tnc.idv.tw 給我
+   5. 如此, 我便可用本人的私密金鑰(Private Key)將該檔解開, 因而達到非對稱式加密傳輸的目的.
+
+Comaq-> pgp -kv
+Pretty Good Privacy(tm) Version 6.5.8
+Type bits      keyID      Date       User ID
+DSS  1024/1024 0x4FE2A1A3 2003/01/12 *** DEFAULT SIGNING KEY ***
+                                     cp@MCI.idv.tw
+1 matching key found.
+
+Comaq-> whoami
+cpfong
+
+pgp -ka keyfile_cpAThiedoc.fjtc.edu.tw
+pgg -kv
+DSS  1024/1024 0xCE1D4517 2003/01/12 cp@hiedoc.fjtc.edu.tw
+DSS  1024/1024 0x4FE2A1A3 2003/01/12 *** DEFAULT SIGNING KEY ***
+                                     cp@MCI.idv.tw
+omaq-> cat plain_txt 
+text
+
+omaq-> pgp -e plain_txt cp@hiedoc.fjtc.edu.tw
+--> plain_txt.pgp
+
+goto cp site
+pgp plain_txt.pgp --> back to plain_txt

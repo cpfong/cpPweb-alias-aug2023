@@ -1,0 +1,3 @@
+1. find www.usc.edu.tw IP
+2. modify your FQDN to point to usc
+3. http://yourSite to test

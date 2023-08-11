@@ -1,0 +1,10 @@
+ls -l
+ls
+
+rm file.txt
+
+mkdir dir
+rmdir dir
+
+cd dir
+

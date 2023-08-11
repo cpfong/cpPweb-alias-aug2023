@@ -1,0 +1,12 @@
+chap12
+--
+OutPut = MsgBox("message you want to say", vbOKOnly)
+Rows(ActiveCell.Row).Select
+Selection.EntireRow.Hidden = True
+
+
+Public Sub foo_show_all()
+  Cells.Select
+  Selection.EntireRow.Hidden = False
+End Sub
+

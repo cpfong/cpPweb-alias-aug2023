@@ -1,0 +1,8 @@
+#!/bin/sh
+
+/sbin/gpart destroy -F da0
+/sbin/gpart create -s mbr da0
+/sbin/gpart add -t \!12 da0
+
+# FORMAT IT MSDOS STYLE (fat32)
+#newfs_msdos -F32 /dev/da0s1

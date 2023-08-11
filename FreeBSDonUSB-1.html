@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- saved from url=(0041)http://xinu.jp/wb/wiliki.cgi?FreeBSDonUSB -->
+<html slick-uniqueid="3"><head><meta http-equiv="Content-Type" content="text/html; charset=EUC-JP"><title>FreeBSDonUSB</title><!--<base href="http://xinu.jp/wb/wiliki.cgi">--><base href="."><link rel="alternate" type="application/rss+xml" title="RSS" href="http://xinu.jp/wb/wiliki.cgi?c=rss"><link rel="stylesheet" href="./FreeBSDonUSB-1_files/my.css" type="text/css"></head><body><div style="font-size:80%" align="right"><table><tbody><tr><td></td><td><form method="POST" action="http://xinu.jp/wb/wiliki.cgi" style="margin:0pt; padding:0pt"><input type="submit" class="navi-button" value="Top"></form></td><td><form method="POST" action="http://xinu.jp/wb/wiliki.cgi" style="margin:0pt; padding:0pt"><input type="hidden" name="c" value="a"><input type="submit" class="navi-button" value="All"></form></td><td><form method="POST" action="http://xinu.jp/wb/wiliki.cgi" style="margin:0pt; padding:0pt"><input type="hidden" name="c" value="r"><input type="submit" class="navi-button" value="Recent Changes"></form></td></tr></tbody></table></div><table border="0" cellspacing="8" width="100%" class="content-table"><tbody><tr><td valign="top"><h1><a href="http://xinu.jp/wb/wiliki.cgi?c=s&key=[[FreeBSDonUSB]]">FreeBSDonUSB</a></h1><h4 id="H-o3fsw1">FreeBSD を USBメモリにインストールするメモ
+</h4><p>以下の2箇所よりコピペしただけ. まだ未確認.
+</p><hr><p><a href="http://typo.submonkey.net/articles/2006/4/13/installing-freebsd-on-usb-stick-episode-2">http://typo.submonkey.net/articles/2006/4/13/installing-freebsd-on-usb-stick-episode-2</a> <br>
+より抜粋
+</p><p>Installing FreeBSD on a USB stick, episode II
+</p><p>Posted by Ceri Davies on 4/14/2006
+</p><p>I previously wrote about putting a 6.1-BETA4 FreeBSD installation on a USB stick. Since the bugs that were in the 6.1-BETA4 installation have been fixed, plus to get 6.1-RC1 tested, here are updated instructions (which should work with 6.1-RELEASE as well).
+</p><p>These instructions result in a downloadable image suitable for dding direct to a USB stick of 512MB or larger.
+</p><p>arved pointed out that it's good to minimize the amount of writes done to USB sticks (and flash memory in general), and I've got some pointers in these instructions, but I haven't really looked at this point.
+</p><p>If you are looking to install FreeBSD from a USB stick, you should check out Dario Freni's script.
+Note
+</p><p>I assume that, like me, you don't have any SCSI disks and so your USB stick will show up on da0, at least while you're preparing it; we're using GEOM disk labels in the image so we don't care so much where the disk appears in the device tree. I'm also assuming that you don't care much for the data on your USB stick.
+The installation
+</p><p>You'll need to grab the disc1 ISO --- get the latest one.
+</p><ul><li>Mount that ISO on /dist:
+<pre># mkdir -p /dist
+# mdconfig -a -f /a/FreeBSD/6.1-RC1-i386-disc1.iso
+md1
+# mount -t cd9660 /dev/md1 /dist
+</pre></li></ul><ul><li>Insert the stick. They come preformatted with a FAT32 partition on, so we'll need to throw a BSD slice label on there --- this command will destroy all existing slices. If you get a warning regarding "Geom not found", don't worry.:
+<pre># fdisk -BI /dev/da0
+</pre></li></ul><ul><li>We need a disk label:
+<pre># bsdlabel -B -w da0s1
+</pre></li></ul><ul><li>and a filesystem, which we'll mount on /mnt. In order to reduce the number of writes to the USB pen, and as common practice, we use the -U flag to enable soft updates. Additionally, so that we can find the filesystem easily no matter where the USB pen appears in the device tree, we will label the filesystem as FreeBSDonUSB:
+<pre># newfs -U -L FreeBSDonUSB /dev/da0s1a
+/dev/da0s1a: 481.0MB (985040 sectors) block size 16384, fragment size 2048
+   using 4 cylinder groups of 120.25MB, 7696 blks, 15424 inodes.
+   with soft updates
+super-block backups (for fsck -b #) at:
+ 160, 246432, 492704, 738976
+# mount /dev/da0s1a /mnt
+</pre></li></ul><ul><li>Now to do an install the blindingly easy way:
+<pre># cd /dist/6.1-RC1/base
+# DESTDIR=/mnt ./install.sh 
+You are about to extract the base distribution into /mnt - are you SURE
+you want to do this over your installed system (y/n)? y
+</pre></li></ul><ul><li>With 6.1, we are providing both uniprocessor and SMP kernels on the CD. sysinstall will install the correct one depending on your hardware configuration, but we need to decide. It's probably OK to just use the SMP one, but I have no multiprocessor machines, so will use the UP kernel. If you want the SMP kernel, just specify smp where I have generic below:
+<pre># cd /dist/6.1-RC1/kernels
+# DESTDIR=/mnt ./install.sh generic
+# rmdir /mnt/boot/kernel
+# mv /mnt/boot/GENERIC /mnt/boot/kernel
+</pre></li></ul><ul><li>Install the boot manager. We use the noupdate option to prevent boot0 writing itself back to disk every boot:
+<pre># boot0cfg -v -B -o noupdate da0
+#   flag     start chs   type       end chs       offset         size
+1   0x80      0:  1: 1   0xa5    480: 63:32           32       985056
+version=1.0  drive=0x80  mask=0xf  ticks=182
+options=packet,noupdate,nosetdrv
+default_selection=F1 (Slice 1)
+</pre></li></ul><ul><li>Create an fstab(5) file on the USB stick. Here's a simple one that puts the logs on to memory storage (to try to minimize writes). We also null mount /var/tmp on /tmp, which makes it non-persistent:
+<pre># Device                Mountpoint      FStype  Options         Dump    Pass#
+/dev/ufs/FreeBSDonUSB   /               ufs     rw,noatime      1       1
+md                      /tmp            mfs     rw,-s16M,nosuid,noatime 0       0
+md                      /var/run        mfs     rw,-s4M,nosuid,noatime  0       0
+md                      /var/log        mfs     rw,-s16M,nosuid,noatime 0       0
+/dev/acd0               /cdrom          cd9660  ro,noauto,nosuid        0       0
+/proc                   /proc           procfs  rw,noauto       0       0
+/tmp                    /var/tmp        nullfs  rw              0       0
+</pre></li></ul><ul><li>Since we're using the UFS label to define the root filesystem, we must force the GEOM label class to be loaded early:
+<pre># cat &gt;&gt; /mnt/boot/loader.conf &lt;&lt; EOF
+geom_label_load="YES"
+EOF
+</pre></li></ul><ul><li>vi(1) likes to have a /var/tmp/vi.recover around, so we ensure that it exists on boot. Pull down this example script and install it:
+<pre># mkdir -p /mnt/usr/local/etc/rc.d/
+# cd /mnt/usr/local/etc/rc.d/
+# fetch http://people.freebsd.org/~ceri/FreeBSDonUSB/scripts/mkvirecover
+# chmod 555 mkvirecover
+</pre></li></ul><ul><li>In order for commands that use wtmp(5) to work correctly with /var/log on a memory disk, we need to tell newsyslog(8) that it is OK to create an empty /var/log/wtmp. Edit /mnt/etc/newsyslog.conf and add C to the /var/log/wtmp line:
+<pre>/var/log/wtmp                          644  3     *    @01T05 BC
+</pre></li></ul><ul><li>Set the interfaces to configure themselves over DHCP. I exclude plip0 and fwe0 since they are practically never connected to a DHCP server, but are reasonably common:
+<pre># cat &gt;&gt; /etc/rc.conf &lt;&lt; EOF
+ifconfig_DEFAULT="DHCP"
+ifconfig_fwe0="NOAUTO"
+ifconfig_plip0="NOAUTO"
+EOF
+</pre></li></ul><ul><li>Again, to reduce the number of writes to the USB key, we will pregenerate a locate database and then turn off the weekly update:
+<pre># chroot /mnt /bin/sh
+# mount_devfs devfs /dev
+# /etc/periodic/weekly/310.locate
+
+Rebuilding locate database:
+# cat &gt;&gt; /etc/periodic.conf &lt;&lt; EOF
+weekly_locate_enable="NO"
+weekly_whatis_enable="NO"
+EOF
+</pre></li></ul><ul><li>Install any packages you might want, and set a root password:
+<pre># chroot /mnt /bin/sh
+# passwd root
+# pkg_add -r lsof rsync unzip zsh kde...
+</pre></li></ul><p>That's it for now.
+</p><hr><p><a href="http://www.karashi.org/~poppen/d/20071214.html#p01">http://www.karashi.org/~poppen/d/20071214.html#p01</a> <br>
+より抜粋
+</p><p>ただ、上記サイトのやり方だと、/homeがUSBメモリ上にあるので、/homeでばんばん作業をする必要がある時には、メディアの寿命が心配ということで、/homeもMFSにすることにした。
+</p><p>以下は作業内容。すべてUSBにインストールしたFreeBSDに対して行なう。
+</p><ol><li>/etc/fstabに下記の内容を追記する。
+<ul><li>md /home mfs rw,-s16M,nosuid,noatime 0 0
+</li></ul></li><li>populate-home（この日記の最後に内容は書いた）をインストールする。
+<ul><li>cp populate-home /usr/local/etc/rc.d
+</li><li>chmod 0555 /usr/local/etc/rc.d/populate-home
+</li></ul></li><li>/etc/rc.confに、下記の内容を追記する。
+<ul><li>populate_home_enable="YES"
+</li></ul></li><li>起動時にhomeディレクトリにコピーされるファイルを準備する。
+<ul><li>mkdir -p /etc/home/ユーザ名
+</li><li>homeディレクトリに置くファイル群（dotファイルとか）をレポジトリからcheckoutするなり、コピーするなりして、手元に用意する。
+</li><li>cp 上記のファイル /etc/home/ユーザ名
+</li><li>chown -R ユーザ名 /etc/home/ユーザ名
+</li></ul></li></ol><p>populate-homeスクリプトの内容は下記の通り。
+</p><pre>#!/bin/sh
+
+# PROVIDE: populate_home
+# REQUIRE: mountcritremote
+# BEFORE:  DAEMON
+
+. /etc/rc.subr
+
+populate_home_enable=${populate_home_enable-"NO"}
+populate_home_data=${populate_home_data-"/etc/home"}
+
+name="populate_home"
+rcvar=`set_rcvar`
+
+stop_cmd=":"
+start_cmd="populate_home_start"
+
+populate_home_start()
+{
+        if [ -d ${populate_home_data} ]; then
+                cd ${populate_home_data}
+                /usr/bin/find . -print | /usr/bin/cpio -dump --quiet /home
+        fi
+        echo '.'
+}
+
+load_rc_config "$name"
+run_rc_command "$1"
+</pre><p>上記の作業で、MFSの/home（容量は16MB）が起動時にmountされ、/etc/homeの内容が/homeにコピーされる。
+</p><p>populate-homeのPROVIDEやREQUIRE、BEFOREあたりはちと自信がないんだけど、
+とりあえず、手元の環境では動いている。
+</p><hr></td><td class="menu-strip" valign="top" style="font-size:80%;width:10em"><div class="menu-title">Search</div><div style="margin-top:2pt;margin-bottom:2pt"><form method="POST" action="http://xinu.jp/wb/wiliki.cgi" style="margin:0pt; padding:0pt"><input type="hidden" name="c" value="s"><input type="text" name="key" size="15" class="search-box"><input type="submit" name="search" value="Search" class="navi-button"></form></div><div class="menu-title"><a href="http://xinu.jp/wb/wiliki.cgi?Topics">Topics</a></div><p>サイト移動/改修中
+</p><div class="menu-title"><a href="http://xinu.jp/wb/wiliki.cgi?Menu">Menu</a></div><ul><li><a href="http://xinu.jp/wb/wiliki.cgi?WBwiki">WBwiki</a>(Top)
+</li><li><a href="http://xinu.jp/wb/wiliki.cgi?Profile">Profile</a>
+</li><li><a href="http://xinu.jp/wb/wiliki.cgi?WebLog">WebLog</a>
+</li><li><a href="http://xinu.jp/wb/wiliki.cgi?TechChips">TechChips</a>
+</li><li><a href="http://xinu.jp/wb/wiliki.cgi?Music">Music</a>
+</li><li><a href="http://xinu.jp/wb/wiliki.cgi?MotoTrial">MotoTrial</a>
+</li><li><a href="http://xinu.jp/wb/wiliki.cgi?Jargon">Jargon</a>
+</li><li><a href="http://xinu.jp/wb/wiliki.cgi?Network">Network</a>
+</li><li><a href="http://xinu.jp/wb/wiliki.cgi?Install%3aUbuntu">Install:Ubuntu</a>
+</li></ul><div class="menu-title">Recent Changes</div><ul class="menu-list"><li><a href="http://xinu.jp/wb/wiliki.cgi?WBwiki">WBwiki</a></li><li><a href="http://xinu.jp/wb/wiliki.cgi?Menu">Menu</a></li><li><a href="http://xinu.jp/wb/wiliki.cgi?TechChips">TechChips</a></li><li><a href="http://xinu.jp/wb/wiliki.cgi?CellularAutomaton">CellularAutomaton</a></li><li><a href="http://xinu.jp/wb/wiliki.cgi?Emacs">Emacs</a></li><li><a href="http://xinu.jp/wb/wiliki.cgi?LaTeX">LaTeX</a></li><li><a href="http://xinu.jp/wb/wiliki.cgi?Jargon">Jargon</a></li><li><a href="http://xinu.jp/wb/wiliki.cgi?Jargon%3aHacker">Jargon:Hacker</a></li><li><a href="http://xinu.jp/wb/wiliki.cgi?Topics">Topics</a></li><li><a href="http://xinu.jp/wb/wiliki.cgi?SandBox">SandBox</a></li><li><a href="http://xinu.jp/wb/wiliki.cgi?MotoTrial%3aMyBike">MotoTrial:MyBike</a></li><li><a href="http://xinu.jp/wb/wiliki.cgi?LinuxVirus">LinuxVirus</a></li><li><a href="http://xinu.jp/wb/wiliki.cgi?Install%3aUbuntu">Install:Ubuntu</a></li><li><a href="http://xinu.jp/wb/wiliki.cgi?MotoTrial">MotoTrial</a></li><li><a href="http://xinu.jp/wb/wiliki.cgi?Music">Music</a></li><li><a href="http://xinu.jp/wb/wiliki.cgi?Network">Network</a></li><li><a href="http://xinu.jp/wb/wiliki.cgi?C%2b%2bStroustrup%3aEng">C++Stroustrup:Eng</a></li><li><a href="http://xinu.jp/wb/wiliki.cgi?C%2b%2bStroustrup">C++Stroustrup</a></li><li><a href="http://xinu.jp/wb/wiliki.cgi?WebLog%3a2009%2f02">WebLog:2009/02</a></li><li><a href="http://xinu.jp/wb/wiliki.cgi?WebLog%3a2009%2f03">WebLog:2009/03</a></li></ul><a href="http://xinu.jp/wb/wiliki.cgi?c=r">More ...</a></td></tr></tbody></table><hr><div class="footer" style="text-align:right">Last modified : 2009/07/24 14:50:58 JST<br><a href="http://www.shiro.dreamhost.com/scheme/wiliki/wiliki.cgi">WiLiKi 0.6.1</a> running on <a href="http://www.shiro.dreamhost.com/scheme/gauche/">Gauche 0.8.14</a><br>Powered by <a href="http://cobaltd.com/">Cobalt Design</a></div></body></html>

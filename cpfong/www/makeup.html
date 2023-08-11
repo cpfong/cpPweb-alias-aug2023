@@ -1,0 +1,711 @@
+<BASE HREF="http://www.geocities.com/Tokyo/1613/">
+
+<!-- <SERVICE NAME="watermark"> -->
+<SCRIPT LANGUAGE="javascript1.2" SRC="http://www.geocities.com/include/watermark/v2/lib.js"></SCRIPT>
+<SCRIPT LANGUAGE="javascript1.2">
+<!--
+var args= new Array;
+
+assignArrays("Computers & Technology", "Computers_and_Technology");
+
+assignArrays("Internet", "Computers_and_Technology/Internet");
+
+assignArrays("HTML", "Computers_and_Technology/Internet/HTML");
+
+//-->
+</SCRIPT>
+<SCRIPT LANGUAGE="javascript1.2" SRC="http://www.geocities.com/include/watermark/v2/ns.js">
+</SCRIPT>
+<!-- </SERVICE> -->
+<HTML>
+<HEAD>
+<TITLE>The HTML Reference</TITLE>
+</HEAD>
+
+<BODY background="Punisher.gif"  bgcolor="000000" text="FFFFFF" link="FFFF00" alink="777777" vlink="0000FF">
+
+
+<TABLE BORDER=0 WIDTH=550 CELLSPACING=0 CELLPADDING=5>
+
+
+	<TR>
+		<TD ALIGN=CENTER>
+		<font size=+2>Hyper Text Markup Language</font>
+		<p>
+		</TD>
+	</TR>
+
+	<TR>
+		<TD>
+		HTML is a language for formatting text and graphics.  In addition to basic text characteristics, there are ways to generate tables, columns and graphics.  No special program is required to write web pages, just a text editor or a word processor that can save in text format.
+		<p>
+		 All HTML commands (also known as tags) begin with < and end with >.  Most have opening and closing forms.
+		<p>
+		&#60;b&gt; - beginning of bold text<br>
+		&#60;/b&gt; - end of bold text
+		<p>
+		&#60;b&gt;ABC..xyz&#60;/b&gt; will appear as <b>ABC..xyz</b><br>
+		<p>
+		Some tags have other options to them.  
+		<p>
+		When listed in this reference, these tags will appear in this format:
+		<p>
+		<dd>&#60;img&gt;
+		<p>
+			<dl><dd><dl><dd>align="..."</dl>
+			<p>
+			<dl><dd>src="..."</dl></dl>
+			<p>
+		Some tags will have many options, which will have their own groups of listed options.
+		<p>
+		A URL (Universal Resource Locator) is the address that refers to WWW page.  This is how one navigates through the internet via a web browser.
+		<pre>
+Http://server.name/path/filename.ext
+
+Http://www.bruin.ucla.edu/alumni/programs/spirit_squad.html
+
+server.name  - the computer the files are stored on   - www.bruin.ucla.edu
+path         - the directory path to the file         - alumni/programs
+filename.ext - the name of the file and its extension - spirit_squad.html
+		</pre>  
+		This document is meant as only a reference for the use of commands.  The best way to learn how pages are written is to look at the actual web page and its scource code.  To do this in netscape, first load the page, then go to the View menu and select Document source. 
+		<p>
+		Some tags use an RGBhex color variable.  These two charts will help you pick the right color <a href="HTMLcolorchart.gif">HTMLColorChart.gif</a> <a href="htmlrgb2.gif">HTMLrgb2.gif</a>
+		<p>
+		For many HTML tags, there is an indicator as to when the tag first appeared, giving some indication of how recent it is.  Some HTML commands may not yet be valid in some web browsers.  Changes will be made to this doument periodically to keep it current.
+		<p>
+		<font size=+1>HTML Tags</font>
+		<p>
+		</TD>
+	</TR>
+
+
+</TABLE>
+
+
+
+<!--	<TR valign=top>
+		<TD><font size=-1></font></TD><TD><font size=-1></font></TD>
+	</TR>  -->
+
+<TABLE width=600 border=1 cellspacing=0 cellpadding=5>
+
+
+<!--MAIN-->
+
+
+
+	<TR valign=top>
+		<TD><font size=-1>&#60;HTML&gt;...&#60;/HTML&gt;</font></TD><TD><font size=-1>Defines the file to be of type HTML<br>(HTML 2.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;head&gt;...&#60;/head&gt;</font></TD><TD><font size=-1>Defines the top of the HTML document.  &#60;Title&gt; and other information about the document are placed here.<br>(HTML 2.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;title&gt;...&#60;/title&gt;</font></TD><TD><font size=-1>Title of page, displayed in title bar at top of window<br>(HTML 2.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;body&gt;...&#60;/body&gt;</font></TD><TD><font size=-1>Defines the main section of the HTML document, where text and graphics are formatted.  Within this tag background image and color, text colors, are defined<br>(HTML 2.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>background= "filename.ext"</font></TD><TD><font size=-1>Background image, similar to wallpaper in windows, using image filename.ext<br>(Netscape 2.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>bgcolor="000000"</font></TD><TD><font size=-1>Background color, the six digit (hexadecimal) RGB (Red, Green Blue) number has a range of 16.7 million colors.  Each pair of digits represents a value for one primary color.  00 is the lowest, FF the highest.  This is the standard method for refering to a particular color in HTML.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>text="112233"</font></TD><TD><font size=-1>Text color</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>link="AABBCC"</font></TD><TD><font size=-1>Color of the text or image border that is used as a link</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>alink="DDEEFF"</font></TD><TD><font size=-1>Color of an active link</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>vlink="FFFFFF"</font></TD><TD><font size=-1>Color of a visited link</font></TD>
+	</TR>
+
+
+<!--PAGE-->
+
+
+	<TR valign=top>
+		<TD><font size=-1>&#60;p&#62;...&#60;/p&#62;</font></TD><TD><font size=-1>Paragraph marker. Will insert a blank line in between paragraphs. &#60;p&#62; alone will insert the blank line. &#60;/p&#62; is now considered optional.<br>(HTML 2.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;br&#62;</font></TD><TD><font size=-1>Inserts a line break (hard return)<br>(HTML 2.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;multicol&#62;...&#60;/multicol&#62;</font></TD><TD><font size=-1>Allows content to be arranged in multiple columns of eaual length<br>(Netscape 3.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>col="<i>N</i>"</font></TD><TD><font size=-1>Sets number of columns <i>N</i></font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>gutter="<i>N</i></font></TD><TD><font size=-1>Space between columns in <i>N</i>, default is 10</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>width="<i>N</i>"</font></TD><TD><font size=-1>Width of columns in <i>N</i></font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;nobr&#62;...&#60;/nobr&#62;</font></TD><TD><font size=-1>Text within &#60;nobr&#62; is not wordwraped when it reaches the edge of the screen<br>(Netscape 2.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;wbr&#62;</font></TD><TD><font size=-1>Wraps text at this point only if necessary<br>(Netscape 2.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>nowrap</font></TD><TD><font size=-1>An attribute that is assigned to a tag that affects text.  It prevents word wrap by the browser.<br>(HTML 3.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>clear="..."</font></TD><TD><font size=-1>Assigned in line break tags.  Prevents wraping of text around images.  Text following this tag will not align to an image, instead droping to the first line with a clear left and/or right margin.  <i>Left</i> and <i>Right</i> will align with their respective margins.  <i>All</i> will drop to the first line where both margins are clear and then wrap text normally.<br>(HTML 3.0)</font></TD>
+	</TR>
+
+
+<!--LIST-->
+
+
+	<TR valign=top>
+		<TD><font size=-1>&#60;ol&#62;...&#60;ol&#62;	&#60;li&#62;</font></TD><TD><font size=-1>An ordered list.  All lines enclosed in this tag will be indented and ordered in succession.  The numbers will appear where the &#60;li&#62; tag is placed.  When &#60;li&#62; is not used, no number appears</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>type="..."</font></TD><TD><font size=-1>Numbering scheme used to bullet the list, A (capital letters), a (small letters), I (large roman numerals), i (small roman numeralsi) or 1 (numbers)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>seqnum="N"</font></TD><TD><font size=-1>Number which to start from, default is 1</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;ul&#62;...&#60;/ul&#62;	&#60;li&#62;</font></TD><TD><font size=-1>An unordered list.  Bullets are used in place of numbers</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>type="..."</font></TD><TD><font size=-1>Specifies the type of bullet used,  Square, Disc, or Circle</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>plain</font></TD><TD><font size=-1>An attribute that suppresses bulleting.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>wrap="..."</font></TD><TD><font size=-1>Determines the way a list is displayed.  The default, vertical, shows the list in one column.  Horizontal will go across the page first, then wrap to the next line.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>dingbat="..."</font></TD><TD><font size=-1>Uses a dingbat instead of standard bullet<br>(HTML 3.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;menu&#62;...&#60;/menu&#62;	&#60;li&#62;<br&#62;&#60;dir&#62;...&#60;/dir&#62;		&#60;li&#62;</font></TD><TD><font size=-1>A centered, bulleted list</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;dl&#62;...&#60;/dl&#62;	&#60;dt&#62;	&#60;dd&#62;</font></TD><TD><font size=-1>A list with titles and indented text</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;lh&#62;</font></TD><TD><font size=-1>Indicates a title for a list.  Is used within any type of list after the first list tag.</font></TD>
+	</TR>
+
+
+<!--RULE LINE-->
+
+
+
+	<TR valign=top>
+		<TD><font size=-1>&#60;HR&#62;</font></TD><TD><font size=-1>Horizontal rule line</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>width="N"</font></TD><TD><font size=-1>Width in N pixels</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>width="N%"</font></TD><TD><font size=-1>Width in N% of the page</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>size="N"</font></TD><TD><font size=-1>Vertical thickness in N pixels</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>align="..."</font></TD><TD><font size=-1>Horizontal alignment, Left, Right or Center</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>noshade</font></TD><TD><font size=-1>Makes the rule line solid instead of shaded</font></TD>
+	</TR>
+
+
+<!--TABLE-->
+
+
+	<TR valign=top>
+		<TD><font size=-1>&#60;table&#62;...&#60;/table&#62;</font></TD><TD><font size=-1>Creates a table for aligning text and images.  Arranged in rows, each containing an equal number of data cells thata are aligned in columns.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>width="N"</font></TD><TD><font size=-1>Width of the table in N pixels.  This will fix the size of the table regardless of the window size</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>border="N"</font></TD><TD><font size=-1>border thickness of the table in N pixels</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>cellspacing="N"</font></TD><TD><font size=-1>space between cells in N pixels</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>cellpadding="N"</font></TD><TD><font size=-1>spacing between the edge of the table cell and the contents in N pixels</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;tr&#62;..&#60;/tr&#62;</font></TD><TD><font size=-1>Table row.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>align="..."</font></TD><TD><font size=-1>Alignment of contents of all cells within the row; left, right, center</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>valign="..."</font></TD><TD><font size=-1>Vertical alignment of contents within all cells in the row; top, center, bottom</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;td&#62;...&#60;/td&#62;</font></TD><TD><font size=-1>Table data.  This is where text and images are placed within the table.  All text attributes set within the cell will apply only within the cell</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>colspan="N"</font></TD><TD><font size=-1>Allows a cell to occupy more than one column.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>rowspan="N"</font></TD><TD><font size=-1>Allows a cell to occupy more than one row.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>width="N"</font></TD><TD><font size=-1>Fixes the width of the cell to N pixels</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>width="N%"</font></TD><TD><font size=-1>Fixes the width of the cell to N% of the table width</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>align="..."</font></TD><TD><font size=-1>Alignment of contents of cell, left, right or center.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;th&#62;...&#60;/th&#62;</font></TD><TD><font size=-1>Table Header.  The same as &#60;td&#62; except that text within will be bold.  All features of &#60;td&#62; apply to &#60;th&#62;</font></TD>
+	</TR>
+
+
+<!--TEXT-->
+
+
+	<TR valign=top>
+		<TD><font size=-1>&#60;b&#62;...&#60;/b&#62;</font></TD><TD><font size=-1>Bold text</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;i&#62;...&#60;/i&#62;</font></TD><TD><font size=-1>Italics</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;blink&#62;...&#60;/blink&#62;</font></TD><TD><font size=-1>Causes enclosed text to blink, not advised!<br>(Netscape 2.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;center&#62;...&#60;/center&#62;</font></TD><TD><font size=-1>Center alignment of text or image, otherwise aligned to the left edge of the window<br>(Netscape 2.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;spacer...&#62;</font></TD><TD><font size=-1>Blank spacing for arranging paragraphs and images<br>(netscape 3.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>type="..."</font></TD><TD><font size=-1>Horizontal, vertical or block</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>size="<i>N</i>"</font></TD><TD><font size=-1>Size of space in <i>N</i> pixels</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>width="<i>N</i>"</font></TD><TD><font size=-1>Width in <i>N</i> pixels, when used as a block</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>height="<i>N</i></font></TD><TD><font size=-1>Height in <i>N</i> pixels, when used as a block</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>align="..."</font></TD><TD><font size=-1>Alignment of text in relation to spacer.  Behaves the same as in &#60;img&#62;</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;basefont size=N&#62;</font></TD><TD><font size=-1>Size of text.  N has a value of 1 to 7, 7 being the largest font size.  3 is the default size.  Any relative font size changes will be determined from this value</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;font&#62;...&#60;/font&#62;</font></TD><TD><font size=-1>Defines font size and color within &#60;font&#62; tags</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>color="123456"</font></TD><TD><font size=-1>color of text</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>size=N</font></TD><TD><font size=-1>Size of text</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>size=+N</font></TD><TD><font size=-1>Increases font size N steps above the &#60;basefont&#62; size.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>size=-N</font></TD><TD><font size=-1>Decreases font size N steps below the &#60;basefont&#62; size.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;pre&#62;...&#60;/pre&#62;</font></TD><TD><font size=-1>Preformatted.   A block of text that is formatted with normal spaces, hard returns, and tabs.  However it appears between the two tags is how it will be displayed in a browser</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;H1&#62;...&#60;/H1&#62;,
+		&#60;H2&#62;...&#60;/H2&#62;,
+	....&#60;H6&#62;...&#60;/H6&#62;</font></TD><TD><font size=-1>Heading tags.  Increases font size and/or puts the text in a bold form. &#60;H1&#62; is the largest size.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>seqnum="N"</font></TD><TD><font size=-1>Begins with header value N.  Affects all subsequent headers.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>skip="N"</font></TD><TD><font size=-1>Skips over N Header types.  If a header of &#60;H2&#62; is used, skip=2 will make the next header 5.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>dingbat="..."</font></TD><TD><font size=-1>Inserts a dingbat from HTML specification just before the header.<br>(HTML 3.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;lang&#62;</font></TD><TD><font size=-1>Defines a country code.  Allows adaption between punction marks and type styles</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;big&#62;...&#60;/big&#62;</font></TD><TD><font size=-1>Text is raised to larger size (same as &#60;font&#62;)<br>(HTML 3.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;small&#62;...&#60;/small&#62;</font></TD><TD><font size=-1>Text is smaller than base font.<br>(HTML 3.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;sub&#62;...&#60;/sub&#62;</font></TD><TD><font size=-1>Subscript<br>(HTML 3.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;sup&#62;...&#60;/sup&#62;</font></TD><TD><font size=-1>Superscript<br>(HTML 3.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;strike&#62;...&#60;/strike&#62;</font></TD><TD><font size=-1>Strikeout text<br>(Netscape 2.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;s&#62;...&#60;/s&#62;</font></TD><TD><font size=-1>Strikeout text<br>(Netscape 3.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;u&#62;...&#60/u&#62;</font></TD><TD><font size=-1>Underlined text<br>(Netscape 3.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;code&#62;...&#60;/code&#62;</font></TD><TD><font size=-1>Causes text to be displayed in default fixed width font<br>(HTML 2.0)</font></TD>
+	</TR>
+
+
+<!--TAB-->
+
+
+	<TR valign=top>
+		<TD><font size=-1>&#60;tab&#62;</font></TD><TD><font size=-1>Allows indenting and aligned tabs.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>indent="N"</font></TD><TD><font size=-1>Tabs N en spaces</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>ID="..."</font></TD><TD><font size=-1>Labels a tab for later reference</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>TO="..."</font></TD><TD><font size=-1>Tabs to align with the tab stop labeled by an ID.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>align=left</font></TD><TD><font size=-1>normal left tab</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>align=right</font></TD><TD><font size=-1>right aligned tab</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>align=center</font></TD><TD><font size=-1>center tab</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>align=decimal</font></TD><TD><font size=-1>decimal place tab.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>DF="..."</font></TD><TD><font size=-1>Character used for the decimal point </font></TD>
+	</TR>
+
+
+<!--IMAGES-->
+
+
+	<TR valign=top>
+		<TD><font size=-1>&#60;img&#62;</font></TD><TD><font size=-1>Beginning of image layout tag.<br>(HTML 2.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>src= "path/fliename.ext"</font></TD><TD><font size=-1>Places an image at this point on the page. GIF, JPEG, XBM, PICT and PNG formats are supported.  Can also be used in headers, &#60;li&#62; in lists, and rule lines.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>align="..."</font></TD><TD><font size=-1>Aligns the image with the text around it</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><font size=-1>left</font></dl></dl></TD><TD><font size=-1>Aligns image to left of page, aligning the following text next to it</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><font size=-1>right</font></dl></dl></TD><TD><font size=-1>Aligns to the right with text to the left.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><font size=-1>top</font></dl></dl></TD><TD><font size=-1>Text aligned with top of image</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><font size=-1>middle</font></dl></dl></TD><TD><font size=-1>Text aligned with middle of image</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><font size=-1>bottom</font></dl></dl></TD><TD><font size=-1>Text aligned with bottom of image</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>Alt="message"</font></TD><TD><font size=-1>If the Web browser does not auto-load the image, the message text will be displayed in its place</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><dd><font size=-1>hspace="N"</font></TD><TD><font size=-1>Places N pixel spaces between the image and the text to the side of it</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>vspace="N"</font></TD><TD><font size=-1>Places N pixel spaces between the image and the text above and below</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>border="N"</font></TD><TD><font size=-1>Defines a border of thickness N pixels, the same color as the text</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>width="N" height="N"</font></TD><TD><font size=-1>Width and height of the image in N pixels, allowing Web browsers to format the page more quickly, or can be used to alter the size and shape fo the image</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>lowsrc= "path/filename.ext"</font></TD><TD><font size=-1>An image loaded before the primary image defined by src. The lowsrc image will load first, followed by the src image.<br>(Netscape 2.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>Usemap="#mapname"</font></TD><TD><font size=-1>Relates image with map definition of name mapname.<br>(Netscape 2.0)</font></TD>
+	</TR>
+
+
+<!--LINK-->
+
+
+	<TR valign=top>
+		<TD><font size=-1>&#60;a&#62;..&#60;/a&#62;</font></TD><TD><font size=-1>link tags.  These are used for navigation, from one page to another or to specific point in a page.  What ever is enclosed in the tags is the clickable link</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>href="filename.ext"</font></TD><TD><font size=-1>The address of a page that is in the current directory</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>href= "path/ filename.ext"</font></TD><TD><font size=-1>The address of a page that is in another directory on the same server</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>href= "server.name/ path/ filename.ext"</font></TD><TD><font size=-1>The address of a page on a different server</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>href="mailto: alumni@support.ucla.edu"</font></TD><TD><font size=-1>A link that will open a mail window addressed to a specific E-mail address</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>href="#location"</font></TD><TD><font size=-1>A link to a specific part of the page.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>href= "server.name/ path/ filename.ext #location"</font></TD><TD><font size=-1>A link to a location on another web page</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>name="location"</font></TD><TD><font size=-1>The marker where the #location address refers to.  Necessary for the href="#location" tag to work</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>target="FrameName"</font></TD><TD><font size=-1>If using frames, a link be sent to a specific frame.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>&#60;id="location"&#62;</font></TD><TD><font size=-1>Id is now the prefered method of marking text.  It can be used by itself or within another tag.<br>(HTML 3.0)</font></TD>
+	</TR>
+
+
+<!--IMAGE MAP-->
+
+
+	<TR valign=top>
+		<TD><font size=-1>&#60;map name= "mapname"&#62;... &#60;/map&#62;</font></TD><TD><font size=-1>Defines the area of an image map: an image that can be used as buttons for links.  mapname is a reference between the image and the map tag that defines the buttons.<br>(Netscape 2.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>&#60;area...&#62;</font></TD><TD><font size=-1>Tag that caontains shape of button and link URL</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><font size=-1>shape="..."</font></dl></dl></TD><TD><font size=-1>Shape of button region</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><dl><dd><font size=-1>rect</font></dl></dl></dl></TD><TD><font size=-1>Rectangle.  Defined by left,top right bottom edges</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><dl><dd><font size=-1>circle</font></dl></dl></dl></TD><TD><font size=-1>Circle.  Center x and y coordinates, radius</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><dl><dd><font size=-1>poly</font></dl></dl></dl></TD><TD><font size=-1>Polygon.  Sets of x,y coordinates of the corners of the polygon</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><dl><dd><font size=-1>default</font></TD><TD><font size=-1>Any region not defined by one of the other shape types is controlled through the default shape.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><font size=-1>coords="..."</font></dl></dl></TD><TD><font size=-1>Cordinates are placed here in the order specified above</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><font size=-1>href="..."</font></dl></dl></TD><TD><font size=-1>The URL where the buuton should link to.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><font size=-1>nohref</font></dl></dl></TD><TD><font size=-1>For button regions that do not lead to a link.</font></TD>
+	</TR>
+
+
+<!--FRAMES-->
+
+
+	<TR valign=top>
+		<TD><font size=-1>&#60;frameset...&#62;...&#60;/frameset&#62;</font></TD><TD><font size=-1>Frames are seperate regions of a browser that are used for displaying different pages.  They are not actaully different browsers, but a set of windows that are not dependent on each other.  One frame can have another go to a specific URL, while not changing its own.  There is no limit to the number of frames that can be used.  Frames can be setup in groups, with multiple frames with the same width having seperate heights that the next column over.  Be warned that there are many users who dislike frames and may turn this option off, so be sure to provide alternatives.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>Cols="N,O,*"</font></TD><TD><font size=-1>Sets the width of each frame in pixels.  N is for the first frame, O, for the second.  A seperate number is used for each frame. * sets the frame to adjust to whatever size is left available in the window.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>Rows="N,O,*"</font></TD><TD><font size=-1>Sets height of frames in pixels.  Again, * is used to indcate a variable height frame.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;noframes&#62;...&#60;/noframes&#62;</font></TD><TD><font size=-1>Similar to the body tag.  If the browser does not supprot frames, This tag is for enclosing an alternative for a slingle window.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><font size=-1>&#60;frame...&#62;</font></TD><TD><font size=-1>Enclosed within the <frameset> tag, this will specify features for a single frame. Several of these statments within one pair of <frameset> tags would be used to define a whole column or row of frames.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>src="URL#location"</font></TD><TD><font size=-1>States the URL and/or location that will initially appear in the frame.  If none is specified, a blank frame is displayed.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>marginwidth="N"	marginheight="N"</font></TD><TD><font size=-1>The width and height of the margin around the frame in N pixels.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>name="framename"</font></TD><TD><font size=-1>The label for the frame.  When doing links, the page can be loaded in a a frame specified by target="..." option in <a href>.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>scrolling="..."</font></TD><TD><font size=-1>Scroll bar options in frames.  Yes will always put scroll bars in that frame.  No will never put in scroll bars.  Auto will add scroll bars onlly if the page loaded into that frame is larger than the frame itself.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>border="<i>N</i>"</font></TD><TD><font size=-1>Sets frame border to <i>N</i> pixels wide</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>frameborder=<i>N</i></font></TD><TD><font size=-1>specifies the width of the border around a specific frame or frameset<br>(Netscape 3.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>bordercolor="<i>ABCDEF</i>"</font></TD><TD><font size=-1>Sets border color to RGB value <i>ABCDEF</i><br>(Netscape 3.0)</font></TD>
+	</TR>
+
+
+<!--FORMS-->
+
+
+	<TR valign=top>
+		<TD><font size=-1>&#60;form...&#62;...&#60;/form&#62;</font></TD><TD><font size=-1>Indicates a fill-in form that can be returned to the server<br>(HTML 2.0)</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>action="..."</font></TD><TD><font size=-1>The URL of the program that will process the form</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>method="..."</font></TD><TD><font size=-1>Method of passing the information.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><font size=-1>Get</font></dl></dl></TD><TD><font size=-1>The data is appended to the action URL</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><font size=-1>Post</font></dl></dl></TD><TD><font size=-1>The data follows after the action URL</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>enctype="multipart/form-data"</font></TD><TD><font size=-1>An option that allows a form to send a file chosen by the user.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>&#60;input&#62;</font></TD><TD><font size=-1>Creates a variable for data</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><font size=-1>type="..."</font></dl></dl></TD><TD><font size=-1>Form of input</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><dl><dd><font size=-1>Checkbox</font></dl></dl></dl></TD><TD><font size=-1>On/Off boxes</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><dl><dd><font size=-1>Hidden</font></dl></dl></dl></TD><TD><font size=-1>Allows passing of information from one generating script to another</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><dl><dd><font size=-1>Radio Button</font></dl></dl></dl></TD><TD><font size=-1>Allows selection of one of many options</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><dl><dd><font size=-1>Reset</font></dl></dl></dl></TD><TD><font size=-1>Clear Form</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><dl><dd><font size=-1>Submit</font></dl></dl></dl></TD><TD><font size=-1>Send Form</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><dl><dd><font size=-1>Text</font></dl></dl></dl></TD><TD><font size=-1>Short text entries</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><dl><dd><font size=-1>File</font></dl></dl></dl></TD><TD><font size=-1>For recieving files from the browser</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><font size=-1>name="..."</font></dl></dl></TD><TD><font size=-1>The name of the passed variable</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><font size=-1>value="..."</font></dl></dl></TD><TD><font size=-1>Value assigned to the variable.  For text and hidden types, the default value.  For check box and radio button, the value submitted by the form.  For Reset and Submit, the label of the button on the form itself.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><font size=-1>Size="<i>N</i>"</font></dl></dl></TD><TD><font size=-1>For text input, the size of the text box</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><font size=-1>maxlength="N"</font></dl></dl></TD><TD><font size=-1>The maximum number of characters allowed for the variable</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>&#60;textarea&#62;</font></TD><TD><font size=-1>A box for text input</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><font size=-1>name="..."</font></dl></dl></TD><TD><font size=-1>Name of the text variable</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><font size=-1>rows="N"</font></dl></dl></TD><TD><font size=-1>sets the text box to N rows high</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><font size=-1>cols="N"</font></dl></dl></TD><TD><font size=-1>sets the text box width to N columns wide</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>&#60;select...&#62;...&#60;/select&#62;</font></TD><TD><font size=-1>A pull-down menu, by default, only one item can be selected.  An image map can be used in place of a pulldown menu.  </font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><font size=-1>name="..."</font></dl></dl></TD><TD><font size=-1>Name of variable</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><font size=-1>multiple="..."</font></dl></dl></TD><TD><font size=-1>Allows selection of more than one item</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><font size=-1>size="N"</font></dl></dl></TD><TD><font size=-1>the number of menu items veiwable at one time</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><font size=-1>&#60;option...&#62;</font></dl></dl></TD><TD><font size=-1>Items are listed individually, each preceded by the <option> tag.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><dl><dd><font size=-1>selected</font></dl></dl></dl></TD><TD><font size=-1>the default value</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dd><font size=-1>&#60;select&#62; with image maps</font></TD><TD><font size=-1>all values are setup in the same way as with pull down menus.  All <option> tags are contained within the &#60;select&#62;.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><font size=-1>&#60;option...&#62;</font></dl></dl></TD><TD><font size=-1>The standard option tag, one needed for every choice offered.  Follows by the text that is to be displayed</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><dl><dd><font size=-1>value="..."</font></dl></dl></dl></TD><TD><font size=-1>value submitted when this option is chosen.  </font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><dl><dd><font size=-1>Shape="..."</font></dl></dl></dl></TD><TD><font size=-1>A region defined in the image for a particular option.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><dl><dd><font size=-1>Shape= "rect x,y,w,h"</font></dl></dl></dl></TD><TD><font size=-1>Rectangular area.  x,y defines the upperleft corner of the area. w,h refer to widht and height of the image.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><dl><dd><font size=-1>Shape= "circle x,y,r"</font></dl></dl></dl></TD><TD><font size=-1>Circle definition.  x,y are the center coordinates of the circle.  r is the radius of the circle.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><dl><dd><font size=-1>Shape= "polygon x1,y1,x2,y2..."</font></dl></dl></dl></TD><TD><font size=-1>A shape that is defined by x,y coordinates.  Each x,y pair is one corner of the polygon.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><dl><dd><font size=-1>Shape="default"</font></dl></dl></dl></TD><TD><font size=-1>An attribute that is assigned to a tag that affects text.  It prevents word wrap by the browser.</font></TD>
+	</TR>
+	<TR valign=top>
+		<TD><dl><dd><dl><dd><dl><dd><font size=-1>nohref</font></dl></dl></dl></TD><TD><font size=-1>Default option for any area of the image that is not contained within one of the other option definitions.</font></TD>
+	</TR>
+
+
+
+</TABLE>
+
+<p>
+
+<hr>
+<center>
+	<b>
+	This page hosted by 
+	<a href="/"><img src="/pictures/gc_icon.gif" border=0 align=middle></a> Get your own <a href="/">Free Home Page</a>
+	</b>
+</center> 
+	
+<p>
+
+</BODY>
+</HTML>
+<!-- <SERVICE NAME="pop"> -->
+<SCRIPT LANGUAGE="javascript">
+<!-- 
+var cuid= "9560"; var keywords= "html"; 
+// -->
+</SCRIPT>
+
+
+<DIV CLASS="GeoBrandingV2" ID="GeoBrandingV2" STYLE="position:absolute;top:1;visibility:hide;" ALIGN="right"><DIV CLASS="GeoBrandingV2" ID="GeoBrandingV2" TTYLE="position:absolute;top:1;visibility:hide;" ALIGN="right"><A HREF="http://www.geocities.com/?source=watermark&browser=NS" TARGET="_top"><IMG SRC="http://pic.geocities.com/images/watermark/v1/geocities.gif" ALT="Click Here!" WIDTH="107" HEIGHT="41" BORDER="0"></A></DIV>

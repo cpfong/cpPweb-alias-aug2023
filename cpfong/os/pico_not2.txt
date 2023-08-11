@@ -1,0 +1,44 @@
+做法可能不是很對....
+希望有經驗的大哥能指導一下...
+裝好FreeBSD,SOURCE全裝在/usr/src/release下有一個picobsd目錄
+以FreeBSD 3.3為例,picobsd 0.445
+用router的來改....
+/usr/src/release/picobsd/router
+1.編修PICOBSD檔(KERNEL)
+  把需要的ETHERNET CARD加入,不要的剔除...
+2.編修crunch1/crunch.conf
+  把要用的程式加入,如ee編輯器,telnet等..
+  但請注意,磁片容量大小考量...也可把不需要的東西
+  刪除...
+3.floppy.tree/etc/
+  這些東西為放在picobsd的/etc目錄下...
+  編修rc這檔加入設定...範例加入
+  sysctl -w net.inet.ip.forwarding=1 >/dev/null
+  ifconfig lo0 inet 127.0.0.1 netmask 0xffffff00
+  ifconfig vr0 inet 192.168.0.254 netmask 0xffffff00
+  ifconfig vr0 inet 192.192.1.1 netmask 0xffffff00 alias
+  route add default 192.192.1.254 1
+  ipfw -f flush
+  ipfw add divert natd all from any to any via vr0
+  ipfw add 100 pass all from any to any via lo0
+  ipfw add 200 deny all from any to 127.0.0.0/8
+  ipfw add 65000 pass all from any to any
+  ipfw add 65535 deny ip from any to any
+  natd -n vr0
+  hostname tatung
+  #真實ip 192.192.1.1/24 假ip 192.168.0.254/24
+  #default gateway 192.192.1.254
+  #natd interface vr0
+4.編修lang/*.en
+  其中en為語言意思(english)...
+  針對需求編修hosts.en,motd.en(畫面檔)
+5.到/usr/src/release/picobsd/build目錄編輯picobsd了...
+  ./build
+  在type 選router
+  會編修picobsd的kernel...
+  編修完放入磁片.....把picobsd寫到磁片..大功告成..
+  你有了自己專用的picobsd了....
+  針對需求,可改軟碟type(如720k等...)...或MFS
+
+
+

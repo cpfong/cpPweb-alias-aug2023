@@ -1,0 +1,40 @@
+chap 7 使用作業系統
+
+OS: Operation System 即為作業系統
+作業系統的類型: 即時, 單人單工, 單人多工, 多人多工
+
+即時: 醫療設備的系統, 在很短時間內即要做出回應
+單人單工: MS-DOS, Palm OS, 同一時間內只能有一位使用者執行一個工作
+單人多工: MS-Windows, 一位使用者可以執行一個以上的工作
+多人多工: UNIX, Linux, Red-Hat Linux, Ubuntu ... 多位使用者可以同時在同一台機器上執行多個工作
+
+如何製作一個可以開機的 usb 隨身碟 ?
+1. 先格式化 usb (注意: 所有在上頭的資料都會被刪除)
+2. 把 usb 改成可以開機
+3. 把重要的檔案放入後即成為一個多用途的 usb 隨身碟
+
+圖型化使用者介面 (GUI Graphical User Interface)
+Windows 的作業系統即使用 GUI, 例如: 桌面, 捷徑, 
+
+命令列介面: 
+如何叫出 dos: 開始, 執行 , cmd
+
+7.3 利用剪貼簿來分享資訊: 利用此一特性可以把資料由甲地複製到乙地
+可以用滑鼠和鍵盤來完成, 利用滑鼠則使用快顯功能表, 利用鍵盤則
+使用 C+C C+V (Control+C, Control+V)
+
+另一方式可以使用 OLE (Object Linking Embedded) 的方式, 這是
+把物件嵌入另一個檔案之中, 要再次編輯它則可以快點二下以進入
+
+7.4 硬體管理: 使用裝置管理員, 開始, 控制台, 系統, 硬體 
+
+7.5 使用公用軟體來增強 OS
+提供免費線上掃毒軟體: 趨勢科技,賽門鐵克,卡巴斯基,熊貓
+趨勢科技 http://housecall.trendmicro.com/
+賽門鐵克 href=http://security.symantec.com/ssc/home.asp
+卡巴斯基 href=http://www.kaspersky.com/scanforvirus.html
+熊貓     href=http://www.itbs.com.tw/panda_OnlineActiveScan.htm
+
+侵入偵測軟體: 侵入軟體可能通過防火牆進入你的電腦之中, 它不像病毒
+不一定會立即造成問題, 在網路上找此類的程式則可以進入 google
+後找 anti spyware 可以找到許多的侵入偵測軟體

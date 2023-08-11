@@ -1,0 +1,3 @@
+bot: A chatbot is a software application used to conduct an on-line chat conversation via text
+provider: who provide this service, (company or personal)
+channel: communication channel

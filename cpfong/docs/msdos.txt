@@ -1,0 +1,7 @@
+Q: what is dos98.img?
+A: cp created MSDOS98 image
+ 
+pluto@Oregon % s mdconfig -a -f ./dos98.org.img 
+pluto@Oregon % s mount -t msdosfs /dev/md0 /mnt
+pluto@Oregon % ls /mnt/README.TXT
+pluto@Oregon % cat /mnt/SETRAMD.BAT

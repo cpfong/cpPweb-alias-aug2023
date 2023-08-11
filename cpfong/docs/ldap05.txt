@@ -1,0 +1,8 @@
+host ldap.my.domain
+base dc=comp,dc=com
+binddn cn=pam_ldap,ou=services,dc=comp,dc=com
+bindpw secret
+scope sub
+pam_password exop
+nss_base_passwd ou=staff,dc=comp,dc=com
+nss_base_shadow ou=staff,dc=comp,dc=com

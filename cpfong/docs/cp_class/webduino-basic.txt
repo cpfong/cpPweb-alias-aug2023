@@ -1,0 +1,6 @@
+third basic function: logic, loop, math, text, list, color
+
+logic: 
+ if x=1 execute upside-down gif
+ if today=monday and weather is rainning execute i will bring unbrella (load photos on imgur accordingly)
+ test whether list is empty (not assign a variable call list, then list is empty)

@@ -1,0 +1,21 @@
+<html>
+<a href=./48022-p7-24.jpg>port# 13 --> R501 </a> -
+<a href=./48022-p7-24.jpg>port# 14 --> R101 </a> -
+<a href=./48022-p7-24.jpg>port# 19 --> R301 </a> -
+<a href=./48022-p7-24.jpg>port# 20 --> R401 </a> -
+<a href=./48022-p7-24.jpg>port# 22 -->  ?   </a> -
+<br>
+interface ethernet 13 port-name "5F-H501 <501>"<br>
+interface ethernet 14 port-name "1F-H101 <111>"<br>
+interface ethernet 19 port-name "3F-301  <301>"<br>
+interface ethernet 20 port-name "4F-H401 <401>"<br>
+interface ethernet 22 port-name "<102>"
+
+
+<br>
+<br>
+vlan 600 by port<br>
+tagged ethe 13 to 14 ethe 19 to 20 ethe 22 ethe 47<br>
+router-interface ve 250<br>
+
+<html>

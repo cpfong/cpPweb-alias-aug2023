@@ -1,0 +1,31 @@
+how to setup jail
+--
+1 Place the stuff you want to run and the stuff it needs to run somewhere on your filesystem. # host filesystem (one folder or safer zfs mount point)
+2 Add some basic configuration for the jail in jail.conf # host /etc/jail.conf
+3 Fire up the jail #exec it
+
+1
+~ # zfs create -p zroot/srv/jails/bsd-test01
+~ # zfs set mountpoint=/srv zroot/srv
+~ # fetch ftp://ftp.freebsd.org/pub/FreeBSD/releases/amd64/amd64/11.1-RELEASE/base.txz -o base-11.1-RELEASE.txz 
+~ # tar xf base-11.1-RELEASE.txz -C /srv/jails/bsd-test01
+
+2 
+vi /etc/jail.conf
+
+bsd-test01 {
+        exec.start  = "/bin/sh /etc/rc";
+        exec.stop   = "/bin/sh /etc/rc.shutdown";
+        exec.clean;
+
+        mount.devfs;
+
+        path = "/srv/jails/bsd-test01";
+
+        host.hostname = "bsd-test01.local";
+}
+
+3
+~ # jail -c bsd-test01
+~ # jls
+~ # jexec bsd-test01

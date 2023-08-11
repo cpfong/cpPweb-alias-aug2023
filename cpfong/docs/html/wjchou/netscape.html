@@ -1,0 +1,369 @@
+<html>
+<TITLE>WWW瀏覽器─Netscape</TITLE>
+<h3>
+<a name="content">
+　　 <h1> ＷＷＷ瀏覽器─Ｎｅｔｓｃａｐｅ</h1>
+<ul>
+<li><a href="#intro">一、前言</a>
+<li><a href="http://www.sinica.edu.tw/www/netscape/netscape.txt">二、如何在MS Windows安裝Netscape</a>
+<li><a href="http://www.sinica.edu.tw/www/netscape/ns32inst.txt">　　如何在MS Windows安裝Netscape(win 95)</a>
+<li><a href="#file>三、Ｆｉｌｅ</a>
+<li><A HREF="#edit">四、Ｅｄｉｔ</A>
+<li><A HREF="#view">五、Ｖｉｅｗ</A>
+<li><A HREF="#go">六、Ｇｏ</A>
+<li><A HREF="#book">七、Ｂｏｏｋｍａｒｋｓ</A>
+<li><A HREF="#options">八、Ｏｐｔｉｏｎｓ</A>
+<li><A HREF="#summary">九、結語</A>
+</ul>
+　　　　　　　　　　　　　　　　<i>計中　周文正(Wen Jeng Chou)</i>
+</h3>
+<HR>
+<pre>
+<a name="intro">
+<h2>一、前言</h2>
+
+　　國際網際網路（ Internet ）是目前全世界最大的電子社區，尤其是全球資
+訊網（ World Wide Web， WWW ）創造了全球性多媒體網路的良好建構機制之後
+，更使無遠弗屆的全球村媒體交流行為趨於熱絡多元化。 實因 WWW 不僅能展現
+諸多文字、聲音、影像、動畫等超媒體文件，並且也能達到使用者單一介面存取
+各種網路資源服務（ telnet、ftp、news、gopher、http 等）的實用理念。 所
+以想進入多彩多姿五花八門的 WWW 世界， 首要之務在於如何選取一個富有親和
+力高、功能強、使用簡易的瀏覽器（ Brower ）， 來解讀與 WWW 主機雙向溝通
+的各種 HTML 檔案。
+
+　　目前最受歡迎的  WWW 瀏覽器， 是以 GUI 為主的 PC 視窗版Netscape 公司
+的 Netscape Navigator 3.0  與 MicroSoft Internet Explorer (IE3.0) 
+，兩者均受 Internet 使用者普遍青睞。本文僅著重於 Netcape 之使用說明， 
+尤其是對設定參數與建立 Bookmark list 的實用上有較詳細的介紹。<p>
+
+<a href="#content">回到主目錄</a>
+<hr>
+<a name="file"> 
+<H2>三、Ｆｉｌｅ</H2>
+  （1）New Browser
+       開啟另一個瀏覽器視窗.同時可開啟視窗的數目(default 4)，是取決於 "options - Network perferences - Network Connections" 的設定。
+
+  （2）Open  Location
+       開啟一個一致資源定位器（Uniform  Resource  Locfor， URL），告知WWW
+       主機要取得資料或服務時能快速確定資料之位置與取得方式（Access Method）
+       。其URL之格式如下：
+            scheme :// host[ :pont] /dir/subdir/ filename
+　　　其中scheme是取得方式，有下列其中之一:
+　　　http ：一個WWW 伺服器的檔案。
+　　　file ：一個本地系統的檔案，或是一個不具名(anonymours)伺服器的檔案。
+　　　gopher：在Gopher伺服器上的一個目錄或檔案。
+      　　  例如： gopher://gopher.nthu.edu.tw:70/11/ccc/faq。
+　　　WAIS： 在WAIS伺服器上的檔案。
+　　　news ： 一個Usenet newsgroup。
+　　　　　　例如：news:nthu.ccc ，注意：news後沒有"//"。
+　　　telnet ： 連結到一個Telnet-base 的伺服器上。例如：telnet://y14/。
+　　　ftp ： 連結到一個不具名(anonymous)FTP伺服器上 的檔案。
+　　　　　例如：ftp://y5/ mailto：例如："mailto:name@address"。
+                 　　　　　　　　　　　 "mailto:wjchou@oz.nthu.edu.tw"。
+          注意：mailto後沒有"//"。
+　　　若服務需要user_id與passwd時，用「scheme://user_id:passwd@host/」
+      例如：ftp://user_id:passwd@y14/。但務必注意：若你的瀏覽器有設定
+      Proxies且WWW主機（HOME PAGE）也有設定Proxis cashe功能時，則您的
+      user_id與passwd會儲存於WWW主機的磁碟上，這對個人使用安全上是很大
+      的冒險，故建議不要隨意使用此法。
+          其實Open Location 只是常用於隨意臨時性的開啟URL，一般常態使用
+      是將常用的URL建立一個標籤檔（BooKmark  file），以便日後選擇URL 項
+      使用。
+
+  （3）Open  file
+       由pc之本地磁碟機內，選擇所要開啟之URL。
+
+  （4）Save As 
+       將目前所開啟之HTML檔內容另存入pc檔
+
+　（5）Mail  Document
+       Netscape 提供一個很方便的電子郵件（E-mail）界面，只要利用填表式
+       的資料，就能與世界各地 internet 的使用者互相收送Email。其中：
+         Mail  to：寄給對方的Email地址
+         Subject：信件之主題。
+         Attachment：從Attach圖示中可選擇URL之文件（內定為目前開啟之 URL）
+                     當作附件。若選 Document text 是代表瀏覽器顯示器的畫
+                     面文件，若選Document Source 是代表其HTML原始檔案內容
+                     。除此之外另可選"FILE"為 pc磁碟中的某個檔案作為附加
+                     內容檔案。
+           最底下的空白方格就是你書寫信件的內容，也可以選"Quote Document"
+        把目前畫面內容含入此空格方塊，作為書信內容的一部份，最後不要忘記
+        按 send按鈕送出信件，其實此功能選項與 OPEN URL:"mailto:name@address"
+        效果相同。有關使用者的E-mail住址、名字以及SMTP主機是在功能軸Options
+         ->perferences  ->Mail  and  News"下設定。
+
+
+     (6) page setup 
+         設定 printer 印出的相關參數
+
+    （7）print
+         將目前之HTML檔所顯現的畫面文件從印表機印出。
+
+    （8）print  preview
+         將目前之HTML檔所顯現的的畫面文件在螢幕預覽印出。
+
+    （9）close
+         結束目前瀏覽視窗。
+
+    （10）Exit
+         退出netscape回windows。<p>
+
+<a href="#content">回到主目錄</a>
+<hr>
+<a name="edit">
+<H2>四、Ｅｄｉｔ</H2>
+    針對HTML檔之內容，可執行某字串之拷貝（copy）與尋找（find）， 而針對
+　　URL  Location 欄之內容，可執行某字串之cut ，copy及   paste等功能。
+<hr>
+<a name="view">
+<H2>五、Ｖｉｅｗ</H2>
+   （1）Reload
+　　　　當更新目前HTML 原始文件時，需執行Reload從WWW主機重載目前URL之文
+        件檔，才能重覽該新的文件。
+
+   （2）Refrefh
+        從pc端重新再展現一次。
+
+   （3）Document Source
+        將目前之HTML檔之原貌文件顯示於螢幕。可隨時利用此 view source
+        命令查關HTML文件之原始敘述內容，以促進HTML文件建構之效果。
+
+    (4) Document Info
+
+    (5) Frame Source
+
+    (6) Frame info
+
+<p>
+<a href="#content">回到主目錄</a>
+<hr>
+<a name="go">
+<H2>六、 ＧＯ</H2>
+    （1）Back
+         回前一層HTML文件。
+
+    （2）Forwork
+         進入曾經呼叫過的下一層HTML文件。
+
+    （3）Home
+         回到 netscape 起始載入的www page，即在options -> perferences ->
+         styles"下的Home page Location之URL設定位置。
+
+    （4）VIEW  History
+         顯示從開機至目前所經過之URL資料，以便重新（go  to）戴入使用。或
+         建立標籤資料（同Bookmarks下的Add  Bookmarks）。
+<p>
+<a href="#content">回到主目錄</a>
+<hr>
+<a name="book">
+<H2>七、Ｂｏｏｋｍａｒｋ</H2>
+    　　在前面曾提及在 Open Location （ URL ）的對話框中，雖然可輸入欲
+    連結的 Internet Service （ www，gopher，ftp.... ），但是這是一般隨
+    意臨時性的用法， 一般常態用法是將常用的 URL 資料分門別類建立在不同
+    的檔案夾（ folder ）之下， 這相當於 DOS 下將相關的檔案存放於相同目錄
+    （ directory ）之內一般，像此由上而下有階層性的熱線表列， 我們稱之
+    標籤檔（ Bookmark File ）， Netscape 內定的標籤檔是 Bookmark.htm，
+    由此可知標籤檔本來就是 HTML 的檔案格式，是可以直接在 Netscape 瀏覽
+    器開啟顯示使用。
+
+    (1) Add Bookmark
+        將目前所展現的文件之 URL , 加入 Bookmark List中。
+
+    (2) Go To Bookmarks
+        進入Bookmark List的編輯視窗。
+
+        [File/...]的選項
+        1. Open...
+           打開一個PC(local)端的標籤檔案。
+
+        2. Import...
+           將PC(local)端的另一個標籤檔案,附加於目前正在使用的Bookmark
+           List 的後面。
+
+        3. Save as...
+           將目前的Bookmark List, 儲存成一個標籤檔案。
+
+        4. What's New?
+           偵測目前所使用的Bookmark List中, 所記錄的URL更新的情況。
+
+        5. Close
+           關閉目前的Bookmark List。
+
+        [Edit/...]選項
+        針對Bookmark List之內容，可執行某字串的尋找(find 或 find again）
+        ；而針對每個URL Location之內容，可執行cut，copy，paste及delete
+        等功能，以便完成一個較完整的階層性的Bookmark List；以及針對使
+        用者操作的動作有(undo復原及redo反復原)來決定是否回復上一個動作，
+        或者取消回復的動作。
+
+        [Item/...]選項
+        1. Properties...
+           內容。記錄著每一個標籤的詳細資料, 並且可以加以修改。
+
+        2. Go to Bookmark
+           連結到所選取的標籤(即反白的entry)所指的URL。
+
+        3. Sort Bookmarks
+           將Bookmar List中的標籤(s)做排序的動作。
+
+        4. Insert Bookmark...
+           在Bookmark List所指的插入處(及反白處), 插入一個新的標籤
+           , 使用者可以根據需要編輯標題與URL, 以及簡單的描述。
+
+        5. Insert Folder...
+           在Bookmark List中插入一個新的標籤夾, (有如在dos底下, 建立
+           目錄一般)在之後的「建立階層性的Bookmark List」時, 便需要用
+           到這個功能,來分門別類各個標籤(s)。
+
+        6. Insert Separator
+           在Bookmark List中插入一個分隔線。
+
+        7. Make Alias
+           他的動作有點像複製, 就是在Bookmark List中再複製一份, 但標
+           題不一樣。
+
+        8. Set to New Bookmarks Folder
+           指定一個標籤夾(Folder)作為Add Bookmark時, 插入的位置。此設
+           定對於「階層性的Bookmark List」有著相當程度的方便。因為你
+           可以在插入標籤時, 便指定位置, 而勿需事後在作調整。
+
+        9. Set to Bookmark Menu Folder
+           當使用者在瀏覽器底下選取[Bookmarks/...]功能選項時，只會顯
+           示在此所設定的標籤夾(Folder)下的所有URL名稱與次標籤夾。
+
+        操作的方式:
+           先在欲選取的標籤夾(Folder)及標籤(Bookmark)上點一下, 再選取
+           所要的功能。
+
+
+    (3) 如何建立「階層性的Bookmark List」
+        其實階層性的Bookmark List的感覺很像DOS的樹狀結構, 也就是將相同
+        性質的標籤置於同一個標籤夾。其使用的方法有兩種：
+
+        方法一:
+            在選取[Bookmark/Add Bookmark]的功能之前, 先設定Bookmark
+            List中的[Item/Set to New Bookmarks Folder]的位置, 讓新增的
+            標籤插入於此指定的標籤夾中。
+            在此之前, 使用者可以先建立一個樹狀的標籤夾, 或有需求時, 再
+            行建立。
+
+        方法二:
+            先隨意的新增標籤於Bookmark List中, 之後再執行選擇表列的
+            [Bookmark/Go to Bookmarks], 使進入Bookmark List中, 利用滑
+            鼠拖曳的功能, 將新增的標籤拖曳至所欲放置的標籤夾中, 此時
+            放開滑鼠左鍵即可。
+            注意: 如果使用者的階層太大的話, 往往在拖曳時看不到想要放置
+            的標籤夾, 此時, 使用者可以先剪下來(cut)後, 再到目的處貼上
+            去(paste)即可。
+
+<a href="#content">回到主目錄</a>
+<hr>
+<a name="options">
+<H2>八、Ｏｐｔｉｏｎｓ</H2>
+    選擇Option下的Perference時，就會出現設定畫面，並依"Set Perferences On"
+    下選擇下列各設定項目
+
+    1、Styles
+       a、Windows styles下之Home page Location：設定您最喜歡的Page，當起動
+          Netscape時，系統先進入你的Home page Location，例如設定
+          http://www.nthu.edu.tw/。
+       b、Link styles下可設定曾被選取的Links，何時回復到未曾選取的顯示狀態，
+          或馬上全部回復（Expire now）
+
+    2、Fonts and colors
+       a、Fonts/Encodings
+          一般Encoding都設定“Latin1”，因為一般字元皆以ISO Latin-1字元定義
+          所規範。至於Proportional Font的字型與大小設定，系統會影響依六層
+          （H1~H6）標題與一般可顯示的文章。而Fixed Font的字型與字型的大小設
+          定，是針對預先格式化文章（Performated Test），即&lt;pre&gt;>&lt;/pre&gt;的文章。
+       b、colors
+          選擇在HTML中有連結（Links）的顏色、曾被選用連結（Followed Links）
+          的顏色（在顯示時效內）以及文章本文的顏色。除此之外，尚有背景顏色的
+          設定：其中包括可以自定選取顏色（除非你選Always Use Mine項，不然自定
+          顏色會由原HTML內&lt;body bockground=&quot;....&quot;&gt;所決定，）或自定背景圖檔。
+
+    3、Mail and News
+       a、Mail
+          Mail（SMTP）Server：設定E-mail的主機，例如140.114.64.15。
+          Your Name：設定你的名字。
+          Your Email：設定你E-mail內容的地址。
+          Signature File：設定你E-mail內容的簽名檔。
+          Send and post：設定allow 8-bit以便能傳送中文。
+
+       b、News
+          News [NNTP] Server：設定你學校單位的News主機，例如140.114.63.56。
+          News RC Directory：設定PC端存放News資料之目錄。
+
+    4、Cashe and Network
+       a、Cashe
+          PC端快取記憶體的配置，可藉主記憶體（memory cache）與硬磁碟（disk
+          cache）記憶體的設定以提高PC端的執行效率，因為WWW的直主從資訊交談
+          存取模式（尤其有圖檔或動畫），其效能取決於兩地的通訊頻。所以儘可
+          能的把PC端的主記憶體與硬碟容量提高，以供儲存首次交談的所有資訊，
+          以便日後存取，如此才能減少連線與傳機的時間。
+
+       b、Networl Connection
+          設定網路的緩充區（buffer）大小，與同時間開啟視窗的數目（此值決定
+          File下New Window開始數目的能力）。
+
+    5、Applications and Directories
+       a、在Telent Application裡，可設定在WWW的環境下執行telnet（例如
+          telnet://y14/）時，所需要外在服務程式的路徑與檔案名稱（例如
+          c:\ws\ewan.exe）。在View source下可設定當執行View source時起動所需
+          的外在的服務程式（例如notepad.exe），但通常此項都不設定，而用net-
+          scape內定提供View source的供能。
+
+       b、Directories中可設定netscape暫存資料的目錄路徑，以及記載常用URL的標
+          籤檔（Boolmark file），一般netscape內定為bookmark.html。
+
+    6、Proxies
+       一般在WWW主機皆有Proxies cache（如CERN）的功能，其目的是一種扮演防火牆
+       （Firewall）的角色；利用它來管制主機合法或非法的網路存取，並配置一塊硬
+       碟空間（cache），作為所有WWW瀏覽器透過主機間儲存所有曾經存取過的資料。
+       以節省每次來往存取的網路消耗。所以在PC端必須告訴netscape富有Proxies
+       cache的主機是誰。例如FTP，Gropher，HTTP，WAIS等項之proxies皆設定為
+       http://www.nthu.edu.tw/。
+
+    7、Helper Applications
+       Netscape瀏覽器可以直接顯示（in-line display）.txt  .html  .gif  .jpg
+       （或jpeg）等檔案型態的資料。若需要展現其他檔案型態應有的媒體效果時。
+       就必須在此Helper Application 中設定外掛驅動程式與服務的檔案型態。
+       系統內定值如下:
+
+       File type          Action      Extensions        資料型態
+       ===============================================================
+       video/x-msvideo    Ask User    avi   avi         動畫
+       video/quicktime    Ask User    qt ,mov           quicktime 動畫
+       video/mpeg         Ask User    mpeg, mpg, mpe    mpeg 動畫
+       text/plain         Browser     txt               一般文字
+       text/html          Browser     html, mdl ,htm    www文件
+       image/jpeg         Browser     jpeg,jpg,jpe      jpeg 圖形
+       image/gif          Browser     gif               gif  圖形
+       audio/x-wav        Ask User    wav               聲音
+       ===============================================================
+
+            註：Action中Ask User代表需外掛驅動程式而尚未外掛，Browser
+                代表瀏覽器內定功能，其他則是已外掛之程式名稱。
+
+         假如要設定.avi  的外掛程式時， 在 Helper Applications 中先選
+     video/x-msvideo ，接著在 Action 中圈選 Launch Application， 再輸
+     入C :\WINDOWS\MPLAYER.EXE 即可。<p>
+
+<a href="#content">回到主目錄</a>
+<hr>
+<a name="summary">  
+<H2>九、結語</H2>
+    有時您用不同的WWW瀏覽器存取同一個 HOME PAGE，常會發現所得的結果不一
+ ，甚至無法展現特殊的媒體效果，這實在是因為每個瀏覽器對HTML的解譯能力不
+ 盡相同，或是外掛程式的安裝與設定有誤。無論您用何種瀏覽器，『工欲善其事，
+ 必先利其器』，假如您能巧用 netscape navigator ,那麼對其他如 MS IE 等瀏覽器
+ 的使用理念與方式， 也會有相當高的熟悉度了。<p>
+</pre>
+<a href="#content">回到主目錄</a>
+<address>
+周文正(Wen Jeng Chou)<br>
+清大電算中心(CCC NTHU)<p>
+E_mail:wjchou@cc.nthu.edu.tw<br>
+07/18/95 , <br>
+</address>
+</HTML>

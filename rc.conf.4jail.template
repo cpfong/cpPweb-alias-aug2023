@@ -1,0 +1,5 @@
+rpc_bind_enable="NO"
+network_interfaces=""
+sendmail_enable="NO"
+defautrouter="163.15.203.190"
+early_late_divider="NETWORKING"

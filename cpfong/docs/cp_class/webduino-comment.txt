@@ -1,0 +1,1 @@
+you can add comment, and also disable it: just use right key on a picece of blockly

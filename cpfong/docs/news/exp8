@@ -1,0 +1,121 @@
+
+  ◇ news spool space left 統計程式
+
+------------------------------------------------------------------------
+From: syscheck@csie.nctu.edu.tw (syscheck pseudo user)
+Newsgroups: csie.sysadmin.news
+Subject: news spool space left 統計程式
+Date: 26 Oct 1994 05:54:34 GMT
+Organization: Dep. Computer Sci. & Information Eng., Chiao Tung Univ., Taiwan, R.O.C
+
+以後每天會將統計結果
+post 到 csie.cc.log.news. 請依此統計據以
+預估 spool 將滿之時, 並採取必要之措施:
+1. 平均每小時進來的量在 10Mbytes 以下.
+2. 每天在 3:40 和 18:40 各做一次 expire.
+
+------------------------ dfchart --------------------------
+#!/usr/local/bin/perl5
+$symbol ='▋ ';
+$maxdf = 0;
+$mindf = 2000000;
+$avgdf = 0;
+$maxdiff = 0;
+$mindiff = 2000000;
+$avgdiff = 0;
+
+while (<>) {
+   if (/(\S+)\s+(\S+)\s+(\S+)\s+(\d+):\d+:\d+/) {
+        ($week,$month,$day,$hour)= ($1,$2,$3,$4);
+        next;
+   }
+   if (m#/dev/sd3c\s+\d+\s+\d+\s+(\d+)#) {
+#     print "$1\n"
+      $df = $1;
+      if ($last) {
+        $diff = $df - $last;
+        if ($diff <=0){
+        $diff = $diff >= 0 ? $diff : - $diff;
+        $DIFF{$hour} = $diff;
+        $maxdiff = $diff if ($diff > $maxdiff);
+        $mindiff = $diff if ($diff < $mindiff);
+        }
+      }
+      $last = $df;
+      $maxdf = $df if ($df > $maxdf);
+      $mindf = $df if ($df < $mindf);
+      $df = int($df/1000);
+      $DF{$hour} = $df;
+   }
+}
+
+&ampprinthead();
+&ampprintdb();
+
+sub printhead {
+ print <<&quotEOF"
+Subject: $week $month $day 平均 news spool space left 統計表
+From: syscheck\@csie.nctu.edu.tw
+Newsgroups: csie.cc.log.news
+
+EOF
+ $avgdf = 0;
+ $count = 0;
+ foreach $df (keys(%DF)) {
+   $avgdf += $DF{$df} ;
+   $count ++;
+ }
+ $avgdf = int($avgdf/$count);
+
+ $avgdiff = 0;
+ $count = 0;
+ foreach $diff (keys(%DIFF)) {
+   next if (!$DIFF{$diff});
+   $avgdiff += $DIFF{$diff} ;
+   $count ++;
+ }
+ $avgdiff = int($avgdiff/$count);
+ if ($month && $day ) {
+    printf "== 交大資工 News Server $week $month $day 平均 news spool space left 統計表 ==\n"
+    print &quot-" x 78,"\n"
+    printf &quotmax space left: %d Kbytes, min left: %d Kbytes, diff: %d Kbytes\n",$maxdf,$mindf,$maxdf - $mindf;
+    print &quotmax hourly space consumed: $maxdiff Kbytes, min space consumed: $mindiff Kbytes\n"
+    print &quotaverage space left: $avgdf Mbytes, average hourly space consumed: $avgdiff Kbytes\n"
+    print &quot-" x 78,"\n"
+ } else {
+ }
+
+}
+
+sub printdb {
+    $high = int($maxdf/1000);
+    $low = int($mindf/1000);
+    $inc = int (($high - $low) / 20);
+    $high = $high + $inc * 2;
+    $low = $low - $inc * 2;
+    $low = 0 if ($low < 0);
+    for ($i= $low,$line=0; $i < $high; $i+= $inc,$line++) {
+        $Print[$line]=" " x 78;
+        foreach $j (0 .. 23) {
+                if ($DF{$j} > $i) {
+#               print &quotaver $DF{$j} $i\n"
+                        substr($Print[$line],3* $j,3) = $symbol;
+                } elsif ($DF{$j} > $i - $inc ) {
+                        substr($Print[$line],3* $j,3) = "$DF{$j}"
+                }
+        }
+#       print $Print[$line],"\n"
+    }
+    foreach $j (reverse (0 .. $line)) {
+        next if (length($Print[$j]) == 0);
+        if ($Print[$j] =~ /$symbol|\d+|\*/) {
+           print $Print[$j],"\n"
+        }
+    }
+    print "=" x 72," $low MB\n"
+    foreach $hour (0 .. 23) {
+        printf "%-2s ",$hour;
+    }
+    print "\n"
+}
+

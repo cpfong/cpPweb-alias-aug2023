@@ -1,0 +1,1 @@
+tce-load -wi Xlibs Xvesa Xprogs fltk-1.1.10 flwm_topside wbar

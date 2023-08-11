@@ -1,0 +1,13 @@
+11. input any string, and if there is any "a " I want to change to An
+	a is use in single. a use lots in sentences.
+-->	An is use in single. An use lots in sentence.
+12. write a program counting how many a how in the string
+	a is use in single. a use lots in sentences.
+---> 	2
+
+21. inherit
+
+31. rewrite p11-5 make it as a square
+32. rewrite p11-5 make it to darkGray, black, yellow and red
+
+41. 

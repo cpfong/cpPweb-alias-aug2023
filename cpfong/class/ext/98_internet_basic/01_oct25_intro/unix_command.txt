@@ -1,0 +1,9 @@
+ls ,ls -l, ls -la
+TAB completion (ex vi xTAB can vi x* files)
+history | grep xxx
+rm filename, rm -f filename (remove ²¾°£)
+cd directory
+echo xxx >file_a, echo yyy >>file_b
+
+cat /etc/gr[TAB]
+fond / -name mysql.ini -print

@@ -1,0 +1,2 @@
+1. variable type: string number list (note: number under math, string under text)
+2. variable operation: set, get

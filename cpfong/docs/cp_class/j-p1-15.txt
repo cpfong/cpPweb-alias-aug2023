@@ -1,0 +1,11 @@
+@sun-> python
+Python 3.7.9 (default, Jan  5 2021, 01:21:20)
+[Clang 8.0.1 (tags/RELEASE_801/final 366581)] on freebsd12
+Type "help", "copyright", "credits" or "license" for more information.
+>>> # xx
+>>> print('F 80 is C ')
+F 80 is C
+>>> print(5/9*80-32)
+12.444444444444443
+>>>
+

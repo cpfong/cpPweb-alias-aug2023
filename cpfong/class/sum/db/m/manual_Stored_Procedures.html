@@ -1,0 +1,1188 @@
+  <HTML>
+  <HEAD>
+  
+  <TITLE>MySQL Reference Manual for version 5.0.3-alpha - 19  Stored Procedures and Functions</TITLE>
+   <style> code {color:purple} tt {color:green} samp {color:navy} pre {color:maroon} </style>
+  </HEAD>
+  <BODY BGCOLOR=silver TEXT=#000000 LINK=#101090 VLINK=#7030B0>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_Spatial_extensions_in_MySQL.html">previous</A>, <A HREF="manual_Triggers.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="Stored_Procedures" HREF="manual_toc.html#Stored_Procedures">19  Stored Procedures and Functions</A></H1>
+
+<P>
+<A NAME="IDX2050"></A>
+<A NAME="IDX2051"></A>
+
+</P>
+<P>
+Stored procedures and functions are a new feature in MySQL version 5.0.
+A stored procedure is a set of SQL statements that can be stored in the server.
+Once this has been done, clients don't need to keep reissuing the individual
+statements but can refer to the stored procedure instead.
+
+</P>
+<P>
+Some situations where stored procedures can be particularly useful:
+
+<UL>
+<LI>
+
+When multiple client applications are written in different languages or work
+on different platforms, but need to perform the same database operations.
+<LI>
+
+When security is paramount. Banks, for example, use stored procedures for
+all common operations. This provides a consistent and secure environment,
+and procedures can ensure that each operation is properly logged.
+In such a setup, applications and users would not get any access to the
+database tables directly, but can only execute specific stored procedures.
+</UL>
+
+<P>
+Stored procedures can provide improved performance because less information
+needs to be sent between the server and the client. The tradeoff is that
+this does increase the load on the database server system because more of
+the work is done on the server side and less is done on the client
+(application) side. Consider this if many client machines (such as
+Web servers) are serviced by only one or a few database servers.
+
+</P>
+<P>
+Stored procedures also allow you to have libraries of functions in the
+database server. This is a feature shared by modern application languages
+that allow such design internally, for example, by using classes. Using
+these client application language features is beneficial for the programmer
+even outside the scope of database use.
+
+</P>
+<P>
+MySQL follows the SQL:2003 syntax for stored procedures, which is also used
+by IBM's DB2.
+
+</P>
+<P>
+The MySQL implementation of stored procedures is still in progress. All
+syntax described in this chapter is supported and any limitations and
+extensions are documented where appropriate.
+
+</P>
+<P>
+Stored procedures require the <code>proc</code> table in the <code>mysql</code> database.
+This table is created during the MySQL 5.0 installation procedure.
+If you are upgrading to MySQL 5.0 from an earlier version, be sure to update
+your grant tables to make sure that the <code>proc</code> table exists.
+See section <A HREF="manual_Installing.html#Upgrading-grant-tables">2.10.7  Upgrading the Grant Tables</A>.
+
+</P>
+
+
+
+<H2><A NAME="Stored_Procedure_Syntax" HREF="manual_toc.html#Stored_Procedure_Syntax">19.1  Stored Procedure Syntax</A></H2>
+
+<P>
+Stored procedures and functions are routines that are created with
+<code>CREATE PROCEDURE</code> and <code>CREATE FUNCTION</code> statements.
+A routine is either a procedure or a function.
+A procedure is invoked using a <code>CALL</code> statement, and can only
+pass back values using output variables.  A function can be called from
+inside a statement just like any other function (that is, by invoking the
+function's name), and can return a scalar value.
+Stored routines may call other stored routines.
+
+</P>
+<P>
+As of MySQL 5.0.1, a stored procedure or function is associated with a
+particular database. This has several implications:
+
+</P>
+
+<UL>
+
+<LI>
+
+When the routine is invoked, an implicit <code>USE
+<var>db_name</var></code> is performed (and undone when the routine terminates).
+<code>USE</code> statements within stored routines are disallowed.
+
+<LI>
+
+You can qualify routine names with the database name. This can be used
+to refer to a routine that is not in the current database.
+For example, to invoke a stored procedure <code>p</code> or function <code>f</code>
+that is associated with the <code>test</code> database, you can say
+<code>CALL test.p()</code> or <code>test.f()</code>.
+
+<LI>
+
+When a database is dropped, all stored routines associated with it are
+dropped as well.
+
+</UL>
+
+<P>
+(In MySQL 5.0.0, stored routines are global and not associated with
+a database. They inherit the default database from the caller.  If a
+<code>USE <var>db_name</var></code> is executed within the routine, the original default
+database is restored upon routine exit.)
+
+</P>
+<P>
+MySQL supports the very useful extension that allows the use of regular
+<code>SELECT</code> statements (that is, without using cursors or local variables)
+inside a stored procedure. The result set of such a query is simply sent
+directly to the client.
+Multiple <code>SELECT</code> statements generate multiple result sets, so the client
+must use a MySQL client library that supports multiple result sets. This means
+the client must use a client library from a version of MySQL at least as
+recent as 4.1.
+
+</P>
+<P>
+This following section describes the syntax used to create, alter, drop, and
+query stored procedures and functions.
+
+</P>
+
+
+
+<H3><A NAME="Maintaining_Stored_Procedures" HREF="manual_toc.html#Maintaining_Stored_Procedures">19.1.1  Maintaining Stored Procedures</A></H3>
+
+
+
+<H4><A NAME="CREATE_PROCEDURE" HREF="manual_toc.html#CREATE_PROCEDURE">19.1.1.1  <code>CREATE PROCEDURE</code> and <code>CREATE FUNCTION</code></A></H4>
+
+<P>
+<A NAME="IDX2052"></A>
+<A NAME="IDX2053"></A>
+
+</P>
+
+<PRE>
+CREATE PROCEDURE <var>sp_name</var> ([<var>parameter</var>[,...]])
+    [<var>characteristic</var> ...] <var>routine_body</var>
+
+CREATE FUNCTION <var>sp_name</var> ([<var>parameter</var>[,...]])
+    RETURNS <var>type</var>
+    [<var>characteristic</var> ...] <var>routine_body</var>
+
+<var>parameter</var>:
+    [ IN | OUT | INOUT ] <var>param_name</var> <var>type</var>
+
+<var>type</var>:
+    <var>Any valid MySQL data type</var>
+
+<var>characteristic</var>:
+    LANGUAGE SQL
+  | [NOT] DETERMINISTIC
+  | SQL SECURITY {DEFINER | INVOKER}
+  | COMMENT '<var>string</var>'
+
+<var>routine_body</var>:
+    <var>Valid SQL procedure statements or statements</var>
+</PRE>
+
+<P>
+By default, the routine is associated with the current database. To associate
+the routine explicitly with a given database, specify the name as
+<var>db_name.sp_name</var> when you create it.
+
+</P>
+<P>
+If the routine name is the same as the name of a built-in SQL function, you
+will need to use a space between the name and the following parenthesis when
+defining the routine, or a syntax error will occur. This is also true when you
+invoke the routine later.
+
+</P>
+<P>
+The <code>RETURNS</code> clause may be specified only for a <code>FUNCTION</code>,
+for which it is mandatory.
+It is used to indicate the return type of the function, and the function
+body must contain a <code>RETURN value</code> statement.
+
+</P>
+<P>
+The parameter list enclosed within parentheses must always be present.
+If there are no parameters, an empty parameter list of <code>()</code> should
+be used.  Each parameter is an <code>IN</code> parameter by default. To specify
+otherwise for a parameter, use the keyword <code>OUT</code> or <code>INOUT</code> before
+the parameter name. Specifying <code>IN</code>, <code>OUT</code>, or <code>INOUT</code> is only
+valid for a <code>PROCEDURE</code>.
+
+</P>
+<P>
+The <code>CREATE FUNCTION</code> statement is used in
+earlier versions of MySQL to support UDFs (User Defined Functions).
+See section <A HREF="manual_Extending_MySQL.html#Adding_functions">24.2  Adding New Functions to MySQL</A>.
+UDFs continue to be supported, even with the existence of stored functions.
+A UDF can be regarded as an external stored function.  However, do
+note that stored functions share their namespace with UDFs.
+
+</P>
+<P>
+A framework for external stored procedures will be introduced in the near
+future. This will allow you to write stored procedures in languages other
+than SQL.
+Most likely, one of the first languages to be supported will be PHP because the
+core PHP engine is small, thread-safe, and can easily be embedded. Because the
+framework will be public, it is expected that many other languages will also
+be supported.
+
+</P>
+<P>
+A function is considered ``deterministic'' if it always returns the same
+result for the same input parameters, and ``not deterministic'' otherwise.
+Currently, the <code>DETERMINISTIC</code> characteristic is accepted, but not yet
+used by the optimizer.
+
+</P>
+<P>
+The <code>SQL SECURITY</code> characteristic can be used to specify whether the
+routine should be executed using the permissions of the user who creates
+the routine or the user who invokes it.
+The default value is <code>DEFINER</code>.
+This feature is new in SQL:2003.
+The creator or invoker must have permission to access the database with which
+the routine is associated.
+
+</P>
+<P>
+MySQL does not yet use the <code>GRANT EXECUTE</code> privilege.
+
+</P>
+<P>
+MySQL stores the <code>sql_mode</code> system variable setting that is in effect
+at the time a routine is created, and will always execute the routine with
+this setting in force.
+
+</P>
+<P>
+The <code>COMMENT</code> clause is a MySQL extension, and may be used to describe
+the stored procedure. This information is displayed by the
+<code>SHOW CREATE PROCEDURE</code> and <code>SHOW CREATE FUNCTION</code> statements.
+
+</P>
+<P>
+MySQL allows routines to contain DDL statements (such as <code>CREATE</code> and
+ <code>DROP</code>) and SQL transaction statements (such as <code>COMMIT</code>). This is
+not required by the standard and is therefore implementation-specific.
+
+</P>
+<P>
+<strong>Note</strong>:
+Currently, stored functions created with <code>CREATE FUNCTION</code> may not
+contain references to tables.  Please note that this includes some <code>SET</code>
+statements, but excludes some <code>SELECT</code> statements.  This limitation
+will be lifted as soon as possible.
+
+</P>
+<P>
+The following is an example of a simple stored procedure that uses
+an <code>OUT</code> parameter.
+The example uses the <code>mysql</code> client <code>delimiter</code> command to change
+the statement delimiter from <code>;</code> to <code>//</code> while the procedure is
+being defined.
+This allows the <code>;</code> delimiter used in the procedure body to be passed
+through to the server rather than being interpreted by <code>mysql</code> itself.
+
+</P>
+
+<PRE>
+mysql&#62; delimiter //
+
+mysql&#62; CREATE PROCEDURE simpleproc (OUT param1 INT)
+    -&#62; BEGIN
+    -&#62;   SELECT COUNT(*) INTO param1 FROM t;
+    -&#62; END
+    -&#62; //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&#62; delimiter ;
+
+mysql&#62; CALL simpleproc(@a);
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&#62; SELECT @a;
++------+
+| @a   |
++------+
+| 3    |
++------+
+1 row in set (0.00 sec)
+</PRE>
+
+<P>
+The following is an example of a function that takes a parameter,
+performs an operation using an SQL function, and returns the result:
+
+</P>
+
+<PRE>
+mysql&#62; delimiter //
+
+mysql&#62; CREATE FUNCTION hello (s CHAR(20)) RETURNS CHAR(50)
+    -&#62; RETURN CONCAT('Hello, ',s,'!');
+    -&#62; //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&#62; delimiter ;
+
+mysql&#62; SELECT hello('world');
++----------------+
+| hello('world') |
++----------------+
+| Hello, world!  |
++----------------+
+1 row in set (0.00 sec)
+</PRE>
+
+
+
+<H4><A NAME="ALTER_PROCEDURE" HREF="manual_toc.html#ALTER_PROCEDURE">19.1.1.2  <code>ALTER PROCEDURE</code> and <code>ALTER FUNCTION</code></A></H4>
+
+<P>
+<A NAME="IDX2054"></A>
+<A NAME="IDX2055"></A>
+
+</P>
+
+<PRE>
+ALTER {PROCEDURE | FUNCTION} <var>sp_name</var> [<var>characteristic</var> ...]
+
+<var>characteristic</var>:
+    SQL SECURITY {DEFINER | INVOKER}
+  | COMMENT '<var>string</var>'
+</PRE>
+
+<P>
+This statement can be used to rename a stored procedure or function, and to
+change its characteristics. More than one change may be specified in an
+<code>ALTER PROCEDURE</code> or <code>ALTER FUNCTION</code> statement.
+
+</P>
+
+
+
+<H4><A NAME="DROP_PROCEDURE" HREF="manual_toc.html#DROP_PROCEDURE">19.1.1.3  <code>DROP PROCEDURE</code> and <code>DROP FUNCTION</code></A></H4>
+
+<P>
+<A NAME="IDX2056"></A>
+<A NAME="IDX2057"></A>
+
+</P>
+
+<PRE>
+DROP {PROCEDURE | FUNCTION} [IF EXISTS] <var>sp_name</var>
+</PRE>
+
+<P>
+This statement is used to drop a stored procedure or function. That is, the
+specified routine is removed from the server.
+
+</P>
+<P>
+The <code>IF EXISTS</code> clause is a MySQL extension.
+It prevents an error from occurring if the procedure or function does not
+exist. A warning is produced that can be viewed with <code>SHOW WARNINGS</code>.
+
+</P>
+
+
+
+<H4><A NAME="SHOW_CREATE_PROCEDURE" HREF="manual_toc.html#SHOW_CREATE_PROCEDURE">19.1.1.4  <code>SHOW CREATE PROCEDURE</code> and <code>SHOW CREATE FUNCTION</code></A></H4>
+
+<P>
+<A NAME="IDX2058"></A>
+<A NAME="IDX2059"></A>
+
+</P>
+
+<PRE>
+SHOW CREATE {PROCEDURE | FUNCTION} <var>sp_name</var>
+</PRE>
+
+<P>
+This statement is a MySQL extension. Similar to <code>SHOW CREATE TABLE</code>, it
+returns the exact string that can be used to re-create the named routine.
+
+</P>
+
+<PRE>
+mysql&#62; SHOW CREATE FUNCTION test.hello\G
+*************************** 1. row ***************************
+       Function: hello
+       sql_mode: 
+Create Function: CREATE FUNCTION `test`.`hello`(s CHAR(20)) RETURNS CHAR(50)
+RETURN CONCAT('Hello, ',s,'!')
+</PRE>
+
+
+
+<H3><A NAME="SHOW_PROCEDURE_STATUS" HREF="manual_toc.html#SHOW_PROCEDURE_STATUS">19.1.2  <code>SHOW PROCEDURE STATUS</code> and <code>SHOW FUNCTION STATUS</code></A></H3>
+
+<P>
+<A NAME="IDX2060"></A>
+<A NAME="IDX2061"></A>
+
+</P>
+
+<PRE>
+SHOW {PROCEDURE | FUNCTION} STATUS [LIKE '<var>pattern</var>']
+</PRE>
+
+<P>
+This statement is a MySQL extension. It returns characteristics of routines,
+such as the database, name, type, creator, and creation and modification dates. If no
+pattern is specified, the information for all stored procedures or all stored
+functions is listed, depending on which statement you use.
+
+</P>
+
+<PRE>
+mysql&#62; SHOW FUNCTION STATUS LIKE 'hello'\G
+*************************** 1. row ***************************
+           Db: test
+         Name: hello
+         Type: FUNCTION
+      Definer: testuser@localhost
+     Modified: 2004-08-03 15:29:37
+      Created: 2004-08-03 15:29:37
+Security_type: DEFINER
+      Comment: 
+</PRE>
+
+
+
+<H3><A NAME="CALL" HREF="manual_toc.html#CALL">19.1.3  <code>CALL</code> Statement</A></H3>
+
+<P>
+<A NAME="IDX2062"></A>
+
+</P>
+
+<PRE>
+CALL <var>sp_name</var>([<var>parameter</var>[,...]])
+</PRE>
+
+<P>
+The <code>CALL</code> statement is used to invoke a procedure that was defined
+previously with <code>CREATE PROCEDURE</code>.
+
+</P>
+<P>
+<code>CALL</code> can return values through its parameters. It also ``returns''
+the number of rows affected, which a client program can obtain at the SQL
+level by calling the <code>ROW_COUNT()</code> function and from C by calling the
+<code>mysql_affected_rows()</code> C API function.
+
+</P>
+
+
+
+<H3><A NAME="BEGIN_END" HREF="manual_toc.html#BEGIN_END">19.1.4  <code>BEGIN ... END</code> Compound Statement</A></H3>
+
+<P>
+<A NAME="IDX2063"></A>
+<A NAME="IDX2064"></A>
+
+</P>
+
+<PRE>
+[<var>begin_label</var>:] BEGIN
+    [<var>statement_list</var>]
+END [<var>end_label</var>]
+</PRE>
+
+<P>
+Stored routines may contain multiple statements, using a
+<code>BEGIN ... END</code> compound statement.
+
+</P>
+<P>
+<var>begin_label</var> and <var>end_label</var> must be the same, if both are
+specified.
+
+</P>
+<P>
+Please note that the optional <code>[NOT] ATOMIC</code> clause is not yet
+supported. This means that no transactional savepoint is set at the start of
+the instruction block and the <code>BEGIN</code> clause used in this context has
+no effect on the current transaction.
+
+</P>
+<P>
+Using multiple statements requires that a client is able to send query
+strings containing the <code>;</code> statement delimiter. This is handled in the
+<code>mysql</code> command-line client with the <code>delimiter</code> command. Changing
+the <code>;</code> end-of-query delimiter (for example, to <code>//</code>) allows
+<code>;</code> to be used in a routine body.
+
+</P>
+
+
+
+<H3><A NAME="DECLARE" HREF="manual_toc.html#DECLARE">19.1.5  <code>DECLARE</code> Statement</A></H3>
+
+<P>
+<A NAME="IDX2065"></A>
+
+</P>
+<P>
+The <code>DECLARE</code> statement is used to define various items local to a
+routine:
+local variables (see section <A HREF="manual_Stored_Procedures.html#Variables_in_Stored_Procedures">19.1.6  Variables in Stored Procedures</A>),
+conditions and handlers (see section <A HREF="manual_Stored_Procedures.html#Conditions_and_Handlers">19.1.7  Conditions and Handlers</A>) and
+cursors (see section <A HREF="manual_Stored_Procedures.html#Cursors">19.1.8  Cursors</A>).
+<code>SIGNAL</code> and <code>RESIGNAL</code> statements are not currently supported.
+
+</P>
+<P>
+<code>DECLARE</code> may be used only inside a <code>BEGIN ... END</code> compound
+statement and must be at its start, before any other statements.
+
+</P>
+<P>
+Cursors must be declared before declaring handlers, and variables must
+be declared before declaring either cursors or handlers.
+
+</P>
+
+
+
+<H3><A NAME="Variables_in_Stored_Procedures" HREF="manual_toc.html#Variables_in_Stored_Procedures">19.1.6  Variables in Stored Procedures</A></H3>
+
+<P>
+You may declare and use variables within a routine.
+
+</P>
+
+
+
+<H4><A NAME="DECLARE_Local_Variables" HREF="manual_toc.html#DECLARE_Local_Variables">19.1.6.1  <code>DECLARE</code> Local Variables</A></H4>
+
+
+<PRE>
+DECLARE <var>var_name</var>[,...] <var>type</var> [DEFAULT <var>value</var>]
+</PRE>
+
+<P>
+This statement is used to declare local variables. The scope of a variable is
+within the <code>BEGIN ... END</code> block.
+
+</P>
+
+
+
+<H4><A NAME="SET_Statement" HREF="manual_toc.html#SET_Statement">19.1.6.2  Variable <code>SET</code> Statement</A></H4>
+
+<P>
+<A NAME="IDX2066"></A>
+
+</P>
+
+<PRE>
+SET <var>var_name</var> = <var>expr</var> [, <var>var_name</var> = <var>expr</var>] ...
+</PRE>
+
+<P>
+The <code>SET</code> statement in stored procedures is an extended version of
+the general <code>SET</code> statement. Referenced variables may be ones declared
+inside a routine, or global server variables.
+
+</P>
+<P>
+The <code>SET</code> statement in stored procedures is implemented as part of the
+pre-existing <code>SET</code> syntax. This allows an extended syntax of
+<code>SET a=x, b=y, ...</code> where different variable types (locally declared
+variables, server variables, and global and session server variables) can be
+mixed. This also allows combinations of local variables and some options
+that make sense only for global/system variables; in that case, the options
+are accepted but ignored.
+
+</P>
+
+
+
+<H4><A NAME="SELECT_INTO_Statement" HREF="manual_toc.html#SELECT_INTO_Statement">19.1.6.3  <code>SELECT ... INTO</code> Statement</A></H4>
+
+<P>
+<A NAME="IDX2067"></A>
+
+</P>
+
+<PRE>
+SELECT <var>col_name</var>[,...] INTO <var>var_name</var>[,...] <var>table_expr</var>
+</PRE>
+
+<P>
+This <code>SELECT</code> syntax stores selected columns directly into variables.
+Therefore, only a single row may be retrieved. This statement is also
+extremely useful when used in combination with cursors.
+
+</P>
+
+<PRE>
+SELECT id,data INTO x,y FROM test.t1 LIMIT 1;
+</PRE>
+
+
+
+<H3><A NAME="Conditions_and_Handlers" HREF="manual_toc.html#Conditions_and_Handlers">19.1.7  Conditions and Handlers</A></H3>
+
+<P>
+Certain conditions may require specific handling. These conditions can relate
+to errors, as well as general flow control inside a routine.
+
+</P>
+
+
+
+<H4><A NAME="DECLARE_Conditions" HREF="manual_toc.html#DECLARE_Conditions">19.1.7.1  <code>DECLARE</code> Conditions</A></H4>
+
+<P>
+<A NAME="IDX2068"></A>
+
+</P>
+
+<PRE>
+DECLARE <var>condition_name</var> CONDITION FOR <var>condition_value</var>
+
+<var>condition_value</var>:
+    SQLSTATE [VALUE] <var>sqlstate_value</var>
+  | <var>mysql_error_code</var>
+</PRE>
+
+<P>
+This statement specifies conditions that will need
+specific handling. It associates a name with a specified error
+condition. The name can subsequently be used in a
+<code>DECLARE HANDLER</code> statement.
+See section <A HREF="manual_Stored_Procedures.html#DECLARE_Handlers">19.1.7.2  <code>DECLARE</code> Handlers</A>.
+
+</P>
+<P>
+In addition to SQLSTATE values, MySQL error codes are also supported.
+
+</P>
+
+
+
+<H4><A NAME="DECLARE_Handlers" HREF="manual_toc.html#DECLARE_Handlers">19.1.7.2  <code>DECLARE</code> Handlers</A></H4>
+
+<P>
+<A NAME="IDX2069"></A>
+
+</P>
+
+<PRE>
+DECLARE <var>handler_type</var> HANDLER FOR <var>condition_value</var>[,...] <var>sp_statement</var>
+
+<var>handler_type</var>:
+    CONTINUE
+  | EXIT
+  | UNDO
+
+<var>condition_value</var>:
+    SQLSTATE [VALUE] <var>sqlstate_value</var>
+  | <var>condition_name</var>
+  | SQLWARNING
+  | NOT FOUND
+  | SQLEXCEPTION
+  | <var>mysql_error_code</var>
+</PRE>
+
+<P>
+This statement specifies handlers that each may deal with
+one or more conditions. If one of these conditions occurs, the specified
+statement is executed.
+
+</P>
+<P>
+For a <code>CONTINUE</code> handler, execution of the current routine continues
+after execution of the handler statement.
+For an <code>EXIT</code> handler, execution of the current <code>BEGIN...END</code>
+compound statement is terminated.
+The <code>UNDO</code> handler type statement is not yet supported.
+
+</P>
+
+<UL>
+<LI>
+
+<code>SQLWARNING</code> is shorthand for all SQLSTATE codes that begin with <code>01</code>.
+<LI>
+
+<code>NOT FOUND</code> is shorthand for all SQLSTATE codes that begin with <code>02</code>.
+<LI>
+
+<code>SQLEXCEPTION</code> is shorthand for all SQLSTATE codes not caught by
+<code>SQLWARNING</code> or <code>NOT FOUND</code>.
+</UL>
+
+<P>
+In addition to SQLSTATE values, MySQL error codes are also supported.
+
+</P>
+
+<P>
+For example:
+
+</P>
+
+<PRE>
+mysql&#62; CREATE TABLE test.t (s1 int,primary key (s1));
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&#62; delimiter //
+
+mysql&#62; CREATE PROCEDURE handlerdemo ()
+    -&#62; BEGIN
+    -&#62;   DECLARE CONTINUE HANDLER FOR SQLSTATE '23000' SET @x2 = 1;
+    -&#62;   SET @x = 1;
+    -&#62;   INSERT INTO test.t VALUES (1);
+    -&#62;   SET @x = 2;
+    -&#62;   INSERT INTO test.t VALUES (1);
+    -&#62;   SET @x = 3;
+    -&#62; END;
+    -&#62; //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&#62; CALL handlerdemo()//
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&#62; SELECT @x//
+    +------+
+    | @x   |
+    +------+
+    | 3    |
+    +------+
+    1 row in set (0.00 sec)
+</PRE>
+
+<P>
+Notice that <code>@x</code> is <code>3</code>, which shows that MySQL executed to the end of
+the procedure. If the line
+<code>DECLARE CONTINUE HANDLER FOR SQLSTATE '23000' SET @x2 = 1;</code>
+had not been present, MySQL would have taken the default (<code>EXIT</code>) path
+after the second <code>INSERT</code> failed due to the <code>PRIMARY KEY</code>
+constraint, and <code>SELECT @x</code> would have returned <code>2</code>.
+
+</P>
+
+
+
+<H3><A NAME="Cursors" HREF="manual_toc.html#Cursors">19.1.8  Cursors</A></H3>
+
+<P>
+<A NAME="IDX2070"></A>
+
+</P>
+<P>
+Simple cursors are supported inside stored procedures and functions.
+The syntax is as in embedded SQL.
+Cursors are currently asensitive, read-only, and non-scrolling.
+Asensitive means that the server may or may not make a copy of its result
+table.
+
+</P>
+<P>
+Cursors must be declared before declaring handlers, and variables must
+be declared before declaring either cursors or handlers.
+
+</P>
+<P>
+For example:
+
+</P>
+
+<PRE>
+CREATE PROCEDURE curdemo()
+BEGIN
+  DECLARE done INT DEFAULT 0;
+  DECLARE a CHAR(16);
+  DECLARE b,c INT;
+  DECLARE cur1 CURSOR FOR SELECT id,data FROM test.t1;
+  DECLARE cur2 CURSOR FOR SELECT i FROM test.t2;
+  DECLARE CONTINUE HANDLER FOR SQLSTATE '02000' SET done = 1;
+
+  OPEN cur1;
+  OPEN cur2;
+
+  REPEAT
+    FETCH cur1 INTO a, b;
+    FETCH cur2 INTO c;
+    IF NOT done THEN
+       IF b &#60; c THEN
+          INSERT INTO test.t3 VALUES (a,b);
+       ELSE
+          INSERT INTO test.t3 VALUES (a,c);
+       END IF;
+    END IF;
+  UNTIL done END REPEAT;
+
+  CLOSE cur1;
+  CLOSE cur2;
+END
+</PRE>
+
+
+
+<H4><A NAME="DECLARE_Cursors" HREF="manual_toc.html#DECLARE_Cursors">19.1.8.1  Declaring Cursors</A></H4>
+
+
+<PRE>
+DECLARE <var>cursor_name</var> CURSOR FOR <var>select_statement</var>
+</PRE>
+
+<P>
+This statement declares a cursor.
+Multiple cursors may be defined in a routine, but each must have a unique
+name.
+
+</P>
+<P>
+The <code>SELECT</code> statement cannot have an <code>INTO</code> clause.
+
+</P>
+
+
+
+<H4><A NAME="OPEN" HREF="manual_toc.html#OPEN">19.1.8.2  Cursor <code>OPEN</code> Statement</A></H4>
+
+<P>
+<A NAME="IDX2071"></A>
+
+</P>
+
+<PRE>
+OPEN <var>cursor_name</var>
+</PRE>
+
+<P>
+This statement opens a previously declared cursor.
+
+</P>
+
+
+
+<H4><A NAME="FETCH" HREF="manual_toc.html#FETCH">19.1.8.3  Cursor <code>FETCH</code> Statement</A></H4>
+
+<P>
+<A NAME="IDX2072"></A>
+
+</P>
+
+<PRE>
+FETCH <var>cursor_name</var> INTO <var>var_name</var> [, <var>var_name</var>] ...
+</PRE>
+
+<P>
+This statement fetches the next row (if a row exists) using the specified
+open cursor, and advances the cursor pointer.
+
+</P>
+
+
+
+<H4><A NAME="CLOSE" HREF="manual_toc.html#CLOSE">19.1.8.4  Cursor <code>CLOSE</code> Statement</A></H4>
+
+<P>
+<A NAME="IDX2073"></A>
+
+</P>
+
+<PRE>
+CLOSE <var>cursor_name</var>
+</PRE>
+
+<P>
+This statement closes a previously opened cursor.
+
+</P>
+<P>
+If not closed explicitly, a cursor is closed at the end of the compound
+statement in which it was declared.
+
+</P>
+
+
+
+<H3><A NAME="Flow_Control_Constructs" HREF="manual_toc.html#Flow_Control_Constructs">19.1.9  Flow Control Constructs</A></H3>
+
+<P>
+The <code>IF</code>, <code>CASE</code>, <code>LOOP</code>, <code>WHILE</code>, <code>ITERATE</code>, and
+<code>LEAVE</code> constructs are fully implemented.
+
+</P>
+<P>
+These constructs may each contain either a single statement, or a block of
+statements using the <code>BEGIN ... END</code> compound statement. Constructs
+may be nested.
+
+</P>
+<P>
+<code>FOR</code> loops are not currently supported.
+
+</P>
+
+
+
+<H4><A NAME="IF_Statement" HREF="manual_toc.html#IF_Statement">19.1.9.1  <code>IF</code> Statement</A></H4>
+
+<P>
+<A NAME="IDX2074"></A>
+
+</P>
+
+<PRE>
+IF <var>search_condition</var> THEN <var>statement_list</var>
+    [ELSEIF <var>search_condition</var> THEN <var>statement_list</var>]
+    ...
+    [ELSE <var>statement_list</var>]
+END IF
+</PRE>
+
+<P>
+<code>IF</code> implements a basic conditional construct. If the
+<var>search_condition</var> evaluates to true, the corresponding SQL statement list
+is executed. If no <var>search_condition</var> matches, the statement list in the
+<code>ELSE</code> clause is executed. <var>statement_list</var> can consist of one or
+more statements.
+
+</P>
+<P>
+Please note that there is also an <code>IF()</code> function.
+See section <A HREF="manual_Functions.html#Control_flow_functions">12.2  Control Flow Functions</A>.
+
+</P>
+
+
+
+<H4><A NAME="CASE_Statement" HREF="manual_toc.html#CASE_Statement">19.1.9.2  <code>CASE</code> Statement</A></H4>
+
+<P>
+<A NAME="IDX2075"></A>
+
+</P>
+
+<PRE>
+CASE <var>case_value</var>
+    WHEN <var>when_value</var> THEN <var>statement_list</var>
+    [WHEN <var>when_value</var> THEN <var>statement_list</var> ...]
+    [ELSE <var>statement_list</var>]
+END CASE
+</PRE>
+
+<P>
+Or:
+
+</P>
+
+<PRE>
+CASE
+    WHEN <var>search_condition</var> THEN <var>statement_list</var>
+    [WHEN <var>search_condition</var> THEN <var>statement_list</var> ...]
+    [ELSE <var>statement_list</var>]
+END CASE
+</PRE>
+
+<P>
+The
+<code>CASE</code> statement for stored procedures implements a complex conditional
+construct. If a
+<var>search_condition</var> evaluates to true, the corresponding SQL statement is executed. If no search condition matches, the statement in the <code>ELSE</code> clause is executed.
+
+</P>
+<P>
+<strong>Note</strong>: The syntax of a <code>CASE</code> <em>statement</em> shown here
+for use inside a stored procedure differs slightly from that of the SQL
+<code>CASE</code> <em>expression</em> described in section <A HREF="manual_Functions.html#Control_flow_functions">12.2  Control Flow Functions</A>.
+The <code>CASE</code> statement cannot have an <code>ELSE NULL</code> clause, and it
+is terminated with <code>END CASE</code> instead of <code>END</code>.
+
+</P>
+
+
+
+<H4><A NAME="LOOP_Statement" HREF="manual_toc.html#LOOP_Statement">19.1.9.3  <code>LOOP</code> Statement</A></H4>
+
+<P>
+<A NAME="IDX2076"></A>
+
+</P>
+
+<PRE>
+[<var>begin_label</var>:] LOOP
+    <var>statement_list</var>
+END LOOP [<var>end_label</var>]
+</PRE>
+
+<P>
+<code>LOOP</code> implements a simple loop construct, enabling repeated execution
+of a particular statement or statements. The statements within the
+loop are repeated until the loop is exited; usually this is accomplished
+with a <code>LEAVE</code> statement.
+
+</P>
+<P>
+<var>begin_label</var> and <var>end_label</var> must be the same, if both are
+specified.
+
+</P>
+
+
+
+<H4><A NAME="LEAVE_Statement" HREF="manual_toc.html#LEAVE_Statement">19.1.9.4  <code>LEAVE</code> Statement</A></H4>
+
+<P>
+<A NAME="IDX2077"></A>
+
+</P>
+
+<PRE>
+LEAVE <var>label</var>
+</PRE>
+
+<P>
+This statement is used to exit any flow control construct.
+
+</P>
+
+
+
+<H4><A NAME="ITERATE_Statement" HREF="manual_toc.html#ITERATE_Statement">19.1.9.5  <code>ITERATE</code> Statement</A></H4>
+
+<P>
+<A NAME="IDX2078"></A>
+
+</P>
+
+<PRE>
+ITERATE <var>label</var>
+</PRE>
+
+<P>
+<code>ITERATE</code> can only appear within <code>LOOP</code>, <code>REPEAT</code>, and
+<code>WHILE</code> statements. <code>ITERATE</code> means ``do the loop iteration again.''
+
+</P>
+<P>
+For example:
+
+</P>
+
+<PRE>
+CREATE PROCEDURE doiterate(p1 INT)
+BEGIN
+  label1: LOOP
+    SET p1 = p1 + 1;
+    IF p1 &#60; 10 THEN ITERATE label1; END IF;
+    LEAVE label1;
+  END LOOP label1;
+  SET @x = p1;
+END
+</PRE>
+
+
+
+<H4><A NAME="REPEAT_Statement" HREF="manual_toc.html#REPEAT_Statement">19.1.9.6  <code>REPEAT</code> Statement</A></H4>
+
+<P>
+<A NAME="IDX2079"></A>
+<A NAME="IDX2080"></A>
+
+</P>
+
+<PRE>
+[<var>begin_label</var>:] REPEAT
+    <var>statement_list</var>
+UNTIL <var>search_condition</var>
+END REPEAT [<var>end_label</var>]
+</PRE>
+
+<P>
+The statement or statements within a <code>REPEAT</code> statement are repeated
+until the <var>search_condition</var> is true.
+
+</P>
+<P>
+<var>begin_label</var> and <var>end_label</var> must be the same, if both are
+specified.
+
+</P>
+<P>
+For example:
+
+</P>
+
+<PRE>
+mysql&#62; delimiter //
+
+mysql&#62; CREATE PROCEDURE dorepeat(p1 INT)
+    -&#62; BEGIN
+    -&#62;   SET @x = 0;
+    -&#62;   REPEAT SET @x = @x + 1; UNTIL @x &#62; p1 END REPEAT;
+    -&#62; END
+    -&#62; //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&#62; CALL dorepeat(1000)//
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&#62; SELECT @x//
++------+
+| @x   |
++------+
+| 1001 |
++------+
+1 row in set (0.00 sec)
+</PRE>
+
+
+
+<H4><A NAME="WHILE_Statement" HREF="manual_toc.html#WHILE_Statement">19.1.9.7  <code>WHILE</code> Statement</A></H4>
+
+<P>
+<A NAME="IDX2081"></A>
+
+</P>
+
+<PRE>
+[<var>begin_label</var>:] WHILE <var>search_condition</var> DO
+    <var>statement_list</var>
+END WHILE [<var>end_label</var>]
+</PRE>
+
+<P>
+The statement or statements within a <code>WHILE</code> statement are repeated as
+long as the <var>search_condition</var> is true.
+
+</P>
+<P>
+<var>begin_label</var> and <var>end_label</var> must be the same, if both are
+specified.
+
+</P>
+<P>
+For example:
+
+</P>
+
+<PRE>
+CREATE PROCEDURE dowhile()
+BEGIN
+  DECLARE v1 INT DEFAULT 5;
+
+  WHILE v1 &#62; 0 DO
+    ...
+    SET v1 = v1 - 1;
+  END WHILE;
+END
+</PRE>
+
+<P><HR><P>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_Spatial_extensions_in_MySQL.html">previous</A>, <A HREF="manual_Triggers.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+ </BODY>
+ </HTML>

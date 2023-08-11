@@ -1,0 +1,11 @@
+ref
+-- https://docstore.mik.ua/orelly/unix/upt/ch08_19.htm
+
+` 		backquotes 		Command substitution
+" 		double quote		Weak quotes
+' 		single quote		Strong quotes
+\ 		back slash		Single-character quote
+$ var 		dolar sign		Variable
+${var-default}  			If var not set, use default .
+? 					Match one character. 	
+* 					Match zero or more characters.

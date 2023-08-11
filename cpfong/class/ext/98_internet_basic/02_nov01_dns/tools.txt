@@ -1,0 +1,23 @@
+windows
+	nslookup 
+		>www.hinet.net, >help, >server >exit >www.hinet.net dns.hinet.net >set type=SOA >set type=ALL >set type=A
+
+	ping /?, ping -t www.hinet.net, ping -c 3 168.95.1.1
+unix 
+	internet command in unix:
+	traceroute	traceroute hostname
+	netstat		netstat -i (interface), netstat -r (route table)
+	ifconfig	ifconfig
+	ping
+
+	related to domain name:
+	/etc/resolv.conf will be used by dig  (man resolv.conf) search ,nameserver
+	dig (man dig)
+	hostname
+	resolveip
+	host
+	arp
+
+	* resolver 會使用 /etc/resolv.conf 中指定的 ns1 ns2 ns1 ns2 ... 直到成功或放棄
+	* nslookup 則只會使用一個 ns
+	* dig name type class

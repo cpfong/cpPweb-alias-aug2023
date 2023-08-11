@@ -1,0 +1,96 @@
+From cpfong.bbs@bbs.civil.ncku.edu.tw Tue Feb 29 13:53:43 2000
+Return-Path: <cpfong.bbs@bbs.civil.ncku.edu.tw>
+Received: from ms24.hinet.net (root@ms24.hinet.net [168.95.4.24])
+	by bb.cc.fjtc.edu.tw (8.9.3/8.9.3) with ESMTP id NAA00454
+	for <cpfong@bb.cc.fjtc.edu.tw>; Tue, 29 Feb 2000 13:53:42 +0800 (CST)
+	(envelope-from cpfong.bbs@bbs.civil.ncku.edu.tw)
+From: cpfong.bbs@bbs.civil.ncku.edu.tw
+Received: from uranus.civil.ncku.edu.tw (uranus.civil.ncku.edu.tw [140.116.36.40])
+	by ms24.hinet.net (8.8.8/8.8.8) with ESMTP id NAA19338
+	for <cpfong@ms24.hinet.net>; Tue, 29 Feb 2000 13:53:18 +0800 (CST)
+Received: from bbs.civil.ncku.edu.tw (IDENT:bbs@bbs.civil.ncku.edu.tw [140.116.36.100])
+	by uranus.civil.ncku.edu.tw (8.9.3/8.9.2) with ESMTP id NAA11618
+	for <cpfong@ms24.hinet.net>; Tue, 29 Feb 2000 13:53:16 +0800 (CST)
+	(envelope-from cpfong.bbs@bbs.civil.ncku.edu.tw)
+Received: (from bbs@localhost)
+	by bbs.civil.ncku.edu.tw (8.9.1/8.9.0) id NAA24982
+	for cpfong@ms24.hinet.net; Tue, 29 Feb 2000 13:53:15 +0800 (CST)
+Date: Tue, 29 Feb 2000 13:53:15 +0800 (CST)
+Message-Id: <200002290553.NAA24982@bbs.civil.ncku.edu.tw>
+Reply-To: cpfong.bbs@bbs.civil.ncku.edu.tw
+To: cpfong@ms24.hinet.net
+Subject: Re: Mysql + IMP
+X-Disclaimer: 成大土木大地雕塑家對本信內容恕不負責。
+Status: RO
+Content-Length: 2304
+Lines: 68
+
+發信人: mchang@3tec.com (Mike Chang), 看板: bsd
+標  題: Re: Mysql + IMP
+發信站: FreeBSD Taiwan News Server. (Tue Jan  4 11:24:40 2000)
+轉信站: CivilEngineer!news.civil.ncku!nsysu-news!news.ccu!ctu-peer!ctu-gate!ne
+來源站: localhost
+
+先試著用你剛設立的 impmgr 帳戶直接在 shell 下連上 MySQL 看看，
+如果無法登錄則表示 impmgr 的帳戶並沒有在 MySQL 裡被正確的設
+定好，也因而導致 login.php3 無法通過 MySQL 使用者確認。
+
+刪除原本 impmgr 在 MySQL 的帳戶，重新用 shell 連到 MySQL 裡設定
+impmgr 帳戶再試試看。
+
+Mike Chang
+資訊系統管理部門經理
+三技資訊網路企業
+企業網址： www.3tec.com
+電郵信箱：mchang@3tec.com
+
+『讓我們都沉醉在這夢中，
+    遊蕩在生命裡曾經追尋過的一切‧‧‧』
+                                             ─ 逍遙才子
+----- Original Message -----
+寄件者: "PowerChip" <dannis@mail.progolf2.com.tw>
+收件者: <freebsd-taiwan-questions@freebsd.sinica.edu.tw>
+傳送日期: 2000年1月3日
+主旨: Mysql + IMP
+
+
+> 問一下 apache + php3 + imap +mysql + imp 的問題, 系統是 3.4-stable
+> 我的 apache + php3 + imap + mysql-client 部份是用 ports 裝的,也就是
+> /usr/port/www/apache13+php3 這個 ports , 選項部份加上了 imap 及 mysql
+> 安裝過程順利, 在裝好這個 ports 後, 再加裝了
+> /usr/port/databases/mysql322-server 這個 ports , 安裝也沒問題.
+> 接下來 fix /etc/inetd.conf 部份,加上了 imapd 及 ipop3d , 重新啟動
+> inetd 然後 ftp.horde.org 內取得 horde-lastest.tar.gz 及
+> imp-latest.tar.gz
+> 並照說明安裝完成, 嗯! 解釋一下好了..
+> tar vxfz horde-lastest.tar.gz
+> tar vxfz imp-latest.tar.gz
+> mv horde-1.0.11 /WebDocumentRoot/horde
+> mv imp-2.0.11 /WebDocumentRoot/horde/imp
+> cd /WebDocumentRoot/horde/imp/config/script
+> mysql < mysql_create.sql
+> cd /WebDocumentRoot/horde
+> ./install.sh
+>
+> 從 netscape 中設定 setup.php3
+> 設定 page 10 of 12
+> use database: true
+> database type: mysql
+> user name: impmgr
+> password: impmgr
+> 其他項目不變.
+>
+> ./secure.sh
+>
+> 接下來從 netscape 中測試時遇到問題了.
+> 在打入 http://urllink/horde/imp 後進入到了 imp 的 login 畫面
+> 輸入了帳號及密碼後, 停在 login 畫面一直沒動靜, 一段時間後就將
+> login 及 password 的輸入格清空了, 且沒有任何錯誤訊息,有沒有前
+> 輩能告訴我怎麼回事呢?
+>
+> -------------------------------------------------------------
+> To Unsubscribe: send mail to majordomo@maillist.tw.freebsd.org
+> with "unsubscribe freebsd-taiwan-questions" in the body of the message
+>
+
+

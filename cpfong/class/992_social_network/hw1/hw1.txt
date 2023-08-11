@@ -1,0 +1,34 @@
+http://www.yorku.ca/cikm10/searchresults.php
+
+http://www.yorku.ca/cikm10/papers.php
+[1] B. Chen, W. Liang, R. Zhou, and J. X. Yu, “Energy-efficient Top-k Query Processing in Wireless Sensor Networks,” Proceedings of the 19th ACM Conference on Information and Knowledge Management, pages 329-338, October 2010.
+Accepted full papers: Session 2C* DB Track: Mobile and Distributed Data Management. Paper ID:885
+
+[2] “A Method for Discovering Components of Human Rituals from Streams of Sensor Data”	
+Accepted full papers: Session 5A* KM Track: Temporal, Spatial and Stream Data Mining. Paper ID:1411
+
+http://www.yorku.ca/cikm10/posters.php
+[3] “An Efficient Data-centric Storage Scheme Considering Storage and Query Hot-spots in Sensor Networks”
+Accepted short papers (Posters) Paper ID:765
+
+Ranking
+papers:
+Ranking and Retrieval Model
+
+Entity Ranking using Wikipedia as a Pivot, Rianne Kaptein, Jaap Kamps, Pavel Serdyukov and Arjen de Vries
+
+Ranking under Temporal Constraints, Lidan Wang, Donald Metzler and Jimmy Lin
+
+Outcome Aware Ranking in Interaction Networks, S Kameshwaran, Sameep Mehta and Vinayaka  Pandit
+
+Web Search Solved? All Result Rankings the Same? Hugo Zaragoza, B. Barla Cambazoglu and Ricardo Baeza-Yates
+
+Ranking Related Entities: Components and Analyses, Marc Bron, Krisztian Balog and Maarten de Rijke
+
+Temporal Query Log Profiling to Improve Web Search Ranking, Alexander Kotov, Pranam Kolari, Lei Duan and Yi Chang
+
+posters:
+Context Modeling for Ranking and Tagging Bursty Features in Text Streams Xin Zhao, Jing Jiang, Jing He, Xiaoming Li, Hongfei Yan, Shan Dongdong
+
+Ranking of Evolving Stories Through Meta-Aggregation    Juozas Gordevicius, Francisco J.  Estrada, Hyun Chul Lee, Periklis Andritsos, Johann Gamper
+

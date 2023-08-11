@@ -1,0 +1,11 @@
+Comaq-> tail innfeed.log 
+Dec 28 11:07:44 innfeed[34319]: fjtc spooling: enabled
+Dec 28 11:07:44 innfeed[34319]: fjtc tape backlog limit: [0 0]
+Dec 28 11:07:44 innfeed[34319]: Adding peer: fjtc
+Dec 28 11:07:46 innfeed[34319]: fjtc:0 Issuing the streaming command: MODE STREAM
+
+Dec 28 11:07:46 innfeed[34319]: fjtc:0 Processing mode response: 203 StreamOK.
+Dec 28 11:07:46 innfeed[34319]: Host is idle: fjtc
+Dec 28 11:16:15 innfeed[34758]: Giving article to peer: fjtc
+
+

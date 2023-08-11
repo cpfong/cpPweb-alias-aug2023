@@ -1,0 +1,9 @@
+ref: http://stackoverflow.com/questions/28593022/list-google-drive-files-with-curl
+
+Q: how to use curl to check files on google drive ?
+A:
+step 1. new credentials for client
+step 2. get client_id and user_code
+step 3. browe device
+step 4. get token
+step 5. use token get files info

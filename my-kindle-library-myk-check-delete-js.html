@@ -1,0 +1,20 @@
+<html>
+<script>
+var isCDLoaded;
+if (typeof(isCDLoaded) == 'undefined') {
+  js = document.createElement('SCRIPT');
+  js.type = 'text/javascript';
+  js.src = '//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js';
+  js.onload = js.onreadystatechange = function() {
+    js = document.createElement('SCRIPT');
+    js.type = 'text/javascript';
+    js.src = '//myk-check-and-delete.googlecode.com/files/myk-check-delete.js';
+    document.getElementsByTagName('head')[0].appendChild(js);
+  };
+  document.getElementsByTagName('head')[0].appendChild(js);
+
+  isCDLoaded = true;
+}
+void(0);
+</script>
+</html>

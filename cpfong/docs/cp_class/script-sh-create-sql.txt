@@ -1,0 +1,3 @@
+sh ./cmd.sh
+sh ./cmd.sh > test.sql
+mysql -pa123456789 <./test.sql

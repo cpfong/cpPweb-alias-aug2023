@@ -1,0 +1,431 @@
+<html>
+<head>
+<title>Emacs Quick Reference</title>
+<style><!--
+BODY {background-color: #eeddcc}
+H1,P,B,TD,TH,PRE {font-family:Arial,Helvetica,sans-seriff}
+H1,P,B,TD,TH,PRE {font-size:10}
+H1    {font-size:30}
+B,TH  {font-size:12}
+TH    {background-color: #cccccc}
+#keyb {background-color: #dddddd}
+#func {background-color: #eeeeee}
+#desc {background-color: #f5f5f5}
+#keyb {font-size:11}
+--></style>
+</head>
+<body>
+<table border=0 width=100%>
+  <tr><td width=50% align=center>
+    <h1>Emacs Quick Reference</h1>
+By Paul Seamons
+  </td><td align=right>
+<!-- Begin Emacs-Ring code -->
+  
+  <img src="http://www.gnusoftware.com/WebRing/emacs.jpg"> Emacs-Ring - Site Number 27
+  <br>
+  [ <a href="http://www.gnusoftware.com/WebRing/zone.cgi?id=27&dir=next">Next Site</a> | 
+  <a href="http://www.gnusoftware.com/WebRing/zone.cgi?id=27&dir=skipnext">Skip Next Site</a> | 
+  <a href="http://www.gnusoftware.com/WebRing/zone.cgi?id=27&dir=prev">Previous Site</a> | 
+  <a href="http://www.gnusoftware.com/WebRing/zone.cgi?id=27&dir=skipprev">Skip Previous Site</a> | 
+  <a href="http://www.gnusoftware.com/WebRing/zone.cgi?list">List Sites</a> | 
+  <a href="http://www.gnusoftware.com/WebRing/">Home</a> ]
+  
+<!-- End Emacs-Ring code -->
+  </td></tr>
+</table>
+<p>
+<b>Notation</b><br>
+It is important to understand the notation commonly used in Emacs
+documentation.  Most of the commands used in Emacs consist of a
+modifier key, in conjuction with one or more other keys.  The
+following are the common modifier keys:
+<table border=0>
+<tr><td rowspan=4 width=19></td>
+    <td>CTRL</td> <td>- (C) -</td>  <td>The CONTROL key.</td></tr>
+<tr><td>META</td> <td>- (M) -</td>  <td>Depending upon the terminal this is the ALT key.  You may also use the ESC key to send META.</td></tr>
+<tr><td>ESC </td> <td>- (ESC) -</td><td>The ESCAPE key.</td></tr>
+<tr><td>SHIFT</td><td>- (S) -</td>  <td>The SHIFT key.</td></tr>
+</table>
+In Emacs documentation it is common to use an abbreviated syntax when
+describing key sequences.  Instead of typing
+  <table border=0><tr><td width=19></td><td>CTRL-x CTRL-c</td></tr></table>
+You would type
+  <table border=0><tr><td width=19></td><td>C-x C-c</td></tr></table>
+This would represent holding down the CONTROL key and pressing the
+letter x, and then holding down the CONTROL key and pressing the
+letter c.  (M-C-\ would represent holding down the the ALT key and
+CONTROL key and pressing the "\" key.  You could also press and
+release the ESCAPE key hold down the CONTROL key and type the "\" key.)
+<br>
+<br>
+The following is a table of notation for other keyboard characters.
+<table border=0>
+<tr><td rowspan=5 width=19></td>
+    <td>BACKSPC</td> <td>The BACKSPACE key.</td></tr>
+<tr><td>SPC</td>     <td>The SPACE bar.</td></tr>
+<tr><td>ENTER</td>   <td>The Enter key.</td></tr>
+<tr><td>RET</td>     <td>The Enter key.</td></tr>
+<tr><td>TAB</td>     <td>The TAB key.</td></tr>
+</table>
+<br>
+<br>
+<b>Insert Mode?</b><br>
+This is a large place where Emacs differs from the Vi editor.  In Vi you are
+either in Insert Mode or you are not.  In order to execute commands
+other than key insertion you need to be out of Insertion Mode.  By
+using CTRL to escape the key sequences, Emacs allows you to use the
+commands at any point in your session.  For example, if you are in Vi
+and are inserting text you would have to type the following key
+sequence to save your file and return to Insert Mode:
+  <table border=0><tr><td width=19></td><td>ESC : w i</td></tr></table>
+In Emacs (which is essentially always in "Insert Mode") you would type
+the following:
+  <table border=0><tr><td width=19></td><td>C-x C-s  </td></tr></table>
+When viewed from the insertion mode view point, Vi doesn't really save
+any keystrokes over Emacs as is commonly claimed by religious Vi
+advocates. (It actually requires more in most cases - the debate is
+really whether you're in Insert Mode more than you are in Command Mode.)
+<br>
+<br>
+<b>What is really happening on the backend</b><br>
+Emacs is really a bunch of lisp routines programmed to operate on the
+text in the buffers.  These complex routines are accessed via key
+bindings on the front end.  For example, when you type an "s" you are
+really telling Emacs to run the "self-insert-command" on the letter
+"s" which inserts the letter "s" at the current Point of Insertion
+(POI).  These backend commands can be accessed by typing M-x and then
+the command.  For example, you open a file with the key binding "C-x
+C-f".  You can begin the same operation by typing "M-x find-file".
+<br>
+<br>
+<b>Keyboard Shortcuts - (Key Bindings)</b><br>
+<table border=1 cellspacing=0 cellpadding=2>
+<tr bgcolor=seagreen><td>Key&nbsp;Binding</td><td>Backend&nbsp;Function</td><td>What it does</td></tr>
+
+<tr><th colspan=3>Quiting Things</th></tr>
+<tr><td id=keyb>C-x C-c</td><td id=func>M-x save-buffers-kill-emacs</td>
+  <td id=desc><b>Quit Emacs</b>.  Exits out of Emacs.  If you have open
+  buffers that have been modified you are prompted to save the changes
+  or discard them.</td></tr>
+<tr><td id=keyb>C-g</td><td id=func>M-x keyboard-quit</td>
+  <td id=desc>If you are in a key request sequence that you can't get out of,
+  this returns you to the main buffer.</td></tr>
+<tr><td id=keyb>ESC ESC ESC</td><td id=func>M-x keyboard-escape-quit</td>
+  <td id=desc>Does about the same thing as "C-g"</td></tr>
+<tr><td id=keyb>C-x k</td><td id=func>M-x kill-buffer</td>
+  <td id=desc>Kills the current buffer.  If the buffer is modified you are
+  prompted to save it.</td></tr>
+
+<tr><th colspan=3>Files and directories</th></tr>
+<tr><td id=keyb>C-x C-f</td><td id=func>M-x find-file</td>
+  <td id=desc><b>Open a file</b>.  This prompts for the name of a file.  Once you have typed the
+  file it opens it in the current buffer.  If the file doesn't exist,
+  a blank buffer is created and Emacs allows you to begin typing (In
+  this case the file will not exist on the system until you save it
+  the first time).  When you are typing the name of the file, you may
+  use the tab key for filename completion.  Also you may use M-p and
+  M-n to go to the "previous" and "next" files that have been found
+  using find-file.</td></tr>
+<tr><td id=keyb>C-x C-s</td><td id=func>M-x save-buffer</td>
+  <td id=desc><b>Save a file</b>.  This saves the current buffer.</td></tr>
+<tr><td id=keyb>C-x d</td><td id=func>M-x dired (directory edit)</td>
+  <td id=desc><a href=#dired>More Here.</a>  This opens the directory specified (same way as find-file).  It
+  opens a buffer that lists the directory and allows you to perform
+  operations on the files. listed in that directory.  There are many
+  features (to many to list here) that I will go into later.  The most
+  basic is to put the cursor on the file you want and hit ENTER.  This
+  does a find-file on that file.</td></tr>
+<tr><td id=keyb>C-x C-w</td><td id=func>M-x write-file</td>
+  <td id=desc>Save the current file as...</td></tr>
+<tr><td id=keyb>C-x i</td><td id=func>M-x insert-file</td>
+  <td id=desc>Insert a file</td></tr>
+
+<tr><th colspan=3>Buffers</th></tr>
+<tr><td id=keyb>C-x C-b</td><td id=func>M-x list-buffers</td>
+  <td id=desc>This lists all buffers that are open.  Emacs will typically open
+  a buffer for each file that you visit (if you visit a new file
+  without closing an old one).  This will give you a list of all of
+  the currently open buffers and will allow you to choose one from the
+  list to switch to.  (You will notice there are a couple of buffers
+  beginning with an *.  These are buffers used by Emacs to store
+  output.  You may kill them if you like.)  If you have a file opened
+  multiple times, you will see it listed as "file" and "file
+  &lt;2>".  This list of buffers is called the <b>buffer ring</b></td></tr>
+<tr><td id=keyb>C-x b</td><td id=func>M-x switch-to-buffer</td>
+  <td id=desc><b>Switch buffers</b>.  Does just that.  The default buffer to switch to is the last one
+  that you came from.  (Typing C-x b ENTER repeatedly swaps between
+  the current and the last buffer like ALT-TAB in windows.)  You may
+  type a TAB to complete the buffer name or TAB TAB to see a list of
+  all of the buffer names you can type.</td></tr>
+<tr><td id=keyb>C-x k</td><td id=func>M-x kill-buffer</td>
+  <td id=desc>Kills the current buffer.  If the buffer is modified you are
+  prompted to save it.</td></tr>
+
+<tr><th colspan=3>Windows and frames</td></tr>
+<tr><td id=keyb>C-x 0</td><td id=func>M-x delete-window</td>
+  <td id=desc>Kills the current window if more than one is visible.  The
+  buffer contained in the window is put back to the buffer ring.</td></tr>
+<tr><td id=keyb>C-x 1</td><td id=func>M-x delete-other-windows</td>
+  <td id=desc>If more than one window is visible in the current viewing frame,
+  it removes all but the current window.  Other buffers remain open
+  but unviewed.</td></tr>
+<tr><td id=keyb>C-x 2</td><td id=func>M-x split-window-vertically</td>
+  <td id=desc>Splits the current viewing window into two windows placed one
+  over the other.</td></tr>
+<tr><td id=keyb>C-x 3</td><td id=func>M-x split-window-horizontally</td>
+  <td id=desc>Splits the current viewing window into two windows placed side
+  to side.</td></tr>
+<tr><td id=keyb>C-x o</td><td id=func>M-x other-window</td>
+  <td id=desc>Switches between two windows.</td></tr>
+
+<tr><th colspan=3>Moving Around</td></tr>
+<tr><td id=keyb>C-p (up&nbsp;arrow)</td><td id=func>M-x previous-line</td>
+  <td id=desc>Moves to the previous line.</td></tr>
+<tr><td id=keyb>C-n (down&nbsp;arrow)</td><td id=func>M-x next-line</td>
+  <td id=desc>Moves to the next line.</td></tr>
+<tr><td id=keyb>C-f (right&nbsp;arrow)</td><td id=func>M-x forward-char</td>
+  <td id=desc>Move forward one character</td></tr>
+<tr><td id=keyb>C-f (left&nbsp;arrow)</td><td id=func>M-x backward-char</td>
+  <td id=desc>Move backward one character</td></tr>
+<tr><td id=keyb>M-f</td><td id=func>M-x forward-word</td>
+  <td id=desc>Move forward one word.</td></tr>
+<tr><td id=keyb>M-b</td><td id=func>M-x backward-word</td>
+  <td id=desc>Move backward one word.</td></tr>
+<tr><td id=keyb>C-a</td><td id=func>M-x beginning-of-line</td>
+  <td id=desc>Move to the beginning of the line.</td></tr>
+<tr><td id=keyb>C-e</td><td id=func>M-x end-of-line</td>
+  <td id=desc>Move to the beginning of the line.</td></tr>
+<tr><td id=keyb>M-a</td><td id=func>M-x backward-sentence</td>
+  <td id=desc>Move backward one sentence.</td></tr>
+<tr><td id=keyb>M-e</td><td id=func>M-x forward-sentence</td>
+  <td id=desc>Move forward one sentence.</td></tr>
+<tr><td id=keyb>C-v</td><td id=func>M-x scroll-up</td>
+  <td id=desc>Page down one page.</td></tr>
+<tr><td id=keyb>M-v</td><td id=func>M-x scroll-down</td>
+  <td id=desc>Page up one page.</td></tr>
+<tr><td id=keyb>M-&gt;</td><td id=func>M-x end-of-buffer</td>
+  <td id=desc>Moves to the end of the buffer.</td></tr>
+<tr><td id=keyb>M-&lt;</td><td id=func>M-x beginning-of-buffer</td>
+  <td id=desc>Moves to the beginning of the buffer.</td></tr>
+<tr><td id=keyb>C-x ]</td><td id=func>M-x forward-page</td>
+  <td id=desc>In most modes does the same as M-&gt;</td></tr>
+<tr><td id=keyb>C-x [</td><td id=func>M-x backward-page</td>
+  <td id=desc>In most modes does the same as M-&lt;</td></tr>
+<tr><td id=keyb>&nbsp;</td><td id=func>M-x goto-line</td>
+  <td id=desc><b>Goto line</b>.  Does what it says.  I can't believe that
+  there is not a default key binding for this (there is in XEmacs).  I
+  usually set up in my .emacs file the line
+  (global-set-key&nbsp;"\M-g"&nbsp;'goto-line) which tells emacs to
+  use M-g to run the command.</td></tr>
+<tr><td id=keyb>C-x o</td><td id=func>M-x other-window</td>
+  <td id=desc>Switches between two windows.</td></tr>
+<tr><td id=keyb>C-x b</td><td id=func>M-x switch-to-buffer</td>
+  <td id=desc><b>Switch buffers</b>.  Does just that.  The default buffer to switch to is the last one
+  that you came from.  (Typing C-x b ENTER repeatedly swaps between
+  the current and the last buffer like ALT-TAB in windows.)  You may
+  type a TAB to complete the buffer name or TAB TAB to see a list of
+  all of the buffer names you can type.</td></tr>
+<tr><td id=keyb>C-SPC</td><td id=func>M-x set-mark-command</td>
+  <td id=desc><b>Set Mark</b>. Sets the mark to the current cursor location (point).  Many
+  commands are run on the region in between the point and mark.</td></tr>
+<tr><td id=keyb>C-x C-x</td><td id=func>M-x exchange-point-and-mark</td>
+  <td id=desc>Exchanges the point (cursor location) and the mark.</td></tr>
+
+<tr><th colspan=3>Copying and Deleting stuff</td></tr>
+<tr><td id=keyb>C-_</td><td id=func>M-x undo</td>
+  <td id=desc><b>Undo</b>.  Undoes the last command.  Can be done repeatedly.</td></tr>
+<tr><td id=keyb>C-d</td><td id=func>M-x delete-char</td>
+  <td id=desc><b>Delete</b>.  Deletes the character under the point (after the cursor location).</td></tr>
+<tr><td id=keyb>BACKSPC</td><td id=func>M-x delete-backward-char</td>
+  <td id=desc><b>Delete</b>.  Deletes the character before the point (before the cursor location).</td></tr>
+<tr><td id=keyb>M-d</td><td id=func>M-x kill-word</td>
+  <td id=desc>Kills the word after the cursor location.  Places on the kill ring.</td></tr>
+<tr><td id=keyb>M-BACKSPC</td><td id=func>M-x backward-kill-word</td>
+  <td id=desc>Kills the word before the cursor location.  Places on the kill ring.</td></tr>
+<tr><td id=keyb>C-k</td><td id=func>M-x kill-line</td>
+  <td id=desc><b>Kill</b>. Kills from the point to the end of the line.  If repeated in a
+  row, all of kills go into the same kill ring entry.  Doing this once
+  does not kill the new line at the end of the line.  Repeating kills
+  the newline.  (for example, to kill the entire current line you
+  would type C-a to move to the beginning of the line, and C-k C-k to
+  kill the line and the newline).</td></tr>
+<tr><td id=keyb>C-y</td><td id=func>M-x yank</td>
+  <td id=desc><b>Yank</b>. Inserts the last entry from the kill ring.  This can be done repeatedly.</td></tr>
+<tr><td id=keyb>M-y</td><td id=func>M-x yank-pop</td>
+  <td id=desc>Cycle through the kill ring.  Operates only if the last command
+  was C-y</td></tr>
+<tr><td id=keyb>C-SPC</td><td id=func>M-x set-mark-command</td>
+  <td id=desc><b>Set Mark</b>. Sets the mark to the current cursor location (point).  Many
+  commands are run on the region in between the point and mark.</td></tr>
+<tr><td id=keyb>C-w</td><td id=func>M-x kill-region</td>
+  <td id=desc>Kills the text between the mark and the point.  Places on the
+  kill ring.  If the buffer is read only, places text on kill ring but
+  warns about not being able to modify buffer.</td></tr>
+<tr><td id=keyb>M-w</td><td id=func>M-x kill-ring-save</td>
+  <td id=desc>Places text between mark and point on the kill ring without
+  killing text.</td></tr>
+<tr><td id=keyb>M-z</td><td id=func>M-x zap-to-char</td>
+  <td id=desc>Deletes the text from the point up to the first instance of the specifed character</td>
+
+<tr><th colspan=3>Search and Replace</td></tr>
+<tr><td id=keyb>C-s</td><td id=func>M-x isearch-forward</td>
+  <td id=desc>Searches forward for the typed in text.  C-s repeatedly searches
+  forward multiple times.  C-r switches direction of search.</td></tr>
+<tr><td id=keyb>C-r</td><td id=func>M-x isearch-backward</td>
+  <td id=desc>Searches backward for the typed in text.  C-r repeatedly searches
+  backward multiple times.  C-s switches direction of search.</td></tr>
+<tr><td id=keyb>M-%</td><td id=func>M-x query-replace</td>
+  <td id=desc>Requests two patterns.  Searches for first pattern and replaces
+  with second pattern.  Prompts at each match.  (y for "yes replace",
+  n for "no next", and ! for "replace all").</td></tr>
+<tr><td id=keyb>C-u C-s</td><td id=func>M-x isearch-forward-regexp</td>
+  <td id=desc>Search using a regular expression (as you type it).
+<tr><td id=keyb>M-C-%</td><td id=func>M-x query-replace-regexp</td>
+  <td id=desc>Query replaces using a regular expression as the match.</td></tr>
+
+<tr><th colspan=3>Fixing up the text</td></tr>
+<tr><td id=keyb>TAB</td><td id=func>M-x indent-relative-maybe</td>
+  <td id=desc>Indent the text according to the program mode you are
+  in.</td></tr>
+<tr><td id=keyb>M-C-\</td><td id=func>M-x indent-region</td>
+  <td id=desc>Runs the "TAB" on all lines in the region.</td></tr>
+<tr><td id=keyb>M-u</td><td id=func>M-x upcase-word</td>
+  <td id=desc>Upper casifies from the point to the end of the word.</td></tr>
+<tr><td id=keyb>M-l</td><td id=func>M-x downcase-word</td>
+  <td id=desc>Lower casifies from the point to the end of the word.</td></tr>
+<tr><td id=keyb>C-t</td><td id=func>M-x transpose-chars</td>
+  <td id=desc>Swaps characters before and after point with one
+  another.</td></tr>
+<tr><td id=keyb>M-t</td><td id=func>M-x transpose-words</td>
+  <td id=desc>Swaps current and next word with one another.</td></tr>
+
+<tr><th colspan=3><a name=dired></a>Dired - Directory Editor</td></tr>
+<tr><td id=keyb>C-x d</td><td id=func>M-x dired (directory edit)</td>
+  <td id=desc>This opens the directory specified (same way as find-file).  It
+  opens a buffer that lists the directory and allows you to perform
+  operations on the files. listed in that directory.  There are many
+  features (to many to list here) that I will go into later.  The most
+  basic is to put the cursor on the file you want and hit ENTER.  This
+  does a find-file on that file.</td></tr>
+
+<tr><td>All commands in this section will only operate when you are in dired mode.</td>
+<td colspan=2>
+
+<table border=1 width=100% cellspacing=0>
+<tr><td id=keyb>ENTER</td><td id=func>M-x dired-advertised-find-file</td>
+  <td id=desc>Runs a C-x C-f (find-file) on the currently highlighted file.  If the file is a directory, that directory will be opened in dired mode in a new buffer.</td></tr>
+<tr><td id=keyb>+</td><td id=func>M-x dired-create-directory</td>
+  <td id=desc>Prompts for a new directory name and creates it.</td></tr>
+<tr><td id=keyb>d</td><td id=func>M-x dired-flag-file-deletion</td>
+  <td id=desc>Flags the current file for deletion.</td></tr>
+<tr><td id=keyb>~</td><td id=func>M-x dired-flag-backup-files</td>
+  <td id=desc>Flags all files ending with <b>~</b> for deletion (backup files)</td></tr>
+<tr><td id=keyb>x</td><td id=func>M-x dired-do-flagged-delete</td>
+  <td id=desc>Delete all files marked for deletion (lines beginning with a <b>D</b></td></tr>
+<tr><td id=keyb>D</td><td id=func>M-x dired-do-delete</td>
+  <td id=desc>Deletes the currently highlighted file(s)</td></tr>
+<tr><td id=keyb>C</td><td id=func>M-x dired-do-copy</td>
+  <td id=desc>Copies the currently highlighted file(s).  Prompts for the destination.</td></tr>
+<tr><td id=keyb>R</td><td id=func>M-x dired-do-rename</td>
+  <td id=desc>Renames the currently highlighted file(s).  Prompts for the destination.</td></tr>
+<tr><td id=keyb>% R</td><td id=func>M-x dired-do-rename-regex</td>
+  <td id=desc>Renames the currently highlighted file(s) using regular expressions.
+  Prompts for a regex for from and to. (example - from regex <b>\(.+\).txt</b>, to regex <b>\1.text</b>)</td></tr>
+
+<tr><td id=keyb>m</td><td id=func>M-x dired-mark</td>
+  <td id=desc>Mark the current file (marks with a <b>*</b>)</td></tr>
+<tr><td id=keyb>u</td><td id=func>M-x dired-unmark</td>
+  <td id=desc>Unmark the current file (marks with <b>SPC</b> - SPC is blank)</td></tr>
+
+<tr><td id=keyb>* c </td><td id=func>M-x dired-change-marks</td>
+  <td id=desc>Changes marks from first prompted letter to second prompted letter (example - <b>* c D SPC</b> - this will clear the deletion flag)</td></tr>
+
+<tr><td id=keyb>!</td><td id=func>M-x dired-do-shell-command</td>
+  <td id=desc>Execute command on files marked with <b>*</b>.  If your command contains a <b>*</b>, the list of marked files will be substituted in place and executed.  Otherwise, the command will be played once with each marked file as the last argument.</td></tr>
+
+<tr><td id=keyb>g</td><td id=func>M-x revert-buffer</td>
+  <td id=desc>Refreshes the current dired directory.</td></tr>
+
+</table>
+
+</td></tr>
+
+
+<tr><th colspan=3>Help - Finding it</td></tr>
+<tr><td id=keyb>C-h t</td><td id=func>M-x help-with-tutorial</td>
+  <td id=desc>Begins the Emacs built in Tutorial - highly recommended</td></tr>
+<tr><td id=keyb>C-h k</td><td id=func>M-x describe-key</td>
+  <td id=desc>Allows you to type in key strokes and see the backend function
+  that they are running.</td></tr>
+<tr><td id=keyb>C-h f</td><td id=func>M-x describe-function</td>
+  <td id=desc>Allows you to type a function name and receive an explanation of
+  what it does.</td></tr>
+<tr><td id=keyb>C-h v</td><td id=func>M-x describe-variable</td>
+  <td id=desc>Allows you to type a Emacs variable name and see its
+  contents</td></tr>
+<tr><td id=keyb>C-h b</td><td id=func>M-x describe-bindings</td>
+  <td id=desc>Show a table of all of the current key bindings.</td></tr>
+<tr><td id=keyb>C-h i</td><td id=func>M-x info</td>
+  <td id=desc>This one is possibly the most important.  It
+  enters into the Emacs help browser which allows you to read in depth
+  about just about any subject relating to Emacs. (Basic commands are
+  "l" for last, "n" for next, and "p" for previous.)  I'll talk more
+  about this later.</td></tr>
+
+<tr><th colspan=3>Text Registers</td></tr>
+<tr><td id=keyb>C-x r s</td><td id=func>M-x copy-to-register</td>
+  <td id=desc>Prompts for register letter.  Saves text between point and mark in the register.</td></tr>
+<tr><td id=keyb>C-x r i</td><td id=func>M-x insert-register</td>
+  <td id=desc>Prompts for register letter.  Inserts the text saved in that register at point.</td></tr>
+
+<tr><th colspan=3>Position Registers</td></tr>
+<tr><td id=keyb>C-x r SPC</td><td id=func>M-x point-to-register</td>
+  <td id=desc>Prompts for register letter.  Saves point in register.</td></tr>
+<tr><td id=keyb>C-x r j</td><td id=func>M-x jump-to-register</td>
+  <td id=desc>Prompts for register letter.  Jumpts to point saved in that register.</td></tr>
+
+<tr><th colspan=3>Bookmarks</td></tr>
+<tr><td id=keyb>C-x r m</td><td id=func>M-x bookmark-set</td>
+  <td id=desc>Prompts for bookmark name (default is buffer name).
+  Saves point in a bookmark.  This information is saved even if you
+  close Emacs.</td></tr>
+<tr><td id=keyb>C-x r b</td><td id=func>M-x bookmark-jump</td>
+  <td id=desc>Prompts for bookmark name.  Jumpts to point saved in
+  that bookmark (Even if you had closed your emacs session).</td></tr>
+<tr><td id=keyb>C-x r l</td><td id=func>M-x bookmark-bmenu-list</td>
+  <td id=desc>Lists all saved bookmarks.  Typing "j" when on a
+  bookmark jumps to the file.  Dired commands are used to delete
+  bookmarks (Type "d" when on file - then "x" to delete bookmark).</td></tr>
+
+<tr><th colspan=3>Rectangles - (Priceless)</td></tr>
+<tr><td id=keyb>C-x r o</td><td id=func>M-x open-rectangle</td>
+  <td id=desc>Opens rectangle of whitespace between point and mark.</td></tr>
+<tr><td id=keyb>C-x r t</td><td id=func>M-x string-rectangle</td>
+  <td id=desc>Replaces text between point and mark with rectangle of
+  text (prompts for text).  This is a major timesaver.  Typing <div
+  id=func>C-x r t "Other Text" RET</div> would replace <table
+  cellspacing=0 cellpadding=0 border=0><tr><td valign=top>&lt;mark></td>
+  <td>Some Text<br>Some Text<br>Some Text&lt;point></td>
+  <td valign=middle>&nbsp;&nbsp;&nbsp;With&nbsp;&nbsp;&nbsp;</td><td valign=top>&lt;mark></td>
+  <td>Other Text<br>Other Text<br>Other Text&lt;point></td></tr></table></td></tr>
+<tr><td id=keyb>C-x r k</td><td id=func>M-x kill-rectangle</td>
+  <td id=desc>Kills text between point and mark and places in
+  rectangle kill ring.</td></tr>
+<tr><td id=keyb>C-x r y</td><td id=func>M-x yank-rectangle</td>
+  <td id=desc>Inserts last killed rectangle at point.</td></tr>
+
+
+
+</table>
+</p>
+</body>
+</html>
+<script><!--
+function SiteStats_5290(){
+var t=new Date();
+var u='http://seamons.com/cgi-bin/sitestats.gif?p='+escape(location.href)+';r='+escape(document.referrer)+';t='+t.getTime();
+var I=new Image(1,1);  I.src=u;
+ }
+ SiteStats_5290();
+//--></script><noscript><img src=http://seamons.com/cgi-bin/sitestats.gif?p=http%3A%2F%2Fseamons.com%2Femacs%2Findex.html;r=-;t=5290; width=1 height=1></noscript>

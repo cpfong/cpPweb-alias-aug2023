@@ -1,0 +1,7 @@
+* starter account does not fit all zones 學生帳號只可在三個 zone 上活動
+  > three regions that the Starter Accounts can launch services from:
+  > US West Oregon,  US East N. Virginia, US East Ohio
+* always remember logout on console 主控台離開時一定要登出
+* never, NEVER login lab 0 實驗室一旦離開即不能再進入!!
+* when necessary may ask teacher to write aws email to relogin lab 0
+* use 1st ec2 as base 使用第一個機器當成主要操作台不離開

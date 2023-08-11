@@ -1,0 +1,316 @@
+  <HTML>
+  <HEAD>
+  
+  <TITLE>MySQL Reference Manual for version 5.0.3-alpha - G  MySQL Regular Expressions</TITLE>
+   <style> code {color:purple} tt {color:green} samp {color:navy} pre {color:maroon} </style>
+  </HEAD>
+  <BODY BGCOLOR=silver TEXT=#000000 LINK=#101090 VLINK=#7030B0>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_Environment_variables.html">previous</A>, <A HREF="manual_GPL_license.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="Regexp" HREF="manual_toc.html#Regexp">G  MySQL Regular Expressions</A></H1>
+
+<P>
+<A NAME="IDX2452"></A>
+<A NAME="IDX2453"></A>
+<A NAME="IDX2454"></A>
+
+</P>
+<P>
+A regular expression is a powerful way of specifying a pattern for a complex
+search.
+
+</P>
+<P>
+MySQL uses Henry Spencer's implementation of regular expressions, which is
+aimed at conformance with POSIX 1003.2.
+See section <A HREF="manual_Credits.html#Credits">B  Credits</A>.
+MySQL uses the extended version to support pattern-matching operations
+performed with the <code>REGEXP</code> operator in SQL statements.
+See section <A HREF="manual_Tutorial.html#Pattern_matching">3.3.4.7  Pattern Matching</A>.
+
+</P>
+<P>
+This appendix is a summary, with examples, of the special characters and
+constructs that can be used in MySQL for <code>REGEXP</code> operations.
+It does not contain all the details that can be found in
+Henry Spencer's <code>regex(7)</code> manual page. That manual page is
+included in MySQL source distributions, in the <tt>`regex.7'</tt> file under the
+<tt>`regex'</tt> directory.
+
+</P>
+<P>
+A regular expression describes a set of strings. The simplest regular
+expression is one that has no special characters in it. For example, the
+regular expression <code>hello</code> matches <code>hello</code> and nothing else.
+
+</P>
+<P>
+Non-trivial regular expressions use certain special constructs so that
+they can match more than one string. For example, the regular expression
+<code>hello|word</code> matches either the string <code>hello</code> or the string
+<code>word</code>.
+
+</P>
+<P>
+As a more complex example, the regular expression <code>B[an]*s</code> matches any
+of the strings <code>Bananas</code>, <code>Baaaaas</code>, <code>Bs</code>, and any other
+string starting with a <code>B</code>, ending with an <code>s</code>, and containing any
+number of <code>a</code> or <code>n</code> characters in between.
+
+</P>
+<P>
+A regular expression for the <code>REGEXP</code> operator may use any of the
+following special characters and constructs:
+
+</P>
+<DL COMPACT>
+
+<DT><code>^</code>
+<DD>
+Match the beginning of a string.
+
+<PRE>
+mysql&#62; SELECT 'fo\nfo' REGEXP '^fo$';                   -&#62; 0
+mysql&#62; SELECT 'fofo' REGEXP '^fo';                      -&#62; 1
+</PRE>
+
+<DT><code>$</code>
+<DD>
+Match the end of a string.
+
+<PRE>
+mysql&#62; SELECT 'fo\no' REGEXP '^fo\no$';                 -&#62; 1
+mysql&#62; SELECT 'fo\no' REGEXP '^fo$';                    -&#62; 0
+</PRE>
+
+<DT><code>.</code>
+<DD>
+Match any character (including carriage return and newline).
+
+<PRE>
+mysql&#62; SELECT 'fofo' REGEXP '^f.*$';                    -&#62; 1
+mysql&#62; SELECT 'fo\r\nfo' REGEXP '^f.*$';                -&#62; 1
+</PRE>
+
+<DT><code>a*</code>
+<DD>
+Match any sequence of zero or more <code>a</code> characters.
+
+<PRE>
+mysql&#62; SELECT 'Ban' REGEXP '^Ba*n';                     -&#62; 1
+mysql&#62; SELECT 'Baaan' REGEXP '^Ba*n';                   -&#62; 1
+mysql&#62; SELECT 'Bn' REGEXP '^Ba*n';                      -&#62; 1
+</PRE>
+
+<DT><code>a+</code>
+<DD>
+Match any sequence of one or more <code>a</code> characters.
+
+<PRE>
+mysql&#62; SELECT 'Ban' REGEXP '^Ba+n';                     -&#62; 1
+mysql&#62; SELECT 'Bn' REGEXP '^Ba+n';                      -&#62; 0
+</PRE>
+
+<DT><code>a?</code>
+<DD>
+Match either zero or one <code>a</code> character.
+
+<PRE>
+mysql&#62; SELECT 'Bn' REGEXP '^Ba?n';                      -&#62; 1
+mysql&#62; SELECT 'Ban' REGEXP '^Ba?n';                     -&#62; 1
+mysql&#62; SELECT 'Baan' REGEXP '^Ba?n';                    -&#62; 0
+</PRE>
+
+<DT><code>de|abc</code>
+<DD>
+Match either of the sequences <code>de</code> or <code>abc</code>.
+
+<PRE>
+mysql&#62; SELECT 'pi' REGEXP 'pi|apa';                     -&#62; 1
+mysql&#62; SELECT 'axe' REGEXP 'pi|apa';                    -&#62; 0
+mysql&#62; SELECT 'apa' REGEXP 'pi|apa';                    -&#62; 1
+mysql&#62; SELECT 'apa' REGEXP '^(pi|apa)$';                -&#62; 1
+mysql&#62; SELECT 'pi' REGEXP '^(pi|apa)$';                 -&#62; 1
+mysql&#62; SELECT 'pix' REGEXP '^(pi|apa)$';                -&#62; 0
+</PRE>
+
+<DT><code>(abc)*</code>
+<DD>
+Match zero or more instances of the sequence <code>abc</code>.
+
+<PRE>
+mysql&#62; SELECT 'pi' REGEXP '^(pi)*$';                    -&#62; 1
+mysql&#62; SELECT 'pip' REGEXP '^(pi)*$';                   -&#62; 0
+mysql&#62; SELECT 'pipi' REGEXP '^(pi)*$';                  -&#62; 1
+</PRE>
+
+<DT><code>{1}</code>
+<DD>
+<DT><code>{2,3}</code>
+<DD>
+<code>{n}</code> or <code>{m,n}</code> notation provides
+a more general way of writing regular expressions that match many
+occurrences of the previous atom (or ``piece'') of the pattern.
+<code>m</code> and <code>n</code> are integers.
+
+<DL COMPACT>
+
+<DT><code>a*</code>
+<DD>
+Can be written as <code>a{0,}</code>.
+<DT><code>a+</code>
+<DD>
+Can be written as <code>a{1,}</code>.
+<DT><code>a?</code>
+<DD>
+Can be written as <code>a{0,1}</code>.
+</DL>
+
+To be more precise, <code>a{n}</code> matches exactly <code>n</code> instances of
+<code>a</code>.
+<code>a{n,}</code> matches <code>n</code> or more instances of <code>a</code>.
+<code>a{m,n}</code> matches <code>m</code> through <code>n</code> instances of <code>a</code>,
+inclusive.
+
+<code>m</code> and <code>n</code> must be in the range from <code>0</code> to
+<code>RE_DUP_MAX</code> (default 255), inclusive.  If both <code>m</code> and <code>n</code>
+are given, <code>m</code> must be less than or equal to <code>n</code>.
+
+
+<PRE>
+mysql&#62; SELECT 'abcde' REGEXP 'a[bcd]{2}e';              -&#62; 0
+mysql&#62; SELECT 'abcde' REGEXP 'a[bcd]{3}e';              -&#62; 1
+mysql&#62; SELECT 'abcde' REGEXP 'a[bcd]{1,10}e';           -&#62; 1
+</PRE>
+
+<DT><code>[a-dX]</code>
+<DD>
+<DT><code>[^a-dX]</code>
+<DD>
+Matches any character that is (or is not, if ^ is used) either <code>a</code>,
+<code>b</code>, <code>c</code>, <code>d</code> or <code>X</code>.  A <code>-</code> character between two other
+characters forms a range that matches all characters from the first
+character to the second. For example, <code>[0-9]</code> matches any decimal
+digit.  To include a literal <code>]</code> character, it must immediately follow
+the opening bracket <code>[</code>.  To include a literal <code>-</code> character, it
+must be written first or last.  Any character that does not have a defined
+special meaning inside a <code>[]</code> pair matches only itself.
+
+
+<PRE>
+mysql&#62; SELECT 'aXbc' REGEXP '[a-dXYZ]';                 -&#62; 1
+mysql&#62; SELECT 'aXbc' REGEXP '^[a-dXYZ]$';               -&#62; 0
+mysql&#62; SELECT 'aXbc' REGEXP '^[a-dXYZ]+$';              -&#62; 1
+mysql&#62; SELECT 'aXbc' REGEXP '^[^a-dXYZ]+$';             -&#62; 0
+mysql&#62; SELECT 'gheis' REGEXP '^[^a-dXYZ]+$';            -&#62; 1
+mysql&#62; SELECT 'gheisa' REGEXP '^[^a-dXYZ]+$';           -&#62; 0
+</PRE>
+
+<DT><code>[.characters.]</code>
+<DD>
+Within a bracket expression (written using <code>[</code> and <code>]</code>),
+matches the sequence of characters of that collating element. <code>characters</code>
+is either a single character or a character name like <code>newline</code>.
+You can find the full list of character names in the <tt>`regexp/cname.h'</tt>
+file.
+
+
+<PRE>
+mysql&#62; SELECT '~' REGEXP '[[.~.]]';                     -&#62; 1
+mysql&#62; SELECT '~' REGEXP '[[.tilde.]]';                 -&#62; 1
+</PRE>
+
+<DT><code>[=character_class=]</code>
+<DD>
+Within a bracket expression (written using <code>[</code> and <code>]</code>),
+<code>[=character_class=]</code> represents
+an equivalence class. It matches all characters with the same collation
+value, including itself.
+For example, if <code>o</code> and <code>(+)</code> are the members of an
+equivalence class, then <code>[[=o=]]</code>, <code>[[=(+)=]]</code>, and
+<code>[o(+)]</code> are all synonymous.
+An equivalence class may not be used as an endpoint of a range.
+
+<DT><code>[:character_class:]</code>
+<DD>
+Within a bracket expression (written using <code>[</code> and <code>]</code>),
+<code>[:character_class:]</code> represents a character class that matches all
+characters belonging to that class. The standard class names are:
+
+<TABLE BORDER>
+<TR><TD><code>alnum</code> </TD><TD> Alphanumeric characters
+</TD></TR>
+<TR><TD><code>alpha</code> </TD><TD> Alphabetic characters
+</TD></TR>
+<TR><TD><code>blank</code> </TD><TD> Whitespace characters
+</TD></TR>
+<TR><TD><code>cntrl</code> </TD><TD> Control characters
+</TD></TR>
+<TR><TD><code>digit</code> </TD><TD> Digit characters
+</TD></TR>
+<TR><TD><code>graph</code> </TD><TD> Graphic characters
+</TD></TR>
+<TR><TD><code>lower</code> </TD><TD> Lowercase alphabetic characters
+</TD></TR>
+<TR><TD><code>print</code> </TD><TD> Graphic or space characters
+</TD></TR>
+<TR><TD><code>punct</code> </TD><TD> Punctuation characters
+</TD></TR>
+<TR><TD><code>space</code> </TD><TD> Space, tab, newline, and carriage return
+</TD></TR>
+<TR><TD><code>upper</code> </TD><TD> Uppercase alphabetic characters
+</TD></TR>
+<TR><TD><code>xdigit</code> </TD><TD> Hexadecimal digit characters
+</TD></TR>
+</TABLE>
+
+These stand for the character classes defined in the <code>ctype(3)</code> manual
+page. A particular locale may provide other class names.
+A character class may not be used as an endpoint of a range.
+
+
+<PRE>
+mysql&#62; SELECT 'justalnums' REGEXP '[[:alnum:]]+';       -&#62; 1
+mysql&#62; SELECT '!!' REGEXP '[[:alnum:]]+';               -&#62; 0
+</PRE>
+
+<DT><code>[[:&#60;:]]</code>
+<DD>
+<DT><code>[[:&#62;:]]</code>
+<DD>
+These markers stand for word boundaries. They match the beginning and end of
+words, respectively.  A word is a sequence of word characters that is not
+preceded by or followed by word characters. A word character is an
+alphanumeric character in the <code>alnum</code> class or an underscore
+(<code>_</code>).
+
+
+<PRE>
+mysql&#62; SELECT 'a word a' REGEXP '[[:&#60;:]]word[[:&#62;:]]';   -&#62; 1
+mysql&#62; SELECT 'a xword a' REGEXP '[[:&#60;:]]word[[:&#62;:]]';  -&#62; 0
+</PRE>
+
+</DL>
+
+<P>
+To use a literal instance of a special character in a regular expression,
+precede it by two backslash (\) characters. The MySQL parser
+interprets one of the backslashes, and the regular expression library
+interprets the other. For example, to match the string <code>1+2</code> that
+contains the special <code>+</code> character, only the last of the following
+regular expressions is the correct one:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT '1+2' REGEXP '1+2';                       -&#62; 0
+mysql&#62; SELECT '1+2' REGEXP '1\+2';                      -&#62; 0
+mysql&#62; SELECT '1+2' REGEXP '1\\+2';                     -&#62; 1
+</PRE>
+
+<P><HR><P>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_Environment_variables.html">previous</A>, <A HREF="manual_GPL_license.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+ </BODY>
+ </HTML>

@@ -1,0 +1,60 @@
+print " hello world\n";
+copy
+server: vi x.pl (ENTER)
+i
+paste (mouse right button)
+esc (keyboard esc key)
+:wq (ENTER)
+
+http://mail.mis.fotech.edu.tw/~cp
+
+
+s961506101
+passwdprint " hello world\n";
+copy
+server: vi x.pl (ENTER)
+i
+paste (mouse right button)
+esc (keyboard esc key)
+:wq (ENTER)
+
+http://mail.mis.fotech.edu.tw/~cp
+
+
+s961506101
+passwd?å²制?整?¸å¢å
+        2.15 ?¸值ç¬?
+2.2 字串
+
+
+chapter 2: 純量資料 scalar data
+
+2.1 數值
+	2.11 所有數值的內部格式都相同
+	2.12 浮點字面值
+	2.13 整數字面值
+	2.14 非十進制的整數字面值
+	2.15 數值算符
+2.2 字串
+	2.21 單引號
+	2.22 雙引號
+	2.23 字串算符
+	2.24 數值和字串間的自動轉換
+2.4 純量變數
+	2.41 慎選變數名稱
+	2.42 純量的賦值運算
+	2.43 二元賦值算符
+
+---- 重點整理 ----
+	前言: 使用 print 來練習本章節的東西
+	2.00 說明 print 中使用 , "\t"  "\n" 所產生不同的效果, print 1, "\t",  2;
+	2.1 何謂數值, 何謂整數, 何謂字串,
+	2.12 floating number: 1.25 -6.5e24
+	2.13 integer: 255 -40 10_890 
+	2.14 print 033, 0xff, 0b11
+	2.15 print 1+1, 10/3; + - * / ** %
+
+	2.21 " explain, ' donot explain
+	2.23 . x print 1x3;
+
+	2.4 += -= *= /= .=

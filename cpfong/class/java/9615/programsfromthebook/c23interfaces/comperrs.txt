@@ -1,0 +1,4 @@
+F:\DOUGS\books\Java\Java4\programs\interfaces\InterfaceTest.java:31: addActionListener(java.awt.event.ActionListener) in javax.swing.AbstractButton cannot be applied to (InterfaceTest)
+        button.addActionListener(this);
+              ^
+1 error

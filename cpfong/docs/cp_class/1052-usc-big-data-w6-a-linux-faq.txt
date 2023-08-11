@@ -1,0 +1,7 @@
+Q: why linux
+A: stable  and easy to set it up for blog
+
+Q: how to connect
+A: ssh
+
+Q:

@@ -1,0 +1,20 @@
+.cshrc
+LANG
+
+tmux mutiple windows
+
+show current directory in csh
+--
+prompt %/
+
+install package apache24
+
+vi /usr/local/etc/apache24
+
+/usr/local/etc/rc.d/apache24 stop
+/usr/local/etc/rc.d/apache24 start
+
+/usr/local/www/apache24/data
+chown -R www:www data 
+
+vi index.html

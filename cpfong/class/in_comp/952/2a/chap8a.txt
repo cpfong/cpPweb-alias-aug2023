@@ -1,0 +1,16 @@
+第八章 使用應用軟體
+
+使用開放程式碼的軟體: 例如使用 openoffice 來取代微軟的 office
+http://www.openoffice.org 上可以下載不同作業系統下的 open office
+
+MS office 包括了: Word, Excel, PowerPoint, Access
+其中較常用到的是 Word, Excel, Point 分別代表文書處理, 試算表, 簡報
+
+Word 學習要點:
+輸入和編輯,  格式化文件 (字型, 樣式, 大小 ...)
+
+Excel 試算表學習要點:
+輸入資料, 資料型態, 欄, 列, 如何輸入資料後加以應用,
+
+PowerPoint 簡報軟體學習要點:
+由範例來製作簡報

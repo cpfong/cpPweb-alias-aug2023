@@ -1,0 +1,122 @@
+heuristic functions:
+p32 typical 20 steps you can finish, branching 2,3,4 and avg is 3
+3^20=3.5x10^9
+不走回頭
+
+p33
+h1 是較簡單版, start state: 錯了多少個 tier h1=8 (因為所有的都錯了, 預估至少 move 8 次可到 goal)
+h2 使用 city block dist 棋盤式的, 1 到 goal 要二次, 以 2 為例要三次, (把水平和垂直的加起來) = 18
+
+p34
+quality of heuristic: effective branching factor: start 到 goal 總共 expanding 多少個 nodes
+expanding only once every time 則 h 為最佳
+
+p16 使用較大的 h 則會有較佳的結果
+
+p23 每次都 expand 一個 node 而已, 則會 looping , 可以再加一個小的值來離開這種 lock
+在 search 中途 memory 用光了, 則可以使用 memory bounding 的方式 
+保持 memory 使用量在一定的狀況, 不要用光, 所以在 seraching 時保留必要的, 不要用完
+有時要把一些不必要的 drop out, (ex: 丟了三個時要把 best path 記起, 以便下次要回頭時
+可以很快的找到由這個開始即可, 當然可以由頭開始, 但會慢些)
+
+p25 memory 至少要記住
+
+SMA*
+p26 memory 只能存 3 個 nodes 而已, fig 第三個 B 先丟, 但要記住你丟的是 15, fig 4 的 18 
+比 15 差, 所以把 h 設成無限大把它丟了, fig 5 的 24 是一個 goal 但比 15 高, 所以不是最佳
+的 solution, fig 6 
+
+如 opt 在第 4 層, 你只能存 3 個則沒有機會找到 optimal node
+
+p28
+沒有一個固定的 algorithms, 要把你的 algorithm 一直有改進最後找到最佳的 solution
+
+p30
+hill climbing
+
+p33
+
+----------------
+prolog
+structures
+
+functor_name(obj1,obj2,obj3) ex date(13,jan,1984)
+obj1 can be a recursive structure
+
+event(leeds,date(23,mar,1995),music_festival)
+event(leeds,date(X,mar,1995....
+
+attends(evnet(Place,Day,Type),Person):-likes(Person,Type),nearby(person,Place,Day).
+我家附近的 event 我會參加, 
+structure reunification 和一相同, functor 要相同
+
+Lists
+[pam, jane, john, ann]
+長度可以變化, not fixed, 最 dynamic 的 data structure
+分成二部份 head, tail (第一為 head) pam 為 head, tail 為一個 list [jan,john,ann]
+可以是 empty [], nonempty [head,[]]
+
+.(Head, Tail) fuctor 為 . 二個 arguments 為 Head Tail
+.(pam, [jane,john,ann]) ==> .(pam,.(jan,[john,ann]))
+
+fact 和 functor 的結構是相同的
+parent(tom,mary)
+
+rules
+:- 為 functor 其它為 head tail
+
+所有 prolog 皆可表為 structure
+
+sturcture 中可以有 stucture
+
+p50 list 中可以有 list
+[pam,12,3.1,x,[ann,jan],'Henry Ford']
+
+p51
+node 為 functor .
+.(pam, .(jan,[])) 即為 [pam, jan] 
+
+p52 
+大多使用 list  []
+likes(mary, [running,climbling,skiing]).
+?-likes(Person,Hobbies).
+
+變數可以和任何東西 unification
+
+?-likes(mary, .(Head, Tail)).
+
+p52
+.(Head, Tail)  (H,T)
+Head = running
+
+p54
+bar operator 或 bar notation
+[a|b,c] --> [Head|Tail] 
+bar 是要把 head 取出
+
+
+print_list([]).
+print_list([Head|Tail]):-    	--> same as .(Head,Tail) 這是 structure 的寫法
+	nl,			--> new line
+	write(Head),		--> 寫 Head 
+	print_list(Tail).
+
+---
+print_list([a,b,c,d,e]).
+--> print_list([]) fail!
+--> print_list([Head|Tail]) 所以 Head=a Tail=[b,c,d,e]
+印出 a 
+後會 print b, c, d
+
+[e]
+print_list(Tail) print_list([]) 和前面的 print_list([]) unification 成功
+
+反過來印 e,d,c,b,a
+reverse_list([]).
+reverse_list([LastOne]) :- write(LastOne).
+reverse_list([Head|Tail]) :- reverse_list(Tail),nl,write(Head).
+
+
+
+p56
+比較二個 list 是否相同

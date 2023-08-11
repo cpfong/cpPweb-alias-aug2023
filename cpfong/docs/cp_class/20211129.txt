@@ -1,0 +1,33 @@
+import tejapi # must
+import cptej # cp's secret code
+
+
+tsmc_data = tejapi.get('TRAIL/TAPRCD',
+        coid='2330',
+        mdate={'gte':'2020-01-01', 'lte':'2020-12-29'},
+        opts={'columns':['mdate','open_d','high_d','low_d','close_d']},
+        chinese_column_name=True,
+)
+
+file = './tsmc.csv'
+tsmc_data.to_csv(file, index=True)
+
+# convert csv into jason
+
+import tejapi # must
+import cptej # cp's secret code
+import csv,json
+
+c_file = './tsmc.csv'
+j_file = './tsmc.json'
+
+data={} #i am hash data structure
+
+with open (c_file) as c_handler:
+ cr = csv.DictReader(c_handler)
+ for rows in cr:
+  id = rows['index']
+  data[id]=rows
+
+with open (j_file, 'w') as j_handler:
+ j_handler.write(json.dumps(data, indent=4))

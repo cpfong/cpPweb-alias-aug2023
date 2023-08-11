@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html" charset="utf-8">
+
+<html>
+<head>
+<script>
+ function cpfunc() {
+  var tID=document.gotourl.deviceID.value;
+  var url="http://webduino.io/device/" + tID;
+  location.href=url;
+  return true;
+ }
+</script>
+</head>
+
+<body>
+測試設備是否上線.  注意:要出現Axyz: OK 字眼才算成功
+<br><br>
+<div id="cpfunc"></div>
+<form name="gotourl"> 
+  輸入 webduino 設備ID ( 註:大小寫英文混合字母) 
+  <input type="text" name="deviceID"><br>
+<!-- debug 
+  <input type="button" onclick="location.href='http://www.ifong.org'" value="G">
+-->
+  <input type="button" onclick="cpfunc();" value="按我驗証">
+</form> 
+</body>
+
+</html>

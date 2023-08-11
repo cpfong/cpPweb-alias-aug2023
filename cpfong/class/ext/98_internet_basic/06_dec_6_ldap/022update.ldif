@@ -1,0 +1,9 @@
+## update22.ldif
+
+## del Gerald mail attribute
+# before 
+# cpfong> ldapsearch -x -b "dc=plainjoe,dc=org" "dc=Ger*"
+dn: cn=Gerald W. Carter,ou=people,dc=plainjoe,dc=org
+changetype: modify
+delete: mail
+mail: gcarter@valinux.com

@@ -1,0 +1,24 @@
+Compaq-> gpg -h |grep gen
+
+gpg --gen-key --> take a long time (forget about this)
+use pgp to generate pub/sec key then import to pgp
+
+gpg --import ~/.pgp/pubring.pkr
+gpg --import ~/.pgp/secring.skr
+
+gpg --list-keys
+gpg --delete-keys cp@hiedoc.fjtc.edu.tw
+
+gpg --edit-key cp@MCI.idv.tw
+Command>
+
+HiEdoc-> gpg --list-keys
+/home/cpfong/.gnupg/pubring.gpg
+-------------------------------
+pub  1024R/8F8F4B4B 2003-01-12 cpfong
+
+HiEdoc-> gpg --export cpfong > pub_key.bin
+HiEdoc-> ls -l pub_key.bin 
+-rw-r--r--  1 cpfong  wheel  304  1 12 13:08 pub_key.bin
+
+HiEdoc-> gpg -a --export cpfong > pub_key.ascii

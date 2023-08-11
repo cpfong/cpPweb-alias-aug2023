@@ -1,0 +1,978 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>java 入門</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<!--
+<h1 align="center"><font color="#008080" size="3"
+face="標楷體">Written By William after Nelson reviewed</font></h1>
+
+<p align="center"><font color="#FF0000" size="3" face="標楷體">(1999/10/29
+updated)</font></p>
+
+<p align="center"><font color="#FF0000" size="3" face="標楷體">Special
+Thanks to Nelson Yeh(Sun Certified Java Programmer)</font></p>
+-->
+
+<hr>
+
+<h1 align="center"><font face="標楷體">java 入門</font></h1>
+
+<ol type="A" start="1">
+    <li><p align="left"><font color="#000000" size="4"
+        face="標楷體"><strong><b>java簡介</b></strong></font></p>
+        <ol>
+            <li><p align="left"><a href="#wathisjava"><font
+                size="4" face="標楷體"><b>什麼是java</b></font></a></p>
+            </li>
+            <li><p align="left"><a href="#javakind"><font
+                size="4" face="標楷體"><strong>java的種類</strong></font></a></p>
+            </li>
+            <li><p align="left"><a href="#whoneedjava"><font
+                size="4" face="標楷體"><strong>誰可以學java</strong></font></a></p>
+            </li>
+        </ol>
+    </li>
+    <li><p align="left"><font size="4" face="標楷體"><strong>java程式撰寫環境的設定</strong></font></p>
+        <ol>
+            <li><p align="left"><a href="#jdk"><font size="4"
+                face="標楷體"><strong>jdk環境設定</strong></font></a></p>
+            </li>
+            <li><p align="left"><a href="#howtoExeApplet"><font
+                size="4" face="標楷體"><strong>如何執行Applet</strong></font></a></p>
+            </li>
+            <li><p align="left"><a href="#bible"><font size="4"
+                face="標楷體"><strong>參考資料(Bible)</strong></font></a></p>
+            </li>
+            <li><p align="left"><font size="4" face="標楷體"><strong>其它</strong></font></p>
+            </li>
+        </ol>
+    </li>
+</ol>
+
+<ol type="A" start="1">
+    <li value="3"><p align="left"><font size="4" face="標楷體"><strong>java基本觀念</strong></font></p>
+    </li>
+</ol>
+
+<blockquote>
+    <ol>
+        <li><p align="left"><a href="#class"><font size="4"
+            face="標楷體"><strong>類別(class)</strong></font></a></p>
+        </li>
+        <li><p align="left"><a href="#object"><font size="4"
+            face="標楷體"><strong>物件</strong></font></a></p>
+        </li>
+        <li><p align="left"><a href="#datatype"><font size="4"
+            face="標楷體"><strong>資料型態(data photo
+            type)</strong></font></a></p>
+        </li>
+    </ol>
+</blockquote>
+
+<blockquote>
+    <ol type="1" start="3">
+        <li><p align="left"><a href="#operate"><font size="4"
+            face="標楷體"><strong>運算子(operator)</strong></font></a></p>
+        </li>
+        <li><p align="left"><a href="#package"><font size="4"
+            face="標楷體"><strong>程式庫(package)</strong></font></a></p>
+        </li>
+        <li><p align="left"><a href="#overwrite"><font size="4"
+            face="標楷體"><strong>overwrite</strong></font></a></p>
+        </li>
+        <li><p align="left"><a href="#thread"><font size="4"
+            face="標楷體"><strong>多褚線MutiThread</strong></font></a></p>
+        </li>
+        <li><p align="left"><a href="#this"><font size="4"
+            face="標楷體"><strong>this</strong></font></a></p>
+        </li>
+        <li><p align="left"><a href="#appletFlowChart"><font
+            size="4" face="標楷體"><strong>Applet程式執行流程</strong></font></a></p>
+        </li>
+        <li><p align="left"><a href="#Interface"><font size="4"
+            face="標楷體"><strong>介面(interface)</strong></font></a></p>
+        </li>
+        <li><p align="left"><a href="#extends"><font size="4"
+            face="標楷體"><strong>繼承(extends)</strong></font></a></p>
+        </li>
+        <li><p align="left"><a href="whatsjar.html"><font
+            size="4" face="標楷體"><strong>what is .jar file</strong></font></a></p>
+        </li>
+    </ol>
+</blockquote>
+
+<ol type="A" start="3">
+    <li value="4"><p align="left"><font size="4" face="標楷體"><strong>java程式範例</strong></font></p>
+        <ol>
+            <li><p align="left"><a href="#class_sample1"><font
+                size="4" face="標楷體"><strong>如何寫一個類別(class)程式</strong></font></a></p>
+            </li>
+            <li><p align="left"><a href="#InstanceSample"><font
+                size="4" face="標楷體"><strong>類別(class)要有Instance?</strong></font></a></p>
+            </li>
+            <li><p align="left"><a href="#datatypes"><font
+                size="4" face="標楷體"><strong>資料型態也可以是一種類別(class)</strong></font></a></p>
+            </li>
+            <li><p align="left"><a href="#InterfaceSample"><font
+                size="4" face="標楷體"><strong>如何寫一個介面(interface)</strong></font></a></p>
+            </li>
+            <li><p align="left"><a href="#InterfaceApp"><font
+                size="4" face="標楷體"><strong>如何實作(implements)介面</strong></font></a></p>
+            </li>
+            <li><p align="left"><a href="#extendsSample"><font
+                size="4" face="標楷體"><strong>如何繼承一個類別與多個介面</strong></font></a></p>
+            </li>
+        </ol>
+    </li>
+</ol>
+
+<p>　</p>
+
+<hr>
+
+<p><font color="#000000" size="5" face="標楷體"><strong><b>java簡介</b></strong></font></p>
+
+<p><a name="wathisjava"></a><font color="#FF0000" size="4"
+face="標楷體">什麼是java：</font></p>
+
+<ul>
+    <li><font face="標楷體">java 是</font><a
+        href="http://java.sun.com"><font face="標楷體"> sun(昇陽)</font></a><font
+        face="標楷體"> 所大力推銷的一種</font><a
+        href="#platform"><font face="標楷體">跨平台</font></a><font
+        face="標楷體">語言(技術)，其優異的特性<strong>
+        (Write Once And Run Anywhere)</strong>，使得程式設計師不必再改寫程式碼，即可在各平台執行java程式。</font></li>
+</ul>
+
+<p><a name="platform"></a><font color="#FF0000" size="4"
+face="標楷體">跨平台： </font></p>
+
+<ul>
+    <li><font color="#000000" face="標楷體">指不受各硬體(i386、Mac、Alpha)，作業系統(Windows、Solaris、Sco-unix、Linux、FreeBSD)的任何限制
+        (write once and run any where)</font></li>
+</ul>
+
+<p><a name="javakind"></a><font color="#FF0000" size="4"
+face="標楷體">java種類：</font></p>
+
+<ul>
+    <li><font face="標楷體">java基本上是屬於<strong>半編譯</strong>(compiler)、<strong>半直譯</strong>(interpreter)的方式執行，當java的compiler將程式<strong>編譯</strong>成所謂的bytecode，傳送到各</font><a
+        href="#platform"><font face="標楷體">平台</font></a><font
+        face="標楷體">時，只要平台有支援</font><a
+        href="#jvm"><font face="標楷體">java virtual machine</font></a><font
+        face="標楷體">，即可將bytecode<strong>直譯</strong>成真正可執行的程式。</font></li>
+    <li><font face="標楷體">java程式分成<strong>一般java</strong>
+        ，及可透過browser而執行的 <strong>Applet</strong>，兩種程式的寫法並不大相同。</font></li>
+</ul>
+
+<p><a name="whoneedjava"></a><font color="#FF0000" size="4"
+face="標楷體">誰可以學java：</font></p>
+
+<ul>
+    <li><font face="標楷體">java強迫程式設計者用完整的物件導向的方式去寫程式，因此必須要有物件導向的基本慨念才行。</font></li>
+    <li><font face="標楷體">但亦可以一邊學java，一邊學物件導向，同步學習效果更</font><font
+        size="3" face="標楷體">好。</font></li>
+    <li><font face="標楷體">java其實很好學。</font></li>
+</ul>
+
+<p><a name="jvm"></a><font color="#FF0000" size="4"
+face="標楷體">java virtual machine：</font></p>
+
+<ul>
+    <li><font color="#000000" face="標楷體">可使java程式能在各平台執行的介面</font><font
+        face="標楷體">，</font><font color="#000000"
+        face="標楷體">將java程式轉成真正的可執行碼。</font></li>
+</ul>
+
+<p><a name="jdkpackage"></a><font color="#FF0000" size="4"
+face="標楷體">jdk (java development tool kit)：</font></p>
+
+<ul>
+    <li><font color="#000000" size="3" face="標楷體">目前java程式發展的環境最新版為jdk1。2。2</font><font
+        size="3" face="標楷體">。</font></li>
+    <li><font color="#000000" size="3" face="標楷體">千萬記得還要下載</font><font
+        size="3" face="標楷體">jdk的Documentation。</font></li>
+</ul>
+
+<hr>
+
+<p><font color="#000000" size="5" face="標楷體"><strong>java基本觀念</strong></font></p>
+
+<p><a name="class"></a><font color="#FF0000" size="4"
+face="標楷體">類別(class)：</font></p>
+
+<ul>
+    <li><font color="#000000" size="3" face="標楷體">在物件導向程式設計中，類別是很重要的觀念。</font></li>
+    <li><font color="#000000" size="3" face="標楷體">類別可以繼承類別。</font></li>
+    <li><font color="#000000" size="3" face="標楷體">類別必須</font><font
+        size="3" face="標楷體">宣告成</font><a
+        href="#object"><font size="3" face="標楷體">物件</font></a><font
+        color="#000000" size="3" face="標楷體">才能使用(執行)，除非</font><font
+        size="3" face="標楷體">此類別的型態是</font><a
+        href="#static"><font size="3" face="標楷體">static</font></a><font
+        size="3" face="標楷體">。</font></li>
+    <li><a href="#class_sample1"><font size="4" face="標楷體">sample</font></a></li>
+</ul>
+
+<p><a name="object"></a><font color="#FF0000" face="標楷體">物件(Object)：</font></p>
+
+<ul>
+    <li><font face="標楷體">一般來說類別必須要宣告物件(Object)，才能使用(執行)。</font></li>
+    <li><a href="#InstanceSample"><font size="4" face="標楷體">sample</font></a></li>
+</ul>
+
+<p><a name="static"></a><font color="#FF0000" size="4"
+face="標楷體">static：</font></p>
+
+<ul>
+    <li><font face="標楷體">如果類別要能直接使用(執行)，必須加上
+        </font><font color="#FF0000" face="標楷體">static</font><font
+        face="標楷體"> 修飾。</font></li>
+    <li><a href="#InstanceSample" name="sample"><font size="4"
+        face="標楷體">sample</font></a></li>
+</ul>
+
+<p><a name="datatype"></a><font color="#FF0000" size="4"
+face="標楷體">資料型態(data type)：</font></p>
+
+<ol>
+    <li><font size="4" face="標楷體">java的資料型態大致與C語言相同，用法也相同，如：</font></li>
+</ol>
+
+<pre><font size="4" face="標楷體"><strong>     boolean、char、byte、short、int、float、double</strong></font></pre>
+
+<ol>
+    <li value="2"><font face="標楷體">特別的是java有一種類別本身可以當資料型態使用，又可以執行額外的功能，如：</font></li>
+</ol>
+
+<pre><font size="4" face="標楷體"><strong>     Integer，Float，Double，Long，Short，String</strong></font></pre>
+
+<ol>
+    <li value="3"><pre><a href="#datatypes"><font size="4"
+face="標楷體">sample</font></a></pre>
+    </li>
+</ol>
+
+<p>　</p>
+
+<p><a name="operate"></a><font color="#FF0000" size="4"
+face="標楷體">運算子：</font></p>
+
+<ul>
+    <li><font size="4" face="標楷體">java的運算子與C語言差不多</font></li>
+</ul>
+
+<pre><font size="4" face="標楷體"><strong>     +，-，*，/，~，!，&gt;&gt;，&lt;&lt;，!=，==，&lt;&lt;=，&gt;&gt;=，&gt;&gt;&gt;，&lt;&lt;&lt;， 。。。</strong></font></pre>
+
+<ul>
+    <li><font size="4" face="標楷體">其中有比較特殊的</font></li>
+</ul>
+
+<pre><font size="4" face="標楷體">     &gt;&gt;&gt; 為無號數的位移</font></pre>
+
+<pre><font size="4" face="標楷體"><strong>     ex：</strong></font><font
+color="#008080" size="4" face="標楷體"><strong>最左邊的1為負號</strong></font></pre>
+
+<pre><font size="4" face="標楷體"><strong>        1000100&gt;&gt;&gt;2  =&gt;   0000001</strong></font></pre>
+
+<pre><font size="4" face="標楷體"><strong>        1000100&gt;&gt;2   =&gt;   0010001</strong></font></pre>
+
+<p><a name="Interface"></a><font color="#FF0000" size="4"
+face="標楷體">介面(interface)：</font></p>
+
+<ul>
+    <li><font size="4" face="標楷體">為了達到多重繼承的目的，且改善</font><a
+        href="#mutiplesuccess"><font size="4" face="標楷體">c++多重繼承的缺點</font></a><font
+        size="4" face="標楷體">，因此java有了介面(interface)的產生</font></li>
+    <li><font size="4" face="標楷體">Interface class的</font><a
+        href="#InterfaceSample"><font size="4" face="標楷體">sample</font></a></li>
+    <li><a href="#InterfaceApp"><font size="4" face="標楷體">Interface
+        的應用</font></a></li>
+</ul>
+
+<p><a name="extends"></a><font color="#FF0000" size="4"
+face="標楷體">繼承(extends)：</font></p>
+
+<ul>
+    <li><font size="4" face="標楷體">java的所有類別一定會繼承(extends)一個(且唯一)的類別：但可(</font><a
+        href="#Interface"><font size="4" face="標楷體">implemnets</font></a><font
+        size="4" face="標楷體"> 很多介面)</font></li>
+    <li><a href="#extendsSample"><font size="4" face="標楷體">sample</font></a></li>
+</ul>
+
+<p><a name="package"></a><font color="#FF0000" size="4"
+face="標楷體">package：</font></p>
+
+<ul>
+    <li><font color="#000000" size="4" face="標楷體">package的使用，以
+        &quot;import xxx;&quot;表示。</font></li>
+</ul>
+
+<p><font color="#000000" size="4" face="標楷體">假設我們的
+CLASSPATH=c：\jdk1.2\jre\lib\classes.zip：</font></p>
+
+<p><font color="#000000" size="4" face="標楷體">則 import
+java.applet.*; 表示程式可以使用 <strong>C：\jdk1.2\jre\lib\java\applet</strong>
+下所有的class(類別)。聰明的看官可以猜出classes.zip的內容其實是將java\applet\*.class的檔案壓縮成classes.zip。現在壓縮的檔案格式改為jar格式。</font></p>
+
+<p><font color="#000000" size="4" face="標楷體">讀者有興趣可以打開classes.zip來看看</font></p>
+
+<p><a name="overwrite"></a><font color="#FF0000" size="4"
+face="標楷體">overwrite：</font></p>
+
+<ul>
+    <li><font size="4" face="標楷體">當class A繼承class B時，
+        A 可以再寫個與B一模一樣的副程式，將之蓋過去，這與c要有virtual
+        修飾，才能over-write不大相同。</font></li>
+</ul>
+
+<p><a name="system_out"></a><font color="#FF0000" size="4"
+face="標楷體">結果印出來：</font></p>
+
+<ul>
+    <li><font size="4" face="標楷體">如果是Applet程式，必須選則看java
+        console 才能看到印出來的結果。</font></li>
+</ul>
+
+<p><a name="thread"></a><font color="#FF0000" size="4"
+face="標楷體">Thread：</font></p>
+
+<ul>
+    <li><font color="#000000" size="4" face="標楷體">凡是類別繼承
+        Applet，</font><font face="標楷體">Thread</font> <font
+        color="#000000" size="4" face="標楷體">或是
+        implemnets Runnable ， 則代表此類別是可多褚線(multi
+        thread)執行的。</font></li>
+</ul>
+
+<p><a name="this"></a><font color="#FF0000" size="4"
+face="標楷體">this：</font></p>
+
+<ul>
+    <li><font size="4" face="標楷體">代表自己這個類別class。</font></li>
+</ul>
+
+<p><a name="appletFlowChart"></a><font color="#FF0000" size="4"
+face="標楷體">Applet程式執行流程：</font></p>
+
+<ul>
+    <li><font size="4" face="標楷體">當這個程式(類別)是繼承
+        Applet 時，一定要寫init()， run()， start() ，
+        stop()等副程式。</font></li>
+</ul>
+
+<ol type="1" start="1">
+    <li><font size="4" face="標楷體">此程式(類別)開始執行時，會先跑
+        init() 這個副程式。</font></li>
+    <li><font size="4" face="標楷體">init()執行完，如果程式有呼叫到
+        this.start()的時候，則系統會自動執行副程式run()。</font></li>
+    <li><font size="4" face="標楷體">當 run()執行完，即會接著執行stop()這個副程式</font></li>
+    <li><font size="4" face="標楷體">請參考</font><a
+        href="#extendsSample"><font size="4" face="標楷體">sample</font></a><font
+        size="4" face="標楷體"> ， 以下為sample程式的解說：</font><ol
+        type="a" start="1">
+            <li><font size="4" face="標楷體">當類別開始執行時，會先跑
+                init()，當執行完init()後，</font></li>
+            <li><font size="4" face="標楷體">如果有mouse的button被按下，則程式的副程式
+                mousePressed()自動執行， 產生新的thread</font></li>
+            <li><font size="4" face="標楷體">當新的thread執行start()時，</font></li>
+            <li><font size="4" face="標楷體">run()即跟著自動執行，將counter加一，</font><a
+                href="#system_out"><font size="4"
+                face="標楷體">將結果印出來</font></a><font
+                size="4" face="標楷體">。</font></li>
+            <li><font size="4" face="標楷體">當 run()執行完，即會執行stop()
+                =&gt;此thread執行完畢。</font></li>
+            <li><font size="4" face="標楷體">回到第b項。</font></li>
+        </ol>
+    </li>
+</ol>
+
+<p><a name="mutiplesuccess"></a><font color="#FF0000" size="4"
+face="標楷體">c++多重繼承的缺點：</font></p>
+
+<ul>
+    <li><font size="4" face="標楷體">假如A繼承B與C，但B，C皆有Hello這個副程式對於A來說必須特別指定B或C這個類別的Hello，才能執行成功。</font></li>
+</ul>
+
+<hr>
+
+<p><font size="5" face="標楷體"><strong>java 程式範例</strong></font></p>
+
+<p>　</p>
+
+<p><a name="class_sample1"></a><font color="#FF0000" size="4"
+face="標楷體"><strong>如何寫一個類別(class)程式：</strong></font></p>
+
+<pre><font size="3" face="標楷體">//======================= ClassSample1.java  =====================</font></pre>
+
+<pre><font size="3" face="標楷體">	public <strong>class</strong> ClassSample1 extends Object{</font></pre>
+
+<pre><font size="3" face="標楷體">	  public static void Hello(){                </font></pre>
+
+<pre><font color="#FF0000" size="3" face="標楷體">           </font><font
+color="#000000" size="3" face="標楷體"> System.out.println(&quot;hello&quot;);</font><font
+color="#FF0000" size="3" face="標楷體">            </font></pre>
+
+<pre><font size="3" face="標楷體">	  }</font></pre>
+
+<pre><font size="3" face="標楷體">	}</font></pre>
+
+<pre><font size="3" face="標楷體">//================================================================</font></pre>
+
+<pre><font color="#008000" size="3" face="標楷體">程式解說：</font></pre>
+
+<pre><font size="3" face="標楷體"><strong>第1列 </strong></font></pre>
+
+<pre><font size="3" face="標楷體">   public為保留字，表示可以公開給別的類別使用</font></pre>
+
+<pre><font size="3" face="標楷體">   class為保留字，表示此為類別型態</font></pre>
+
+<pre><font size="3" face="標楷體">   <strong>ClassSample1</strong> 為類別名字，必須與檔名(<strong>ClassSample1.java</strong>)<strong>相同</strong>(注意大小寫) </font></pre>
+
+<pre><font size="3" face="標楷體">   extends 為保留字表示繼承</font></pre>
+
+<pre><font size="3" face="標楷體">   Object 為父類別</font></pre>
+
+<pre><font size="3" face="標楷體"><strong>第2列</strong></font></pre>
+
+<pre><font size="3" face="標楷體">   static為保留字</font></pre>
+
+<pre><font size="3" face="標楷體">   void 表示副程式無回傳(return)值</font></pre>
+
+<pre><font size="3" face="標楷體">   Hello為副程式的名字</font></pre>
+
+<pre><font size="3" face="標楷體"><strong>第3列</strong></font></pre>
+
+<pre><font color="#FF0000" size="3" face="標楷體">  </font><font
+color="#000000" size="3" face="標楷體"> System.out.println(&quot;hello&quot;);</font><font
+color="#FF0000" size="3" face="標楷體">     </font><font
+size="3" face="標楷體">將字串hello印出來 (System 是一靜態(static)類別型態)</font></pre>
+
+<pre><font size="3" face="標楷體"><strong>ps：  </strong></font></pre>
+
+<ul>
+    <li><pre><font size="3" face="標楷體">ClassSample1.java不能直接執行，但可以compile</font></pre>
+    </li>
+    <li><pre><font size="3" face="標楷體">如果要能執行請到</font><a
+href="#InstanceSample"><font size="3" face="標楷體">這兒</font></a></pre>
+    </li>
+    <li><pre><a href="#jdk"><font size="3" face="標楷體"><strong>如何compiler這個程式</strong></font></a></pre>
+    </li>
+</ul>
+
+<p>　</p>
+
+<p><a name="InstanceSample"></a><font color="#FF0000" size="4"
+face="標楷體"><strong>類別(class)要有Instance?</strong></font></p>
+
+<ul>
+    <li><font size="3" face="標楷體">檔案</font><a
+        href="#class_sample1"><font size="3" face="標楷體"><strong>ClassSample1.java</strong></font></a><font
+        size="3" face="標楷體">必須與<strong>InstanceSample.java</strong>一起compile</font></li>
+</ul>
+
+<pre><font size="3" face="標楷體">//========================== <strong>InstanceSample.java</strong> ===========================</font></pre>
+
+<pre><font size="3" face="標楷體">  import ClassSample1;    </font></pre>
+
+<pre><font size="3" face="標楷體">  public class InstanceSample{</font></pre>
+
+<pre><font size="3" face="標楷體">    static ClassSample1  myClass;     </font></pre>
+
+<pre><font size="3" face="標楷體">    public static void main(String args[]){</font></pre>
+
+<pre><font size="3" face="標楷體">      myClass.Hello();</font></pre>
+
+<pre><font size="3" face="標楷體">      ClassSample1.Hello();</font></pre>
+
+<pre><font size="3" face="標楷體">    }</font></pre>
+
+<pre><font size="3" face="標楷體">  }</font></pre>
+
+<pre><font size="3" face="標楷體">//========================================================================== </font></pre>
+
+<pre><font color="#008000" size="3" face="標楷體">程式解說：</font></pre>
+
+<p>　</p>
+
+<pre><font size="3" face="標楷體"><strong>第1列</strong> <strong>Import</strong>為保留字， ClassSample1 表示此程式會用到類別ClassSample1</font></pre>
+
+<pre><font size="3" face="標楷體"><strong>第3列</strong> myClass 為 ClassSample1的一個 <strong>Instance</strong></font></pre>
+
+<pre><font size="3" face="標楷體"><strong>第4列</strong> public static void main(String args[]) =&gt; 若要使成式能執行必須要有此function</font></pre>
+
+<pre><font size="3" face="標楷體"><strong>第5列</strong> myClass.Hello(); 此 Instance 執行Hello()這個副程式</font></pre>
+
+<pre><font size="3" face="標楷體"><strong>第6列</strong> </font></pre>
+
+<pre><font size="3" face="標楷體">      ClassSample1.Hello(); 因 Hello()這個副程式 用 <strong>static</strong> 修飾 ，</font></pre>
+
+<pre><font size="3" face="標楷體">      所以類別ClassSample1可以直接執行Hello();</font></pre>
+
+<pre><font size="3" face="標楷體"><strong>ps：  </strong></font></pre>
+
+<ul>
+    <li><pre><font size="3" face="標楷體">InstanceSample.java可以執行。</font></pre>
+    </li>
+    <li><pre><font size="3" face="標楷體">myClass中的Hello() 與 ClassSample1的Hello() <strong>共用一個記憶體。</strong></font></pre>
+    </li>
+</ul>
+
+<p>　</p>
+
+<p>　</p>
+
+<p><a name="datatypes"></a><font color="#FF0000" size="4"
+face="標楷體"><strong>資料型態也可以是一種類別(class)：</strong></font></p>
+
+<pre><font size="3" face="標楷體">//=================== DataTypes.java ====================== </font></pre>
+
+<pre><font size="3" face="標楷體"> public class DataTypes {</font></pre>
+
+<pre><font size="3" face="標楷體">    static int i;</font></pre>
+
+<pre><font size="3" face="標楷體">    static float j;</font></pre>
+
+<pre><font size="3" face="標楷體">    static int k;</font></pre>
+
+<pre><font size="3" face="標楷體">    public static void main(String args[]){</font></pre>
+
+<pre><font size="3" face="標楷體">      int l;</font></pre>
+
+<pre><font size="3" face="標楷體">      Integer a=new Integer(1000);</font></pre>
+
+<pre><font size="3" face="標楷體">      i=a.intValue();</font></pre>
+
+<pre><font size="3" face="標楷體">      j=a.floatValue();   </font></pre>
+
+<pre><font size="3" face="標楷體">      k=a.parseInt(&quot;2000&quot;);</font></pre>
+
+<pre><font size="3" face="標楷體">      l=Integer.parseInt(&quot;3000&quot;);</font></pre>
+
+<p>　</p>
+
+<pre><font size="3" face="標楷體">      System.out.println(a.toString());</font></pre>
+
+<pre><font size="3" face="標楷體">      System.out.println(i);</font></pre>
+
+<pre><font size="3" face="標楷體">      System.out.println(j);</font></pre>
+
+<pre><font size="3" face="標楷體">      System.out.println(k);</font></pre>
+
+<pre><font size="3" face="標楷體">      System.out.println(l);</font></pre>
+
+<pre><font size="3" face="標楷體">    }</font></pre>
+
+<pre><font size="3" face="標楷體">  }</font></pre>
+
+<pre><font size="3" face="標楷體">//=========================================================</font></pre>
+
+<pre><font color="#008000" size="3" face="標楷體"><strong>程式解說：</strong></font></pre>
+
+<pre><font size="3" face="標楷體"><strong>第2，3，4列 </strong></font></pre>
+
+<pre><font size="3" face="標楷體">        i ， j ， k 分別屬於 int ， float ， int 的資料型態 ， 且必須要用 </font><a
+href="#static"><font size="3" face="標楷體">static</font></a><font
+size="3" face="標楷體"> 修飾，</font></pre>
+
+<pre><font size="3" face="標楷體">        因為main這個function是static ，而 static 的function 所用的data type必須是static</font></pre>
+
+<pre><font size="3" face="標楷體"><strong>第6列 </strong></font></pre>
+
+<pre><font size="3" face="標楷體">       l 的資料型態屬於int ， 因為是在main中，所以不用static 修飾 ，即是 static 變數</font></pre>
+
+<pre><font size="3" face="標楷體"><strong>第7列  </strong></font></pre>
+
+<pre><font size="3" face="標楷體">       a 的資料型態屬於Integer， Integer是個類別，且給予a一個1000的初值</font></pre>
+
+<pre><font size="3" face="標楷體"><strong>第8，9列 </strong></font></pre>
+
+<pre><font size="3" face="標楷體">       a 因為是Integer這個類別宣告出來的物件 ， 所以a 具有Integer的功能 </font></pre>
+
+<pre><font size="3" face="標楷體">       因此 a 將1000的數值轉換成適當的data type 給 i ， j </font></pre>
+
+<pre><font size="3" face="標楷體">       而這些轉換的function 即是 Integer 這個 class 的function</font></pre>
+
+<pre><font size="3" face="標楷體"><strong>第10列 </strong></font></pre>
+
+<pre><font size="3" face="標楷體">       a 將 2000 這個字串轉成 int 給 k 用</font></pre>
+
+<pre><font size="3" face="標楷體"><strong>第11列 </strong></font></pre>
+
+<pre><font size="3" face="標楷體">       Integer是 static 的類別， 所以 可以直接使用 Integer.parseInt()這個function ，</font></pre>
+
+<pre><font size="3" face="標楷體"><strong>第12列 </strong></font></pre>
+
+<pre><font size="3" face="標楷體">       將 i ， j ， k ， l 印出來。 System 亦是一static class，所以可以直接使用 。</font></pre>
+
+<pre><font size="5" face="標楷體"><strong>ps</strong></font></pre>
+
+<pre><font size="4" face="標楷體">  此程式可執行</font></pre>
+
+<p>　</p>
+
+<p><a name="InterfaceSample"></a><font color="#FF0000" size="4"
+face="標楷體"><strong>如何寫一個介面(interface)：</strong></font></p>
+
+<pre><font size="3" face="標楷體">//=========================== InterfaceSample.java ===============================</font></pre>
+
+<pre><font size="3" face="標楷體">  public <strong>interface</strong> InterfaceSample{</font></pre>
+
+<pre><font size="3" face="標楷體">    public <strong>abstract</strong> void Hello();</font></pre>
+
+<pre><font size="3" face="標楷體">  }</font></pre>
+
+<pre><font size="3" face="標楷體">//================================================================================</font></pre>
+
+<p><font size="3" face="標楷體"><strong>第1列</strong></font></p>
+
+<pre><font size="3" face="標楷體">     interface 為保留字</font></pre>
+
+<p><font size="3" face="標楷體"><strong>第2列</strong></font></p>
+
+<pre><font size="3" face="標楷體">    abstract 修飾 Hello 表現其為虛擬副程式 </font></pre>
+
+<p><font size="3" face="標楷體"><strong>ps：</strong></font></p>
+
+<ul>
+    <li><pre><font size="4" face="標楷體">此程式可compile，但不可執行</font></pre>
+    </li>
+    <li><pre><font size="4" face="標楷體">副程式必須要用 abstract 修飾 </font></pre>
+    </li>
+</ul>
+
+<p>　</p>
+
+<p><a name="InterfaceApp"></a><font color="#FF0000" size="4"
+face="標楷體"><strong>如何實作(implements)介面：</strong></font></p>
+
+<ul>
+    <li><font size="3" face="標楷體">檔案</font><a
+        href="#InterfaceSample"><font size="3" face="標楷體"><strong>InterfaceSample.java</strong></font></a><font
+        size="3" face="標楷體">必須與<strong>InterfaceApp.java</strong>一起compile</font></li>
+</ul>
+
+<pre><font size="3" face="標楷體">//======================== <strong>InterfaceApp.java</strong> =========================  </font></pre>
+
+<pre><font size="3" face="標楷體">  public class <strong>InterfaceApp</strong> extends Object <strong>implements</strong> <strong>InterfaceSample</strong>{   </font></pre>
+
+<pre><font size="3" face="標楷體">    public static void main(String args[]){</font></pre>
+
+<pre><font size="3" face="標楷體">      InterfaceApp a=<strong>new </strong>InterfaceApp();</font></pre>
+
+<pre><font size="3" face="標楷體">      a.Hello();</font></pre>
+
+<pre><font size="3" face="標楷體">    }</font></pre>
+
+<pre><font size="3" face="標楷體">    public void Hello(){</font></pre>
+
+<pre><font size="3" face="標楷體">      System.out.println(&quot;hello!&quot;);</font></pre>
+
+<pre><font size="3" face="標楷體">    }</font></pre>
+
+<pre><font size="3" face="標楷體">  }</font></pre>
+
+<pre><font size="3" face="標楷體">//====================================================================</font></pre>
+
+<p><font size="3" face="標楷體"><strong>第1列</strong></font></p>
+
+<pre><font size="3" face="標楷體">     InterfaceApp是一個類別 ， 它繼承</font><font
+color="#FF0000" size="3" face="標楷體">類別</font><font
+size="3" face="標楷體"> Object 及 </font><font
+color="#FF0000" size="3" face="標楷體">介面</font><font
+size="3" face="標楷體"> InterfaceSample</font></pre>
+
+<pre><font size="3" face="標楷體">     implemnets是保留字</font></pre>
+
+<p><font size="3" face="標楷體"><strong>第3列</strong></font></p>
+
+<pre><font size="3" face="標楷體">    宣告類別InterfaceApp的instance =&gt; a</font></pre>
+
+<p><font size="3" face="標楷體"><strong>第6列 ~ 第8列</strong></font></p>
+
+<pre><font size="3" face="標楷體">      public void Hello() 為 InterfaceSample.java 的 abstract 副程式</font></pre>
+
+<pre><font size="3" face="標楷體">      因類別InterfaceApp繼承InterfaceSample這個介面，</font><font
+color="#FF0000" size="3" face="標楷體">所以必須要重寫Hello()這個副程式，</font></pre>
+
+<pre><font size="3" face="標楷體">      否則會有error。</font></pre>
+
+<p><font color="#000000" size="3" face="標楷體"><strong>ps。</strong></font></p>
+
+<ul>
+    <li><pre><font size="4" face="標楷體">此程式可執行</font></pre>
+    </li>
+</ul>
+
+<p>　</p>
+
+<p><a name="extendsSample"></a><font color="#FF0000" size="4"
+face="標楷體"><strong>如何繼承一個類別與多個介面：</strong></font></p>
+
+<pre><font color="#000000" size="3" face="標楷體">//======================== ExtendsSample.java ======================</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">  import java.awt.event.*;</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">  import java.applet.*;</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">  public class ExtendsSample <strong>extends</strong> <strong>Applet</strong> <strong>implements</strong> <strong>Runnable,MouseListener,</strong> <strong>MouseMotionListener</strong>{</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">    private int counter;</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">    <strong>synchronized</strong> private void count(){</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">      counter++;	</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">      System.out.println(counter);</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">    };</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">    public void <strong>init</strong>() {</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">      counter=0;</font></pre>
+
+<pre><font color="#0000FF" size="3" face="標楷體"><strong>      addMouseListener(this);</strong></font></pre>
+
+<pre><font color="#0000FF" size="3" face="標楷體"><strong>      addMouseMotionListener(this);</strong></font></pre>
+
+<pre><font color="#0000FF" size="3" face="標楷體"><strong>    </strong></font><font
+color="#000000" size="3" face="標楷體">}</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">    public void  <strong>start</strong>(){</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">    }</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">    public void <strong>run</strong>(){</font></pre>
+
+<pre><font color="#0000FF" size="3" face="標楷體"><strong>       count();</strong></font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">   }</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">    public void <strong>mouseDragged</strong>(MouseEvent e) {</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">    }</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">    public void <strong>mouseMoved</strong>(MouseEvent e) {</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">    }</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">    public void <strong>mousePressed</strong>(MouseEvent e) {</font></pre>
+
+<pre><font color="#FF0000" size="3" face="標楷體"><strong>  </strong></font><font
+color="#0000FF" size="3" face="標楷體"><strong>    Thread seed=new Thread(this);</strong></font></pre>
+
+<pre><font color="#0000FF" size="3" face="標楷體"><strong>      seed.start();</strong></font></pre>
+
+<pre><font color="#0000FF" size="3" face="標楷體">   </font><font
+color="#000000" size="3" face="標楷體"> }</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">    public void <strong>mouseReleased</strong>(MouseEvent e) {</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">    }</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">    public void <strong>mouseEntered</strong>(MouseEvent e) {</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">    }</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">    public void <strong>mouseExited</strong>(MouseEvent e) {</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">    }</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">    public void <strong>mouseClicked</strong>(MouseEvent e) {  </font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">    }</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">    public void <strong>stop</strong>(){</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">    }</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">}</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">//==================================================================</font></pre>
+
+<p><font color="#008080" size="4" face="標楷體"><strong>程式解說：</strong></font></p>
+
+<p><font color="#000000" size="3" face="標楷體"><strong>第1，2列：</strong></font></p>
+
+<pre><font color="#000000" size="3" face="標楷體">       import 是保留字， 表示程式將參考到java.awt.event 及 java.applet.* 這些</font><a
+href="#package"><font size="4" face="標楷體"><strong>package</strong></font></a></pre>
+
+<p><font color="#000000" size="3" face="標楷體"><strong>第3列：</strong></font></p>
+
+<pre><font color="#000000" size="3" face="標楷體">      ExtendsSample繼承 Applet這個 class ， 也 implemnets  Runnable,MouseListener, MouseMotionListener</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">     這3個介面。</font></pre>
+
+<p><font color="#000000" size="3" face="標楷體"><strong>第5列：</strong></font></p>
+
+<pre><font color="#000000" size="3" face="標楷體">    副程式 count 用 private 及 synchronized 修飾 ， 代表外界不能直接使用這個副程式(只有內部的副程式可</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">    以使用 count ) 及 同一個時間只能執行一個 count副程式(其它必須等到 count 執行完才能接著執行 count)</font></pre>
+
+<p><font color="#000000" size="3" face="標楷體"><strong>第11，12列：
+</strong></font></p>
+
+<pre><font color="#000000" size="3" face="標楷體">    addMouseListener(this);</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">    addMouseMotionListener(this);</font></pre>
+
+<pre><font color="#000000" size="3" face="標楷體">    代表mouse所產生的事件，會讓程式知道並執行特定的副程式，如 mounsePressed()  </font><font
+color="#0000FF" size="3" face="標楷體">( 程式必須 implemnet </font></pre>
+
+<pre><font color="#0000FF" size="3" face="標楷體">    MouseListener, MouseMotionListener 這兩個介面 )</font></pre>
+
+<p><font color="#000000" size="3" face="標楷體"><strong>第24，25列：
+</strong></font></p>
+
+<ul>
+    <li><a href="#thread"><font face="標楷體">thead</font></a></li>
+    <li><a href="#this"><font face="標楷體">this</font></a></li>
+</ul>
+
+<p><font color="#000000" size="3" face="標楷體"><strong>其它副程式：</strong></font></p>
+
+<pre><font color="#000000" size="3" face="標楷體">   因繼承3個介面 ， 所以必須要重寫原來這3個介面所定義的副程式。</font></pre>
+
+<p><font color="#000000" size="3" face="標楷體"><strong>ps。</strong></font></p>
+
+<ul>
+    <li><font color="#000000" size="3" face="標楷體"><strong>此程式為Applet
+        ， 可compile，但要透過html格式才能執行</strong></font></li>
+    <li><font color="#000000" size="3" face="標楷體"><strong>html
+        檔名為 </strong></font><a href="#extendsSample"><font
+        size="3" face="標楷體"><strong>ExtendsSample.html</strong></font></a></li>
+    <li><a href="#howtoExeApplet"><font size="3" face="標楷體"><strong>如何執行
+        Applet</strong></font><font color="#000000" size="3"
+        face="標楷體"><strong> </strong></font></a></li>
+    <li><a href="#threadFlowChart"><font size="3"
+        face="標楷體"><strong>程式執行流程</strong></font></a></li>
+</ul>
+
+<p>　</p>
+
+<p><a name="htmlSample"></a><font color="#FF0000" size="4"
+face="標楷體"><strong>ExtendsSample.html：</strong></font></p>
+
+<p><font size="3" face="標楷體">//===============
+ExtendsSample.html ===========================</font></p>
+
+<pre><font size="3" face="標楷體">&lt;html&gt;</font></pre>
+
+<pre><font size="3" face="標楷體">&lt;body&gt;</font></pre>
+
+<pre><font size="3" face="標楷體">&lt;applet width=&quot;50&quot; height=&quot;30&quot; code=&quot;ExtendsSample.class&quot; codebase=&quot;.&quot;&gt;</font></pre>
+
+<pre><font size="3" face="標楷體">&lt;/applet&gt;</font></pre>
+
+<pre><font size="3" face="標楷體">&lt;body&gt;</font></pre>
+
+<pre><font size="3" face="標楷體">&lt;/html&gt;</font></pre>
+
+<pre><font size="3" face="標楷體">//=======================================================================</font></pre>
+
+<hr>
+
+<p><font size="5" face="標楷體"><strong>java程式撰寫環境的設定</strong></font></p>
+
+<p><a name="jdk"></a><font color="#FF0000" size="4"
+face="標楷體"><strong>JDK設定步驟：</strong></font></p>
+
+<ol>
+    <li><font color="#000000" size="4" face="標楷體">java程式的compiler，tools，package甚至是source
+        code都包含在jdk這個套件中，</font><a
+        href="#jdkpackage"><font size="4" face="標楷體">jdk</font></a><font
+        color="#000000" size="4" face="標楷體">可到</font><a
+        href="http://java.sun.com"><font size="4"
+        face="標楷體">sun</font></a><font color="#000000"
+        size="4" face="標楷體">取得，</font><font
+        color="#000000" size="3" face="標楷體">各平台都有jdk的套件，請依需要選擇然後安裝。</font></li>
+    <li><font color="#000000" size="3" face="標楷體">拿到jdk解開後，會安裝在一個目錄下
+        如：windows下 c：\jdk1.1 ; 或 unix 下/usr/local/java</font></li>
+    <li><font color="#000000" size="3" face="標楷體">在作業系統下增加JDK路徑，及classpath的環境變數：</font></li>
+</ol>
+
+<pre><font color="#FF0000" size="4" face="標楷體"><strong>      windows：</strong></font></pre>
+
+<pre><font color="#000000" size="4" face="標楷體"><strong>      ================ AUTOEXEC.BAT ==============</strong></font></pre>
+
+<pre><font color="#000000" size="4" face="標楷體"><strong>      PATH=%PATH%;C：\JDK1.2\BIN</strong></font></pre>
+
+<pre><font color="#000000" size="4" face="標楷體"><strong>      SET CLASSPATH = C：\JDK1.2\JRE\LIB;  </strong></font><font
+color="#FF0000" size="4" face="標楷體"><strong>&lt;== 若為jdk1.2則不須加上此行</strong></font></pre>
+
+<pre><font color="#000000" size="4" face="標楷體"><strong>      ============================================    </strong></font></pre>
+
+<pre><font color="#0000FF" size="4" face="標楷體"><strong>      unix：(bash or sh)</strong></font></pre>
+
+<pre><font color="#000000" size="4" face="標楷體"><strong>      ================ .profile ==================</strong></font></pre>
+
+<pre><font color="#000000" size="4" face="標楷體"><strong>      PATH=$PATH：/usr/local/java/bin</strong></font></pre>
+
+<pre><font color="#000000" size="4" face="標楷體"><strong>      CLASSPATH=/usr/local/java/jre/lib：  </strong></font><font
+color="#FF0000" size="4" face="標楷體"><strong>&lt;== 若為jdk1.2則不須加上此行</strong></font></pre>
+
+<pre><font color="#000000" size="4" face="標楷體"><strong>      export PATH</strong></font></pre>
+
+<pre><font color="#000000" size="4" face="標楷體"><strong>      export CLASSPATH</strong></font></pre>
+
+<pre><font color="#000000" size="4" face="標楷體"><strong>      ============================================</strong></font></pre>
+
+<ol>
+    <li value="4"><font color="#000000" size="3" face="標楷體">當寫好程式
+        InstanceSample.java ， 必須要將程式編譯(compile)</font></li>
+</ol>
+
+<pre><font color="#FF0000" size="4" face="標楷體"><strong>      windows：  </strong></font></pre>
+
+<pre><font color="#000000" size="4" face="標楷體"><strong>      c：\jdk1.2&gt;javac InstanceSample.java</strong></font></pre>
+
+<pre><font color="#0000FF" size="4" face="標楷體"><strong>      unix：</strong></font></pre>
+
+<pre><font color="#000000" size="4" face="標楷體"><strong>      # javac InstanceSample.java</strong></font></pre>
+
+<ol>
+    <li value="5"><font color="#000000" size="3" face="標楷體">程式編譯後，會產生
+        ClassSample1.class 的bytecode，
+        如果要執行，可打</font></li>
+</ol>
+
+<pre><font color="#FF0000" size="4" face="標楷體"><strong>      windows：  </strong></font></pre>
+
+<pre><font color="#000000" size="4" face="標楷體"><strong>      c：\&gt;java InstanceSample</strong></font></pre>
+
+<pre><font color="#0000FF" size="4" face="標楷體"><strong>      unix：</strong></font></pre>
+
+<pre><font color="#000000" size="4" face="標楷體"><strong>      # java InstanceSample</strong></font></pre>
+
+<p><a name="howtoExeApplet"></a><font color="#FF0000" size="4"
+face="標楷體"><strong>如何執行Applet：</strong></font></p>
+
+<pre><font size="4" face="標楷體">     假設Applet程式放在 </font><a
+href="#htmlSample"><font size="4" face="標楷體">ExtendsSample.html</font></a><font
+size="4" face="標楷體">中</font></pre>
+
+<pre><font size="4" face="標楷體"><strong>     c：\&gt;appletviewer ExtendsSample.html</strong></font></pre>
+
+<p><a name="bible"></a><font color="#FF0000" size="4"
+face="標楷體"><strong>Bible：</strong></font></p>
+
+<pre><font size="4" face="標楷體"><strong>     寫程式最重要的是參考資料，因此jdk內的package用法必須到 </strong></font><a
+href="http://java.sun.com"><font size="4" face="標楷體"><strong>Sun </strong></font></a></pre>
+
+<pre><font size="4" face="標楷體"><strong>     下載jdk的document(java api)，才能知道如何使用 </strong></font></pre>
+
+<pre><font size="4" face="標楷體"><strong>     %%%</strong></font><font
+color="#FF0000" size="4" face="標楷體"><em><strong> </strong></em></font><font
+color="#FF0000" size="5" face="標楷體"><em><strong>very important</strong></em></font><font
+color="#FF0000" size="4" face="標楷體"><em><strong> </strong></em></font><font
+size="4" face="標楷體"><strong>%%%</strong></font></pre>
+
+<hr>
+</body>
+</html>

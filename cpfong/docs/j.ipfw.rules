@@ -1,0 +1,1 @@
+ipfw -q add 20000 allow ip from any to any

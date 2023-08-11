@@ -1,0 +1,70 @@
+option subnet-mask 255.255.255.0;
+option routers 192.168.1.254;
+filename "pxelinux.0";
+
+ddns-update-style none;
+
+option domain-name "no.where";
+option broadcast-address 192.168.1.255;
+option domain-name-servers 192.168.1.2,168.95.1.1;
+server-name "DHCPserver";
+server-identifier 192.168.1.2;
+
+default-lease-time 21600;			# 6 hours
+max-lease-time 86400;				# 1 day
+
+subnet 192.168.1.0 netmask 255.255.255.0{
+  filename "pxelinux.0";
+  next-server 192.168.1.2;
+
+  pool {					# pool for those hosts unknown 
+	default-lease-time 3600;		# 1 hours
+	max-lease-time 5400; 			# 1.5 hour
+	range 192.168.1.240 192.168.1.250;	# 10 ip only
+	allow unknown-clients;
+  }
+  pool {					# default time for tsc know hosts
+	default-lease-time 32400;		# 9 hours
+	max-lease-time 86400;			# 1 day
+	range 192.168.1.20 192.168.1.239;
+	deny unknown-clients;
+  }
+
+  group{
+	option domain-name "staff.comp.2f";	# staff's computer using default 9hr/1day
+	host jhk-comp-2f	{fixed-address 192.168.1.121; hardware ethernet 00:23:54:33:21:22;}
+	host joyce-comp-2f	{fixed-address 192.168.1.122; hardware ethernet 00:0F:FE:41:38:ED;}
+	host tien-comp-2f	{fixed-address 192.168.1.123; hardware ethernet 00:23:54:33:23:3C;}
+	host mchun-comp-2f	{fixed-address 192.168.1.124; hardware ethernet 00:0F:FE:45:B6:E7;}
+  }
+
+  group{
+	default-lease-time 7200;		# 2 hours
+	max-lease-time 10800;			# 3 day
+	option domain-name "note.book.2f";	# church notebook
+	host number-4		{fixed-address 192.168.1.141; hardware ethernet 00:17:31:C7:82:32;}
+	host number-5		{fixed-address 192.168.1.142; hardware ethernet 00:1F:C6:71:45:D5;}
+	host epc-1		{fixed-address 192.168.1.143; hardware ethernet 00:22:15:48:56:E2;}
+  }
+	
+  group{					# 5F computer room computers
+	default-lease-time 10800;		# 3 hours
+	max-lease-time 14400 ;			# 4 hours
+	option domain-name "comp.room.5f";
+
+	host cr-5f-01		{fixed-address 192.168.1.151; hardware ethernet 00:C0:A8:F5:7B:96;}
+	host cr-5f-02		{fixed-address 192.168.1.152; hardware ethernet 00:02:A5:D8:6E:A6;}
+	host cr-5f-03		{fixed-address 192.168.1.153; hardware ethernet 00:0D:60:30:E4:2B;}
+	host cr-5f-04		{fixed-address 192.168.1.154; hardware ethernet 00:13:72:B0:81:48;}
+#	host cr-5f-05		{fixed-address 192.168.1.155; hardware ethernet ;} # out of order
+	host cr-5f-06		{fixed-address 192.168.1.156; hardware ethernet 00:0D:60:31:28:72;}
+	host cr-5f-07		{fixed-address 192.168.1.157; hardware ethernet 00:0D:60:40:B2:B2;}
+	host cr-5f-08		{fixed-address 192.168.1.158; hardware ethernet 00:50:8D:47:A6:0C;}
+#	host cr-5f-09		{fixed-address 192.168.1.159; hardware ethernet ;} # no one by this name
+	host cr-5f-10		{fixed-address 192.168.1.160; hardware ethernet 00:0D:60:30:D4:F4;}
+	host cr-5f-11		{fixed-address 192.168.1.161; hardware ethernet 00:50:8D:47:A3:56;}
+	host cr-5f-12		{fixed-address 192.168.1.162; hardware ethernet 00:50:8D:47:A4:AA;}
+	host cr-5f-13		{fixed-address 192.168.1.163; hardware ethernet 00:10:DC:E7:09:03;}
+	host cr-5f-14		{fixed-address 192.168.1.164; hardware ethernet 00:02:55:0B:98:AC;}
+  }
+}

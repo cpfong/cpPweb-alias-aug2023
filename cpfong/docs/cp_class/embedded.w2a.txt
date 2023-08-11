@@ -1,0 +1,139 @@
+vi foo.txt
+--
+
+ -- in and out :q!
+ -- cmd mode vs insert mode
+ -- cursor movement hjkl
+ -- i : insert mode
+ -- a : append mode
+ -- :q!		no write and quit
+ -- :wq!	write quit 
+ -- x		cmd mode to remove one character
+ -- 5x		remove 5 characters
+ -- dd		delete one line
+ -- 2dd		delete two lines
+ -- dw		delete one word
+ -- y		yank
+ -- yw		yank a word
+ -- 2yy		yank 2 lines
+ -- p		paste
+ -- $		to end
+ -- 0		to front
+ -- /		search then n to next
+ -- u		command mode undo
+
+ -- modify something and save
+ -- esc		insert mode --> cmd mode
+
+
+echo
+
+env variable
+--
+echo $SHELL
+echo $HOME
+
+vi ~/.bashrc
+PS1="hello-> "
+:wq!
+source ~/.bashrc
+
+mouse copy paste
+mouse left drag (copy)
+mouse right click (paste)
+
+mkdir		make a directory
+rmdir		remove a directory, cannot remove empty dir, use rm -fr to remove a non empty dir
+cd		change directory
+rm		remove a file
+rm -fr		force to remove whole directory
+pwd		show currrent directory
+cd ..		move up directory
+cd ~		cd to HOME directory just like cd
+
+change bash system prompt
+source ~/.bashrc
+
+ssh s3121@21.33.59.152
+
+pkg search sudo		# search for database
+pkg install -y sudo
+vi /usr/local/etc/sudoers
+/ search wheel
+#%wheel ALL=(ALL) ALL # orig, remove 1st #
+%wheel ALL=(ALL) ALL
+
+pkg info | grep sudo	# search for package you are already installed
+remove a user
+rmuser -y john
+ls /home		# check users
+
+login as regular user
+how to become root	# use sudo
+sudo su			# type user password to enter
+# exit			# exit root, note: root prompt is # user prompt $
+
+note: in config file # means comment, ignore it
+
+scp in mobaxTerm
+
+homework 2: create 3 users 
+--
+1. due 2020.09.30 24:00
+2. requirement
+ 2a: 2018-1.txt 2018-2.txt
+ group_id, ip
+ 18101, 21.33.59.152
+
+ 2b.
+ cpfong account exists
+
+ 2c. 
+ two user have been created
+
+ 2d. 
+ group wheel
+ login ok and has supervisor privilege
+
+--ref
+Full name: john chen
+Uid (Leave empty for default):
+Login group [zyz]: wheel
+Login group is wheel. Invite zyz into other groups? []:
+Login class [default]:
+Shell (sh csh tcsh bash rbash git-shell nologin) [sh]: csh
+Home directory [/home/zyz]:
+Home directory permissions (Leave empty for default):
+Use password-based authentication? [yes]:
+Use an empty password? (yes/no) [no]:
+Use a random password? (yes/no) [no]:
+Enter password:
+Enter password again:
+Lock out the account after creation? [no]:
+Username   : zyz
+Password   : *****
+Full Name  : john chen
+Uid        : 1004
+Class      :
+Groups     : wheel
+Home       : /home/zyz
+Home Mode  :
+Shell      : /bin/csh
+Locked     : no
+OK? (yes/no):
+
+how to check cpfong in right permission ?
+--
+cpfong@iZbp1a9uy8axsb1zc2i2lqZ:/root % cd ~cpfong
+cpfong@iZbp1a9uy8axsb1zc2i2lqZ:~ % pwd
+/usr/home/cpfong
+cpfong@iZbp1a9uy8axsb1zc2i2lqZ:~ % ls -la
+total 48
+-rw-r--r--  1 cpfong  cpfong  1055 Sep 23 12:15 .cshrc # Wrong!! group is cpfong not wheel
+
+
+# cd /root
+# ls -la
+total 88
+drwxr-xr-x   6 root  wheel   512  9月 24 20:35 .
+drwxr-xr-x  19 root  wheel  1024  8月  5 17:08 .. # correct!!

@@ -1,0 +1,199 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>
+			Setting Up a Solaris DHCP Client
+		</title>
+		<meta name="description" content="This is Rich Teer's page about setting up a Solaris DHCP client">
+		<meta name="keywords" content="rite, group, web, hosting, consulting, rite online, rite group, rite consulting, rite software, rich teer, kelowna, bc, canada">
+		<meta name="robots" content="Index, Follow">
+		<meta name="generator" content="Hand made with vi on Solaris">
+		<meta name="revisit-after" content="30 days">
+		<meta name="author" content="Rich Teer">
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<link rel="stylesheet" type="text/css" href="styles.css">
+	</head>
+	<body>
+		<table border="0" cellspacing="0" cellpadding="0" width="100%">
+			<tr>
+				<td width="170" bgcolor="#ff0000" height="90"><img src="images/rite_logo-white_trans.gif" width="90" height="90" border="0" alt="Rite logo"></td>
+				<td width="10" rowspan="2"></td>
+				<td valign="top" bgcolor="#ff0000" height="90">
+					<table border="0" cellspacing="0" cellpadding="0" width="100%">
+						<tr>
+							<td bgcolor="#ff0000" class="titlehead">Setting Up a Solaris DHCP Client</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<!-- Start of navigation column -->
+				<td valign="top" class="hnav">
+					<table border="0" cellspacing="0" cellpadding="0" width="100%">
+						<tr valign="top">
+							<td class="htitle"><div>Contents</div></td>
+						</tr>
+						<tr>
+							<td class="htopitem"><div>&nbsp;&nbsp;<a href="#intro">Introduction</a></div></td>
+						</tr>
+						<tr>
+							<td class="hitem"><div>&nbsp;&nbsp;<a href="#setup">Setting up DHCP</a></div></td>
+						</tr>
+						<tr>
+							<td class="hitem"><div>&nbsp;&nbsp;<a href="#unknown">Unknown hostname</a></div></td>
+						</tr>
+						<tr>
+							<td class="hlastitem"><div>&nbsp;&nbsp;<a href="ssp/index.html">About my book</a></div></td>
+						</tr>
+						<tr>
+							<td bgcolor="#cccccc"><img src="images/trans_pixel.gif" width="170" height="4" border="0" alt=""></td>
+						</tr>
+					</table>
+				</td>
+				<!-- End of navigation column -->
+				<!-- Start of content column -->
+				<td class="hnav" valign="top">
+					<h2><a name="intro"></a>Introduction</h2>
+					<p>
+						One of the problems that can arise when trying to use a
+						Solaris box as a DHCP client is that by default, the server
+						is expected to supply a hostname, in addition to all the
+						other stuff (like IP address, DNS servers, etc.).  Most
+						cable modems and home routers don't supply a (usable)
+						hostname, so it gets set to "unknown".  This page describes
+						how to get around that.  (Where this page says "cable modem",
+						"DSL modem" can be substituted.)
+					</p>
+					<p>
+						This page assumes that <tt>le0</tt> is the interface you using
+						for your DHCP connection.  Substitute <tt>hme0</tt> or whatever
+						interface you're actually using in the examples below.
+					</p>
+					<h2><a name="setup"></a>Setting up DHCP</h2>
+					<p>
+						There are two ways of using DHCP:
+						<ul>
+							<li>DHCP has limited control
+							<li>DHCP has full control
+						</ul>
+					<p>
+						The first case may be where you want to use your own
+						<tt>/etc/resolv.conf</tt> and so on, with a minimum
+						of hassle.
+					</p>
+					<p>
+						The second case would be the normal situation,
+						especially if your cable modem provider has a
+						habit of changing DNS name server IP addresses
+						on you (like mine does!), so I'll concentrate on
+						that here.  I have a <a href="dhcp_client">script</a>
+						to automate the first method, should you want to
+						use it.  You'll need to change the <tt>DEFAULT_ADDR</tt>
+						and <tt>INTERFACE</tt> variables as required.
+					</p>
+					<p>
+						The first thing to do is to create an empty <tt>/etc/hostname.le0</tt>,
+						like this:<br>
+						<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;<tt>&gt; /etc/hostname.le0</tt><br>
+						<br>
+						Creating this file ensures that the interface gets plumbed,
+						ready for the DHCP software to do its stuff.
+					</p>
+					<p>
+						Next, you create <TT>/etc/dhcp.le0</TT>.  This
+						file can be empty if you want to accept the defaults,
+						but may also contain one or both of these directives:
+						<ul>
+							<li><tt>wait</tt> <i>time</i>, and
+							<li><tt>primary</tt>
+						</ul>
+					<p>
+						By default, <tt>ifconfig</tt> will wait 30 seconds
+						for the DHCP server to respond (after which time,
+						the boot will continue, while the interface gets
+						configured in the background).  Specifying the <tt>wait</tt>
+						directive tells <tt>ifconfig</tt> not to return until
+						the DHCP has responded.  <i>time</i> can be set to
+						the special value of <tt>forever</tt>, with obvious meaning.
+						I use a <i>time</i> value of 300, which seems to be long
+						enough for my cable provider.
+					</p>
+					<p>
+						The <tt>primary</tt> directive indicates to <tt>ifconfig</tt>
+						that the current interface is the primary one, if you have
+						more than one interface under DHCP control.  If you only
+						have one interface under DHCP control, then it is automatically
+						the primary one, so <tt>primary</tt> is redundant (although
+						it's permissible).
+					</p>
+					<p>
+						With these files in place, subsequent reboots will place
+						<tt>le0</tt> under DHCP control: you're ready to go!
+					</p>
+					<h2><a name="unknown"></a>Unknown hostname</h2>
+					<p>
+						Actually, there's one snag: most (if not all) cable modem
+						DHCP servers don't provide you with a hostname (even if they
+						did, odds are it won't be one you want anyway!).  This wouldn't
+						be a problem, except that the boot scripts (<tt>/etc/init.d/rootusr</tt>
+						in particular) try to be clever, and set your hostname to
+						"unknown" in this case, which is not at all useful!
+					</p>
+					<p>
+						The trick is to change your hostname back to the right one,
+						preferably without changing any of the supplied start-up scripts,
+						which are liable to be being stomped on when you upgrade or
+						install a patch.  You've also got to do it early enough in
+						the boot process, so that <tt>rpcbind</tt>, <tt>sendmail</tt>
+						and friends don't get confused by using the wrong hostname.
+						To solve this problem, put this <a href="set_hostname">little script</a>
+						in to <tt>/etc/init.d/set_hostname</tt>, with a symbolic link
+						to it from <tt>/etc/rc2.d/S70set_hostname</tt>.
+					</p>
+					<p>
+						Starting with Solaris 10, the preceding paragraph can be ignored.
+						Instead, just make sure that the hostname you want to use is in
+						<tt>/etc/nodename</tt>; the contents of that file will then be
+						used to set the hostname.  (Note that it is essential that the
+						hostname you put into <tt>/etc/nodename</tt> is terminated with a
+						carriage return.  Breakage will happen if this is not the case.)
+						Also, from Solaris 8 it is possible
+						to tell the DHCP software not to request a hostname from the
+						DHCP server.  To do this, remove the token 12 from the
+						<tt>PARAM_REQUEST_LIST</tt> line in <tt>/etc/default/dhcpagent</tt>.
+						(<tt>/etc/default/dhcpagent</tt> describes what the default tokens are;
+						12 is the hostname, 3 is the default router, 6 is the DNS server, and so on.)
+					</p>
+					<p>
+						With these modifications in place, reboot, and you'll be using
+						your cable modem in no time!
+					</p>
+					<p>
+						If you've got more than one machine, and you want to access
+						the Internet from all of them, you might also find my
+						<a href="solaris_nat.html">Solaris NAT</A> page useful.
+					</p>
+					<p>
+						If this page has been useful to you, please consider buying
+						a copy of my book, <a href="ssp/index.html">Solaris Systems Programming</a>.
+					</p>
+				</td>
+				<!-- End of content column -->
+			</tr>
+		</table>
+		<!-- Copyright notice footer -->
+		<br>
+		<br>
+		<center>
+			<p class="small">
+				Send any questions or comments to: <a href="mailto:rich.teer@rite-group.com">rich.teer@rite-group.com</a>
+				<br>
+				Copyright &copy; 1997-2005 by Rich Teer
+			</p>
+		</center>
+		<p align="right"
+			<a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-html401" height="31" width="88" border="0" alt="Valid HTML 4.01!"></a>
+		</p>
+	</body>
+</html>

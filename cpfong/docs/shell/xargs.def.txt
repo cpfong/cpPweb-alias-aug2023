@@ -1,0 +1,3 @@
+xargs - build and execute command lines from standard input
+
+xargs (by default) expects the input from stdin, and executes /bin/echo command over the input.

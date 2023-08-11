@@ -1,0 +1,4013 @@
+  <HTML>
+  <HEAD>
+  
+  <TITLE>MySQL Reference Manual for version 5.0.3-alpha - 8  MySQL Client and Utility Programs</TITLE>
+   <style> code {color:purple} tt {color:green} samp {color:navy} pre {color:maroon} </style>
+  </HEAD>
+  <BODY BGCOLOR=silver TEXT=#000000 LINK=#101090 VLINK=#7030B0>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_MySQL_Optimization.html">previous</A>, <A HREF="manual_Language_Structure.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="Client-Side_Scripts" HREF="manual_toc.html#Client-Side_Scripts">8  MySQL Client and Utility Programs</A></H1>
+
+<P>
+There are many different MySQL client programs that connect to the server to
+access databases or perform administrative tasks. Other utilities are
+available as well. These do not communicate with the server but perform
+MySQL-related operations.
+
+</P>
+<P>
+This chapter provides a brief overview of these programs and then a more
+detailed description of each one.  The descriptions indicate how to invoke the
+programs and the options they understand.
+See section <A HREF="manual_Using_MySQL_Programs.html#Using_MySQL_Programs">4  Using MySQL Programs</A> for general information on invoking programs
+and specifying program options.
+
+</P>
+
+
+
+<H2><A NAME="Client-Side_Overview" HREF="manual_toc.html#Client-Side_Overview">8.1  Overview of the Client-Side Scripts and Utilities</A></H2>
+
+<P>
+The following list briefly describes the MySQL client programs and utilities:
+
+</P>
+
+<DL COMPACT>
+
+<DT><code>myisampack</code>
+<DD>
+<A NAME="IDX816"></A>
+A utility that compresses <code>MyISAM</code> tables to produce smaller read-only
+tables.
+See section <A HREF="manual_Client-Side_Scripts.html#myisampack">8.2  <code>myisampack</code>, the MySQL Compressed Read-only Table Generator</A>.
+
+<DT><code>mysql</code>
+<DD>
+<A NAME="IDX817"></A>
+The command-line tool for interactively entering SQL statements or executing
+them from a file in batch mode.
+See section <A HREF="manual_Client-Side_Scripts.html#mysql">8.3  <code>mysql</code>, the Command-Line Tool</A>.
+
+<DT><code>mysqlaccess</code>
+<DD>
+<A NAME="IDX818"></A>
+A script that checks the access privileges for a host, user, and database
+combination.
+
+<DT><code>mysqladmin</code>
+<DD>
+<A NAME="IDX819"></A>
+A client that performs administrative operations, such as creating or
+dropping databases, reloading the grant tables, flushing tables to disk, and
+reopening log files.  <code>mysqladmin</code> can also be used to retrieve version,
+process, and status information from the server.
+See section <A HREF="manual_Client-Side_Scripts.html#mysqladmin">8.4  <code>mysqladmin</code>, Administering a MySQL Server</A>.
+
+<DT><code>mysqlbinlog</code>
+<DD>
+<A NAME="IDX820"></A>
+A utility for reading statements from a binary log. The log of executed
+statements contained in the binary log files can be used to help recover
+from a crash.
+See section <A HREF="manual_Client-Side_Scripts.html#mysqlbinlog">8.5  The <code>mysqlbinlog</code> Binary Log Utility</A>.
+
+<DT><code>mysqlcc</code>
+<DD>
+<A NAME="IDX821"></A>
+A client that provides a graphical interface for interacting with the
+server.
+See section <A HREF="manual_Client-Side_Scripts.html#mysqlcc">8.6  <code>mysqlcc</code>, the MySQL Control Center</A>.
+
+<DT><code>mysqlcheck</code>
+<DD>
+<A NAME="IDX822"></A>
+A table-maintenance client that checks, repairs, analyzes, and optimizes
+tables.
+See section <A HREF="manual_Client-Side_Scripts.html#Using_mysqlcheck">8.7  The <code>mysqlcheck</code> Table Maintenance and Repair Program</A>.
+
+<DT><code>mysqldump</code>
+<DD>
+<A NAME="IDX823"></A>
+A client that dumps a MySQL database into a file as SQL statements or
+as tab-separated text files. Enhanced freeware originally by Igor Romanenko.
+See section <A HREF="manual_Client-Side_Scripts.html#mysqldump">8.8  The <code>mysqldump</code> Database Backup Program</A>.
+
+<DT><code>mysqlhotcopy</code>
+<DD>
+<A NAME="IDX824"></A>
+A utility that quickly makes backups of <code>MyISAM</code> or <code>ISAM</code> tables
+while the server is running.
+See section <A HREF="manual_Client-Side_Scripts.html#mysqlhotcopy">8.9  The <code>mysqlhotcopy</code> Database Backup Program</A>.
+
+<DT><code>mysqlimport</code>
+<DD>
+<A NAME="IDX825"></A>
+A client that imports text files into their respective tables using
+<code>LOAD DATA INFILE</code>.
+See section <A HREF="manual_Client-Side_Scripts.html#mysqlimport">8.10  The <code>mysqlimport</code> Data Import Program</A>.
+
+<DT><code>mysqlshow</code>
+<DD>
+<A NAME="IDX826"></A>
+A client that displays information about databases, tables, columns,
+and indexes.
+See section <A HREF="manual_Client-Side_Scripts.html#mysqlshow">8.11  <code>mysqlshow</code>, Showing Databases, Tables, and Columns</A>.
+
+<DT><code>perror</code>
+<DD>
+<A NAME="IDX827"></A>
+A utility that displays the meaning of system or MySQL error codes.
+See section <A HREF="manual_Client-Side_Scripts.html#perror">8.12  <code>perror</code>, Explaining Error Codes</A>.
+
+<DT><code>replace</code>
+<DD>
+<A NAME="IDX828"></A>
+A utility program that changes strings in place in
+files or on the standard input.
+See section <A HREF="manual_Client-Side_Scripts.html#replace_utility">8.13  The <code>replace</code> String-Replacement Utility</A>.
+
+</DL>
+
+<P>
+Each MySQL program takes many different options. However, every MySQL program
+provides a <code>--help</code> option that you can use to get a full description
+of the program's different options. For example, try <code>mysql --help</code>.
+
+</P>
+<P>
+<A NAME="IDX829"></A>
+
+</P>
+<P>
+MySQL clients that communicate with the server using the
+<code>mysqlclient</code> library use the following environment variables:
+
+</P>
+<P>
+<A NAME="IDX830"></A>
+<A NAME="IDX831"></A>
+<A NAME="IDX832"></A>
+<A NAME="IDX833"></A>
+<A NAME="IDX834"></A>
+<A NAME="IDX835"></A>
+<A NAME="IDX836"></A>
+<A NAME="IDX837"></A>
+
+</P>
+<TABLE BORDER>
+<TR><TD><code>MYSQL_UNIX_PORT</code>
+ </TD><TD> The default Unix socket file; used for connections to <code>localhost</code>
+</TD></TR>
+<TR><TD><code>MYSQL_TCP_PORT</code>
+ </TD><TD> The default port number; used for TCP/IP connections
+</TD></TR>
+<TR><TD><code>MYSQL_PWD</code>
+ </TD><TD> The default password
+</TD></TR>
+<TR><TD><code>MYSQL_DEBUG</code>
+ </TD><TD> Debug trace options when debugging
+</TD></TR>
+<TR><TD><code>TMPDIR</code>
+ </TD><TD> The directory where temporary tables and files are created
+</TD></TR>
+</TABLE>
+
+<P>
+Use of <code>MYSQL_PWD</code> is insecure.
+See section <A HREF="manual_MySQL_Database_Administration.html#Password_security">5.6.6  Keeping Your Password Secure</A>.
+
+</P>
+<P>
+You can override the default option values or values specified in
+environment variables for all standard programs by specifying options in an
+option file or on the command line.
+section <A HREF="manual_Using_MySQL_Programs.html#Program_Options">4.3  Specifying Program Options</A>.
+
+</P>
+
+
+
+<H2><A NAME="myisampack" HREF="manual_toc.html#myisampack">8.2  <code>myisampack</code>, the MySQL Compressed Read-only Table Generator</A></H2>
+
+<P>
+<A NAME="IDX838"></A>
+<A NAME="IDX839"></A>
+<A NAME="IDX840"></A>
+<A NAME="IDX841"></A>
+<A NAME="IDX842"></A>
+
+</P>
+<P>
+The <code>myisampack</code> utility compresses <code>MyISAM</code> tables.
+<code>myisampack</code> works by compressing each column in the table separately.
+Usually, <code>myisampack</code> packs the data file 40%-70%.
+
+</P>
+<P>
+When the table is used later, the information needed to decompress columns
+is read into memory.  This results in much better performance when accessing
+individual records, because you only have to uncompress exactly one record,
+not a much larger disk block as when using Stacker on MS-DOS.
+
+</P>
+<P>
+MySQL uses <code>mmap()</code> when possible to perform memory mapping on
+compressed tables. If <code>mmap()</code> doesn't work, MySQL falls back to
+normal read/write file operations.
+
+</P>
+<P>
+A similar utility, <code>pack_isam</code>, compresses <code>ISAM</code> tables. Because
+<code>ISAM</code> tables are deprecated, this section discusses only
+<code>myisampack</code>, but the general procedures for using <code>myisampack</code>
+are also true for <code>pack_isam</code> unless otherwise specified.
+
+</P>
+<P>
+Please note the following:
+
+</P>
+
+<UL>
+
+<LI>
+
+If the <code>mysqld</code> server was invoked with the
+<code>--skip-external-locking</code> option, it is not a good idea to invoke
+<code>myisampack</code> if the table might be updated by the server during the
+packing process.
+
+<LI>
+
+After packing a table, it becomes read-only. This is generally intended
+(such as when accessing packed tables on a CD). Allowing writes
+to a packed table is on our TODO list, but with low priority.
+
+<LI>
+
+<code>myisampack</code> can pack <code>BLOB</code> or <code>TEXT</code> columns.
+The older <code>pack_isam</code> program for <code>ISAM</code> tables cannot.
+
+</UL>
+
+<P>
+Invoke <code>myisampack</code> like this:
+
+</P>
+
+<PRE>
+shell&#62; myisampack [<var>options</var>] <var>filename</var> ...
+</PRE>
+
+<P>
+Each filename should be the name of an index (<tt>`.MYI'</tt>) file.  If you
+are not in the database directory, you should specify the pathname to the
+file.  It is permissible to omit the <tt>`.MYI'</tt> extension.
+
+</P>
+<P>
+<code>myisampack</code> supports the following options:
+
+</P>
+<DL COMPACT>
+
+<DT><code>--help, -?</code>
+<DD>
+Display a help message and exit.
+
+<DT><code>--backup, -b</code>
+<DD>
+Make a backup of the table data file using the name <tt>`<var>tbl_name</var>.OLD'</tt>.
+
+<DT><code>--debug[=<var>debug_options</var>], -# [<var>debug_options</var>]</code>
+<DD>
+Write a debugging log. The <var>debug_options</var> string often is
+<code>'d:t:o,<var>file_name</var>'</code>.
+
+<DT><code>--force, -f</code>
+<DD>
+Produce a packed table even if it becomes larger than the original or if
+the temporary file from an earlier invocation of <code>myisampack</code> exists.
+(<code>myisampack</code> creates a temporary file named <tt>`<var>tbl_name</var>.TMD'</tt> while
+it compresses the table.  If you kill <code>myisampack</code>, the <tt>`.TMD'</tt>
+file might not be deleted.)  Normally, <code>myisampack</code> exits with an
+error if it finds that <tt>`<var>tbl_name</var>.TMD'</tt> exists.  With <code>--force</code>,
+<code>myisampack</code> packs the table anyway.
+
+<DT><code>--join=<var>big_tbl_name</var>, -j <var>big_tbl_name</var></code>
+<DD>
+Join all tables named on the command line into a single table
+<var>big_tbl_name</var>.  All tables that are to be combined <em>must</em>
+have identical structure (same column names and types, same indexes,
+and so forth).
+
+<DT><code>--packlength=<var>#</var>, -p <var>#</var></code>
+<DD>
+Specify the record length storage size, in bytes.  The value should be 1, 2,
+or 3.  <code>myisampack</code> stores all rows with length pointers of 1, 2, or 3
+bytes.  In most normal cases, <code>myisampack</code> can determine the right length
+value before it begins packing the file, but it may notice during the packing
+process that it could have used a shorter length. In this case,
+<code>myisampack</code> will print a note that the next time you pack the same file,
+you could use a shorter record length.
+
+<DT><code>--silent, -s</code>
+<DD>
+Silent mode.  Write output only when errors occur.
+
+<DT><code>--test, -t</code>
+<DD>
+Don't actually pack the table, just test packing it.
+
+<DT><code>--tmp_dir=<var>path</var>, -T <var>path</var></code>
+<DD>
+Use the named directory as the location in which to write the temporary table.
+
+<DT><code>--verbose, -v</code>
+<DD>
+Verbose mode.  Write information about the progress of the packing operation
+and its result.
+
+<DT><code>--version, -V</code>
+<DD>
+Display version information and exit.
+
+<DT><code>--wait, -w</code>
+<DD>
+Wait and retry if the table is in use.  If the <code>mysqld</code> server was
+invoked with the <code>--skip-external-locking</code> option, it is not a good idea
+to invoke <code>myisampack</code> if the table might be updated by the server during
+the packing process.
+
+</DL>
+
+<P>
+<A NAME="IDX843"></A>
+The following sequence of commands illustrates a typical table compression
+session:
+
+</P>
+
+<PRE>
+shell&#62; ls -l station.*
+-rw-rw-r--   1 monty    my         994128 Apr 17 19:00 station.MYD
+-rw-rw-r--   1 monty    my          53248 Apr 17 19:00 station.MYI
+-rw-rw-r--   1 monty    my           5767 Apr 17 19:00 station.frm
+
+shell&#62; myisamchk -dvv station
+
+MyISAM file:     station
+Isam-version:  2
+Creation time: 1996-03-13 10:08:58
+Recover time:  1997-02-02  3:06:43
+Data records:              1192  Deleted blocks:              0
+Datafile parts:            1192  Deleted data:                0
+Datafile pointer (bytes):     2  Keyfile pointer (bytes):     2
+Max datafile length:   54657023  Max keyfile length:   33554431
+Recordlength:               834
+Record format: Fixed length
+
+table description:
+Key Start Len Index   Type                 Root  Blocksize    Rec/key
+1   2     4   unique  unsigned long        1024       1024          1
+2   32    30  multip. text                10240       1024          1
+
+Field Start Length Type
+1     1     1
+2     2     4
+3     6     4
+4     10    1
+5     11    20
+6     31    1
+7     32    30
+8     62    35
+9     97    35
+10    132   35
+11    167   4
+12    171   16
+13    187   35
+14    222   4
+15    226   16
+16    242   20
+17    262   20
+18    282   20
+19    302   30
+20    332   4
+21    336   4
+22    340   1
+23    341   8
+24    349   8
+25    357   8
+26    365   2
+27    367   2
+28    369   4
+29    373   4
+30    377   1
+31    378   2
+32    380   8
+33    388   4
+34    392   4
+35    396   4
+36    400   4
+37    404   1
+38    405   4
+39    409   4
+40    413   4
+41    417   4
+42    421   4
+43    425   4
+44    429   20
+45    449   30
+46    479   1
+47    480   1
+48    481   79
+49    560   79
+50    639   79
+51    718   79
+52    797   8
+53    805   1
+54    806   1
+55    807   20
+56    827   4
+57    831   4
+
+shell&#62; myisampack station.MYI
+Compressing station.MYI: (1192 records)
+- Calculating statistics
+
+normal:     20  empty-space:   16  empty-zero:     12  empty-fill:  11
+pre-space:   0  end-space:     12  table-lookups:   5  zero:         7
+Original trees:  57  After join: 17
+- Compressing file
+87.14%
+Remember to run myisamchk -rq on compressed tables
+
+shell&#62; ls -l station.*
+-rw-rw-r--   1 monty    my         127874 Apr 17 19:00 station.MYD
+-rw-rw-r--   1 monty    my          55296 Apr 17 19:04 station.MYI
+-rw-rw-r--   1 monty    my           5767 Apr 17 19:00 station.frm
+
+shell&#62; myisamchk -dvv station
+
+MyISAM file:     station
+Isam-version:  2
+Creation time: 1996-03-13 10:08:58
+Recover time:  1997-04-17 19:04:26
+Data records:               1192  Deleted blocks:              0
+Datafile parts:             1192  Deleted data:                0
+Datafile pointer (bytes):      3  Keyfile pointer (bytes):     1
+Max datafile length:    16777215  Max keyfile length:     131071
+Recordlength:                834
+Record format: Compressed
+
+table description:
+Key Start Len Index   Type                 Root  Blocksize    Rec/key
+1   2     4   unique  unsigned long       10240       1024          1
+2   32    30  multip. text                54272       1024          1
+
+Field Start Length Type                         Huff tree  Bits
+1     1     1      constant                             1     0
+2     2     4      zerofill(1)                          2     9
+3     6     4      no zeros, zerofill(1)                2     9
+4     10    1                                           3     9
+5     11    20     table-lookup                         4     0
+6     31    1                                           3     9
+7     32    30     no endspace, not_always              5     9
+8     62    35     no endspace, not_always, no empty    6     9
+9     97    35     no empty                             7     9
+10    132   35     no endspace, not_always, no empty    6     9
+11    167   4      zerofill(1)                          2     9
+12    171   16     no endspace, not_always, no empty    5     9
+13    187   35     no endspace, not_always, no empty    6     9
+14    222   4      zerofill(1)                          2     9
+15    226   16     no endspace, not_always, no empty    5     9
+16    242   20     no endspace, not_always              8     9
+17    262   20     no endspace, no empty                8     9
+18    282   20     no endspace, no empty                5     9
+19    302   30     no endspace, no empty                6     9
+20    332   4      always zero                          2     9
+21    336   4      always zero                          2     9
+22    340   1                                           3     9
+23    341   8      table-lookup                         9     0
+24    349   8      table-lookup                        10     0
+25    357   8      always zero                          2     9
+26    365   2                                           2     9
+27    367   2      no zeros, zerofill(1)                2     9
+28    369   4      no zeros, zerofill(1)                2     9
+29    373   4      table-lookup                        11     0
+30    377   1                                           3     9
+31    378   2      no zeros, zerofill(1)                2     9
+32    380   8      no zeros                             2     9
+33    388   4      always zero                          2     9
+34    392   4      table-lookup                        12     0
+35    396   4      no zeros, zerofill(1)               13     9
+36    400   4      no zeros, zerofill(1)                2     9
+37    404   1                                           2     9
+38    405   4      no zeros                             2     9
+39    409   4      always zero                          2     9
+40    413   4      no zeros                             2     9
+41    417   4      always zero                          2     9
+42    421   4      no zeros                             2     9
+43    425   4      always zero                          2     9
+44    429   20     no empty                             3     9
+45    449   30     no empty                             3     9
+46    479   1                                          14     4
+47    480   1                                          14     4
+48    481   79     no endspace, no empty               15     9
+49    560   79     no empty                             2     9
+50    639   79     no empty                             2     9
+51    718   79     no endspace                         16     9
+52    797   8      no empty                             2     9
+53    805   1                                          17     1
+54    806   1                                           3     9
+55    807   20     no empty                             3     9
+56    827   4      no zeros, zerofill(2)                2     9
+57    831   4      no zeros, zerofill(1)                2     9
+</PRE>
+
+<P>
+<code>myisampack</code> displays the following kinds of information:
+
+</P>
+<DL COMPACT>
+
+<DT><code>normal</code>
+<DD>
+The number of columns for which no extra packing is used.
+
+<DT><code>empty-space</code>
+<DD>
+The number of columns containing
+values that are only spaces; these will occupy one bit.
+
+<DT><code>empty-zero</code>
+<DD>
+The number of columns containing
+values that are only binary zeros; these will occupy one bit.
+
+<DT><code>empty-fill</code>
+<DD>
+The number of integer columns that don't occupy the full byte range of their
+type; these are changed to a smaller type.  For example, a <code>BIGINT</code>
+column (eight bytes) can be stored as a <code>TINYINT</code> column (one byte) if
+all its values are in the range from <code>-128</code> to <code>127</code>.
+
+<DT><code>pre-space</code>
+<DD>
+The number of decimal columns that are stored with leading spaces. In this
+case, each value will contain a count for the number of leading spaces.
+
+<DT><code>end-space</code>
+<DD>
+The number of columns that have a lot of trailing spaces.  In this case, each
+value will contain a count for the number of trailing spaces.
+
+<DT><code>table-lookup</code>
+<DD>
+The column had only a small number of different values, which were
+converted to an <code>ENUM</code> before Huffman compression.
+
+<DT><code>zero</code>
+<DD>
+The number of columns for which all values are zero.
+
+<DT><code>Original trees</code>
+<DD>
+The initial number of Huffman trees.
+
+<DT><code>After join</code>
+<DD>
+The number of distinct Huffman trees left after joining
+trees to save some header space.
+</DL>
+
+<P>
+After a table has been compressed, <code>myisamchk -dvv</code> prints additional
+information about each column:
+
+</P>
+<DL COMPACT>
+
+<DT><code>Type</code>
+<DD>
+The column type. The value may contain any of the following descriptors:
+
+<DL COMPACT>
+
+<DT><code>constant</code>
+<DD>
+All rows have the same value.
+
+<DT><code>no endspace</code>
+<DD>
+Don't store endspace.
+
+<DT><code>no endspace, not_always</code>
+<DD>
+Don't store endspace and don't do endspace compression for all values.
+
+<DT><code>no endspace, no empty</code>
+<DD>
+Don't store endspace. Don't store empty values.
+
+<DT><code>table-lookup</code>
+<DD>
+The column was converted to an <code>ENUM</code>.
+
+<DT><code>zerofill(<var>n</var>)</code>
+<DD>
+The most significant <var>n</var> bytes in the value are always 0 and are not
+stored.
+
+<DT><code>no zeros</code>
+<DD>
+Don't store zeros.
+
+<DT><code>always zero</code>
+<DD>
+Zero values are stored using one bit.
+</DL>
+
+<DT><code>Huff tree</code>
+<DD>
+The number of the Huffman tree associated with the column.
+
+<DT><code>Bits</code>
+<DD>
+The number of bits used in the Huffman tree.
+</DL>
+
+<P>
+After you run <code>myisampack</code>, you must run
+<code>myisamchk</code> to re-create any indexes.  At this time, you
+can also sort the index blocks and create statistics needed for
+the MySQL optimizer to work more efficiently:
+
+</P>
+
+<PRE>
+shell&#62; myisamchk -rq --sort-index --analyze <var>tbl_name</var>.MYI
+</PRE>
+
+<P>
+A similar procedure applies for <code>ISAM</code> tables. After using
+<code>pack_isam</code>, use <code>isamchk</code> to re-create the indexes:
+
+</P>
+
+<PRE>
+shell&#62; isamchk -rq --sort-index --analyze <var>tbl_name</var>.ISM
+</PRE>
+
+<P>
+After you have installed the packed table into the MySQL database directory,
+you should execute <code>mysqladmin flush-tables</code> to force <code>mysqld</code>
+to start using the new table.
+
+</P>
+<P>
+To unpack a packed table, use the <code>--unpack</code> option to <code>myisamchk</code>
+or <code>isamchk</code>.
+
+</P>
+
+
+
+<H2><A NAME="mysql" HREF="manual_toc.html#mysql">8.3  <code>mysql</code>, the Command-Line Tool</A></H2>
+
+<P>
+<A NAME="IDX844"></A>
+<A NAME="IDX845"></A>
+<A NAME="IDX846"></A>
+<A NAME="IDX847"></A>
+<A NAME="IDX848"></A>
+
+</P>
+
+<P>
+<code>mysql</code> is a simple SQL shell (with GNU <code>readline</code> capabilities).
+It supports interactive and non-interactive use. When used interactively,
+query results are presented in an ASCII-table format. When used
+non-interactively (for example, as a filter), the result is presented in
+tab-separated format.  The output format can be changed using command-line
+options.
+
+</P>
+<P>
+If you have problems due to insufficient memory for large result sets, use the
+<code>--quick</code> option.  This forces <code>mysql</code> to retrieve results from
+the server a row at a time rather than retrieving the entire result set
+and buffering it in memory before displaying it.  This is done by using
+<code>mysql_use_result()</code> rather than <code>mysql_store_result()</code> to
+retrieve the result set.
+
+</P>
+<P>
+Using <code>mysql</code> is very easy. Invoke it from the prompt of your command
+interpreter as follows:
+
+</P>
+
+<PRE>
+shell&#62; mysql <var>db_name</var>
+</PRE>
+
+<P>
+Or:
+
+</P>
+
+<PRE>
+shell&#62; mysql --user=<var>user_name</var> --password=<var>your_password</var> <var>db_name</var>
+</PRE>
+
+<P>
+Then type an SQL statement, end it with <samp>`;'</samp>, <code>\g</code>, or <code>\G</code>
+and press Enter.
+
+</P>
+<P>
+You can run a script simply like this:
+
+</P>
+
+<PRE>
+shell&#62; mysql <var>db_name</var> &#60; <var>script.sql</var> &#62; <var>output.tab</var>
+</PRE>
+
+<P>
+<A NAME="IDX849"></A>
+<A NAME="IDX850"></A>
+<A NAME="IDX851"></A>
+<A NAME="IDX852"></A>
+<code>mysql</code> supports the following options:
+
+</P>
+<DL COMPACT>
+
+<DT><code>--help, -?</code>
+<DD>
+<A NAME="IDX853"></A>
+Display a help message and exit.
+
+<DT><code>--batch, -B</code>
+<DD>
+<A NAME="IDX854"></A>
+Print results using tab as the column separator, with each row on a new line.
+With this option, <code>mysql</code> doesn't use the history file.
+
+<DT><code>--character-sets-dir=<var>path</var></code>
+<DD>
+<A NAME="IDX855"></A>
+The directory where character sets are installed.  See section <A HREF="manual_MySQL_Database_Administration.html#Character_sets">5.8.1  The Character Set Used for Data and Sorting</A>.
+
+<DT><code>--compress, -C</code>
+<DD>
+<A NAME="IDX856"></A>
+Compress all information sent between the client and the server if both
+support compression.
+
+<DT><code>--database=<var>db_name</var>, -D <var>db_name</var></code>
+<DD>
+<A NAME="IDX857"></A>
+The database to use. This is useful mainly in an option file.
+
+<DT><code>--debug[=<var>debug_options</var>], -# [<var>debug_options</var>]</code>
+<DD>
+<A NAME="IDX858"></A>
+Write a debugging log. The <var>debug_options</var> string often is
+<code>'d:t:o,<var>file_name</var>'</code>.
+The default is <code>'d:t:o,/tmp/mysql.trace'</code>.
+
+<DT><code>--debug-info, -T</code>
+<DD>
+<A NAME="IDX859"></A>
+Print some debugging information when the program exits.
+
+<DT><code>--default-character-set=<var>charset</var></code>
+<DD>
+<A NAME="IDX860"></A>
+Use <var>charset</var> as the default character set.  See section <A HREF="manual_MySQL_Database_Administration.html#Character_sets">5.8.1  The Character Set Used for Data and Sorting</A>.
+
+<DT><code>--execute=<var>statement</var>, -e <var>statement</var></code>
+<DD>
+<A NAME="IDX861"></A>
+Execute the statement and quit. The default output format is like that produced with
+<code>--batch</code>.
+
+<DT><code>--force, -f</code>
+<DD>
+<A NAME="IDX862"></A>
+Continue even if an SQL error occurs.
+
+<DT><code>--host=<var>host_name</var>, -h <var>host_name</var></code>
+<DD>
+<A NAME="IDX863"></A>
+Connect to the MySQL server on the given host.
+
+<DT><code>--html, -H</code>
+<DD>
+<A NAME="IDX864"></A>
+Produce HTML output.
+
+<DT><code>--ignore-space, -i</code>
+<DD>
+<A NAME="IDX865"></A>
+Ignore spaces after function names.
+The effect of this is described in the discussion for <code>IGNORE_SPACE</code> in
+section <A HREF="manual_MySQL_Database_Administration.html#Server_SQL_mode">5.2.2  The Server SQL Mode</A>.
+
+<DT><code>--local-infile[={0|1}]</code>
+<DD>
+<A NAME="IDX866"></A>
+Enable or disable <code>LOCAL</code> capability for <code>LOAD DATA INFILE</code>.
+With no value, the option enables <code>LOCAL</code>. It may be given as
+<code>--local-infile=0</code> or <code>--local-infile=1</code> to explicitly disable
+or enable <code>LOCAL</code>. Enabling <code>LOCAL</code> has no effect if the server
+does not also support it.
+
+<DT><code>--named-commands, -G</code>
+<DD>
+<A NAME="IDX867"></A>
+Named commands are <em>enabled</em>.  Long format commands are allowed as
+well as shortened \* commands. For example, <code>quit</code> and <code>\q</code> both
+are recognized.
+
+<DT><code>--no-auto-rehash, -A</code>
+<DD>
+<A NAME="IDX868"></A>
+No automatic rehashing.  This option causes <code>mysql</code> to start faster,
+but you must issue the <code>rehash</code> command if you want to use table and
+column name completion.
+
+<DT><code>--no-beep, -b</code>
+<DD>
+<A NAME="IDX869"></A>
+Do not beep when errors occur.
+
+<DT><code>--no-named-commands, -g</code>
+<DD>
+<A NAME="IDX870"></A>
+Named commands are disabled. Use the <code>\*</code> form only, or use
+named commands only at the beginning of a line ending with a semicolon
+(<samp>`;'</samp>). As of MySQL 3.23.22, <code>mysql</code> starts with this option
+<em>enabled</em> by default!  However, even with this option, long-format
+commands still work from the first line.
+
+<DT><code>--no-pager</code>
+<DD>
+<A NAME="IDX871"></A>
+Do not use a pager for displaying query output.
+Output paging is discussed further in
+section <A HREF="manual_Client-Side_Scripts.html#mysql_Commands">8.3.1  <code>mysql</code> Commands</A>.
+
+<DT><code>--no-tee</code>
+<DD>
+<A NAME="IDX872"></A>
+Do not copy output to a file.
+Tee files are discussed further in
+section <A HREF="manual_Client-Side_Scripts.html#mysql_Commands">8.3.1  <code>mysql</code> Commands</A>.
+
+<DT><code>--one-database, -O</code>
+<DD>
+<A NAME="IDX873"></A>
+Ignore statements except those for the default database named on the
+command line.  This is useful for skipping updates to other databases in
+the binary log.
+
+<DT><code>--pager[=<var>command</var>]</code>
+<DD>
+<A NAME="IDX874"></A>
+Use the given command for paging query output.  If the command is
+omitted, the default pager is the value of your <code>PAGER</code> environment
+variable. Valid pagers are <code>less</code>, <code>more</code>, <code>cat [&#62;
+filename]</code>, and so forth.  This option works only on Unix.  It does not
+work in batch mode.
+Output paging is discussed further in
+section <A HREF="manual_Client-Side_Scripts.html#mysql_Commands">8.3.1  <code>mysql</code> Commands</A>.
+
+<DT><code>--password[=<var>password</var>], -p[<var>password</var>]</code>
+<DD>
+<A NAME="IDX875"></A>
+The password to use when connecting to the server.  If you use the
+short option form (<code>-p</code>), you <em>cannot</em> have a space between the
+option and the password.  If you omit the <var>password</var> value following the
+<code>--password</code> or <code>-p</code> option on the command line, you will be
+prompted for one.
+
+<DT><code>--port=<var>port_num</var>, -P <var>port_num</var></code>
+<DD>
+<A NAME="IDX876"></A>
+The TCP/IP port number to use for the connection.
+
+<DT><code>--prompt=<var>format_str</var></code>
+<DD>
+<A NAME="IDX877"></A>
+Set the prompt to the specified format. The default is <code>mysql&#62;</code>.
+The special sequences that the prompt can contain are described in
+section <A HREF="manual_Client-Side_Scripts.html#mysql_Commands">8.3.1  <code>mysql</code> Commands</A>.
+
+<DT><code>--protocol={TCP | SOCKET | PIPE | MEMORY}</code>
+<DD>
+<A NAME="IDX878"></A>
+The connection protocol to use.  New in MySQL 4.1.
+
+<DT><code>--quick, -q</code>
+<DD>
+<A NAME="IDX879"></A>
+Don't cache each query result, print each row as it is received. This may slow
+down the server if the output is suspended.  With this option, <code>mysql</code>
+doesn't use the history file.
+
+<DT><code>--raw, -r</code>
+<DD>
+<A NAME="IDX880"></A>
+Write column values without escape conversion. Often used with the
+<code>--batch</code> option.
+
+<DT><code>--reconnect</code>
+<DD>
+<A NAME="IDX881"></A>
+If the connection to the server is lost, automatically try to reconnect. A
+single reconnect attempt is made each time the connection is lost.  To
+suppress reconnection behavior, use <code>--skip-reconnect</code>.
+New in MySQL 4.1.0.
+
+<DT><code>--safe-updates, --i-am-a-dummy, -U</code>
+<DD>
+<A NAME="IDX882"></A>
+Allow only <code>UPDATE</code> and <code>DELETE</code> statements that specify rows
+to affect using key values.  If you have this option in an option file,
+you can override it by using <code>--safe-updates</code> on the command line.
+See section <A HREF="manual_Client-Side_Scripts.html#mysql_Tips">8.3.3  <code>mysql</code> Tips</A> for more information about
+this option.
+
+<DT><code>--sigint-ignore</code>
+<DD>
+Ignore <code>SIGINT</code> signals (typically the result of typing Control-C).
+This option was added in MySQL 4.1.6.
+
+<DT><code>--silent, -s</code>
+<DD>
+<A NAME="IDX883"></A>
+Silent mode. Produce less output.  This option can be given multiple times
+to produce less and less output.
+
+<DT><code>--skip-column-names, -N</code>
+<DD>
+<A NAME="IDX884"></A>
+Don't write column names in results.
+
+<DT><code>--skip-line-numbers, -L</code>
+<DD>
+<A NAME="IDX885"></A>
+Don't write line numbers for errors. Useful when you want to compare result
+files that include error messages.
+
+<DT><code>--socket=<var>path</var>, -S <var>path</var></code>
+<DD>
+<A NAME="IDX886"></A>
+The socket file to use for the connection.
+
+<DT><code>--table, -t</code>
+<DD>
+<A NAME="IDX887"></A>
+Display
+output in table format. This is the default for interactive use, but can be
+used to produce table output in batch mode.
+
+<DT><code>--tee=<var>file_name</var></code>
+<DD>
+<A NAME="IDX888"></A>
+Append a copy of output to the given file. This option does not
+work in batch mode.  Tee files are discussed further in
+section <A HREF="manual_Client-Side_Scripts.html#mysql_Commands">8.3.1  <code>mysql</code> Commands</A>.
+
+<DT><code>--unbuffered, -n</code>
+<DD>
+<A NAME="IDX889"></A>
+Flush the buffer after each query.
+
+<DT><code>--user=<var>user_name</var>, -u <var>user_name</var></code>
+<DD>
+<A NAME="IDX890"></A>
+The MySQL username to use when connecting to the server.
+
+<DT><code>--verbose, -v</code>
+<DD>
+<A NAME="IDX891"></A>
+Verbose mode. Produce more output. This option can be given multiple times
+to produce more and more output.
+(For example, <code>-v -v -v</code> produces the table output format even in batch
+mode.)
+
+<DT><code>--version, -V</code>
+<DD>
+<A NAME="IDX892"></A>
+Display version information and exit.
+
+<DT><code>--vertical, -E</code>
+<DD>
+<A NAME="IDX893"></A>
+Print the rows of query output vertically. Without this option, you can
+specify vertical output for individual statements by terminating them
+with <code>\G</code>.
+
+<DT><code>--wait, -w</code>
+<DD>
+<A NAME="IDX894"></A>
+If the connection cannot be established, wait and retry instead of aborting.
+
+<DT><code>--xml, -X</code>
+<DD>
+<A NAME="IDX895"></A>
+Produce XML output.
+
+</DL>
+
+<P>
+You can also set the following variables by using <code>--<var>var_name</var>=<var>value</var></code>
+options:
+
+</P>
+<P>
+<A NAME="IDX896"></A>
+<A NAME="IDX897"></A>
+<A NAME="IDX898"></A>
+<A NAME="IDX899"></A>
+<A NAME="IDX900"></A>
+<A NAME="IDX901"></A>
+
+</P>
+<DL COMPACT>
+
+<DT><code>connect_timeout</code>
+<DD>
+The number of seconds before connection timeout.
+(Default value is 0.)
+
+<DT><code>max_allowed_packet</code>
+<DD>
+The maximum packet length to send to or receive from the server.
+(Default value is 16MB.)
+
+<DT><code>max_join_size</code>
+<DD>
+The automatic limit for rows in a join when using <code>--safe-updates</code>.
+(Default value is 1,000,000.)
+
+<DT><code>net_buffer_length</code>
+<DD>
+The buffer size for TCP/IP and socket communication.
+(Default value is 16KB.)
+
+<DT><code>select_limit</code>
+<DD>
+The automatic limit for <code>SELECT</code> statements when using
+<code>--safe-updates</code>.
+(Default value is 1,000.)
+
+</DL>
+
+<P>
+It is also possible to set variables by using
+<code>--set-variable=<var>var_name</var>=<var>value</var></code> or <code>-O <var>var_name</var>=<var>value</var></code>
+syntax. However, this syntax is deprecated as of MySQL 4.0.
+
+</P>
+<P>
+<A NAME="IDX902"></A>
+<A NAME="IDX903"></A>
+<A NAME="IDX904"></A>
+<A NAME="IDX905"></A>
+<A NAME="IDX906"></A>
+<A NAME="IDX907"></A>
+<A NAME="IDX908"></A>
+
+</P>
+<P>
+On Unix, the <code>mysql</code> client writes a record of executed statements to a
+history file.  By default, the history file is named <tt>`.mysql_history'</tt>
+and is created in your home directory.  To specify a different file,
+set the value of the <code>MYSQL_HISTFILE</code> environment variable.
+
+</P>
+<P>
+If you do not want to maintain a history file, first remove
+<tt>`.mysql_history'</tt> if it exists, and then use either of the following
+techniques:
+
+</P>
+
+<UL>
+
+<LI>
+
+Set the <code>MYSQL_HISTFILE</code> variable to <tt>`/dev/null'</tt>. To cause this
+setting to take effect each time you log in, put the setting in one of
+your shell's startup files.
+
+<LI>
+
+Create <tt>`.mysql_history'</tt> as a symbolic link to <tt>`/dev/null'</tt>:
+
+
+<PRE>
+shell&#62; ln -s /dev/null $HOME/.mysql_history
+</PRE>
+
+You need do this only once.
+
+</UL>
+
+
+
+<H3><A NAME="mysql_Commands" HREF="manual_toc.html#mysql_Commands">8.3.1  <code>mysql</code> Commands</A></H3>
+
+<P>
+<code>mysql</code> sends SQL statements that you issue to the server to be
+executed.  There is also a set of commands that <code>mysql</code> itself
+interprets.  For a list of these commands, type <code>help</code> or <code>\h</code> at
+the <code>mysql&#62;</code> prompt:
+
+</P>
+<P>
+<A NAME="IDX909"></A>
+
+<PRE>
+mysql&#62; help
+
+MySQL commands:
+?         (\h)    Synonym for `help'.
+clear     (\c)    Clear command.
+connect   (\r)    Reconnect to the server.
+                  Optional arguments are db and host.
+delimiter (\d)    Set query delimiter.
+edit      (\e)    Edit command with $EDITOR.
+ego       (\G)    Send command to mysql server,
+                  display result vertically.
+exit      (\q)    Exit mysql. Same as quit.
+go        (\g)    Send command to mysql server.
+help      (\h)    Display this help.
+nopager   (\n)    Disable pager, print to stdout.
+notee     (\t)    Don't write into outfile.
+pager     (\P)    Set PAGER [to_pager].
+                  Print the query results via PAGER.
+print     (\p)    Print current command.
+prompt    (\R)    Change your mysql prompt.
+quit      (\q)    Quit mysql.
+rehash    (\#)    Rebuild completion hash.
+source    (\.)    Execute an SQL script file.
+                  Takes a file name as an argument.
+status    (\s)    Get status information from the server.
+system    (\!)    Execute a system shell command.
+tee       (\T)    Set outfile [to_outfile].
+                  Append everything into given outfile.
+use       (\u)    Use another database.
+                  Takes database name as argument.
+</PRE>
+
+<P>
+Each command has both a long and short form.
+The long form is not case sensitive; the short form is.
+The long form can be followed by an optional semicolon terminator, but the
+short form should not.
+
+</P>
+<P>
+The <code>edit</code>, <code>nopager</code>, <code>pager</code>, and <code>system</code> commands
+work only in Unix.
+
+</P>
+<P>
+<A NAME="IDX910"></A>
+The <code>status</code> command provides some information about the
+connection and the server you are using. If you are running in
+<code>--safe-updates</code> mode, <code>status</code> also prints the values for
+the <code>mysql</code> variables that affect your queries.
+
+</P>
+<P>
+To log queries and their output, use the <code>tee</code> command.  All the data
+displayed on the screen will be appended into a given file. This can be very
+useful for debugging purposes also.  You can enable this feature on the
+command line with the <code>--tee</code> option, or interactively with the <code>tee</code>
+command.  The <code>tee</code> file can be disabled interactively with the
+<code>notee</code> command. Executing <code>tee</code> again re-enables logging.
+Without a parameter, the previous file will be used. Note that <code>tee</code>
+flushes query results to the file after each statement, just before <code>mysql</code>
+prints its next prompt.
+
+</P>
+<P>
+Browsing or searching query results in interactive mode by using Unix
+programs such as <code>less</code>, <code>more</code>, or any other similar program is
+now possible with the <code>--pager</code> option. If you specify no value for the
+option, <code>mysql</code> checks the value of the <code>PAGER</code> environment
+variable and sets the pager to that.  Output paging can be enabled
+interactively with the <code>pager</code> command and disabled with
+<code>nopager</code>.  The command takes an optional argument; if given, the
+paging program is set to that. With no argument, the pager is set to the
+pager that was set on the command line, or <code>stdout</code> if no pager was
+specified.
+
+</P>
+<P>
+Output paging works only in Unix because it uses the <code>popen()</code>
+function, which doesn't exist on Windows. For Windows, the <code>tee</code>
+option can be used instead to save query output, although this is not as
+convenient as <code>pager</code> for browsing output in some situations.
+
+</P>
+<P>
+A few tips about the <code>pager</code> command:
+
+</P>
+
+<UL>
+<LI>
+
+You can use it to write to a file and the results will go only to the file:
+
+
+<PRE>
+mysql&#62; pager cat &#62; /tmp/log.txt
+</PRE>
+
+You can also pass any options for the program that you want to use as your
+pager:
+
+
+<PRE>
+mysql&#62; pager less -n -i -S
+</PRE>
+
+<LI>
+
+In the preceding example, note the <code>-S</code> option. You may find it very
+useful for browsing wide query results.  Sometimes a very wide result set is
+difficult to read on the screen.  The <code>-S</code> option to <code>less</code> can
+make the result set much more readable because you can scroll it
+horizontally using the left-arrow and right-arrow keys.  You can also use
+<code>-S</code> interactively within <code>less</code> to switch the horizontal-browse
+mode on and off.  For more information, read the <code>less</code> manual page:
+
+
+<PRE>
+shell&#62; man less
+</PRE>
+
+<LI>
+
+You can specify very complex pager commands for handling query output:
+
+
+<PRE>
+mysql&#62; pager cat | tee /dr1/tmp/res.txt \
+          | tee /dr2/tmp/res2.txt | less -n -i -S
+</PRE>
+
+In this example, the command would send query results to two files in two
+different directories on two different filesystems mounted on <tt>`/dr1'</tt>
+and <tt>`/dr2'</tt>, yet still display the results onscreen via <code>less</code>.
+
+</UL>
+
+<P>
+You can also combine the <code>tee</code> and <code>pager</code> functions. Have a
+<code>tee</code> file enabled and <code>pager</code> set to <code>less</code>, and you will be
+able to browse the results using the <code>less</code> program and still have
+everything appended into a file the same time. The difference between the
+Unix <code>tee</code> used with the <code>pager</code> command and the <code>mysql</code>
+built-in <code>tee</code> command is that the built-in <code>tee</code> works even if
+you don't have the Unix <code>tee</code> available. The built-in <code>tee</code> also
+logs everything that is printed on the screen, whereas the Unix <code>tee</code>
+used with <code>pager</code> doesn't log quite that much. Additionally, <code>tee</code>
+file logging can be turned on and off interactively from within
+<code>mysql</code>. This is useful when you want to log some queries to a file,
+but not others.
+
+</P>
+<P>
+<A NAME="IDX911"></A>
+From MySQL 4.0.2 on, the default <code>mysql&#62;</code> prompt can be reconfigured.
+The string for defining the prompt can contain the following special
+sequences:
+
+</P>
+
+<TABLE BORDER>
+<TR><TD><strong>Option</strong> </TD><TD> <strong>Description</strong>
+</TD></TR>
+<TR><TD><code>\v</code> </TD><TD> The server version
+</TD></TR>
+<TR><TD><code>\d</code> </TD><TD> The current database
+</TD></TR>
+<TR><TD><code>\h</code> </TD><TD> The server host
+</TD></TR>
+<TR><TD><code>\p</code> </TD><TD> The current TCP/IP host
+</TD></TR>
+<TR><TD><code>\u</code> </TD><TD> Your username
+</TD></TR>
+<TR><TD><code>\U</code> </TD><TD> Your full <code><var>user_name</var>@<var>host_name</var></code> account name
+</TD></TR>
+<TR><TD><code>\\</code> </TD><TD> A literal <samp>`\'</samp> backslash character
+</TD></TR>
+<TR><TD><code>\n</code> </TD><TD> A newline character
+</TD></TR>
+<TR><TD><code>\t</code> </TD><TD> A tab character
+</TD></TR>
+<TR><TD><code>\ </code> </TD><TD> A space (a space follows the backslash)
+</TD></TR>
+<TR><TD><code>\_</code> </TD><TD> A space
+</TD></TR>
+<TR><TD><code>\R</code> </TD><TD> The current time, in 24-hour military time (0-23)
+</TD></TR>
+<TR><TD><code>\r</code> </TD><TD> The current time, standard 12-hour time (1-12)
+</TD></TR>
+<TR><TD><code>\m</code> </TD><TD> Minutes of the current time
+</TD></TR>
+<TR><TD><code>\y</code> </TD><TD> The current year, two digits
+</TD></TR>
+<TR><TD><code>\Y</code> </TD><TD> The current year, four digits
+</TD></TR>
+<TR><TD><code>\D</code> </TD><TD> The full current date
+</TD></TR>
+<TR><TD><code>\s</code> </TD><TD> Seconds of the current time
+</TD></TR>
+<TR><TD><code>\w</code> </TD><TD> The current day of the week in three-letter format (Mon, Tue, ...)
+</TD></TR>
+<TR><TD><code>\P</code> </TD><TD> am/pm
+</TD></TR>
+<TR><TD><code>\o</code> </TD><TD> The current month in numeric format
+</TD></TR>
+<TR><TD><code>\O</code> </TD><TD> The current month in three-letter format (Jan, Feb, ...)
+</TD></TR>
+<TR><TD><code>\c</code> </TD><TD> A counter that increments for each statement you issue
+</TD></TR>
+<TR><TD><code>\S</code> </TD><TD> Semicolon
+</TD></TR>
+<TR><TD><code>\'</code> </TD><TD> Single quote
+</TD></TR>
+<TR><TD><code>\"</code> </TD><TD> Double quote
+</TD></TR>
+</TABLE>
+
+<P>
+<samp>`\'</samp> followed by any other letter just becomes that letter.
+
+</P>
+<P>
+If you specify the <code>prompt</code> command with no argument, <code>mysql</code> resets
+the prompt to the default of <code>mysql&#62;</code>.
+
+</P>
+<P>
+You can set the prompt in several ways:
+
+</P>
+
+<UL>
+<LI>Use an environment variable
+
+You can set the <code>MYSQL_PS1</code> environment variable to a prompt string.  For
+example:
+
+
+<PRE>
+shell&#62; export MYSQL_PS1="(\u@\h) [\d]&#62; "
+</PRE>
+
+<LI>Use an option file
+
+You can set the <code>prompt</code> option in the <code>[mysql]</code> group of any MySQL
+option file, such as <tt>`/etc/my.cnf'</tt> or the <tt>`.my.cnf'</tt> file in
+your home directory.
+For example:
+
+
+<PRE>
+[mysql]
+prompt=(\\u@\\h) [\\d]&#62;\\_
+</PRE>
+
+In this example, note that the backslashes are doubled.
+If you set the prompt using the <code>prompt</code> option in an option
+file, it is advisable to double the backslashes when using the special
+prompt options.  There is
+some overlap in the set of allowable prompt options and the set of special
+escape sequences that are recognized in option files.
+(These sequences are listed in section <A HREF="manual_Using_MySQL_Programs.html#Option_files">4.3.2  Using Option Files</A>.)
+The overlap may cause you problems if you use single backslashes.
+For example, <code>\s</code> will be interpreted as a space rather than as the
+current seconds value. The following example shows how to define a prompt
+within an option file to
+include the current time in <code>HH:MM:SS&#62;</code> format:
+
+
+<PRE>
+[mysql]
+prompt="\\r:\\m:\\s&#62; "
+</PRE>
+
+<LI>Use a command-line option
+
+You can set the <code>--prompt</code> option on the command line to <code>mysql</code>.
+For example:
+
+
+<PRE>
+shell&#62; mysql --prompt="(\u@\h) [\d]&#62; "
+(user@host) [database]&#62; 
+</PRE>
+
+<LI>Interactively
+
+You can change your prompt interactively by using the <code>prompt</code> (or
+<code>\R</code>) command.  For example:
+
+
+<PRE>
+mysql&#62; prompt (\u@\h) [\d]&#62;\_
+PROMPT set to '(\u@\h) [\d]&#62;\_'
+(<var>user</var>@<var>host</var>) [<var>database</var>]&#62; 
+(<var>user</var>@<var>host</var>) [<var>database</var>]&#62; prompt
+Returning to default PROMPT of mysql&#62; 
+mysql&#62; 
+</PRE>
+
+</UL>
+
+
+
+<H3><A NAME="Batch_Commands" HREF="manual_toc.html#Batch_Commands">8.3.2  Executing SQL Statements from a Text File</A></H3>
+
+<P>
+The <code>mysql</code> client typically is used interactively, like this:
+
+</P>
+
+<PRE>
+shell&#62; mysql <var>db_name</var>
+</PRE>
+
+<P>
+However, it's also possible to put your SQL statements in a file and then
+tell <code>mysql</code> to read its input from that file.  To do so, create a text
+file <tt>`text_file'</tt> that contains the statements you wish to execute.
+Then invoke <code>mysql</code> as shown here:
+
+</P>
+
+<PRE>
+shell&#62; mysql <var>db_name</var> &#60; <var>text_file</var>
+</PRE>
+
+<P>
+You can also start your text file with a <code>USE <var>db_name</var></code> statement.  In
+this case, it is unnecessary to specify the database name on the command
+line:
+
+</P>
+
+<PRE>
+shell&#62; mysql &#60; text_file
+</PRE>
+
+<P>
+If you are already running <code>mysql</code>, you can execute an SQL
+script file using the <code>source</code> or <code>\.</code> command:
+
+</P>
+
+<PRE>
+mysql&#62; source <var>filename</var>
+mysql&#62; \. <var>filename</var>
+</PRE>
+
+<P>
+Sometimes you may want your script to display progress information to the user;
+for this you can insert some lines like
+
+</P>
+
+<PRE>
+SELECT '&#60;info_to_display&#62;' AS ' ';
+</PRE>
+
+<P>
+which will output &#60;info_to_display&#62;.
+
+</P>
+<P>
+For more information about batch mode, see section <A HREF="manual_Tutorial.html#Batch_mode">3.5  Using <code>mysql</code> in Batch Mode</A>.
+
+</P>
+
+
+
+<H3><A NAME="mysql_Tips" HREF="manual_toc.html#mysql_Tips">8.3.3  <code>mysql</code> Tips</A></H3>
+
+<P>
+This section describes some techniques that can help you use <code>mysql</code> more
+effectively.
+
+</P>
+
+
+
+<H4><A NAME="Vertical_query_results" HREF="manual_toc.html#Vertical_query_results">8.3.3.1  Displaying Query Results Vertically</A></H4>
+
+<P>
+Some query results are much more readable when displayed vertically, instead
+of in the usual horizontal table format. Queries can be displayed vertically 
+by terminating the query with \G instead of a semicolon.
+For example, longer text values that
+include newlines often are much easier to read with vertical output:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT * FROM mails WHERE LENGTH(txt) &#60; 300 LIMIT 300,1\G
+*************************** 1. row ***************************
+  msg_nro: 3068
+     date: 2000-03-01 23:29:50
+time_zone: +0200
+mail_from: Monty
+    reply: monty@no.spam.com
+  mail_to: "Thimble Smith" &#60;tim@no.spam.com&#62;
+      sbj: UTF-8
+      txt: &#62;&#62;&#62;&#62;&#62; "Thimble" == Thimble Smith writes:
+
+Thimble&#62; Hi.  I think this is a good idea.  Is anyone familiar
+Thimble&#62; with UTF-8 or Unicode? Otherwise, I'll put this on my
+Thimble&#62; TODO list and see what happens.
+
+Yes, please do that.
+
+Regards,
+Monty
+     file: inbox-jani-1
+     hash: 190402944
+1 row in set (0.09 sec)
+</PRE>
+
+
+
+<H4><A NAME="safe-updates" HREF="manual_toc.html#safe-updates">8.3.3.2  Using the <code>--safe-updates</code> Option</A></H4>
+
+<P>
+<A NAME="IDX912"></A>
+
+</P>
+<P>
+For beginners, a useful startup option is <code>--safe-updates</code> (or
+<code>--i-am-a-dummy</code>, which has the same effect).  This option was
+introduced in MySQL 3.23.11.  It is helpful for cases when you might
+have issued a <code>DELETE FROM <var>tbl_name</var></code> statement but forgotten the
+<code>WHERE</code> clause. Normally, such a statement will delete all rows from the
+table.  With <code>--safe-updates</code>, you can delete rows only by specifying
+the key values that identify them. This helps prevent accidents.
+
+</P>
+<P>
+When you use the <code>--safe-updates</code> option, <code>mysql</code> issues the
+following statement when it connects to the MySQL server:
+
+</P>
+
+<PRE>
+SET SQL_SAFE_UPDATES=1,SQL_SELECT_LIMIT=1000, SQL_MAX_JOIN_SIZE=1000000;
+</PRE>
+
+<P>
+See section <A HREF="manual_SQL_Syntax.html#SET_OPTION">13.5.3  <code>SET</code> Syntax</A>.
+
+</P>
+<P>
+The <code>SET</code> statement has the following effects:
+
+</P>
+
+<UL>
+<LI>
+
+You are not allowed to execute an <code>UPDATE</code> or <code>DELETE</code> statement
+unless you specify a key constraint in the <code>WHERE</code> clause or provide a
+<code>LIMIT</code> clause (or both).
+For example:
+
+
+<PRE>
+UPDATE <var>tbl_name</var> SET <var>not_key_column</var>=# WHERE <var>key_column</var>=#;
+
+UPDATE <var>tbl_name</var> SET <var>not_key_column</var>=# LIMIT 1;
+</PRE>
+
+<LI>
+
+All large <code>SELECT</code> results are automatically limited to 1,000 rows
+unless the statement includes a <code>LIMIT</code> clause.
+
+<LI>
+
+Multiple-table <code>SELECT</code> statements that will probably need to examine
+more than 1,000,000 row combinations are aborted.
+
+</UL>
+
+<P>
+To specify limits other than 1,000 and 1,000,000, you can override the
+defaults by using <code>--select_limit</code> and <code>--max_join_size</code> options:
+
+</P>
+
+<PRE>
+shell&#62; mysql --safe-updates --select_limit=500 --max_join_size=10000
+</PRE>
+
+
+
+<H4><A NAME="mysql_reconnect" HREF="manual_toc.html#mysql_reconnect">8.3.3.3  Disabling <code>mysql</code> Auto-Reconnect</A></H4>
+
+<P>
+If the <code>mysql</code> client loses its connection to the server while sending
+a query, it will immediately and automatically try to reconnect once to the
+server and send the query again.  However, even if <code>mysql</code> succeeds in
+reconnecting, your first connection has ended and all your previous session
+objects and settings are lost: temporary tables, the autocommit mode, and
+user and session variables.  This behavior may be dangerous for you, as in
+the following example where the server was shut down and restarted without
+you knowing it:
+
+</P>
+
+<PRE>
+mysql&#62; SET @a=1;
+Query OK, 0 rows affected (0.05 sec)
+
+mysql&#62; INSERT INTO t VALUES(@a);
+ERROR 2006: MySQL server has gone away
+No connection. Trying to reconnect...
+Connection id:    1
+Current database: test
+
+Query OK, 1 row affected (1.30 sec)
+
+mysql&#62; SELECT * FROM t;
++------+
+| a    |
++------+
+| NULL |
++------+
+1 row in set (0.05 sec)
+</PRE>
+
+<P>
+The <code>@a</code> user variable has been lost with the connection, and after
+the reconnection it is undefined. If it is important to have <code>mysql</code>
+terminate with an error if the connection has been lost, you can start the
+<code>mysql</code> client with the <code>--skip-reconnect</code> option.
+
+</P>
+
+
+
+<H2><A NAME="mysqladmin" HREF="manual_toc.html#mysqladmin">8.4  <code>mysqladmin</code>, Administering a MySQL Server</A></H2>
+
+<P>
+<A NAME="IDX913"></A>
+<A NAME="IDX914"></A>
+<A NAME="IDX915"></A>
+
+</P>
+<P>
+<code>mysqladmin</code> is a client for performing administrative operations.
+You can use it to check the server's configuration and current status, create
+and drop databases, and more.
+
+</P>
+<P>
+Invoke <code>mysqladmin</code> like this:
+
+</P>
+
+<PRE>
+shell&#62; mysqladmin [<var>options</var>] <var>command</var> [<var>command-option</var>] <var>command</var> ...
+</PRE>
+
+<P>
+<code>mysqladmin</code> supports the following commands:
+
+</P>
+<DL COMPACT>
+
+<DT><code>create <var>db_name</var></code>
+<DD>
+Create a new database named <var>db_name</var>.
+
+<DT><code>drop <var>db_name</var></code>
+<DD>
+Delete the database named <var>db_name</var> and all its tables.
+
+<DT><code>extended-status</code>
+<DD>
+Display the server status variables and their values.
+
+<DT><code>flush-hosts</code>
+<DD>
+Flush all information in the host cache.
+
+<DT><code>flush-logs</code>
+<DD>
+Flush all logs.
+
+<DT><code>flush-privileges</code>
+<DD>
+Reload the grant tables (same as <code>reload</code>).
+
+<DT><code>flush-status</code>
+<DD>
+Clear status variables.
+
+<DT><code>flush-tables</code>
+<DD>
+Flush all tables.
+
+<DT><code>flush-threads</code>
+<DD>
+Flush the thread cache.
+(Added in MySQL 3.23.16.)
+
+<DT><code>kill id,id,...</code>
+<DD>
+Kill server threads.
+
+<DT><code>old-password <var>new-password</var></code>
+<DD>
+This is like the <code>password</code> command but stores the password using
+the old (pre-4.1) password-hashing format. This command was added in MySQL
+4.1.0.
+
+<DT><code>password <var>new-password</var></code>
+<DD>
+Set a new password. This changes the password to <code>new-password</code>
+for the account that you use with <code>mysqladmin</code> for connecting to the
+server.
+
+If <var>new-password</var> contains spaces or other characters that are special
+to your command interpreter, you will need to enclose it within quotes.
+On Windows, be sure to use double quotes rather than single quotes;
+single quotes will be not be stripped from the password, they will be
+interpreted as part of the password.  For example:
+
+shell&#62; mysqladmin password "my new password"
+
+<DT><code>ping</code>
+<DD>
+Check whether the server is alive.
+The return status from <code>mysqladmin</code> is 0 if the server is running,
+1 if it is not. Beginning with MySQL 4.0.22, the status is 0 even in case
+of an error such as <code>Access denied</code>, because that means the server is
+running but disallowed the connection, which is different from the server
+not running.
+
+<DT><code>processlist</code>
+<DD>
+Show a list of active server threads. This is like the output of the
+<code>SHOW PROCESSLIST</code> statement.
+If the <code>--verbose</code> option is given, the output is like that of
+<code>SHOW FULL PROCESSLIST</code>.
+
+<DT><code>reload</code>
+<DD>
+Reload the grant tables.
+
+<DT><code>refresh</code>
+<DD>
+Flush all tables and close and open log files.
+
+<DT><code>shutdown</code>
+<DD>
+Stop the server.
+
+<DT><code>start-slave</code>
+<DD>
+Start replication on a slave server.
+(Added in MySQL 3.23.16.)
+
+<DT><code>status</code>
+<DD>
+Display a short server status message.
+
+<DT><code>stop-slave</code>
+<DD>
+Stop replication on a slave server.
+(Added in MySQL 3.23.16.)
+
+<DT><code>variables</code>
+<DD>
+Display the server system variables and their values.
+
+<DT><code>version</code>
+<DD>
+Display version information from the server.
+</DL>
+
+<P>
+All commands can be shortened to any unique prefix.  For example:
+
+</P>
+
+<PRE>
+shell&#62; mysqladmin proc stat
++----+-------+-----------+----+-------------+------+-------+------+
+| Id | User  | Host      | db | Command     | Time | State | Info |
++----+-------+-----------+----+-------------+------+-------+------+
+| 6  | monty | localhost |    | Processlist | 0    |       |      |
++----+-------+-----------+----+-------------+------+-------+------+
+Uptime: 10077  Threads: 1  Questions: 9  Slow queries: 0
+Opens: 6 Flush tables: 1  Open tables: 2
+Memory in use: 1092K  Max memory used: 1116K
+</PRE>
+
+<P>
+<A NAME="IDX916"></A>
+The <code>mysqladmin status</code> command result displays the following values:
+
+</P>
+<DL COMPACT>
+
+<DT><code>Uptime</code>
+<DD>
+<A NAME="IDX917"></A>
+
+The number of seconds the MySQL server has been running.
+
+<DT><code>Threads</code>
+<DD>
+<A NAME="IDX918"></A>
+
+The number of active threads (clients).
+
+<DT><code>Questions</code>
+<DD>
+<A NAME="IDX919"></A>
+
+The number of questions (queries) from clients since the server was started.
+
+<DT><code>Slow queries</code>
+<DD>
+<A NAME="IDX920"></A>
+
+The number of queries that have taken more than <code>long_query_time</code>
+seconds.  See section <A HREF="manual_MySQL_Database_Administration.html#Slow_query_log">5.9.5  The Slow Query Log</A>.
+
+<DT><code>Opens</code>
+<DD>
+<A NAME="IDX921"></A>
+
+The number of tables the server has opened.
+
+<DT><code>Flush tables</code>
+<DD>
+<A NAME="IDX922"></A>
+<A NAME="IDX923"></A>
+
+The number of <code>flush ...</code>, <code>refresh</code>, and <code>reload</code> commands the
+server has executed.
+
+<DT><code>Open tables</code>
+<DD>
+<A NAME="IDX924"></A>
+
+The number of tables that currently are open.
+
+<DT><code>Memory in use</code>
+<DD>
+<A NAME="IDX925"></A>
+
+The amount of
+memory allocated directly by <code>mysqld</code> code.
+This value is displayed only when MySQL has been compiled with
+<code>--with-debug=full</code>.
+
+<DT><code>Maximum memory used</code>
+<DD>
+<A NAME="IDX926"></A>
+
+The maximum amount of memory allocated directly by <code>mysqld</code> code.
+This value is displayed only when MySQL has been compiled with
+<code>--with-debug=full</code>.
+
+</DL>
+
+<P>
+If you execute <code>mysqladmin shutdown</code> when connecting to a local server
+using a Unix socket file, <code>mysqladmin</code> waits until the server's process
+ID file has been removed, to ensure that the server has stopped properly.
+
+</P>
+<P>
+<A NAME="IDX927"></A>
+<A NAME="IDX928"></A>
+<A NAME="IDX929"></A>
+<A NAME="IDX930"></A>
+
+</P>
+<P>
+<code>mysqladmin</code> supports the following options:
+
+</P>
+<DL COMPACT>
+
+<DT><code>--help, -?</code>
+<DD>
+Display a help message and exit.
+
+<DT><code>--character-sets-dir=<var>path</var></code>
+<DD>
+The directory where character sets are installed.  See section <A HREF="manual_MySQL_Database_Administration.html#Character_sets">5.8.1  The Character Set Used for Data and Sorting</A>.
+
+<DT><code>--compress, -C</code>
+<DD>
+Compress all information sent between the client and the server if both
+support compression.
+
+<DT><code>--count=<var>#</var>, -c <var>#</var></code>
+<DD>
+The number of iterations to make. This works only with <code>--sleep</code>
+(<code>-i</code>).
+
+<DT><code>--debug[=<var>debug_options</var>], -# [<var>debug_options</var>]</code>
+<DD>
+Write a debugging log. The <var>debug_options</var> string often is
+<code>'d:t:o,<var>file_name</var>'</code>.
+The default is <code>'d:t:o,/tmp/mysqladmin.trace'</code>.
+
+<DT><code>--default-character-set=<var>charset</var></code>
+<DD>
+Use <var>charset</var> as the default character set.  See section <A HREF="manual_MySQL_Database_Administration.html#Character_sets">5.8.1  The Character Set Used for Data and Sorting</A>.
+Added in MySQL 4.1.9.
+
+<DT><code>--force, -f</code>
+<DD>
+Don't ask for confirmation for the <code>drop database</code> command.
+With multiple commands, continue even if an error occurs.
+
+<DT><code>--host=<var>host_name</var>, -h <var>host_name</var></code>
+<DD>
+Connect to the MySQL server on the given host.
+
+<DT><code>--password[=<var>password</var>], -p[<var>password</var>]</code>
+<DD>
+The password to use when connecting to the server.  If you use the
+short option form (<code>-p</code>), you <em>cannot</em> have a space between the
+option and the password.  If you omit the <var>password</var> value following the
+<code>--password</code> or <code>-p</code> option on the command line, you will be
+prompted for one.
+
+<DT><code>--port=<var>port_num</var>, -P <var>port_num</var></code>
+<DD>
+The TCP/IP port number to use for the connection.
+
+<DT><code>--protocol={TCP | SOCKET | PIPE | MEMORY}</code>
+<DD>
+The connection protocol to use.  New in MySQL 4.1.
+
+<DT><code>--relative, -r</code>
+<DD>
+Show the difference between the current and previous values when used with
+<code>-i</code>. Currently, this option works only with the <code>extended-status</code>
+command.
+
+<DT><code>--silent, -s</code>
+<DD>
+Exit silently if a connection to the server cannot be established.
+
+<DT><code>--sleep=<var>delay</var>, -i <var>delay</var></code>
+<DD>
+Execute commands again and again, sleeping for <var>delay</var> seconds in
+between.
+
+<DT><code>--socket=<var>path</var>, -S <var>path</var></code>
+<DD>
+The socket file to use for the connection.
+
+<DT><code>--user=<var>user_name</var>, -u <var>user_name</var></code>
+<DD>
+The MySQL username to use when connecting to the server.
+
+<DT><code>--verbose, -v</code>
+<DD>
+Verbose mode.  Print out more information on what the program does.
+
+<DT><code>--version, -V</code>
+<DD>
+Display version information and exit.
+
+<DT><code>--vertical, -E</code>
+<DD>
+Print output vertically. This is similar to <code>--relative</code>, but
+prints output vertically.
+
+<DT><code>--wait[=<var>#</var>], -w[<var>#</var>]</code>
+<DD>
+If the connection cannot be established, wait and retry instead of aborting.
+If an option value is given, it indicates the number of times to retry.
+The default is one time.
+
+</DL>
+
+<P>
+You can also set the following variables by using <code>--<var>var_name</var>=<var>value</var></code>
+options:
+
+</P>
+<P>
+<A NAME="IDX931"></A>
+<A NAME="IDX932"></A>
+<A NAME="IDX933"></A>
+<A NAME="IDX934"></A>
+
+</P>
+<DL COMPACT>
+
+<DT><code>connect_timeout</code>
+<DD>
+The number of seconds before connection timeout.
+(Default value is 0.)
+
+<DT><code>shutdown_timeout</code>
+<DD>
+The number of seconds to wait for shutdown.
+(Default value is 0.)
+
+</DL>
+
+<P>
+It is also possible to set variables by using
+<code>--set-variable=<var>var_name</var>=<var>value</var></code> or <code>-O <var>var_name</var>=<var>value</var></code>
+syntax. However, this syntax is deprecated as of MySQL 4.0.
+
+</P>
+
+
+
+<H2><A NAME="mysqlbinlog" HREF="manual_toc.html#mysqlbinlog">8.5  The <code>mysqlbinlog</code> Binary Log Utility</A></H2>
+
+<P>
+<A NAME="IDX935"></A>
+
+</P>
+<P>
+The binary log files that the server generates are written in binary format.
+To examine these files in text format, use the <code>mysqlbinlog</code> utility.
+It is available as of MySQL 3.23.14.
+
+</P>
+<P>
+Invoke <code>mysqlbinlog</code> like this:
+
+</P>
+
+<PRE>
+shell&#62; mysqlbinlog [<var>options</var>] <var>log-file</var> ...
+</PRE>
+
+<P>
+For example, to display the contents of the binary log <tt>`binlog.000003'</tt>,
+use this command:
+
+</P>
+
+<PRE>
+shell&#62; mysqlbinlog binlog.0000003
+</PRE>
+
+<P>
+The output includes all statements contained in <tt>`binlog.000003'</tt>,
+together with other information such as the time each statement took, the
+thread ID of the client that issued it, the timestamp when it was issued,
+and so forth.
+
+</P>
+<P>
+Normally, you use <code>mysqlbinlog</code> to read binary log files directly and
+apply them to the local MySQL server. It is also possible to read binary
+logs from a remote server by using the <code>--read-from-remote-server</code>
+option.
+
+</P>
+<P>
+When you read remote binary logs, the connection parameter options can be
+given to indicate how to connect to the server, but they are ignored unless
+you also specify the <code>--read-from-remote-server</code> option. These options
+are <code>--host</code>, <code>--password</code>, <code>--port</code>, <code>--protocol</code>,
+<code>--socket</code>, and <code>--user</code>.
+
+</P>
+<P>
+You can also use <code>mysqlbinlog</code> to read relay log files written by a
+slave server in a replication setup. Relay logs have the same format as
+binary log files.
+
+</P>
+<P>
+The binary log is discussed further in section <A HREF="manual_MySQL_Database_Administration.html#Binary_log">5.9.4  The Binary Log</A>.
+
+</P>
+<P>
+<code>mysqlbinlog</code> supports the following options:
+
+</P>
+<DL COMPACT>
+
+<DT><code>--help, -?</code>
+<DD>
+Display a help message and exit.
+
+<DT><code>--database=<var>db_name</var>, -d <var>db_name</var></code>
+<DD>
+List entries for just this database (local log only).
+
+<DT><code>--force-read, -f</code>
+<DD>
+With this option, if <code>mysqlbinlog</code> reads a binary log event that
+it does not recognize, it prints a warning, ignores the event, and continues.
+Without this option, <code>mysqlbinlog</code> stops if it reads such an event.
+
+<DT><code>--host=<var>host_name</var>, -h <var>host_name</var></code>
+<DD>
+Get the binary log from the MySQL server on the given host.
+
+<DT><code>--local-load=<var>path</var>, -l <var>path</var></code>
+<DD>
+Prepare local temporary files for <code>LOAD DATA INFILE</code> in the specified
+directory.
+
+<DT><code>--offset=<var>N</var>, -o <var>N</var></code>
+<DD>
+Skip the first <var>N</var> entries.
+
+<DT><code>--password[=<var>password</var>], -p[<var>password</var>]</code>
+<DD>
+The password to use when connecting to the server.  If you use the
+short option form (<code>-p</code>), you <em>cannot</em> have a space between the
+option and the password.  If you omit the <var>password</var> value following the
+<code>--password</code> or <code>-p</code> option on the command line, you will be
+prompted for one.
+
+<DT><code>--port=<var>port_num</var>, -P <var>port_num</var></code>
+<DD>
+The TCP/IP port number to use for connecting to a remote server.
+
+<DT><code>--position=<var>N</var>, -j <var>N</var></code>
+<DD>
+Deprecated, use <code>--start-position</code> instead (starting from MySQL 4.1.4).
+
+<DT><code>--protocol={TCP | SOCKET | PIPE | MEMORY}</code>
+<DD>
+The connection protocol to use.  New in MySQL 4.1.
+
+<DT><code>--read-from-remote-server, -R</code>
+<DD>
+Read the binary log from a MySQL server.
+Any connection parameter options are ignored unless this option is given as
+well. These options are <code>--host</code>, <code>--password</code>, <code>--port</code>,
+<code>--protocol</code>,
+<code>--socket</code>, and <code>--user</code>.
+
+<DT><code>--result-file=<var>name</var>, -r <var>name</var></code>
+<DD>
+Direct output to the given file.
+
+<DT><code>--short-form, -s</code>
+<DD>
+Display only the statements contained in the log, without any extra
+information.
+
+<DT><code>--socket=<var>path</var>, -S <var>path</var></code>
+<DD>
+The socket file to use for the connection.
+
+<DT><code>--start-datetime=<var>datetime</var></code>
+<DD>
+Start reading the binary log at the first event having a datetime equal or
+posterior to the <code>datetime</code> argument. Available as of MySQL 4.1.4.
+
+<DT><code>--stop-datetime=<var>datetime</var></code>
+<DD>
+Stop reading the binary log at the first event having a datetime equal or
+posterior to the <code>datetime</code> argument.  Available as of MySQL 4.1.4. Useful
+for point-in-time recovery.
+
+<DT><code>--start-position=<var>N</var></code>
+<DD>
+Start reading the binary log at the first event having a position equal to
+the <code>N</code> argument. Available as of MySQL 4.1.4 (previously named
+<code>--position</code>).
+
+<DT><code>--stop-position=<var>N</var></code>
+<DD>
+Stop reading the binary log at the first event having a position equal or
+greater than the <code>N</code> argument. Available as of MySQL 4.1.4.
+
+<DT><code>--to-last-log, -t</code>
+<DD>
+Do not stop at the end of the requested binary log of the MySQL server, but
+rather continue printing until the end of the last binary log. If you send
+the output to the same MySQL server, this may lead to an endless loop.  This
+option requires <code>--read-from-remote-server</code>. Available as of MySQL 4.1.2.
+
+<DT><code>--disable-log-bin, -D</code>
+<DD>
+Disable binary logging. This is useful for avoiding an endless loop if you
+use the <code>--to-last-log</code> option and are sending the output to the same
+MySQL server.  This option also is useful when restoring after a crash
+to avoid duplication of the statements you already have logged. <strong>Note</strong>:
+This option requires that you have the <code>SUPER</code> privilege. Available
+as of MySQL 4.1.8.
+
+<DT><code>--user=<var>user_name</var>, -u <var>user_name</var></code>
+<DD>
+The MySQL username to use when connecting to a remote server.
+
+<DT><code>--version, -V</code>
+<DD>
+Display version information and exit.
+
+</DL>
+
+<P>
+You can also set the following variable by using <code>--<var>var_name</var>=<var>value</var></code>
+options:
+
+</P>
+<P>
+<A NAME="IDX936"></A>
+
+</P>
+<DL COMPACT>
+
+<DT><code>open_files_limit</code>
+<DD>
+Specify the number of open file descriptors to reserve.
+
+</DL>
+
+<P>
+You can pipe the output of <code>mysqlbinlog</code> into a <code>mysql</code> client to
+execute the statements contained in the binary log. This is used to recover
+from a crash when you have an old backup (see section <A HREF="manual_MySQL_Database_Administration.html#Backup">5.7.1  Database Backups</A>):
+
+</P>
+
+<PRE>
+shell&#62; mysqlbinlog <var>hostname</var>-bin.000001 | mysql
+</PRE>
+
+<P>
+Or:
+
+</P>
+
+<PRE>
+shell&#62; mysqlbinlog <var>hostname</var>-bin.[0-9]* | mysql
+</PRE>
+
+<P>
+You can also redirect the output of <code>mysqlbinlog</code> to a text file
+instead, if you need to modify the statement log first (for example, to
+remove statements that you don't want to execute for some reason). After
+editing the file, execute the statements that it contains by using it as
+input to the <code>mysql</code> program.
+
+</P>
+<P>
+<code>mysqlbinlog</code> has the <code>--position</code> option, which prints only
+those statements with an offset in the binary log greater than or equal to
+a given position (the given position must match the start of one event). It
+also has options to stop or start when it sees an event of a given date and
+time. This enables you to perform point-in-time recovery using the
+<code>--stop-datetime</code> option (to be able to say, for example, "roll forward
+my databases to how they were today at 10:30 AM").
+
+</P>
+<P>
+If you have more than one binary log to execute on the MySQL server,
+the safe method is to process them all using a single connection to the
+server.  Here is an example that demonstrates what may be <em>unsafe</em>:
+
+</P>
+
+<PRE>
+shell&#62; mysqlbinlog <var>hostname</var>-bin.000001 | mysql # DANGER!!
+shell&#62; mysqlbinlog <var>hostname</var>-bin.000002 | mysql # DANGER!!
+</PRE>
+
+<P>
+Processing binary logs this way using different connections to the server
+will cause problems if the first log file contains a <code>CREATE TEMPORARY
+TABLE</code> statement and the second log contains a statement that uses the
+temporary table. When the first <code>mysql</code> process terminates, the server
+will drop the temporary table. When the second <code>mysql</code> process attempts
+to use the table, the server will report ``unknown table.''
+
+</P>
+<P>
+To avoid problems like this, use a single connection to execute the contents
+of all binary logs that you want to process.  Here is one way to do that:
+
+</P>
+
+<PRE>
+shell&#62; mysqlbinlog <var>hostname</var>-bin.000001 <var>hostname</var>-bin.000002 | mysql
+</PRE>
+
+<P>
+Another approach is to do this:
+
+</P>
+
+<PRE>
+shell&#62; mysqlbinlog <var>hostname</var>-bin.000001 &#62;  /tmp/statements.sql
+shell&#62; mysqlbinlog <var>hostname</var>-bin.000002 &#62;&#62; /tmp/statements.sql
+shell&#62; mysql -e "source /tmp/statements.sql"
+</PRE>
+
+<P>
+In MySQL 3.23, the binary log did not contain the data to load for
+<code>LOAD DATA INFILE</code> statements. To execute such a statement from a
+binary log file, the original data file was needed.  Starting from MySQL
+4.0.14, the binary log does contain the data, so <code>mysqlbinlog</code> can
+produce output that reproduces the <code>LOAD DATA INFILE</code> operation without
+the original data file.  <code>mysqlbinlog</code> copies the data to a temporary
+file and writes a <code>LOAD DATA LOCAL INFILE</code> statement that refers to the
+file.  The default location of the directory where these files are written
+is system-specific. To specify a directory explicitly, use the
+<code>--local-load</code> option.
+
+</P>
+<P>
+Because <code>mysqlbinlog</code> converts <code>LOAD DATA INFILE</code> statements to
+<code>LOAD DATA LOCAL INFILE</code> statements (that is, it adds <code>LOCAL</code>),
+both the client and the server that you use to process the statements must be
+configured to allow <code>LOCAL</code> capability.
+See section <A HREF="manual_MySQL_Database_Administration.html#LOAD_DATA_LOCAL">5.4.4  Security Issues with <code>LOAD DATA LOCAL</code></A>.
+
+</P>
+<P>
+<strong>Warning:</strong> The temporary files created for <code>LOAD DATA LOCAL</code>
+statements are <em>not</em> automatically deleted
+because they are needed until you actually execute those statements.  You
+should delete the temporary files yourself after you no longer need the
+statement log.  The files can be found in the temporary file directory and
+have names like <tt>`original_file_name-#-#'</tt>.
+
+</P>
+<P>
+In the future, we will fix this problem by allowing <code>mysqlbinlog</code>
+to connect directly to a <code>mysqld</code> server.  Then it will be possible
+to safely remove the log files automatically as soon as the <code>LOAD DATA
+INFILE</code> statements have been executed.
+
+</P>
+<P>
+Before MySQL 4.1, <code>mysqlbinlog</code> could not prepare output suitable for
+<code>mysql</code> if the binary log contained interlaced statements originating
+from different clients that used temporary tables of the same name. This is
+fixed in MySQL 4.1. However, the problem still existed for <code>LOAD DATA
+INFILE</code> statements until it was fixed in MySQL 4.1.8.
+
+</P>
+
+
+
+<H2><A NAME="mysqlcc" HREF="manual_toc.html#mysqlcc">8.6  <code>mysqlcc</code>, the MySQL Control Center</A></H2>
+
+<P>
+<A NAME="IDX937"></A>
+<A NAME="IDX938"></A>
+<A NAME="IDX939"></A>
+<A NAME="IDX940"></A>
+<A NAME="IDX941"></A>
+
+</P>
+<P>
+<code>mysqlcc</code>, the MySQL Control Center, is a platform-independent client that
+provides a graphical user interface (GUI) to the MySQL database server.
+It supports interactive use, including syntax highlighting and tab completion.
+It provides database and table management, and allows server administration.
+
+</P>
+<P>
+<code>mysqlcc</code> is now deprecated and it is recommended that users choose the new
+MySQL Administrator and MySQL Query Browser, found at <a HREF="http://dev.mysql.com/downloads/">http://dev.mysql.com/downloads/</a>.
+
+</P>
+<P>
+Currently, <code>mysqlcc</code> runs on Windows and Linux platforms.
+
+</P>
+<P>
+Invoke <code>mysqlcc</code> by double-clicking its icon in a graphical environment.
+From the command line, invoke it like this:
+
+</P>
+
+<PRE>
+shell&#62; mysqlcc [<var>options</var>]
+</PRE>
+
+<P>
+<A NAME="IDX942"></A>
+<A NAME="IDX943"></A>
+<A NAME="IDX944"></A>
+<A NAME="IDX945"></A>
+<code>mysqlcc</code> supports the following options:
+
+</P>
+<DL COMPACT>
+
+<DT><code>--help, -?</code>
+<DD>
+<A NAME="IDX946"></A>
+Display a help message and exit.
+
+<DT><code>--blocking_queries, -b</code>
+<DD>
+<A NAME="IDX947"></A>
+Use blocking queries.
+
+<DT><code>--compress, -C</code>
+<DD>
+<A NAME="IDX948"></A>
+Compress all information sent between the client and the server if both
+support compression.
+
+<DT><code>--connection_name=<var>name</var>, -c <var>name</var></code>
+<DD>
+<A NAME="IDX949"></A>
+This option is a synonym for <code>--server</code>.
+
+<DT><code>--database=<var>db_name</var>, -d <var>db_name</var></code>
+<DD>
+<A NAME="IDX950"></A>
+The database to use. This is useful mainly in an option file.
+
+<DT><code>--history_size=<var>#</var>, -H <var>#</var></code>
+<DD>
+<A NAME="IDX951"></A>
+The history size for the query window.
+
+<DT><code>--host=<var>host_name</var>, -h <var>host_name</var></code>
+<DD>
+<A NAME="IDX952"></A>
+Connect to the MySQL server on the given host.
+
+<DT><code>--local-infile[={0|1}]</code>
+<DD>
+<A NAME="IDX953"></A>
+Enable or disable <code>LOCAL</code> capability for <code>LOAD DATA INFILE</code>.
+With no value, the option enables <code>LOCAL</code>. It may be given as
+<code>--local-infile=0</code> or <code>--local-infile=1</code> to explicitly disable
+or enable <code>LOCAL</code>. Enabling <code>LOCAL</code> has no effect if the server
+does not also support it.
+
+<DT><code>--password[=<var>password</var>], -p[<var>password</var>]</code>
+<DD>
+<A NAME="IDX954"></A>
+The password to use when connecting to the server.  If you use the
+short option form (<code>-p</code>), you <em>cannot</em> have a space between the
+option and the password.  If you omit the <var>password</var> value following the
+<code>--password</code> or <code>-p</code> option on the command line, you will be
+prompted for one.
+
+<DT><code>--plugins_path=<var>name</var>, -g <var>name</var></code>
+<DD>
+<A NAME="IDX955"></A>
+The path to the directory where MySQL Control Center plugins are located.
+
+<DT><code>--port=<var>port_num</var>, -P <var>port_num</var></code>
+<DD>
+<A NAME="IDX956"></A>
+The TCP/IP port number to use for the connection.
+
+<DT><code>--query, -q</code>
+<DD>
+<A NAME="IDX957"></A>
+Open a query window on startup.
+
+<DT><code>--register, -r</code>
+<DD>
+<A NAME="IDX958"></A>
+Open the Register Server dialog on startup.
+
+<DT><code>--server=<var>name</var>, -s <var>name</var></code>
+<DD>
+<A NAME="IDX959"></A>
+The MySQL Control Center connection name.
+
+<DT><code>--socket=<var>path</var>, -S <var>path</var></code>
+<DD>
+<A NAME="IDX960"></A>
+The socket file to use for the connection.
+
+<DT><code>--syntax, -y</code>
+<DD>
+<A NAME="IDX961"></A>
+Enable syntax highlighting and completion.
+
+<DT><code>--syntax_file=<var>name</var>, -Y <var>name</var></code>
+<DD>
+<A NAME="IDX962"></A>
+The syntax file for completion.
+
+<DT><code>--translations_path=<var>name</var>, -T <var>name</var></code>
+<DD>
+<A NAME="IDX963"></A>
+The path to the directory where MySQL Control Center translations are located.
+
+<DT><code>--user=<var>user_name</var>, -u <var>user_name</var></code>
+<DD>
+<A NAME="IDX964"></A>
+The MySQL username to use when connecting to the server.
+
+<DT><code>--version, -V</code>
+<DD>
+<A NAME="IDX965"></A>
+Display version information and exit.
+
+</DL>
+
+<P>
+You can also set the following variables by using <code>--<var>var_name</var>=<var>value</var></code>
+options:
+
+</P>
+<P>
+<A NAME="IDX966"></A>
+<A NAME="IDX967"></A>
+<A NAME="IDX968"></A>
+<A NAME="IDX969"></A>
+<A NAME="IDX970"></A>
+<A NAME="IDX971"></A>
+
+</P>
+<DL COMPACT>
+
+<DT><code>connect_timeout</code>
+<DD>
+The number of seconds before connection timeout.
+(Default value is 0.)
+
+<DT><code>max_allowed_packet</code>
+<DD>
+The maximum packet length to send to or receive from the server.
+(Default value is 16MB.)
+
+<DT><code>max_join_size</code>
+<DD>
+The automatic limit for rows in a join.
+(Default value is 1,000,000.)
+
+<DT><code>net_buffer_length</code>
+<DD>
+The buffer size for TCP/IP and socket communication.
+(Default value is 16KB.)
+
+<DT><code>select_limit</code>
+<DD>
+The automatic limit for <code>SELECT</code> statements.
+(Default value is 1,000.)
+
+</DL>
+
+<P>
+It is also possible to set variables by using
+<code>--set-variable=<var>var_name</var>=<var>value</var></code> or <code>-O <var>var_name</var>=<var>value</var></code>
+syntax. However, this syntax is deprecated as of MySQL 4.0.
+
+</P>
+
+
+
+<H2><A NAME="Using_mysqlcheck" HREF="manual_toc.html#Using_mysqlcheck">8.7  The <code>mysqlcheck</code> Table Maintenance and Repair Program</A></H2>
+
+<P>
+The <code>mysqlcheck</code> client checks and repairs <code>MyISAM</code> tables.  It
+can also optimize and analyze tables. <code>mysqlcheck</code> is available as of
+MySQL 3.23.38.
+
+</P>
+<P>
+<code>mysqlcheck</code> is similar in function to <code>myisamchk</code>, but works
+differently.  The main operational difference is that <code>mysqlcheck</code> must
+be used when the <code>mysqld</code> server is running, whereas <code>myisamchk</code>
+should be used when it is not. The benefit of using <code>mysqlcheck</code> is
+that you do not have to stop the server to check or repair your tables.
+
+</P>
+<P>
+<code>mysqlcheck</code> uses the SQL statements <code>CHECK TABLE</code>, <code>REPAIR
+TABLE</code>, <code>ANALYZE TABLE</code>, and <code>OPTIMIZE TABLE</code> in a convenient way
+for the user. It determines which statements to use for the operation you want
+to perform, then sends the statements to the server to be executed.
+
+</P>
+<P>
+There are three general ways to invoke <code>mysqlcheck</code>:
+
+</P>
+
+<PRE>
+shell&#62; mysqlcheck [<var>options</var>] <var>db_name</var> [<var>tables</var>]
+shell&#62; mysqlcheck [<var>options</var>] --databases <var>DB1</var> [<var>DB2</var> <var>DB3</var>...]
+shell&#62; mysqlcheck [<var>options</var>] --all-databases
+</PRE>
+
+<P>
+If you don't name any tables or use the <code>--databases</code> or
+<code>--all-databases</code> option, entire databases will be checked.
+
+</P>
+<P>
+<code>mysqlcheck</code> has a special feature compared to the other clients. The
+default behavior of checking tables (<code>--check</code>) can be changed by renaming
+the binary. If you want to have a tool that repairs tables by default, you
+should just make a copy of <code>mysqlcheck</code> named <code>mysqlrepair</code>, or make
+a symbolic link to <code>mysqlcheck</code> named <code>mysqlrepair</code>. If you invoke
+<code>mysqlrepair</code>, it will repair tables by command.
+
+</P>
+<P>
+The following names can be used to change <code>mysqlcheck</code> default behavior:
+
+</P>
+<TABLE BORDER>
+<TR><TD><code>mysqlrepair</code> </TD><TD> The default option will be <code>--repair</code>
+</TD></TR>
+<TR><TD><code>mysqlanalyze</code> </TD><TD> The default option will be <code>--analyze</code>
+</TD></TR>
+<TR><TD><code>mysqloptimize</code> </TD><TD> The default option will be <code>--optimize</code>
+</TD></TR>
+</TABLE>
+
+<P>
+<code>mysqlcheck</code> supports the following options:
+
+</P>
+<DL COMPACT>
+
+<DT><code>--help, -?</code>
+<DD>
+Display a help message and exit.
+
+<DT><code>--all-databases, -A</code>
+<DD>
+Check all tables in all databases. This is the same as using the
+<code>--databases</code> option and naming all the databases on the command line.
+
+<DT><code>--all-in-1, -1</code>
+<DD>
+Instead of issuing a statement for each table, execute a single statement for
+each database that names all the tables from that database to be processed.
+
+<DT><code>--analyze, -a</code>
+<DD>
+Analyze the tables.
+
+<DT><code>--auto-repair</code>
+<DD>
+If a checked table is corrupted, automatically fix it. Any necessary repairs
+are done after all tables have been checked.
+
+<DT><code>--character-sets-dir=<var>path</var></code>
+<DD>
+The directory where character sets are installed.  See section <A HREF="manual_MySQL_Database_Administration.html#Character_sets">5.8.1  The Character Set Used for Data and Sorting</A>.
+
+<DT><code>--check, -c</code>
+<DD>
+Check the tables for errors.
+
+<DT><code>--check-only-changed, -C</code>
+<DD>
+Check only tables that have changed since the last check or that haven't been
+closed properly.
+
+<DT><code>--compress</code>
+<DD>
+Compress all information sent between the client and the server if both
+support compression.
+
+<DT><code>--databases, -B</code>
+<DD>
+Process all tables in the named databases. With this option, all name
+arguments are regarded as database names, not as table names.
+
+<DT><code>--debug[=<var>debug_options</var>], -# [<var>debug_options</var>]</code>
+<DD>
+Write a debugging log. The <var>debug_options</var> string often is
+<code>'d:t:o,<var>file_name</var>'</code>.
+
+<DT><code>--default-character-set=<var>charset</var></code>
+<DD>
+Use <var>charset</var> as the default character set.  See section <A HREF="manual_MySQL_Database_Administration.html#Character_sets">5.8.1  The Character Set Used for Data and Sorting</A>.
+
+<DT><code>--extended, -e</code>
+<DD>
+If you are using this option to check tables, it ensures that they are
+100% consistent but will take a long time.
+
+If you are using this option to repair tables, it runs an extended
+repair that may not only take a long time to execute, but
+may produce a lot of garbage rows also!
+
+<DT><code>--fast, -F</code>
+<DD>
+Check only tables that haven't been closed properly.
+
+<DT><code>--force, -f</code>
+<DD>
+Continue even if an SQL error occurs.
+
+<DT><code>--host=<var>host_name</var>, -h <var>host_name</var></code>
+<DD>
+Connect to the MySQL server on the given host.
+
+<DT><code>--medium-check, -m</code>
+<DD>
+Do a check that is faster than an <code>--extended</code> operation.
+This finds only 99.99% of all errors, which should be good enough in most cases.
+
+<DT><code>--optimize, -o</code>
+<DD>
+Optimize the tables.
+
+<DT><code>--password[=<var>password</var>], -p[<var>password</var>]</code>
+<DD>
+The password to use when connecting to the server.  If you use the
+short option form (<code>-p</code>), you <em>cannot</em> have a space between the
+option and the password.  If you omit the <var>password</var> value following the
+<code>--password</code> or <code>-p</code> option on the command line, you will be
+prompted for one.
+
+<DT><code>--port=<var>port_num</var>, -P <var>port_num</var></code>
+<DD>
+The TCP/IP port number to use for the connection.
+
+<DT><code>--protocol={TCP | SOCKET | PIPE | MEMORY}</code>
+<DD>
+The connection protocol to use.  New in MySQL 4.1.
+
+<DT><code>--quick, -q</code>
+<DD>
+If you are using this option to check tables, it prevents the check
+from scanning the rows to check for incorrect links. This is the fastest
+check method.
+
+If you are using this option to repair tables, it tries to repair
+only the index tree. This is the fastest repair method.
+
+<DT><code>--repair, -r</code>
+<DD>
+Do a repair that
+can fix almost anything except unique keys that aren't unique.
+
+<DT><code>--silent, -s</code>
+<DD>
+Silent mode.
+Print only error messages.
+
+<DT><code>--socket=<var>path</var>, -S <var>path</var></code>
+<DD>
+The socket file to use for the connection.
+
+<DT><code>--tables</code>
+<DD>
+Overrides the <code>--databases</code> or <code>-B</code> option. All arguments 
+following the option are regarded as table names.
+
+<DT><code>--user=<var>user_name</var>, -u <var>user_name</var></code>
+<DD>
+The MySQL username to use when connecting to the server.
+
+<DT><code>--verbose, -v</code>
+<DD>
+Verbose mode.
+Print information about the various stages of program operation.
+
+<DT><code>--version, -V</code>
+<DD>
+Display version information and exit.
+
+</DL>
+
+
+
+<H2><A NAME="mysqldump" HREF="manual_toc.html#mysqldump">8.8  The <code>mysqldump</code> Database Backup Program</A></H2>
+
+<P>
+<A NAME="IDX972"></A>
+<A NAME="IDX973"></A>
+<A NAME="IDX974"></A>
+<A NAME="IDX975"></A>
+
+</P>
+<P>
+<A NAME="IDX976"></A>
+The <code>mysqldump</code> client can be used
+to dump a database or a collection of databases for backup or for
+transferring the data to another SQL server (not necessarily a MySQL
+server).  The dump will contain SQL statements to create the table
+and/or populate the table.
+
+</P>
+<P>
+If you are doing a backup on the server, and your tables all are
+<code>MyISAM</code> tables, you could consider using
+the <code>mysqlhotcopy</code> instead (faster backup, faster
+restore). See section <A HREF="manual_Client-Side_Scripts.html#mysqlhotcopy">8.9  The <code>mysqlhotcopy</code> Database Backup Program</A>.
+
+</P>
+<P>
+There are three general ways to invoke <code>mysqldump</code>:
+
+</P>
+
+<PRE>
+shell&#62; mysqldump [<var>options</var>] <var>db_name</var> [<var>tables</var>]
+shell&#62; mysqldump [<var>options</var>] --databases <var>DB1</var> [<var>DB2</var> <var>DB3</var>...]
+shell&#62; mysqldump [<var>options</var>] --all-databases
+</PRE>
+
+<P>
+If you don't name any tables or use the <code>--databases</code> or
+<code>--all-databases</code> option, entire databases will be dumped.
+
+</P>
+<P>
+To get a list of the options your version of <code>mysqldump</code> supports,
+execute <code>mysqldump --help</code>.
+
+</P>
+<P>
+If you run <code>mysqldump</code> without the <code>--quick</code> or
+<code>--opt</code> option, <code>mysqldump</code> will load the whole result set into
+memory before dumping the result.  This will probably be a problem if
+you are dumping a big database. As of MySQL 4.1, <code>--opt</code> is on by
+default, but can be disabled with <code>--skip-opt</code>.
+
+</P>
+<P>
+If you are using a recent copy of the <code>mysqldump</code> program
+and you are going to generate a dump that will be reloaded into a very old MySQL
+server, you should not use the <code>--opt</code> or <code>-e</code> options.
+
+</P>
+<P>
+Out-of-range numeric values such as <code>-inf</code> and <code>inf</code>, as well
+as NaN (not-a-number) values are dumped by <code>mysqldump</code> as <code>NULL</code>.
+You can see this using the following sample table:
+
+</P>
+
+<PRE>
+mysql&#62; CREATE TABLE t (f DOUBLE);
+mysql&#62; INSERT INTO t VALUES(1e+111111111111111111111);
+mysql&#62; INSERT INTO t VALUES(-1e111111111111111111111);
+mysql&#62; SELECT f FROM t;
++------+
+| f    |
++------+
+|  inf |
+| -inf |
++------+
+</PRE>
+
+<P>
+For this table, <code>mysqldump</code> produces the following data output:
+
+</P>
+
+<PRE>
+--
+-- Dumping data for table `t`
+--
+
+INSERT INTO t VALUES (NULL);
+INSERT INTO t VALUES (NULL);
+</PRE>
+
+<P>
+The significance of this behavior is that if you dump and restore the
+table, the new table has contents that differ from the original contents.
+Note that since MySQL 4.1.2 you cannot insert <code>inf</code> in the table,
+so this <code>mysqldump</code> behavior is only relevant when you deal
+with old servers.
+
+</P>
+<P>
+<code>mysqldump</code> supports the following options:
+
+</P>
+<DL COMPACT>
+
+<DT><code>--help, -?</code>
+<DD>
+Display a help message and exit.
+
+<DT><code>--add-drop-table</code>
+<DD>
+Add a <code>DROP TABLE</code> statement before each <code>CREATE TABLE</code> statement.
+
+<DT><code>--add-locks</code>
+<DD>
+Surround each table dump with <code>LOCK TABLES</code> and <code>UNLOCK TABLES</code>
+statements. This results in faster inserts when the dump file is reloaded.
+See section <A HREF="manual_MySQL_Optimization.html#Insert_speed">7.2.14  Speed of <code>INSERT</code> Statements</A>.
+
+<DT><code>--all-databases, -A</code>
+<DD>
+Dump all tables in all databases. This is the same as using the
+<code>--databases</code> option and naming all the databases on the command line.
+
+<DT><code>--allow-keywords</code>
+<DD>
+Allow creation of column names that are keywords.  This works by
+prefixing each column name with the table name.
+
+<DT><code>--comments[={0|1}]</code>
+<DD>
+If set to <code>0</code>, suppresses additional information in the dump file such
+as program version, server version, and host. <code>--skip-comments</code> has the
+same effect as <code>--comments=0</code>.  The default value is <code>1</code> to not
+suppress the extra information.  New in MySQL 4.0.17.
+
+<DT><code>--compatible=<var>name</var></code>
+<DD>
+Produce output that
+is compatible with other database systems or with older MySQL servers.
+The value of <code>name</code> can be
+<code>ansi</code>,
+<code>mysql323</code>,
+<code>mysql40</code>,
+<code>postgresql</code>,
+<code>oracle</code>,
+<code>mssql</code>,
+<code>db2</code>,
+<code>maxdb</code>,
+<code>no_key_options</code>,
+<code>no_table_options</code>,
+or
+<code>no_field_options</code>.
+To use several values, separate them by commas.
+These values have the same meaning as the corresponding options for setting
+the server SQL mode.
+See section <A HREF="manual_MySQL_Database_Administration.html#Server_SQL_mode">5.2.2  The Server SQL Mode</A>.
+
+This option requires a server version of 4.1.0 or higher.
+With older servers, it does nothing.
+
+<DT><code>--complete-insert, -c</code>
+<DD>
+Use complete <code>INSERT</code> statements that include column names.
+
+<DT><code>--compress, -C</code>
+<DD>
+Compress all information sent between the client and the server if both
+support compression.
+
+<DT><code>--create-options</code>
+<DD>
+Include all MySQL-specific table options in the <code>CREATE TABLE</code> statements.
+Before MySQL 4.1.2, use <code>--all</code> instead.
+
+<DT><code>--databases, -B</code>
+<DD>
+To dump several databases. Note the difference in usage. In this case, no
+tables are given. All name arguments on the command line are regarded as
+database names.  A <code>USE <var>db_name</var></code> statement is included in the
+output before each new database.
+
+<DT><code>--debug[=<var>debug_options</var>], -# [<var>debug_options</var>]</code>
+<DD>
+Write a debugging log. The <var>debug_options</var> string often is
+<code>'d:t:o,<var>file_name</var>'</code>.
+
+<DT><code>--default-character-set=<var>charset</var></code>
+<DD>
+Use <var>charset</var> as the default character set.  See section <A HREF="manual_MySQL_Database_Administration.html#Character_sets">5.8.1  The Character Set Used for Data and Sorting</A>.
+If not specified, <code>mysqldump</code> from MySQL 4.1.2 or later
+uses <code>utf8</code>; earlier versions use <code>latin1</code>.
+
+<DT><code>--delayed</code>
+<DD>
+Insert rows using <code>INSERT DELAYED</code> statements.
+
+<DT><code>--delete-master-logs</code>
+<DD>
+On a master replication server, delete the binary
+logs after performing the dump operation.
+This option automatically enables <code>--first-slave</code>.
+It was added in MySQL 3.23.57 (for MySQL 3.23) and MySQL 4.0.13 (for MySQL
+4.0).
+
+<DT><code>--disable-keys, -K</code>
+<DD>
+For each table, surround the <code>INSERT</code> statements with
+<code>/*!40000 ALTER TABLE <var>tbl_name</var> DISABLE KEYS */;</code> and
+<code>/*!40000 ALTER TABLE <var>tbl_name</var> ENABLE KEYS */;</code> statements.
+This makes loading the dump file into a MySQL 4.0 server faster because the
+indexes are created after all rows are inserted.
+This option is effective only for <code>MyISAM</code> tables.
+
+<DT><code>--extended-insert, -e</code>
+<DD>
+Use multiple-row <code>INSERT</code> syntax that include several <code>VALUES</code> lists.
+This results in a smaller dump file and speeds up inserts when the file is
+reloaded.
+
+<DT><code>--fields-terminated-by=...</code>
+<DD>
+<DT><code>--fields-enclosed-by=...</code>
+<DD>
+<DT><code>--fields-optionally-enclosed-by=...</code>
+<DD>
+<DT><code>--fields-escaped-by=...</code>
+<DD>
+<DT><code>--lines-terminated-by=...</code>
+<DD>
+These options are used with the <code>-T</code> option and have the same
+meaning as the corresponding clauses for <code>LOAD DATA INFILE</code>.
+See section <A HREF="manual_SQL_Syntax.html#LOAD_DATA">13.1.5  <code>LOAD DATA INFILE</code> Syntax</A>.
+
+<DT><code>--first-slave, -x</code>
+<DD>
+Deprecated, renamed to <code>--lock-all-tables</code> in MySQL 4.1.8.
+
+<DT><code>--flush-logs, -F</code>
+<DD>
+Flush the MySQL server log files before starting the dump. Note that if you
+use this option in combination with the <code>--all-databases</code> (or
+<code>-A</code>) option, the logs are flushed <em>for each database dumped</em>.
+The exception is when using <code>--lock-all-tables</code>
+or <code>--master-data</code>:
+In this case, the logs are flushed only once, corresponding to the moment
+that all tables are locked. If you want your dump and the log flush to
+happen at exactly the same moment, you should use <code>--flush-logs</code>
+together with either <code>--lock-all-tables</code> or <code>--master-data</code>.
+
+<DT><code>--force, -f</code>
+<DD>
+Continue even if an SQL error occurs during a table dump.
+
+<DT><code>--host=<var>host_name</var>, -h <var>host_name</var></code>
+<DD>
+Dump data from the MySQL server on the given host. The default host
+is <code>localhost</code>.
+
+<DT><code>--hex-blob</code>
+<DD>
+Dump binary string columns using hexadecimal notation (for example,
+<code>'abc'</code> becomes <code>0x616263</code>. The affected columns are <code>BINARY</code>,
+<code>VARBINARY</code>, and <code>BLOB</code> in MySQL 4.1 and up, and <code>CHAR
+BINARY</code>, <code>VARCHAR BINARY</code>, and <code>BLOB</code> in MySQL 4.0.  This option
+was added in MySQL 4.0.23 and 4.1.8.
+
+<DT><code>--lock-all-tables, -x</code>
+<DD>
+Locks all tables across all databases. This is achieved by acquiring a global
+read lock for the duration of the whole dump. This option automatically
+turns off <code>--single-transaction</code> and <code>--lock-tables</code>. Added in
+MySQL 4.1.8.
+
+<DT><code>--lock-tables, -l</code>
+<DD>
+Lock all tables before starting the dump.  The tables are locked with
+<code>READ LOCAL</code> to allow concurrent inserts in the case of <code>MyISAM</code>
+tables. For InnoDB tables, <code>--single-transaction</code> is a much better
+option, because it does not need to lock the tables at all.
+
+Please note that when dumping multiple databases, <code>--lock-tables</code> locks
+tables for each database separately. So, using this option will not guarantee
+that the tables in the dump file will be logically consistent between
+databases.  Tables in different databases may be dumped in completely
+different states.
+
+<DT><code>--master-data[=<var>value</var>]</code>
+<DD>
+This option causes the binary log position and filename to be appended to the
+output. If the option value is equal to 1, the position and filename are
+written to the dump output in the form of a <code>CHANGE MASTER</code> statement
+that will make a slave server start from the correct
+position in the master's binary logs if you use this SQL dump of the master
+to set up a slave.
+If the option value is equal to 2, the <code>CHANGE MASTER</code> statement is
+written as an SQL comment. 
+This is the default action if <var>value</var> is omitted.
+<var>value</var> may be given as of MySQL 4.1.8; before that, do not specify
+an option value.
+
+The <code>--master-data</code>  option turns on <code>--lock-all-tables</code>, unless 
+<code>--single-transaction</code> also is specified (in which case, a 
+global read lock is only acquired a short time at the beginning of the
+dump. See also the description for
+<code>--single-transaction</code>. In all cases,
+any action on logs happens at the exact moment of the dump.
+This option automatically turns off <code>--lock-tables</code>.
+
+<DT><code>--no-create-db, -n</code>
+<DD>
+This option suppresses the <code>CREATE DATABASE /*!32312 IF NOT EXISTS*/
+db_name</code> statements that are otherwise included in the output if the
+<code>--databases</code> or <code>--all-databases</code> option is given.
+
+<DT><code>--no-create-info, -t</code>
+<DD>
+Don't write <code>CREATE TABLE</code> statements that re-create each dumped table.
+
+<DT><code>--no-data, -d</code>
+<DD>
+Don't write any row information for the table.  This is very useful if you
+just want to get a dump of the structure for a table.
+
+<DT><code>--opt</code>
+<DD>
+This option is shorthand; it is the same as specifying <code>--add-drop-table
+--add-locks --create-options --disable-keys --extended-insert
+--lock-tables --quick --set-charset</code>.  It should
+give you a fast dump operation and produce a dump file that can be reloaded
+into a MySQL server quickly. <strong>As of MySQL 4.1, <code>--opt</code> is on by default,
+but can be disabled with <code>--skip-opt</code></strong>. To disable only certain of the
+options enabled by <code>--opt</code>, use their <code>--skip</code> forms; for example,
+<code>--skip-add-drop-table</code> or <code>--skip-quick</code>.
+
+<DT><code>--password[=<var>password</var>], -p[<var>password</var>]</code>
+<DD>
+The password to use when connecting to the server.  If you use the
+short option form (<code>-p</code>), you <em>cannot</em> have a space between the
+option and the password.  If you omit the <var>password</var> value following the
+<code>--password</code> or <code>-p</code> option on the command line, you will be
+prompted for one.
+
+<DT><code>--port=<var>port_num</var>, -P <var>port_num</var></code>
+<DD>
+The TCP/IP port number to use for the connection.
+
+<DT><code>--protocol={TCP | SOCKET | PIPE | MEMORY}</code>
+<DD>
+The connection protocol to use.  New in MySQL 4.1.
+
+<DT><code>--quick, -q</code>
+<DD>
+This option is useful for dumping large tables.
+It forces <code>mysqldump</code> to retrieve rows for a table from
+the server a row at a time rather than retrieving the entire row set
+and buffering it in memory before writing it out.
+
+<DT><code>--quote-names, -Q</code>
+<DD>
+Quote database, table, and column names within <samp>``'</samp> characters.
+If the server SQL mode includes the <code>ANSI_QUOTES</code> option, names are
+quoted within <samp>`"'</samp> characters.
+As of MySQL 4.1.1, <code>--quote-names</code> is on by default,
+but can be disabled with <code>--skip-quote-names</code>.
+
+<DT><code>--result-file=<var>file</var>, -r <var>file</var></code>
+<DD>
+Direct output to a given file. This option should be used on Windows, because
+it prevents newline <samp>`\n'</samp> characters from being converted to <samp>`\r\n'</samp>
+carriage return/newline sequences.
+
+<DT><code>--set-charset</code>
+<DD>
+Add <code>SET NAMES <var>default_character_set</var></code> to the output. This option
+is enabled by default. To suppress the <code>SET NAMES</code> statement, use
+<code>--skip-set-charset</code>. This option was added in MySQL 4.1.2.
+
+<DT><code>--single-transaction</code>
+<DD>
+This option issues a <code>BEGIN</code> SQL statement before dumping data from
+the server. It is mostly useful with <code>InnoDB</code> tables and the default
+<code>REPEATABLE READ</code> transaction isolation level, because in this mode it
+will dump the consistent state of the database at the time then
+<code>BEGIN</code> was issued without blocking any applications.
+
+When using this option, you should keep in mind that only InnoDB
+tables will be dumped in a consistent state. For example, any <code>MyISAM</code> or
+<code>HEAP</code> tables dumped while using this option may still change
+state.
+
+The <code>--single-transaction</code> option was added in MySQL 4.0.2.
+This option is mutually exclusive with the <code>--lock-tables</code> option,
+because <code>LOCK TABLES</code> causes any pending transactions to be committed
+implicitly.
+
+To dump big tables, you should combine this option with <code>--quick</code>.
+
+<DT><code>--socket=<var>path</var>, -S <var>path</var></code>
+<DD>
+The socket file to use when connecting to <code>localhost</code> (which is the
+default host).
+
+<DT><code>--skip-comments</code>
+<DD>
+See the description for the <code>--comments</code> option.
+
+<DT><code>--tab=<var>path</var>, -T <var>path</var></code>
+<DD>
+Produces tab-separated data files.  For each dumped table, <code>mysqldump</code>
+creates a <tt>`<var>tbl_name</var>.sql'</tt> file that contains the <code>CREATE TABLE</code>
+statement that creates the table, and a <tt>`<var>tbl_name</var>.txt'</tt> file that
+contains its data.  The option value is the directory in which to write the
+files.
+
+By default, the <tt>`.txt'</tt> data files are formatted using tab characters
+between column values and a newline at the end of each line.  The format can
+be specified explicitly using the <code>--fields-<var>xxx</var></code> and
+<code>--lines--<var>xxx</var></code> options.
+
+<strong>Note</strong>: This option should be used only when <code>mysqldump</code> is run
+on the same machine as the <code>mysqld</code> server. You must use a MySQL
+account that has the <code>FILE</code> privilege, and the server must have
+permission to write files in the directory you specify.
+
+<DT><code>--tables</code>
+<DD>
+Overrides the <code>--databases</code> or <code>-B</code> option. All arguments 
+following the option are regarded as table names.
+
+<DT><code>--user=<var>user_name</var>, -u <var>user_name</var></code>
+<DD>
+The MySQL username to use when connecting to the server.
+
+<DT><code>--verbose, -v</code>
+<DD>
+Verbose mode.  Print out more information on what the program does.
+
+<DT><code>--version, -V</code>
+<DD>
+Display version information and exit.
+
+<DT><code>--where='<var>where-condition</var>', -w '<var>where-condition</var>'</code>
+<DD>
+Dump only records selected by the given <code>WHERE</code> condition.  Note that
+quotes around the condition are mandatory if it contains spaces or
+characters that are special to your command interpreter.
+
+Examples:
+
+
+<PRE>
+"--where=user='jimf'"
+"-wuserid&#62;1"
+"-wuserid&#60;1"
+</PRE>
+
+<DT><code>--xml, -X</code>
+<DD>
+Write dump output as well-formed XML.
+
+</DL>
+
+<P>
+You can also set the following variables by using <code>--<var>var_name</var>=<var>value</var></code>
+options:
+
+</P>
+<DL COMPACT>
+
+<DT><code>max_allowed_packet</code>
+<DD>
+The maximum size of the buffer for client/server communication.
+The value of the variable can be up to 16MB before MySQL 4.0, and
+up to 1GB from MySQL 4.0 on.
+When creating multiple-row-insert statements (as with option
+<code>--extended-insert</code> or <code>--opt</code>), <code>mysqldump</code> will create
+rows up to <code>max_allowed_packet</code> length. If you increase this
+variable, you should also ensure that the <code>max_allowed_packet</code>
+variable in the MySQL server is at least this large.
+
+<DT><code>net_buffer_length</code>
+<DD>
+The initial size of the buffer for client/server communication.
+
+</DL>
+
+<P>
+It is also possible to set variables by using
+<code>--set-variable=<var>var_name</var>=<var>value</var></code> or <code>-O <var>var_name</var>=<var>value</var></code>
+syntax. However, this syntax is deprecated as of MySQL 4.0.
+
+</P>
+<P>
+The most common use of <code>mysqldump</code> is probably for making a backup of
+entire databases.
+
+</P>
+
+<PRE>
+shell&#62; mysqldump --opt <var>db_name</var> &#62; <var>backup-file.sql</var>
+</PRE>
+
+<P>
+You can read the dump file back into the server with:
+
+</P>
+
+<PRE>
+shell&#62; mysql <var>db_name</var> &#60; <var>backup-file.sql</var>
+</PRE>
+
+<P>
+Or:
+
+</P>
+
+<PRE>
+shell&#62; mysql -e "source <var>/path-to-backup/backup-file.sql</var>" <var>db_name</var>
+</PRE>
+
+<P>
+<code>mysqldump</code> is also very useful for populating databases by copying
+data from one MySQL server to another:
+
+</P>
+
+<PRE>
+shell&#62; mysqldump --opt <var>db_name</var> | mysql --host=<var>remote_host</var> -C <var>db_name</var>
+</PRE>
+
+<P>
+It is possible to dump several databases with one command:
+
+</P>
+
+<PRE>
+shell&#62; mysqldump --databases <var>db_name1</var> [<var>db_name2</var> ...] &#62; my_databases.sql
+</PRE>
+
+<P>
+If you want to dump all databases, use the <code>--all-databases</code> option:
+
+</P>
+
+<PRE>
+shell&#62; mysqldump --all-databases &#62; all_databases.sql
+</PRE>
+
+<P>
+If tables are stored in the InnoDB storage engine, <code>mysqldump</code> provides a
+way of making an online backup of these (see command below). This backup just
+needs to acquire a global read lock on all tables (using <code>FLUSH TABLES
+WITH READ LOCK</code>) at the beginning of the dump. As soon as this lock has been
+acquired, the binary log coordinates are read and lock is released. So if and
+only if one long updating statement is running when the <code>FLUSH...</code> is
+issued, the MySQL server may get stalled until that long statement finishes,
+and then the dump becomes lock-free. So if the MySQL server receives only
+short (in the sense of "short execution time") updating statements, even if
+there are plenty of them, the initial lock period should not be noticeable.
+
+</P>
+
+<PRE>
+shell&#62; mysqldump --all-databases --single-transaction &#62; all_databases.sql
+</PRE>
+
+<P>
+For point-in-time recovery (also known as "roll-forward", when you need to
+restore an old backup and replay the changes which happened since that backup),
+it is often useful to rotate the binary log (section <A HREF="manual_MySQL_Database_Administration.html#Binary_log">5.9.4  The Binary Log</A>) or at least
+know the binary log coordinates to which the dump corresponds:
+
+</P>
+
+<PRE>
+shell&#62; mysqldump --all-databases --master-data=2 &#62; all_databases.sql
+or
+shell&#62; mysqldump --all-databases --flush-logs --master-data=2 &#62; all_databases.sql
+</PRE>
+
+<P>
+The simultaneous use of <code>--master-data</code> and <code>--single-transaction</code>
+works as of MySQL 4.1.8. It provides a convenient way to make an online backup
+suitable for point-in-time recovery, if tables are stored in the InnoDB storage
+engine.
+
+</P>
+<P>
+For more information on making backups, see section <A HREF="manual_MySQL_Database_Administration.html#Backup">5.7.1  Database Backups</A>.
+
+</P>
+
+
+
+<H2><A NAME="mysqlhotcopy" HREF="manual_toc.html#mysqlhotcopy">8.9  The <code>mysqlhotcopy</code> Database Backup Program</A></H2>
+
+<P>
+<A NAME="IDX977"></A>
+<A NAME="IDX978"></A>
+<A NAME="IDX979"></A>
+<A NAME="IDX980"></A>
+
+</P>
+<P>
+<code>mysqlhotcopy</code> is a Perl script that was originally written and
+contributed by Tim Bunce. It uses <code>LOCK TABLES</code>,
+<code>FLUSH TABLES</code>, and <code>cp</code> or <code>scp</code> to quickly make a backup of
+a database.  It's the fastest way to make a backup of the database or single
+tables, but it can be run only on the same machine where the database
+directories are located.  <code>mysqlhotcopy</code> works only for backing up
+<code>MyISAM</code> and <code>ISAM</code> tables.
+It runs on Unix, and as of MySQL 4.0.18 also on NetWare.
+
+</P>
+
+
+<PRE>
+shell&#62; mysqlhotcopy <var>db_name</var> [<var>/path/to/new_directory</var>]
+</PRE>
+
+
+<PRE>
+shell&#62; mysqlhotcopy <var>db_name_1</var> ... <var>db_name_n</var> <var>/path/to/new_directory</var>
+</PRE>
+
+
+<PRE>
+shell&#62; mysqlhotcopy <var>db_name</var>./<var>regex</var>/
+</PRE>
+
+<P>
+<code>mysqlhotcopy</code> supports the following options:
+
+</P>
+<DL COMPACT>
+
+<DT><code>--help, -?</code>
+<DD>
+Display a help message and exit.
+
+<DT><code>--allowold</code>
+<DD>
+Don't abort if target already exists (rename it by adding an <code>_old</code>
+suffix).
+
+<DT><code>--checkpoint=<var>db_name.tbl_name</var></code>
+<DD>
+Insert checkpoint entries into the specified <var>db_name.tbl_name</var>.
+
+<DT><code>--debug</code>
+<DD>
+Enable debug output.
+
+<DT><code>--dryrun, -n</code>
+<DD>
+Report actions without doing them.
+
+<DT><code>--flushlog</code>
+<DD>
+Flush logs after all tables are locked.
+
+<DT><code>--keepold</code>
+<DD>
+Don't delete previous (now renamed) target when done.
+
+<DT><code>--method=<var>#</var></code>
+<DD>
+Method for copy (<code>cp</code> or <code>scp</code>).
+
+<DT><code>--noindices</code>
+<DD>
+Don't include full index files in the backup. This makes the backup smaller
+and faster.  The indexes can be reconstructed later with <code>myisamchk -rq</code>
+for <code>MyISAM</code> tables or <code>isamchk -rq</code> for <code>ISAM</code> tables.
+
+<DT><code>--password=<var>password</var>, -p<var>password</var></code>
+<DD>
+The password to use when connecting to the server.  Note that the password
+value is not optional for this option, unlike for other MySQL programs.
+
+<DT><code>--port=<var>port_num</var>, -P <var>port_num</var></code>
+<DD>
+The TCP/IP port number to use when connecting to the local server.
+
+<DT><code>--quiet, -q</code>
+<DD>
+Be silent except for errors.
+
+<DT><code>--regexp=<var>expr</var></code>
+<DD>
+Copy all databases with names matching the given regular expression.
+
+<DT><code>--socket=<var>path</var>, -S <var>path</var></code>
+<DD>
+The Unix socket file to use for the connection.
+
+<DT><code>--suffix=<var>str</var></code>
+<DD>
+The suffix for names of copied databases.
+
+<DT><code>--tmpdir=<var>path</var></code>
+<DD>
+The temporary directory (instead of <tt>`/tmp'</tt>).
+
+<DT><code>--user=<var>user_name</var>, -u <var>user_name</var></code>
+<DD>
+The MySQL username to use when connecting to the server.
+
+</DL>
+
+<P>
+<code>mysqlhotcopy</code> reads the <code>[client]</code> and  <code>[mysqlhotcopy]</code>
+option groups from option files.
+
+</P>
+<P>
+To execute <code>mysqlhotcopy</code>, you must have access to the files
+for the tables that you are backing up, the <code>SELECT</code> privilege
+for those tables, and the <code>RELOAD</code> privilege (to be able to
+execute <code>FLUSH TABLES</code>).
+
+</P>
+<P>
+Use <code>perldoc</code> for additional <code>mysqlhotcopy</code> documentation:
+
+</P>
+
+<PRE>
+shell&#62; perldoc mysqlhotcopy
+</PRE>
+
+
+
+<H2><A NAME="mysqlimport" HREF="manual_toc.html#mysqlimport">8.10  The <code>mysqlimport</code> Data Import Program</A></H2>
+
+<P>
+<A NAME="IDX981"></A>
+<A NAME="IDX982"></A>
+<A NAME="IDX983"></A>
+<A NAME="IDX984"></A>
+<A NAME="IDX985"></A>
+
+</P>
+<P>
+The <code>mysqlimport</code> client provides a command-line interface to the
+<code>LOAD DATA INFILE</code> SQL statement.  Most options to <code>mysqlimport</code>
+correspond directly to clauses of <code>LOAD DATA INFILE</code>.
+See section <A HREF="manual_SQL_Syntax.html#LOAD_DATA">13.1.5  <code>LOAD DATA INFILE</code> Syntax</A>.
+
+</P>
+<P>
+Invoke <code>mysqlimport</code> like this:
+
+</P>
+
+<PRE>
+shell&#62; mysqlimport [<var>options</var>] <var>db_name</var> <var>textfile1</var> [<var>textfile2</var> ...]
+</PRE>
+
+<P>
+For each text file named on the command line, <code>mysqlimport</code> strips any
+extension from the filename and uses the result to determine the name of the
+table into which to import the file's contents.  For example, files named
+<tt>`patient.txt'</tt>, <tt>`patient.text'</tt>, and <tt>`patient'</tt> all would be
+imported into a table named <code>patient</code>.
+
+</P>
+<P>
+<code>mysqlimport</code> supports the following options:
+
+</P>
+<DL COMPACT>
+
+<DT><code>--help, -?</code>
+<DD>
+Display a help message and exit.
+
+<DT><code>--columns=<var>column_list</var>, -c <var>column_list</var></code>
+<DD>
+This option takes a comma-separated list of column names as its value. The
+order of the column names indicates how to match up data file columns with
+table columns.
+
+<DT><code>--compress, -C</code>
+<DD>
+Compress all information sent between the client and the server if both
+support compression.
+
+<DT><code>--debug[=<var>debug_options</var>], -# [<var>debug_options</var>]</code>
+<DD>
+Write a debugging log. The <var>debug_options</var> string often is
+<code>'d:t:o,<var>file_name</var>'</code>.
+
+<DT><code>--delete, -D</code>
+<DD>
+Empty the table before importing the text file.
+
+<DT><code>--fields-terminated-by=...</code>
+<DD>
+<DT><code>--fields-enclosed-by=...</code>
+<DD>
+<DT><code>--fields-optionally-enclosed-by=...</code>
+<DD>
+<DT><code>--fields-escaped-by=...</code>
+<DD>
+<DT><code>--lines-terminated-by=...</code>
+<DD>
+These options have the same meaning as the corresponding clauses for
+<code>LOAD DATA INFILE</code>. See section <A HREF="manual_SQL_Syntax.html#LOAD_DATA">13.1.5  <code>LOAD DATA INFILE</code> Syntax</A>.
+
+<DT><code>--force, -f</code>
+<DD>
+Ignore errors.  For example, if a table for a text file doesn't exist,
+continue processing any remaining files.  Without <code>--force</code>,
+<code>mysqlimport</code> exits if a table doesn't exist.
+
+<DT><code>--host=<var>host_name</var>, -h <var>host_name</var></code>
+<DD>
+Import data to the MySQL server on the given host. The default host
+is <code>localhost</code>.
+
+<DT><code>--ignore, -i</code>
+<DD>
+See the description for the <code>--replace</code> option.
+
+<DT><code>--ignore-lines=<var>n</var></code>
+<DD>
+Ignore the first <var>n</var> lines of the data file.
+
+<DT><code>--local, -L</code>
+<DD>
+Read input files locally from the client host.
+
+<DT><code>--lock-tables, -l</code>
+<DD>
+Lock <em>all</em> tables for writing before processing any text files. This
+ensures that all tables are synchronized on the server.
+
+<DT><code>--password[=<var>password</var>], -p[<var>password</var>]</code>
+<DD>
+The password to use when connecting to the server.  If you use the
+short option form (<code>-p</code>), you <em>cannot</em> have a space between the
+option and the password.  If you omit the <var>password</var> value following the
+<code>--password</code> or <code>-p</code> option on the command line, you will be
+prompted for one.
+
+<DT><code>--port=<var>port_num</var>, -P <var>port_num</var></code>
+<DD>
+The TCP/IP port number to use for the connection.
+
+<DT><code>--protocol={TCP | SOCKET | PIPE | MEMORY}</code>
+<DD>
+The connection protocol to use.  New in MySQL 4.1.
+
+<DT><code>--replace, -r</code>
+<DD>
+The <code>--replace</code> and <code>--ignore</code> options control handling of input
+records that duplicate existing records on unique key values.  If you specify
+<code>--replace</code>, new rows replace existing rows that have the same unique key
+value. If you specify <code>--ignore</code>, input rows that duplicate an existing
+row on a unique key value are skipped.  If you don't specify either option, an
+error occurs when a duplicate key value is found, and the rest of the text
+file is ignored.
+
+<DT><code>--silent, -s</code>
+<DD>
+Silent mode.  Produce output only when errors occur.
+
+<DT><code>--socket=<var>path</var>, -S <var>path</var></code>
+<DD>
+The socket file to use when connecting to <code>localhost</code> (which is the
+default host).
+
+<DT><code>--user=<var>user_name</var>, -u <var>user_name</var></code>
+<DD>
+The MySQL username to use when connecting to the server.
+
+<DT><code>--verbose, -v</code>
+<DD>
+Verbose mode.  Print out more information what the program does.
+
+<DT><code>--version, -V</code>
+<DD>
+Display version information and exit.
+
+</DL>
+
+<P>
+Here is a sample session that demonstrates use of <code>mysqlimport</code>:
+
+</P>
+
+<PRE>
+shell&#62; mysql -e 'CREATE TABLE imptest(id INT, n VARCHAR(30))' test
+shell&#62; ed
+a
+100     Max Sydow
+101     Count Dracula
+.
+w imptest.txt
+32
+q
+shell&#62; od -c imptest.txt
+0000000   1   0   0  \t   M   a   x       S   y   d   o   w  \n   1   0
+0000020   1  \t   C   o   u   n   t       D   r   a   c   u   l   a  \n
+0000040
+shell&#62; mysqlimport --local test imptest.txt
+test.imptest: Records: 2  Deleted: 0  Skipped: 0  Warnings: 0
+shell&#62; mysql -e 'SELECT * FROM imptest' test
++------+---------------+
+| id   | n             |
++------+---------------+
+|  100 | Max Sydow     |
+|  101 | Count Dracula |
++------+---------------+
+</PRE>
+
+
+
+<H2><A NAME="mysqlshow" HREF="manual_toc.html#mysqlshow">8.11  <code>mysqlshow</code>, Showing Databases, Tables, and Columns</A></H2>
+
+<P>
+<A NAME="IDX986"></A>
+<A NAME="IDX987"></A>
+<A NAME="IDX988"></A>
+<A NAME="IDX989"></A>
+<A NAME="IDX990"></A>
+
+</P>
+<P>
+The <code>mysqlshow</code> client can be used to quickly look at which databases
+exist, their tables, and a table's columns or indexes.
+
+</P>
+<P>
+<code>mysqlshow</code> provides a command-line interface to several SQL
+<code>SHOW</code> statements.  The same information can be obtained by using those
+statements directly.  For example, you can issue them from the <code>mysql</code>
+client program.
+See section <A HREF="manual_SQL_Syntax.html#SHOW">13.5.4  <code>SHOW</code> Syntax</A>.
+
+</P>
+<P>
+Invoke <code>mysqlshow</code> like this:
+
+</P>
+
+<PRE>
+shell&#62; mysqlshow [<var>options</var>] [<var>db_name</var> [<var>tbl_name</var> [<var>col_name</var>]]]
+</PRE>
+
+
+<UL>
+<LI>
+
+If no database is given, all matching databases are shown.
+<LI>
+
+If no table is given, all matching tables in the database are shown.
+<LI>
+
+If no column is given, all matching columns and column types in the table
+are shown.
+</UL>
+
+<P>
+Note that in newer MySQL versions, you see only those
+database, tables, or columns for which you have some privileges.
+
+</P>
+<P>
+If the last argument contains shell or SQL wildcard characters (<samp>`*'</samp>,
+<samp>`?'</samp>, <samp>`%'</samp>, or <samp>`_'</samp>), only those names that are matched by the
+wildcard are shown.  If a database name contains any underscores, those
+should be escaped with a backslash (some Unix shells will require two) in
+order to get a list of the proper tables or columns. <samp>`*'</samp> and <samp>`?'</samp>
+characters are converted into SQL <samp>`%'</samp> and <samp>`_'</samp> wildcard characters.
+This might cause some confusion when you try to display the columns for a
+table with a <samp>`_'</samp> in the name, because in this case <code>mysqlshow</code>
+shows you only the table names that match the pattern.  This is easily fixed
+by adding an extra <samp>`%'</samp> last on the command line as a separate
+argument.
+
+</P>
+<P>
+<code>mysqlshow</code> supports the following options:
+
+</P>
+<DL COMPACT>
+
+<DT><code>--help, -?</code>
+<DD>
+Display a help message and exit.
+
+<DT><code>--character-sets-dir=<var>path</var></code>
+<DD>
+The directory where character sets are installed.  See section <A HREF="manual_MySQL_Database_Administration.html#Character_sets">5.8.1  The Character Set Used for Data and Sorting</A>.
+
+<DT><code>--compress, -C</code>
+<DD>
+Compress all information sent between the client and the server if both
+support compression.
+
+<DT><code>--debug[=<var>debug_options</var>], -# [<var>debug_options</var>]</code>
+<DD>
+Write a debugging log. The <var>debug_options</var> string often is
+<code>'d:t:o,<var>file_name</var>'</code>.
+
+<DT><code>--default-character-set=<var>charset</var></code>
+<DD>
+Use <var>charset</var> as the default character set.  See section <A HREF="manual_MySQL_Database_Administration.html#Character_sets">5.8.1  The Character Set Used for Data and Sorting</A>.
+
+<DT><code>--host=<var>host_name</var>, -h <var>host_name</var></code>
+<DD>
+Connect to the MySQL server on the given host.
+
+<DT><code>--keys, -k</code>
+<DD>
+Show table indexes.
+
+<DT><code>--password[=<var>password</var>], -p[<var>password</var>]</code>
+<DD>
+The password to use when connecting to the server.  If you use the
+short option form (<code>-p</code>), you <em>cannot</em> have a space between the
+option and the password.  If you omit the <var>password</var> value following the
+<code>--password</code> or <code>-p</code> option on the command line, you will be
+prompted for one.
+
+<DT><code>--port=<var>port_num</var>, -P <var>port_num</var></code>
+<DD>
+The TCP/IP port number to use for the connection.
+
+<DT><code>--protocol={TCP | SOCKET | PIPE | MEMORY}</code>
+<DD>
+The connection protocol to use.  New in MySQL 4.1.
+
+<DT><code>--socket=<var>path</var>, -S <var>path</var></code>
+<DD>
+The socket file to use when connecting to <code>localhost</code> (which is the
+default host).
+
+<DT><code>--status, -i</code>
+<DD>
+Display extra information about each table.
+
+<DT><code>--user=<var>user_name</var>, -u <var>user_name</var></code>
+<DD>
+The MySQL username to use when connecting to the server.
+
+<DT><code>--verbose, -v</code>
+<DD>
+Verbose mode.  Print out more information what the program does.
+This option can be used multiple times to increase the amount of information.
+
+<DT><code>--version, -V</code>
+<DD>
+Display version information and exit.
+
+</DL>
+
+
+
+<H2><A NAME="perror" HREF="manual_toc.html#perror">8.12  <code>perror</code>, Explaining Error Codes</A></H2>
+
+<P>
+<A NAME="IDX991"></A>
+<A NAME="IDX992"></A>
+
+</P>
+<P>
+<A NAME="IDX993"></A>
+<A NAME="IDX994"></A>
+
+</P>
+<P>
+For most system errors, MySQL displays, in addition to an internal text
+message, the system error code in one of the following styles:
+
+</P>
+
+<PRE>
+message ... (errno: #)
+message ... (Errcode: #)
+</PRE>
+
+<P>
+You can find out what the error code means by either examining the
+documentation for your system or by using the <code>perror</code> utility.
+
+</P>
+<P>
+<code>perror</code> prints a description for a system error code or for a storage
+engine (table handler) error code.
+
+</P>
+<P>
+Invoke <code>perror</code> like this:
+
+</P>
+
+<PRE>
+shell&#62; perror [<var>options</var>] <var>errorcode</var> ...
+</PRE>
+
+<P>
+Example:
+
+</P>
+
+<PRE>
+shell&#62; perror 13 64
+Error code  13:  Permission denied
+Error code  64:  Machine is not on the network
+</PRE>
+
+<P>
+Note that the meaning of system error messages may be dependent on your
+operating system. A given error code may mean different things on different
+operating systems.
+
+</P>
+
+
+
+<H2><A NAME="replace_utility" HREF="manual_toc.html#replace_utility">8.13  The <code>replace</code> String-Replacement Utility</A></H2>
+
+<P>
+<A NAME="IDX995"></A>
+<A NAME="IDX996"></A>
+
+</P>
+<P>
+The <code>replace</code> utility program changes strings in place in files or on
+the standard input. It uses a finite state machine to match longer strings
+first. It can be used to swap strings. For example, the following command
+swaps <code>a</code> and <code>b</code> in the given files, <tt>`file1'</tt> and <tt>`file2'</tt>:
+
+</P>
+
+<PRE>
+shell&#62; replace a b b a -- file1 file2 ...
+</PRE>
+
+<P>
+Use the <code>--</code> option to indicate where the string-replacement list
+ends and the filenames begin.
+
+</P>
+<P>
+Any file named on the command line is modified in place, so you may want to
+make a copy of the original before converting it.
+
+</P>
+<P>
+If no files are named on the command line, <code>replace</code> reads the standard
+input and writes to the standard output.  In this case, no <code>--</code> option is
+needed.
+
+</P>
+<P>
+The <code>replace</code> program is used by <code>msql2mysql</code>.
+See section <A HREF="manual_MySQL_APIs.html#msql2mysql">21.1.1  <code>msql2mysql</code>, Convert mSQL Programs for Use with MySQL</A>.
+
+</P>
+<P>
+<code>replace</code> supports the following options:
+
+</P>
+<DL COMPACT>
+
+<DT><code>-?, -I</code>
+<DD>
+Display a help message and exit.
+
+<DT><code>-# <var>debug_options</var></code>
+<DD>
+Write a debugging log. The <code><var>debug_options</var></code> string often is
+<code>'d:t:o,<var>file_name</var>'</code>.
+
+<DT><code>-s</code>
+<DD>
+Silent mode.  Print out less information what the program does.
+
+<DT><code>-v</code>
+<DD>
+Verbose mode.  Print out more information what the program does.
+
+<DT><code>-V</code>
+<DD>
+Display version information and exit.
+
+</DL>
+
+<P><HR><P>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_MySQL_Optimization.html">previous</A>, <A HREF="manual_Language_Structure.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+ </BODY>
+ </HTML>

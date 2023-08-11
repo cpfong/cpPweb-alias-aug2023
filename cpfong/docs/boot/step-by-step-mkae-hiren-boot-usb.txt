@@ -1,0 +1,5 @@
+format usb using window7 file manager
+open grub4dos_from_MaxT/grubinst_gui as ADMINISTRATOR (must root, or cannot see partition!!)
+instal at hd1
+copy grldr menu.lst 2 files and HBCD dir to usb
+done and reboot

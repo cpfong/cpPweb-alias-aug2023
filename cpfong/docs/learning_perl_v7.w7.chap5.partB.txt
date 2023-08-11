@@ -1,0 +1,41 @@
+$! # reason of failing
+
+open F, "< ./xx" or die "cannot open $!"  ; # with line number
+open F, "< ./xx" or die "cannot open $!\n"; # NO line number
+
+cat test.pl
+cat -n test.pl # -n or --number cat with number
+
+test.pl
+--
+# number 4 is four
+open F, "<./xx" or die "cannot open $!";
+
+cpfong@cpfong-1018P:~/tmp/trash$ cat -n t.pl | grep 4
+     3  # number 4 is four
+     4  open F, "<./xx" or die "cannot open $!";
+
+man cat
+--
+/-e -E
+
+cpfong@cpfong-1018P:~/tmp/trash$ cat -n t.pl | grep -E "\s+4"
+     3  # number 4 is four
+     4  open F, "<./xx" or die "cannot open $!";
+
+cpfong@cpfong-1018P:~/tmp/trash$ cat -n t.pl | grep -E "^\s+4"
+     4  open F, "<./xx" or die "cannot open $!";
+
+using filehandler
+--
+open F, '> ./foo' or die "cannot open $!";
+print    'hello world'; # print to STDOUT
+print F  'hello world'; # print to F (filehandler which is ./foo), note : no , after F
+print F, 'hello world'; # print has two arguments
+
+changing the default filehandler
+--
+open BEDROCK, '> ./foo' or die "cannot oepn $!";
+select BEDROCK;
+print "I hope Mr. Slate doesn't find out about this.\n";
+print "Wilma!\n";

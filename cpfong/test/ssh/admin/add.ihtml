@@ -1,0 +1,37 @@
+<HTML>
+<HEAD>
+<TITLE>New user addpage</TITLE>
+</HEAD>
+<BODY>
+<form  method="post" action="?menu=action&type=add">
+<TABLE>
+  <TBODY>
+    <TR>
+      <TD align="right">LoginID</TD>
+      <TD>
+      <INPUT size="20" type="text" name="newloginID">
+      </TD>
+    </TR>
+    <TR>
+      <TD align="right">Password</TD>
+      <TD>
+      <INPUT size="20" type="password" name="newpass">
+      </TD>
+    </TR>
+    <TR>
+      <TD align="right">E-Mail Address</TD>
+      <TD>
+      <INPUT size="40" type="text" name="newemail">
+      </TD>
+    </TR>
+    <TR>
+      <TD colspan="2" align="center">
+      <INPUT type="submit" name="Add User" value="Add User">
+      </TD>
+    </TR>
+  </TBODY>
+</TABLE>
+</FORM>
+</BODY>
+</HTML>
+

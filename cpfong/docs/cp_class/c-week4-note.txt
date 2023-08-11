@@ -1,0 +1,119 @@
+// malloc
+#include "stdio.h"
+#include "stdlib.h"
+
+#define N 5
+int main(){
+ int i;
+ int array[N];
+
+ int *p;
+ p= (int *)malloc(N*sizeof(int));
+
+ // init array
+ for (i=0;i<N;i++){
+  array[i]=0;
+ }
+
+ i=0;
+ for (i=0;i<N;i++){
+  *(p+i)=0;
+ }
+ return 0;
+}
+
+
+// malloc char
+#include "stdio.h"
+#include "stdlib.h"
+#include "string.h"
+
+#define N 5
+
+int main(){
+ int i;
+
+ char *p;
+ p = (char *) malloc(N*sizeof(char));
+
+ strcpy(p, "test");
+
+ for (i=0; i<N; i++){
+ printf("%c\n", p[i]);
+ }
+
+ return 0;
+}
+
+// bubble sort
+#include "stdlib.h"
+#include "time.h"
+
+#define N 5
+int main(){
+ int array[N]={70,89,60,90,95};
+ int i,j,t;
+
+ // bubble
+ for (i=0; i<N; i++){
+  for (j=i+1; j<N; j++){
+   if (array[i] > array[j]){
+    t=array[i];
+    array[i]=array[j];
+    array[j]=t;
+   }
+  }
+ }
+ for (i=0;i<N;i++){
+  printf("%d ", array[i]);
+ }
+}
+
+// pointer
+#include "stdio.h"
+#include "stdlib.h"
+#include "time.h"
+
+#define N 15
+#define MIN 10
+#define MAX 100
+
+void swap (int *, int *);
+
+int main(){
+ int *p;
+ int i,j;
+ time_t t;
+
+ p=malloc(N * sizeof(int));
+
+ srand((unsigned) time(&t)); // srand is must, or it create SAME number
+
+ // N random int
+ for (i=0; i<N; i++){
+  *(p+i)=rand()%(MAX-MIN+1) + MIN;
+ }
+
+ // bubble sorting
+ for (i=0; i<N; i++){
+  for (j=i+1; j<N; j++){
+   if (*(p+i) > *(p+j)){
+    swap(p+i, p+j);
+   }
+  }
+ }
+
+ for (i=0; i<N; i++){
+  printf ("%d ", *(p+i));
+ }
+ printf ("\n");
+
+}
+
+void swap(int *s, int *d){
+ int t;
+ t=*s;
+ *s=*d;
+ *d=t;
+}
+

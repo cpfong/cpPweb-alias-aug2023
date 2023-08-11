@@ -1,0 +1,16 @@
+https://cn.aliyun.com
+http://www.vultr.com
+https://www.amazonaws.cn
+
+aliyun: $60/month: adv proj running ok, all chinese
+vultr: $67.87/month $100us free 1st month: adv i am using it
+amazon: 12 months free: adv 1 year free
+
+under 24 (search campus / then campus.2018)
+https://developer.aliyun.com/article/722830
+
+2 months free
+--
+https://developer.aliyun.com/adc/student/?spm=a2c6h.13788096.J_7970846300.1.7c9476387VXz7Q&accounttraceid=4b7dd1f400f84ccb90cf2c625751cbd3rxnx#ecscolleges-collocation-stu
+
+must FreeBSD

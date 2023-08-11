@@ -1,0 +1,2 @@
+# ftp ca.crt from ldap server!
+TLS_CACERT              /usr/local/etc/openldap/ca.crt

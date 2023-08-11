@@ -1,0 +1,6 @@
+package=AvpNewVirusCode
+hostname=www.tschurch.org.
+site=ftp.avp.ch.
+remote_dir=/updates
+local_dir=/usr/local/avp/updates
+do_deletes=true

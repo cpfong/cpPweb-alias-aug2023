@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+ <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.9">
+ <TITLE>Mail2News Mini-Howto: The posting script &amp; perl</TITLE>
+ <LINK HREF="Mail2News-6.html" REL=next>
+ <LINK HREF="Mail2News-4.html" REL=previous>
+ <LINK HREF="Mail2News.html#toc5" REL=contents>
+</HEAD>
+<BODY>
+<A HREF="Mail2News-6.html">Next</A>
+<A HREF="Mail2News-4.html">Previous</A>
+<A HREF="Mail2News.html#toc5">Contents</A>
+<HR>
+<H2><A NAME="s5">5. The posting script &amp; perl</A></H2>
+
+<H2><A NAME="ss5.1">5.1 What is Perl?</A>
+</H2>
+
+<P>Perl stands for Practical Extension and Report Language.  It
+is very popular for small scripts which manipulate text which
+is exactly what we need.
+<P>
+<P>Perl is installed by default on almost every Unix system.  
+<P>
+<H2><A NAME="ss5.2">5.2 Location of perl</A>
+</H2>
+
+<P>If you perl intepreter is in an unusual place (not <CODE>/usr/bin/</CODE>) then
+you will have to modify the first line of the script.
+If this line is wrong, on my 2.2 kernel system I get
+"bash: /usr/local/bin/mail2news.pl: No such file or directory"
+Can we please change this to "bash: /usr/local/bin/mail2news.pl: 
+Interpreter not found.  Check first line of script." ?
+<P>
+<H2><A NAME="ss5.3">5.3 The mail2news.pl script</A>
+</H2>
+
+<P>
+<HR>
+<PRE>
+#!/usr/bin/perl
+
+($program = $0) =~ s%.*/%%;
+
+#( $version  ) = $] =~ /(\d+\.\d+).*\nPatch level/;
+#die "$program: requires at least version 3 of perl\n"
+#        if $version &lt; 3;
+
+# $news_poster_program = "/usr/bin/inews";
+# $news_poster_options = "-h -o \"mail2news gateway\"";
+$news_poster_program = "/usr/bin/rnews";
+$news_poster_options = "-r localhost";
+$postinghost = "localhost";
+
+if ($#ARGV &lt; 0) {
+    # $newsgroup = "test";
+    # we'll expect the newsgroup line in the body
+} elsif ($#ARGV == 0) {
+    $newsgroup = $ARGV[0];
+} else {
+    die "usage: $program [newsgroup]\n";
+}
+
+# in case inews dumps core or something crazy
+$SIG{'PIPE'} = "plumber";
+sub plumber { die "$program: \"$news_poster_program\" died prematurely!\n"; }
+
+open (INEWS, "| $news_poster_program $news_poster_options") ||
+    die "$program: can't run $news_poster_program\n";
+
+# header munging loop
+while (&lt;STDIN>) {
+   last if /^$/;
+
+   # transform real from: line back to icky style
+   s/^From:\s+(.*) &lt;(.*)>/From: $2 ($1)/;
+
+   s/Message-Id/Message-ID/;
+ 
+   # transform from_ line to path header; also works locally
+   s/^From\s+(\S+)@(\S+).*/Path: $2!$1/
+     || s/^From\s+(\S+)[^@]*$/Path: $1\n/;
+
+   print INEWS
+#       if /^(Date|From|Subject|Path|Newsgroups|Organization|Message-ID):/i;
+   if /^(Date|From|Subject|Path|Newsgroups|Message-ID):/i;
+   $saw_subject |= ( $+ eq 'Subject' );
+
+   $saw_msgid |= ( $+ eq 'Message-ID' );
+
+#   $saw_newsgroup |= ( $+ eq 'Newsgroups' );
+}
+
+warn "$program: didn't expect newsgroup in both headers and ARGV\n"
+    if $newsgroup &amp;&amp; $saw_newsgroup;
+ 
+die "$program: didn't get newsgroup from either headers or ARGV\n"
+    unless $newsgroup || $saw_newsgroup;
+     
+$approved = $newsgroup;
+$approved =~ s/\./'-'/eg;
+
+($sec,$min,$hour,$mday,$mon,$year)=localtime(time);
+$madeupid = "\&lt;$year$mon$mday.$hour$min$sec.$$\@kepler.hedland.edu.au\>";
+
+printf INEWS "Newsgroups: %s\n", $newsgroup if $newsgroup;
+printf INEWS "Approved: %s\@kepler.hedland.edu.au\n", $approved;
+print  INEWS "Subject: Untitled\n" unless $saw_subject;
+printf INEWS "Message-ID: %s\n", $madeupid unless $saw_msgid;
+printf INEWS "NNTP-Posting-Host: %s\n", $postinghost;
+print  INEWS "Organisation: (mail2news gateway)\n";
+print  INEWS "\n";
+ 
+print INEWS while &lt;STDIN>;   # gobble rest of message
+    
+close INEWS;
+
+# update from Steve Platt &lt;svp@uk.research.att.com>
+# based on mail2news.c by Rich Saltz
+# 70 is EX_SOFTWARE
+exit ( ( $? &amp; 0xff ) == 0 ? ( $? >> 8 ) &amp; 0xff : 70 );
+</PRE>
+<HR>
+<P>
+<P>I saved the script in /usr/local/bin (and will use this 
+path throughout the HOWTO).
+<P>
+<P>Be sure to make the script executable by all, but not
+writable by group or other.  Sendmail is picky.
+<BLOCKQUOTE><CODE>
+<PRE>
+chmod a+x /usr/local/bin/mail2news.pl
+chmod go-w /usr/local/bin/mail2news.pl
+</PRE>
+</CODE></BLOCKQUOTE>
+
+or
+<BLOCKQUOTE><CODE>
+<PRE>
+chmod 555 /usr/local/bin/mail2news.pl
+</PRE>
+</CODE></BLOCKQUOTE>
+
+for short.
+<P>
+<H2><A NAME="ss5.4">5.4 How do I know if the script is running?</A>
+</H2>
+
+<P>I tested this script by changed my news poster from
+/usr/bin/rnews to /bin/cat.  I then saved an e-mail
+send to myself in a file.  Finally I ran the mail2news.pl
+on the saved mail and captured the output to a file.
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+/usr/local/bin/mail2news.pl ietf.confctrl &lt;/tmp/savedMailFile >/tmp/article
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>
+<H2><A NAME="ss5.5">5.5 What is with the Aussie?</A>
+</H2>
+
+<P>Yes, the output of your posting script should contain the 
+e-mail address of an Austrailian.  My guess
+is that  his
+address is a trusted address in your news configuration 
+(althogh I could not find it in mine) for
+approving moderated postings. 
+<P>
+<H2><A NAME="ss5.6">5.6 What do you mean $PATH?</A>
+</H2>
+
+<P> If the mail2news.pl script is not in my path, I get
+the error <CODE>bash: mail2news.pl: command not found</CODE>.  You will need
+to either add this directory to your path 
+<BLOCKQUOTE><CODE>
+<PRE>
+PATH=$PATH:/usr/local/bin
+</PRE>
+</CODE></BLOCKQUOTE>
+
+(which only works for the current login)
+or give an absolute path when you run the script 
+<BLOCKQUOTE><CODE>
+<PRE>
+/usr/local/bin/mail2news.pl
+</PRE>
+</CODE></BLOCKQUOTE>
+
+To view your current path type
+<BLOCKQUOTE><CODE>
+<PRE>
+echo $PATH
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>
+<HR>
+<A HREF="Mail2News-6.html">Next</A>
+<A HREF="Mail2News-4.html">Previous</A>
+<A HREF="Mail2News.html#toc5">Contents</A>
+</BODY>
+</HTML>

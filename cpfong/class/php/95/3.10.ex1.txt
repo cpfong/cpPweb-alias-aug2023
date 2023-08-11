@@ -1,0 +1,8 @@
+<?php
+	// 連線上 localhost 用 l1501611 上線, 密碼用 1234, 若沒成功則告知錯的原因
+	$conn = mysql_connect("localhost", "l1501611", "1234") or die(mysql_error());
+	// 打開資料庫
+	mysql_select_db("db", "$conn") or die(mysql_error()); 
+	mysql_query("select * from id") or die(mysql_error());
+	mysql_close($db1);
+?>

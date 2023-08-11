@@ -1,0 +1,25 @@
+#!/bin/sh
+
+array=''
+for acc in `cat`; do
+ array="${array} ${acc}"
+done < /dev/stdin
+
+names=$(printf "%s\n" "$array" | sed -e 's/^[ \t]*//')
+
+for n in $names; do
+ printf "%s\n" "pw useradd -n $n -s /bin/csh -m"
+ printf "echo secret.of.this.user | pw mod user %s -h 0\n" "$n"
+done
+
+names='s1'
+for i in `jot 3 2 4`; do
+ names="${names} s$i"
+done
+
+for n in $names; do
+ printf "%s\n" "pw useradd -n $n -s /bin/csh -m"
+done
+
+# "pw useradd -n $acc -s /bin/csh -m"
+#  echo "echo 'i-love-you' | pw mod user $acc -h 0"

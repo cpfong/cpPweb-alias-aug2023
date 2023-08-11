@@ -1,0 +1,45 @@
+man restic
+using search to find thing in mannual
+
+fetch it back
+--
+.bashrc
+.tmux.conf	(copy & paste)
+
+echo 12345678 >~/pwd
+
+edit a simple shell
+--
+#!/bin/sh
+rclone purge koofr:repo
+rclone mkdir koofr:repo
+restic --repo=rclone:koofr:repo --password-file=./pwd init
+restic --repo=rclone:koofr:repo --password-file=./pwd backup /usr/local/etc/
+
+3 ways of passing parameters
+--password-file=
+-p
+$RESTIC_PASSWORD_FILE
+
+restic --repo=
+restic -r
+restic
+
+A=10
+echo $A
+export A=10
+
+$RESTIC_PASSWORD_FILE
+bash> export RESTIC_PASSWORD_FILE='/home/cpfong/tmp/trash/foo.pwd'
+
+restic ls latest 	#check the latest snapshot
+restic find foo		#check all snapshots
+
+restic -r /srv/restic-repo dump latest production.sql
+
+restic forget snap_id
+restic prune snap_id
+
+restore
+--
+restic restore 17adfc7c --repo=rclone:koocn:foo/ --password-file=./foo.pwd --target=./target/

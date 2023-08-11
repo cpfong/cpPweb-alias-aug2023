@@ -1,0 +1,39 @@
+1. cetificate
+2. learning curve
+3. hw explain
+
+1. how to kill a process: take vi as an exmple
+2. different with mosh
+3. kill mosh process
+
+cpfong@18101~ % ls -l /etc/localtime 
+lrwxr-xr-x  1 root  wheel  33 Aug  6  2019 /etc/localtime -> /usr/share/zoneinfo/Asia/Shanghai
+
+practice ln
+
+$date
+vi ~/.cshrc
+setenv LANG zh_CN.UTF-8
+$date
+
+#find / -name 'zh_*' -type d
+
+
+uname -a
+--
+
+install fetch pkg
+--
+
+fetch
+--
+fetch files
+logout still cannot get it back?
+how to background?
+ps aux | grep fetch
+
+process
+--
+kill -TERM process_id
+
+alias tmuxatts0 /usr/local/bin/tmux attach-session -t 0

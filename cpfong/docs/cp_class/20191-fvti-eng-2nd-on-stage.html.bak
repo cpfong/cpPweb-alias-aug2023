@@ -1,0 +1,97 @@
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+<html>
+rule A: due 2018/11/25 23:59, -0.5 every 2 hrs, after 2018/11/28 23:59 not acceptable <br>
+rule B: turn in format: plain text file <a href=./171201013301.txt>171201013301.txt</a> filename or format wrong -1 <br>
+rule C: typo: 1 error word -1 <br>
+rule D: min: 100 words, 1 word less -1 <br>
+<br>
+Dec 2019 上台 2 
+<br><br>
+<table border=1>
+
+<!-- header -->
+<tr>
+<td>date 
+<td>name turn words error 
+<td>name turn words error 
+<td>name turn words error 
+<td>name turn words error 
+
+
+<tr>
+<td>12/01 Tue 二 
+<td>刘定乾 11/
+<td>林立挺 11/
+<td>林铖 11/
+<td>叶秉鑫 11/
+
+
+<tr>
+<td bgcolor='lightblue'>12/03 Thu 四
+<td bgcolor='lightblue'>郑力力 11/
+<td bgcolor='lightblue'>陈健伟 11/
+<td bgcolor='lightblue'>林腾东 11/
+<td bgcolor='lightblue'>卞霖冀 11/
+
+<tr><td>12/08 Tue 二 
+<td>林浩杰 11/
+<td>叶嘉鑫 11/
+<td>李智群 11/
+<td>杨华秋 11/
+
+<tr><td bgcolor='lightblue'>12/10 Thu 四
+<td bgcolor='lightblue'>乐园 11/
+<td bgcolor='lightblue'>任育煌 11/
+<td bgcolor='lightblue'>陈玫芯 11/
+<td bgcolor='lightblue'>陈家锋 11/
+
+<tr><td>12/15 Tue 二 
+<td>庄忠兴 11/
+<td>陈冰冰 11/
+<td>苏展宏 11/
+<td>黄炜彬 11/
+
+<tr><td bgcolor='lightblue'>12/17 Thu 四
+<td bgcolor='lightblue'>伍国雄 11/
+<td bgcolor='lightblue'>沈子炼 11/
+<td bgcolor='lightblue'>林镇洲 11/
+<td bgcolor='lightblue'>黄龙强 11/
+
+<tr><td>12/22 Tue 二 
+<td>苏世杰 11/
+<td>李兴昌 11/
+<td>徐慧思远 11/
+<td>黄嘉文 11/
+
+
+<tr><td bgcolor='lightblue'>12/24 Thu 四
+<td bgcolor='lightblue'>俞翔 11/
+<td bgcolor='lightblue'>吴鑫源 11/
+<td bgcolor='lightblue'>叶锦泽 11/
+<td bgcolor='lightblue'>林淑婧 11/
+
+<tr><td>12/29 Tue 二 
+<td>谢鑫鑫 11/
+<td>陈林灿 11/
+<td>吴俊峰 11/
+<td>陈少寒 11/
+
+
+<tr><td bgcolor='lightblue'>01/03 Thu 四
+<td bgcolor='lightblue'>周敏 11/
+<td bgcolor='lightblue'>张文鑫 11/
+<td bgcolor='lightblue'>钟建基 11/
+<td bgcolor='lightblue'>罗锦辉 11/
+
+</html>
+
+
+<!--zzz keepME
+<td>
+<td bgcolor='lightblue'>
+
+>
+ bgcolor='lightblue'>
+
+
+-->

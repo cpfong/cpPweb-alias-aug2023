@@ -1,0 +1,28 @@
+#!/bin/sh
+# Creating the jail Template
+# build & install world, this /home/j is a template for all jails
+
+root='/home/j/mroot'
+skel='/home/j/skel'
+
+echo "mkdir -p $root"
+
+#cd /usr/src; make buildworld # 1st needed, no need 4 2nd time, very time consuming, you may have a cup of coffee
+
+echo "cd /usr/src"
+echo "make installworld DESTDIR=$root"
+echo "make distribution DESTDIR=$root"
+
+# all jais has its ports now,  Ports Collection for the jails
+
+echo "mkdir $root/usr/ports"
+echo "cpdup /usr/src $root/usr/src"
+
+# Create a skeleton for the read-write
+echo "mkdir $skel $skel/home $skel/usr-X11R6 $skel/distfiles"
+
+echo "mv $root/etc $skel"
+echo "mv $root/usr/local $skel/usr-local"
+echo "mv $root/tmp $skel"
+echo "mv $root/var $skel"
+echo "mv $root/root $skel"

@@ -1,0 +1,13 @@
+Q: 簽入主機?
+A: telnet cc.fjtc.edu.tw --> ssh l2506101@cpfong.fjtc.edu.tw ( 或 ssh cpfong )
+
+Q: 在家中也可以連上主機來組譯否?
+A: 可以, 作法如次, 開始 -> 執行 -> telnet cc.fjtc.edu.tw -> 輸入你的帳號和密碼 -> ssh cpfong
+
+Q: 如何 組譯, run ?
+A: 1. vi test.c
+   2. cc test.c
+   3. ./a.out
+
+Q: 我上課沒帶磁片 
+A: 和班長買一張磁片, 把磁片交給老師  

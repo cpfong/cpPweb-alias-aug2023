@@ -1,0 +1,1558 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org" />
+<title>FreeBSD PXEBoot Guide</title>
+<meta name="GENERATOR" content="Modular DocBook HTML Stylesheet Version 1.79" />
+<link rel="STYLESHEET" type="text/css" href="docbook.css" />
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+</head>
+<body class="ARTICLE" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#840084"
+alink="#0000FF">
+<div class="ARTICLE">
+<div class="TITLEPAGE">
+<h1 class="TITLE"><a id="AEN2" name="AEN2">FreeBSD PXEBoot Guide</a></h1>
+
+<h3 class="AUTHOR"><a id="AEN4" name="AEN4">Erik Nørgaard</a></h3>
+
+<div class="AFFILIATION">
+<div class="ADDRESS">
+<p class="ADDRESS"><code class="EMAIL">&#60;<a
+href="mailto:norgaard@locolomo.org">norgaard@locolomo.org</a>&#62;</code></p>
+</div>
+</div>
+
+<p class="COPYRIGHT">Copyright &copy; 2005 Erik Norgaard</p>
+
+<div>
+<div class="ABSTRACT"><a id="AEN13" name="AEN13"></a>
+<p>This guide describes how to use the pxeboot boot loader for FreeBSD for booting hosts
+over the network, both for jumpstart installation and diskless clients. The guide is
+based on FreeBSD 6.1-RELEASE on the i386 platform.</p>
+</div>
+</div>
+
+<div class="DOCFORAMTNAVI">[ <a href="./index.html">Split HTML</a> / <a
+href="./article.html">Single HTML</a> ]</div>
+
+<hr />
+</div>
+
+<div class="SECT1">
+<h2 class="SECT1"><a id="PREFACE" name="PREFACE">1. Preface</a></h2>
+
+<p>I wrote this guide while setting up a "jumpstart" server to document what I had done
+so I could get back on the track if necessary. I used other guides as reference, but
+found that these were either outdated or lacked important details.</p>
+
+<p>I started writing this guide using FreeBSD 5.3, but the project stopped because I had
+problems with diskless operation using the now obsolete version of <span
+class="CITEREFENTRY"><span class="REFENTRYTITLE">dhclient</span>(8)</span>. It turned out
+that using DHCP for configuration of diskless clients has not worked for a long time.
+Meanwhile 5.5 and 6.1 have been released. I am updating the document to match the latest
+stable release of FreeBSD, please excuse broken links and other errors.</p>
+
+<div class="SECT2">
+<hr />
+<h3 class="SECT2"><a id="AEN22" name="AEN22">1.1. Warning</a></h3>
+
+<p>Following the instructions in this guide may render your system(s) useless and cause
+data loss. Whatever you are up to, it is on your own risk.</p>
+
+<p>I did screw up my own system quite seriously while trying to get things to do a
+jumpstart installation. I hope I have documented the path that does not screw up (too
+much) :-)</p>
+</div>
+
+<div class="SECT2">
+<hr />
+<h3 class="SECT2"><a id="AEN26" name="AEN26">1.2. Problems with PXEBoot</a></h3>
+
+<p>If you have problems with PXEBoot, please ask on the appropriate mailing list, don't
+ask me for help personally. This way everyone can help solve the problem and learn from
+it. If your problems are caused by errors in the document, or you have other comments on
+how to make this document better, feel free to contact me.</p>
+
+<p>Please note: I have documented some advanced tricks that according to the
+documentation around should work, but I have not tested this yet. If you find examples
+that just won't work, please let me know. Before reporting this, make sure you are
+following the exact procedure described here, or else I can't know if the problem is
+caused by messed up configuration.</p>
+</div>
+</div>
+
+<div class="SECT1">
+<hr />
+<h2 class="SECT1"><a id="BASICS" name="BASICS">2. Network booting basics</a></h2>
+
+<p>This section introduces the general concepts and ideas and the motivation for going
+into the next sections. You can skip this if you are in a hurry.</p>
+
+<div class="SECT2">
+<hr />
+<h3 class="SECT2"><a id="AEN33" name="AEN33">2.1. Introduction</a></h3>
+
+<p>Intel's PXE (Preboot eXecution Environment) is a small boot code that lets your client
+query network configuration using DHCP and fetch a boot loader using TFTP. This has
+become standard in many computers and has replaced etherboot.</p>
+
+<p>This guide sets out to explore two uses of network booting: Jumpstart installation of
+FreeBSD and diskless clients:</p>
+
+<ul>
+<li>
+<p>Jumpstart installation has roots at Sun (at least the name) and can be used to
+automate installation of a large number of identical machines or simply avoid using
+install cd's. A homogeneous server farm is easier to maintain, and automated installation
+lets you quickly setup a new server: plug it in, turn it on, drink coffee.</p>
+</li>
+
+<li>
+<p>Diskless clients has a number of advantages: You can easily set up and manage a large
+number of identical diskless clients. No disk means less noise and longer lifetime of
+your hardware and a beter working environment for your users. No disk means that files
+must be fetched from a central server, hence only updating on the server.</p>
+</li>
+</ul>
+
+<p>In both cases the benefit is ease of maintenance when working with a large number of
+workstations or servers. If you're only doing it for one machine, then it's mostly for
+the sport and learning, but those too are valid reasons.</p>
+
+<p>Setting up a server has been documented in numerous documents, however not every step
+is clear and various documents describe different paths to follow and some parts are
+obsolete. This document is probably no different.</p>
+</div>
+
+<div class="SECT2">
+<hr />
+<h3 class="SECT2"><a id="AEN44" name="AEN44">2.2. Hard- and software</a></h3>
+
+<p>The hardware must support PXE network booting. Many motherboards with on board Intel
+based network interface supports PXE. VIA produces mini-ITX format motherboards including
+some fanless ones, these are ideal for building cheap diskless and completely silent
+clients.</p>
+
+<p>Any system can function as server as long as they support the services needed to serve
+the files to the booting client. However, it is easier to setup when using the same
+platform and version of FreeBSD on the server and client.</p>
+</div>
+
+<div class="SECT2">
+<hr />
+<h3 class="SECT2"><a id="AEN48" name="AEN48">2.3. Understanding the boot process</a></h3>
+
+<p>When a PXE client boots, the boot process goes through a number of stages, which are
+roughly as follows:</p>
+
+<ol type="1">
+<li>
+<p>PXE sends a bootp query on the network and receives information for configuring the
+network interface: IP address, netmask, default router. Also it receives information
+about where to fetch a boot loader and the path name of the root device.</p>
+</li>
+
+<li>
+<p>PXE fetches the boot loader with tftp (the boot loader is actually the normal FreeBSD
+loader with some extra pxe code and tftp or nfs support). Before any other file, the
+loader fetches <tt class="COMMAND">boot/loader.rc</tt> and any included files using tftp.
+These files contains information about where to get a kernel and posibly a root
+device.</p>
+</li>
+
+<li>
+<p>The kernel is loaded and the root file system mounted. The kernel will need to acquire
+information about the network configuration, either by using information passed from
+stage 2 or by sending a new bootp request.</p>
+</li>
+</ol>
+
+<p>To enter stage 1, PXE must be supported by the hardware. Alternatively one can install
+a flash boot image or boot on a floppy - this method is not covered in this document.</p>
+
+<p>In stage 2, if pxeboot is compiled with nfs support (default) it will try to nfs mount
+the root device specified in the root-path option sent by the dhcp server. If pxeboot is
+compiled with tftp support, it will fetch the files using tftp. In both cases, it will
+first read the file <tt class="COMMAND">boot/loader.rc</tt> where the path is relative to
+the nfs root directory or tftp directory.</p>
+
+<p>What happens after stage 3 depends on how we populate the root file system.</p>
+</div>
+
+<div class="SECT2">
+<hr />
+<h3 class="SECT2"><a id="AEN63" name="AEN63">2.4. The root device: Memory FS vs. Network
+FS</a></h3>
+
+<p>The root device can either be a memory disk or an nfs share, both have their
+advantages and disadvantages:</p>
+
+<ul>
+<li>
+<p>A memory disk is loaded into RAM making file access fast once loaded, but storage
+space is limited.</p>
+</li>
+
+<li>
+<p>A network mounted device, files are fetched as needed. Loading programs is slower but
+only programs actually needed are kept in memory and storage space is bigger.</p>
+</li>
+</ul>
+
+<p>Serving a memory disk is easy as it can be fetched with tftp, and tftp has to be setup
+anyway to serve the pxeboot loader. But, the memory disk is a bit more cumbersome to
+populate, customise and update.</p>
+
+<p>The main disadvantage of using tftp to fetch a memory file system is that all clients
+will fetch the same files, load the same kernel and memory file system, regardless of
+hardware, version of FreeBSD or the purpose of the client.</p>
+
+<p>With an nfs root device you can specify different root mounts for different clients.
+This means that it is posible to support multiple hardware platforms and configurations
+from the same server.</p>
+
+<p>The main reason to avoid nfs is that it is difficult to set up in particular if there
+is a firewall in the way.</p>
+
+<p>The jumpstart installation section will take the approach of using a memory disk
+device while for diskless clients we use nfs. So both methods are covered. Setting up
+pxeboot, you can choose the path you find best and ignore the other.</p>
+</div>
+
+<div class="SECT2">
+<hr />
+<h3 class="SECT2"><a id="AEN76" name="AEN76">2.5. Security</a></h3>
+
+<p>Keep in mind that all data will be transferred across the network, and at least
+initially without encryption making your traffic target for eavesdropping.</p>
+
+<p>Do not boot diskless clients on an untrusted network! After boot, connections can be
+encrypted, but the encryption keys will have been sent in the clear at boot time.</p>
+</div>
+</div>
+
+<div class="SECT1">
+<hr />
+<h2 class="SECT1"><a id="SERVER" name="SERVER">3. Server setup</a></h2>
+
+<p>The server configuration is similar for both diskless clients and jumpstart
+installation, allthough for diskless operation we will use NFS to serve files and for
+jumpstart we will use FTP.</p>
+
+<p>This section describes the configuration of the required services. The population of
+the directories with files to be served is covered in the following sections.</p>
+
+<p>We will assume that the server and pxebooting clients are located on the 172.16.0.0/16
+subnet. All services may be identified by DNS lookup, such that nfs.example.com is the
+nfs server and tftp.example.com is the tftp server. &#13;</p>
+
+<div class="SECT2">
+<hr />
+<h3 class="SECT2"><a id="AEN85" name="AEN85">3.1. DHCP</a></h3>
+
+<p>We will be using dhcpd v. 3.0 from the <a href="http://www.isc.org"
+target="_top">Internet Software Consortium (ISC)</a> which can be installed from ports
+(<a href="http://www.FreeBSD.org/cgi/url.cgi?ports/net/isc-dhcp3-server/pkg-descr"><tt
+class="FILENAME">net/isc-dhcp3-server</tt></a>). The configuration file, <span
+class="CITEREFENTRY"><span class="REFENTRYTITLE">dhcpd.conf</span>(5)</span>, should be
+something like this for the basic configuration:</p>
+
+<pre class="SCREEN">
+# Configuration file for ISC's dhcpd v. 3.0
+#
+# Server is authoritative for the subnets.
+authoritative; 
+
+# Disable dynamic dns update
+ddns-update-style none;
+
+subnet 172.16.0.0 netmask 255.255.0.0 {
+  range 172.16.128.0 172.16.255.254;
+  default-lease-time 3600;
+  max-lease-time 86400;
+ 
+  option domain-name "example.com";
+  option domain-name-servers ns.example.com;
+  option routers gateway.example.com;
+
+}
+</pre>
+
+<p>This will assign unknown clients IP in the specified range. For jumpstart installation
+we add the following section within the subnet block:</p>
+
+<pre class="SCREEN">
+group { # jumpstart clients
+  use-host-decl-names on;
+  next-server tftp.example.com;
+  filename "boot/pxeboot";
+}
+</pre>
+
+<p>The line <tt class="COMMAND">next-server tftp.example.com;</tt> tells the client where
+to fetch the bootloader, and <tt class="COMMAND">filename "boot/pxeboot"</tt> tells which
+file to request. The path to the boot loader is relative to the root directory of the
+tftp server.</p>
+
+<p>For diskless clients, the following section within the subnet block should replace the
+section above for jumpstart clients.</p>
+
+<pre class="SCREEN">
+group { # diskless clients
+  use-host-decl-names on;
+  next-server tftp.example.com;
+  filename "boot/pxeboot";
+  option root-path "nfs.example.com:/var/diskless/FreeBSD";
+
+  host diskless-1 {
+    hardware ethernet 00:40:63:d4:89:73;
+  }
+}
+</pre>
+
+<p>For diskless client setup, we also need to specify the root device: <tt
+class="COMMAND">option root-path "nfs.example.com:/var/diskless/FreeBSD"</tt> tells the
+client where to get an NFS root mount, if not set it will default to <tt
+class="COMMAND">&lt;next-server&gt;:/pxeroot</tt>. An alternative is to edit <span
+class="CITEREFENTRY"><span class="REFENTRYTITLE">loader.conf</span>(5)</span> to specify
+a root device (this method is not covered for diskless clients, but is used for
+jumpstart).</p>
+
+<p>For each client a host declaration is included, this may be omitted. but in particular
+if the network also hosts non-diskless clients it may be used to tighten control.</p>
+
+<p>To enable <tt class="COMMAND">dhcpd</tt>, add the following lines to <tt
+class="FILENAME">rc.conf</tt>:</p>
+
+<pre class="SCREEN">
+dhcpd_enable="YES"
+dhcpd_flags="-q"
+dhcpd_conf="/etc/dhcpd.conf"
+dhcpd_ifaces=""
+dhcpd_withumask="077"
+dhcpd_chuser_enable="YES"
+dhcpd_chroot_enable="NO"
+dhcpd_rootdir="/var/db/dhcpd"
+</pre>
+
+<p>Then start <tt class="COMMAND">dhcpd</tt>:</p>
+
+<pre class="SCREEN">
+# /usr/local/etc/rc.d/dhcpd.sh start
+</pre>
+
+<div class="NOTE">
+<blockquote class="NOTE">
+<p><b>Note:</b> If you make any changes to <tt class="FILENAME">dhcpd.conf</tt> you need
+to restart the <tt class="COMMAND">dhcpd</tt> daemon, you cannot just send a SIGHUP.</p>
+</blockquote>
+</div>
+</div>
+
+<div class="SECT2">
+<hr />
+<h3 class="SECT2"><a id="AEN119" name="AEN119">3.2. TFTP</a></h3>
+
+<p>Unless you decide to serve all files with nfs you need to enable <span
+class="CITEREFENTRY"><span class="REFENTRYTITLE">tftpd</span>(8)</span>. <tt
+class="COMMAND">tftp</tt> is supported in the FreeBSD base system, to enable tftp edit
+the file <tt class="FILENAME">/etc/inetd.conf</tt> to enable the following line:</p>
+
+<pre class="SCREEN">
+tftp  dgram  udp  wait  root  /usr/libexec/tftpd  tftpd  -l -s /var/tftp
+</pre>
+
+<p>The <tt class="COMMAND">-l</tt> option tells <tt class="COMMAND">tftpd</tt> to log to
+<span class="CITEREFENTRY"><span class="REFENTRYTITLE">syslogd</span>(8)</span>, the <tt
+class="COMMAND">-s /var/tftp</tt> instructs <tt class="COMMAND">tftpd</tt> to change its
+root directory into <tt class="FILENAME">/var/tftp</tt>.</p>
+
+<p>If you have not enabled <span class="CITEREFENTRY"><span
+class="REFENTRYTITLE">inetd</span>(8)</span> in your <tt
+class="FILENAME">/etc/rc.conf</tt>, first add the line:</p>
+
+<pre class="SCREEN">
+inetd_enable="YES"
+</pre>
+
+<p>Then start (or restart) <tt class="COMMAND">inetd</tt>:</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> /etc/rc.d/inetd start
+</pre>
+</div>
+
+<div class="SECT2">
+<hr />
+<h3 class="SECT2"><a id="AEN147" name="AEN147">3.3. FTP</a></h3>
+
+<p>For jumpstart installation we want to install using ftp rather than nfs. Using a local
+ftp server speeds up the installation as the local network is faster, saves bandwidth on
+the external connection and reduces load on the public servers.</p>
+
+<p>You can use the ftpd distributed with FreeBSD and enable it in <tt
+class="FILENAME">inetd.conf</tt>. I prefer <tt class="COMMAND">vsftpd</tt> which can be
+installed from ports. To enable the <tt class="COMMAND">vfstpd</tt> you need to add the
+following two lines to the <tt class="FILENAME">vsftpd.conf</tt> file:</p>
+
+<pre class="SCREEN">
+listen=YES
+background=YES
+</pre>
+
+<p>Then start the server with:</p>
+
+<pre class="SCREEN">
+# /usr/local/etc/rc.d/vsftpd.sh start
+</pre>
+
+<p>You may want to toggle <tt class="COMMAND">pasv_min_port</tt> and <tt
+class="COMMAND">pasv_max_port</tt> to control which ports are used in pasive ftp-data.
+This is particularly important if there is a firewall between the client and the ftp
+server.</p>
+
+<p><tt class="COMMAND">vsftpd</tt> will chroot into it's home directory as specified in
+the password file, usually <tt class="COMMAND">/var/ftp</tt>. Now you need to fetch a
+release from a mirror and put it into some reasonable path, typically <tt
+class="COMMAND">pub/FreeBSD/&lt;RELEASE&gt;</tt>.</p>
+</div>
+
+<div class="SECT2">
+<hr />
+<h3 class="SECT2"><a id="AEN165" name="AEN165">3.4. NFS</a></h3>
+
+<p>NFS is a protocol for sharing file systems over the local network, it is an RPC
+service which makes it particularly difficult to handle, in particular across a
+firewall.</p>
+
+<p>There are some limitations when exporting file systems. You can export an entire
+partition (disk label) or a specific directory. If you export a partition with the option
+<tt class="COMMAND">-alldirs</tt>, then any sub-directory can be mounted, but with the
+permissions set for the partition. Alternatively you have to list each directory you wish
+to be exported and the permissions.</p>
+
+<p>The latter should be preferred, although cumbersome, because it gives you more fine
+grained access control.</p>
+
+<p>Enable nfs in <tt class="COMMAND">/etc/rc.conf</tt>:</p>
+
+<pre class="SCREEN">
+rpcbind_enable="YES"          # Run the portmapper service (YES/NO).
+nfs_server_enable="YES"       # This host is an NFS server (or NO).
+mountd_enable="YES"           # Run mountd (or NO).
+mountd_flags="-r -p 59"       # Force mountd to bind on port 59
+</pre>
+
+<p>As a minimum you need to enable <tt class="COMMAND">rpcbind</tt>, <tt
+class="COMMAND">nfsserver</tt> and <tt class="COMMAND">mountd</tt> as shown above.</p>
+
+<p>By default, when <tt class="COMMAND">mountd</tt> starts it binds to some arbitrary
+port, and rpc is used to discover which, making it impossible to filter. With option '<tt
+class="COMMAND">-p</tt>' <tt class="COMMAND">mountd</tt> can be forced to bind to a
+specific port. Port 59 is assigned to "any private file service", so it sounds reasonable
+to use this.</p>
+
+<p>You may optionally want to enable <tt class="COMMAND">lockd</tt> and <tt
+class="COMMAND">statd</tt> which provides file locking and status monitoring. The problem
+with these services is that they cannot be forced to bind to specific ports making
+filtering impossible.</p>
+
+<p>Before starting up nfs, we must export the file systems the diskless clients need to
+mount. Users wants more than a bare base system, in particular they want access to their
+files in their home directory. The <span class="CITEREFENTRY"><span
+class="REFENTRYTITLE">exports</span>(5)</span> file should be something like this:</p>
+
+<pre class="SCREEN">
+/var/diskless/FreeBSD -ro -maproot=root:wheel -network 172.16.0.0 -mask 255.255.0.0
+/home -alldirs -network 172.16.0.0 -mask 255.255.0.0
+/var/diskless/&lt;hostname&gt;/var &lt;hostname&gt; 
+/var/diskless/&lt;hostname&gt;/tmp &lt;hostname&gt;
+</pre>
+
+<div class="NOTE">
+<blockquote class="NOTE">
+<p><b>Note:</b> If <tt class="COMMAND">/var/diskless</tt> is a directory residing in <tt
+class="COMMAND">/var</tt> then you cannot use the option <tt
+class="COMMAND">-alldirs</tt> and you cannot mount subdirectories of <tt
+class="COMMAND">/var/diskless</tt>. Instead, you will have to list each directory which
+will be mounted as shown above. The positive effect is that this will enforce a more
+strict access control.</p>
+</blockquote>
+</div>
+
+<p>The <tt class="COMMAND">-maproot</tt> option specifies which privileges the <tt
+class="LITERAL">root</tt> user on the client will have for accessing files on the server
+via nfs. By default <tt class="COMMAND">root:wheel</tt> is mapped to <tt
+class="COMMAND">nobody:nobody</tt>.</p>
+
+<p>We will need to create <tt class="COMMAND">var</tt> and (optionally) <tt
+class="COMMAND">/tmp</tt> directories and a swap file for each diskless client. This is
+described in the section <a href="diskless.html" target="_top">diskless clients</a>. In
+the above, it is assumed that the hostname of the diskless clients can be looked up and
+fixed ip address is assigned. If you control the network, you may choose not to specify
+the hostname or ip address.</p>
+
+<p>Then start nfsd:</p>
+
+<pre class="SCREEN">
+# /etc/rc.d/rpcbind start
+# /etc/rc.d/nfsd start
+# /etc/rc.d/mountd start
+</pre>
+
+<p>You should be able to see the exported shares with the command <span
+class="CITEREFENTRY"><span class="REFENTRYTITLE">showmount</span>(8)</span>. The
+directories exported should be created if they do not exist. If you update the <tt
+class="COMMAND">exports</tt> file, you need to restart <tt class="COMMAND">mountd</tt>
+for the changes to take effect.</p>
+
+<p>If you are on a closed and controlled network you need not protect your server by a
+firewall, although it is recommended always to be cautious. If you have a firewall
+enabled however, you need to open such that the clients can fetch the files needed.</p>
+</div>
+
+<div class="SECT2">
+<hr />
+<h3 class="SECT2"><a id="AEN214" name="AEN214">3.5. Firewall</a></h3>
+
+<p>If you are on a closed and controlled network you need not protect your server by a
+firewall, although it is recommended always to be cautious. If you have a firewall
+enabled however, you need to open such that the clients can fetch the files needed.</p>
+
+<div class="SECT3">
+<hr />
+<h4 class="SECT3"><a id="AEN217" name="AEN217">3.5.1. DHCP</a></h4>
+
+<p>To enable DHCP, you must allow packets with source port 68 and destination port 67 in,
+and the reverse out for <span class="emphasis"><i class="EMPHASIS">any</i></span> ip. The
+reason is that when the first dhcp request is sent, the client don't know it's ip and
+source ip port 67 in, and the reverse out for <span class="emphasis"><i
+class="EMPHASIS">any</i></span> ip. The reason is that when the first dhcp request is
+sent, the client don't know it's ip and source ip is set to 0.0.0.0, nor does it know the
+ip of the server so the destination ip is also set to 0.0.0.0:</p>
+
+<pre class="SCREEN">
+pass in quick proto udp from 0/32 port = 68 to 0/32 port = 67 keep state
+pass in quick proto udp from 172.16.0.0/16 port = 68 to 172.16.0.2/32 port = 67 keep state
+</pre>
+
+<p>for inbound traffic and for outbound:</p>
+
+<pre class="SCREEN">
+pass out quick proto udp from 172.16.0.2 port = 67 to 0/32 port = 68 keep state
+</pre>
+</div>
+
+<div class="SECT3">
+<hr />
+<h4 class="SECT3"><a id="AEN225" name="AEN225">3.5.2. TFTP</a></h4>
+
+<p>TFTP receives requests on udp port 69, but files are transfered from ports in the
+dynamic port range (ports &#62; 49151). To allow tftp you must add the following
+rules:</p>
+
+<pre class="SCREEN">
+pass in quick proto udp from 172.16.0.0/16 to 172.16.0.2 port = 69 keep state
+</pre>
+
+<p>for inbound, and for outbound traffic:</p>
+
+<pre class="SCREEN">
+pass out quick proto udp from 172.16.0.2 port &#62; 49151 to 172.16.0.0/16 port &#62; 49151 keep state
+</pre>
+</div>
+
+<div class="SECT3">
+<hr />
+<h4 class="SECT3"><a id="AEN231" name="AEN231">3.5.3. FTP</a></h4>
+
+<p>FTP is more complicated. The server listens on port 21 for incoming connections, as
+with any other service. FTP specifies two data transfer modes, active and passive. In
+active ftp-data, the server connects back to the client from port 20 to some unprivileged
+port chosen by the client. In passive ftp-data the client connects to some unprivileged
+port chosen by the server, typically in the dynamic port range.</p>
+
+<pre class="SCREEN">
+# ftp
+pass in quick proto tcp from 172.16.0.0/16 to 172.16.0.2 port 21 flags S keep state
+# ftp-data passive
+pass in quick proto tcp from 172.16.0.0/16 to 172.16.0.2 port &#62; 49151 flags S keep state
+</pre>
+
+<p>allows ftp-sessions and passive ftp-data, to allow active ftp-data, add the following
+line</p>
+
+<pre class="SCREEN">
+# ftp-data active
+pass out quick proto tcp from 172.16.0.2 port 20 to 172.16.0.0/16 port &#62; 1023 flags S keep state
+</pre>
+</div>
+
+<div class="SECT3">
+<hr />
+<h4 class="SECT3"><a id="AEN237" name="AEN237">3.5.4. NFS</a></h4>
+
+<p>We forced <tt class="COMMAND">mountd</tt> to bind to a specific port, 59, this makes
+firewalling easy:</p>
+
+<pre class="SCREEN">
+pass in quick proto tcp from 172.16.0.0/16 to 172.16.0.2 port 59 flags S keep state
+pass in quick proto tcp from 172.16.0.0/16 to 172.16.0.2 port 111 flags S keep state
+pass in quick proto tcp from 172.16.0.0/16 to 172.16.0.2 port 2049 flags S keep state
+pass in quick proto udp from 172.16.0.0/16 to 172.16.0.2 port 59 keep state
+pass in quick proto udp from 172.16.0.0/16 to 172.16.0.2 port 111 keep state
+pass in quick proto udp from 172.16.0.0/16 to 172.16.0.2 port 2049 keep state
+</pre>
+
+<div class="NOTE">
+<blockquote class="NOTE">
+<p><b>Note:</b> Originally, nfs was based on udp but FreeBSD's implementation supports
+tcp as well.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div>
+
+<div class="SECT1">
+<hr />
+<h2 class="SECT1"><a id="PXEBOOT" name="PXEBOOT">4. PXEBoot</a></h2>
+
+<div class="SECT2">
+<h3 class="SECT2"><a id="AEN246" name="AEN246">4.1. Building the pxeboot loader</a></h3>
+
+<p>First we build the pxeboot loader with support for tftp, this means that the kernel
+will be fetched with tftp rather than mounting the nfs root filesystem first.</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> cd /usr/src/sys/boot
+<samp class="PROMPT">#</samp> make -DLOADER_TFTP_SUPPORT=YES
+</pre>
+
+<div class="NOTE">
+<blockquote class="NOTE">
+<p><b>Note:</b> If you have compiled world and <tt class="FILENAME">/usr/obj</tt> exists
+this won't build, remove or rename this directory first.</p>
+</blockquote>
+</div>
+
+<p>Install it into the tftp directory, <tt class="FILENAME">/var/tftp</tt>:</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> cp i386/pxeldr/pxeboot /var/tftp/boot/
+<samp class="PROMPT">#</samp> cp i386/boot0/boot0 /var/tftp/boot/
+<samp class="PROMPT">#</samp> cp i386/boot2/boot1 /var/tftp/boot/
+<samp class="PROMPT">#</samp> cp i386/boot2/boot2 /var/tftp/boot/
+<samp class="PROMPT">#</samp> cp i386/mbr/mbr /var/tftp/boot/
+</pre>
+</div>
+
+<div class="SECT2">
+<hr />
+<h3 class="SECT2"><a id="AEN263" name="AEN263">4.2. Building the kernel</a></h3>
+
+<p>For jumpstart installation we need the kernel to support tftp in order that it can
+fetch the root file system, this is a build option, the GENERIC kernel configuration file
+can be used without changes. For diskless systems, the GENERIC kernel supports NFS and
+NFS mount of the root file system, but additional BOOTP support will prove useful.</p>
+
+<p>When configuring the kernel, make sure to include the network drivers for the client,
+or load them before boot. Also, make sure the following options are included in the
+kernel configuration file. For Jumpstart:</p>
+
+<pre class="SCREEN">
+# Filesystems
+options         MD_ROOT         # MD is a potential root device
+options         PSEUDOFS        # Pseudo-filesystem framework
+
+# Memory pseudo devices
+device          md              # Memory "disks" needed for root file system
+</pre>
+
+<p>And for diskless operation:</p>
+
+<pre class="SCREEN">
+options         NFSCLIENT
+options         NFS_ROOT
+options         BOOTP
+options         BOOTP_COMPAT
+</pre>
+
+<p>The options BOOTP and BOOTP_COMPAT allow the kernel to rerequest certain options sent
+with the dhcp response such as hostname. Strictly, these are not required to boot the
+diskless system, but having the hostname set makes it easier to set host specific
+configuration option.</p>
+
+<p>Build the kernel:</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> cd /usr/src
+<samp class="PROMPT">#</samp> make -DLOADER_TFTP_SUPPORT=YES buildkernel
+</pre>
+
+<p>This builds a kernel with support for tftp. If you are compiling the kernel for a
+different version of FreeBSD than the server system, you need to "make buildworld" before
+building the kernel.</p>
+
+<p>We will not overwrite our system kernel, instead we install directly into the
+directory <tt class="FILENAME">/var/tftp</tt>. We first need to install a few files by
+hand:</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> mkdir -p /var/tftp/boot/defaults
+<samp
+class="PROMPT">#</samp> cp /usr/src/sys/i386/conf/GENERIC.hints /var/tftp/boot/device.hints
+<samp
+class="PROMPT">#</samp> cp /usr/src/sys/boot/forth/loader.conf /var/tftp/boot/defaults/
+<samp
+class="PROMPT">#</samp> cp /usr/src/sys/boot/forth/loader.4th /var/tftp/boot/defaults/
+<samp
+class="PROMPT">#</samp> cp /usr/src/sys/boot/forth/support.4th /var/tftp/boot/defaults/
+</pre>
+
+<div class="NOTE">
+<blockquote class="NOTE">
+<p><b>Note:</b> Strictly, to install the kernel <tt class="FILENAME">loader.4th</tt> and
+<tt class="FILENAME">support.4th</tt> are not required, but we will include <tt
+class="FILENAME">loader.4th</tt> in <tt class="FILENAME">loader.rc</tt> and this includes
+<tt class="FILENAME">support.4th</tt>.</p>
+</blockquote>
+</div>
+
+<p>Then install the kernel</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> make DESTDIR=/var/tftp installkernel
+</pre>
+</div>
+
+<div class="SECT2">
+<hr />
+<h3 class="SECT2"><a id="AEN294" name="AEN294">4.3. The tftp root directory</a></h3>
+
+<p>In the tftp root directory, <tt class="FILENAME">/var/tftp</tt>, create <tt
+class="FILENAME">boot/loader.rc</tt> containing the following lines:</p>
+
+<pre class="SCREEN">
+include /boot/loader.4th
+start
+</pre>
+
+<p>For Jumpstart installation create <tt class="FILENAME">boot/loader.conf</tt>
+containing the following:</p>
+
+<pre class="SCREEN">
+init_path="/stand/sysinstall"
+rootfs_load="YES"
+rootfs_name="/boot/jumpstart"
+rootfs_type="mfs_root"
+vfs.root.mountfrom="ufs:/dev/md0c"
+autoboot_delay=5
+</pre>
+
+<p>The loader will by default search first for <span class="CITEREFENTRY"><span
+class="REFENTRYTITLE">init</span>(8)</span> and if not found then try to run <span
+class="CITEREFENTRY"><span class="REFENTRYTITLE">sysinstall</span>(8)</span>. Setting <tt
+class="COMMAND">init_path</tt> allows us to toggle wether to run <tt
+class="COMMAND">sysinstall</tt> or <tt class="COMMAND">init</tt> at boot, provided both
+are present. You may add any kernel modules to be loaded with the usual syntax, in that
+case these are fetched with tftp and must be in the tftp directory.</p>
+
+<p>The <tt class="COMMAND">rootfs_name</tt> specifies that the loader should fetch the
+file <tt class="FILENAME">/boot/jumpstart</tt> for use as root device, needed for
+jumpstart installation. Although the path appears absolute, on the server, this is
+relative to the tftp directory. In the next section we will create the root file system.
+You should not set any <tt class="LITERAL">rootfs</tt> options, in fact no <tt
+class="FILENAME">loader.conf</tt> is needed, the defaults will work fine.</p>
+
+<p>If you try to boot at this stage, the pxeclient client should complete stage 3 and
+load the kernel.</p>
+</div>
+</div>
+
+<div class="SECT1">
+<hr />
+<h2 class="SECT1"><a id="JUMPSTART" name="JUMPSTART">5. Jumpstart installation</a></h2>
+
+<p>In this section covers how to set up a jumpstart installation. By the end of this
+section, you should have set up your server such that (almost) all you need to do to
+install FreeBSD is to connect your new machine to your network.</p>
+
+<p>The jumpstart installation will load a memory disk as root device and fetch the
+release using ftp. We could also do this providing both root device and release files
+with nfs, if you want to to this, skip to the <a href="diskless.html" target="_top">next
+section</a>.</p>
+
+<div class="SECT2">
+<hr />
+<h3 class="SECT2"><a id="AEN324" name="AEN324">5.1. The memory disk root device</a></h3>
+
+<p>For jumpstart installation we use a memory file system as root device. The easiest way
+to obtain such a memory disk is to grap the one found on the installation media, <tt
+class="FILENAME">mfsroot.gz</tt>, and copy it to <tt
+class="FILENAME">/var/tftp/boot/jumpstart.gz</tt>.</p>
+
+<p>If you plan on interactive installation or only simple scripting, there is no reason
+to do the trouble of customizing a memory root file system.</p>
+
+<p>You may want to create a custom root file system in order to enable special
+customization prior or posterior to the installation that need extra scripting support.
+This section explains how.</p>
+
+<p>Essentially, the memory disk device distributed on the installation media contains
+just a minimal set of configuration files and a "bootcrunch" file. A bootcrunch file is a
+special compressed binary containing statically linked executables. This format is useful
+when storage is limited.</p>
+
+<p>The memory disk is loaded into the RAM, which determines the upper size limit for a
+memory root device. You can create a custom memory disk in two ways:</p>
+
+<ul>
+<li>
+<p>If RAM is limited, you can create a custom bootcrunch file.</p>
+</li>
+
+<li>
+<p>If you have plenty of RAM, then you can install the base system on a memory file
+system and load that. The base system takes up some 150 MB and with systems shipping with
+1024MB RAM this may be the easiest option.</p>
+</li>
+</ul>
+
+<div class="SECT3">
+<hr />
+<h4 class="SECT3"><a id="AEN338" name="AEN338">5.1.1. Creating root file system with a
+custom bootcrunch file</a></h4>
+
+<p>To create the bootcrunch file we can either customize the bootcrunch configuration
+file found in <tt class="FILENAME">release/i386</tt> - without any changes this will
+build the bootcrunch file found on installation media, or you can use the "rescue" make
+files as skeleton.</p>
+
+<p>In the following we will use the makefiles found in <tt
+class="FILENAME">/usr/src/resuce</tt> as skeleton to create a custom bootcrunch file. It
+turns out to be easier, because the make file also allows us to easily install the
+bootcrunch binary on the memory file system.</p>
+
+<p>First create a copy of the <tt class="FILENAME">rescue</tt> directory to leave
+original unmodified:</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> cd /usr/src
+<samp class="PROMPT">#</samp> cp -R rescue jumpstart
+<samp class="PROMPT">#</samp> cd jumpstart
+<samp class="PROMPT">#</samp> mv rescue jumpstart
+<samp class="PROMPT">#</samp> mv librescue libjumpstart
+</pre>
+
+<p>In this directory there are three make-files, one in the top directory and one in the
+two sub-directories <tt class="FILENAME">jumpstart</tt> and <tt
+class="FILENAME">libjumpstart</tt>. Edit all these to replace all occurences of "rescue"
+with "jumpstart".</p>
+
+<p>The make file in <tt class="FILENAME">jumpstart</tt> defines which binaries and
+libraries to include, libjumpstart adds some specially linked libraries. Edit <tt
+class="FILENAME">jumpstart/Makefile</tt> to suit your needs, you can use the bootcrunch
+configuration file found in <tt class="FILENAME">release/i386</tt> to see what you must
+include.</p>
+
+<p>We need to create and mount the memory device to install the memory root file system.
+It can be any size as long as the jumpstart client has enough RAM. We create a 16MB
+memory disk:</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> dd if=/dev/zero of=/var/tftp/boot/jumpstart bs=1k count=16k
+<samp class="PROMPT">#</samp> mdconfig -a -t vnode -f jumpstart -u0
+<samp class="PROMPT">#</samp> disklabel -r -w md0 auto
+<samp class="PROMPT">#</samp> newfs /dev/md0c
+</pre>
+
+<p>Next mount the file system:</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> mount /dev/md0 /mnt
+<samp class="PROMPT">#</samp> cd /mnt
+</pre>
+
+<p>We now have an empty memory disk which will be served the client. Now we need to
+populate the file system to start the system installation, first create the base
+directory layout:</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> cd /usr/src
+<samp class="PROMPT">#</samp> mtree -U -p /mnt -f /etc/mtree/BSD.root.mtree
+<samp class="PROMPT">#</samp> make DESTDIR=/mnt distribution
+<samp class="PROMPT">#</samp> mkdir /mnt/jumpstart
+</pre>
+
+<p>Now build and install the bootcrunch file:</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> cd /usr/src/jumpstart
+<samp class="PROMPT">#</samp> make NO_ATM=YES
+<samp class="PROMPT">#</samp> make DESTDIR=/mnt install
+</pre>
+
+<div class="NOTE">
+<blockquote class="NOTE">
+<p><b>Note:</b> With the jumpstart makefiles I created, I got errors trying to compile
+with ATM, disabling this solved the problem.</p>
+</blockquote>
+</div>
+
+<p>And to finish up,</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> cd /mnt
+<samp class="PROMPT">#</samp> rmdir /mnt/sbin /mnt/bin
+<samp class="PROMPT">#</samp> ln -s jumpstart bin
+<samp class="PROMPT">#</samp> ln -s jumpstart sbin
+</pre>
+
+<p><tt class="COMMAND">dhclient</tt> uses a shell script which must be installed
+separately:</p>
+
+<pre class="SCREEN">
+<samp
+class="PROMPT">#</samp> cp /usr/src/sbin/dhclient/dhclient-script /mnt/jumpstart/dhclient-script 
+<samp class="PROMPT">#</samp> chmod +x /mnt/jumpstart/dhclient-script
+</pre>
+
+<p>Unmount the file system and run fsck:</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> cd /
+<samp class="PROMPT">#</samp> umount /mnt/mfs
+<samp class="PROMPT">#</samp> fsck -t ufs /dev/md0
+<samp class="PROMPT">#</samp> mdconfig -d -u 0
+<samp class="PROMPT">#</samp> gzip /var/tftp/boot/jumpstart
+</pre>
+
+<p>At this point we have a fully equipped memory file system that can be used for
+installation. Booting up your jumpstart client, you should get the standard interactive
+installation menu.</p>
+
+<div class="NOTE">
+<blockquote class="NOTE">
+<p><b>Note:</b> The release is set according to the version of your kernel, if your
+kernel is 6.1-RELEASE sysinstall will assume this is the version you want to install. If
+you built a kernel from updated sources you may have a 6-STABLE kernel, and installation
+will fail since there is no such release. You can set the release you want to install in
+the menus.</p>
+</blockquote>
+</div>
+</div>
+</div>
+
+<div class="SECT2">
+<hr />
+<h3 class="SECT2"><a id="AEN403" name="AEN403">5.2. Speeding up booting</a></h3>
+
+<p>Booting with PXE takes more time as all the files needs to be fetched over the
+network. The pxeboot program will first look for compressed files, then the
+non-compressed, the only file you cannot compres is pxeboot.</p>
+
+<p>So, to speed up the transfer, you can gzip the kernel, any kernel modules and the
+memory file system. We may need to edit and customize the configuration files, so we let
+these be uncompressed.</p>
+</div>
+
+<div class="SECT2">
+<hr />
+<h3 class="SECT2"><a id="AEN407" name="AEN407">5.3. Rebooting</a></h3>
+
+<p>Before you reboot, make sure that your new server won't boot again using pxeboot,
+hence repeating the process. My experience with the VIA board was that I had to disable
+LAN boot completely in the bios, not just have it as secondary boot device.</p>
+</div>
+</div>
+
+<div class="SECT1">
+<hr />
+<h2 class="SECT1"><a id="AUTOMATIC-INSTALLATION" name="AUTOMATIC-INSTALLATION">6.
+Automatic installation</a></h2>
+
+<p>If you are going to set up a large number or servers with the same base installation,
+you'll quickly get tired of navigating the sysinstall menus. sysinstall can be scripted,
+this section show you how. By the end of the section, all you need to do is to plug in
+your new machine and drink coffee.</p>
+
+<div class="SECT2">
+<hr />
+<h3 class="SECT2"><a id="AEN413" name="AEN413">6.1. Scripting sysinstall</a></h3>
+
+<p><span class="CITEREFENTRY"><span class="REFENTRYTITLE">sysinstall</span>(8)</span>
+will first look for the file <tt class="FILENAME">/install.cfg</tt> on the root file
+system which sets installation parameters. This file can also be used to script <tt
+class="COMMAND">sysinstall</tt>. When the execution exits, sysinstall will return to the
+interactive mode.</p>
+
+<p>Hence, to automate the installation we need to create <tt
+class="FILENAME">install.cfg</tt> and place it in the root of the memory filesystem we
+created. The syntax, variables and commands are described in <span
+class="CITEREFENTRY"><span class="REFENTRYTITLE">sysinstall</span>(8)</span>, however not
+all variables and commands are documented, for theese, we need to take a look at the
+source code also. Also a sample <tt class="FILENAME">install.cfg</tt> is given in the
+source code directory, <tt class="FILENAME">/usr/src/usr.sbin/sysinstall</tt>.</p>
+
+<p>One important thing is that <tt class="FILENAME">/install.cfg</tt> is read and
+executed strictly top down, variables must be set before the function using them.</p>
+
+<p>If anything fails in the script, sysinstall will abort the rest of the script and go
+interactive.</p>
+
+<pre class="SCREEN">
+################################
+# install.cfg for jumpstart of FreeBSD
+#
+# See sysinstall(8) for details about how to script the process
+# This file has been edited from /usr/src/usr.sbin/sysinstall/install.cfg
+# Turn on extra debugging.
+debug=YES
+nonInteractive=YES
+noConfirm=YES
+noWarn=NO
+################################
+</pre>
+
+<p>We don't want any interactive questioning, the whole point is to power up the machine
+and drink coffee. But we do like to have some debug information for when we get back and
+everything has failed misserably.</p>
+
+<pre class="SCREEN">
+################################
+# Disk partitioning
+#
+# WARNING: This will format the disk and dedicate the entire disk to
+#          FreeBSD
+disk=ad0
+partition=all
+bootManager=none
+diskPartitionEditor
+################################
+</pre>
+
+<p>This section selects a disk and creates the partitions. Multiple disks can be
+partitioned but you must end each disk defintion with <tt
+class="LITERAL">diskPartitionEditor</tt>.</p>
+
+<div class="NOTE">
+<blockquote class="NOTE">
+<p><b>Note:</b> The sample <tt class="FILENAME">install.cfg</tt> provided with sysinstall
+source sets partition to exclusive, this will set your disk in "dangerously dedicated"
+mode which is not recommended unless you really need it.</p>
+</blockquote>
+</div>
+
+<pre class="SCREEN">
+################################
+# Disk labeling
+#
+# All sizes are expressed in 512 byte blocks!
+#
+# For example:
+# / 512MB, swap 512MB, /usr 8192MB, /var 8192MB, /home remaining
+ad0s1-1=ufs  1048576 /
+ad0s1-2=swap 1048576 none
+ad0s1-3=ufs 16777216 /usr
+ad0s1-4=ufs 16777216 /var 
+ad0s1-5=ufs  1048576 /tmp
+ad0s1-6=ufs        0 /home 1
+diskLabelEditor
+################################
+</pre>
+
+<p>This section slices up the chosen diskpartitions. The line labeling <tt
+class="FILENAME">/home</tt> is special, this will use any remaining space, so it must be
+last.</p>
+
+<pre class="SCREEN">
+################################
+# Host specific configuration:
+tryDHCP=YES
+netDev=vr0
+# The following optional if using dhcp to configure the network
+hostname=jumpstart
+domainname=example.com
+################################
+</pre>
+
+<p>Apparently sysinstall suffers from amnesia when it comes to the network configuration.
+Even though the network was configured on boot, sysinstall will need a network
+configuration as above unless you are installing from a disk.</p>
+
+<p>This should be a general configuration file and all host configuration should be done
+with dhcp. For unknown reason, hostname is required even if passed with dhcp.</p>
+
+<pre class="SCREEN">
+################################
+# Select release to install
+#
+releaseName 6.1-RELEASE
+################################
+</pre>
+
+<p>This section defines the release and which collection of packages and sources to
+install. <tt class="LITERAL">releaseName</tt> is by default determined by the release of
+the kernel and <tt class="COMMAND">sysinstall</tt> will then look for a directory of that
+name when fetching the relase. If you cvsup'ed your sources before building the custom
+kernel, <tt class="LITERAL">releaseName</tt> may be <tt class="LITERAL">x.x-STABLE</tt>
+or <tt class="LITERAL">x.x-CURRENT</tt>, but there are no such releases, so we need to
+specify it here.</p>
+
+<pre class="SCREEN">
+################################
+# Set distribution to install, either use distSetCustom and choose
+# individual components or choose a collection, for example
+# distSetKernDeveloper which installs base and kernel sources
+distSetKernDeveloper
+################################
+</pre>
+
+<p>FreeBSD has some predefined distributions you can choose: <tt
+class="LITERAL">distSetMinimum</tt>, <tt class="LITERAL">distSetUser</tt>, <tt
+class="LITERAL">distSetXUser</tt>, <tt class="LITERAL">distSetKernDeveloper</tt>, <tt
+class="LITERAL">distSetXKernDeveloper</tt>, <tt class="LITERAL">distSetDeveloper</tt>,
+<tt class="LITERAL">distSetXDeveloper</tt> and <tt
+class="LITERAL">distSetEverything</tt>. You can also customize defining the variable <tt
+class="LITERAL">dists</tt> and then use <tt class="LITERAL">distSetCustom</tt>.</p>
+
+<div class="NOTE">
+<blockquote class="NOTE">
+<p><b>Note:</b> Some have reported problem using the custom distribution, that the kernel
+is not correctly installed. A work around is to install the minimal distribution and
+commit it, then select custom and commit that.</p>
+</blockquote>
+</div>
+
+<pre class="SCREEN">
+################################
+# Select installation method
+# 
+# We want an FTP install, so we also need to specify the ftp server to
+# fetch from
+netDev=vr0
+tryDHCP=YES
+_ftpPath=ftp://ftp.example.com/pub/FreeBSD
+mediaSetFTP
+################################
+</pre>
+
+<p>Again (!?) we need to specify the interface we want to use and configure it using
+dhcp. For ftp installation we also need to specify a server to install from and a path.
+<tt class="COMMAND">sysinstall</tt> will look for the directory set in the variable <tt
+class="LITERAL">releaseName</tt> in the ftp-path.</p>
+
+<p>At this point, your old disk is still alive and happy, the next section will commit
+everything to the disk, and we have set <tt class="LITERAL">noConfirm</tt>!</p>
+
+<pre class="SCREEN">
+################################
+#
+# OK, everything is set.  Do it!
+installCommit
+################################
+</pre>
+
+<p>You can customize further after install commit setting the variable <tt
+class="LITERAL">package</tt> to any package you'd like installed and followed by the
+command <tt class="LITERAL">packageAdd</tt>. At this point, when installation is
+finnished it will return to the well known <tt class="COMMAND">sysinstall</tt> menu to
+allow you to add any further customization. To avoid this end the <tt
+class="FILENAME">install.cfg</tt> with the command <span class="CITEREFENTRY"><span
+class="REFENTRYTITLE">shutdown</span>(8)</span>. It may be better though, if you compiled
+your memory disk with <span class="CITEREFENTRY"><span
+class="REFENTRYTITLE">halt</span>(8)</span> to terminate the installation with <tt
+class="COMMAND">system halt -p</tt>.</p>
+
+<p>If everything works well, simply power up your system, is should be busy installing
+installing and you busy drinking coffee :-)</p>
+</div>
+
+<div class="SECT2">
+<hr />
+<h3 class="SECT2"><a id="AEN486" name="AEN486">6.2. Customization</a></h3>
+
+<p>It is a bit tiresome to change the <tt class="FILENAME">install.cfg</tt> if it is
+located on the memory disk. If you created a custom memory file system with support for
+the <span class="CITEREFENTRY"><span class="REFENTRYTITLE">ftp</span>(1)</span> command,
+then could create a minimal <tt class="FILENAME">install.cfg</tt> and then fetch one to
+be included like this:</p>
+
+<pre class="SCREEN">
+################################
+# Host specific configuration:
+tryDHCP=YES
+netDev=vr0
+# The following optional if using dhcp to configure the network
+hostname=jumpstart
+domainname=example.com
+################################
+system /bin/ftp ftp://ftp.example.com/pub/FreeBSD/jumpstart.cfg
+loadConfig jumpstart.cfg
+ 
+</pre>
+
+<p>This should configure the network interface and fetch the installation configuration
+file (altough I have not tested it yet). Furter scripting is posible, and you can also
+change <tt class="FILENAME">loader.conf</tt> to run <span class="CITEREFENTRY"><span
+class="REFENTRYTITLE">init</span>(8)</span> instead and script everything - the limits
+are given by the commands available on the root file system.</p>
+</div>
+</div>
+
+<div class="SECT1">
+<hr />
+<h2 class="SECT1"><a id="DISKLESS" name="DISKLESS">7. Diskless clients</a></h2>
+
+<p>This section covers how to set up a diskless environment. By the end of the section
+you should be able to boot up your diskless client with access to the FreeBSD base
+system.</p>
+
+<div class="SECT2">
+<hr />
+<h3 class="SECT2"><a id="AEN503" name="AEN503">7.1. The diskless setup</a></h3>
+
+<p>The diskless client will fetch kernel and kernel modules at boot using tftp. Then nfs
+mounting the root file system. Each client must have separate <tt
+class="FILENAME">var</tt> and <tt class="FILENAME">tmp</tt> partitions as processes on
+different clients may otherwise overwrite files.</p>
+
+<p>Everything will be installed in <tt class="FILENAME">/var/diskless</tt>, the base
+system and user applications in <tt class="FILENAME">FreeBSD</tt>, see the following
+section. For each host we create a directory, <tt class="FILENAME">&lt;hostname&gt;</tt>
+with subdirectories, <tt class="FILENAME">var</tt> and <tt class="FILENAME">tmp</tt>.</p>
+
+<p>Without the host specific directories, <tt class="FILENAME">var</tt> and <tt
+class="FILENAME">tmp</tt> will be created as memory file systems. This has the advantage
+that cleaning up the "disk" is done on reboot, but at the price of precious RAM.</p>
+</div>
+
+<div class="SECT2">
+<hr />
+<h3 class="SECT2"><a id="AEN517" name="AEN517">7.2. Preparing the base system</a></h3>
+
+<p>In the following we will create a separate root file system. This has many advantages,
+in particular it is easy to move or copy to other servers, and you don't risk exporting
+files containing confidential server information onto your diskless clients.</p>
+
+<p>The following builds the base system and installs into <tt
+class="FILENAME">/var/diskless/FreeBSD</tt>:</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> cd /usr/src
+<samp class="PROMPT">#</samp> make buildworld
+<samp class="PROMPT">#</samp> mkdir /var/diskless/FreeBSD
+<samp class="PROMPT">#</samp> make DESTDIR=/var/diskless/FreeBSD installworld
+<samp class="PROMPT">#</samp> make DESTDIR=/var/diskless/FreeBSD distribution
+</pre>
+
+<div class="NOTE">
+<blockquote class="NOTE">
+<p><b>Note:</b> On FreeBSD 5.x you will have to <tt class="COMMAND">cd</tt> into <tt
+class="FILENAME">etc</tt> before making the distribution, <tt class="COMMAND">make
+DESTDIR=/var/diskless/FreeBSD distribution</tt>.</p>
+</blockquote>
+</div>
+
+<p>You can make a more lean installation by disabling unneeded features in <tt
+class="FILENAME">/etc/make.conf</tt>.</p>
+</div>
+
+<div class="SECT2">
+<hr />
+<h3 class="SECT2"><a id="AEN535" name="AEN535">7.3. Configuring the diskless
+clients</a></h3>
+
+<p>The configuration of the client is done on the server. The first to do is do edit <tt
+class="FILENAME">/var/diskless/FreeBSD/.cshrc</tt> and set <tt class="LITERAL">set promt
+= "FreeBSD diskless # "</tt>. Now <span class="CITEREFENTRY"><span
+class="REFENTRYTITLE">chroot</span>(8)</span> into <tt
+class="FILENAME">/var/diskless/FreeBSD</tt>. The prompt should now change,</p>
+
+<pre class="SCREEN">
+FreeBSD diskless #
+</pre>
+
+<p>indicating that you are in the diskless file system, this helps you avoid messing up
+your server configuration. In the following, paths are relative to the root in the
+chrooted environment.</p>
+
+<p>We need to modify the following files:</p>
+
+<ul>
+<li>
+<p><tt class="FILENAME">/etc/fstab</tt></p>
+</li>
+
+<li>
+<p><tt class="FILENAME">/etc/syslog.conf</tt></p>
+</li>
+
+<li>
+<p><tt class="FILENAME">/etc/resolv.conf</tt></p>
+</li>
+
+<li>
+<p><tt class="FILENAME">/etc/rc.conf</tt></p>
+</li>
+</ul>
+
+<p>Of course, this is a minimal list, you may wish to modify other files as well, for
+example to give users access to cdrom or usb devices.</p>
+
+<div class="SECT3">
+<hr />
+<h4 class="SECT3"><a id="AEN561" name="AEN561">7.3.1. Mounting filesystems</a></h4>
+
+<p>The root file system is mounted at boot, but this is mounted read only. We need to
+mount <tt class="FILENAME">/var</tt>, <tt class="FILENAME">/tmp</tt> and <tt
+class="FILENAME">/home</tt>. We may also want to mount a swap partition.</p>
+
+<p>Swap over NFS is slow, and should be avoided if posible. Also, since each diskless
+client needs it's own swap partition, you need to create a large number of swap files on
+the server wasting a lot of disk space. However, if you have limited RAM swap may be
+needed.</p>
+
+<p>All diskless clients will share the same <tt class="FILENAME">fstab</tt> for the
+common file systems:</p>
+
+<pre class="SCREEN">
+### Common fstab for diskless clients
+# Device                              Mount  FStype  Options       Dump  Pass
+nfs.example.com:/var/diskless/FreeBSD /      nfs     ro            0     0
+nfs.example.com:/home                 /home  nfs     rw, userquota 0     0
+proc                                  /proc  procfs  rw            0     0
+</pre>
+
+<p>The dump frequency and pass numbers are set to 0 to avoid running <span
+class="CITEREFENTRY"><span class="REFENTRYTITLE">fsck</span>(8)</span>. <tt
+class="COMMAND">fsck</tt> should never be run on nfs mounted file systems, if the
+partition becomes corrupt, run <tt class="COMMAND">fsck</tt> on the server.</p>
+
+<p>The <tt class="FILENAME">/var</tt> and <tt class="FILENAME">/tmp</tt> partitions have
+been excluded. This is because these cannot be shared among the diskless clients. By
+default, at startup if the system detects that <tt class="FILENAME">/var</tt> and <tt
+class="FILENAME">/tmp</tt> are read only, it will create these as memory file systems.
+Although the size can be limited this wastes precious memory.</p>
+
+<p>If you compiled the kernel with the <tt class="LITERAL">BOOTP</tt> options, hostname
+should be set on boot, and we can then create a script that will mount host specific
+partitions given the hostname.</p>
+</div>
+
+<div class="SECT3">
+<hr />
+<h4 class="SECT3"><a id="AEN584" name="AEN584">7.3.2. Monitoring diskless
+clients</a></h4>
+
+<p>The diskless client should not log locally, even if the log directory is nfs mounted.
+This will spread out logs for all the diskless clients and make it more difficult to
+rotate logs and clean up. In stead the diskless clients should log to a remote syslog
+server.</p>
+
+<p>To log to a remote syslog server, replace the entries in <tt
+class="FILENAME">/etc/syslog.conf</tt> with the following:</p>
+
+<pre class="SCREEN">
+*.*     @syslog.example.com
+</pre>
+
+<p>It may be useful to log critical errors on the console also.</p>
+</div>
+
+<div class="SECT3">
+<hr />
+<h4 class="SECT3"><a id="AEN591" name="AEN591">7.3.3. Host name resolution</a></h4>
+
+<p><tt class="FILENAME">/etc/resolv.conf</tt> won't be updated on boot since using <tt
+class="COMMAND">dhclient</tt> would cause the client to loose the root file system, and
+it's mounted read only anyway. So update <tt class="FILENAME">resolv.conf</tt> manually
+to reflect the correct network configuration.</p>
+</div>
+
+<div class="SECT3">
+<hr />
+<h4 class="SECT3"><a id="AEN597" name="AEN597">7.3.4. Configuring startup</a></h4>
+
+<p>The diskless client should not run any services, with the posible only exception of
+<tt class="COMMAND">syslog</tt>. Certain services are enabled by default, even if only
+intended to run as a local service. These are all controled in <tt
+class="FILENAME">/etc/rc.conf</tt>. Defaults are set in <tt
+class="FILENAME">/etc/defaults/rc.conf</tt>, we need only change a few. A sample <tt
+class="FILENAME">rc.conf</tt> may be as follows:</p>
+
+<pre class="SCREEN">
+# rc.conf for diskless clients
+#
+# System daemons:
+#
+sendmail_submit_enable="NO"     # Do not enable local delivery or outbound
+sendmail_outbound_enable="NO"   # sendmail daemon. This disables sendmail
+sendmail_msp_queue_enable="NO"  # completely on the client.
+cron_enable="NO"                # Cron should run on the server
+#
+# File systems
+#
+root_rw_mount="NO"              # Root is exported read only
+background_fsck="NO"            # NEVER run fsck on nfs mounted partitions
+nfs_client_enable="YES"         # The diskless client is an NFS client
+tmpmfs="NO"                     # We mount /var and /tmp as NFS partitions
+varmfs="NO"                     #
+cleanvar_enable="YES"           # Clean the /var directory (this is default)
+clear_tmp_enable="YES"          # Clear /tmp at startup.
+clear_tmp_X="YES"               # Clear and recreate X11-related directories
+#
+# Scripts run at startup only
+#
+newsyslog_enable="NO"           # Logging to server
+update_motd="NO"                # Root file system is read only
+</pre>
+
+<p>On a standalone machine, <span class="CITEREFENTRY"><span
+class="REFENTRYTITLE">sendmail</span>(8)</span> is only used by cron to send status
+reports to root. Cron should run on the server, not on the client so sendmail can be
+disabled along with cron.</p>
+
+<p>At boot, by default the root file system is first mounted read-only, then remounted
+read-write when switching into multiuser mode. The root file system is exported
+read-only, so we disable the remounting. You should never run <tt
+class="COMMAND">fsck</tt> on an nfs mounted disk, if there are disk errors, run <tt
+class="COMMAND">fsck</tt> on the server. Enabling the nfs client merely checks that nfs
+is supported by the kernel and if not loads the nfsclient kernel module. Strictly this
+line is not needed.</p>
+
+<p>The default value for <tt class="LITERAL">tmpmfs</tt> and <tt
+class="LITERAL">varmfs</tt> is <tt class="LITERAL">AUTO</tt>. The script then checks if
+these directories are writeable, if not memory file systems are created. To avoid this,
+we disable the script. By default <tt class="FILENAME">/var</tt> is cleaned up on boot as
+it should. Then the server need not clean up after the clients. This is not the default
+for <tt class="FILENAME">/tmp</tt> though, so we enable clearing <tt
+class="FILENAME">/tmp</tt>.</p>
+
+<p>Since <tt class="COMMAND">syslog</tt> logs to the server, there is no need to run <tt
+class="COMMAND">newsyslog</tt> on startup. This would only have the effect of rotating
+log files. Also, we cannot update the "message of the day" file, since the root is
+mounted read-only.</p>
+
+<p>Of course, the above sample <tt class="FILENAME">rc.conf</tt> only lists the settings
+required for diskless operation. You must add any other customization as needed.</p>
+</div>
+</div>
+
+<div class="SECT2">
+<hr />
+<h3 class="SECT2"><a id="AEN624" name="AEN624">7.4. Installing applications</a></h3>
+
+<p>Once the base system is set up, it is fairly easy to install and maintain the diskless
+clients and install third party applications. First get the source and ports tree.</p>
+
+<p>Then you can simply chroot into the root directory for the diskless clients and
+install applications as on a normal system. This will not interfere with your server
+system.</p>
+
+<p>For some ports to build correctly, you may need access to the device file system
+within the chroot'ed environment. To get this, before chrooting, run the command:</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> mount -t devfs devfs /var/diskless/FreeBSD/dev
+</pre>
+
+<p>The first thing you want to install is <tt class="COMMAND">cvsup</tt> and then update
+the ports tree.</p>
+</div>
+
+<div class="SECT2">
+<hr />
+<h3 class="SECT2"><a id="AEN633" name="AEN633">7.5. Booting up</a></h3>
+
+<p>At this point, you should be able to boot up the diskless client but there is still
+tons of stuff that remains to be tweaked to make the system useful. Among other things,
+we haven't considered how to manage users. The next section covers management and
+finetuning.</p>
+</div>
+</div>
+
+<div class="SECT1">
+<hr />
+<h2 class="SECT1"><a id="MANAGEMENT" name="MANAGEMENT">8. Managing diskless
+clients</a></h2>
+
+<p>While we can boot now, there are still a lot of things that remains to be configured
+or tweaked to work properly. This section discusses some of these. This section will
+probably be incomplete forever, some things are not included because they are not any
+particular to diskless clients.</p>
+
+<div class="SECT2">
+<hr />
+<h3 class="SECT2"><a id="AEN639" name="AEN639">8.1. User management</a></h3>
+
+<p>For a start, you might want to copy the password and group files from the server,
+however, managing users becomes significantly easier if you use LDAP or NIS to make user
+account information accessible from all hosts.</p>
+
+<p>NIS is parcially supported in the FreeBSD base system, but LDAP is recommended as it
+easily integrates with other network services and other systems. This section will
+document an LDAP solution.</p>
+
+<p>To support LDAP you need to install the following packages:</p>
+
+<ul>
+<li>
+<p><a href="http://www.FreeBSD.org/cgi/url.cgi?ports/security/pam_ldap/pkg-descr"><tt
+class="FILENAME">security/pam_ldap</tt></a></p>
+</li>
+
+<li>
+<p><a href="http://www.FreeBSD.org/cgi/url.cgi?ports/net/nss_ldap/pkg-descr"><tt
+class="FILENAME">net/nss_ldap</tt></a></p>
+</li>
+
+<li>
+<p><a href="http://www.FreeBSD.org/cgi/url.cgi?ports/net/openldap22-client/pkg-descr"><tt
+class="FILENAME">net/openldap22-client</tt></a></p>
+</li>
+</ul>
+
+<p>Obviously you also need to setup an LDAP server. You need to install <a
+href="http://www.FreeBSD.org/cgi/url.cgi?ports/net/openldap22-server/pkg-descr"><tt
+class="FILENAME">net/openldap22-server</tt></a>. Setting up the LDAP server is beyond the
+scope of this document. Creating an LDAP directory and configuring clients to
+authenticate against this will not be covered at this moment.</p>
+</div>
+</div>
+
+<div class="SECT1">
+<hr />
+<h2 class="SECT1"><a id="REFERENCES" name="REFERENCES">9. References</a></h2>
+
+<ul>
+<li>
+<p><a href="http://www.freebsd.org/doc/en_US.ISO8859-1/articles/pxe/"
+target="_top">FreeBSD Jumpstart Guide</a>, Alfred Perlstein</p>
+</li>
+
+<li>
+<p><a href="http://www.freebsd.org/doc/en_US.ISO8859-1/articles/diskless-x/"
+target="_top">Diskless X Server: a how to guide</a>, Jerry Kendall</p>
+</li>
+
+<li>
+<p><a href="http://www.freebsd.org/doc/en_US.ISO8859-1/articles/pam/"
+target="_top">Pluggable Authentication Modules</a>, Dag-Erling Smørgrav</p>
+</li>
+
+<li>
+<p>MAN-pages: <span class="CITEREFENTRY"><span
+class="REFENTRYTITLE">diskless</span>(8)</span> <span class="CITEREFENTRY"><span
+class="REFENTRYTITLE">pxeboot</span>(8)</span></p>
+</li>
+</ul>
+</div>
+</div>
+
+<hr />
+</body>
+</html>
+

@@ -1,0 +1,2722 @@
+  <HTML>
+  <HEAD>
+  
+  <TITLE>MySQL Reference Manual for version 5.0.3-alpha - 10  Character Set Support</TITLE>
+   <style> code {color:purple} tt {color:green} samp {color:navy} pre {color:maroon} </style>
+  </HEAD>
+  <BODY BGCOLOR=silver TEXT=#000000 LINK=#101090 VLINK=#7030B0>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_Language_Structure.html">previous</A>, <A HREF="manual_Column_types.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="Charset" HREF="manual_toc.html#Charset">10  Character Set Support</A></H1>
+
+<P>
+<A NAME="IDX1076"></A>
+<A NAME="IDX1077"></A>
+<A NAME="IDX1078"></A>
+<A NAME="IDX1079"></A>
+<A NAME="IDX1080"></A>
+
+</P>
+
+<P>
+Improved support for character set handling was added to MySQL in Version
+4.1.  The features described here are as implemented in MySQL 4.1.1.
+(MySQL 4.1.0 has some but not all of these features, and some of them are
+implemented differently.)
+
+</P>
+<P>
+This chapter discusses the following topics:
+
+</P>
+
+<UL>
+<LI>What are character sets and collations?
+
+<LI>The multiple-level default system
+
+<LI>New syntax in MySQL 4.1
+
+<LI>Affected functions and operations
+
+<LI>Unicode support
+
+<LI>The meaning of each individual character set and collation
+
+</UL>
+
+<P>
+Character set support currently is included in the <code>MyISAM</code>,
+<code>MEMORY</code> (<code>HEAP</code>), and (as of MySQL 4.1.2) <code>InnoDB</code> storage
+engines.  The <code>ISAM</code> storage engine does not include character set
+support; there are no plans to change this, because <code>ISAM</code> is
+deprecated.
+
+</P>
+
+
+
+<H2><A NAME="Charset-general" HREF="manual_toc.html#Charset-general">10.1  Character Sets and Collations in General</A></H2>
+
+<P>
+A <strong>character set</strong> is a set of symbols and encodings. A 
+<strong>collation</strong> is a set of rules for comparing characters in a
+character set. Let's make the distinction clear with an example of an 
+imaginary character set.
+
+</P>
+<P>
+Suppose that we have an alphabet with four letters: <samp>`A'</samp>, <samp>`B'</samp>, 
+<samp>`a'</samp>, <samp>`b'</samp>. We give each letter a number: <samp>`A'</samp> = 0, 
+<samp>`B'</samp> = 1, <samp>`a'</samp> = 2, <samp>`b'</samp> = 3. The letter <samp>`A'</samp> is a 
+symbol, the number 0 is the <strong>encoding</strong> for <samp>`A'</samp>, and the 
+combination of all four letters and their encodings is a 
+<strong>character set</strong>.
+
+</P>
+<P>
+Now, suppose that we want to compare two string values, <samp>`A'</samp> and <samp>`B'</samp>.
+The simplest way to do this is to look at the encodings: 0 for
+<samp>`A'</samp> and 1 for <samp>`B'</samp>. Because 0 is less than 1, we say <samp>`A'</samp> is less
+than <samp>`B'</samp>. Now, what we've just done is apply a collation to our
+character set. The collation is a set of rules (only one rule in
+this case): ``compare the encodings.'' We call this simplest of all
+possible collations a <strong>binary</strong> collation.
+
+</P>
+<P>
+But what if we want to say that the lowercase and uppercase
+letters are equivalent? Then we would have at least two rules: (1)
+treat the lowercase letters <samp>`a'</samp> and <samp>`b'</samp> as equivalent to <samp>`A'</samp> and
+<samp>`B'</samp>; (2) then compare the encodings. We call this a
+<strong>case-insensitive</strong> collation. It's a little more complex than a
+binary collation.
+
+</P>
+<P>
+In real life, most character sets have many characters: not just
+<samp>`A'</samp> and <samp>`B'</samp> but whole alphabets, sometimes multiple alphabets or
+eastern writing systems with thousands of characters, along with
+many special symbols and punctuation marks. Also in real life, most
+collations have many rules: not just case insensitivity but also
+accent insensitivity (an ``accent'' is a mark attached to a character
+as in German <samp>`&Ouml;'</samp>) and multiple-character mappings (such as the
+rule that <samp>`&Ouml;'</samp> = <samp>`OE'</samp> in one of the two German collations).
+
+</P>
+<P>
+MySQL 4.1 can do these things for you:
+
+</P>
+
+<UL>
+<LI>Store strings using a variety of character sets
+
+<LI>Compare strings using a variety of collations
+
+<LI>Mix strings with different character sets or collations in the
+
+same server, the same database, or even the same table
+<LI>Allow specification of character set and collation at any
+
+level
+
+</UL>
+
+<P>
+In these respects, not only is MySQL 4.1 far more flexible than
+MySQL 4.0, it also is far ahead of other DBMSs. However, to use the
+new features effectively, you will need to learn what character
+sets and collations are available, how to change their defaults,
+and what the various string operators do with them.
+
+</P>
+
+
+
+<H2><A NAME="Charset-MySQL" HREF="manual_toc.html#Charset-MySQL">10.2  Character Sets and Collations in MySQL</A></H2>
+
+<P>
+The MySQL server can support multiple character sets. To list the available
+character sets, use the <code>SHOW CHARACTER SET</code> statement:
+
+</P>
+
+
+<PRE>
+mysql&#62; SHOW CHARACTER SET;
++----------+-----------------------------+---------------------+
+| Charset  | Description                 | Default collation   |
++----------+-----------------------------+---------------------+
+| big5     | Big5 Traditional Chinese    | big5_chinese_ci     |
+| dec8     | DEC West European           | dec8_swedish_ci     |
+| cp850    | DOS West European           | cp850_general_ci    |
+| hp8      | HP West European            | hp8_english_ci      |
+| koi8r    | KOI8-R Relcom Russian       | koi8r_general_ci    |
+| latin1   | ISO 8859-1 West European    | latin1_swedish_ci   |
+| latin2   | ISO 8859-2 Central European | latin2_general_ci   |
+...
+</PRE>
+
+<P>
+The output actually includes another column that is not shown so that the
+example fits better on the page.
+
+</P>
+<P>
+Any given character set always has at least one collation. It may have
+several collations.
+
+</P>
+<P>
+To list the collations for a character set, use the <code>SHOW COLLATION</code>
+statement. For example, to see the collations for the <code>latin1</code>
+(``ISO-8859-1 West European'') character set, use this statement to find
+those collation names that begin with <code>latin1</code>:
+
+</P>
+
+<PRE>
+mysql&#62; SHOW COLLATION LIKE 'latin1%';
++-------------------+---------+----+---------+----------+---------+
+| Collation         | Charset | Id | Default | Compiled | Sortlen |
++-------------------+---------+----+---------+----------+---------+
+| latin1_german1_ci | latin1  |  5 |         |          |       0 |
+| latin1_swedish_ci | latin1  |  8 | Yes     | Yes      |       1 |
+| latin1_danish_ci  | latin1  | 15 |         |          |       0 |
+| latin1_german2_ci | latin1  | 31 |         | Yes      |       2 |
+| latin1_bin        | latin1  | 47 |         | Yes      |       1 |
+| latin1_general_ci | latin1  | 48 |         |          |       0 |
+| latin1_general_cs | latin1  | 49 |         |          |       0 |
+| latin1_spanish_ci | latin1  | 94 |         |          |       0 |
++-------------------+---------+----+---------+----------+---------+
+</PRE>
+
+<P>
+The <code>latin1</code> collations have the following meanings:
+
+</P>
+<TABLE BORDER>
+
+<TR><TD><strong>Collation</strong> </TD><TD> <strong>Meaning</strong>
+</TD></TR>
+<TR><TD><code>latin1_bin</code> </TD><TD> Binary according to <code>latin1</code> encoding
+</TD></TR>
+<TR><TD><code>latin1_danish_ci</code> </TD><TD> Danish/Norwegian
+</TD></TR>
+<TR><TD><code>latin1_general_ci</code> </TD><TD> Multilingual
+</TD></TR>
+<TR><TD><code>latin1_general_cs</code> </TD><TD> Multilingual, case sensitive
+</TD></TR>
+<TR><TD><code>latin1_german1_ci</code> </TD><TD> German DIN-1
+</TD></TR>
+<TR><TD><code>latin1_german2_ci</code> </TD><TD> German DIN-2
+</TD></TR>
+<TR><TD><code>latin1_spanish_ci</code> </TD><TD> Modern Spanish
+</TD></TR>
+<TR><TD><code>latin1_swedish_ci</code> </TD><TD> Swedish/Finnish
+
+</TD></TR>
+</TABLE>
+
+<P>
+Collations have these general characteristics:
+
+</P>
+
+<UL>
+<LI>
+
+Two different character sets cannot have the same collation.
+
+<LI>
+
+Each character set has one collation that is the <em>default
+collation</em>. For example, the default collation for <code>latin1</code> is
+<code>latin1_swedish_ci</code>.
+
+<LI>
+
+There is a convention for collation names: They start
+with the name of the character set with which they are associated, they
+usually include a language name, and they end with <code>_ci</code> (case
+insensitive), <code>_cs</code> (case sensitive), or <code>_bin</code> (binary).
+
+</UL>
+
+
+
+<H2><A NAME="Charset-defaults" HREF="manual_toc.html#Charset-defaults">10.3  Determining the Default Character Set and Collation</A></H2>
+
+<P>
+There are default settings for character sets and collations at
+four levels: server, database, table, and connection. The following
+description may appear complex, but it has been found in practice
+that multiple-level defaulting leads to natural and obvious
+results.
+
+</P>
+
+
+
+<H3><A NAME="Charset-server" HREF="manual_toc.html#Charset-server">10.3.1  Server Character Set and Collation</A></H3>
+
+<P>
+The MySQL Server has a server character set and a server collation,
+which may not be null.
+
+</P>
+<P>
+MySQL determines the server character set and server collation
+thus:
+
+</P>
+
+<UL>
+
+<LI>
+
+According to the option settings in effect when the server starts
+<LI>
+
+According to the values set at runtime
+
+</UL>
+
+<P>
+At the server level, the decision is simple. The server
+character set and collation depend initially on the
+options that you use when you start <code>mysqld</code>. You can use
+<code>--default-character-set</code> for the character set, and
+along with it you can add <code>--default-collation</code> for the
+collation. If you don't specify a character set, that is the same as saying
+<code>--default-character-set=latin1</code>. If you specify only a character set
+(for example, <code>latin1</code>) but not a collation, that is the same as saying
+<code>--default-charset=latin1</code> <code>--default-collation=latin1_swedish_ci</code>
+because <code>latin1_swedish_ci</code> is the default collation for <code>latin1</code>.
+Therefore, the following three commands all have the same effect:
+
+</P>
+
+<PRE>
+shell&#62; mysqld
+shell&#62; mysqld --default-character-set=latin1
+shell&#62; mysqld --default-character-set=latin1 \
+           --default-collation=latin1_swedish_ci
+</PRE>
+
+<P>
+One way to change the settings is by recompiling. If you want to
+change the default server character set and collation when building
+from sources, use: <code>--with-charset</code> and <code>--with-collation</code>
+as arguments for <code>configure</code>. For example:
+
+</P>
+
+<PRE>
+shell&#62; ./configure --with-charset=latin1
+</PRE>
+
+<P>
+Or:
+
+</P>
+
+<PRE>
+shell&#62; ./configure --with-charset=latin1 \
+           --with-collation=latin1_german1_ci
+</PRE>
+
+<P>
+Both <code>mysqld</code> and <code>configure</code> verify that the character
+set/collation combination is valid. If not, each program displays an error
+message and terminates.
+
+</P>
+<P>
+The current server character set and collation are available as the values of
+the <code>character_set_server</code> and <code>collation_server</code> system variables.
+These variables can be changed at runtime.
+
+</P>
+
+
+
+<H3><A NAME="Charset-database" HREF="manual_toc.html#Charset-database">10.3.2  Database Character Set and Collation</A></H3>
+
+<P>
+Every database has a database character set and a database
+collation, which may not be null. The <code>CREATE DATABASE</code> and <code>ALTER
+DATABASE</code> statements have optional clauses for specifying the
+database character set and collation:
+
+</P>
+
+<PRE>
+CREATE DATABASE <var>db_name</var>
+    [[DEFAULT] CHARACTER SET <var>charset_name</var>]
+    [[DEFAULT] COLLATE <var>collation_name</var>]
+
+ALTER DATABASE <var>db_name</var>
+    [[DEFAULT] CHARACTER SET <var>charset_name</var>]
+    [[DEFAULT] COLLATE <var>collation_name</var>]
+</PRE>
+
+<P>
+Example:
+
+</P>
+
+<PRE>
+CREATE DATABASE <var>db_name</var>
+    DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+</PRE>
+
+<P>
+MySQL chooses the database character set and database collation
+thus:
+
+</P>
+
+<UL>
+<LI>If both <code>CHARACTER SET <var>X</var></code> and <code>COLLATE <var>Y</var></code> were specified, then
+
+character set <var>X</var> and collation <var>Y</var>.
+<LI>If <code>CHARACTER SET <var>X</var></code> was specified without <code>COLLATE</code>, then
+
+character set <var>X</var> and its default collation.
+<LI>Otherwise, the server character set and server collation.
+
+</UL>
+
+<P>
+MySQL's <code>CREATE DATABASE ... DEFAULT CHARACTER SET ...</code> syntax is
+analogous to the standard SQL <code>CREATE SCHEMA ... CHARACTER SET ...</code>
+syntax. Because of this, it is possible to create databases with
+different character sets and collations on the same MySQL
+server.
+
+</P>
+
+<P>
+The database character set and collation are used as default
+values if the table character set and collation are not specified
+in <code>CREATE TABLE</code> statements. They have no other purpose.
+
+</P>
+<P>
+The character set and collation for the default database are available as
+the values of the <code>character_set_database</code> and
+<code>collation_database</code> system variables.  The server sets these variables
+whenever the default database changes.  If there is no default database, the
+variables have the same value as the corresponding server-level variables,
+<code>character_set_server</code> and <code>collation_server</code>.
+
+</P>
+
+
+
+<H3><A NAME="Charset-table" HREF="manual_toc.html#Charset-table">10.3.3  Table Character Set and Collation</A></H3>
+
+<P>
+Every table has a table character set and a table collation, which
+may not be null. The <code>CREATE TABLE</code> and <code>ALTER TABLE</code> statements
+have optional clauses for specifying the table character set and
+collation:
+
+</P>
+
+<PRE>
+CREATE TABLE <var>tbl_name</var> (<var>column_list</var>)
+    [DEFAULT CHARACTER SET <var>charset_name</var> [COLLATE <var>collation_name</var>]]
+
+ALTER TABLE <var>tbl_name</var>
+    [DEFAULT CHARACTER SET <var>charset_name</var>] [COLLATE <var>collation_name</var>]
+</PRE>
+
+<P>
+Example:
+
+</P>
+
+<PRE>
+CREATE TABLE t1 ( ... )
+    DEFAULT CHARACTER SET latin1 COLLATE latin1_danish_ci;
+</PRE>
+
+<P>
+MySQL chooses the table character set and collation thus:
+
+</P>
+
+<UL>
+<LI>If both <code>CHARACTER SET <var>X</var></code> and <code>COLLATE <var>Y</var></code> were specified, then
+
+character set <var>X</var> and collation <var>Y</var>.
+<LI>If <code>CHARACTER SET <var>X</var></code> was specified without <code>COLLATE</code>, then
+
+character set <var>X</var> and its default collation.
+<LI>Otherwise, the database character set and collation.
+
+</UL>
+
+<P>
+The table character set and collation are used as default
+values if the column character set and collation are not specified
+in individual column definitions. The table character set and
+collation are MySQL extensions; there are no such things in
+standard SQL.
+
+</P>
+
+
+
+<H3><A NAME="Charset-column" HREF="manual_toc.html#Charset-column">10.3.4  Column Character Set and Collation</A></H3>
+
+<P>
+Every ``character'' column (that is, a column of type <code>CHAR</code>,
+<code>VARCHAR</code>, or <code>TEXT</code>) has a column character set and a column
+collation, which may not be null. Column definition syntax has optional
+clauses for specifying the column character set and collation:
+
+</P>
+
+<PRE>
+<var>col_name</var> {CHAR | VARCHAR | TEXT} (<var>col_length</var>)
+    [CHARACTER SET <var>charset_name</var> [COLLATE <var>collation_name</var>]]
+</PRE>
+
+<P>
+Example:
+
+</P>
+
+<PRE>
+CREATE TABLE Table1
+(
+    column1 VARCHAR(5) CHARACTER SET latin1 COLLATE latin1_german1_ci
+);
+</PRE>
+
+<P>
+MySQL chooses the column character set and collation thus:
+
+</P>
+
+<UL>
+<LI>If both <code>CHARACTER SET <var>X</var></code> and <code>COLLATE <var>Y</var></code> were specified, then
+
+character set <var>X</var> and collation <var>Y</var>.
+<LI>If <code>CHARACTER SET X</code> was specified without <code>COLLATE</code>, then
+
+character set <code>X</code> and its default collation.
+<LI>Otherwise, the table character set and collation.
+
+</UL>
+
+<P>
+The <code>CHARACTER SET</code> and <code>COLLATE</code> clauses are standard SQL.
+
+</P>
+
+
+
+<H3><A NAME="Charset-examples" HREF="manual_toc.html#Charset-examples">10.3.5  Examples of Character Set and Collation Assignment</A></H3>
+
+<P>
+The following examples show how MySQL determines default character set and
+collation values.
+
+</P>
+
+<H4>Example 1: Table + Column Definition</H4>
+
+
+<PRE>
+CREATE TABLE t1
+(
+    c1 CHAR(10) CHARACTER SET latin1 COLLATE latin1_german1_ci
+) DEFAULT CHARACTER SET latin2 COLLATE latin2_bin;
+</PRE>
+
+<P>
+Here we have a column with a <code>latin1</code> character set
+and a <code>latin1_german1_ci</code> collation. The definition is explicit, so
+that's straightforward. Notice that there's no problem storing a
+<code>latin1</code> column in a <code>latin2</code> table.
+
+</P>
+
+<H4>Example 2: Table + Column Definition</H4>
+
+
+<PRE>
+CREATE TABLE t1
+(
+    c1 CHAR(10) CHARACTER SET latin1
+) DEFAULT CHARACTER SET latin1 COLLATE latin1_danish_ci;
+</PRE>
+
+<P>
+This time we have a column with a <code>latin1</code> character
+set and a default collation. Now, although it might seem natural,
+the default collation is not taken from the table level. Instead,
+because the default collation for <code>latin1</code> is always
+<code>latin1_swedish_ci</code>,
+column <code>c1</code> will have a collation of <code>latin1_swedish_ci</code> (not
+<code>latin1_danish_ci</code>).
+
+</P>
+
+<H4>Example 3: Table + Column Definition</H4>
+
+
+<PRE>
+CREATE TABLE t1
+(
+    c1 CHAR(10)
+) DEFAULT CHARACTER SET latin1 COLLATE latin1_danish_ci;
+</PRE>
+
+<P>
+We have a column with a default character set and
+a default collation. In this circumstance, MySQL looks up to the
+table level for inspiration in determining the column character set and
+collation. So, the character set for column <code>c1</code> is
+<code>latin1</code> and its collation is <code>latin1_danish_ci</code>.
+
+</P>
+
+<H4>Example 4: Database + Table + Column Definition</H4>
+
+
+<PRE>
+CREATE DATABASE d1
+    DEFAULT CHARACTER SET latin2 COLLATE latin2_czech_ci;
+USE d1;
+CREATE TABLE t1
+(
+    c1 CHAR(10)
+);
+</PRE>
+
+<P>
+We create a column without specifying its
+character set and collation. We're also not specifying a character
+set and a collation at the table level. In this circumstance, MySQL
+looks up to the database level for inspiration. (The database's
+settings become the table's settings, and thereafter become the
+column's setting.) So, the character set for column <code>c1</code> is <code>latin2</code>
+and its collation is <code>latin2_czech_ci</code>.
+
+</P>
+
+
+
+<H3><A NAME="Charset-connection" HREF="manual_toc.html#Charset-connection">10.3.6  Connection Character Sets and Collations</A></H3>
+
+<P>
+Several character set and collation system variables relate to a client's
+interaction with the server. Some of these have already been mentioned in
+earlier sections:
+
+</P>
+
+<UL>
+
+<LI>
+
+The server character set and collation are available as the values of the
+<code>character_set_server</code> and <code>collation_server</code> variables.
+
+<LI>
+
+The character set and collation of the default database are available as the
+values of the <code>character_set_database</code> and <code>collation_database</code>
+variables.
+
+</UL>
+
+<P>
+Additional character set and collation variables are involved in handling
+traffic for the connection between a client and the server.  Every client has
+connection-related character set and collation variables.
+
+</P>
+<P>
+Consider what a ``connection'' is: It's what you make when you connect to
+the server. The client sends SQL statements, such as queries, over the
+connection to the server. The server sends responses, such as result sets,
+over the connection back to the client. This leads to several questions
+about character set and collation handling for client connections, each of
+which can be answered in terms of system variables:
+
+</P>
+
+<UL>
+
+<LI>
+
+What character set is the query in when it leaves the client?
+
+The server takes the <code>character_set_client</code> variable to be the
+character set in which queries are sent by the client.
+
+<LI>
+
+What character set should the server translate a query to after receiving it?
+
+For this, <code>character_set_connection</code> and <code>collation_connection</code>
+are used by the server.  It converts queries sent by the client from
+<code>character_set_client</code> to <code>character_set_connection</code>
+(except for string literals that have an introducer such as <code>_latin1</code> or
+<code>_utf8</code>).
+<code>collation_connection</code> is important for comparisons of literal strings.
+For comparisons of strings with column values, it does not matter because
+columns have a higher collation precedence.
+
+<LI>
+
+What character set should the server translate to before shipping result
+sets or error messages back to the client?
+
+The <code>character_set_results</code> variable indicates the character set in
+which the server returns query results to the client. This includes result
+data such as column values, and result metadata such as column names.
+
+</UL>
+
+<P>
+You can fine-tune the settings for these variables, or you can depend on the
+defaults (in which case, you can skip this section).
+
+</P>
+<P>
+There are two statements that affect the connection character sets:
+
+</P>
+
+<PRE>
+SET NAMES '<var>charset_name</var>'
+SET CHARACTER SET <var>charset_name</var>
+</PRE>
+
+<P>
+<code>SET NAMES</code> indicates what is in the SQL statements that the client
+sends. Thus, <code>SET NAMES 'cp1251'</code> tells the server ``future incoming
+messages from this client will be in character set <code>cp1251</code>.'' It
+also specifies the character set for results that the server sends back to
+the client.  (For example, it indicates what character set column values
+will have if you use a <code>SELECT</code> statement.)
+
+</P>
+<P>
+A <code>SET NAMES '<var>x</var>'</code> statement
+is equivalent to these three statements:
+
+</P>
+
+<PRE>
+mysql&#62; SET character_set_client = <var>x</var>;
+mysql&#62; SET character_set_results = <var>x</var>;
+mysql&#62; SET character_set_connection = <var>x</var>;
+</PRE>
+
+<P>
+Setting <code>character_set_connection</code> to <code>x</code> also sets
+<code>collation_connection</code> to the default collation for <code>x</code>.
+
+</P>
+<P>
+<code>SET CHARACTER SET</code> is similar but sets the connection character set
+and collation to be those of the default database.  A <code>SET CHARACTER SET
+x</code> statement is equivalent to these three statements:
+
+</P>
+
+<PRE>
+mysql&#62; SET character_set_client = <var>x</var>;
+mysql&#62; SET character_set_results = <var>x</var>;
+mysql&#62; SET collation_connection = @@collation_database;
+</PRE>
+
+<P>
+When a client connects, it sends to the server the name of the character set
+that it wants to use. The server sets the <code>character_set_client</code>,
+<code>character_set_results</code>, and <code>character_set_connection</code> variables
+to that character set. (In effect, the server performs a <code>SET NAMES</code>
+operation using the character set.)
+
+</P>
+<P>
+With the <code>mysql</code> client, it is not necessary to execute <code>SET NAMES</code>
+every time you start up if you want to use a character set different from
+the default. You can add the <code>--default-character-set</code>  option setting
+to your <code>mysql</code> statement line, or in your option file.  For example,
+the following option file setting changes the three character set variables
+set to <code>koi8r</code> each time you run <code>mysql</code>:
+
+</P>
+
+<PRE>
+[mysql]
+default-character-set=koi8r
+</PRE>
+
+<P>
+Example: Suppose that <code>column1</code> is defined as <code>CHAR(5) CHARACTER
+SET latin2</code>.  If you do not say <code>SET NAMES</code> or <code>SET CHARACTER SET</code>,
+then for <code>SELECT column1 FROM t</code>, the server will send back all the
+values for <code>column1</code> using the character set that the client specified
+when it connected. On the other hand, if you say <code>SET NAMES 'latin1'</code>
+or <code>SET CHARACTER SET latin1</code>, then just before sending results back,
+the server will convert the <code>latin2</code> values to <code>latin1</code>.
+Conversion may be lossy if there are characters that are not in both
+character sets.
+
+</P>
+<P>
+If you do not want the server to perform any conversion, set
+<code>character_set_results</code> to <code>NULL</code>:
+
+</P>
+
+<PRE>
+mysql&#62; SET character_set_results = NULL;
+</PRE>
+
+
+
+<H3><A NAME="Charset-literal" HREF="manual_toc.html#Charset-literal">10.3.7  Character String Literal Character Set and Collation</A></H3>
+
+<P>
+Every character string literal has a character set and a collation,
+which may not be null.
+
+</P>
+<P>
+A character string literal may have an optional character set
+introducer and <code>COLLATE</code> clause:
+
+</P>
+<P>
+<A NAME="IDX1081"></A>
+<A NAME="IDX1082"></A>
+
+</P>
+
+<PRE>
+[_<var>charset_name</var>]'<var>string</var>' [COLLATE <var>collation_name</var>]
+</PRE>
+
+<P>
+Examples:
+
+<PRE>
+SELECT '<var>string</var>';
+SELECT _latin1'<var>string</var>';
+SELECT _latin1'<var>string</var>' COLLATE latin1_danish_ci;
+</PRE>
+
+<P>
+For the simple statement <code>SELECT '<var>string</var>'</code>, the string has the character
+set and collation defined by the <code>character_set_connection</code> and
+<code>collation_connection</code> system variables.
+
+</P>
+<P>
+The <code>_<var>charset_name</var></code> expression is formally called
+an <em>introducer</em>. It tells the parser,
+``the string that is about to follow is in character set <code>X</code>.''
+Because this has confused people in the past, we emphasize
+that an introducer does not cause any conversion, it is strictly a
+signal that does not change the string's value. An introducer is
+also legal before standard hex literal and numeric hex literal notation
+(<code>x'<var>literal</var>'</code> and <code>0x<var>nnnn</var></code>), and before <code>?</code> (parameter
+substitution when using prepared statements within a programming language
+interface).
+
+</P>
+<P>
+Examples:
+
+</P>
+
+<PRE>
+SELECT _latin1 x'AABBCC';
+SELECT _latin1 0xAABBCC;
+SELECT _latin1 ?;
+</PRE>
+
+<P>
+MySQL determines a literal's character set and collation thus:
+
+</P>
+
+<UL>
+<LI>If both <var>_X</var> and <code>COLLATE <var>Y</var></code> were specified, then
+
+character set <var>X</var> and collation <var>Y</var>
+<LI>If <var>_X</var> is specified but <code>COLLATE</code> is not specified, then
+
+character set <var>X</var> and its default collation
+<LI>Otherwise, the character set and collation given by the
+
+<code>character_set_connection</code> and <code>collation_connection</code> system
+variables
+
+</UL>
+
+<P>
+Examples:
+
+</P>
+
+<UL>
+<LI>
+
+A string with <code>latin1</code> character set and <code>latin1_german1_ci</code>
+collation:
+
+
+<PRE>
+SELECT _latin1'M&uuml;ller' COLLATE latin1_german1_ci;
+</PRE>
+
+<LI>
+
+A string with <code>latin1</code> character set and its default collation (that is,
+<code>latin1_swedish_ci</code>):
+
+
+<PRE>
+SELECT _latin1'M&uuml;ller';
+</PRE>
+
+<LI>
+
+A string with the connection default character set and collation:
+
+
+<PRE>
+SELECT 'M&uuml;ller';
+</PRE>
+
+</UL>
+
+<P>
+Character set introducers and the <code>COLLATE</code> clause are implemented
+according to standard SQL specifications.
+
+</P>
+
+
+<H3><A NAME="Charset-collate" HREF="manual_toc.html#Charset-collate">10.3.8  Using <code>COLLATE</code> in SQL Statements</A></H3>
+
+<P>
+With the <code>COLLATE</code> clause, you can override whatever the default
+collation is for a comparison. <code>COLLATE</code> may be used in
+various parts of SQL statements.  Here are some examples:
+
+</P>
+
+<UL>
+
+<LI>With <code>ORDER BY</code>:
+
+
+<PRE>
+SELECT k
+FROM t1
+ORDER BY k COLLATE latin1_german2_ci;
+</PRE>
+
+<LI>With <code>AS</code>:
+
+
+<PRE>
+SELECT k COLLATE latin1_german2_ci AS k1
+FROM t1
+ORDER BY k1;
+</PRE>
+
+<LI>With <code>GROUP BY</code>:
+
+
+<PRE>
+SELECT k
+FROM t1
+GROUP BY k COLLATE latin1_german2_ci;
+</PRE>
+
+<LI>With aggregate functions:
+
+
+<PRE>
+SELECT MAX(k COLLATE latin1_german2_ci)
+FROM t1;
+</PRE>
+
+<LI>With <code>DISTINCT</code>:
+
+
+<PRE>
+SELECT DISTINCT k COLLATE latin1_german2_ci
+FROM t1;
+</PRE>
+
+<LI>With <code>WHERE</code>:
+
+
+<PRE>
+SELECT *
+FROM t1
+WHERE _latin1 'M&uuml;ller' COLLATE latin1_german2_ci = k;
+</PRE>
+
+<LI>With <code>HAVING</code>:
+
+
+<PRE>
+SELECT k
+FROM t1
+GROUP BY k
+HAVING k = _latin1 'M&uuml;ller' COLLATE latin1_german2_ci;
+</PRE>
+
+</UL>
+
+
+
+<H3><A NAME="Charset-collate-precedence" HREF="manual_toc.html#Charset-collate-precedence">10.3.9  <code>COLLATE</code> Clause Precedence</A></H3>
+
+<P>
+The <code>COLLATE</code> clause has high precedence (higher than <code>||</code>),
+so the following two expressions are equivalent:
+
+</P>
+
+<PRE>
+x || y COLLATE z
+x || (y COLLATE z)
+</PRE>
+
+
+
+<H3><A NAME="Charset-binary-op" HREF="manual_toc.html#Charset-binary-op">10.3.10  <code>BINARY</code> Operator</A></H3>
+
+<P>
+The <code>BINARY</code> operator is a shorthand for a <code>COLLATE</code> clause.
+<code>BINARY 'x'</code> is equivalent to <code>'x' COLLATE y</code>, where <code>y</code> is
+the name of the binary collation for the character set of <code>'x'</code>.  Every
+character set has a binary collation.  For example, the binary collation for
+the <code>latin1</code> character set is <code>latin1_bin</code>, so if the column
+<code>a</code> is of character set <code>latin1</code>, the following two statements have
+the same effect:
+
+</P>
+
+<PRE>
+SELECT * FROM t1 ORDER BY BINARY a;
+SELECT * FROM t1 ORDER BY a COLLATE latin1_bin;
+</PRE>
+
+
+
+<H3><A NAME="Charset-collate-tricky" HREF="manual_toc.html#Charset-collate-tricky">10.3.11  Some Special Cases Where the Collation Determination Is Tricky</A></H3>
+
+<P>
+In the great majority of queries, it is obvious what collation
+MySQL uses to resolve a comparison operation. For example, in the
+following cases, it should be clear that the collation will be ``the
+column collation of column <code>x</code>'':
+
+</P>
+
+<PRE>
+SELECT x FROM T ORDER BY x;
+SELECT x FROM T WHERE x = x;
+SELECT DISTINCT x FROM T;
+</PRE>
+
+<P>
+However, when multiple operands are involved, there can be
+ambiguity. For example:
+
+</P>
+
+<PRE>
+SELECT x FROM T WHERE x = 'Y';
+</PRE>
+
+<P>
+Should this query use the collation of the column <code>x</code>, or of the
+string literal <code>'Y'</code>?
+
+</P>
+<P>
+Standard SQL resolves such questions using what used to be
+called ``coercibility'' rules. The essence is: Because <code>x</code> and <code>'Y'</code>
+both have collations, whose collation takes precedence? It's complex,
+but the following rules take care of most situations:
+
+</P>
+
+<UL>
+
+<LI>An explicit <code>COLLATE</code> clause has a coercibility of 0.
+
+(Not coercible at all.)
+
+<LI>A concatenation of two strings with different collations has
+
+a coercibility of 1.
+
+<LI>A column's collation has a coercibility of 2.
+
+<LI>A literal's collation has a coercibility of 3.
+
+</UL>
+
+<P>
+Those rules resolve ambiguities thus:
+
+</P>
+
+<UL>
+
+<LI>Use the collation with the lowest coercibility value.
+
+<LI>If both sides have the same coercibility, then it is an error if
+
+the collations aren't the same.
+
+</UL>
+
+<P>
+Examples:
+
+</P>
+<TABLE BORDER>
+
+<TR><TD><code>column1 = 'A'</code> </TD><TD> Use collation of <code>column1</code>
+</TD></TR>
+<TR><TD><code>column1 = 'A' COLLATE x</code> </TD><TD> Use collation of <code>'A'</code>
+</TD></TR>
+<TR><TD><code>column1 COLLATE x = 'A' COLLATE y</code> </TD><TD> Error
+
+</TD></TR>
+</TABLE>
+
+<P>
+The <code>COERCIBILITY()</code> function can be used to determine the coercibility
+of a string expression:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT COERCIBILITY('A' COLLATE latin1_swedish_ci);
+        -&#62; 0
+mysql&#62; SELECT COERCIBILITY('A');
+        -&#62; 3
+</PRE>
+
+<P>
+See section <A HREF="manual_Functions.html#Information_functions">12.8.3  Information Functions</A>.
+
+</P>
+
+
+
+<H3><A NAME="Charset-collation-charset" HREF="manual_toc.html#Charset-collation-charset">10.3.12  Collations Must Be for the Right Character Set</A></H3>
+
+<P>
+Recall that each character set has one or more
+collations, and each collation is associated with one and only one
+character set. Therefore, the following statement
+causes an error message because the <code>latin2_bin</code> collation is not
+legal with the <code>latin1</code> character set:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT _latin1 'x' COLLATE latin2_bin;
+ERROR 1251: COLLATION 'latin2_bin' is not valid
+for CHARACTER SET 'latin1'
+</PRE>
+
+<P>
+In some cases, expressions that worked before MySQL 4.1 fail as of MySQL 4.1
+if you do not take character set and collation into account. For example,
+before 4.1, this statement works as is:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT SUBSTRING_INDEX(USER(),'@',1);
++-------------------------------+
+| SUBSTRING_INDEX(USER(),'@',1) |
++-------------------------------+
+| root                          |
++-------------------------------+
+</PRE>
+
+<P>
+After an upgrade to MySQL 4.1, the statement fails:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT SUBSTRING_INDEX(USER(),'@',1);
+ERROR 1267 (HY000): Illegal mix of collations
+(utf8_general_ci,IMPLICIT) and (latin1_swedish_ci,COERCIBLE)
+for operation 'substr_index'
+</PRE>
+
+<P>
+The reason this occurs is that usernames are stored using UTF8
+(see section <A HREF="manual_Charset.html#Charset-metadata">10.6  UTF8 for Metadata</A>). As a result, the <code>USER()</code> function and
+the literal string <code>'@'</code> have different character sets (and thus
+different collations):
+
+</P>
+
+<PRE>
+mysql&#62; SELECT COLLATION(USER()), COLLATION('@');
++-------------------+-------------------+
+| COLLATION(USER()) | COLLATION('@')    |
++-------------------+-------------------+
+| utf8_general_ci   | latin1_swedish_ci |
++-------------------+-------------------+
+</PRE>
+
+<P>
+One way to deal with this is to tell MySQL to interpret the literal
+string as <code>utf8</code>:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT SUBSTRING_INDEX(USER(),_utf8'@',1);
++------------------------------------+
+| SUBSTRING_INDEX(USER(),_utf8'@',1) |
++------------------------------------+
+| root                               |
++------------------------------------+
+</PRE>
+
+<P>
+Another way is to change the connection character set and collation to
+<code>utf8</code>. You can do that with <code>SET NAMES 'utf8'</code> or by setting
+the <code>character_set_connection</code> and <code>collation_connection</code> system
+variables directly.
+
+</P>
+
+
+
+<H3><A NAME="Charset-collation-effect" HREF="manual_toc.html#Charset-collation-effect">10.3.13  An Example of the Effect of Collation</A></H3>
+
+<P>
+Suppose that column <code>X</code> in table <code>T</code> has these <code>latin1</code> column values:
+
+</P>
+
+<PRE>
+Muffler
+M&uuml;ller
+MX Systems
+MySQL
+</PRE>
+
+<P>
+And suppose that the column values are retrieved using the following
+statement:
+
+</P>
+
+<PRE>
+SELECT X FROM T ORDER BY X COLLATE <var>collation_name</var>;
+</PRE>
+
+<P>
+The resulting order of the values for different collations is shown in this
+table:
+
+</P>
+<TABLE BORDER>
+<TR><TD><code>latin1_swedish_ci</code> </TD><TD> <code>latin1_german1_ci</code> </TD><TD> <code>latin1_german2_ci</code>
+</TD></TR>
+<TR><TD>Muffler </TD><TD> Muffler </TD><TD> M&uuml;ller
+</TD></TR>
+<TR><TD>MX Systems </TD><TD> M&uuml;ller </TD><TD> Muffler
+</TD></TR>
+<TR><TD>M&uuml;ller </TD><TD> MX Systems </TD><TD> MX Systems
+</TD></TR>
+<TR><TD>MySQL </TD><TD> MySQL </TD><TD> MySQL
+</TD></TR>
+</TABLE>
+
+<P>
+The table is an example that shows what the effect would
+be if we used different collations in an <code>ORDER BY</code> clause. The
+character that causes the different sort orders in this example is the U with
+two dots over it, which the Germans call U-umlaut, but we'll call
+it U-diaeresis.
+
+</P>
+
+<UL>
+
+<LI>
+
+The first column shows the result of the <code>SELECT</code> using the
+Swedish/Finnish collating rule, which says that U-diaeresis sorts
+with Y.
+
+<LI>
+
+The second column shows the result of the <code>SELECT</code> using the
+German DIN-1 rule, which says that U-diaeresis sorts with U.
+
+<LI>
+
+The third column shows the result of the <code>SELECT</code> using the German
+DIN-2 rule, which says that U-diaeresis sorts with UE.
+
+</UL>
+
+<P>
+Three different collations, three different results. That's what
+MySQL is here to handle. By using the appropriate collation, you can choose
+the sort order you want.
+
+</P>
+
+
+
+<H2><A NAME="Charset-operations" HREF="manual_toc.html#Charset-operations">10.4  Operations Affected by Character Set Support</A></H2>
+
+<P>
+This section describes operations that take character set information
+into account as of MySQL 4.1.
+
+</P>
+
+
+<H3><A NAME="Charset-result" HREF="manual_toc.html#Charset-result">10.4.1  Result Strings</A></H3>
+
+<P>
+MySQL has many operators and functions that return a string.
+This section answers the question: What is the character set
+and collation of such a string?
+
+</P>
+<P>
+For simple functions that take string input and return a string result as
+output, the output's character set and collation are the same as those of
+the principal input value. For example, <code>UPPER(<var>X</var>)</code> returns a string
+whose character string and collation are the same as that of <var>X</var>.
+The same applies for
+<code>INSTR()</code>,
+<code>LCASE()</code>,
+<code>LOWER()</code>,
+<code>LTRIM()</code>,
+<code>MID()</code>,
+<code>REPEAT()</code>,
+<code>REPLACE()</code>,
+<code>REVERSE()</code>,
+<code>RIGHT()</code>,
+<code>RPAD()</code>,
+<code>RTRIM()</code>,
+<code>SOUNDEX()</code>,
+<code>SUBSTRING()</code>,
+<code>TRIM()</code>,
+<code>UCASE()</code>, and
+<code>UPPER()</code>.
+(Also note: The <code>REPLACE()</code> function, unlike all other functions,
+ignores the collation of the string input and performs a
+case-insensitive comparison every time.)
+
+</P>
+<P>
+For operations that combine multiple string inputs and return a
+single string output, the ``aggregation rules'' of standard SQL apply:
+
+</P>
+
+<UL>
+<LI>If an explicit <code>COLLATE X</code> occurs, then use <code>X</code>
+
+<LI>If an explicit <code>COLLATE X</code> and <code>COLLATE Y</code> occur, then error
+
+<LI>Otherwise, if all collations are <code>X</code>, then use <code>X</code>
+
+<LI>Otherwise, the result has no collation
+
+</UL>
+
+<P>
+For example, with <code>CASE ... WHEN a THEN b WHEN b THEN c COLLATE X
+END</code>, the resultant collation is <code>X</code>. The same applies for
+<code>CASE</code>,
+<code>UNION</code>,
+<code>||</code>,
+<code>CONCAT()</code>,
+<code>ELT()</code>,
+<code>GREATEST()</code>,
+<code>IF()</code>, and
+<code>LEAST()</code>.
+
+</P>
+<P>
+For operations that convert to character data, the character set and
+collation of the strings that result from the operations are defined by the
+<code>character_set_connection</code> and <code>collation_connection</code> system
+variables.  This applies for
+<code>CAST()</code>,
+<code>CHAR()</code>,
+<code>CONV()</code>,
+<code>FORMAT()</code>,
+<code>HEX()</code>, and
+<code>SPACE()</code>.
+
+</P>
+
+
+<H3><A NAME="Charset-CONVERT" HREF="manual_toc.html#Charset-CONVERT">10.4.2  <code>CONVERT()</code></A></H3>
+
+<P>
+<code>CONVERT()</code> provides a way to convert data between different
+character sets. The syntax is:
+
+</P>
+
+<PRE>
+CONVERT(<var>expr</var> USING <var>transcoding_name</var>)
+</PRE>
+
+<P>
+In MySQL, transcoding names are the same as the
+corresponding character set names.
+
+</P>
+<P>
+Examples:
+
+</P>
+
+<PRE>
+SELECT CONVERT(_latin1'M&uuml;ller' USING utf8);
+INSERT INTO utf8table (utf8column)
+    SELECT CONVERT(latin1field USING utf8) FROM latin1table;
+</PRE>
+
+<P>
+<code>CONVERT(... USING ...)</code> is implemented according to the standard SQL
+specification.
+
+</P>
+
+
+<H3><A NAME="Charset-CAST" HREF="manual_toc.html#Charset-CAST">10.4.3  <code>CAST()</code></A></H3>
+
+<P>
+You may also use <code>CAST()</code> to convert a string to a different character
+set. The syntax is:
+
+</P>
+
+<PRE>
+CAST(<var>character_string</var> AS <var>character_data_type</var> CHARACTER SET <var>charset_name</var>)
+</PRE>
+
+<P>
+Example:
+
+</P>
+
+<PRE>
+SELECT CAST(_latin1'test' AS CHAR CHARACTER SET utf8);
+</PRE>
+
+<P>
+If you use <code>CAST()</code> without specifying <code>CHARACTER SET</code>,
+the resulting character set and collation are defined by the
+<code>character_set_connection</code> and <code>collation_connection</code> system
+variables.  If you use <code>CAST()</code> with <code>CHARACTER SET X</code>, then
+the resulting character set and collation are <code>X</code> and the default
+collation of <code>X</code>.
+
+</P>
+<P>
+You may not use a <code>COLLATE</code> clause inside a <code>CAST()</code>, but you may use
+it outside. That is, <code>CAST(... COLLATE ...)</code> is illegal, but
+<code>CAST(...) COLLATE ...</code> is legal.
+
+</P>
+<P>
+Example:
+
+</P>
+
+<PRE>
+SELECT CAST(_latin1'test' AS CHAR CHARACTER SET utf8) COLLATE utf8_bin;
+</PRE>
+
+
+
+<H3><A NAME="Charset-SHOW" HREF="manual_toc.html#Charset-SHOW">10.4.4  <code>SHOW</code> Statements</A></H3>
+
+<P>
+Several <code>SHOW</code> statements are new or modified in MySQL 4.1 to provide
+additional character set information.
+<code>SHOW CHARACTER SET</code>,
+<code>SHOW COLLATION</code>, and
+<code>SHOW CREATE DATABASE</code> are new.
+<code>SHOW CREATE TABLE</code> and
+<code>SHOW COLUMNS</code> are modified.
+
+</P>
+<P>
+The <code>SHOW CHARACTER SET</code> command shows all available character sets.
+It takes an optional <code>LIKE</code> clause that indicates which character set
+names to match.  For example:
+
+</P>
+
+<PRE>
+mysql&#62; SHOW CHARACTER SET LIKE 'latin%';
++---------+-----------------------------+-------------------+--------+
+| Charset | Description                 | Default collation | Maxlen |
++---------+-----------------------------+-------------------+--------+
+| latin1  | ISO 8859-1 West European    | latin1_swedish_ci |      1 |
+| latin2  | ISO 8859-2 Central European | latin2_general_ci |      1 |
+| latin5  | ISO 8859-9 Turkish          | latin5_turkish_ci |      1 |
+| latin7  | ISO 8859-13 Baltic          | latin7_general_ci |      1 |
++---------+-----------------------------+-------------------+--------+
+</PRE>
+
+<P>
+See section <A HREF="manual_SQL_Syntax.html#SHOW_CHARACTER_SET">13.5.4.1  <code>SHOW CHARACTER SET</code> Syntax</A>.
+
+</P>
+<P>
+The output from <code>SHOW COLLATION</code> includes all available character
+sets.
+It takes an optional <code>LIKE</code> clause that indicates which collation
+names to match.  For example:
+
+</P>
+
+<PRE>
+mysql&#62; SHOW COLLATION LIKE 'latin1%';
++-------------------+---------+----+---------+----------+---------+
+| Collation         | Charset | Id | Default | Compiled | Sortlen |
++-------------------+---------+----+---------+----------+---------+
+| latin1_german1_ci | latin1  |  5 |         |          |       0 |
+| latin1_swedish_ci | latin1  |  8 | Yes     | Yes      |       0 |
+| latin1_danish_ci  | latin1  | 15 |         |          |       0 |
+| latin1_german2_ci | latin1  | 31 |         | Yes      |       2 |
+| latin1_bin        | latin1  | 47 |         | Yes      |       0 |
+| latin1_general_ci | latin1  | 48 |         |          |       0 |
+| latin1_general_cs | latin1  | 49 |         |          |       0 |
+| latin1_spanish_ci | latin1  | 94 |         |          |       0 |
++-------------------+---------+----+---------+----------+---------+
+</PRE>
+
+<P>
+See section <A HREF="manual_SQL_Syntax.html#SHOW_COLLATION">13.5.4.2  <code>SHOW COLLATION</code> Syntax</A>.
+
+</P>
+<P>
+<code>SHOW CREATE DATABASE</code> displays the <code>CREATE DATABASE</code> statement
+that will create a given database. The result includes all database
+options. <code>DEFAULT CHARACTER SET</code> and <code>COLLATE</code> are supported. All
+database options are stored in a text file named <tt>`db.opt'</tt> that can
+be found in the database directory.
+
+</P>
+
+<PRE>
+mysql&#62; SHOW CREATE DATABASE a\G
+*************************** 1. row ***************************
+       Database: a
+Create Database: CREATE DATABASE `a`
+                 /*!40100 DEFAULT CHARACTER SET macce */
+</PRE>
+
+<P>
+See section <A HREF="manual_SQL_Syntax.html#SHOW_CREATE_DATABASE">13.5.4.4  <code>SHOW CREATE DATABASE</code> Syntax</A>.
+
+</P>
+<P>
+<code>SHOW CREATE TABLE</code> is similar, but displays the <code>CREATE TABLE</code>
+statement to create a given table. The column definitions now indicate any
+character set specifications, and the table options include character set
+information.
+
+</P>
+<P>
+See section <A HREF="manual_SQL_Syntax.html#SHOW_CREATE_TABLE">13.5.4.5  <code>SHOW CREATE TABLE</code> Syntax</A>.
+
+</P>
+<P>
+The <code>SHOW COLUMNS</code> statement displays the collations of a table's
+columns when invoked as <code>SHOW FULL COLUMNS</code>.
+Columns with <code>CHAR</code>, <code>VARCHAR</code>, or <code>TEXT</code> data types have
+non-<code>NULL</code> collations. Numeric and other non-character types have
+<code>NULL</code> collations. For example:
+
+</P>
+
+<PRE>
+mysql&#62; SHOW FULL COLUMNS FROM t;
++-------+---------+------------+------+-----+---------+-------+
+| Field | Type    | Collation  | Null | Key | Default | Extra |
++-------+---------+------------+------+-----+---------+-------+
+| a     | char(1) | latin1_bin | YES  |     | NULL    |       |
+| b     | int(11) | NULL       | YES  |     | NULL    |       |
++-------+---------+------------+------+-----+---------+-------+
+</PRE>
+
+<P>
+The character set is not part of the display. (The character set name is implied by
+the collation name.)
+
+</P>
+<P>
+See section <A HREF="manual_SQL_Syntax.html#SHOW_COLUMNS">13.5.4.3  <code>SHOW COLUMNS</code> Syntax</A>.
+
+</P>
+
+
+<H2><A NAME="Charset-Unicode" HREF="manual_toc.html#Charset-Unicode">10.5  Unicode Support</A></H2>
+
+<P>
+As of MySQL version 4.1, there are two new character sets for storing 
+Unicode data:
+
+</P>
+
+<UL>
+<LI>
+
+<code>ucs2</code>, the UCS-2 Unicode character set.
+<LI>
+
+<code>utf8</code>, the UTF8 encoding of the Unicode character set.
+</UL>
+
+<P>
+In UCS-2 (binary Unicode representation), every character is
+represented by a two-byte Unicode code with the most significant
+byte first. For example: "LATIN CAPITAL LETTER A" has the code
+0x0041 and it's stored as a two-byte sequence: 0x00 0x41. "CYRILLIC
+SMALL LETTER YERU" (Unicode 0x044B) is stored as a two-byte
+sequence: 0x04 0x4B. For Unicode characters and their codes, please
+refer to the <a HREF="http://www.unicode.org/">Unicode Home Page</a>.
+
+</P>
+<P>
+A temporary restriction is that UCS-2 cannot yet be used as a client
+character set. That means that <code>SET NAMES 'ucs2'</code> will not work.
+
+</P>
+<P>
+The UTF8 character set (transform Unicode representation) is an
+alternative way to store Unicode data. It is implemented according
+to RFC2279. The idea of the UTF8 character set is that various
+Unicode characters fit into byte sequences of different
+lengths:
+
+</P>
+
+<UL>
+<LI>Basic Latin letters, digits, and punctuation signs use one
+
+byte.
+<LI>Most European and Middle East script letters fit into a two-byte
+
+sequence: extended Latin letters (with tilde, macron, acute,
+grave and other accents), Cyrillic, Greek, Armenian, Hebrew,
+Arabic, Syriac, and others.
+<LI>Korean, Chinese, and Japanese ideographs use three-byte
+
+sequences.
+
+</UL>
+
+<P>
+Currently, MySQL UTF8 support does not include four-byte sequences.
+
+</P>
+<P>
+Tip: To save space with UTF8, use <code>VARCHAR</code> instead of <code>CHAR</code>.
+Otherwise, MySQL has to reserve 30 bytes for a <code>CHAR(10) CHARACTER
+SET utf8</code> column, because that's the maximum possible length.
+
+</P>
+
+
+
+<H2><A NAME="Charset-metadata" HREF="manual_toc.html#Charset-metadata">10.6  UTF8 for Metadata</A></H2>
+
+<P>
+The metadata is the data about the data. Anything that
+describes the database, as opposed to being the contents of the
+database, is metadata. Thus column names, database names,
+usernames, version names, and most of the string results from <code>SHOW</code> are
+metadata.
+
+</P>
+<P>
+Representation of metadata must satisfy these requirements:
+
+</P>
+
+<UL>
+
+<LI>
+
+All metadata must be in the same character set. Otherwise, <code>SHOW</code>
+wouldn't work properly because different rows in the same column would be
+in different character sets.
+
+<LI>
+
+Metadata must include all characters in all languages. Otherwise, users
+wouldn't be able to name columns and tables in their own languages.
+
+</UL>
+
+<P>
+In order to satisfy both requirements, MySQL stores metadata in a Unicode
+character set, namely UTF8. This will not cause any disruption if you never
+use accented characters. But if you do, you should be aware that metadata
+is in UTF8.
+
+</P>
+<P>
+This means that the <code>USER()</code>, <code>CURRENT_USER()</code>, and <code>VERSION()</code>
+functions will have the UTF8 character set by default.  So will any
+synonyms, such the <code>SESSION_USER()</code> and <code>SYSTEM_USER()</code> synonyms
+for <code>USER()</code>.
+
+</P>
+<P>
+The server sets the <code>character_set_system</code> system variable to the
+name of the metadata character set:
+
+</P>
+
+<PRE>
+mysql&#62; SHOW VARIABLES LIKE 'character_set_system';
++----------------------+-------+
+| Variable_name        | Value |
++----------------------+-------+
+| character_set_system | utf8  |
++----------------------+-------+
+</PRE>
+
+<P>
+Storage of metadata using Unicode does <em>not</em> mean that the headers
+of columns and the results of <code>DESCRIBE</code> functions will be in the
+<code>character_set_system</code> character set by default.  When you say
+<code>SELECT column1 FROM t</code>, the name <code>column1</code> itself will be
+returned from the server to the client in the character set as determined
+by the <code>SET NAMES</code> statement. More specifically, the character
+set used is determined by the value of the <code>character_set_results</code>
+system variable. If this variable is set to <code>NULL</code>, no conversion is
+performed and the server returns metadata using its original character set
+(the set indicated by <code>character_set_system</code>).
+
+</P>
+<P>
+If you want the server to pass metadata results back in a
+non-UTF8 character set, then use <code>SET NAMES</code> to force the
+server to perform character set conversion (see section <A HREF="manual_Charset.html#Charset-connection">10.3.6  Connection Character Sets and Collations</A>),
+or else set the client to do the conversion. It is
+always more efficient to set the client to do the conversion, but
+this option will not be available for many clients until late in
+the MySQL 4.x product cycle.
+
+</P>
+<P>
+If you are just using, for example, the <code>USER()</code> function for
+comparison or assignment within a single statement, don't worry.
+MySQL will do some automatic conversion for you.
+
+</P>
+
+<PRE>
+SELECT * FROM Table1 WHERE USER() = latin1_column;
+</PRE>
+
+<P>
+This will work because the contents of <code>latin1_column</code> are
+automatically converted to UTF8 before the comparison.
+
+</P>
+
+<PRE>
+INSERT INTO Table1 (latin1_column) SELECT USER();
+</PRE>
+
+<P>
+This will work because the contents of <code>USER()</code> are automatically
+converted to <code>latin1</code> before the assignment.
+Automatic conversion is not fully implemented yet, but should work
+correctly in a later version.
+
+</P>
+
+<P>
+Although automatic conversion is not in the SQL standard, the
+SQL standard document does say that every character set is (in
+terms of supported characters) a ``subset'' of Unicode. Since it is a
+well-known principle that ``what applies to a superset can apply to
+a subset,'' we believe that a collation for Unicode can apply for
+comparisons with non-Unicode strings.
+
+</P>
+
+
+
+<H2><A NAME="Charset-compatibility" HREF="manual_toc.html#Charset-compatibility">10.7  Compatibility with Other DBMSs</A></H2>
+
+<P>
+For MaxDB compatibility these two statements are the same:
+
+</P>
+
+<PRE>
+CREATE TABLE t1 (f1 CHAR(<var>n</var>) UNICODE);
+CREATE TABLE t1 (f1 CHAR(<var>n</var>) CHARACTER SET ucs2);
+</PRE>
+
+
+
+<H2><A NAME="Charset-config-file" HREF="manual_toc.html#Charset-config-file">10.8  New Character Set Configuration File Format</A></H2>
+
+<P>
+In MySQL 4.1, character set configuration is stored in XML
+files, one file per character set. In previous versions, this information
+was stored in <tt>`.conf'</tt> files.
+
+</P>
+
+
+<H2><A NAME="Charset-national" HREF="manual_toc.html#Charset-national">10.9  National Character Set</A></H2>
+
+<P>
+Before MySQL 4.1, <code>NCHAR</code> and <code>CHAR</code> were synonymous. ANSI
+defines <code>NCHAR</code> or <code>NATIONAL CHAR</code> as a way to indicate that a
+<code>CHAR</code>
+column should use some predefined character set. MySQL 4.1 and up uses <code>utf8</code> as
+that predefined character set. For example, these column type declarations
+are equivalent:
+
+</P>
+
+<PRE>
+CHAR(10) CHARACTER SET utf8
+NATIONAL CHARACTER(10)
+NCHAR(10)
+</PRE>
+
+<P>
+As are these:
+
+</P>
+
+<PRE>
+VARCHAR(10) CHARACTER SET utf8
+NATIONAL VARCHAR(10)
+NCHAR VARCHAR(10)
+NATIONAL CHARACTER VARYING(10)
+NATIONAL CHAR VARYING(10)
+</PRE>
+
+<P>
+You can use <code>N'<var>literal</var>'</code> to create a string in
+the national character set.
+These two statements are equivalent:
+
+</P>
+
+<PRE>
+SELECT N'some text';
+SELECT _utf8'some text';
+</PRE>
+
+
+
+<H2><A NAME="Charset-upgrading" HREF="manual_toc.html#Charset-upgrading">10.10  Upgrading Character Sets from MySQL 4.0</A></H2>
+
+<P>
+Now, what about upgrading from older versions of MySQL? MySQL 4.1
+is almost upward compatible with MySQL 4.0 and earlier for the
+simple reason that almost all the features are new, so there's
+nothing in earlier versions to conflict with. However, there are
+some differences and a few things to be aware of.
+
+</P>
+<P>
+Most important: The ``MySQL 4.0 character set'' has the properties
+of both ``MySQL 4.1 character sets'' and ``MySQL 4.1 collations.'' You
+will have to unlearn this. Henceforth, we will not bundle character
+set/collation properties in the same conglomerate object.
+
+</P>
+<P>
+There is a special treatment of national character sets in MySQL
+4.1. <code>NCHAR</code> is not the same as <code>CHAR</code>, and <code>N'...'</code> literals
+are not the same as <code>'...'</code> literals.
+
+</P>
+<P>
+Finally, there is a different file format for storing information
+about character sets and collations. Make sure that you have reinstalled the
+<tt>`/share/mysql/charsets/'</tt> directory containing the new configuration files.
+
+</P>
+<P>
+If you want to start <code>mysqld</code> from a 4.1.x distribution with data
+created by MySQL 4.0, you should start the server with the same
+character set and collation. In this case, you won't need to reindex
+your data.
+
+</P>
+<P>
+There are two ways to do so:
+
+</P>
+
+<PRE>
+shell&#62; ./configure --with-charset=... --with-collation=...
+shell&#62; ./mysqld --default-character-set=... --default-collation=...
+</PRE>
+
+<P>
+If you used <code>mysqld</code> with, for example, the MySQL 4.0 <code>danish</code>
+character set, you should now use the <code>latin1</code> character set and
+the <code>latin1_danish_ci</code> collation:
+
+</P>
+
+<PRE>
+shell&#62; ./configure --with-charset=latin1 \
+           --with-collation=latin1_danish_ci
+shell&#62; ./mysqld --default-character-set=latin1 \
+           --default-collation=latin1_danish_ci
+</PRE>
+
+<P>
+Use the table shown in section <A HREF="manual_Charset.html#Charset-map">10.10.1  4.0 Character Sets and Corresponding 4.1 Character Set/Collation Pairs</A> to find old 4.0 character set
+names and their 4.1 character set/collation pair equivalents.
+
+</P>
+<P>
+If you have non-<code>latin1</code> data stored in a 4.0 <code>latin1</code> table
+and want to convert the table column definitions to reflect the actual
+character set of the data, use the instructions in section <A HREF="manual_Charset.html#Charset-conversion">10.10.2  Converting 4.0 Character Columns to 4.1 Format</A>.
+
+</P>
+
+
+
+<H3><A NAME="Charset-map" HREF="manual_toc.html#Charset-map">10.10.1  4.0 Character Sets and Corresponding 4.1 Character Set/Collation Pairs</A></H3>
+
+<TABLE BORDER>
+<TR><TD><strong>ID</strong> </TD><TD> <strong>4.0 Character Set</strong> </TD><TD> <strong>4.1 Character Set</strong> </TD><TD> <strong>4.1 Collation</strong>
+</TD></TR>
+<TR><TD>1 </TD><TD> <code>big5</code> </TD><TD> <code>big5</code> </TD><TD> <code>big5_chinese_ci</code>
+</TD></TR>
+<TR><TD>2 </TD><TD> <code>czech</code> </TD><TD> <code>latin2</code> </TD><TD> <code>latin2_czech_ci</code>
+</TD></TR>
+<TR><TD>3 </TD><TD> <code>dec8</code> </TD><TD> <code>dec8</code> </TD><TD> <code>dec8_swedish_ci</code>
+</TD></TR>
+<TR><TD>4 </TD><TD> <code>dos</code> </TD><TD> <code>cp850</code> </TD><TD> <code>cp850_general_ci</code>
+</TD></TR>
+<TR><TD>5 </TD><TD> <code>german1</code> </TD><TD> <code>latin1</code> </TD><TD> <code>latin1_german1_ci</code>
+</TD></TR>
+<TR><TD>6 </TD><TD> <code>hp8</code> </TD><TD> <code>hp8</code> </TD><TD> <code>hp8_english_ci</code>
+</TD></TR>
+<TR><TD>7 </TD><TD> <code>koi8_ru</code> </TD><TD> <code>koi8r</code> </TD><TD> <code>koi8r_general_ci</code>
+</TD></TR>
+<TR><TD>8 </TD><TD> <code>latin1</code> </TD><TD> <code>latin1</code> </TD><TD> <code>latin1_swedish_ci</code>
+</TD></TR>
+<TR><TD>9 </TD><TD> <code>latin2</code> </TD><TD> <code>latin2</code> </TD><TD> <code>latin2_general_ci</code>
+</TD></TR>
+<TR><TD>10 </TD><TD> <code>swe7</code> </TD><TD> <code>swe7</code> </TD><TD> <code>swe7_swedish_ci</code>
+</TD></TR>
+<TR><TD>11 </TD><TD> <code>usa7</code> </TD><TD> <code>ascii</code> </TD><TD> <code>ascii_general_ci</code>
+</TD></TR>
+<TR><TD>12 </TD><TD> <code>ujis</code> </TD><TD> <code>ujis</code> </TD><TD> <code>ujis_japanese_ci</code>
+</TD></TR>
+<TR><TD>13 </TD><TD> <code>sjis</code> </TD><TD> <code>sjis</code> </TD><TD> <code>sjis_japanese_ci</code>
+</TD></TR>
+<TR><TD>14 </TD><TD> <code>cp1251</code> </TD><TD> <code>cp1251</code> </TD><TD> <code>cp1251_bulgarian_ci</code>
+</TD></TR>
+<TR><TD>15 </TD><TD> <code>danish</code> </TD><TD> <code>latin1</code> </TD><TD> <code>latin1_danish_ci</code>
+</TD></TR>
+<TR><TD>16 </TD><TD> <code>hebrew</code> </TD><TD> <code>hebrew</code> </TD><TD> <code>hebrew_general_ci</code>
+</TD></TR>
+<TR><TD>17 </TD><TD> <code>win1251</code> </TD><TD> <code>(removed)</code> </TD><TD> <code>(removed)</code>
+</TD></TR>
+<TR><TD>18 </TD><TD> <code>tis620</code> </TD><TD> <code>tis620</code> </TD><TD> <code>tis620_thai_ci</code>
+</TD></TR>
+<TR><TD>19 </TD><TD> <code>euc_kr</code> </TD><TD> <code>euckr</code> </TD><TD> <code>euckr_korean_ci</code>
+</TD></TR>
+<TR><TD>20 </TD><TD> <code>estonia</code> </TD><TD> <code>latin7</code> </TD><TD> <code>latin7_estonian_ci</code>
+</TD></TR>
+<TR><TD>21 </TD><TD> <code>hungarian</code> </TD><TD> <code>latin2</code> </TD><TD> <code>latin2_hungarian_ci</code>
+</TD></TR>
+<TR><TD>22 </TD><TD> <code>koi8_ukr</code> </TD><TD> <code>koi8u</code> </TD><TD> <code>koi8u_ukrainian_ci</code>
+</TD></TR>
+<TR><TD>23 </TD><TD> <code>win1251ukr</code> </TD><TD> <code>cp1251</code> </TD><TD> <code>cp1251_ukrainian_ci</code>
+</TD></TR>
+<TR><TD>24 </TD><TD> <code>gb2312</code> </TD><TD> <code>gb2312</code> </TD><TD> <code>gb2312_chinese_ci</code>
+</TD></TR>
+<TR><TD>25 </TD><TD> <code>greek</code> </TD><TD> <code>greek</code> </TD><TD> <code>greek_general_ci</code>
+</TD></TR>
+<TR><TD>26 </TD><TD> <code>win1250</code> </TD><TD> <code>cp1250</code> </TD><TD> <code>cp1250_general_ci</code>
+</TD></TR>
+<TR><TD>27 </TD><TD> <code>croat</code> </TD><TD> <code>latin2</code> </TD><TD> <code>latin2_croatian_ci</code>
+</TD></TR>
+<TR><TD>28 </TD><TD> <code>gbk</code> </TD><TD> <code>gbk</code> </TD><TD> <code>gbk_chinese_ci</code>
+</TD></TR>
+<TR><TD>29 </TD><TD> <code>cp1257</code> </TD><TD> <code>cp1257</code> </TD><TD> <code>cp1257_lithuanian_ci</code>
+</TD></TR>
+<TR><TD>30 </TD><TD> <code>latin5</code> </TD><TD> <code>latin5</code> </TD><TD> <code>latin5_turkish_ci</code>
+</TD></TR>
+<TR><TD>31 </TD><TD> <code>latin1_de</code> </TD><TD> <code>latin1</code> </TD><TD> <code>latin1_german2_ci</code>
+</TD></TR>
+</TABLE>
+
+
+
+<H3><A NAME="Charset-conversion" HREF="manual_toc.html#Charset-conversion">10.10.2  Converting 4.0 Character Columns to 4.1 Format</A></H3>
+
+<P>
+Normally, the server runs using the <code>latin1</code> character set by default.
+If you have been storing column data that actually is in some other
+character set that the 4.1 server now supports directly, you can convert the
+column.  However, you should avoid trying to convert directly from
+<code>latin1</code> to the "real" character set. This may result in data loss.
+Instead, convert the column to a binary column type, and then from the
+binary type to a non-binary type with the desired character set.  Conversion
+to and from binary involves no attempt at character value conversion and
+preserves your data intact.  For example, suppose that you have a 4.0 table with
+three columns that are used to store values represented in <code>latin1</code>,
+<code>latin2</code>, and <code>utf8</code>:
+
+</P>
+
+<PRE>
+CREATE TABLE t
+(
+    latin1_col CHAR(50),
+    latin2_col CHAR(100),
+    utf8_col CHAR(150)
+);
+</PRE>
+
+<P>
+After upgrading to MySQL 4.1, you want to convert this table to leave
+<code>latin1_col</code> alone but change the <code>latin2_col</code> and <code>utf8_col</code>
+columns to have character sets of <code>latin2</code> and <code>utf8</code>.  First,
+back up your table, then convert the columns as follows:
+
+</P>
+
+<PRE>
+ALTER TABLE t MODIFY latin2_col BINARY(100);
+ALTER TABLE t MODIFY utf8_col BINARY(150);
+ALTER TABLE t MODIFY latin2_col CHAR(100) CHARACTER SET latin2;
+ALTER TABLE t MODIFY utf8_col CHAR(150) CHARACTER SET utf8;
+</PRE>
+
+<P>
+The first two statements ``remove'' the character set information from the
+<code>latin2_col</code> and <code>utf8_col</code> columns.  The second two statements
+assign the proper character sets to the two columns.
+
+</P>
+<P>
+If you like, you can combine the to-binary conversions and from-binary
+conversions into single statements:
+
+</P>
+
+<PRE>
+ALTER TABLE t
+    MODIFY latin2_col BINARY(100),
+    MODIFY utf8_col BINARY(150);
+ALTER TABLE t
+    MODIFY latin2_col CHAR(100) CHARACTER SET latin2,
+    MODIFY utf8_col CHAR(150) CHARACTER SET utf8;
+</PRE>
+
+
+
+<H2><A NAME="Charset-charsets" HREF="manual_toc.html#Charset-charsets">10.11  Character Sets and Collations That MySQL Supports</A></H2>
+
+<P>
+Here is an annotated list of character sets and collations that
+MySQL supports. Because options and installation settings differ,
+some sites might not have all items listed, and some sites might
+have items not listed.
+
+</P>
+<P>
+MySQL supports 70+ collations for 30+ character sets. The character sets and
+their default collations are displayed by the
+<code>SHOW CHARACTER SET STATEMENT</code>.
+(The output actually includes another column that is not shown so that the
+example fits better on the page.)
+
+</P>
+
+
+<PRE>
+mysql&#62; SHOW CHARACTER SET;
++----------+-----------------------------+---------------------+
+| Charset  | Description                 | Default collation   |
++----------+-----------------------------+---------------------+
+| big5     | Big5 Traditional Chinese    | big5_chinese_ci     |
+| dec8     | DEC West European           | dec8_swedish_ci     |
+| cp850    | DOS West European           | cp850_general_ci    |
+| hp8      | HP West European            | hp8_english_ci      |
+| koi8r    | KOI8-R Relcom Russian       | koi8r_general_ci    |
+| latin1   | ISO 8859-1 West European    | latin1_swedish_ci   |
+| latin2   | ISO 8859-2 Central European | latin2_general_ci   |
+| swe7     | 7bit Swedish                | swe7_swedish_ci     |
+| ascii    | US ASCII                    | ascii_general_ci    |
+| ujis     | EUC-JP Japanese             | ujis_japanese_ci    |
+| sjis     | Shift-JIS Japanese          | sjis_japanese_ci    |
+| hebrew   | ISO 8859-8 Hebrew           | hebrew_general_ci   |
+| tis620   | TIS620 Thai                 | tis620_thai_ci      |
+| euckr    | EUC-KR Korean               | euckr_korean_ci     |
+| koi8u    | KOI8-U Ukrainian            | koi8u_general_ci    |
+| gb2312   | GB2312 Simplified Chinese   | gb2312_chinese_ci   |
+| greek    | ISO 8859-7 Greek            | greek_general_ci    |
+| cp1250   | Windows Central European    | cp1250_general_ci   |
+| gbk      | GBK Simplified Chinese      | gbk_chinese_ci      |
+| latin5   | ISO 8859-9 Turkish          | latin5_turkish_ci   |
+| armscii8 | ARMSCII-8 Armenian          | armscii8_general_ci |
+| utf8     | UTF-8 Unicode               | utf8_general_ci     |
+| ucs2     | UCS-2 Unicode               | ucs2_general_ci     |
+| cp866    | DOS Russian                 | cp866_general_ci    |
+| keybcs2  | DOS Kamenicky Czech-Slovak  | keybcs2_general_ci  |
+| macce    | Mac Central European        | macce_general_ci    |
+| macroman | Mac West European           | macroman_general_ci |
+| cp852    | DOS Central European        | cp852_general_ci    |
+| latin7   | ISO 8859-13 Baltic          | latin7_general_ci   |
+| cp1251   | Windows Cyrillic            | cp1251_general_ci   |
+| cp1256   | Windows Arabic              | cp1256_general_ci   |
+| cp1257   | Windows Baltic              | cp1257_general_ci   |
+| binary   | Binary pseudo charset       | binary              |
+| geostd8  | GEOSTD8 Georgian            | geostd8_general_ci  |
+| cp932    | SJIS for Windows Japanese   | cp932_japanese_ci   |
+| eucjpms  | UJIS for Windows Japanese   | eucjpms_japanese_ci |
++----------+-----------------------------+---------------------+
+</PRE>
+
+
+
+<H3><A NAME="Charset-Unicode-sets" HREF="manual_toc.html#Charset-Unicode-sets">10.11.1  Unicode Character Sets</A></H3>
+
+<P>
+MySQL has two Unicode character sets. You can store
+texts in about 650 languages using these character sets. We have
+added several collations for these two new sets, with more to come.
+
+</P>
+
+
+<UL>
+
+<LI><code>ucs2</code> (UCS-2 Unicode) collations:
+
+
+<UL>
+<LI><code>ucs2_bin</code>
+
+<LI><code>ucs2_czech_ci</code>
+
+<LI><code>ucs2_danish_ci</code>
+
+<LI><code>ucs2_estonian_ci</code>
+
+<LI><code>ucs2_general_ci</code> (default)
+
+<LI><code>ucs2_icelandic_ci</code>
+
+<LI><code>ucs2_latvian_ci</code>
+
+<LI><code>ucs2_lithuanian_ci</code>
+
+<LI><code>ucs2_persian_ci</code>
+
+<LI><code>ucs2_polish_ci</code>
+
+<LI><code>ucs2_roman_ci</code>
+
+<LI><code>ucs2_romanian_ci</code>
+
+<LI><code>ucs2_slovak_ci</code>
+
+<LI><code>ucs2_slovenian_ci</code>
+
+<LI><code>ucs2_spanish2_ci</code>
+
+<LI><code>ucs2_spanish_ci</code>
+
+<LI><code>ucs2_swedish_ci</code>
+
+<LI><code>ucs2_turkish_ci</code>
+
+<LI><code>ucs2_unicode_ci</code>
+
+</UL>
+
+<LI><code>utf8</code> (UTF-8 Unicode) collations:
+
+
+<UL>
+<LI><code>utf8_bin</code>
+
+<LI><code>utf8_czech_ci</code>
+
+<LI><code>utf8_danish_ci</code>
+
+<LI><code>utf8_estonian_ci</code>
+
+<LI><code>utf8_general_ci</code> (default)
+
+<LI><code>utf8_icelandic_ci</code>
+
+<LI><code>utf8_latvian_ci</code>
+
+<LI><code>utf8_lithuanian_ci</code>
+
+<LI><code>utf8_persian_ci</code>
+
+<LI><code>utf8_polish_ci</code>
+
+<LI><code>utf8_roman_ci</code>
+
+<LI><code>utf8_romanian_ci</code>
+
+<LI><code>utf8_slovak_ci</code>
+
+<LI><code>utf8_slovenian_ci</code>
+
+<LI><code>utf8_spanish2_ci</code>
+
+<LI><code>utf8_spanish_ci</code>
+
+<LI><code>utf8_swedish_ci</code>
+
+<LI><code>utf8_turkish_ci</code>
+
+<LI><code>utf8_unicode_ci</code>
+
+</UL>
+
+</UL>
+
+
+
+<H3><A NAME="Charset-we-sets" HREF="manual_toc.html#Charset-we-sets">10.11.2  West European Character Sets</A></H3>
+
+<P>
+West European Character Sets cover most West European languages,
+such as French, Spanish, Catalan, Basque, Portuguese, Italian,
+Albanian, Dutch, German, Danish, Swedish, Norwegian, Finnish,
+Faroese, Icelandic, Irish, Scottish, and English.
+
+</P>
+
+<UL>
+
+<LI><code>ascii</code> (US ASCII) collations:
+
+
+<UL>
+<LI><code>ascii_bin</code>
+
+<LI><code>ascii_general_ci</code> (default)
+
+</UL>
+
+<LI><code>cp850</code> (DOS West European) collations:
+
+
+<UL>
+<LI><code>cp850_bin</code>
+
+<LI><code>cp850_general_ci</code> (default)
+
+</UL>
+
+<LI><code>dec8</code> (DEC West European) collations:
+
+
+<UL>
+<LI><code>dec8_bin</code>
+
+<LI><code>dec8_swedish_ci</code> (default)
+
+</UL>
+
+<LI><code>hp8</code> (HP West European) collations:
+
+
+<UL>
+<LI><code>hp8_bin</code>
+
+<LI><code>hp8_english_ci</code> (default)
+
+</UL>
+
+<LI><code>latin1</code> (ISO 8859-1 West European) collations:
+
+
+<UL>
+<LI><code>latin1_bin</code>
+
+<LI><code>latin1_danish_ci</code>
+
+<LI><code>latin1_general_ci</code>
+
+<LI><code>latin1_general_cs</code>
+
+<LI><code>latin1_german1_ci</code>
+
+<LI><code>latin1_german2_ci</code>
+
+<LI><code>latin1_spanish_ci</code>
+
+<LI><code>latin1_swedish_ci</code> (default)
+
+</UL>
+
+The <code>latin1</code> is the default character set.
+The <code>latin1_swedish_ci</code> collation is the default that probably is
+used by the majority of MySQL customers. It is constantly stated
+that this is based on the Swedish/Finnish collation rules, but you
+will find Swedes and Finns who disagree with that statement.
+
+The <code>latin1_german1_ci</code> and <code>latin1_german2_ci</code>
+collations are based on the DIN-1 and DIN-2 standards,
+where DIN stands for Deutsches Institut f&uuml;r Normung (that is,
+the German answer to ANSI).
+DIN-1 is called the dictionary collation and DIN-2 is called the
+phone-book collation.
+
+
+<UL>
+
+<LI><code>latin1_german1_ci</code> (dictionary) rules:
+
+
+<PRE>
+&Auml; = A
+&Ouml; = O
+&Uuml; = U
+&szlig; = s
+</PRE>
+
+<LI><code>latin1_german2_ci</code> (phone-book) rules:
+
+
+<PRE>
+&Auml; = AE
+&Ouml; = OE
+&Uuml; = UE
+&szlig; = ss
+</PRE>
+
+</UL>
+
+In the <code>latin1_spanish_ci</code> collation, <samp>`&Ntilde;'</samp> (N-tilde) is a
+separate letter between <samp>`N'</samp> and <samp>`O'</samp>.
+
+<LI><code>macroman</code> (Mac West European) collations:
+
+
+<UL>
+<LI><code>macroman_bin</code>
+
+<LI><code>macroman_general_ci</code> (default)
+
+</UL>
+
+<LI><code>swe7</code> (7bit Swedish) collations:
+
+
+<UL>
+<LI><code>swe7_bin</code>
+
+<LI><code>swe7_swedish_ci</code> (default)
+
+</UL>
+
+</UL>
+
+
+
+<H3><A NAME="Charset-ce-sets" HREF="manual_toc.html#Charset-ce-sets">10.11.3  Central European Character Sets</A></H3>
+
+<P>
+We have some support for character sets used in the Czech Republic,
+Slovakia, Hungary, Romania, Slovenia, Croatia, and Poland.
+
+</P>
+
+<UL>
+
+<LI><code>cp1250</code> (Windows Central European) collations:
+
+
+<UL>
+<LI><code>cp1250_bin</code>
+
+<LI><code>cp1250_czech_cs</code>
+
+<LI><code>cp1250_general_ci</code> (default)
+
+</UL>
+
+<LI><code>cp852</code> (DOS Central European) collations:
+
+
+<UL>
+<LI><code>cp852_bin</code>
+
+<LI><code>cp852_general_ci</code> (default)
+
+</UL>
+
+<LI><code>keybcs2</code> (DOS Kamenicky Czech-Slovak) collations:
+
+
+<UL>
+<LI><code>keybcs2_bin</code>
+
+<LI><code>keybcs2_general_ci</code> (default)
+
+</UL>
+
+<LI><code>latin2</code> (ISO 8859-2 Central European) collations:
+
+
+<UL>
+<LI><code>latin2_bin</code>
+
+<LI><code>latin2_croatian_ci</code>
+
+<LI><code>latin2_czech_cs</code>
+
+<LI><code>latin2_general_ci</code> (default)
+
+<LI><code>latin2_hungarian_ci</code>
+
+</UL>
+
+<LI><code>macce</code> (Mac Central European) collations:
+
+
+<UL>
+<LI><code>macce_bin</code>
+
+<LI><code>macce_general_ci</code> (default)
+
+</UL>
+
+</UL>
+
+
+
+<H3><A NAME="Charset-se-me-sets" HREF="manual_toc.html#Charset-se-me-sets">10.11.4  South European and Middle East Character Sets</A></H3>
+
+
+<UL>
+
+<LI><code>armscii8</code> (ARMSCII-8 Armenian) collations:
+
+
+<UL>
+<LI><code>armscii8_bin</code>
+
+<LI><code>armscii8_general_ci</code> (default)
+
+</UL>
+
+<LI><code>cp1256</code> (Windows Arabic) collations:
+
+
+<UL>
+<LI><code>cp1256_bin</code>
+
+<LI><code>cp1256_general_ci</code> (default)
+
+</UL>
+
+<LI><code>geostd8</code> (GEOSTD8 Georgian) collations:
+
+
+<UL>
+<LI><code>geostd8_bin</code>
+
+<LI><code>geostd8_general_ci</code> (default)
+
+</UL>
+
+<LI><code>greek</code> (ISO 8859-7 Greek) collations:
+
+
+<UL>
+<LI><code>greek_bin</code>
+
+<LI><code>greek_general_ci</code> (default)
+
+</UL>
+
+<LI><code>hebrew</code> (ISO 8859-8 Hebrew) collations:
+
+
+<UL>
+<LI><code>hebrew_bin</code>
+
+<LI><code>hebrew_general_ci</code> (default)
+
+</UL>
+
+<LI><code>latin5</code> (ISO 8859-9 Turkish) collations:
+
+
+<UL>
+<LI><code>latin5_bin</code>
+
+<LI><code>latin5_turkish_ci</code> (default)
+
+</UL>
+
+</UL>
+
+
+
+<H3><A NAME="Charset-baltic-sets" HREF="manual_toc.html#Charset-baltic-sets">10.11.5  Baltic Character Sets</A></H3>
+
+<P>
+The Baltic character sets cover Estonian, Latvian, and Lithuanian
+languages. There are two Baltic character sets currently supported:
+
+</P>
+
+<UL>
+
+<LI><code>cp1257</code> (Windows Baltic) collations:
+
+
+<UL>
+<LI><code>cp1257_bin</code>
+
+<LI><code>cp1257_general_ci</code> (default)
+
+<LI><code>cp1257_lithuanian_ci</code>
+
+</UL>
+
+<LI><code>latin7</code> (ISO 8859-13 Baltic) collations:
+
+
+<UL>
+<LI><code>latin7_bin</code>
+
+<LI><code>latin7_estonian_cs</code>
+
+<LI><code>latin7_general_ci</code> (default)
+
+<LI><code>latin7_general_cs</code>
+
+</UL>
+
+</UL>
+
+
+
+<H3><A NAME="Charset-cyrillic-sets" HREF="manual_toc.html#Charset-cyrillic-sets">10.11.6  Cyrillic Character Sets</A></H3>
+
+<P>
+Here are the Cyrillic character sets and collations for use with
+Belarusian, Bulgarian, Russian, and Ukrainian languages.
+
+</P>
+
+
+<UL>
+
+<LI><code>cp1251</code> (Windows Cyrillic) collations:
+
+
+<UL>
+<LI><code>cp1251_bin</code>
+
+<LI><code>cp1251_bulgarian_ci</code>
+
+<LI><code>cp1251_general_ci</code> (default)
+
+<LI><code>cp1251_general_cs</code>
+
+<LI><code>cp1251_ukrainian_ci</code>
+
+</UL>
+
+<LI><code>cp866</code> (DOS Russian) collations:
+
+
+<UL>
+<LI><code>cp866_bin</code>
+
+<LI><code>cp866_general_ci</code> (default)
+
+</UL>
+
+<LI><code>koi8r</code> (KOI8-R Relcom Russian) collations:
+
+
+<UL>
+<LI><code>koi8r_bin</code>
+
+<LI><code>koi8r_general_ci</code> (default)
+
+</UL>
+
+<LI><code>koi8u</code> (KOI8-U Ukrainian) collations:
+
+
+<UL>
+<LI><code>koi8u_bin</code>
+
+<LI><code>koi8u_general_ci</code> (default)
+
+</UL>
+
+</UL>
+
+
+
+<H3><A NAME="Charset-asian-sets" HREF="manual_toc.html#Charset-asian-sets">10.11.7  Asian Character Sets</A></H3>
+
+<P>
+The Asian character sets that we support include Chinese, Japanese,
+Korean, and Thai. These can be complicated. For example, the Chinese
+sets must allow for thousands of different characters.
+
+</P>
+
+<UL>
+
+<LI><code>big5</code> (Big5 Traditional Chinese) collations:
+
+
+<UL>
+<LI><code>big5_bin</code>
+
+<LI><code>big5_chinese_ci</code> (default)
+
+</UL>
+
+<LI><code>cp932</code> (SJIS for Windows Japanese) collations:
+
+
+<UL>
+<LI><code>cp932_bin</code>
+
+<LI><code>cp932_japanese_ci</code> (default)
+
+</UL>
+
+<LI><code>eucjpms</code> (UJIS for Windows Japanese) collations:
+
+
+<UL>
+<LI><code>eucjpms_bin</code>
+
+<LI><code>eucjpms_japanese_ci</code> (default)
+
+</UL>
+
+<LI><code>euckr</code> (EUC-KR Korean) collations:
+
+
+<UL>
+<LI><code>euckr_bin</code>
+
+<LI><code>euckr_korean_ci</code> (default)
+
+</UL>
+
+<LI><code>gb2312</code> (GB2312 Simplified Chinese) collations:
+
+
+<UL>
+<LI><code>gb2312_bin</code>
+
+<LI><code>gb2312_chinese_ci</code> (default)
+
+</UL>
+
+<LI><code>gbk</code> (GBK Simplified Chinese) collations:
+
+
+<UL>
+<LI><code>gbk_bin</code>
+
+<LI><code>gbk_chinese_ci</code> (default)
+
+</UL>
+
+<LI><code>sjis</code> (Shift-JIS Japanese) collations:
+
+
+<UL>
+<LI><code>sjis_bin</code>
+
+<LI><code>sjis_japanese_ci</code> (default)
+
+</UL>
+
+<LI><code>tis620</code> (TIS620 Thai) collations:
+
+
+<UL>
+<LI><code>tis620_bin</code>
+
+<LI><code>tis620_thai_ci</code> (default)
+
+</UL>
+
+<LI><code>ujis</code> (EUC-JP Japanese) collations:
+
+
+<UL>
+<LI><code>ujis_bin</code>
+
+<LI><code>ujis_japanese_ci</code> (default)
+
+</UL>
+
+</UL>
+
+<P><HR><P>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_Language_Structure.html">previous</A>, <A HREF="manual_Column_types.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+ </BODY>
+ </HTML>

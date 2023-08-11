@@ -1,0 +1,71 @@
+Q: 為何使用 dhcpd ?
+A: no need to know the environment, and easy to setup the ip part
+
+Q: 到底系統上安裝了那些個軟體 ?
+[cpfong@ubuntu ~]$ rpm -qa |grep dhcp
+dhcpv6-client-1.0.10-17.el5
+
+[cpfong@ubuntu ~]$ yum list |grep dhcp
+dhcpv6-client.i386                         1.0.10-17.el5	installed
+dhcp.i386                                  12:3.0.5-21.el5      base     
+dhcpv6.i386                                1.0.10-17.el5        base     
+
+使用 yum 前先更新 yum
+>yum update
+>yum install dhcp.i386
+
+安裝了之後可以使用 query 看到 dhcp 相關的
+[cpfong@ubuntu ~]$ rpm -qa |grep dhcp
+dhcpv6-client-1.0.10-17.el5
+dhcp-3.0.5-21.el5
+
+在開機的 ini.d 目錄下已出現了
+[cpfong@ubuntu nfs.AT.vnc_MIS.dir]$ ls /etc/init.d/dhc
+dhcpd     dhcrelay  
+
+如把它 remove 則看不到這些東西
+[cpfong@ubuntu ~]$ yum remove dhcp.i386
+[cpfong@ubuntu nfs.AT.vnc_MIS.dir]$ ls /etc/init.d/dhcpd
+[cpfong@ubuntu nfs.AT.vnc_MIS.dir]$ ls /etc/dhcpd.conf 
+
+[cpfong@ubuntu nfs.AT.vnc_MIS.dir]$ ls /etc/dhcpd.conf 
+/etc/dhcpd.conf
+
+先由範例之中把東西 copy 過來
+cat /usr/share/doc/dhcp-3.0.5/dhcpd.conf.sample >> dhcpd.conf
+comment out all of them
+
+使用的方式如下:
+[cpfong@ubuntu ~]$/etc/init.d/dhcpd 
+usage: /etc/init.d/dhcpd {start|stop|restart|condrestart|configtest|status}
+
+看看 dchpd 的狀態如何 ?
+[cpfong@ubuntu ~]$ sudo /etc/init.d/dhcpd status
+not running
+
+[cpfong@ubuntu ~]$ sudo /etc/init.d/dhcpd start
+fail!
+
+為何 fail, 可以到 message 去看一下
+[cpfong@ubuntu ~]$ tail /var/log/messages
+
+
+dhcp 的觀念如下:
+client --> broadcast asking for dhcp service
+server --> get client mac then respond to it
+		* does client use certain ip and this ip is not occupied ?
+		* give an ip and released time to client and ask acknoledge
+		* client sent acknoledge back to server
+		* server can give 2 kinds of ip to client: static and dynamic
+
+dhcpd.conf 的語法為:
+	# means comment
+	end with ;
+	variable values;
+	options variable values;
+
+重要的內容為:
+content
+    * option domain-name --> affect client /etc/resolv.conf
+    * option domain-name-servers IP1, IP2
+    * option routers aa.bb.cc.dd;

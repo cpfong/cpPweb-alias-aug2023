@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# note: this is for amiLinux, ohter AMI need to modify this file
+
+cd ~ec2-user
+wget http://199.102.79.18:8080/tmp/ddns.tgz
+tar xfvz ddns.tgz
+cd ddns
+cat rc.local.ec2-user >> /etc/rc.local

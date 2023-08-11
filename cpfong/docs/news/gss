@@ -1,0 +1,15 @@
+pwd
+/usr/local/src/sendmail-8.12.6/cf/cf
+
+cat generic-bsd4.4.mc.procmail.innews
+define(`USENET_MAILER_PATH', `/usr/local/news/bin/inews')dnl
+define(`USENET_MAILER_FLAGS', `rsDFMmn')dnl
+define(`USENET_MAILER_ARGS', `news -A -h -N')dnl
+MAILER(usenet)dnl
+
+m4 ../m4/cf.m4 ./generic-bsd4.4.mc.procmail.innews > generic-bsd4.4.cf.procmail.innews
+
+echo xxx | mail -s xxx tttgroup.usenet
+note: There is "NO" tttgroup.usenet account is system!!
+---------------
+Jan  4 14:27:22 hiedoc sendmail[42053]: h046RL0E042051: to=<tttgroup.usenet@hiedoc.fjtc.edu.tw>, delay=00:00:01, xdelay=00:00:01, mailer=amavis, pri=30384, dsn=2.0.0, stat=Sent

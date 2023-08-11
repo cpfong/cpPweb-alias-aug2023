@@ -1,0 +1,5 @@
+man jot
+
+jot 3 1 3 # rep start end : start form 1 to 3 separate them in 3 parts
+jot -r 3  # give me 3 random number
+jot -r 3 1 100

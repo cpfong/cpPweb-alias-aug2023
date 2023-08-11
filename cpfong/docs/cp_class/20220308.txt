@@ -1,0 +1,59 @@
+p2-4 visual + logic (ie: layout + coding)
+p2-6 visual: GUI (graphic user interface) using XML
+p2-7 Coding: using Java to program
+p2-8 Build: make file to genertate .apk (Fig 2-3)
+
+p2-9 
+ up Fig: why only 2 files: A:activity_main.xml B:MainActivity.java (# take attentation on files' extension: xml, java)
+
+p2-10 create java (not kotlin)
+
+p2-13 
+ layout: element's ID in xml link to java
+
+p2-15 layout and attributes
+ layout: elements display 
+ attributes: size, color, ...
+
+p2-25 Chap02_Button
+ request: check Fig 1st
+
+p2-26
+ Chap02_Button
+ tw.com.flag.chap02_button #differ
+
+p2-29
+ xml --> code (comment out orig one)
+ #color (yellow ok, red is BAD!)
+<androidx.xxyyzz
+..
+> END here
+
+</androidx ...> end of androidx 
+
+how to comment?
+<!--
+here is comment
+-->
+
+p2-29
+ SELECT 'android.support.constraint.ConstraintLayout' --> practice select using arrow key
+
+p2-31
+ canNOT move 'hello world' text --> disable magnetic icon
+ add TextView id as txv
+
+p2-33
+ add a button
+
+p2-34
+ move hello world and button
+ change txv text to Bigger (chinese) --> warning (yellow tringle) --> click that triangle --> last there is a Fix (it will open extract resource window)
+
+p2-41
+ textApperance is missing, you have to use + to add it in
+ add textSize attr in too
+
+p2-45
+ public void bigger(V #note Capital V not v)
+ 

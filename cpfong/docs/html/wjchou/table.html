@@ -1,0 +1,217 @@
+<HTML>
+<HEAD>
+<title>Tables in Netscape 1.1</title>
+</HEAD>
+
+<BODY>
+<H1>Tables as implemented in Netscape 1.1</H1>
+
+<H2>Netscape 1.1 tables and the proposed HTML 3.0 spec.</H2>
+<p>
+It has been interesting trying to faithfully reproduce tables as described
+in the HTML 3.0 proposed spec. in Netscape 1.1, because as fast as I implement
+something, the proposed spec. changes.  The best I can offer, is that in
+order for the HTML 3.0 proposal to become a real spec. and eventual standard, 
+it will some day have to stop changing.
+</p>
+
+<H2>The table tags</H2>
+<dl>
+<dt><font size="+1"><b>&lt;TABLE ...&gt;&lt;/TABLE&gt;</b></font>
+<dd>This is the main wrapper for all the other table tags, and other
+    table tags will be ignored if they aren't wrapped inside of a
+    <tt>TABLE</tt> tag.  By default tables have no borders, borders will
+    be added if the <tt>BORDER</tt> attribute is specified.
+ <p>
+    Right now <tt>TABLE</tt> has an implied linebreak both before and
+    after it.  <i>We expect this to change</i> so that you can eventually
+    have as much control over placement of tables as you currently do over
+    the placement of images.  Aligning them to various positions in a line of
+    text, as well as shifting them to the left or right margins and wrapping
+    text around them.
+ </p>
+
+<dt><font size="+1"><b>&lt;TR ...&gt;&lt;/TR&gt;</b></font>
+<dd>This stands for table row.  The number of rows in a table is exactly
+    specified by how many <tt>TR</tt> tags are contained within it,
+    irregardless of cells that may attempt to use the <tt>ROWSPAN</tt>
+    attribute to span into non-specified rows.  <tt>TR</tt> can have
+    both the <tt>ALIGN</tt> and <tt>VALIGN</tt> attributes, which if
+    specified become the default alignments for all cells in this row.
+<p>
+
+<dt><font size="+1"><b>&lt;TD ...&gt;&lt;/TD&gt;</b></font>
+<dd>This stands for table data, and specifies a standard table data cell.
+    Table data cells must only appear within table rows.  Each row need
+    not have the same number of cells specified as short rows will
+    be padded with blank cells on the right.
+    A cell can contain any of the HTML tags normally present in the
+    body of an HTML document.  The default alignment of table data is
+    <tt>ALIGN</tt>=left and <tt>VALIGN</tt>=middle.  These alignments are
+    overridden by any alignments specified in the containing <tt>TR</tt> tag,
+    and those alignments in turn are overridden by any <tt>ALIGN</tt> or
+    <tt>VALIGN</tt> attributes explicitly specified on this cell.
+    By default lines inside of table cells can be broken up to fit
+    within the overall cell width.  Specifying the <tt>NOWRAP</tt>
+    attribute for a <tt>TD</tt> prevents linebreaking for that cell.
+ <p>
+
+<dt><font size="+1"><b>&lt;TH ...&gt;&lt;/TH&gt;</b></font>
+<dd>This stands for table header.  Header cells are identical to data
+    cells in all respects, with the exception that header cells
+    are in a <b>bold</b> font, and have a default <tt>ALIGN</tt>=center.
+<p>
+
+<dt><font size="+1"><b>&lt;CAPTION ...&gt;&lt;/CAPTION&gt;</b></font>
+<dd>This represents the caption for a table.  <tt>CAPTION</tt> tags should
+    appear inside the <tt>TABLE</tt> but not inside table rows or cells.
+    The caption accepts an alignment attribute that defaults to
+    <tt>ALIGN</tt>=top but can be explicitly set to <tt>ALIGN</tt>=bottom.
+    Like table cells, any document body HTML can appear in a caption.
+    Captions are always horizontally centered with respect to the table, and
+    the may have their lines broken to fit within the width of the table.
+<p>
+</dl>
+<hr>
+
+<H2>The table attributes</H2>
+<dl>
+<dt><font size="+1"><b>BORDER</b></font>
+<dd>This attribute appears in the <tt>TABLE</tt> tag.  If present, borders
+    are drawn around all table cells.  If absent, there are no borders,
+    but by default space is left for borders, so the same table with and
+    without the <tt>BORDER</tt> attribute will have the same width.
+<dt><font size="+1"><b>ALIGN</b></font>
+<dd>If appearing inside a <tt>CAPTION</tt> it controls whether the caption
+    appears above or below the table, and can have the values
+    <b>top</b> or <b>bottom</b>, defaulting to top.
+<p>
+    If appearing inside a <tt>TR</tt>, <tt>TH</tt>, or <tt>TD</tt> it
+    controls whether text inside the table cell(s) is aligned to the
+    left side of the cell, the right side of the cell, or centered within
+    the cell.  Values are <b>left</b>, <b>center</b>, and <b>right</b>.
+<dt><font size="+1"><b>VALIGN</b></font>
+<dd>Appearing inside a <tt>TR</tt>, <tt>TH</tt>, or <tt>TD</tt> it
+    controls whether text inside the table cell(s) is aligned to the
+    top of the cell, the bottom of the cell, or vertically centered within
+    the cell.  It can also specify that all the cells in the row should
+    be vertically aligned to the same baseline.  Values are <b>top</b>,
+    <b>middle</b> <b>bottom</b>, and <b>baseline</b>.
+<dt><font size="+1"><b>NOWRAP</b></font>
+<dd>If this attribute appears in any table cell (<tt>TH</tt> or <tt>TD</tt>)
+    it means the lines within this cell cannot be broken to fit the width
+    of the cell.  Be cautious in use of this attribute as it can result
+    in excessively wide cells.
+<dt><font size="+1"><b>COLSPAN</b></font>
+<dd>This attribute can appear in any table cell (<tt>TH</tt> or <tt>TD</tt>)
+    and it specifies how many columns of the table this cell should span.
+    The default <tt>COLSPAN</tt> for any cell is 1.
+<dt><font size="+1"><b>ROWSPAN</b></font>
+<dd>This attribute can appear in any table cell (<tt>TH</tt> or <tt>TD</tt>)
+    and it specifies how many rows of the table this cell should span.
+    The default <tt>ROWSPAN</tt> for any cell is 1.  A span that extends into
+    rows that were never specified with a <tt>TR</tt> will be truncated.
+</dl>
+<p>
+<hr>
+</p>
+
+<H2>A little more control</H2>
+<p>
+We found when creating tables that the creator inevitably wanted a
+little more control, especially when creating complex multiply nested tables.
+To this end we added a few more attributes that we are hoping to get into
+The continually evolving proposed HTML 3.0 spec.
+</p>
+<dl>
+<dt><font size="+1"><b>BORDER</b>=&lt;value&gt;</font>
+<dd>By allowing the <tt>BORDER</tt> attribute to take a value, the document
+    author gains two things.  First they gain the ability emphasize some
+    tables with respect to others, a table with a border of four containing
+    a sub-table with a border of one looks much nicer than if they both
+    share the same default border width.  Second, by explicitly setting
+    border to zero they regain that space originally reserved for borders
+    between cells, allowing particularly compact tables.
+<dt><font size="+1"><b>CELLSPACING</b>=&lt;value&gt;</font>
+<dd>This is a new attribute for the <tt>TABLE</tt> tag.  By default
+    Netscape 1.1 uses a cell spacing of two.  For those fussy about the look
+    of their tables, this gives them a little more control.  Like it sounds, 
+    cell spacing is the amount of space inserted between individual cells in
+    a table.
+<dt><font size="+1"><b>CELLPADDING</b>=&lt;value&gt;</font>
+<dd>This is a new attribute for the <tt>TABLE</tt> tag.  By default
+    Netscape 1.1 uses a cell padding of one.  Cell padding is the amount
+    of space between the border of the cell and the contents of the cell.
+    Setting a cell padding of zero on a table with borders might look bad
+    because the edges of the text could touch the cell borders.<br>
+&lt;TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0&gt;<br>
+    gives the most compact table possible.
+<dt><font size="+1"><b>WIDTH</b>=&lt;value_or_percent&gt;</font>
+<dd>When this attribute appears on the <tt>TABLE</tt> tag it is used
+    to describe the desired width of this table, either as an absolute
+    width in pixels, or a percentage of document width.  Ordinarily
+    complex heuristics are applied to tables and their cells to attempt
+    to present a pleasing looking table.  Setting the <tt>WIDTH</tt>
+    attribute overrides those heuristics and instead effort is put into
+    fitting the table into the desired width as specified.  In some cases
+    it might be impossible to fit all the table cells at the specified
+    width, in which case Netscape 1.1 will try and get as close as possible.
+<p>
+    When this attribute appears on either the <tt>TH</tt> or <tt>TD</tt> tag
+    it is used to describe the desired width of the cell, either as an absolute
+    width in pixels, or a percentage of table width.  Ordinarily
+    complex heuristics are applied to table cells to attempt
+    to present a pleasing looking table.  Setting the <tt>WIDTH</tt>
+    attribute overrides those heuristics for that cell and instead effort
+    is put into fitting the cell into the desired width as specified.  In
+    some cases it might be impossible to fit all the table cells at the
+    specified widths, in which case Netscape 1.1 will try and get as close
+    as possible.
+</dl>
+<p>
+<hr>
+</p>
+
+<H2 align=center>Stuff and bother <i>(the details)</i></H2>
+<p>
+Blank cells which contain no displayable elements are not given borders.
+If you wish the appearance of an empty cell, but with borders, put either
+a blank line or a non-breaking space in the cell. (&lt;td&gt;&amp;nbsp;&lt;/td&gt; or &lt;td&gt;&lt;br&gt;&lt;/td&gt;)
+</p>
+<hr width="10%">
+<p>
+The proposed HTML 3.0 spec. allows you to abuse row and column spans
+to create tables whose cells <b>must</b> overlap.  Don't do this, it
+looks awful.
+</p>
+<hr width="10%">
+<p>
+You will eventually create a cell containing nothing but an image, and
+you will wonder why your image is not properly centered inside the cell.
+You probably wrote HTML like:
+</p>
+<pre>
+&lt;td&gt;
+  &lt;img src="url"&gt
+&lt;/td&gt;
+</pre>
+<p>
+That extra whitespace inside your cell and around your image gets
+collapsed into single space characters.  And it is these spaces (whose
+baselines by default align with the bottom of the image) which are making your
+cell look lopsided.  Try this instead:
+</p>
+<pre>
+&lt;td&gt;&lt;img src="url"&gt&lt;/td&gt;
+</pre>
+<hr width="10%">
+
+
+<br>
+<br>
+<center>
+<address>ebina@netscape.com</address>
+</center>
+
+</BODY>
+</HTML>

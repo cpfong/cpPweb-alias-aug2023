@@ -1,0 +1,28 @@
+news-> hostname 
+hiedoc.fjtc.edu.tw
+
+Comaq-> pwd
+/home/cpfong/ln.news/etc
+Comaq-> s vi newsfeeds 
+
+#開放 innfeed, 即所有的 feed 都用這種方式
+# innfeed funnel master.
+#innfeed!\
+#       :!*\
+#       :Tc,Wnm*:/usr/local/news/bin/startinnfeed
+innfeed!\
+        :!*\
+        :Tc,Wnm*:/usr/local/news/bin/startinnfeed
+
+#給和春的 news, 給它 pub.post
+fjtc\
+        :pub*\
+        :Tm:innfeed!
+
+Comaq-> s vi innfeed.conf
+
+告知自己何謂和春
+peer fjtc {
+        ip-name:                news.fjtc.edu.tw
+        max-connections:        10
+}

@@ -1,0 +1,50 @@
+<html>
+<head>
+<title>ftp的使用</title>
+<body bgcolor="#ffffff" text="#000000">
+</head>
+<font size=+2>ftp的使用</font><br>
+<ol type=1>
+<li>進入ftp<br>
+ftp ftp.ntu.edu.tw或ftp 140.112.1.23<br>
+login:ftp<br>
+password:b0401087@med.mc.ntu.edu.tw<br>
+或是ftp med<br>
+login:b0401087<br>
+password:********<br>
+就可以抓自己工作站的檔案了.
+<li>遠端和近端<br>
+如果你在圓形教室telnet med, 再ftp 到ccsun24.cc.ntu.edu.tw<br>
+則med 是近端, ccsun是遠端.<br>
+get就是download, put就是upload<br>
+例:get maruko.jpg sakura.jpg<br>
+就會把遠端maruko.jpg的檔案變成近端的sakura.jpg
+<li>bin & ascii<br>
+要傳二進位檔案時請用binary模式, 否則會殘缺不全.<br>
+傳文字檔因為格式問題, 最好用ascii 模式.<br>
+bin 可轉換成binary模式, asc 可轉為ascii 模式.
+<li>國內最大的FTP 站是NCTUCCCA.edu.tw.<br>
+台大有一份完全一樣的copy: ftp.ntu.edu.tw.
+<li>常用指令
+<table border=2 width=60%>
+<tr><td>? [command]<td>列出所有指令。或指令的使用法。</tr>
+<tr><td>open hostname<td>連到Host</tr>
+<tr><td>user username [password]<td>以username進入Remote.</tr>
+<tr><td>dir, ls [remote-directory] [local-file]<td>讀remote 
+directory,[存入local file]</tr>
+<tr><td>cd [remote-directory]<td>改變目錄</tr>
+<tr><td>pwd<td>顯示目前remote工作目錄</tr>
+<tr><td>binary<td>binary狀態</tr>
+<tr><td>ascii<td>ascii狀態</tr>
+<tr><td>get remote-file [local-file]<td>從remote抓到local</tr>
+<tr><td>put local-file [remote-file]<td>從local抓到remote</tr>
+<tr><td>mget remote-files<td>一次get多個檔案。Ctrl-c中斷.可用"?","*"</tr>
+<tr><td>mput local-files<td>一次put多個檔案.Ctrl-c中斷.可用"?","*".</tr>
+<tr><td>prompt<td>打開或關掉mget或mput的詢問.</tr>
+<tr><td>hash<td>每傳1024bytes,便印一個"#".</tr>
+<tr><td>![command.[args]<td>執行local程式.</tr>
+<tr><td>lcd<td>改變local的目錄.</tr>
+<tr><td>bye<td>結束</tr>
+</table>
+</ol>
+</html>

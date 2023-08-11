@@ -1,0 +1,71 @@
+<?
+
+$fp = fopen("$homedir/user.txt","r");
+flock($fp,2);
+
+switch($type){
+
+	case "add":
+		if(!$newloginID || !$newpass){
+			echo "Your newuser or newpass are blank!!<BR>";
+			exit;
+		}
+
+
+		while($userinfo = fscanf($fp,"%s\t%s\t%s\t%s\n")){
+        		list($id,$name,$pass,$email)=$userinfo;
+			if($newloginID == $name){
+				echo "$newloginID is exist!!<BR>";
+				exit;
+			}
+			$tmpuser="$id $name $pass $email\n";
+			$x=$x.$tmpuser;
+			$lastid=$id;
+		}
+		$nextid=$lastid+1;
+
+		$tmpuser="$nextid $newloginID $newpass $newemail\n";
+		$x=$x.$tmpuser;
+		$fw = fopen("$homedir/user.txt","w");
+		fclose($fp);
+
+		fputs($fw,$x);
+		echo "$newloginID was added.";
+		exit;
+
+	case "del":
+		while($userinfo = fscanf($fp,"%s\t%s\t%s\t%s\n")){
+			list($id,$name,$pass,$email)=$userinfo;
+			if(!($deluser == $name)){
+                        	$tmpuser="$id $name $pass $email\n";
+                        	$x=$x.$tmpuser;
+                        }
+                }
+		$fw = fopen("$homedir/user.txt","w");
+		fclose($fp);
+
+		fputs($fw,$x);
+		echo "$deluser was deleted.";
+		exit;
+
+	case "edit":
+		while($userinfo = fscanf($fp,"%s\t%s\t%s\t%s\n")){
+			list($id,$name,$pass,$email)=$userinfo;
+			if($oldloginID == $name){
+				$tmpuser="$id $alterloginID $alterpass $alteremail\n";
+				$x=$x.$tmpuser;
+                        }else{
+                        	$tmpuser="$id $name $pass $email\n";
+                        	$x=$x.$tmpuser;
+			}
+				
+                }
+		$fw = fopen("$homedir/user.txt","w");
+		fclose($fp);
+
+		fputs($fw,$x);
+		echo "$oldloginID was updated.";
+		exit;
+}
+
+?>

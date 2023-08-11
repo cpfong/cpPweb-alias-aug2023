@@ -1,0 +1,58 @@
+	'1
+        Console.WriteLine("今天是2010年11月9日!")
+        Console.WriteLine("星期二")
+        Console.ReadKey()
+
+	'2
+	'dim head As Integer = 8
+        'Dim data() As Integer = {2, 76, 5, -8, 1, 38, 7, 39, -75, 24}
+        'Dim index() As Integer = {2, -1, 6, 4, 0, 7, 9, 1, 3, 5}
+
+        Dim head As Integer = 8
+        Dim data() As Integer = {9, 22, 70, 50, -88, 1, 38, 7, 90, -55}
+        Dim index() As Integer = {7, 0, 3, 6, -1, 9, 1, 5, 2, 4}
+
+
+        Console.WriteLine("data num =>" & index.GetUpperBound(0) + 1)
+        Console.WriteLine("index")
+
+        For i As Integer = 0 To index.GetUpperBound(0)
+            Console.WriteLine("order" & i & "==>" & head & "  ==>" & data(head))
+            head = index(head)
+        Next
+
+        Console.ReadKey()        'Dim head As Integer = 8
+
+	'3
+        Dim a(,) As Integer = {{0, 0, 0}, {0, 0, 1}, {0, 1, 1}, {0, 2, 2}}
+        Dim b(,) As Integer = {{0, 0, 0}, {0, 1, 2}, {0, 2, 2}, {0, 3, 3}}
+
+        Dim d(3, 2) As Integer
+
+        Dim r, c As Integer
+        For r = 1 To a.GetUpperBound(0)
+            For c = 1 To a.GetUpperBound(1)
+                d(r, c) = a(r, c) - b(r, c)
+            Next
+        Next
+
+        For r = 1 To a.GetUpperBound(0)
+            For c = 1 To a.GetUpperBound(1)
+                Console.Write(d(r, c) & " ")
+            Next
+            Console.WriteLine()
+        Next
+
+        Console.ReadKey()
+
+	'4
+	Dim a() As Integer = {5, -5, 2, 3}
+        Dim xn() As Integer = {0, 1, 30, 70}
+
+        Dim fx As Double = 0
+        Dim x As Integer = TextBox1.Text()
+
+        For i As Integer = 0 To a.GetUpperBound(0)
+            fx += a(i) * x ^ xn(i)
+        Next
+        TextBox2.Text = fx

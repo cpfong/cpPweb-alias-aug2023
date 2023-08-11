@@ -1,0 +1,3 @@
+0. backup all files on pc to web Drive
+1. it can scheduling
+2. need installed, however it use localhost:8200 ( use web UI, unlike other app, it has no self GUI )

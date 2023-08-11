@@ -1,0 +1,10 @@
+https://unix.stackexchange.com/questions/65803/why-is-printf-better-than-echo
+
+Q: echo
+echo didn't accept any option and didn't expand anything. 
+All it was doing was outputting its arguments separated by a space character and terminated by a newline character.
+
+Q: printf
+printf, on the other hand is more reliable, at least when it's limited to the basic usage of echo.
+printf '%s\n' "$var"
+

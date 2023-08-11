@@ -1,0 +1,4894 @@
+  <HTML>
+  <HEAD>
+  
+  <TITLE>MySQL Reference Manual for version 5.0.3-alpha - 22  MySQL Connectors</TITLE>
+   <style> code {color:purple} tt {color:green} samp {color:navy} pre {color:maroon} </style>
+  </HEAD>
+  <BODY BGCOLOR=silver TEXT=#000000 LINK=#101090 VLINK=#7030B0>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_MySQL_APIs.html">previous</A>, <A HREF="manual_Error-handling.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="MySQL_Connectors" HREF="manual_toc.html#MySQL_Connectors">22  MySQL Connectors</A></H1>
+
+<P>
+<A NAME="IDX2233"></A>
+<A NAME="IDX2234"></A>
+<A NAME="IDX2235"></A>
+
+</P>
+<P>
+This chapter describes MySQL Connectors, drivers that provide connectivity to
+the MySQL server for client programs.
+
+</P>
+
+
+
+<H2><A NAME="ODBC_Connector" HREF="manual_toc.html#ODBC_Connector">22.1  MySQL ODBC Support</A></H2>
+
+<P>
+<A NAME="IDX2236"></A>
+<A NAME="IDX2237"></A>
+<A NAME="IDX2238"></A>
+<A NAME="IDX2239"></A>
+
+</P>
+
+<P>
+MySQL provides support for ODBC by means of MySQL Connector/ODBC, the
+family of MyODBC drivers.  This is the reference for the Connector/ODBC
+product family of MyODBC drivers that provide ODBC 3.5x compliant access
+to the MySQL Database System.  It will teach you how to install MyODBC
+and how to use it.  You will also information about common programs that
+are known to work with MyODBC and answers to some of the most frequently
+asked questions about MyODBC.
+
+</P>
+<P>
+This reference applies to MyODBC 3.51.  You can find a
+manual for an older version of MyODBC in the binary or source distribution
+for that version.
+
+</P>
+<P>
+This is a reference to the MySQL ODBC drivers, not a general
+ODBC reference.  For more information about ODBC, refer to
+<a HREF="http://www.microsoft.com/data/">http://www.microsoft.com/data/</a>.
+
+</P>
+<P>
+The application development part of this reference assumes a good working
+knowledge of C, general DBMS knowledge, and finally, but not least,
+familiarity with MySQL.  For more information about MySQL functionality and
+its syntax, refer to <a HREF="http://dev.mysql.com/doc/">http://dev.mysql.com/doc/</a>.
+
+</P>
+<P>
+If you have questions that are not aswered in this document, please send
+a mail message to <a HREF="mailto:myodbc@lists.mysql.com">myodbc@lists.mysql.com</a>.
+
+</P>
+
+
+
+<H3><A NAME="MyODBC_Introduction" HREF="manual_toc.html#MyODBC_Introduction">22.1.1  Introduction to MyODBC</A></H3>
+
+
+
+<H4><A NAME="ODBC" HREF="manual_toc.html#ODBC">22.1.1.1  What is ODBC?</A></H4>
+
+<P>
+ODBC (Open Database Connectivity) provides a way for client programs to
+access a wide range of databases or data sources.  ODBC is a standardized
+API that allows connections to SQL database servers.  It was developed
+according to the specifications of the SQL Access Group and defines a set
+of function calls, error codes, and data types that can be used to develop
+database-independent applications.  ODBC usually is used when database
+independence or simultaneous access to different data sources is required.
+
+</P>
+<P>
+For more information about ODBC, refer to
+<a HREF="http://www.microsoft.com/data/">http://www.microsoft.com/data/</a>.
+
+</P>
+
+
+
+<H4><A NAME="Connector_ODBC" HREF="manual_toc.html#Connector_ODBC">22.1.1.2  What is Connector/ODBC?</A></H4>
+
+<P>
+Connector/ODBC is the term designating the MySQL AB product family
+of MySQL ODBC drivers. These are known as the MyODBC drivers.
+
+</P>
+
+
+
+<H4><A NAME="MyODBC_2.50" HREF="manual_toc.html#MyODBC_2.50">22.1.1.3  What is MyODBC 2.50?</A></H4>
+
+<P>
+MyODBC 2.50 is a 32-bit ODBC driver from MySQL AB that is based on ODBC 2.50
+specification level 0 (with level 1 and 2 features). This is one of the most
+popular ODBC drivers in the Open Source market, used by many users to access
+the MySQL functionality.
+
+</P>
+
+
+
+<H4><A NAME="MyODBC_3.51" HREF="manual_toc.html#MyODBC_3.51">22.1.1.4  What is MyODBC 3.51?</A></H4>
+
+<P>
+MyODBC 3.51 is a 32-bit ODBC driver, also known as the MySQL ODBC 3.51
+driver.  This version is enhanced compared to the existing MyODBC 2.50
+driver.  It has support for ODBC 3.5x specification level 1 (complete core
+API + level 2 features) in order to continue to provide all functionality of
+ODBC for accessing MySQL.
+
+</P>
+
+
+
+<H4><A NAME="Where_to_Get_MyODBC" HREF="manual_toc.html#Where_to_Get_MyODBC">22.1.1.5  Where to Get MyODBC</A></H4>
+
+<P>
+MySQL AB distributes all its products under the General Public License
+(GPL). You can get a copy of the latest version of MyODBC binaries and
+sources from the MySQL AB Web site <a HREF="http://dev.mysql.com/downloads/">http://dev.mysql.com/downloads/</a>.
+
+</P>
+<P>
+For more information about MyODBC, visit
+<a HREF="http://www.mysql.com/products/myodbc/">http://www.mysql.com/products/myodbc/</a>.
+
+</P>
+<P>
+For more information about licensing, visit
+<a HREF="http://www.mysql.com/company/legal/licensing/">http://www.mysql.com/company/legal/licensing/</a>.
+
+</P>
+
+
+
+<H4><A NAME="MyODBC_Supported_Platforms" HREF="manual_toc.html#MyODBC_Supported_Platforms">22.1.1.6  Supported Platforms</A></H4>
+
+<P>
+MyODBC can be used on all major platforms supported by
+MySQL, such as:
+
+</P>
+
+<UL>
+<LI>Windows 95, 98, Me, NT, 2000, XP, and 2003
+
+<LI>All Unix Operating Systems
+
+
+<UL>
+<LI>AIX
+
+<LI>Amiga
+
+<LI>BSDI
+
+<LI>DEC
+
+<LI>FreeBSD
+
+<LI>HP-UX 10, 11
+
+<LI>Linux
+
+<LI>Mac OS X Server
+
+<LI>Mac OS X
+
+<LI>NetBSD
+
+<LI>OpenBSD
+
+<LI>OS/2
+
+<LI>SGI Irix
+
+<LI>Solaris
+
+<LI>SunOS
+
+<LI>SCO OpenServer
+
+<LI>SCO UnixWare
+
+<LI>Tru64 Unix
+
+</UL>
+
+</UL>
+
+<P>
+If a binary distribution is not available for downloading for a
+particular platform, you can build the driver yourself by
+downloading the driver sources. You can contribute the binaries to MySQL
+by sending a mail message to <a HREF="mailto:myodbc@lists.mysql.com">myodbc@lists.mysql.com</a>, so that it
+becomes available for other users.
+
+</P>
+
+
+
+<H4><A NAME="MyODBC_Mailing_List" HREF="manual_toc.html#MyODBC_Mailing_List">22.1.1.7  MyODBC Mailing List</A></H4>
+
+<P>
+MySQL AB provides assistance to the user community by means of its mailing
+lists. For MyODBC-related issues, you can get help from experienced
+users by using the <a HREF="mailto:myodbc@lists.mysql.com">myodbc@lists.mysql.com</a> mailing list.
+
+</P>
+<P>
+For information about subscribing to MySQL mailing lists or to browse
+list archives, visit <a HREF="http://lists.mysql.com/">http://lists.mysql.com/</a>. 
+
+</P>
+<P>
+Of particular interest is the ODBC forum in the MySQL Connectors section of the forums.
+
+</P>
+
+
+<H4><A NAME="MyODBC_Forum" HREF="manual_toc.html#MyODBC_Forum">22.1.1.8  MyODBC Forum</A></H4>
+
+<P>
+Community support from experienced users is available through the MySQL Forums,
+located at <a HREF="http://forums.mysql.com">http://forums.mysql.com</a>.
+
+
+<H4><A NAME="MyODBC_bug_report" HREF="manual_toc.html#MyODBC_bug_report">22.1.1.9  How to Report MyODBC Problems or Bugs</A></H4>
+
+<P>
+<A NAME="IDX2240"></A>
+<A NAME="IDX2241"></A>
+<A NAME="IDX2242"></A>
+<A NAME="IDX2243"></A>
+<A NAME="IDX2244"></A>
+
+</P>
+<P>
+If you encounter difficulties or problems with MyODBC, you should start
+by making a log file from the <code>ODBC Manager</code> (the log you get when
+requesting logs from <code>ODBC ADMIN</code>) and MyODBC. The procedure for doing
+this is described in section <A HREF="manual_MySQL_Connectors.html#MyODBC_trace">22.1.9.7  Getting an ODBC Trace File</A>.
+
+</P>
+<P>
+Check the MyODBC trace file to find out what could be wrong.
+You should be able to determine what statements were issued by searching for
+the string <code>&#62;mysql_real_query</code> in the <tt>`myodbc.log'</tt> file.
+
+</P>
+<P>
+You should also try issuing the statements from the <code>mysql</code> client
+program or from <code>admndemo</code>. This will help you determine whether the
+error is in MyODBC or MySQL.
+
+</P>
+<P>
+If you find out something is wrong, please only send the relevant rows
+(maximum 40 rows) to the <code>myodbc</code> mailing list.
+See section <A HREF="manual_Introduction.html#Mailing-list">1.4.1.1  The MySQL Mailing Lists</A>.
+Please never send the whole MyODBC or ODBC log file!
+
+</P>
+<P>
+If you are unable to find out what's wrong, the last option is to
+create an archive in <code>tar</code> or Zip format that contains a MyODBC trace file,
+the ODBC log file, and a <tt>`README'</tt> file that explains the problem.  You can send this
+to <a HREF="ftp://ftp.mysql.com/pub/mysql/upload/">ftp://ftp.mysql.com/pub/mysql/upload/</a>.  Only we at
+MySQL AB will have access to the files you upload, and we will
+be very discreet with the data.
+
+</P>
+<P>
+If you can create a program that also demonstrates the problem, please include
+it in the archive as well.
+
+</P>
+<P>
+If the program works with some other SQL server, you should include an ODBC log
+file where you do exactly the same thing in the other SQL server.
+
+</P>
+<P>
+Remember that the more information you can supply to us, the more
+likely it is that we can fix the problem.
+
+</P>
+
+
+
+<H4><A NAME="MyODBC_patch_submission" HREF="manual_toc.html#MyODBC_patch_submission">22.1.1.10  How to Submit a MyODBC Patch</A></H4>
+
+<P>
+You can send a patch or suggest a better solution for any existing code
+or problems by sending a mail message to <a HREF="mailto:myodbc@lists.mysql.com">myodbc@lists.mysql.com</a>.
+
+</P>
+
+
+
+<H3><A NAME="MyODBC_General_Information" HREF="manual_toc.html#MyODBC_General_Information">22.1.2  General Information About ODBC and MyODBC</A></H3>
+
+
+
+<H4><A NAME="Introduction_to_ODBC" HREF="manual_toc.html#Introduction_to_ODBC">22.1.2.1  Introduction to ODBC</A></H4>
+
+<P>
+Open Database Connectivity (ODBC) is a widely accepted application-programming
+interface (API) for database access. It is based on the Call-Level Interface
+(CLI) specifications from X/Open and ISO/IEC for database APIs and uses
+Structured Query Language (SQL) as its database access language. 
+
+</P>
+<P>
+A survey of ODBC functions supported by MyODBC is given at
+section <A HREF="manual_MySQL_Connectors.html#MyODBC_API_Reference">22.1.16  MyODBC API Reference</A>.  For general information about ODBC, see
+<a HREF="http://www.microsoft.com/data/">http://www.microsoft.com/data/</a>.
+
+</P>
+
+
+
+<H4><A NAME="MyODBC_Architecture" HREF="manual_toc.html#MyODBC_Architecture">22.1.2.2  MyODBC Architecture</A></H4>
+
+<P>
+The MyODBC architecture is based on five components, as shown in the
+following diagram:
+
+</P>
+<P>
+<br /> <IMG SRC="Images/myarchitecture.gif"> <br />
+
+</P>
+<DL COMPACT>
+
+<DT><strong>Application:</strong>
+<DD>
+An application is a program that calls the ODBC API to access the data from
+the MySQL server. The Application communicates with the Driver Manager
+using the standard ODBC calls.  The Application does not care where the
+data is stored, how it is stored, or even how the system is configured to
+access the data.  It needs to know only the Data Source Name (DSN).
+
+A number of tasks are common to all applications, no matter how they use ODBC.
+These tasks are:
+
+<UL>
+<LI>Selecting the MySQL server and connecting to it
+
+<LI>Submitting SQL statements for execution
+
+<LI>Retrieving results (if any)
+
+<LI>Processing errors
+
+<LI>Committing or rolling back the transaction enclosing the SQL statement
+
+<LI>Disconnecting from the MySQL server
+
+</UL>
+
+Because most data access work is done with SQL, the primary tasks for
+applications that use ODBC are submitting SQL statements and retrieving
+any results generated by those statements.
+
+<DT><strong>Driver manager:</strong>
+<DD>
+The Driver Manager is a library that manages communication
+between application and driver or drivers. It performs the following tasks:
+
+
+<UL>
+<LI>Resolves Data Source Names (DSN)
+
+<LI>Driver loading and unloading
+
+<LI>Processes ODBC function calls or passes them to the driver
+
+</UL>
+
+<DT><strong>MyODBC Driver:</strong>
+<DD>
+The MyODBC driver is a library that implements the functions in the
+ODBC API. It processes ODBC function calls, submits SQL requests to MySQL
+server, and returns results back to the application. If necessary, the driver
+modifies an application's request so that the request conforms to syntax
+supported by the MySQL.
+
+<DT><strong>ODBC.INI:</strong>
+<DD>
+<tt>`ODBC.INI'</tt> is the ODBC configuration file that stores the driver
+and database information required to connect to the server. It is used by
+the Driver Manager to determine which driver to be loaded using the Data
+Source Name.  The driver uses this to read connection parameters based on
+the DSN specified.  For more information, section <A HREF="manual_MySQL_Connectors.html#MyODBC_Configuration">22.1.9  MyODBC Configuration</A>.
+
+<DT><strong>MySQL Server:</strong>
+<DD>
+The MySQL server is the source of data. MySQL is:
+
+
+<UL>
+<LI>A database management system (DBMS)
+
+<LI>A relational database management system (RDBMS)
+
+<LI>Open Source Software
+
+</UL>
+
+</DL>
+
+
+
+<H4><A NAME="Driver_Manager" HREF="manual_toc.html#Driver_Manager">22.1.2.3  ODBC Driver Managers</A></H4>
+
+<P>
+An ODBC Driver Manager is a library that manages communication between
+the ODBC aware application and driver(s). Its main functionality includes:
+
+</P>
+
+<UL>
+<LI>Resolving Data Source Names (DSN)
+
+<LI>Driver loading and unloading
+
+<LI>Processing ODBC function calls or passing them to the driver
+
+</UL>
+
+<P>
+	
+The following driver managers are commonly used:
+
+</P>
+
+<UL>
+<LI>Microsoft Windows ODBC Driver Manager (<tt>`odbc32.dll'</tt>), <a HREF="http://www.microsoft.com/data/">http://www.microsoft.com/data/</a>
+
+<LI>unixODBC Driver Manager for Unix (<tt>`libodbc.so'</tt>), <a HREF="http://www.unixodbc.org">http://www.unixodbc.org</a>.
+
+<LI>iODBC ODBC Driver Manager for Unix (<tt>`libiodbc.so'</tt>), <a HREF="http://www.iodbc.org">http://www.iodbc.org</a>
+
+</UL>
+
+<P>
+MyODBC 3.51 also is shipped with UnixODBC beginning with version 2.1.2.
+
+</P>
+
+
+
+<H4><A NAME="Types_of_MySQL_ODBC_Drivers" HREF="manual_toc.html#Types_of_MySQL_ODBC_Drivers">22.1.2.4  Types of MySQL ODBC Drivers</A></H4>
+
+<P>
+MySQL AB supports two Open Source ODBC drivers for accessing MySQL
+functionality through the ODBC API: MyODBC (MyODBC 2.50) and MySQL ODBC
+3.51 Driver (MyODBC 3.51).
+
+</P>
+<P>
+Note: From this section onward, we refer both the drivers
+generically as MyODBC.  Whenever there is a difference, we use the
+original names.
+
+</P>
+
+
+
+<H3><A NAME="Installing_MyODBC" HREF="manual_toc.html#Installing_MyODBC">22.1.3  How to Install MyODBC</A></H3>
+
+<P>
+MyODBC works on Windows 9x, Me, NT, 2000, XP, and 2003, and on most Unix platforms.
+
+</P>
+<P>
+MyODBC is Open Source. You can find the newest
+version at <a HREF="http://dev.mysql.com/downloads/connector/odbc/">http://dev.mysql.com/downloads/connector/odbc/</a>.
+Please note that the 2.50.x versions are LGPL licensed,
+whereas the 3.51.x versions are GPL licensed.
+
+</P>
+<P>
+If you have problem with MyODBC and your program also works
+with OLEDB, you should try the OLEDB driver.
+
+</P>
+<P>
+Normally you need to install MyODBC only on Windows machines.
+You need MyODBC for Unix only if you have a program like
+ColdFusion that is running on a Unix machine and uses ODBC to connect
+for database access.
+
+</P>
+<P>
+If you want to install MyODBC on a Unix box, you will also need
+an ODBC manager.  MyODBC is known to work with most Unix ODBC managers.
+
+</P>
+
+<UL>
+<LI>
+
+To make a connection to a Unix box from a Windows box with an ODBC
+application (one that doesn't support MySQL natively), you must
+first install MyODBC on the Windows machine.
+<LI>
+
+The user and Windows machine must have access privileges for the
+MySQL server on the Unix machine.  This is set up with the
+<code>GRANT</code> command. See section <A HREF="manual_SQL_Syntax.html#GRANT">13.5.1.2  <code>GRANT</code> and <code>REVOKE</code> Syntax</A>.
+<LI>
+
+You must create an ODBC DSN entry as follows:
+
+
+<OL>
+<LI>
+
+Open the Control Panel on the Windows machine.
+<LI>
+
+Double-click the <code>ODBC Data Sources 32-bit</code> icon.
+<LI>
+
+Click the tab <code>User DSN</code>.
+<LI>
+
+Click the <code>Add</code> button.
+<LI>
+
+Select MySQL in the screen <code>Create New Data Source</code> and click
+the <code>Finish</code> button.
+<LI>
+
+The MySQL Driver default configuration screen will be shown.
+See section <A HREF="manual_MySQL_Connectors.html#DSN_on_Windows">22.1.9.2  Configuring a MyODBC DSN on Windows</A>.
+</OL>
+
+<LI>
+
+Now start your application and select the ODBC driver with the DSN that you
+specified in the ODBC administrator.
+</UL>
+
+<P>
+Notice that other configuration options are shown on the MySQL screen that
+you can try if you run into problems (options such as trace, don't prompt
+on connect, and so forth).
+
+</P>
+
+
+
+<H3><A NAME="MyODBC_Windows_binary_installation" HREF="manual_toc.html#MyODBC_Windows_binary_installation">22.1.4  Installing MyODBC from a Binary Distribution on Windows</A></H3>
+
+<P>
+To install MyODBC on Windows, you should download the appropriate
+distribution file from <a HREF="http://dev.mysql.com/downloads/connector/odbc/">http://dev.mysql.com/downloads/connector/odbc/</a>,
+unpack it, and execute the <code>MyODBC-<var>VERSION</var>.exe</code> file.
+
+</P>
+<P>
+On Windows, you may get the following error when trying to install the
+older MyODBC 2.50 driver:
+
+</P>
+
+<PRE>
+An error occurred while copying C:\WINDOWS\SYSTEM\MFC30.DLL. Restart
+Windows and try installing again (before running any applications
+which use ODBC)
+</PRE>
+
+<P>
+The problem is that some other program is using ODBC.  Because of how
+Windows is designed, you may not be able in this case to install new
+ODBC drivers with Microsoft's ODBC setup program. In most cases, you can
+continue by pressing <code>Ignore</code> to copy the rest of the MyODBC files and
+the final installation should still work.  If it doesn't, the solution is
+to re-boot your computer in ``safe mode.'' Choose safe mode by pressing F8
+just before your machine starts Windows during re-booting, install MyODBC,
+and re-boot to normal mode.
+
+</P>
+
+
+
+<H3><A NAME="MyODBC_Unix_binary_installation" HREF="manual_toc.html#MyODBC_Unix_binary_installation">22.1.5  Installing MyODBC from a Binary Distribution on Unix</A></H3>
+
+
+
+<H4><A NAME="MyODBC_Unix_RPM_installation" HREF="manual_toc.html#MyODBC_Unix_RPM_installation">22.1.5.1  Installing MyODBC from an RPM Distribution</A></H4>
+
+<P>
+To install or upgrade MyODBC from an RPM distribution on
+Linux, simply download the RPM distribution of the latest version
+of MyODBC and follow the instructions below.  Use <code>su root</code>
+to become <code>root</code>, then install the RPM file.
+
+</P>
+<P>
+If you are installing for the first time:
+
+</P>
+
+<PRE>
+shell&#62; su root
+shell&#62; rpm -ivh MyODBC-3.51.01.i386-1.rpm
+</PRE>
+
+<P>
+If the driver already exists, upgrade like this:
+
+</P>
+
+<PRE>
+shell&#62; su root
+shell&#62; rpm -Uvh MyODBC-3.51.01.i386-1.rpm
+</PRE>
+
+<P>
+If there is any dependancy error for MySQL client library,
+<code>libmysqlclient</code>, simply ignore it by supplying the <code>--nodeps</code>
+option, and then make sure the MySQL client shared library is in the path
+or set through <code>LD_LIBRARY_PATH</code>.
+
+</P>
+<P>
+This installs the driver libraries and related documents to
+<tt>`/usr/local/lib'</tt> and <tt>`/usr/share/doc/MyODBC'</tt> respectively. Now
+proceed onto section <A HREF="manual_MySQL_Connectors.html#DSN_on_Unix">22.1.9.3  Configuring a MyODBC DSN on Unix</A>.
+
+</P>
+<P>
+To <strong>uninstall</strong> the driver, become <code>root</code> and execute
+an <code>rpm</code> command:
+
+</P>
+
+<PRE>
+shell&#62; su root
+shell&#62; rpm -e MyODBC
+</PRE>
+
+
+
+<H4><A NAME="MyODBC_Unix_tarball_installation" HREF="manual_toc.html#MyODBC_Unix_tarball_installation">22.1.5.2  Installing MyODBC from a Binary Tarball Distribution</A></H4>
+
+<P>
+To install the driver from a tarball distribution (<tt>`.tar.gz'</tt> file),
+download the latest version of the driver for your operating system and
+follow these steps:
+
+</P>
+
+<PRE>
+shell&#62; su root
+shell&#62; gunzip MyODBC-3.51.01-i686-pc-linux.tar.gz
+shell&#62; tar xvf MyODBC-3.51.01-i686-pc-linux.tar
+shell&#62; cd MyODBC-3.51.01-i686-pc-linux
+</PRE>
+
+<P>
+Read the installation instructions in the <tt>`INSTALL-BINARY'</tt> file
+and execute these commands.
+
+</P>
+
+<PRE>
+shell&#62; cp libmyodbc* /usr/local/lib
+shell&#62; cp odbc.ini /usr/local/etc
+shell&#62; export ODBCINI=/usr/local/etc/odbc.ini
+</PRE>
+
+<P>
+Then proceed on to section <A HREF="manual_MySQL_Connectors.html#DSN_on_Unix">22.1.9.3  Configuring a MyODBC DSN on Unix</A> to configure the DSN for MyODBC. For more information,
+refer to the <tt>`INSTALL-BINARY'</tt> file that comes with your distribution.
+
+</P>
+
+
+
+<H3><A NAME="MyODBC_Windows_source_installation" HREF="manual_toc.html#MyODBC_Windows_source_installation">22.1.6  Installing MyODBC from a Source Distribution on Windows</A></H3>
+
+
+
+<H4><A NAME="MyODBC_Windows_source_requirements" HREF="manual_toc.html#MyODBC_Windows_source_requirements">22.1.6.1  Requirements</A></H4>
+
+
+<UL>
+<LI>
+
+MDAC, Microsoft Data Access SDK from
+<a HREF="http://www.microsoft.com/data/">http://www.microsoft.com/data/</a>.
+<LI>
+
+MySQL client libraries and include files from MySQL 4.0.0 or higher.
+(Preferably MySQL 4.0.16 or higher).
+This is required because MyODBC uses new calls and structures that
+exist only starting from this version of the library.
+To get the client libraries and include files, visit
+<a HREF="http://dev.mysql.com/downloads/">http://dev.mysql.com/downloads/</a>.
+</UL>
+
+
+
+<H4><A NAME="MyODBC_3.51_Windows_building" HREF="manual_toc.html#MyODBC_3.51_Windows_building">22.1.6.2  Building MyODBC 3.51</A></H4>
+
+<P>
+MyODBC 3.51 source distributions include <tt>`Makefiles'</tt> that
+uses <code>nmake</code>. In the distribution, you can find <tt>`Makefile'</tt>
+for building the release version and <tt>`Makefile_debug'</tt> for building
+debugging versions of the driver libraries and DLLs.
+
+</P>
+<P>
+To build the driver, use this procedure:
+
+</P>
+
+<OL>
+
+<LI>
+
+Download and extract the sources to a folder, then change location into that
+folder.  The following command assumes the folder is named <tt>`myodbc3-src'</tt>:
+
+
+<PRE>
+C:\&#62; cd myodbc3-src
+</PRE>
+
+<LI>
+
+Edit <tt>`Makefile'</tt> to specify the correct path for the MySQL client
+libraries and header files. Then use the following commands to build
+and install the release version:
+
+
+<PRE>
+C:\&#62; nmake -f Makefile
+C:\&#62; nmake -f Makefile install
+</PRE>
+
+<code>nmake -f Makefile</code> builds the release version of the driver
+and places the binaries in subdirectory called <tt>`Release'</tt>.
+
+<code>nmake -f Makefile install</code> installs (copies) the driver DLLs
+and libraries(<tt>`myodbc3.dll'</tt>, <tt>`myodbc3.lib'</tt>) to your system
+directory.
+
+<LI>
+
+To build the debug version, use <tt>`Makefile_Debug'</tt> rather than
+<tt>`Makefile'</tt>, as shown below:
+
+
+<PRE>
+C:\&#62; nmake -f Makefile_debug
+C:\&#62; nmake -f Makefile_debug install
+</PRE>
+
+<LI>
+
+You can clean and rebuild the driver by using:
+
+
+<PRE>
+C:\&#62; nmake -f Makefile clean
+C:\&#62; nmake -f Makefile install
+</PRE>
+
+</OL>
+
+<P>
+<strong>Note</strong>:
+
+</P>
+
+<UL>
+
+<LI>
+
+Make sure to specify the correct MySQL client libraries and header files
+path in the Makefiles (set the <code>MYSQL_LIB_PATH</code> and
+<code>MYSQL_INCLUDE_PATH</code> variables). The default header file path is
+assumed to be <tt>`C:\mysql\include'</tt>. The default library path is assumed
+to be <tt>`C:\mysql\lib\opt'</tt> for release DLLs and <tt>`C:\mysql\lib\debug'</tt>
+for debug versions.
+
+<LI>
+
+For the complete usage of <code>nmake</code>, visit
+<a HREF="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/wcepb40/htm/_wcepb_nmake_tool.asp">http://msdn.microsoft.com/library/default.asp?url=/library/en-us/wcepb40/htm/_wcepb_nmake_tool.asp</a>.
+
+<LI>
+
+If you are using the BitKeeper tree for compiling, All
+Windows-specific <tt>`Makefiles'</tt> are named as <tt>`Win_Makefile*'</tt>.
+
+</UL>
+
+
+
+<H4><A NAME="MyODBC_3.51_Windows_testing" HREF="manual_toc.html#MyODBC_3.51_Windows_testing">22.1.6.3  Testing</A></H4>
+
+<P>
+After the driver libraries are copied/installed to the system directory, you
+can test whether the libraries are properly built by using the samples
+provided in the <tt>`samples'</tt> subdirectory:
+
+</P>
+
+<PRE>
+C:\&#62; cd samples
+C:\&#62; nmake -f Makefile all
+</PRE>
+
+
+
+<H4><A NAME="MyODBC_2.50_Windows_building" HREF="manual_toc.html#MyODBC_2.50_Windows_building">22.1.6.4  Building MyODBC 2.50</A></H4>
+
+<P>
+The MyODBC 2.50 source distribution includes VC workspace files. You can
+build the driver using these files (<tt>`.dsp'</tt> and <tt>`.dsw'</tt>) directly
+by loading them from Microsoft Visual Studio 6.0 or higher.
+
+</P>
+
+
+
+<H3><A NAME="MyODBC_Unix_source" HREF="manual_toc.html#MyODBC_Unix_source">22.1.7  Installing MyODBC from a Source Distribution on Unix</A></H3>
+
+
+
+<H4><A NAME="MyODBC_Unix_requirements" HREF="manual_toc.html#MyODBC_Unix_requirements">22.1.7.1  Requirements</A></H4>
+
+
+<UL>
+<LI>
+
+MySQL client libraries and include files from MySQL 4.0.0 or higher.
+(Preferably MySQL 4.0.16 or higher).
+This is required because MyODBC uses new calls and structures that
+exist only starting from this version of the library.
+To get the client libraries and include files, visit
+<a HREF="http://dev.mysql.com/downloads/">http://dev.mysql.com/downloads/</a>.
+
+<LI>
+
+The MySQL library must be configured with the
+<code>--enable-thread-safe-client</code> option.
+libmysqlclient installed as a shared library.
+
+<LI>
+
+One of the following Unix ODBC driver managers must be installed:
+
+
+<UL>
+<LI>
+
+<code>iodbc</code> 3.0 or later (<a HREF="http://www.iodbc.org">http://www.iodbc.org</a>)
+<LI>
+
+<code>unixodbc</code> Alpha 3 or later (<a HREF="http://www.unixodbc.org">http://www.unixodbc.org</a>)
+</UL>
+
+<LI>
+
+If using a <strong>character set</strong> that isn't compiled into the MySQL
+client library (the defaults are: latin1 big5 czech euc_kr gb2312 gbk sjis
+tis620 ujis) then you need to install the mysql character definitions
+from the <tt>`charsets'</tt> directory into <var>SHAREDIR</var> (by default,
+<tt>`/usr/local/mysql/share/mysql/charsets'</tt>). These should already be
+into place if you have installed the MySQL server on the same machine.
+
+</UL>
+
+<P>
+Once you have all the required files, unpack the source files to a
+separate directory and follow the instructions as given below:
+
+</P>
+
+
+<H4><A NAME="MyODBC_Unix_configure_options" HREF="manual_toc.html#MyODBC_Unix_configure_options">22.1.7.2  Typical <code>configure</code> Options</A></H4>
+
+<P>
+The <code>configure</code> script gives you a great deal of control over how
+you configure your MyODBC build. Typically you do this using options on the
+<code>configure</code> command line. You can also affect <code>configure</code>
+using certain environment variables. For a list of options and environment
+variables supported by <code>configure</code>, run this command:
+
+</P>
+
+<PRE>
+shell&#62; ./configure --help
+</PRE>
+
+<P>
+Some of the more commonly used <code>configure</code> options are described here:
+
+</P>
+
+<OL>
+<LI>
+
+To compile MyODBC, you need to supply the MySQL client include and library
+files path using the <code>--with-mysql-path=<var>DIR</var></code> option, where
+<var>DIR</var> is the directory where the MySQL is installed.
+
+MySQL compile options can be determined by running
+<code><var>DIR</var>/bin/mysql_config</code>.
+
+<LI>
+
+Supply the standard header and library files path for your
+ODBC Driver Manager(<code>iodbc</code> or <code>unixobc</code>).
+
+
+<UL>
+
+<LI>
+
+If you are using <code>iodbc</code> and <code>iodbc</code> is not installed in its default
+location (<tt>`/usr/local'</tt>), you might have to use
+the <code>--with-iodbc=<var>DIR</var></code> option, where
+<var>DIR</var> is the directory where iodbc is installed.
+
+If the iodbc headers do not reside in <tt>`<var>DIR</var>/include'</tt>,
+you can use the <code>--with-iodbc-includes=<var>INCDIR</var></code> option to
+specify their location.
+
+The applies to libraries. If they are not in <tt>`<var>DIR</var>/lib'</tt>,
+you can use the <code>--with-iodbc-libs=<var>LIBDIR</var></code> option.
+
+<LI>
+
+If you are using <code>unixODBC</code>, use the <code>--with-unixODBC=<var>DIR</var></code>
+option (case sensitive) to make <code>configure</code> look for <code>unixODBC</code>
+instead of <code>iodbc</code> by default, <var>DIR</var> is the directory where
+unixODBC is installed.
+
+If the unixODBC headers and libraries aren't located in
+<tt>`<var>DIR</var>/include'</tt> and <tt>`<var>DIR</var>/lib'</tt>, use
+the <code>--with-unixODBC-includes=<var>INCDIR</var></code>
+and <code>--with-unixODBC-libs=<var>LIBDIR</var></code> options.
+
+</UL>
+
+<LI>
+
+You might want to specify an installation prefix other than
+<tt>`/usr/local'</tt>.  For example, to install the MyODBC drivers in
+<tt>`/usr/local/odbc/lib'</tt>, use the
+<code>--prefix=/usr/local/odbc</code> option.
+
+</OL>
+
+<P>
+The final configuration command will look something like this:
+
+</P>
+
+<PRE>
+shell&#62; ./configure --prefix=/usr/local \
+           --with-iodbc=/usr/local \
+           --with-mysql-path=/usr/local/mysql
+</PRE>
+
+
+
+<H4><A NAME="MyODBC_Unix_thread-safe" HREF="manual_toc.html#MyODBC_Unix_thread-safe">22.1.7.3  Thread-Safe Client</A></H4>
+
+<P>
+In order to link the driver with MySQL thread safe client libraries
+<tt>`libmysqlclient_r.so'</tt> or <tt>`libmysqlclient_r.a'</tt>, you must specify the
+following <code>configure</code> option:
+
+</P>
+
+<PRE>
+--enable-thread-safe
+</PRE>
+
+<P>
+and can be disabled(default) using
+
+</P>
+
+<PRE>
+--disable-thread-safe
+</PRE>
+
+<P>
+This option enables the building of driver thread-safe library
+<tt>`libmyodbc3_r.so'</tt> from by linking with mysql thread-safe client library
+<tt>`libmysqlclient_r.so'</tt> (The extensions are OS dependent).
+
+</P>
+<P>
+In case while configuring with thread-safe option, and gotten into a
+configure error; then look at the <tt>`config.log'</tt> and see if it is due
+to the lack of thread-libraries in the system; and supply one with LIBS
+options i.e.
+
+</P>
+
+<PRE>
+LIBS="-lpthread" ./configure ..
+</PRE>
+
+
+
+<H4><A NAME="MyODBC_Unix_library_options" HREF="manual_toc.html#MyODBC_Unix_library_options">22.1.7.4  Shared or Static Options</A></H4>
+
+<P>
+You can enable or disable the shared and static versions using these options:
+
+</P>
+
+<PRE>
+--enable-shared[=yes/no]
+--disable-shared
+--enable-static[=yes/no]
+--disable-static
+</PRE>
+
+
+
+<H4><A NAME="MyODBC_Unix_debugging_options" HREF="manual_toc.html#MyODBC_Unix_debugging_options">22.1.7.5  Enabling Debugging Information</A></H4>
+
+<P>
+By default, all the binary distributions are built as non-debugging versions
+(configured with <code>--without-debug</code>).
+
+</P>
+<P>
+To enable debugging information,
+build the driver from source distribution and use the
+<code>--with-debug</code>) when you run <code>configure</code>.
+
+</P>
+
+
+
+<H4><A NAME="MyODBC_Unix_documentation_options" HREF="manual_toc.html#MyODBC_Unix_documentation_options">22.1.7.6  Enabling the Documentation</A></H4>
+
+<P>
+This option is available only for <code>BK</code> clone trees; not for
+normal source distributions.
+
+</P>
+<P>
+By default, the driver is built with (<code>--without-docs</code>); And
+in case if you want the documentation to be taken care in the normal
+build, then configure with:
+
+<PRE>
+ --with-docs
+</PRE>
+
+
+
+<H4><A NAME="MyODBC_Unix_building" HREF="manual_toc.html#MyODBC_Unix_building">22.1.7.7  Building and Compilation</A></H4>
+
+<P>
+To build the driver libraries, you have to just execute <code>make</code>,
+which takes care of everything.
+
+</P>
+
+<PRE>
+shell&#62; make
+</PRE>
+
+<P>
+If any errors occur, correct them and continue
+the build process. If you aren't able to build, then send a detailed email
+to <a HREF="mailto:myodbc@lists.mysql.com">myodbc@lists.mysql.com</a> for further assistance.
+
+</P>
+
+
+
+<H4><A NAME="MyODBC_Unix_shared_libraries" HREF="manual_toc.html#MyODBC_Unix_shared_libraries">22.1.7.8  Building Shared Libraries</A></H4>
+
+<P>
+On most platforms, MySQL doesn't build or support <tt>`.so'</tt> (shared)
+client libraries by default, because building with shared libraries has
+caused us problems in the past.
+
+</P>
+<P>
+In cases like this, you have to download the MySQL distribution
+and configure it with these options:
+
+</P>
+
+<PRE>
+--without-server --enable-shared
+</PRE>
+
+<P>
+To build shared driver libraries, you must specify the
+<code>--enable-shared</code> option for <code>configure</code>.  By default,
+<code>configure</code> does not enable this option.
+
+</P>
+<P>
+If you have configured with the <code>--disable-shared</code> option, you can
+build the <tt>`.so'</tt> file from the static libraries using the following
+commands:
+
+</P>
+
+<PRE>
+shell&#62; cd MyODBC-3.51.01
+shell&#62; make
+shell&#62; cd driver
+shell&#62; CC=/usr/bin/gcc \
+       $CC -bundle -flat_namespace -undefined error \
+           -o .libs/libmyodbc3-3.51.01.so \
+           catalog.o connect.o cursor.o dll.o error.o execute.o \
+           handle.o info.o misc.o myodbc3.o options.o prepare.o \
+           results.o transact.o utility.o \
+           -L/usr/local/mysql/lib/mysql/ \
+           -L/usr/local/iodbc/lib/ \
+           -lz -lc -lmysqlclient -liodbcinst
+</PRE>
+
+<P>
+Make sure to change <code>-liodbcinst</code> to <code>-lodbcinst</code> if you are
+using unixODBC instead of iODBC, and configure the library paths
+accordingly.
+
+</P>
+<P>
+This builds and places the <tt>`libmyodbc3-3.51.01.so'</tt> file in the
+<tt>`.libs'</tt> directory.  Copy this file to MyODBC library directory
+(<tt>`/usr/local/lib'</tt> (or the <tt>`lib'</tt> directory under the installation
+directory that you supplied with the <code>--prefix</code>).
+
+</P>
+
+<PRE>
+shell&#62; cd .libs
+shell&#62; cp libmyodbc3-3.51.01.so /usr/local/lib
+shell&#62; cd /usr/local/lib
+shell&#62; ln -s libmyodbc3-3.51.01.so libmyodbc3.so
+</PRE>
+
+<P>
+To build the thread-safe driver library:
+
+</P>
+
+<PRE>
+shell&#62; CC=/usr/bin/gcc \
+       $CC -bundle -flat_namespace -undefined error
+	      -o .libs/libmyodbc3_r-3.51.01.so
+	      catalog.o connect.o cursor.o dll.o error.o execute.o
+	      handle.o info.o misc.o myodbc3.o options.o prepare.o
+	      results.o transact.o utility.o
+	      -L/usr/local/mysql/lib/mysql/
+	      -L/usr/local/iodbc/lib/
+	      -lz -lc -lmysqlclient_r -liodbcinst
+</PRE>
+
+
+
+<H4><A NAME="MyODBC_Unix_installing" HREF="manual_toc.html#MyODBC_Unix_installing">22.1.7.9  Installing Driver Libraries</A></H4>
+
+<P>
+To install the driver libraries, execute the following command:
+
+</P>
+
+<PRE>
+shell&#62; make install
+</PRE>
+
+<P>
+That command installs one of the following sets of libraries:
+
+</P>
+<P>
+For MyODBC 3.51:
+
+</P>
+
+<UL>
+<LI>
+
+<tt>`libmyodbc3.so'</tt>
+<LI>
+
+<tt>`libmyodbc3-3.51.01.so'</tt>, where 3.51.01 is the version of the driver
+<LI>
+
+<tt>`libmyodbc3.a'</tt>
+</UL>
+
+<P>
+For thread-safe MyODBC 3.51:
+
+</P>
+
+<UL>
+<LI>
+
+<tt>`libmyodbc3_r.so'</tt>
+<LI>
+
+<tt>`libmyodbc3-3_r.51.01.so'</tt>
+<LI>
+
+<tt>`libmyodbc3_r.a'</tt>
+</UL>
+
+<P>
+For MyODBC 2.5.0:
+
+</P>
+
+<UL>
+<LI>
+
+<tt>`libmyodbc.so'</tt>
+<LI>
+
+<tt>`libmyodbc-2.50.39.so'</tt>, where 2.50.39 is the version of the driver
+<LI>
+
+<tt>`libmyodbc.a'</tt>
+</UL>
+
+<P>
+For more information on build process, refer to the <tt>`INSTALL'</tt> file
+that comes with the source distribution. Note that if you are trying to
+use the <code>make</code> from Sun, you may end up with errors. On
+the other hand, GNU <code>gmake</code> should work fine on all
+platforms.
+
+</P>
+
+
+
+<H4><A NAME="MyODBC_Unix_testing" HREF="manual_toc.html#MyODBC_Unix_testing">22.1.7.10  Testing MyODBC on Unix</A></H4>
+
+<P>
+To run the basic samples provided in the distribution with the libraries
+that you built, just execute:
+
+<PRE>
+shell&#62; make test
+</PRE>
+
+<P>
+Make sure the DSN 'myodbc3' is configured first in <tt>`odbc.ini'</tt> and
+environment variable <code>ODBCINI</code> is pointing to the right
+<tt>`odbc.ini'</tt> file; and MySQL server is running. You can find a sample
+<tt>`odbc.ini'</tt> with the driver distribution.
+
+</P>
+<P>
+You can even modify the <tt>`samples/run-samples'</tt> script to pass the desired
+DSN, UID, and PASSWORD values as the command line arguments to each sample.
+
+</P>
+
+
+
+<H4><A NAME="MyODBC_Mac_OS_X" HREF="manual_toc.html#MyODBC_Mac_OS_X">22.1.7.11  Mac OS X Notes</A></H4>
+
+<P>
+To build the driver on Mac OS X (Darwin), make use of the
+following <code>configure</code> example:
+
+</P>
+
+<PRE>
+shell&#62; ./configure --prefix=/usr/local
+			       --with-unixODBC=/usr/local
+			       --with-mysql-path=/usr/local/mysql
+			       --disable-shared
+			       --enable-gui=no
+			       --host=powerpc-apple
+</PRE>
+
+<P>
+The command assumes that the unixODBC and MySQL are installed in the default
+locations. If not, configure accordingly.
+
+</P>
+<P>
+On Mac OS X, <code>--enable-shared</code> builds <tt>`.dylib'</tt> files by default.
+You can build <tt>`.so'</tt> files like this:
+
+</P>
+
+<PRE>
+shell&#62; make
+shell&#62; cd driver
+shell&#62; CC=/usr/bin/gcc \
+       $CC -bundle -flat_namespace -undefined error
+           -o .libs/libmyodbc3-3.51.01.so *.o
+           -L/usr/local/mysql/lib/
+           -L/usr/local/iodbc/lib
+           -liodbcinst -lmysqlclient -lz -lc
+</PRE>
+
+<P>
+To build the thread-safe driver library:
+
+</P>
+
+<PRE>
+shell&#62; CC=/usr/bin/gcc \
+       $CC -bundle -flat_namespace -undefined error
+       -o .libs/libmyodbc3-3.51.01.so *.o
+       -L/usr/local/mysql/lib/
+       -L/usr/local/iodbc/lib
+       -liodbcinst -lmysqlclienti_r -lz -lc -lpthread
+</PRE>
+
+<P>
+Make sure to change the <code>-liodbcinst</code> to <code>-lodbcinst</code> in case of
+using unixODBC instead of iODBC and configure the libraries path
+accordingly.
+
+</P>
+<P>
+In Apple's version of GCC, both <code>cc</code> and <code>gcc</code> are actually
+symbolic links to <code>gcc3</code>.
+
+</P>
+<P>
+Now copy this library to the <tt>`$prefix/lib'</tt> directory and symlink to
+<tt>`libmyodbc3.so'</tt>.
+
+</P>
+<P>
+You can cross-check the output shared-library properties using this command:
+
+</P>
+
+<PRE>
+shell&#62; otool -LD .libs/libmyodbc3-3.51.01.so
+</PRE>
+
+
+
+<H4><A NAME="MyODBC_HP-UX" HREF="manual_toc.html#MyODBC_HP-UX">22.1.7.12  HP-UX Notes</A></H4>
+
+<P>
+To build the driver on HP-UX 10.x or 11.x, make use of
+the following <code>configure</code> example:
+
+</P>
+<P>
+If using <code>cc</code>:
+
+</P>
+
+<PRE>
+shell&#62; CC="cc" \
+       CFLAGS="+z" \
+       LDFLAGS="-Wl,+b:-Wl,+s" \
+       ./configure --prefix=/usr/local
+			       --with-unixodbc=/usr/local
+			       --with-mysql-path=/usr/local/mysql/lib/mysql
+			       --enable-shared
+			       --enable-thread-safe
+</PRE>
+
+<P>
+If using <code>gcc</code>:
+
+</P>
+
+<PRE>
+shell&#62; CC="gcc" \
+       LDFLAGS="-Wl,+b:-Wl,+s" \
+       ./configure --prefix=/usr/local
+			       --with-unixodbc=/usr/local
+			       --with-mysql-path=/usr/local/mysql
+			       --enable-shared
+			       --enable-thread-safe
+</PRE>
+
+<P>
+Once the driver is built, cross-check its attributes using
+<code>chatr .libs/libmyodbc3.sl</code>
+to see whether or not you need to have the MySQL client
+libraries path using the <code>SHLIB_PATH</code> environment variable. For
+static versions, ignore all shared-library options and run <code>configure</code>
+with the <code>--disable-shared</code> option.
+
+</P>
+
+
+
+<H4><A NAME="MyODBC_AIX" HREF="manual_toc.html#MyODBC_AIX">22.1.7.13  AIX Notes:</A></H4>
+
+<P>
+To build the driver on AIX, make use of
+the following <code>configure</code> example:
+
+</P>
+
+<PRE>
+shell&#62; ./configure --prefix=/usr/local
+			       --with-unixodbc=/usr/local
+			       --with-mysql-path=/usr/local/mysql
+			       --disable-shared
+			       --enable-thread-safe
+</PRE>
+
+<P>
+<strong>NOTE</strong>: For more information about how to build and set up the
+static and shared libraries across the different platforms refer to '
+<a HREF="http://www.fortran-2000.com/ArnaudRecipes/sharedlib.html">
+Using static and shared libraries across platforms</a>'.
+
+</P>
+
+
+
+<H3><A NAME="Development_source" HREF="manual_toc.html#Development_source">22.1.8  Installing MyODBC from the BitKeeper Development Source Tree</A></H3>
+
+<P>
+Note: You should read this section only if you are interested in helping us
+test our new code.
+
+</P>
+<P>
+To obtain our most recent development source tree, use these instructions:
+
+</P>
+
+<OL>
+<LI>
+
+Download BitKeeper from
+<a HREF="http://www.bitmover.com/cgi-bin/download.cgi">http://www.bitmover.com/cgi-bin/download.cgi</a>.  You will need
+BitKeeper 3.0 or newer to access our repository.
+<LI>
+
+Follow the instructions to install it.
+<LI>
+
+After BitKeeper is installed, first go to the directory you
+want to work from, and then use this command if you want to clone
+the MyODBC 3.51 branch:
+
+
+<PRE>
+shell&#62; bk clone bk://mysql.bkbits.net/myodbc3 myodbc-3.51
+</PRE>
+
+In the preceding example, the source tree will be set up in the
+<tt>`myodbc-3.51/'</tt> or by default <tt>`myodbc3/'</tt> subdirectory of
+your current directory. If you are behind the firewall and can only
+initiate HTTP connections, you can also use BitKeeper via
+HTTP. If you are required to use a proxy server, simply set the
+environment variable <code>http_proxy</code> to point to your proxy:
+
+
+<PRE>
+shell&#62; export http_proxy="http://your.proxy.server:8080/"
+</PRE>
+
+Now, simply replace the <code>bk://</code> with <code>http://</code> when doing a
+clone. Example:
+
+
+<PRE>
+shell&#62; bk clone http://mysql.bkbits.net/myodbc3 myodbc-3.51
+</PRE>
+
+The initial download of the source tree may take a while, depending on the
+speed of your connection; be patient.
+<LI>
+
+You will need GNU <code>autoconf 2.52</code> (or newer), <code>automake 1.4</code>,
+<code>libtool 1.4</code>, and <code>m4</code> to run the next set of commands.
+
+
+<PRE>
+shell&#62; cd myodbc-3.51
+shell&#62; bk -r edit
+shell&#62; aclocal; autoheader; autoconf;  automake;
+shell&#62; ./configure  # Add your favorite options here
+shell&#62; make
+</PRE>
+
+For more information on how to build, refer to <tt>`INSTALL'</tt> file located
+in the same directory. On Windows, make use of Windows
+Makefiles <tt>`WIN-Makefile'</tt> and <tt>`WIN-Makefile_debug'</tt> in
+building the driver, for more information, see
+section <A HREF="manual_MySQL_Connectors.html#MyODBC_Windows_source_installation">22.1.6  Installing MyODBC from a Source Distribution on Windows</A>.
+<LI>
+
+When the build is done, run <code>make install</code> to install the
+MyODBC 3.51 driver on your system.
+<LI>
+
+If you have gotten to the <code>make</code> stage and the distribution does
+not compile, please report it to <a HREF="mailto:myodbc@lists.mysql.com">myodbc@lists.mysql.com</a>.
+<LI>
+
+After the initial <code>bk clone</code> operation to get the source tree, you
+should run <code>bk pull</code> periodically to get the updates.
+<LI>
+
+You can examine the change history for the tree with all the diffs by using
+<code>bk sccstool</code>.  If you see some funny diffs or code that you have a
+question about, do not hesitate to send e-mail to
+<a HREF="mailto:myodbc@lists.mysql.com">myodbc@lists.mysql.com</a>.
+
+Also, if you think you have a better idea on how to do something, send an
+e-mail to the same address with a patch. <code>bk diffs</code> will produce a
+patch for you after you have made changes to the source. If you do not
+have the time to code your idea, just send a description.
+<LI>
+
+BitKeeper has a nice help utility that you can access via
+<code>bk helptool</code>.
+</OL>
+
+<P>
+You can also browse changesets, comments and source code online by
+browsing to <a HREF="http://mysql.bkbits.net:8080/myodbc3">http://mysql.bkbits.net:8080/myodbc3</a>.
+
+</P>
+
+
+
+<H3><A NAME="MyODBC_Configuration" HREF="manual_toc.html#MyODBC_Configuration">22.1.9  MyODBC Configuration</A></H3>
+
+<P>
+This section describes how to configure MyODBC, including
+DSN creation and the different arguments that the driver takes as
+an input arguments in the connection string. It also describes how
+to create an ODBC trace file.
+
+</P>
+
+
+
+<H4><A NAME="Data_Source_Name" HREF="manual_toc.html#Data_Source_Name">22.1.9.1  What is a Data Source Name?</A></H4>
+
+<P>
+A "data source" is a place where data comes from.  The data source must
+have a persistent identifier, the Data Source Name. Using the Data Source
+Name, MySQL can access initialization information. With the initialization
+information, MySQL knows where to access the database and what settings
+to use when the access starts.
+
+</P>
+<P>
+In effect, the data source is the <em>path</em> to the data. In different
+contexts this might mean different things, but typically it identifies
+a running MySQL server (for example via a network address or service
+name), plus the default database for that server at connection time, plus
+necessary connection information such as the port. The MySQL drivers (and,
+on Windows systems, the ODBC Driver Manager) will use the data source for
+connecting. An administrative utility called the Microsoft ODBC Data Source
+Administrator may be useful for this purpose.
+
+</P>
+<P>
+There are two places where the initialization information might be: in
+the Windows registry (on a Windows system), or in a DSN file (on any system).
+
+</P>
+<P>
+If the information is in the Windows registry, it is called a "Machine
+data source". It might be a "User data source", in which case only one
+user can see it. Or it might be a "System data source" in which case
+it is accessible to all users on the computer, or indeed to all users
+connected to the computer, if the users are connected by Microsoft Windows
+NT services. When you run the ODBC Data Administration program, you will
+have a choice whether to use "User" or "System" -- there are separate tabs.
+
+</P>
+<P>
+If the information is in a DSN file, it is called a "File data source". This
+is a text file. Its advantages are: (a) it is an option for any kind of
+computer, not just a computer with a Windows operating system; (b) its
+contents can be transmitted or copied relatively easily.
+
+</P>
+
+
+
+<H4><A NAME="DSN_on_Windows" HREF="manual_toc.html#DSN_on_Windows">22.1.9.2  Configuring a MyODBC DSN on Windows</A></H4>
+
+<P>
+To add and configure a new MyODBC data source on Windows, use the
+<code>ODBC Data Source Administrator</code>. The <code>ODBC Administrator</code>
+updates your data source connection information. As you
+add data sources, the <code>ODBC Administrator</code> updates the
+registry information for you.
+
+</P>
+<P>
+To open the <code>ODBC Administrator</code> from the Control Panel:
+
+</P>
+
+<OL>
+
+<LI>
+
+Click <code>Start</code>, point to <code>Settings</code>, and then click <code>Control
+Panel</code>.
+
+<LI>
+
+On computers running Microsoft Windows 2000 or newer, double-click
+<code>Administrative Tools</code>, and then double-click <code>Data Sources
+(ODBC)</code>. On computers running older versions of Windows, double-click
+<code>32-bit ODBC</code> or <code>ODBC</code>.
+
+<br /> <IMG SRC="Images/mydsn-icon.gif"> <br />
+
+The <code>ODBC Data Source Administrator</code> dialog box appears, as
+shown here:
+
+<br /> <IMG SRC="Images/mydsn.jpg"> <br />
+
+Click <code>Help</code> for detailed information about each tab of the <code>ODBC
+Data Source Administrator</code> dialog box.
+
+</OL>
+
+<P>
+To add a data source on Windows:
+
+</P>
+
+<OL>
+
+<LI>
+
+Open the <code>ODBC Data Source Administrator</code>.
+
+<LI>
+
+In the <code>ODBC Data Source Administrator</code> dialog box, click
+<code>Add</code>. The <code>Create New Data Source</code> dialog box appears.
+
+<LI>
+
+Select <code>MySQL ODBC 3.51 Driver</code>, and then click <code>Finish</code>.
+The <code>MySQL ODBC 3.51 Driver - DSN Configuration</code> dialog box appears,
+as shown here:
+
+<br /> <IMG SRC="Images/mydsn-setup.jpg"> <br />
+
+<LI>
+
+In the <code>Data Source Name</code> box, enter the name of the data
+source you want to access. It can be any valid name that you choose.
+
+<LI>
+
+In the <code>Description</code> box, enter the description needed for the DSN.
+
+<LI>
+
+For <code>Host or Server Name (or IP)</code> box, enter the name of the MySQL
+server host that you want to access. By default, it is <code>localhost</code>.
+
+<LI>
+
+In the <code>Database Name</code> box, enter the name of the MySQL database
+that you want to use as the default database.
+
+<LI>
+
+In the <code>User</code> box, enter your MySQL username (your database
+user ID).
+
+<LI>
+
+In the <code>Password</code> box, enter your password.
+
+<LI>
+
+In the <code>Port</code> box, enter the port number if it is not the default (3306).
+
+<LI>
+
+In the <code>SQL Command</code> box, you can enter an optional SQL statement that
+you want to issue automatically after the connection has been established.
+
+The final dialog looks like this:
+
+<br /> <IMG SRC="Images/mydsn-example.jpg"> <br />
+
+Click <code>OK</code> to add this data source.
+
+</OL>
+
+<P>
+<strong>Note</strong>: Upon clicking <code>OK</code>, the <code>Data Sources</code> dialog
+box appears, and the <code>ODBC Administrator</code> updates the registry
+information. The username and connect string that you entered become the
+default connection values for this data source when you connect to it.
+
+</P>
+<P>
+You can also test whether your settings are suitable for connecting to the
+server using the button <code>Test Data Source</code>. This feature is available
+only for the MyODBC 3.51 driver. A successful test results in the following
+window:
+
+</P>
+<P>
+<br /> <IMG SRC="Images/mydsn-test-success.jpg"> <br />
+
+</P>
+<P>
+A failed test results in an error:
+
+</P>
+<P>
+<br /> <IMG SRC="Images/mydsn-test-fail.jpg"> <br />
+
+</P>
+<P>
+The DSN configuration dialog also has an <code>Options</code> button. If you
+select it, the following options dialog appears displaying that control
+driver behavior. Refer to section <A HREF="manual_MySQL_Connectors.html#Connection_parameters">22.1.9.4  Connection Parameters</A> for information
+about the meaning of these options.
+
+</P>
+<P>
+<br /> <IMG SRC="Images/mydsn-options.jpg"> <br />
+
+</P>
+<P>
+<strong>Note</strong>: The options listed under <code>Driver Trace Options</code> are
+disabled (grayed out) unless you are using the debugging version of the
+driver DLL.
+
+</P>
+<P>
+To modify a data source on Windows:
+
+</P>
+
+<OL>
+
+<LI>
+
+Open the <code>ODBC Data Source Administrator</code>. Click the appropriate
+DSN tab.
+<LI>
+
+Select the MySQL data source that you want to modify and then click
+<code>Configure</code>.  The <code>MySQL ODBC 3.51 Driver - DSN Configuration</code>
+dialog box appears.
+<LI>
+
+Modify the applicable data source fields, and then click <code>OK</code>.
+
+</OL>
+
+<P>
+When you have finished modifying the information in this dialog box, the
+<code>ODBC Administrator</code> updates the registry information.
+
+</P>
+
+
+
+<H4><A NAME="DSN_on_Unix" HREF="manual_toc.html#DSN_on_Unix">22.1.9.3  Configuring a MyODBC DSN on Unix</A></H4>
+
+<P>
+On <code>Unix</code>, you configure DSN entries directly in the
+<tt>`odbc.ini'</tt> file. Here is a typical <tt>`odbc.ini'</tt> file that configures
+<code>myodbc</code> and <code>myodbc3</code> as the DSN names for MyODBC 2.50 and MyODBC
+3.51, respectively:
+
+</P>
+
+<PRE>
+;
+;  odbc.ini configuration for MyODBC and MyODBC 3.51 drivers
+;
+
+[ODBC Data Sources]
+myodbc      = MyODBC 2.50 Driver DSN
+myodbc3     = MyODBC 3.51 Driver DSN
+
+[myodbc]
+Driver       = /usr/local/lib/libmyodbc.so
+Description  = MyODBC 2.50 Driver DSN
+SERVER       = localhost
+PORT         =
+USER         = root
+Password     =
+Database     = test
+OPTION       = 3
+SOCKET       =
+
+[myodbc3]
+Driver       = /usr/local/lib/libmyodbc3.so
+Description  = MyODBC 3.51 Driver DSN
+SERVER       = localhost
+PORT         =
+USER         = root
+Password     =
+Database     = test
+OPTION       = 3
+SOCKET       =
+
+[Default]
+Driver       = /usr/local/lib/libmyodbc3.so
+Description  = MyODBC 3.51 Driver DSN
+SERVER       = localhost
+PORT         =
+USER         = root
+Password     =
+Database     = test
+OPTION       = 3
+SOCKET       =
+</PRE>
+
+<P>
+Refer to the section <A HREF="manual_MySQL_Connectors.html#Connection_parameters">22.1.9.4  Connection Parameters</A>, for the list of
+connection parameters that can be supplied.
+
+</P>
+<P>
+<strong>Note</strong>: If you are using unixODBC, you can use the following tools
+in order to set up the DSN:
+
+</P>
+
+<UL>
+<LI>
+
+ODBCConfig GUI tool(<a HREF="http://www.unixodbc.org/config.html"> HOWTO: ODBCConfig</a>)
+<LI>
+
+odbcinst
+</UL>
+
+<P>
+In some cases when using unixODBC, you might get this error:
+
+</P>
+
+<PRE>
+Data source name not found and no default driver specified
+</PRE>
+
+<P>
+If this happens, make sure the <code>ODBCINI</code> and <code>ODBCSYSINI</code>
+environment variables are pointing to the right <tt>`odbc.ini'</tt> file.  For
+example, if your <tt>`odbc.ini'</tt> file is located in <tt>`/usr/local/etc'</tt>,
+set the environment variables like this:
+
+</P>
+
+<PRE>
+export ODBCINI=/usr/local/etc/odbc.ini
+export ODBCSYSINI=/usr/local/etc
+</PRE>
+
+
+
+<H4><A NAME="Connection_parameters" HREF="manual_toc.html#Connection_parameters">22.1.9.4  Connection Parameters</A></H4>
+
+<P>
+You can specify the following parameters for MyODBC in the <code>[Data
+Source Name]</code> section of an <code>ODBC.INI</code> file or through the
+<code>InConnectionString</code> argument in the <code>SQLDriverConnect()</code> call.
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Parameter</strong> </TD><TD> <strong>Default Value</strong> </TD><TD> <strong>Comment</strong>
+</TD></TR>
+<TR><TD><code>user</code> </TD><TD> ODBC (on Windows) </TD><TD> The username used to connect to MySQL.
+</TD></TR>
+<TR><TD><code>server</code> </TD><TD> <code>localhost</code> </TD><TD> The hostname of the MySQL server.
+</TD></TR>
+<TR><TD><code>database</code> </TD><TD> </TD><TD> The default database.
+</TD></TR>
+<TR><TD><code>option</code> </TD><TD> 0 </TD><TD> Options that specify how MyODBC should work. See below.
+</TD></TR>
+<TR><TD><code>port</code> </TD><TD> 3306 </TD><TD> The TCP/IP port to use if <code>server</code> is not <code>localhost</code>.
+</TD></TR>
+<TR><TD><code>stmt</code> </TD><TD> </TD><TD> A statement to execute when connecting to MySQL.
+</TD></TR>
+<TR><TD><code>password</code> </TD><TD> </TD><TD> The password for the <code>user</code> account on <code>server</code>.
+</TD></TR>
+<TR><TD><code>socket</code> </TD><TD> </TD><TD> The Unix socket file or Windows named pipe to connect to if <code>server</code> is <code>localhost</code>.
+</TD></TR>
+</TABLE>
+
+<P>
+The <code>option</code> argument is used to tell MyODBC that the client isn't 100%
+ODBC compliant. On Windows, you normally select options by toggling the
+checkboxes in the connection screen, but you can also select them in the
+<code>option</code> argument. The following options are listed in the order
+in which they appear in the MyODBC connect screen:
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Value</strong> </TD><TD> <strong>Description</strong>
+</TD></TR>
+<TR><TD>1 </TD><TD> The client can't handle that MyODBC returns the real width of a column.
+</TD></TR>
+<TR><TD>2 </TD><TD> The client can't handle that MySQL returns the true value of affected rows.  If this flag is set, MySQL returns ``found rows'' instead.  You must have MySQL 3.21.14 or newer to get this to work.
+</TD></TR>
+<TR><TD>4 </TD><TD> Make a debug log in <tt>`c:\myodbc.log'</tt>.  This is the same as putting <code>MYSQL_DEBUG=d:t:O,c::\myodbc.log</code> in <tt>`AUTOEXEC.BAT'</tt>. (On Unix, the file is <tt>`/tmp/myodbc.log'</tt>.)
+</TD></TR>
+<TR><TD>8 </TD><TD> Don't set any packet limit for results and parameters.
+</TD></TR>
+<TR><TD>16 </TD><TD> Don't prompt for questions even if driver would like to prompt.
+</TD></TR>
+<TR><TD>32 </TD><TD> Enable or disable the dynamic cursor support. (Not allowed in MyODBC 2.50.)
+</TD></TR>
+<TR><TD>64 </TD><TD> Ignore use of database name in <code>db_name.tbl_name.col_name</code>.
+</TD></TR>
+<TR><TD>128 </TD><TD> Force use of ODBC manager cursors (experimental).
+</TD></TR>
+<TR><TD>256 </TD><TD> Disable the use of extended fetch (experimental).
+</TD></TR>
+<TR><TD>512 </TD><TD> Pad <code>CHAR</code> columns to full column length.
+</TD></TR>
+<TR><TD>1024 </TD><TD> <code>SQLDescribeCol()</code> will return fully qualified column names.
+</TD></TR>
+<TR><TD>2048 </TD><TD> Use the compressed client/server protocol.
+</TD></TR>
+<TR><TD>4096 </TD><TD> Tell server to ignore space after function name and before <samp>`('</samp> (needed by PowerBuilder).  This will make all function names keywords.
+</TD></TR>
+<TR><TD>8192 </TD><TD> Connect with named pipes to a <code>mysqld</code> server running on NT.
+</TD></TR>
+<TR><TD>16384 </TD><TD> Change <code>LONGLONG</code> columns to <code>INT</code> columns (some applications can't handle <code>LONGLONG</code>).
+</TD></TR>
+<TR><TD>32768 </TD><TD> Return 'user' as <code>Table_qualifier</code> and <code>Table_owner</code> from <code>SQLTables</code> (experimental).
+</TD></TR>
+<TR><TD>65536 </TD><TD> Read parameters from the <code>[client]</code> and <code>[odbc]</code> groups from <tt>`my.cnf'</tt>.
+</TD></TR>
+<TR><TD>131072 </TD><TD> Add some extra safety checks (should not be needed but...).
+</TD></TR>
+<TR><TD>262144 </TD><TD> Disable transactions.
+</TD></TR>
+<TR><TD>524288 </TD><TD> Enable query logging to <tt>`c:\myodbc.sql'</tt>(<tt>`/tmp/myodbc.sql'</tt>) file. (Enabled only in debug mode.)
+</TD></TR>
+<TR><TD>1048576 </TD><TD> Do not cache the results locally in the driver,
+instead read from server (<code>mysql_use_result()</code>). This works only for
+forward-only cursors. This option is very important in dealing
+with large tables when you don't want the driver to cache the
+entire result set.
+</TD></TR>
+<TR><TD>2097152 </TD><TD> Force the use of <code>Forward-only</code> cursor type. In case
+of applications setting the default static/dynamic cursor type, and one
+wants driver to use non-cache result sets, then this option will ensure
+the forward-only cursor behavior.
+</TD></TR>
+</TABLE>
+
+<P>
+To select multiple options, add together their values.  For example,
+setting <code>option</code> to 12 (4+8) gives you debugging without packet limits.
+
+</P>
+<P>
+The default <tt>`myodbc3.dll'</tt> is compiled for optimal performance.  If you
+want to debug MyODBC 3.51 (for example, to enable tracing), you should
+instead use <tt>`myodbc3d.dll'</tt>.  To install this file, copy
+<tt>`myodbc3d.dll'</tt> over the installed <tt>`myodbc3.dll'</tt> file. Make sure to
+revert back to the release version of the driver DLL once you are done with
+the debugging because the debug version may cause performance issues.
+
+</P>
+<P>
+For MyODBC 2.50, <tt>`myodbc.dll'</tt> and <tt>`myodbcd.dll'</tt> are used instead.
+
+</P>
+<P>
+The following table shows some recommended <code>option</code> values for
+various configurations:
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Configuration</strong> </TD><TD> <strong>Option Value</strong>
+</TD></TR>
+<TR><TD>Microsoft Access </TD><TD> 3
+</TD></TR>
+<TR><TD>Microsoft Visual Basic </TD><TD> 3
+</TD></TR>
+<TR><TD>Large tables with too many rows </TD><TD> 2049
+</TD></TR>
+<TR><TD>Driver trace generation (Debug mode) </TD><TD> 4
+</TD></TR>
+<TR><TD>Query log generation (Debug mode) </TD><TD> 524288
+</TD></TR>
+<TR><TD>Generate driver trace as well as query log (Debug mode) </TD><TD> 524292
+</TD></TR>
+<TR><TD>Large tables with no-cache results </TD><TD> 3145731
+</TD></TR>
+</TABLE>
+
+
+
+<H4><A NAME="Without_DSN" HREF="manual_toc.html#Without_DSN">22.1.9.5  Connecting Without a Predefined DSN</A></H4>
+
+<P>
+Yes.  You can connect to the MySQL server using SQLDriverConnect, by
+specifying the <code>DRIVER</code> name field. Here are the connection strings
+for MyODBC using DSN-Less connection:
+
+</P>
+<P>
+<strong>For MyODBC 2.50:</strong>
+
+</P>
+
+<PRE>
+ConnectionString = "DRIVER={MySQL};\
+                    SERVER=localhost;\
+                    DATABASE=test;\
+                    USER=venu;\
+                    PASSWORD=venu;\
+                    OPTION=3;"
+</PRE>
+
+<P>
+<strong>For MyODBC 3.51:</strong>
+
+</P>
+
+<PRE>
+ConnectionString = "DRIVER={MySQL ODBC 3.51 Driver};\
+                    SERVER=localhost;\
+                    DATABASE=test;\
+                    USER=venu;\
+                    PASSWORD=venu;\
+                    OPTION=3;"
+</PRE>
+
+<P>
+If your programming language converts backslash followed by whitespace to
+a space, it is preferable to specify the connection string as a single long
+string, or to use a concatenation of multiple strings that does not add
+spaces in between.  For example:
+
+</P>
+
+<PRE>
+ConnectionString = "DRIVER={MySQL ODBC 3.51 Driver};"
+                    "SERVER=localhost;"
+                    "DATABASE=test;"
+                    "USER=venu;"
+                    "PASSWORD=venu;"
+                    "OPTION=3;"
+</PRE>
+
+<P>
+Refer to the section <A HREF="manual_MySQL_Connectors.html#Connection_parameters">22.1.9.4  Connection Parameters</A>, for the list of connection parameters that can be supplied.
+
+</P>
+
+
+
+<H4><A NAME="Remote_connection" HREF="manual_toc.html#Remote_connection">22.1.9.6  Establishing a Remote Connection to System A from System B</A></H4>
+
+<P>
+If you want to connect to system A from system B with a username
+and password of <code>myuser</code> and <code>mypassword</code>, here is a simple
+procedure.
+
+</P>
+<P>
+On system A, follow these steps:
+
+</P>
+
+<OL>
+
+<LI>
+
+Start the MySQL server.
+
+<LI>
+
+Use
+<code>GRANT</code> to set up an account with a username of <code>myuser</code> that can
+connect from system B using a password of <code>myuser</code>:
+
+
+<PRE>
+GRANT ALL ON *.* to 'myuser'@'B' IDENTIFIED BY 'mypassword';
+</PRE>
+
+<LI>
+
+The <code>GRANT</code> statement grants all privileges to user <tt>`myuser'</tt> for
+connecting
+from system B using the password <code>mypassword</code>. To execute this statement,
+you should be either <code>root</code> on system A (or another user who has
+appropriate privileges). For more information about MySQL privileges, refer to
+section <A HREF="manual_MySQL_Database_Administration.html#User_Account_Management">5.6  MySQL User Account Management</A>.
+
+</OL>
+
+<P>
+On system B, follow these steps:
+
+</P>
+
+<OL>
+
+<LI>
+
+Configure a MyODBC DSN using the following connection parameters:
+
+
+<PRE>
+DSN            = remote_test
+SERVER or HOST = A (or IP address of system A)
+DATABASE       = test (The default database or an appropriate one)
+USER           = myuser
+PASSWORD       = mypassword
+</PRE>
+
+To set up a DSN-less connection, refer to section <A HREF="manual_MySQL_Connectors.html#Without_DSN">22.1.9.5  Connecting Without a Predefined DSN</A>.
+
+<LI>
+
+Check whether you are able to access system A from system B by
+using ping or other means. If you are not able to reach system A, check
+your network or Internet connections or contact your system administrator.
+
+<LI>
+
+Now, try to connect using <code>DSN=remote_test</code>. If it fails, trace the
+MyODBC log, and take the further steps based on the error message
+from the log. If you need further assistance, send a detailed mail message
+to <a HREF="mailto:myodbc@lists.mysql.com">myodbc@lists.mysql.com</a>.
+
+</OL>
+
+<P>
+You can also find a simple HOWTO at
+<a HREF="http://www.phphelp.com/tutorial/using-myodbc-to-connect-to-a-remote-database.html">http://www.phphelp.com/tutorial/using-myodbc-to-connect-to-a-remote-database.html</a>.
+
+</P>
+
+
+
+<H4><A NAME="MyODBC_trace" HREF="manual_toc.html#MyODBC_trace">22.1.9.7  Getting an ODBC Trace File</A></H4>
+
+<P>
+If you encounter difficulties or problems with MyODBC, you should start
+by making a log file from the <code>ODBC Manager</code> (the log you get when
+requesting logs from <code>ODBC ADMIN</code>) and MyODBC.
+
+</P>
+<P>
+To get an ODBC trace through Driver Manager, do the following:
+
+</P>
+
+<UL>
+<LI>
+
+Open ODBC Data source administrator:
+
+
+<OL>
+
+<LI>
+
+Click <code>Start</code>, point to <code>Settings</code>, and then click <code>Control
+Panel</code>.
+
+<LI>
+
+On computers running Microsoft Windows 2000, XP, or 2003, double-click
+<code>Administrative Tools</code>, and then double-click <code>Data Sources
+(ODBC)</code>, as shown below.
+
+<br /> <IMG SRC="Images/mydsn-icon.gif"> <br />
+
+On computers running an earlier version of Microsoft Windows, double-click
+<code>32-bit ODBC</code> or <code>ODBC</code> in the Control Panel.
+
+<LI>
+
+The <code>ODBC Data Source Administrator</code> dialog box appears, as shown
+below:
+
+<br /> <IMG SRC="Images/mydsn.jpg"> <br />
+
+<LI>
+
+Click Help for detailed information about each tab of the ODBC Data
+Source Administrator dialog box.
+
+</OL>
+
+<LI>
+
+Enable the trace option.
+The procedure for this differs for Windows and Unix.
+
+To enable the trace option on Windows:
+
+
+<OL>
+<LI>
+
+The <code>Tracing</code> tab of the ODBC Data Source Administrator
+dialog box enables you to configure the way ODBC function calls are
+traced.
+
+<LI>
+
+When you activate tracing from the <code>Tracing</code> tab, the
+<code>Driver Manager</code> will log all ODBC function calls for all
+subsequently run applications.
+
+<LI>
+
+ODBC function calls from applications running before tracing is
+activated are not logged. ODBC function calls are recorded in a
+log file you specify.
+
+<LI>
+
+Tracing ceases only after you click <code>Stop Tracing Now</code>. Remember that
+while tracing is on, the log file continues to increase in size and
+that tracing affects the performance of all your ODBC applications.
+
+<br /> <IMG SRC="Images/mydsn-trace.jpg"> <br />
+
+</OL>
+
+To enable the trace option on Unix:
+
+
+<OL>
+<LI>
+
+On Unix, you need to explicitly set the <code>Trace</code> option in the
+<tt>`ODBC.INI'</tt> file.
+
+Set the tracing <code>ON</code> or <code>OFF</code> by using <code>TraceFile</code> and
+<code>Trace</code> parameters in <tt>`odbc.ini'</tt> as shown below:
+
+
+<PRE>
+TraceFile  = /tmp/odbc.trace
+Trace      = 1
+</PRE>
+
+<code>TraceFile</code> specifies the name and full path of the trace file
+and <code>Trace</code> is set to <code>ON</code> or <code>OFF</code>. You can also use
+<code>1</code> or <code>YES</code> for <code>ON</code> and <code>0</code> or <code>NO</code> for
+<code>OFF</code>.  If you are using <code>ODBCConfig</code> from <code>unixODBC</code>,
+then follow the instructions for tracing <code>unixODBC</code> calls at
+<a HREF="http://www.unixodbc.org/config.html">HOWTO-ODBCConfig</a>.
+
+</OL>
+
+To generate a MyODBC log, do the following:
+
+
+<OL>
+
+<LI>
+
+Ensure that you are using the driver debug DLL (that is, <tt>`myodbc3d.dll'</tt>
+and not <tt>`myodbc3.dll'</tt> for MyODBC 3.51, and <tt>`myodbcd.dll'</tt> for
+MyODBC 2.50).
+
+The easiest way to do this is to get <tt>`myodbc3d.dll'</tt> (or
+<tt>`myodbcd.dll'</tt>) from the MyODBC 3.51 distribution and copy it over
+the <tt>`myodbc3.dll'</tt> (or <tt>`myodbc.dll'</tt>), which is probably in your
+<tt>`C:\windows\system32'</tt> or <tt>`C:\winnt\system32'</tt> directory. Note
+that you probably want to restore the old <tt>`myodbc.dll'</tt> file when you
+have finished testing, as this is a lot faster than <tt>`myodbc3d.dll'</tt>
+(or <tt>`myodbcd.dll'</tt>), so do keep a backup copy of original DLLs.
+
+<LI>
+
+Enable the <code>Trace MyODBC</code> option flag in the MyODBC connect/configure
+screen. The log will be written to file <tt>`C:\myodbc.log'</tt>.  If the trace
+option is not remembered when you are going back to the above screen, it
+means that you are not using the <tt>`myodbcd.dll'</tt> driver (see above). On
+Linux or if you are using DSN-Less connection, then you need to supply
+<code>OPTION=4</code> in the connection string.
+
+<LI>
+
+Start your application and try to get it to fail.  Then check the MyODBC
+trace file to find out what could be wrong.
+
+If you find out something is wrong, please send a mail message to
+<a HREF="mailto:myodbc@lists.mysql.com">myodbc@lists.mysql.com</a> (or to <a HREF="mailto:support@mysql.com">support@mysql.com</a>
+if you have a support contract from MySQL AB) with a brief description of
+the problem, with the following additional information:
+
+
+<UL>
+<LI>MyODBC version
+
+<LI>ODBC Driver Manager type and version
+
+<LI>MySQL server version
+
+<LI>ODBC trace from Driver Manager
+
+<LI>MyODBC log file from MyODBC driver
+
+<LI>Simple reproducible sample
+
+</UL>
+
+</OL>
+
+Remember that the more information you can supply to us,
+the more likely it is that we can fix the problem!
+
+Also, before posting the bug, check the MyODBC mailing list archive at
+<a HREF="http://lists.mysql.com/">http://lists.mysql.com/</a>.
+
+</UL>
+
+
+
+<H4><A NAME="MyODBC_Tested_Applications" HREF="manual_toc.html#MyODBC_Tested_Applications">22.1.9.8  Applications Tested with MyODBC</A></H4>
+
+<P>
+MyODBC has been tested with the following applications:
+
+</P>
+
+<UL>
+<LI>
+
+MS Access 95, 97, 2000, and 2002
+<LI>
+
+C++-Builder, Borland Builder 4
+<LI>
+
+Centura Team Developer (formerly Gupta SQL/Windows)
+<LI>
+
+ColdFusion (on Solaris and NT with service pack 5),
+<a HREF="http://www.njwtech.net/addons/coldfusion/mysql.html"> How-to:
+MySQL and Coldfusion</a>.
+<a HREF="http://www.macromedia.com/v1/handlers/index.cfm?ID=11328&#38;Method=Full&#38;PageCall=/support/index.cfm">
+Troubleshooting Data Sources and Database Connectivity for UnixPlatforms</a>.
+<LI>Crystal Reports
+
+<LI>DataJunction
+
+<LI>Delphi
+
+<LI>ERwin
+
+<LI>MS Excel
+
+<LI>iHTML
+
+<LI>FileMaker Pro
+
+<LI>FoxPro
+
+<LI>Notes 4.5/4.6
+
+<LI>MS Visio Enterprise 2000
+
+<LI>Vision
+
+<LI>Visual Objects
+
+<LI>Visual Interdev
+
+<LI>SBSS
+
+<LI>Perl DBD-ODBC
+
+<LI>Paradox
+
+<LI>Powerbuilder
+
+<LI>Powerdesigner 32-bit
+
+<LI>MS Visual C++
+
+<LI>Visual Basic
+
+<LI>ODBC.NET through CSharp(C#), VB and C++
+
+<LI>
+
+Data Architect(<a HREF="http://thekompany.com/products/dataarchitect/">http://thekompany.com/products/dataarchitect/</a>)
+<LI>
+
+SQLExpress for Xbase++(<a HREF="http://www.SQLExpress.net">http://www.SQLExpress.net</a>)
+<LI>
+
+Open Office (<a HREF="http://www.openoffice.org">http://www.openoffice.org</a>)
+<a HREF="http://dba.openoffice.org/proposals/MySQL_OOo.html"> How-to: MySQL
++ OpenOffice</a>.
+<a HREF="http://www.unixodbc.org/doc/OOoMySQL.pdf"> How-to: OpenOffice + MyODBC + unixODBC</a>.
+<LI>
+
+Star Office (<a HREF="http://wwws.sun.com/software/star/staroffice/6.0/index.html">http://wwws.sun.com/software/star/staroffice/6.0/index.html</a>)
+<LI>
+
+G2-ODBC bridge (<a HREF="http://www.gensym.com">http://www.gensym.com</a>)
+<LI>
+
+Sambar Server (<a HREF="http://www.sambarserver.info">http://www.sambarserver.info</a>)
+<a HREF="http://www.sambarserver.info/article.php?sid=66"> How-to: MyODBC + SambarServer + MySQL</a>.
+</UL>
+
+<P>
+If you know of any other applications that work with MyODBC, please send
+mail to <a HREF="mailto:myodbc@lists.mysql.com">myodbc@lists.mysql.com</a> about them.
+
+</P>
+
+
+
+<H4><A NAME="Programs_Known_to_Work_With_MyODBC" HREF="manual_toc.html#Programs_Known_to_Work_With_MyODBC">22.1.9.9  Programs Known to Work With MyODBC</A></H4>
+
+<P>
+Most programs should work with MyODBC, but for each of those listed
+here, we have tested it ourselves or received confirmation from some user
+that it works. Many of the descriptions provide workarounds for problems
+that you might encounter.
+
+</P>
+<DL COMPACT>
+
+<DT><strong>Program</strong>
+<DD>
+<strong>Comment</strong>
+<A NAME="IDX2245"></A>
+
+<DT>Access
+<DD>
+To make Access work:
+
+<UL>
+<LI>
+
+If you are using Access 2000, you should get and install the newest (version
+2.6 or higher) Microsoft MDAC (<code>Microsoft Data Access Components</code>) from
+<a HREF="http://www.microsoft.com/data/">http://www.microsoft.com/data/</a>.  This will fix a bug in Access that
+when you export data to MySQL, the table and column names aren't specified.
+Another way to work around this bug is to upgrade to MyODBC 2.50.33 and
+MySQL 3.23.x, which together provide a workaround for the problem.
+
+You should also get and apply the Microsoft Jet 4.0 Service Pack 5 (SP5)
+which can be found at
+<a HREF="http://support.microsoft.com/default.aspx?scid=kb;EN-US;q239114">http://support.microsoft.com/default.aspx?scid=kb;EN-US;q239114</a>.
+This will fix some cases where columns are marked as <code>#DELETED#</code>
+in Access.
+
+Note: If you are using MySQL 3.22, you must to apply the
+MDAC patch and use MyODBC 2.50.32 or 2.50.34 and up to work around
+this problem.
+<LI>
+
+For all versions of Access, you should enable the MyODBC <code>Return
+matching rows</code> option. For Access 2.0, you should additionally enable
+the <code>Simulate ODBC 1.0</code> option.
+<LI>
+
+You should have a timestamp in all tables that you want to be able to update.
+For maximum portability, don't use a length specification in the column
+declaration.  That is, use <code>TIMESTAMP</code>, not <code>TIMESTAMP(<var>n</var>)</code>,
+<var>n</var> &#60; 14.
+<LI>
+
+You should have a primary key in the table. If not, new or updated rows
+may show up as <code>#DELETED#</code>.
+<LI>
+
+Use only <code>DOUBLE</code> float fields. Access fails when comparing with
+single floats.  The symptom usually is that new or updated rows may show
+up as <code>#DELETED#</code> or that you can't find or update rows.
+<LI>
+
+If you are using MyODBC to link to a table that has a <code>BIGINT</code>
+column, the results will be displayed as <code>#DELETED</code>. The
+work around solution is:
+
+
+<UL>
+<LI>
+
+Have one more dummy column with <code>TIMESTAMP</code> as the data type.
+<LI>
+
+Select the <code>Change BIGINT columns to INT</code> option in the connection
+dialog in ODBC DSN Administrator.
+<LI>
+
+Delete the table link from Access and re-create it.
+</UL>
+
+Old records still will display as <code>#DELETED#</code>, but newly
+added/updated records will be displayed properly.
+<LI>
+
+If you still get the error <code>Another user has changed your data</code> after
+adding a <code>TIMESTAMP</code> column, the following trick may help you:
+
+Don't use a <code>table</code> data sheet view. Instead, create a form with the
+fields you want, and use that <code>form</code> data sheet view.  You should
+set the <code>DefaultValue</code> property for the <code>TIMESTAMP</code> column to
+<code>NOW()</code>.  It may be a good idea to hide the <code>TIMESTAMP</code> column
+from view so your users are not confused.
+<LI>
+
+In some cases, Access may generate illegal SQL statements that
+MySQL can't understand. You can fix this by selecting
+<code>"Query|SQLSpecific|Pass-Through"</code> from the Access menu.
+<LI>
+
+On NT, Access will report <code>BLOB</code> columns as <code>OLE OBJECTS</code>. If
+you want to have <code>MEMO</code> columns instead, you should change <code>BLOB</code>
+columns to <code>TEXT</code> with <code>ALTER TABLE</code>.
+<LI>
+
+Access can't always handle <code>DATE</code> columns properly. If you have a problem
+with these, change the columns to <code>DATETIME</code>.
+<LI>
+
+If you have in Access a column defined as <code>BYTE</code>, Access will try
+to export this as <code>TINYINT</code> instead of <code>TINYINT UNSIGNED</code>.
+This will give you problems if you have values larger than 127 in the column.
+</UL>
+
+<DT>ADO
+<DD>
+<A NAME="IDX2246"></A>
+When you are coding with the ADO API and MyODBC, you need to
+pay attention to some default properties that aren't supported by the
+MySQL server.  For example, using the <code>CursorLocation Property</code>
+as <code>adUseServer</code> will return a result of -1 for the
+<code>RecordCount Property</code>.  To have the right value, you need to set
+this property to <code>adUseClient</code>, as shown in the VB code here:
+
+
+<PRE>
+Dim myconn As New ADODB.Connection
+Dim myrs As New Recordset
+Dim mySQL As String
+Dim myrows As Long
+
+myconn.Open "DSN=MyODBCsample"
+mySQL = "SELECT * from user"
+myrs.Source = mySQL
+Set myrs.ActiveConnection = myconn
+myrs.CursorLocation = adUseClient
+myrs.Open
+myrows = myrs.RecordCount
+
+myrs.Close
+myconn.Close
+</PRE>
+
+Another workaround is to use a <code>SELECT COUNT(*)</code> statement
+for a similar query to get the correct row count.
+
+<DT>Active server pages (ASP)
+<DD>
+You should select the <code>Return matching rows</code> option.
+
+<DT>BDE applications
+<DD>
+To get these to work, you should select the
+<code>Don't optimize column widths</code> and <code>Return matching rows</code> options.
+
+<DT>Borland Builder 4
+<DD>
+<A NAME="IDX2247"></A>
+When you start a query, you can use the <code>Active</code> property or the
+<code>Open</code> method.  Note that <code>Active</code> will start by automatically
+issuing a <code>SELECT * FROM ...</code> query. That may not be a good thing if
+your tables are large.
+
+<DT>ColdFusion (On Unix)
+<DD>
+<A NAME="IDX2248"></A>
+The following information is taken from the ColdFusion documentation:
+
+Use the following information to configure ColdFusion Server for Linux
+to use the unixODBC driver with MyODBC for MySQL data
+sources.  Allaire has verified that MyODBC 2.50.26
+works with MySQL 3.22.27 and ColdFusion for Linux. (Any
+newer version should also work.) You can download MyODBC at
+<a HREF="http://dev.mysql.com/downloads/connector/odbc/">http://dev.mysql.com/downloads/connector/odbc/</a>.
+
+ColdFusion Version 4.5.1 allows you to us the ColdFusion Administrator
+to add the MySQL data source. However, the driver is not
+included with ColdFusion Version 4.5.1. Before the MySQL driver
+will appear in the ODBC datasources drop-down list, you must build and
+copy the MyODBC driver to
+<tt>`/opt/coldfusion/lib/libmyodbc.so'</tt>.
+
+The Contrib directory contains the program <tt>`mydsn-<var>xxx</var>.zip'</tt> which allows
+you to build and remove the DSN registry file for the MyODBC driver
+on Coldfusion applications.
+
+<DT>DataJunction
+<DD>
+<A NAME="IDX2249"></A>
+You have to change it to output <code>VARCHAR</code> rather than <code>ENUM</code>, as
+it exports the latter in a manner that causes MySQL problems.
+
+<DT>Excel
+<DD>
+<A NAME="IDX2250"></A>
+Works. A few tips:
+
+<UL>
+<LI>
+
+If you have problems with dates, try to select them as strings using the
+<code>CONCAT()</code> function. For example:
+
+<PRE>
+SELECT CONCAT(rise_time), CONCAT(set_time)
+    FROM sunrise_sunset;
+</PRE>
+
+Values retrieved as strings this way should be correctly recognized
+as time values by Excel97.
+
+The purpose of <code>CONCAT()</code> in this example is to fool ODBC into thinking
+the column is of ``string type.'' Without the <code>CONCAT()</code>, ODBC knows the
+column is of time type, and Excel does not understand that.
+
+Note that this is a bug in Excel, because it automatically converts a
+string to a time. This would be great if the source was a text file, but
+is unfortunate when the source is an ODBC connection that reports
+exact types for each column.
+</UL>
+
+<DT>Word
+<DD>
+<A NAME="IDX2251"></A>
+
+To retrieve data from MySQL to Word/Excel documents, you need to
+use the MyODBC driver and the Add-in Microsoft Query help.
+
+For example, create a database with a table containing two columns of text:
+
+
+<UL>
+<LI>
+
+Insert rows using the <code>mysql</code> client command-line tool.
+<LI>
+
+Create a DSN file using the ODBC manager, for example, <tt>`my'</tt> for the
+database that was just created.
+<LI>
+
+Open the Word application.
+<LI>
+
+Create a blank new document.
+<LI>
+
+In the <code>Database</code> tool bar, press the <code>Insert Database</code> button.
+<LI>
+
+Press the <code>Get Data</code> button.
+<LI>
+
+At the right hand of the <code>Get Data</code> screen, press the <code>Ms Query</code>
+button.
+<LI>
+
+In <code>Ms Query</code>, create a new data source using the <tt>`my'</tt> DSN file.
+<LI>
+
+Select the new query.
+<LI>
+
+Select the columns that you want.
+<LI>
+
+Make a filter if you want.
+<LI>
+
+Make a Sort if you want.
+<LI>
+
+Select <code>Return Data to Microsoft Word</code>.
+<LI>
+
+Click <code>Finish</code>.
+<LI>
+
+Click <code>Insert Data</code> and select the records.
+<LI>
+
+Click <code>OK</code> and you see the rows in your Word document.
+</UL>
+
+<DT>odbcadmin
+<DD>
+<A NAME="IDX2252"></A>
+Test program for ODBC.
+
+<DT>Delphi
+<DD>
+<A NAME="IDX2253"></A>
+You must use BDE Version 3.2 or newer.  Select the <code>Don't optimize column width</code>
+option when connecting to MySQL.
+
+Also, here is some potentially useful Delphi code that sets up both an
+ODBC entry and a BDE entry for MyODBC. The BDE entry requires a BDE
+Alias Editor that is free at a Delphi Super Page near
+you. (Thanks to Bryan Brunton <a HREF="mailto:bryan@flesherfab.com">bryan@flesherfab.com</a> for this):
+
+
+<PRE>
+fReg:= TRegistry.Create;
+  fReg.OpenKey('\Software\ODBC\ODBC.INI\DocumentsFab', True);
+  fReg.WriteString('Database', 'Documents');
+  fReg.WriteString('Description', ' ');
+  fReg.WriteString('Driver', 'C:\WINNT\System32\myodbc.dll');
+  fReg.WriteString('Flag', '1');
+  fReg.WriteString('Password', '');
+  fReg.WriteString('Port', ' ');
+  fReg.WriteString('Server', 'xmark');
+  fReg.WriteString('User', 'winuser');
+  fReg.OpenKey('\Software\ODBC\ODBC.INI\ODBC Data Sources', True);
+  fReg.WriteString('DocumentsFab', 'MySQL');
+  fReg.CloseKey;
+  fReg.Free;
+
+  Memo1.Lines.Add('DATABASE NAME=');
+  Memo1.Lines.Add('USER NAME=');
+  Memo1.Lines.Add('ODBC DSN=DocumentsFab');
+  Memo1.Lines.Add('OPEN MODE=READ/WRITE');
+  Memo1.Lines.Add('BATCH COUNT=200');
+  Memo1.Lines.Add('LANGDRIVER=');
+  Memo1.Lines.Add('MAX ROWS=-1');
+  Memo1.Lines.Add('SCHEMA CACHE DIR=');
+  Memo1.Lines.Add('SCHEMA CACHE SIZE=8');
+  Memo1.Lines.Add('SCHEMA CACHE TIME=-1');
+  Memo1.Lines.Add('SQLPASSTHRU MODE=SHARED AUTOCOMMIT');
+  Memo1.Lines.Add('SQLQRYMODE=');
+  Memo1.Lines.Add('ENABLE SCHEMA CACHE=FALSE');
+  Memo1.Lines.Add('ENABLE BCD=FALSE');
+  Memo1.Lines.Add('ROWSET SIZE=20');
+  Memo1.Lines.Add('BLOBS TO CACHE=64');
+  Memo1.Lines.Add('BLOB SIZE=32');
+
+  AliasEditor.Add('DocumentsFab','MySQL',Memo1.Lines);
+</PRE>
+
+<DT>C++ Builder
+<DD>
+<A NAME="IDX2254"></A>
+Tested with BDE Version 3.0. The only known problem is that when the table
+schema changes, query fields are not updated. BDE, however, does not seem
+to recognize primary keys, only the index named <code>PRIMARY</code>, though this
+has not been a problem.
+
+<DT>Vision
+<DD>
+You should select the <code>Return matching rows</code> option.
+
+<DT>Visual Basic
+<DD>
+<A NAME="IDX2255"></A>
+To be able to update a table, you must define a primary key for the table.
+
+Visual Basic with ADO can't handle big integers. This means that some queries
+like <code>SHOW PROCESSLIST</code> will not work properly.  The fix is to use
+<code>OPTION=16384</code> in the ODBC connect string or to select
+the <code>Change BIGINT columns to INT</code> option in the MyODBC connect
+screen.  You may also want to select the <code>Return matching rows</code> option.
+
+<DT>VisualInterDev
+<DD>
+If you have a <code>BIGINT</code> in your result, you may get the error
+<code>[Microsoft][ODBC Driver Manager] Driver does not support this parameter</code>
+Try selecting the <code>Change BIGINT
+columns to INT</code> option in the MyODBC connect screen.
+
+<DT>Visual Objects
+<DD>
+You should select the <code>Don't optimize column widths</code> option.
+
+<DT>MS Visio Enterprise 2000
+<DD>
+We made database model diagram by connecting from MS Vision Enterprise 
+2000 to MySQL via MyODBC (2.50.37 or greater) and using Visio's reverse 
+engineer function to retrieve information about the DB (Visio shows all 
+the column definitions, primary keys, Indexes and so on). Also we tested 
+by designing new tables in Visio and exported them to MySQL via MyODBC.
+
+</DL>
+
+
+
+<H3><A NAME="Connection" HREF="manual_toc.html#Connection">22.1.10  MyODBC Connection-Related Issues</A></H3>
+
+<P>
+This section answers MyODBC connection-related questions.
+
+</P>
+
+
+
+<H4><A NAME="Setup-error" HREF="manual_toc.html#Setup-error">22.1.10.1  While Configuring a MyODBC DSN, a <code>Could Not Load Translator or Setup Library</code> Error Occurs</A></H4>
+
+<P>
+For more information, refer to
+<a HREF="http://support.microsoft.com/default.aspx?scid=kb;EN-US;q260558">MS KnowledgeBase
+Article(Q260558)</a>. Also, make sure you have the latest valid
+<tt>`ctl3d32.dll'</tt> in your system directory.
+
+</P>
+
+
+
+<H4><A NAME="Access_denied_error" HREF="manual_toc.html#Access_denied_error">22.1.10.2  While Connecting, an <code>Access denied</code> Error Occurs</A></H4>
+
+<P>
+Refer to section <A HREF="manual_MySQL_Database_Administration.html#Access_denied">5.5.8  Causes of <code>Access denied</code> Errors</A>.
+
+</P>
+
+
+
+<H4><A NAME="Connection_pool" HREF="manual_toc.html#Connection_pool">22.1.10.3  INFO: About ODBC Connection Pooling</A></H4>
+
+<P>
+Refer to this document about connection pooling:
+<a HREF="http://support.microsoft.com/default.aspx?scid=kb;EN-US;q169470">http://support.microsoft.com/default.aspx?scid=kb;EN-US;q169470</a>.
+
+</P>
+
+
+
+<H3><A NAME="MSAccess" HREF="manual_toc.html#MSAccess">22.1.11  MyODBC and Microsoft Access</A></H3>
+
+<P>
+This section of the document answers questions related to MyODBC
+with Microsoft Access.
+
+</P>
+
+
+
+<H4><A NAME="MSAccess_Setup" HREF="manual_toc.html#MSAccess_Setup">22.1.11.1  How to Set Up Microsoft Access to Work with MySQL using MyODBC?</A></H4>
+
+<P>
+The following must be done on your client PC in order to make Microsoft
+Access work with MyODBC.
+
+</P>
+
+<OL>
+
+<LI>
+
+If you are using Access 2000, you should get and install the newest (version
+2.6 or higher) Microsoft MDAC (<code>Microsoft Data Access Components</code>) from
+<a HREF="http://www.microsoft.com/data/">http://www.microsoft.com/data/</a>.  This will fix a bug in Access that
+when you export data to MySQL, the table and column names aren't specified.
+Another way to work around this bug is to upgrade to MyODBC 2.50.33 and
+MySQL 3.23.x, which together provide a workaround for the problem.
+
+You should also get and apply the Microsoft Jet 4.0 Service Pack 5 (SP5)
+which can be found at
+<a HREF="http://support.microsoft.com/default.aspx?scid=kb;EN-US;q239114">http://support.microsoft.com/default.aspx?scid=kb;EN-US;q239114</a>.
+This will fix some cases where columns are marked as <code>#DELETED#</code>
+in Access.
+
+Note: If you are using MySQL 3.22, you must to apply the
+MDAC patch and use MyODBC 2.50.32 or 2.50.34 and up to work around
+this problem.
+<LI>
+
+Install the latest version of MySQL from <a HREF="http://dev.mysql.com/downloads/">http://dev.mysql.com/downloads/</a>.
+<LI>
+
+Install the latest version of MyODBC 3.51 or 2.50 from
+<a HREF="http://dev.mysql.com/downloads/connector/odbc/">http://dev.mysql.com/downloads/connector/odbc/</a>.
+<LI>
+
+For all Access versions, you should enable the <code>Return matching rows</code>
+option.
+<LI>
+
+Now start working with Access as the front-end for MySQL Server through MyODBC.
+
+</OL>
+
+
+
+<H4><A NAME="Export_of_Data" HREF="manual_toc.html#Export_of_Data">22.1.11.2  How to Export a Table or Query from Access to MySQL?</A></H4>
+
+<P>
+You cannot export a table or query to MySQL unless you have installed
+MyODBC.
+
+</P>
+<P>
+To export a table from Access to MySQL, follow these instructions:
+
+</P>
+
+<OL>
+
+<LI>
+
+When you open an Access database or an Access project, a Database window
+will appear.  It displays shortcuts for creating new database objects and
+opening existing objects.
+
+<br /> <IMG SRC="Images/myaccess.jpg"> <br />
+
+<LI>
+
+Click the name of the <code>table</code> or <code>query</code> you want to export,
+and then in the <code>File</code> menu, select <code>Export</code>.
+
+<LI>
+
+In the <code>Export Object Type <var>Object name</var> To</code> dialog box, in the
+<code>Save As Type</code> box, select <code>ODBC Databases ()</code> as shown here:
+
+<br /> <IMG SRC="Images/myaccess-odbc.gif"> <br />
+
+<LI>
+
+In the <code>Export</code> dialog box, enter a name for the file (or use the
+suggested name), and then select <code>OK</code>.
+
+<LI>
+
+The Select Data Source dialog box is displayed; it lists the defined data
+sources for any ODBC drivers installed on your computer.  Click either the
+File Data Source or Machine Data Source tab, and then double-click the
+MyODBC or MyODBC 3.51 data source that you want to export to. To define
+a new data source for MyODBC, please section <A HREF="manual_MySQL_Connectors.html#DSN_on_Windows">22.1.9.2  Configuring a MyODBC DSN on Windows</A>.
+
+</OL>
+
+<P>
+Microsoft Access connects to the MySQL Server through this data source
+and exports new tables and or data.
+
+</P>
+
+
+
+<H4><A NAME="Import_of_Data" HREF="manual_toc.html#Import_of_Data">22.1.11.3  How to Import or Link MySQL Database Tables to Access?</A></H4>
+
+<P>
+You cannot export a table or query to MySQL database unless you have installed
+the MyODBC.
+
+</P>
+<P>
+<strong>To import or link a table(s) from MySQL to Access, follow the instructions:</strong>
+
+</P>
+
+<OL>
+
+<LI>
+
+Open a database, or switch to the Database window for the open database.
+<LI>
+
+To import tables, on the <code>File</code> menu, point to <code>Get External Data</code>,
+and then click <code>Import</code>.
+To link tables, on the File menu, point to <code>Get External Data</code>, and
+then click <code>Link Tables</code>.
+<LI>
+
+In the <code>Import</code> (or <code>Link</code>) dialog box, in the Files Of Type
+box, select <code>ODBC Databases ()</code>.
+The Select Data Source dialog box lists the defined data sources The Select Data
+Source dialog box is displayed; it lists the defined data sources for any ODBC
+drivers installed on your computer.
+Click either the File Data Source or Machine Data Source tab, and then double-click
+the MyODBC or MyODBC 3.51 data source that you want to export to. To
+define a new data source for the MyODBC or MyODBC 3.51 driver, please
+section <A HREF="manual_MySQL_Connectors.html#DSN_on_Windows">22.1.9.2  Configuring a MyODBC DSN on Windows</A>.
+<LI>
+
+If the ODBC data source that you selected requires you to log on, enter your login
+ID and password (additional information might also be required), and then click
+<code>OK</code>.
+<LI>
+
+Microsoft Access connects to the MySQL server through <code>ODBC data source </code>
+and displays the list of tables that you can <code>import</code> or <code>link</code>.
+<LI>
+
+Click each table that you want to <code>import</code> or <code>link</code>, and then click
+<code>OK</code>. If you're linking a table and it doesn't have an index that uniquely
+identifies each record, then Microsoft Access displays a list of the fields in
+the linked table. Click a field or a combination of fields that will uniquely
+identify each record, and then click <code>OK</code>.
+
+</OL>
+
+
+
+<H4><A NAME="Linked_Tables" HREF="manual_toc.html#Linked_Tables">22.1.11.4  The Structure or Location of a Linked Table has been Changed. Can I See Those Changes Locally in Linked Tables?</A></H4>
+
+<P>
+Yes. Use the following procedure to view or to refresh links when the
+structure or location of a linked table has changed. The Linked Table Manager
+lists the paths to all currently linked tables.
+
+</P>
+<P>
+<strong>To wiew or refresh links</strong>:
+
+</P>
+
+<OL>
+
+<LI>
+
+Open the database that contains links to tables.
+<LI>
+
+On the <code>Tools</code> menu, point to <code>Add-ins</code>, and then click <code>Linked Table Manager</code>.
+<LI>
+
+Select the check box for the tables whose links you want to refresh.
+<LI>
+
+Click OK to refresh the links.
+
+</OL>
+
+<P>
+Microsoft Access confirms a successful refresh or, if the table wasn't
+found, displays the <code>Select New Location of</code> &#60;table name&#62; dialog box
+in which you can specify its the table's new location.If several selected
+tables have moved to the new location that you specify, the Linked Table
+Manager searches that location for all selected tables, and updates all
+links in one step.
+
+</P>
+<P>
+<strong>To vhange the path for a set of linked tables</strong>:
+
+</P>
+
+<OL>
+
+<LI>
+
+Open the database that contains links to tables.
+<LI>
+
+On the <code>Tools</code> menu, point to <code>Add-ins</code>, and then click <code>Linked Table Manager</code>.
+<LI>
+
+Select the <code>Always Prompt For A New Location</code> check box.
+<LI>
+
+Select the check box for the tables whose links you want to change, and then click <code>OK</code>.
+<LI>
+
+In the <code>Select New Location of</code> &#60;table name&#62; dialog box, specify the new location, click
+<code>Open</code>, and then click <code>OK</code>.
+
+</OL>
+
+
+
+<H4><A NAME="DELETED_problem" HREF="manual_toc.html#DELETED_problem">22.1.11.5  When I Insert or Update a Record in Linked Tables, I Get <code>#DELETED#</code></A></H4>
+
+<P>
+If the inserted or updated records are shown as <code>#DELETED#</code> in the access, then:
+
+</P>
+
+<UL>
+<LI>
+
+If you are using Access 2000, you should get and install the newest (version
+2.6 or higher) Microsoft MDAC (<code>Microsoft Data Access Components</code>) from
+<a HREF="http://www.microsoft.com/data/">http://www.microsoft.com/data/</a>.  This will fix a bug in Access that
+when you export data to MySQL, the table and column names aren't specified.
+Another way to work around this bug is to upgrade to MyODBC 2.50.33 and
+MySQL 3.23.x, which together provide a workaround for the problem.
+
+You should also get and apply the Microsoft Jet 4.0 Service Pack 5 (SP5)
+which can be found at
+<a HREF="http://support.microsoft.com/default.aspx?scid=kb;EN-US;q239114">http://support.microsoft.com/default.aspx?scid=kb;EN-US;q239114</a>.
+This will fix some cases where columns are marked as <code>#DELETED#</code>
+in Access.
+
+Note: If you are using MySQL 3.22, you must to apply the
+MDAC patch and use MyODBC 2.50.32 or 2.50.34 and up to work around
+this problem.
+
+<LI>
+
+For all versions of Access, you should enable the MyODBC <code>Return
+matching rows</code> option. For Access 2.0, you should additionally enable
+the <code>Simulate ODBC 1.0</code> option.
+
+<LI>
+
+You should have a timestamp in all tables that you want to be able to update.
+For maximum portability, don't use a length specification in the column
+declaration.  That is, use <code>TIMESTAMP</code>, not <code>TIMESTAMP(<var>n</var>)</code>,
+<var>n</var> &#60; 14.
+
+<LI>
+
+You should have a primary key in the table. If not, new or updated rows
+may show up as <code>#DELETED#</code>.
+
+<LI>
+
+Use only <code>DOUBLE</code> float fields. Access fails when comparing with
+single floats.  The symptom usually is that new or updated rows may show
+up as <code>#DELETED#</code> or that you can't find or update rows.
+
+<LI>
+
+If you are using MyODBC to link to a table that has a <code>BIGINT</code>
+column, the results will be displayed as <code>#DELETED</code>. The
+work around solution is:
+
+
+<UL>
+<LI>
+
+Have one more dummy column with <code>TIMESTAMP</code> as the data type.
+<LI>
+
+Select the <code>Change BIGINT columns to INT</code> option in the connection
+dialog in ODBC DSN Administrator.
+<LI>
+
+Delete the table link from Access and re-create it.
+</UL>
+
+Old records still will display as <code>#DELETED#</code>, but newly
+added/updated records will be displayed properly.
+
+</UL>
+
+
+
+<H4><A NAME="Write_conflict" HREF="manual_toc.html#Write_conflict">22.1.11.6  How Do I Handle Write Conflicts or Row Location Errors?</A></H4>
+
+<P>
+If you see the following errors, 
+select the <code>Return Matching Rows</code> option in the DSN configuration
+dialog, or specify <code>OPTION=2</code>, as the connection parameter:
+
+</P>
+
+<PRE>
+Write Conflict. Another user has changed your data.
+
+Row cannot be located for updating. Some values may have been changed
+since it was last read.
+</PRE>
+
+
+
+<H4><A NAME="Access97_Export" HREF="manual_toc.html#Access97_Export">22.1.11.7  Whenever I Export a Table from Access 97, a Strange Syntax Error Occurs</A></H4>
+
+<P>
+This is a strange issue from Access 97, and doesn't appear with Access 2000 or 2002.
+You can overcome this by upgrading the MyODBC driver to at least MyODBC 3.51.02.
+
+</P>
+
+
+
+<H4><A NAME="Modified_error" HREF="manual_toc.html#Modified_error">22.1.11.8  Access Returns <code>Another user has modified the record that you have modified</code> While Editing Records</A></H4>
+
+<P>
+With some programs, this error may occur:
+<code>Another user has modified the record that you have modified</code>. In most
+cases, this can be solved by doing one of the following things:
+
+</P>
+
+<UL>
+
+<LI>
+
+Add a primary key for the table if there isn't one already.
+<LI>
+
+Add a timestamp column if there isn't one already.
+<LI>
+
+Only use double float fields. Some programs may fail when they compare
+single floats.
+</UL>
+
+<P>
+If these strategies don't help, you should start by making a log file from
+the ODBC manager (the log you get when requesting logs from ODBCADMIN)
+and a MyODBC log to help you figure out why things go wrong.
+For instructions, see section <A HREF="manual_MySQL_Connectors.html#MyODBC_trace">22.1.9.7  Getting an ODBC Trace File</A>.
+
+</P>
+
+
+
+<H4><A NAME="Trapping_ODBC_Errors" HREF="manual_toc.html#Trapping_ODBC_Errors">22.1.11.9  How to Trap ODBC Login Error Messages in Access?</A></H4>
+
+<P>
+Read ``How to Trap ODBC Login Error Messages in Access'' at
+<a HREF="http://support.microsoft.com/support/kb/articles/Q124/9/01.asp?LN=EN-US&#38;SD=gn&#38;FR=0%3CP%3E">http://support.microsoft.com/support/kb/articles/Q124/9/01.asp?LN=EN-US&#38;SD=gn&#38;FR=0%3CP%3E</a>.
+
+</P>
+
+
+
+<H4><A NAME="Optimize_Access" HREF="manual_toc.html#Optimize_Access">22.1.11.10  How Do I Optimize Access for Performance with MyODBC?</A></H4>
+
+
+<UL>
+<LI>
+
+<a HREF="http://support.microsoft.com/default.aspx?scid=kb;en-us;128808">Optimizing for Client/Server Performance</a>
+<LI>
+
+<a HREF="http://support.microsoft.com/default.aspx?scid=kb;en-us;164481">Tips for Converting Applications to Using ODBCDirect</a>
+<LI>
+
+<a HREF="http://support.microsoft.com/default.aspx?scid=kb;EN-US;q99321">Tips for Optimizing Queries on Attached SQL Tables</a>
+</UL>
+
+
+
+<H4><A NAME="Access-Long_Tables" HREF="manual_toc.html#Access-Long_Tables">22.1.11.11  I Have Very Long Tables. What is the Best Configuration for MyODBC to Access These Tables?</A></H4>
+
+<P>
+If you have very large (long) tables in Access, it might take a very long
+time to open them. Or you might run low on virtual memory and eventually get
+an <code>ODBC Query Failed</code> error and the table will not open.  To deal with
+this, select the following options:
+
+</P>
+
+<UL>
+<LI>
+
+Return Matching Rows (2)
+<LI>
+
+Allow BIG Results (8).
+</UL>
+
+<P>
+These add up to a value of 10 (<code>OPTION=10</code>).
+
+</P>
+
+
+
+<H4><A NAME="Query-Timeout" HREF="manual_toc.html#Query-Timeout">22.1.11.12  How to Set the QueryTimeout Value for ODBC Connections?</A></H4>
+
+<P>
+Read ``Set the QueryTimeout Value for ODBC Connections'' at
+<a HREF="http://support.microsoft.com/default.aspx?scid=kb%3Ben-us%3B153756">http://support.microsoft.com/default.aspx?scid=kb%3Ben-us%3B153756</a>.
+
+</P>
+
+
+
+<H4><A NAME="MySQL_tools_with_Access" HREF="manual_toc.html#MySQL_tools_with_Access">22.1.11.13  INFO: Tools to Export/Import from/to Access to/from MySQL</A></H4>
+
+<P>
+Refer to <a HREF="http://www.mysql.com/portal/software/convertors/">converters</a> section for list of available tools.
+
+</P>
+
+
+
+<H3><A NAME="MSVBA" HREF="manual_toc.html#MSVBA">22.1.12  MyODBC and Microsoft VBA and ASP</A></H3>
+
+<P>
+This section answers questions related to using MyODBC
+with Microsoft Visual Basic(ADO, DAO &#38; RDO) and ASP.
+
+</P>
+
+
+
+<H4><A NAME="count-error" HREF="manual_toc.html#count-error">22.1.12.1  Why Does <code>SELECT COUNT(*) FROM <var>tbl_name</var></code> Return an Error?</A></H4>
+
+<P>
+It's because the <code>COUNT(*)</code> expression is returning a <code>BIGINT</code>,
+and ADO can't make sense of a number this big.  Select the <code>Change
+BIGINT columns to INT</code> option (option value 16384).
+
+</P>
+
+
+
+<H4><A NAME="chunk" HREF="manual_toc.html#chunk">22.1.12.2  Whenever I Use the <code>AppendChunk()</code> or <code>GetChunk()</code> ADO Methods, I Get an Error <code>Multiple-step operation generated errors. Check each status value</code>.</A></H4>
+
+<P>
+The <code>GetChunk()</code> and <code>AppendChunk()</code> methods from ADO doesn't work as
+expected when the cursor location is specified as adUseServer. On the other
+hand, you can overcome this error by using adUseClient.
+
+</P>
+<P>
+A simple example can be found from,  <a HREF="http://www.dwam.net/iishelp/ado/docs/adomth02_4.htm">http://www.dwam.net/iishelp/ado/docs/adomth02_4.htm</a>
+
+</P>
+
+
+
+<H4><A NAME="Total_number_of_rows" HREF="manual_toc.html#Total_number_of_rows">22.1.12.3  How to Find the Total Number of Rows Affected by a Particular SQL Statement in ADO?</A></H4>
+
+<P>
+You can make use of <code>RecordsAffected</code> property in the ADO execute method. For more
+information on the usage of execute method, refer to
+<a HREF="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/ado270/htm/mdmthcnnexecute.asp">http://msdn.microsoft.com/library/default.asp?url=/library/en-us/ado270/htm/mdmthcnnexecute.asp</a>.
+
+</P>
+
+
+
+<H4><A NAME="Blob-Article" HREF="manual_toc.html#Blob-Article">22.1.12.4  How Do I Handle Blob Data in Visual Basic?</A></H4>
+
+<P>
+Here is an excellent article from Mike Hillyer
+(<a HREF="mailto:m.hillyer@telusplanet.net">m.hillyer@telusplanet.net</a>); explaining how to insert
+and/or fetch data from blob columns through MyODBC from ADO:
+<a HREF="http://www.dynamergy.com/mike/articles/blobaccessvb.html">MySQL
+BLOB columns and Visual Basic 6</a>.
+
+</P>
+
+
+
+<H4><A NAME="VB-Types" HREF="manual_toc.html#VB-Types">22.1.12.5  How Do I Map Visual Basic Data Types to MySQL Types?</A></H4>
+
+<P>
+Here is yet another good article from Mike Hillyer
+(<a HREF="mailto:m.hillyer@telusplanet.net">m.hillyer@telusplanet.net</a>):
+<a HREF="http://www.dynamergy.com/mike/articles/vbmysqldatatypes.php"> How
+to map Visual basic data type to MySQL types</a>.
+
+</P>
+
+
+
+<H4><A NAME="SAMPLE_-_VB" HREF="manual_toc.html#SAMPLE_-_VB">22.1.12.6  SAMPLES: VB with ADO, DAO and RDO</A></H4>
+
+<P>
+A simple examples for the usage of ADO, DAO and RDO with VB can be found her:
+
+</P>
+
+<UL>
+<LI>
+
+ADO sample: section <A HREF="manual_MySQL_Connectors.html#MyODBC_With_VB">22.1.19  MyODBC With VB: ADO, DAO and RDO</A>
+<LI>
+
+DAO sample: section <A HREF="manual_MySQL_Connectors.html#MyODBC_With_VB">22.1.19  MyODBC With VB: ADO, DAO and RDO</A>
+<LI>
+
+RDO sample: section <A HREF="manual_MySQL_Connectors.html#MyODBC_With_VB">22.1.19  MyODBC With VB: ADO, DAO and RDO</A>
+</UL>
+
+<P>
+If you find any other good example or HOW-TO on ADO/DAO/RDO, then please send the details to <a HREF="mailto:myodbc@lists.mysql.com">myodbc@lists.mysql.com</a>
+
+</P>
+
+
+<H4><A NAME="ASP" HREF="manual_toc.html#ASP">22.1.12.7  ASP and MySQL with MyODBC</A></H4>
+
+<P>
+For more information about how to access MySQL via ASP using MyODBC,
+refer to the following articles:
+
+</P>
+
+<UL>
+<LI>
+
+<a HREF="http://www.devarticles.com/c/a/ASP/Using-MyODBC-To-Access-Your-MySQL-Database-Via-ASP/">
+Using MyODBC To Access Your MySQL Database Via ASP</a>
+<LI>
+
+<a HREF="http://www.dwam.net/mysql/asp_myodbc.asp">
+ASP and MySQL at DWAM.NT</a>
+</UL>
+
+<P>
+A Frequently Asked Questions list for ASP can be found at
+<a HREF="http://support.microsoft.com/default.aspx?scid=/Support/ActiveServer/faq/data/adofaq.asp">http://support.microsoft.com/default.aspx?scid=/Support/ActiveServer/faq/data/adofaq.asp</a>.
+
+</P>
+
+
+
+<H4><A NAME="ADO" HREF="manual_toc.html#ADO">22.1.12.8  INFO: Frequently Asked Questions on ActiveX Data Objects (ADO)</A></H4>
+
+<P>
+For information, see
+<a HREF="http://support.microsoft.com/default.aspx?scid=kb;EN-US;q183606">
+ActiveX Data Objects(ADO) Freqently Asked Questions</a>.
+
+</P>
+
+
+
+<H3><A NAME="Tools" HREF="manual_toc.html#Tools">22.1.13  MyODBC and Third-Party ODBC Tools</A></H3>
+
+<P>
+This section answers questions related to MyODBC
+with various ODBC-related tools; such as Microsoft Word, Excel and
+ColdFusion.
+
+</P>
+
+
+
+<H4><A NAME="DocToExcel" HREF="manual_toc.html#DocToExcel">22.1.13.1  How to Retrieve Data from MySQL into MS-Word/Excel Documents?</A></H4>
+
+<P>
+To retrieve data from MySQL to Word/Excel documents, you need to
+use the MyODBC driver and the Add-in Microsoft Query help.
+
+</P>
+<P>
+For example, create a database with a table containing two columns of text:
+
+</P>
+
+<UL>
+<LI>
+
+Insert rows using the <code>mysql</code> client command-line tool.
+<LI>
+
+Create a DSN file using the ODBC manager, for example, <tt>`my'</tt> for the
+database that was just created.
+<LI>
+
+Open the Word application.
+<LI>
+
+Create a blank new document.
+<LI>
+
+In the <code>Database</code> tool bar, press the <code>Insert Database</code> button.
+<LI>
+
+Press the <code>Get Data</code> button.
+<LI>
+
+At the right hand of the <code>Get Data</code> screen, press the <code>Ms Query</code>
+button.
+<LI>
+
+In <code>Ms Query</code>, create a new data source using the <tt>`my'</tt> DSN file.
+<LI>
+
+Select the new query.
+<LI>
+
+Select the columns that you want.
+<LI>
+
+Make a filter if you want.
+<LI>
+
+Make a Sort if you want.
+<LI>
+
+Select <code>Return Data to Microsoft Word</code>.
+<LI>
+
+Click <code>Finish</code>.
+<LI>
+
+Click <code>Insert Data</code> and select the records.
+<LI>
+
+Click <code>OK</code> and you see the rows in your Word document.
+</UL>
+
+
+
+<H4><A NAME="MSDTS" HREF="manual_toc.html#MSDTS">22.1.13.2  Exporting Tables from MS DTS to MySQL Using MyODBC Results in a Syntax Error</A></H4>
+
+<P>
+This is an issue similar to that of Access 97 when your table consists
+of <code>TEXT</code> or <code>VARCHAR</code> data types. You can fix this error by
+upgrading your MyODBC driver to version 3.51.02 or higher.
+
+</P>
+
+
+<H4><A NAME="HOWTO-CF" HREF="manual_toc.html#HOWTO-CF">22.1.13.3  HOWTO: Configure MySQL+MyODBC+unixODBC+ColdFusion on Solaris</A></H4>
+
+<P>
+Refer to
+<a HREF="http://dbforums.com/showthread.php?threadid=174934">
+     MySQL ColdFusion unixODBC MyODBC and Solaris - how to succeed</a>
+
+</P>
+
+
+
+<H3><A NAME="Functionality" HREF="manual_toc.html#Functionality">22.1.14  MyODBC General Functionality</A></H3>
+
+<P>
+This section of the document answers questions related to MyODBC
+general functionality.
+
+</P>
+
+
+
+<H4><A NAME="ODBC_and_last_insert_id" HREF="manual_toc.html#ODBC_and_last_insert_id">22.1.14.1  How to Get the Value of an <code>AUTO_INCREMENT</code> Column in ODBC</A></H4>
+
+<P>
+<A NAME="IDX2256"></A>
+
+</P>
+<P>
+A common problem is how to get the value of an automatically generated ID
+from an <code>INSERT</code> statement. With ODBC, you can do something like this (assuming
+that <code>auto</code> is an <code>AUTO_INCREMENT</code> field):
+
+</P>
+
+<PRE>
+INSERT INTO tbl (auto,text) VALUES(NULL,'text');
+SELECT LAST_INSERT_ID();
+</PRE>
+
+<P>
+Or, if you are just going to insert the ID into another table, you can do this:
+
+</P>
+
+<PRE>
+INSERT INTO tbl (auto,text) VALUES(NULL,'text');
+INSERT INTO tbl2 (id,text) VALUES(LAST_INSERT_ID(),'text');
+</PRE>
+
+<P>
+See section <A HREF="manual_MySQL_APIs.html#Getting_unique_ID">21.2.13.3  How to Get the Unique ID for the Last Inserted Row</A>.
+
+</P>
+<P>
+For the benefit of some ODBC applications (at least Delphi and Access),
+the following query can be used to find a newly inserted row:
+
+<PRE>
+SELECT * FROM tbl WHERE auto IS NULL;
+</PRE>
+
+
+
+<H4><A NAME="Dynamic_Cursor" HREF="manual_toc.html#Dynamic_Cursor">22.1.14.2  Does MyODBC Support Dynamic Cursor Type?</A></H4>
+
+<P>
+Yes. MyODBC 3.51 supports <code>Dynamic cursor</code> type along with
+<code>Forward-only</code> and <code>static</code>.
+
+</P>
+<P>
+Due to the performance issues, the driver does not support this feature by
+default. You can enable this by specifying the connection option flag as
+<code>OPTION=32</code> or by checking the <code>Enable Dynamic Cursor</code> option
+from the DSN configuration.
+
+</P>
+
+
+
+<H4><A NAME="Transaction" HREF="manual_toc.html#Transaction">22.1.14.3  What Causes <code>Transactions are not enabled</code> Errors?</A></H4>
+
+<P>
+The driver returns this error when an application issues any transactional
+call but the underlying MySQL server either does not support transactions
+or they are not enabled.
+
+</P>
+<P>
+To avoid this problem, you must use a server that has either or both of the
+<code>InnoDB</code> or <code>BDB</code> storage engines enabled, and use tables of those
+types.  MySQL servers from version 4.0 and up support <code>InnoDB</code> by
+default.  MySQL-Max servers also support <code>BDB</code> on platforms where
+<code>BDB</code> is available.
+
+</P>
+<P>
+Also, if your server supports transactional table types (<code>InnoDB</code>
+and <code>BDB</code>)
+make sure the <code>disable transactions</code> option is not set from the DSN
+configuration.
+
+</P>
+
+
+
+<H4><A NAME="NoCursor" HREF="manual_toc.html#NoCursor">22.1.14.4  What Causes <code>Cursor not found</code> Errors?</A></H4>
+
+<P>
+This is becuase the application is using old MyODBC 2.50 version, and
+it did not set the cursor name explicitly through SQLSetCursorName. The fix
+is to upgrade to MyODBC 3.51 version.
+
+</P>
+
+
+
+<H4><A NAME="MyODBC_Compatibility" HREF="manual_toc.html#MyODBC_Compatibility">22.1.14.5  Can I Use MyODBC 2.50 Applications with MyODBC 3.51?</A></H4>
+
+<P>
+Yes. If you find something is not working with MyODBC 3.51 that works with
+MyODBC 2.50, then send a mail message to <a HREF="mailto:myodbc@lists.mysql.com">myodbc@lists.mysql.com</a>
+
+</P>
+
+
+<H4><A NAME="MyODBC-Net" HREF="manual_toc.html#MyODBC-Net">22.1.14.6  Can I Access MySQL from .NET Environment Using MyODBC?</A></H4>
+
+<P>
+Yes. You can make use of <strong>odbc.net</strong> to connect to MySQL through
+MyODBC. Here are the few basic samples to connect to MySQL from
+VC.NET and VB.NET.
+
+<UL>
+<LI>
+
+See section <A HREF="manual_MySQL_Connectors.html#ODBC.NET(C-sharp)">22.1.20.1  ODBC.NET: CSHARP(C#)</A>
+<LI>
+
+See section <A HREF="manual_MySQL_Connectors.html#ODBC.NET(VB)">22.1.20.2  ODBC.NET: VB</A>
+</UL>
+
+<P>
+Here is yet another excellent article
+"<a HREF="http://www.mysql.com/newsletter/2002-07/a0000000035.html">Exploring
+MySQL on .NET environment</a>" by <strong>Venu</strong> (MyODBC developer)
+that covers about all MySQL .NET interfaces along with
+some useful examples.
+
+</P>
+<P>
+<strong>Caution</strong>: Using ODBC.NET with MyODBC, while fetching empty string
+(0 length), it starts giving the SQL_NO_DATA exception. You can get the
+patch for this from <a HREF="http://support.microsoft.com/default.aspx?scid=kb;EN-US;q319243">http://support.microsoft.com/default.aspx?scid=kb;EN-US;q319243</a>.
+
+</P>
+
+
+
+<H4><A NAME="performance" HREF="manual_toc.html#performance">22.1.14.7  Why Does MyODBC Perform Poorly, and Also Make a Lot of Disk Activity for Relatively Small Queries?</A></H4>
+
+<P>
+MyODBC is a lot faster than any other ODBC driver. Slowness might be
+due to not using the following options.
+
+</P>
+
+<UL>
+<LI>
+
+The <strong>ODBC Tracing</strong> option is turned on. You can cross-check whether
+this option is not turned on by following the instructions from
+<a HREF="http://support.microsoft.com/default.aspx?scid=kb;EN-US;268591">
+here</a>.
+
+<br /> <IMG SRC="Images/mydsn-trace.jpg"> <br />
+
+As shown in the above image, the 'When to trace' option from the ODBC
+Data Source Administrator 'Tracing' tab should always point to 'Start
+Tracing Now', instead of 'Stop Tracing Now'.
+
+<LI>
+
+The <strong>Debug version</strong> of the driver is used. If you are using the
+debug version of the driver DLL, it can also relatively slow down the
+query processing time. You can cross-check whether you are using the
+debug or release version of the DLL from the 'Comments' section
+of the driver DLL properties (from the sytem directory, right click
+on the driver DLL and click on properties) as shown below:
+
+<br /> <IMG SRC="Images/mydll-properties.jpg"> <br />
+
+<LI>
+
+The <strong>Driver trace and query logs</strong> are enabled. Even if you intent
+to use the debug version of the driver (you should always use the release
+version in the production environment), make sure the driver trace and
+query log options(OPTION=4,524288 respectively) are not enabled as
+shown below:
+
+<br /> <IMG SRC="Images/mydsn-options.jpg"> <br />
+
+</UL>
+
+
+
+<H3><A NAME="Basic_MyODBC_application_steps" HREF="manual_toc.html#Basic_MyODBC_application_steps">22.1.15  Basic MyODBC Application Steps</A></H3>
+
+<P>
+Interacting with a MySQL server from MyODBC applications involves the
+following operations:
+
+</P>
+
+<UL>
+<LI>Configure the MyODBC DSN
+
+<LI>Connect to MySQL server
+
+<LI>Initialization operations
+
+<LI>Execute SQL statements
+
+<LI>Retrieve results
+
+<LI>Perform Transactions
+
+<LI>Disconnect from the server
+
+</UL>
+
+<P>
+Most applications use some variation of these steps. The basic application 
+steps are shown in the following diagram:
+
+</P>
+<P>
+<br /> <IMG SRC="Images/myflowchart.gif"> <br />
+
+</P>
+
+
+
+<H3><A NAME="MyODBC_API_Reference" HREF="manual_toc.html#MyODBC_API_Reference">22.1.16  MyODBC API Reference</A></H3>
+
+<P>
+This section summarizes ODBC routines, categorized by functionality.
+
+</P>
+<P>
+For the complete ODBC API reference, please refer to the ODBC Programer's
+Reference at
+<a HREF="http://msdn.microsoft.com/library/en-us/odbc/htm/odbcabout_this_manual.asp">http://msdn.microsoft.com/library/en-us/odbc/htm/odbcabout_this_manual.asp</a>.
+
+</P>
+<P>
+An application can call <code>SQLGetInfo</code> function to obtain conformance 
+information about MyODBC. To obtain information about support for a specific 
+function in the driver, an application can call <code>SQLGetFunctions</code>.
+
+</P>
+<P>
+Note: For backward compatibility, the MyODBC 3.51 driver supports all
+deprecated functions.
+
+</P>
+<P>
+The following tables list MyODBC API calls grouped by task:
+
+</P>
+<P>
+<strong>Connecting to a data source:</strong>
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Function name</strong> </TD><TD> <strong>MyODBC</strong> </TD><TD> <strong>MyODBC</strong> </TD><TD> <strong>Conformance</strong> </TD><TD> <strong>Purpose</strong>
+</TD></TR>
+<TR><TD></TD><TD> <strong>2.50</strong> </TD><TD> <strong>3.51</strong> </TD><TD> </TD><TD> 
+
+</TD></TR>
+<TR><TD><code>SQLAllocHandle</code> </TD><TD> No </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Obtains an environment, connection, statement, or descriptor handle.
+</TD></TR>
+<TR><TD><code>SQLConnect</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Connects to a specific driver by data source name, user ID, and password.
+</TD></TR>
+<TR><TD><code>SQLDriverConnect</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ODBC </TD><TD> Connects to a specific driver by connection string or requests that the Driver Manager and driver display connection dialog boxes for the user.
+</TD></TR>
+<TR><TD><code>SQLAllocEnv</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> Deprecated </TD><TD> Obtains an environment handle allocated from driver.
+</TD></TR>
+<TR><TD><code>SQLAllocConnect</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> Deprecated </TD><TD> Obtains a connection handle
+</TD></TR>
+</TABLE>
+
+<P>
+<strong>Obtaining information about a driver and data source:</strong>
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Function name</strong> </TD><TD> <strong>MyODBC</strong> </TD><TD> <strong>MyODBC</strong> </TD><TD> <strong>Conformance</strong> </TD><TD> <strong>Purpose</strong>
+</TD></TR>
+<TR><TD></TD><TD> <strong>2.50</strong> </TD><TD> <strong>3.51</strong> </TD><TD> </TD><TD> 
+
+</TD></TR>
+<TR><TD><code>SQLDataSources</code> </TD><TD> No </TD><TD> No </TD><TD> ISO 92 </TD><TD> Returns the list of available data sources, handled by the Driver Manager
+</TD></TR>
+<TR><TD><code>SQLDrivers</code> </TD><TD> No </TD><TD> No </TD><TD> ODBC </TD><TD> Returns the list of installed drivers and their attributes, handles by Driver Manager
+</TD></TR>
+<TR><TD><code>SQLGetInfo</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Returns information about a specific driver and data source.
+</TD></TR>
+<TR><TD><code>SQLGetFunctions</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Returns supported driver functions.
+</TD></TR>
+<TR><TD><code>SQLGetTypeInfo</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Returns information about supported data types.
+</TD></TR>
+</TABLE>
+
+<P>
+<strong>Setting and retrieving driver attributes:</strong>
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Function name</strong> </TD><TD> <strong>MyODBC</strong> </TD><TD> <strong>MyODBC</strong> </TD><TD> <strong>Conformance</strong> </TD><TD> <strong>Purpose</strong>
+</TD></TR>
+<TR><TD></TD><TD> <strong>2.50</strong> </TD><TD> <strong>3.51</strong> </TD><TD> </TD><TD> 
+
+</TD></TR>
+<TR><TD><code>SQLSetConnectAttr</code> </TD><TD> No </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Sets a connection attribute.
+</TD></TR>
+<TR><TD><code>SQLGetConnectAttr</code> </TD><TD> No </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Returns the value of a connection attribute.
+</TD></TR>
+<TR><TD><code>SQLSetConnectOption</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> Deprecated </TD><TD> Sets a connection option
+</TD></TR>
+<TR><TD><code>SQLGetConnectOption</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> Deprecated </TD><TD> Returns the value of a connection option
+</TD></TR>
+<TR><TD><code>SQLSetEnvAttr</code> </TD><TD> No </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Sets an environment attribute.
+</TD></TR>
+<TR><TD><code>SQLGetEnvAttr</code> </TD><TD> No </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Returns the value of an environment attribute.
+</TD></TR>
+<TR><TD><code>SQLSetStmtAttr</code> </TD><TD> No </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Sets a statement attribute.
+</TD></TR>
+<TR><TD><code>SQLGetStmtAttr</code> </TD><TD> No </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Returns the value of a statement attribute.
+</TD></TR>
+<TR><TD><code>SQLSetStmtOption</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> Deprecated </TD><TD> Sets a statement option
+</TD></TR>
+<TR><TD><code>SQLGetStmtOption</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> Deprecated </TD><TD> Returns the value of a statement option
+</TD></TR>
+</TABLE>
+
+<P>
+<strong>Preparing SQL requests:</strong>
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Function name</strong> </TD><TD> <strong>MyODBC</strong> </TD><TD> <strong>MyODBC</strong> </TD><TD> <strong>Conformance</strong> </TD><TD> <strong>Purpose</strong>
+</TD></TR>
+<TR><TD></TD><TD> <strong>2.50</strong> </TD><TD> <strong>3.51</strong> </TD><TD> </TD><TD> 
+
+</TD></TR>
+<TR><TD><code>SQLAllocStmt</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> Deprecated </TD><TD> Allocates a statement handle
+</TD></TR>
+<TR><TD><code>SQLPrepare</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Prepares an SQL statement for later execution.
+</TD></TR>
+<TR><TD><code>SQLBindParameter</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ODBC </TD><TD> Assigns storage for a parameter in an SQL statement.
+</TD></TR>
+<TR><TD><code>SQLGetCursorName</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Returns the cursor name associated with a statement handle.
+</TD></TR>
+<TR><TD><code>SQLSetCursorName</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Specifies a cursor name.
+</TD></TR>
+<TR><TD><code>SQLSetScrollOptions</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ODBC </TD><TD> Sets options that control cursor behavior.
+</TD></TR>
+</TABLE>
+
+<P>
+<strong>Submitting requests:</strong>
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Function name</strong> </TD><TD> <strong>MyODBC</strong> </TD><TD> <strong>MyODBC</strong> </TD><TD> <strong>Conformance</strong> </TD><TD> <strong>Purpose</strong>
+</TD></TR>
+<TR><TD></TD><TD> <strong>2.50</strong> </TD><TD> <strong>3.51</strong> </TD><TD> </TD><TD> 
+
+</TD></TR>
+<TR><TD><code>SQLExecute</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Executes a prepared statement.
+</TD></TR>
+<TR><TD><code>SQLExecDirect</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Executes a statement
+</TD></TR>
+<TR><TD><code>SQLNativeSql</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ODBC </TD><TD> Returns the text of an SQL statement as translated by the driver.
+</TD></TR>
+<TR><TD><code>SQLDescribeParam</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ODBC </TD><TD> Returns the description for a specific parameter in a statement.
+</TD></TR>
+<TR><TD><code>SQLNumParams</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Returns the number of parameters in a statement.
+</TD></TR>
+<TR><TD><code>SQLParamData</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Used in conjunction with <code>SQLPutData</code> to supply parameter data at execution time. (Useful for long data values.)
+</TD></TR>
+<TR><TD><code>SQLPutData</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Sends part or all of a data value for a parameter. (Useful for long data values.)
+</TD></TR>
+</TABLE>
+
+<P>
+<strong>Retrieving results and information about results:</strong>
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Function name</strong> </TD><TD> <strong>MyODBC</strong> </TD><TD> <strong>MyODBC</strong> </TD><TD> <strong>Conformance</strong> </TD><TD> <strong>Purpose</strong>
+</TD></TR>
+<TR><TD></TD><TD> <strong>2.50</strong> </TD><TD> <strong>3.51</strong> </TD><TD> </TD><TD> 
+
+</TD></TR>
+<TR><TD><code>SQLRowCount</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Returns the number of rows affected by an insert, update, or delete request.
+</TD></TR>
+<TR><TD><code>SQLNumResultCols</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Returns the number of columns in the result set.
+</TD></TR>
+<TR><TD><code>SQLDescribeCol</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Describes a column in the result set.
+</TD></TR>
+<TR><TD><code>SQLColAttribute</code> </TD><TD> No </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Describes attributes of a column in the result set.
+</TD></TR>
+<TR><TD><code>SQLColAttributes</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> Deprecated </TD><TD> Describes attributes of a column in the result set.
+</TD></TR>
+<TR><TD><code>SQLFetch</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Returns multiple result rows.
+</TD></TR>
+<TR><TD><code>SQLFetchScroll</code> </TD><TD> No </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Returns scrollable result rows.
+</TD></TR>
+<TR><TD><code>SQLExtendedFetch</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> Deprecated </TD><TD> Returns scrollable result rows.
+</TD></TR>
+<TR><TD><code>SQLSetPos</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ODBC </TD><TD> Positions a cursor within a fetched block of data and allows an application to refresh data in the rowset or to update or delete data in the result set.
+</TD></TR>
+<TR><TD><code>SQLBulkOperations</code> </TD><TD> No </TD><TD> Yes </TD><TD> ODBC </TD><TD> Performs bulk insertions and bulk bookmark operations, including update, delete, and fetch by bookmark.
+</TD></TR>
+</TABLE>
+
+<P>
+<strong>Retrieving error or diagnostic information:</strong>
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Function name</strong> </TD><TD> <strong>MyODBC</strong> </TD><TD> <strong>MyODBC</strong> </TD><TD> <strong>Conformance</strong> </TD><TD> <strong>Purpose</strong>
+</TD></TR>
+<TR><TD></TD><TD> <strong>2.50</strong> </TD><TD> <strong>3.51</strong> </TD><TD> </TD><TD> 
+
+</TD></TR>
+<TR><TD><code>SQLError</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> Deprecated </TD><TD> Returns additional error or status information
+</TD></TR>
+<TR><TD><code>SQLGetDiagField</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Returns additional diagnostic information (a single field of the diagnostic data structure).
+</TD></TR>
+<TR><TD><code>SQLGetDiagRec</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Returns additional diagnostic information (multiple fields of the diagnostic data structure).
+</TD></TR>
+</TABLE>
+
+<P>
+<strong>Obtaining information about the data source's system tables (catalog
+functions) item:</strong>
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Function name</strong> </TD><TD> <strong>MyODBC</strong> </TD><TD> <strong>MyODBC</strong> </TD><TD> <strong>Conformance</strong> </TD><TD> <strong>Purpose</strong>
+</TD></TR>
+<TR><TD></TD><TD> <strong>2.50</strong> </TD><TD> <strong>3.51</strong> </TD><TD> </TD><TD> 
+
+</TD></TR>
+<TR><TD><code>SQLColumnPrivileges</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ODBC </TD><TD> Returns a list of columns and associated privileges for one or more tables.
+</TD></TR>
+<TR><TD><code>SQLColumns</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> X/Open </TD><TD> Returns the list of column names in specified tables.
+</TD></TR>
+<TR><TD><code>SQLForeignKeys</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ODBC </TD><TD> Returns a list of column names that make up foreign keys, if they exist for a specified table.
+</TD></TR>
+<TR><TD><code>SQLPrimaryKeys</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ODBC </TD><TD> Returns the list of column names that make up the primary key for a table.
+</TD></TR>
+<TR><TD><code>SQLSpecialColumns</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> X/Open </TD><TD> Returns information about the optimal set of columns that uniquely identifies a row in a specified table, or the columns that are automatically updated when any value in the row is updated by a transaction.
+</TD></TR>
+<TR><TD><code>SQLStatistics</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Returns statistics about a single table and the list of indexes associated with the table.
+</TD></TR>
+<TR><TD><code>SQLTablePrivileges</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ODBC </TD><TD> Returns a list of tables and the privileges associated with each table.
+</TD></TR>
+<TR><TD><code>SQLTables</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> X/Open </TD><TD> Returns the list of table names stored in a specific data source.
+</TD></TR>
+</TABLE>
+
+<P>
+<strong>Performing transactions:</strong>
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Function name</strong> </TD><TD> <strong>MyODBC</strong> </TD><TD> <strong>MyODBC</strong> </TD><TD> <strong>Conformance</strong> </TD><TD> <strong>Purpose</strong>
+</TD></TR>
+<TR><TD></TD><TD> <strong>2.50</strong> </TD><TD> <strong>3.51</strong> </TD><TD> </TD><TD> 
+
+</TD></TR>
+<TR><TD><code>SQLTransact</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> Deprecated </TD><TD> Commits or rolls back a transaction
+</TD></TR>
+<TR><TD><code>SQLEndTran</code> </TD><TD> No </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Commits or rolls back a transaction.
+</TD></TR>
+</TABLE>
+
+<P>
+<strong>Terminating a statement:</strong>
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Function name</strong> </TD><TD> <strong>MyODBC</strong> </TD><TD> <strong>MyODBC</strong> </TD><TD> <strong>Conformance</strong> </TD><TD> <strong>Purpose</strong>
+</TD></TR>
+<TR><TD></TD><TD> <strong>2.50</strong> </TD><TD> <strong>3.51</strong> </TD><TD> </TD><TD> 
+
+</TD></TR>
+<TR><TD><code>SQLFreeStmt</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Ends statement processing, discards pending results, and, optionally, frees all resources associated with the statement handle.
+</TD></TR>
+<TR><TD><code>SQLCloseCursor</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Closes a cursor that has been opened on a statement handle.
+</TD></TR>
+<TR><TD><code>SQLCancel</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Cancels an SQL statement.
+</TD></TR>
+</TABLE>
+
+<P>
+<strong>Terminating a connection:</strong>
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Function name</strong> </TD><TD> <strong>MyODBC</strong> </TD><TD> <strong>MyODBC</strong> </TD><TD> <strong>Conformance</strong> </TD><TD> <strong>Purpose</strong>
+</TD></TR>
+<TR><TD></TD><TD> <strong>2.50</strong> </TD><TD> <strong>3.51</strong> </TD><TD> </TD><TD> 
+
+</TD></TR>
+<TR><TD><code>SQLDisconnect</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Closes the connection.
+</TD></TR>
+<TR><TD><code>SQLFreeHandle</code> </TD><TD> No </TD><TD> Yes </TD><TD> ISO 92 </TD><TD> Releases an environment, connection, statement, or descriptor handle.
+</TD></TR>
+<TR><TD><code>SQLFreeConnect</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> Deprecated </TD><TD> Releases connection handle
+</TD></TR>
+<TR><TD><code>SQLFreeEnv</code> </TD><TD> Yes </TD><TD> Yes </TD><TD> Deprecated </TD><TD> Releases an environment handle
+</TD></TR>
+</TABLE>
+
+
+
+<H3><A NAME="MyODBC_Data_Types" HREF="manual_toc.html#MyODBC_Data_Types">22.1.17  MyODBC Data Types</A></H3>
+
+<P>
+The following table illustrates how driver maps the server data types to default 
+SQL and C data types:
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Native Value</strong> </TD><TD> <strong>SQL Type</strong> </TD><TD> <strong>C Type</strong>
+</TD></TR>
+<TR><TD><code>bit</code> </TD><TD> <code>SQL_BIT</code> </TD><TD> <code>SQL_C_BIT</code>
+</TD></TR>
+<TR><TD><code>tinyint</code> </TD><TD> <code>SQL_TINYINT</code> </TD><TD> <code>SQL_C_STINYINT</code>
+</TD></TR>
+<TR><TD><code>tinyint unsigned</code> </TD><TD> <code>SQL_TINYINT</code> </TD><TD> <code>SQL_C_UTINYINT</code>
+</TD></TR>
+<TR><TD><code>bigint</code> </TD><TD> <code>SQL_BIGINT</code> </TD><TD> <code>SQL_C_SBIGINT</code>
+</TD></TR>
+<TR><TD><code>bigint unsigned</code> </TD><TD> <code>SQL_BIGINT</code> </TD><TD> <code>SQL_C_UBIGINT</code>
+</TD></TR>
+<TR><TD><code>long varbinary</code> </TD><TD> <code>SQL_LONGVARBINARY</code> </TD><TD> <code>SQL_C_BINARY</code>
+</TD></TR>
+<TR><TD><code>blob</code> </TD><TD> <code>SQL_VARBINARY</code> </TD><TD> <code>SQL_C_BINARY</code>
+</TD></TR>
+<TR><TD><code>longblob</code> </TD><TD> <code>SQL_VARBINARY</code> </TD><TD> <code>SQL_C_BINARY</code>
+</TD></TR>
+<TR><TD><code>tinyblob</code> </TD><TD> <code>SQL_BINARY</code> </TD><TD> <code>SQL_C_BINARY</code>
+</TD></TR>
+<TR><TD><code>mediumblob</code> </TD><TD> <code>SQL_LONGVARBINARY</code> </TD><TD> <code>SQL_C_BINARY</code>
+</TD></TR>
+<TR><TD><code>long varchar</code> </TD><TD> <code>SQL_LONGVARCHAR</code> </TD><TD> <code>SQL_C_CHAR</code>
+</TD></TR>
+<TR><TD><code>text</code> </TD><TD> <code>SQL_LONGVARCHAR</code> </TD><TD> <code>SQL_C_CHAR</code>
+</TD></TR>
+<TR><TD><code>mediumtext</code> </TD><TD> <code>SQL_LONGVARCHAR</code> </TD><TD> <code>SQL_C_CHAR</code>
+</TD></TR>
+<TR><TD><code>char</code> </TD><TD> <code>SQL_CHAR</code> </TD><TD> <code>SQL_C_CHAR</code>
+</TD></TR>
+<TR><TD><code>numeric</code> </TD><TD> <code>SQL_NUMERIC</code> </TD><TD> <code>SQL_C_CHAR</code>
+</TD></TR>
+<TR><TD><code>decimal</code> </TD><TD> <code>SQL_DECIMAL</code> </TD><TD> <code>SQL_C_CHAR</code>
+</TD></TR>
+<TR><TD><code>integer</code> </TD><TD> <code>SQL_INTEGER</code> </TD><TD> <code>SQL_C_SLONG</code>
+</TD></TR>
+<TR><TD><code>integer unsigned</code> </TD><TD> <code>SQL_INTEGER</code> </TD><TD> <code>SQL_C_ULONG</code>
+</TD></TR>
+<TR><TD><code>int</code> </TD><TD> <code>SQL_INTEGER</code> </TD><TD> <code>SQL_C_SLONG</code>
+</TD></TR>
+<TR><TD><code>int unsigned</code> </TD><TD> <code>SQL_INTEGER</code> </TD><TD> <code>SQL_C_ULONG</code>
+</TD></TR>
+<TR><TD><code>mediumint</code> </TD><TD> <code>SQL_INTEGER</code> </TD><TD> <code>SQL_C_SLONG</code>
+</TD></TR>
+<TR><TD><code>mediumint unsigned</code> </TD><TD> <code>SQL_INTEGER</code> </TD><TD> <code>SQL_C_ULONG</code>
+</TD></TR>
+<TR><TD><code>smallint</code> </TD><TD> <code>SQL_SMALLINT</code> </TD><TD> <code>SQL_C_SSHORT</code>
+</TD></TR>
+<TR><TD><code>smallint unsigned</code> </TD><TD> <code>SQL_SMALLINT</code> </TD><TD> <code>SQL_C_USHORT</code>
+</TD></TR>
+<TR><TD><code>real</code> </TD><TD> <code>SQL_FLOAT</code> </TD><TD> <code>SQL_C_DOUBLE</code>
+</TD></TR>
+<TR><TD><code>double</code> </TD><TD> <code>SQL_FLOAT</code> </TD><TD> <code>SQL_C_DOUBLE</code>
+</TD></TR>
+<TR><TD><code>float</code> </TD><TD> <code>SQL_REAL</code> </TD><TD> <code>SQL_C_FLOAT</code>
+</TD></TR>
+<TR><TD><code>double precision</code> </TD><TD> <code>SQL_DOUBLE</code> </TD><TD> <code>SQL_C_DOUBLE</code>
+</TD></TR>
+<TR><TD><code>date</code> </TD><TD> <code>SQL_DATE</code> </TD><TD> <code>SQL_C_DATE</code>
+</TD></TR>
+<TR><TD><code>time</code> </TD><TD> <code>SQL_TIME</code> </TD><TD> <code>SQL_C_TIME</code>
+</TD></TR>
+<TR><TD><code>year</code> </TD><TD> <code>SQL_SMALLINT</code> </TD><TD> <code>SQL_C_SHORT</code>
+</TD></TR>
+<TR><TD><code>datetime</code> </TD><TD> <code>SQL_TIMESTAMP</code> </TD><TD> <code>SQL_C_TIMESTAMP</code>
+</TD></TR>
+<TR><TD><code>timestamp</code> </TD><TD> <code>SQL_TIMESTAMP</code> </TD><TD> <code>SQL_C_TIMESTAMP</code>
+</TD></TR>
+<TR><TD><code>text</code> </TD><TD> <code>SQL_VARCHAR</code> </TD><TD> <code>SQL_C_CHAR</code>
+</TD></TR>
+<TR><TD><code>varchar</code> </TD><TD> <code>SQL_VARCHAR</code> </TD><TD> <code>SQL_C_CHAR</code>
+</TD></TR>
+<TR><TD><code>enum</code> </TD><TD> <code>SQL_VARCHAR</code> </TD><TD> <code>SQL_C_CHAR</code>
+</TD></TR>
+<TR><TD><code>set</code> </TD><TD> <code>SQL_VARCHAR</code> </TD><TD> <code>SQL_C_CHAR</code>
+</TD></TR>
+<TR><TD><code>bit</code> </TD><TD> <code>SQL_CHAR</code> </TD><TD> <code>SQL_C_CHAR</code>
+</TD></TR>
+<TR><TD><code>bool</code> </TD><TD> <code>SQL_CHAR</code> </TD><TD> <code>SQL_C_CHAR</code>
+</TD></TR>
+</TABLE>
+
+
+
+<H3><A NAME="MyODBC_Error_Codes" HREF="manual_toc.html#MyODBC_Error_Codes">22.1.18  MyODBC Error Codes</A></H3>
+
+<P>
+The following tables lists the error codes returned by the driver apart 
+from the server errors.
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Native Code</strong> </TD><TD> <strong>SQLSTATE 2</strong> </TD><TD> <strong>SQLSTATE 3</strong> </TD><TD> <strong>Error Message</strong>
+</TD></TR>
+<TR><TD>500 </TD><TD> 01000 </TD><TD> 01000 </TD><TD> General warning
+</TD></TR>
+<TR><TD>501 </TD><TD> 01004 </TD><TD> 01004 </TD><TD> String data, right truncated
+</TD></TR>
+<TR><TD>502 </TD><TD> 01S02 </TD><TD> 01S02 </TD><TD> Option value changed
+</TD></TR>
+<TR><TD>503 </TD><TD> 01S03 </TD><TD> 01S03 </TD><TD> No rows updated/deleted
+</TD></TR>
+<TR><TD>504 </TD><TD> 01S04 </TD><TD> 01S04 </TD><TD> More than one row updated/deleted
+</TD></TR>
+<TR><TD>505 </TD><TD> 01S06 </TD><TD> 01S06 </TD><TD> Attempt to fetch before the result set returned the first row set
+</TD></TR>
+<TR><TD>506 </TD><TD> 07001 </TD><TD> 07002 </TD><TD> <code>SQLBindParameter</code> not used for all parameters
+</TD></TR>
+<TR><TD>507 </TD><TD> 07005 </TD><TD> 07005 </TD><TD> Prepared statement not a cursor-specification
+</TD></TR>
+<TR><TD>508 </TD><TD> 07009 </TD><TD> 07009 </TD><TD> Invalid descriptor index
+</TD></TR>
+<TR><TD>509 </TD><TD> 08002 </TD><TD> 08002 </TD><TD> Connection name in use
+</TD></TR>
+<TR><TD>510 </TD><TD> 08003 </TD><TD> 08003 </TD><TD> Connection does not exist
+</TD></TR>
+<TR><TD>511 </TD><TD> 24000 </TD><TD> 24000 </TD><TD> Invalid cursor state
+</TD></TR>
+<TR><TD>512 </TD><TD> 25000 </TD><TD> 25000 </TD><TD> Invalid transaction state
+</TD></TR>
+<TR><TD>513 </TD><TD> 25S01 </TD><TD> 25S01 </TD><TD> Transaction state unknown
+</TD></TR>
+<TR><TD>514 </TD><TD> 34000 </TD><TD> 34000 </TD><TD> Invalid cursor name
+</TD></TR>
+<TR><TD>515 </TD><TD> S1000 </TD><TD> HY000 </TD><TD> General driver defined error
+</TD></TR>
+<TR><TD>516 </TD><TD> S1001 </TD><TD> HY001 </TD><TD> Memory allocation error
+</TD></TR>
+<TR><TD>517 </TD><TD> S1002 </TD><TD> HY002 </TD><TD> Invalid column number
+</TD></TR>
+<TR><TD>518 </TD><TD> S1003 </TD><TD> HY003 </TD><TD> Invalid application buffer type
+</TD></TR>
+<TR><TD>519 </TD><TD> S1004 </TD><TD> HY004 </TD><TD> Invalid SQL data type
+</TD></TR>
+<TR><TD>520 </TD><TD> S1009 </TD><TD> HY009 </TD><TD> Invalid use of null pointer
+</TD></TR>
+<TR><TD>521 </TD><TD> S1010 </TD><TD> HY010 </TD><TD> Function sequence error
+</TD></TR>
+<TR><TD>522 </TD><TD> S1011 </TD><TD> HY011 </TD><TD> Attribute can not be set now
+</TD></TR>
+<TR><TD>523 </TD><TD> S1012 </TD><TD> HY012 </TD><TD> Invalid transaction operation code
+</TD></TR>
+<TR><TD>524 </TD><TD> S1013 </TD><TD> HY013 </TD><TD> Memory management error
+</TD></TR>
+<TR><TD>525 </TD><TD> S1015 </TD><TD> HY015 </TD><TD> No cursor name available
+</TD></TR>
+<TR><TD>526 </TD><TD> S1024 </TD><TD> HY024 </TD><TD> Invalid attribute value
+</TD></TR>
+<TR><TD>527 </TD><TD> S1090 </TD><TD> HY090 </TD><TD> Invalid string or buffer length
+</TD></TR>
+<TR><TD>528 </TD><TD> S1091 </TD><TD> HY091 </TD><TD> Invalid descriptor field identifier
+</TD></TR>
+<TR><TD>529 </TD><TD> S1092 </TD><TD> HY092 </TD><TD> Invalid attribute/option identifier
+</TD></TR>
+<TR><TD>530 </TD><TD> S1093 </TD><TD> HY093 </TD><TD> Invalid parameter number
+</TD></TR>
+<TR><TD>531 </TD><TD> S1095 </TD><TD> HY095 </TD><TD> Function type out of range
+</TD></TR>
+<TR><TD>532 </TD><TD> S1106 </TD><TD> HY106 </TD><TD> Fetch type out of range
+</TD></TR>
+<TR><TD>533 </TD><TD> S1117 </TD><TD> HY117 </TD><TD> Row value out of range
+</TD></TR>
+<TR><TD>534 </TD><TD> S1109 </TD><TD> HY109 </TD><TD> Invalid cursor position
+</TD></TR>
+<TR><TD>535 </TD><TD> S1C00 </TD><TD> HYC00 </TD><TD> Optional feature not implemented
+</TD></TR>
+<TR><TD>0 </TD><TD> 21S01 </TD><TD> 21S01 </TD><TD> Column count does not match value count
+</TD></TR>
+<TR><TD>0 </TD><TD> 23000 </TD><TD> 23000 </TD><TD> Integrity constraint violation
+</TD></TR>
+<TR><TD>0 </TD><TD> 42000 </TD><TD> 42000 </TD><TD> Syntax error or access violation
+</TD></TR>
+<TR><TD>0 </TD><TD> 42S02 </TD><TD> 42S02 </TD><TD> Base table or view not found
+</TD></TR>
+<TR><TD>0 </TD><TD> 42S12 </TD><TD> 42S12 </TD><TD> Index not found
+</TD></TR>
+<TR><TD>0 </TD><TD> 42S21 </TD><TD> 42S21 </TD><TD> Column already exists
+</TD></TR>
+<TR><TD>0 </TD><TD> 42S22 </TD><TD> 42S22 </TD><TD> Column not found
+</TD></TR>
+<TR><TD>0 </TD><TD> 08S01 </TD><TD> 08S01 </TD><TD> Communication link failure
+</TD></TR>
+</TABLE>
+
+
+
+<H3><A NAME="MyODBC_With_VB" HREF="manual_toc.html#MyODBC_With_VB">22.1.19  MyODBC With VB: ADO, DAO and RDO</A></H3>
+
+<P>
+This section contains simple examples of the use of MySQL ODBC 3.51 Driver
+with ADO, DAO and RDO.
+
+</P>
+
+
+
+<H4><A NAME="ADO_-_rs.addNew" HREF="manual_toc.html#ADO_-_rs.addNew">22.1.19.1  ADO: <code>rs.addNew</code>, <code>rs.delete</code>, and <code>rs.update</code></A></H4>
+
+<P>
+The following ADO (ActiveX Data Objects) example creates a table
+<code>my_ado</code> and demonstrates the use of <code>rs.addNew</code>, <code>rs.delete</code>,
+and <code>rs.update</code>.
+
+</P>
+
+<PRE>
+Private Sub myodbc_ado_Click()
+
+  Dim conn As ADODB.Connection
+  Dim rs As ADODB.Recordset
+  Dim fld As ADODB.Field
+  Dim sql As String
+
+  'connect to MySQL server using MySQL ODBC 3.51 Driver
+  Set conn = New ADODB.Connection
+  conn.ConnectionString = "DRIVER={MySQL ODBC 3.51 Driver};"_
+                        &#38; "SERVER=localhost;"_ 
+                        &#38; " DATABASE=test;"_
+                        &#38; "UID=venu;PWD=venu; OPTION=3"
+
+  conn.Open
+
+  'create table
+  conn.Execute "DROP TABLE IF EXISTS my_ado"
+  conn.Execute "CREATE TABLE my_ado(id int not null primary key, name varchar(20)," _
+                                 &#38; "txt text, dt date, tm time, ts timestamp)"
+
+  'direct insert
+  conn.Execute "INSERT INTO my_ado(id,name,txt) values(1,100,'venu')"
+  conn.Execute "INSERT INTO my_ado(id,name,txt) values(2,200,'MySQL')"
+  conn.Execute "INSERT INTO my_ado(id,name,txt) values(3,300,'Delete')"
+
+  Set rs = New ADODB.Recordset
+  rs.CursorLocation = adUseServer
+
+  'fetch the initial table ..
+  rs.Open "SELECT * FROM my_ado", conn
+    Debug.Print rs.RecordCount
+    rs.MoveFirst
+    Debug.Print String(50, "-") &#38; "Initial my_ado Result Set " &#38; String(50, "-")
+    For Each fld In rs.Fields
+      Debug.Print fld.Name,
+      Next
+      Debug.Print
+
+      Do Until rs.EOF
+      For Each fld In rs.Fields
+      Debug.Print fld.Value,
+      Next
+      rs.MoveNext
+      Debug.Print
+    Loop
+  rs.Close
+
+  'rs insert
+  rs.Open "select * from my_ado", conn, adOpenDynamic, adLockOptimistic
+  rs.AddNew
+  rs!Name = "Monty"
+  rs!txt = "Insert row"
+  rs.Update
+  rs.Close
+
+  'rs update
+  rs.Open "SELECT * FROM my_ado"
+  rs!Name = "update"
+  rs!txt = "updated-row"
+  rs.Update
+  rs.Close
+
+  'rs update second time..
+  rs.Open "SELECT * FROM my_ado"
+  rs!Name = "update"
+  rs!txt = "updated-second-time"
+  rs.Update
+  rs.Close
+
+  'rs delete
+  rs.Open "SELECT * FROM my_ado"
+  rs.MoveNext
+  rs.MoveNext
+  rs.Delete
+  rs.Close
+
+  'fetch the updated table ..
+  rs.Open "SELECT * FROM my_ado", conn
+    Debug.Print rs.RecordCount
+    rs.MoveFirst
+    Debug.Print String(50, "-") &#38; "Updated my_ado Result Set " &#38; String(50, "-")
+    For Each fld In rs.Fields
+      Debug.Print fld.Name,
+      Next
+      Debug.Print
+
+      Do Until rs.EOF
+      For Each fld In rs.Fields
+      Debug.Print fld.Value,
+      Next
+      rs.MoveNext
+      Debug.Print
+    Loop
+  rs.Close
+  conn.Close
+End Sub
+</PRE>
+
+
+
+<H4><A NAME="DAO_-_rs.addNew" HREF="manual_toc.html#DAO_-_rs.addNew">22.1.19.2  DAO: <code>rs.addNew</code>, <code>rs.update</code>, and Scrolling</A></H4>
+
+<P>
+The following DAO (Data Access Objects) example creates a table <code>my_dao</code>
+and demonstrates the use of <code>rs.addNew</code>, <code>rs.update</code>, and result
+set scrolling.
+
+</P>
+
+<PRE>
+Private Sub myodbc_dao_Click()
+
+  Dim ws As Workspace
+  Dim conn As Connection
+  Dim queryDef As queryDef
+  Dim str As String
+
+  'connect to MySQL using MySQL ODBC 3.51 Driver
+  Set ws = DBEngine.CreateWorkspace("", "venu", "venu", dbUseODBC)
+  str = "odbc;DRIVER={MySQL ODBC 3.51 Driver};"_
+                        &#38; "SERVER=localhost;"_ 
+                        &#38; " DATABASE=test;"_
+                        &#38; "UID=venu;PWD=venu; OPTION=3"
+  Set conn = ws.OpenConnection("test", dbDriverNoPrompt, False, str)
+
+  'Create table my_dao
+  Set queryDef = conn.CreateQueryDef("", "drop table if exists my_dao")
+  queryDef.Execute
+
+  Set queryDef = conn.CreateQueryDef("", "create table my_dao(Id INT AUTO_INCREMENT PRIMARY KEY, " _
+                                                           &#38; "Ts TIMESTAMP(14) NOT NULL, Name varchar(20), Id2 INT)")
+  queryDef.Execute
+
+  'Insert new records using rs.addNew
+  Set rs = conn.OpenRecordset("my_dao")
+  Dim i As Integer
+
+    For i = 10 To 15
+    rs.AddNew
+    rs!Name = "insert record" &#38; i
+    rs!Id2 = i
+    rs.Update
+    Next i
+             rs.Close
+
+  'rs update..
+  Set rs = conn.OpenRecordset("my_dao")
+  rs.Edit
+  rs!Name = "updated-string"
+  rs.Update
+  rs.Close
+
+  'fetch the table back...
+  Set rs = conn.OpenRecordset("my_dao", dbOpenDynamic)
+  str = "Results:"
+  rs.MoveFirst
+  While Not rs.EOF
+  str = " " &#38; rs!Id &#38; " , " &#38; rs!Name &#38; ", " &#38; rs!Ts &#38; ", " &#38; rs!Id2
+  Debug.Print "DATA:" &#38; str
+  rs.MoveNext
+  Wend
+
+  'rs Scrolling
+  rs.MoveFirst
+  str = " FIRST ROW: " &#38; rs!Id &#38; " , " &#38; rs!Name &#38; ", " &#38; rs!Ts &#38; ", " &#38; rs!Id2
+  Debug.Print str
+
+  rs.MoveLast
+  str = " LAST ROW: " &#38; rs!Id &#38; " , " &#38; rs!Name &#38; ", " &#38; rs!Ts &#38; ", " &#38; rs!Id2
+  Debug.Print str
+
+  rs.MovePrevious
+  str = " LAST-1 ROW: " &#38; rs!Id &#38; " , " &#38; rs!Name &#38; ", " &#38; rs!Ts &#38; ", " &#38; rs!Id2
+  Debug.Print str
+
+  'free all resources
+  rs.Close
+  queryDef.Close
+  conn.Close
+  ws.Close
+
+End Sub
+</PRE>
+
+
+
+<H4><A NAME="RDO_-_rs.addNew_and_rs.update" HREF="manual_toc.html#RDO_-_rs.addNew_and_rs.update">22.1.19.3  RDO: <code>rs.addNew</code> and <code>rs.update</code></A></H4>
+
+<P>
+The following RDO (Remote Data Objects) example creates
+a table <code>my_rdo</code> and demonstrates the use of <code>rs.addNew</code>
+and <code>rs.update</code>.
+
+</P>
+
+<PRE>
+Dim rs As rdoResultset
+    Dim cn As New rdoConnection
+    Dim cl As rdoColumn
+    Dim SQL As String
+
+    'cn.Connect = "DSN=test;"
+    cn.Connect = "DRIVER={MySQL ODBC 3.51 Driver};"_
+                        &#38; "SERVER=localhost;"_ 
+                        &#38; " DATABASE=test;"_
+                        &#38; "UID=venu;PWD=venu; OPTION=3"
+
+    cn.CursorDriver = rdUseOdbc
+    cn.EstablishConnection rdDriverPrompt
+
+    'drop table my_rdo
+    SQL = "drop table if exists my_rdo"
+    cn.Execute SQL, rdExecDirect
+
+    'create table my_rdo
+    SQL = "create table my_rdo(id int, name varchar(20))"
+    cn.Execute SQL, rdExecDirect
+
+    'insert - direct
+    SQL = "insert into my_rdo values (100,'venu')"
+    cn.Execute SQL, rdExecDirect
+
+    SQL = "insert into my_rdo values (200,'MySQL')"
+    cn.Execute SQL, rdExecDirect
+
+    'rs insert
+    SQL = "select * from my_rdo"
+    Set rs = cn.OpenResultset(SQL, rdOpenStatic, rdConcurRowVer, rdExecDirect)
+    rs.AddNew
+    rs!id = 300
+    rs!Name = "Insert1"
+    rs.Update
+    rs.Close
+
+    'rs insert
+    SQL = "select * from my_rdo"
+    Set rs = cn.OpenResultset(SQL, rdOpenStatic, rdConcurRowVer, rdExecDirect)
+    rs.AddNew
+    rs!id = 400
+    rs!Name = "Insert 2"
+    rs.Update
+    rs.Close
+
+    'rs update
+    SQL = "select * from my_rdo"
+    Set rs = cn.OpenResultset(SQL, rdOpenStatic, rdConcurRowVer, rdExecDirect)
+    rs.Edit
+    rs!id = 999
+    rs!Name = "updated"
+    rs.Update
+    rs.Close 
+
+    'fetch back...
+    SQL = "select * from my_rdo"
+    Set rs = cn.OpenResultset(SQL, rdOpenStatic, rdConcurRowVer, rdExecDirect)
+    Do Until rs.EOF
+    For Each cl In rs.rdoColumns
+                Debug.Print cl.Value,
+      Next
+      rs.MoveNext
+      Debug.Print
+               Loop
+    Debug.Print "Row count="; rs.RowCount
+
+    'close
+    rs.Close
+    cn.Close
+
+End Sub
+</PRE>
+
+
+
+<H3><A NAME="MyODBC_with_.NET" HREF="manual_toc.html#MyODBC_with_.NET">22.1.20  MyODBC with Microsoft .NET</A></H3>
+
+<P>
+This section contains simple examples that demonstrate the use 
+of MyODBC drivers with ODBC.NET.
+
+</P>
+
+
+
+<H4><A NAME="ODBC.NET(C-sharp)" HREF="manual_toc.html#ODBC.NET(C-sharp)">22.1.20.1  ODBC.NET: CSHARP(C#)</A></H4>
+
+<P>
+The following sample creates a table <code>my_odbc_net</code> and 
+demonstrates the use in C#.
+
+</P>
+
+<PRE>
+
+ /**
+ * @sample    : mycon.cs
+ * @purpose   : Demo sample for ODBC.NET using MyODBC
+ * @author    : Venu, <a HREF="mailto:venu@mysql.com">venu@mysql.com</a>
+ *
+ * (C) Copyright MySQL AB, 1995-2004
+ *
+ **/
+
+ /* build command
+  * 
+  *  csc /t:exe 
+  *      /out:mycon.exe mycon.cs 
+  *      /r:Microsoft.Data.Odbc.dll 
+  */ 
+
+ using Console = System.Console;
+ using Microsoft.Data.Odbc;
+
+ namespace myodbc3
+ {
+  class mycon
+  {
+    static void Main(string[] args)
+    {
+      try
+      { 
+        //Connection string for MyODBC 2.50
+        /*string MyConString = "DRIVER={MySQL};" + 
+                             "SERVER=localhost;" +
+                             "DATABASE=test;" +
+                             "UID=venu;" +
+                             "PASSWORD=venu;" +
+                             "OPTION=3";
+        */
+        //Connection string for MyODBC 3.51
+        string MyConString = "DRIVER={MySQL ODBC 3.51 Driver};" + 
+                             "SERVER=localhost;" +
+                             "DATABASE=test;" +
+                             "UID=venu;" +
+                             "PASSWORD=venu;" +
+                             "OPTION=3";
+
+        //Connect to MySQL using MyODBC
+        OdbcConnection MyConnection = new OdbcConnection(MyConString);    
+        MyConnection.Open();
+
+        Console.WriteLine("\n !!! success, connected successfully !!!\n");    
+
+        //Display connection information
+        Console.WriteLine("Connection Information:");   
+        Console.WriteLine("\tConnection String:" + MyConnection.ConnectionString);    
+        Console.WriteLine("\tConnection Timeout:" + MyConnection.ConnectionTimeout);    
+        Console.WriteLine("\tDatabase:" + MyConnection.Database);   
+        Console.WriteLine("\tDataSource:" + MyConnection.DataSource);
+        Console.WriteLine("\tDriver:" + MyConnection.Driver);
+        Console.WriteLine("\tServerVersion:" + MyConnection.ServerVersion);
+
+        //Create a sample table
+        OdbcCommand MyCommand = new OdbcCommand("DROP TABLE IF EXISTS my_odbc_net",MyConnection);
+        MyCommand.ExecuteNonQuery();
+        MyCommand.CommandText = "CREATE TABLE my_odbc_net(id int, name varchar(20), idb bigint)";
+        MyCommand.ExecuteNonQuery();
+
+        //Insert
+        MyCommand.CommandText = "INSERT INTO my_odbc_net VALUES(10,'venu', 300)";        
+        Console.WriteLine("INSERT, Total rows affected:" + MyCommand.ExecuteNonQuery());;
+
+        //Insert
+        MyCommand.CommandText = "INSERT INTO my_odbc_net VALUES(20,'mysql',400)";        
+        Console.WriteLine("INSERT, Total rows affected:" + MyCommand.ExecuteNonQuery());
+
+        //Insert
+        MyCommand.CommandText = "INSERT INTO my_odbc_net VALUES(20,'mysql',500)";        
+        Console.WriteLine("INSERT, Total rows affected:" + MyCommand.ExecuteNonQuery());
+
+        //Update
+        MyCommand.CommandText = "UPDATE my_odbc_net SET id=999 WHERE id=20";        
+        Console.WriteLine("Update, Total rows affected:" + MyCommand.ExecuteNonQuery());
+
+        //COUNT(*)        
+        MyCommand.CommandText = "SELECT COUNT(*) as TRows FROM my_odbc_net";        
+        Console.WriteLine("Total Rows:" + MyCommand.ExecuteScalar());
+
+        //Fetch
+        MyCommand.CommandText = "SELECT * FROM my_odbc_net";                
+        OdbcDataReader MyDataReader;
+        MyDataReader =  MyCommand.ExecuteReader();
+        while (MyDataReader.Read())
+        {
+         if(string.Compare(MyConnection.Driver,"myodbc3.dll") == 0) {
+           Console.WriteLine("Data:" + MyDataReader.GetInt32(0) + " " +
+                                       MyDataReader.GetString(1) + " " +
+                                       MyDataReader.GetInt64(2)); //Supported only by MyODBC 3.51
+         }
+         else {            
+           Console.WriteLine("Data:" + MyDataReader.GetInt32(0) + " " +
+                                       MyDataReader.GetString(1) + " " +                                         
+                                       MyDataReader.GetInt32(2)); //BIGINTs not supported by MyODBC
+         }
+        }
+
+        //Close all resources
+        MyDataReader.Close();
+        MyConnection.Close();
+      }
+      catch (OdbcException MyOdbcException)//Catch any ODBC exception ..
+      {
+        for (int i=0; i &#60; MyOdbcException.Errors.Count; i++)
+        {
+          Console.Write("ERROR #" + i + "\n" +
+            "Message: " + MyOdbcException.Errors[i].Message + "\n" +
+            "Native: " + MyOdbcException.Errors[i].NativeError.ToString() + "\n" +
+            "Source: " + MyOdbcException.Errors[i].Source + "\n" +
+            "SQL: " + MyOdbcException.Errors[i].SQLState + "\n");
+        }
+      }
+    }
+  }
+ }
+</PRE>
+
+
+
+<H4><A NAME="ODBC.NET(VB)" HREF="manual_toc.html#ODBC.NET(VB)">22.1.20.2  ODBC.NET: VB</A></H4>
+
+<P>
+The following sample creates a table <code>my_vb_net</code> and 
+demonstrates the use in VB.
+
+</P>
+
+<PRE>
+' @sample    : myvb.vb
+' @purpose   : Demo sample for ODBC.NET using MyODBC
+' @author    : Venu, <a HREF="mailto:venu@mysql.com">venu@mysql.com</a>
+'
+' (C) Copyright MySQL AB, 1995-2004
+'
+'
+
+' 
+' build command
+'
+' vbc /target:exe 
+'     /out:myvb.exe 
+'     /r:Microsoft.Data.Odbc.dll 
+'     /r:System.dll 
+'     /r:System.Data.dll 
+'
+
+Imports Microsoft.Data.Odbc
+Imports System
+
+Module myvb
+    Sub Main()
+        Try
+
+            'MyODBC 3.51 connection string
+            Dim MyConString As String = "DRIVER={MySQL ODBC 3.51 Driver};" &#38; _
+                           "SERVER=localhost;" &#38; _
+                           "DATABASE=test;" &#38; _
+                           "UID=venu;" &#38; _
+                           "PASSWORD=venu;" &#38; _
+                           "OPTION=3;"
+
+            'Connection
+            Dim MyConnection As New OdbcConnection(MyConString)
+            MyConnection.Open()
+
+            Console.WriteLine ("Connection State::" &#38; MyConnection.State.ToString)
+
+            'Drop
+            Console.WriteLine ("Dropping table")
+            Dim MyCommand As New OdbcCommand()
+            MyCommand.Connection = MyConnection
+            MyCommand.CommandText = "DROP TABLE IF EXISTS my_vb_net"
+            MyCommand.ExecuteNonQuery()
+
+            'Create
+            Console.WriteLine ("Creating....")
+            MyCommand.CommandText = "CREATE TABLE my_vb_net(id int, name varchar(30))"
+            MyCommand.ExecuteNonQuery()
+
+            'Insert
+            MyCommand.CommandText = "INSERT INTO my_vb_net VALUES(10,'venu')"    
+            Console.WriteLine("INSERT, Total rows affected:" &#38; MyCommand.ExecuteNonQuery())
+
+            'Insert
+            MyCommand.CommandText = "INSERT INTO my_vb_net VALUES(20,'mysql')"
+            Console.WriteLine("INSERT, Total rows affected:" &#38; MyCommand.ExecuteNonQuery())
+
+            'Insert
+            MyCommand.CommandText = "INSERT INTO my_vb_net VALUES(20,'mysql')"
+            Console.WriteLine("INSERT, Total rows affected:" &#38; MyCommand.ExecuteNonQuery())
+
+            'Insert
+            MyCommand.CommandText = "INSERT INTO my_vb_net(id) VALUES(30)"
+            Console.WriteLine("INSERT, Total rows affected:" &#38; MyCommand.ExecuteNonQuery())
+
+            'Update
+            MyCommand.CommandText = "UPDATE my_vb_net SET id=999 WHERE id=20"
+            Console.WriteLine("Update, Total rows affected:" &#38; MyCommand.ExecuteNonQuery())
+
+            'COUNT(*)        
+            MyCommand.CommandText = "SELECT COUNT(*) as TRows FROM my_vb_net"
+            Console.WriteLine("Total Rows:" &#38; MyCommand.ExecuteScalar())
+
+            'Select              
+            Console.WriteLine ("Select * FROM my_vb_net")
+            MyCommand.CommandText = "SELECT * FROM my_vb_net"
+            Dim MyDataReader As OdbcDataReader
+            MyDataReader = MyCommand.ExecuteReader
+            While MyDataReader.Read
+                If MyDataReader("name") Is DBNull.Value Then
+                    Console.WriteLine ("id = " &#38; CStr(MyDataReader("id")) &#38; "  name = " &#38; _
+                      "NULL")
+                Else
+                    Console.WriteLine ("id = " &#38; CStr(MyDataReader("id")) &#38; "  name = " &#38; _
+                                          CStr(MyDataReader("name")))
+                End If
+            End While
+
+        'Catch ODBC Exception
+        Catch MyOdbcException As OdbcException 
+            Dim i As Integer
+            Console.WriteLine (MyOdbcException.ToString)
+
+        'Catch program exception
+        Catch MyException As Exception
+            Console.WriteLine (MyException.ToString)
+    End Try
+    End Sub
+End Module
+</PRE>
+
+
+
+<H3><A NAME="MyODBC_Credits" HREF="manual_toc.html#MyODBC_Credits">22.1.21  Credits</A></H3>
+
+<P>
+These are the developers that have worked on the MyODBC 
+and MyODBC 3.51 Drivers from MySQL AB.
+
+</P>
+
+<UL>
+<LI>
+
+Micheal (Monty) Widenius
+<LI>
+
+Venu Anuganti
+<LI>
+
+Peter Harvey
+</UL>
+
+
+
+<H2><A NAME="Java_Connector" HREF="manual_toc.html#Java_Connector">22.2  MySQL Java Connectivity (JDBC)</A></H2>
+
+<P>
+<A NAME="IDX2257"></A>
+<A NAME="IDX2258"></A>
+<A NAME="IDX2259"></A>
+
+</P>
+<P>
+There are two supported JDBC drivers for MySQL:
+
+</P>
+
+<UL>
+<LI>
+
+<code>MySQL Connector/J</code> from MySQL AB, implemented in 100% native Java.
+This product was formerly known as the <code>mm.mysql</code> driver.
+You can download <code>MySQL Connector/J</code> from
+<a HREF="http://dev.mysql.com/downloads/connector/j/">http://dev.mysql.com/downloads/connector/j/</a>.
+<LI>
+
+The Resin JDBC driver, which can be found at
+<a HREF="http://www.caucho.com/projects/jdbc-mysql/index.xtp">http://www.caucho.com/projects/jdbc-mysql/index.xtp</a>.
+</UL>
+
+<P>
+For more information, consult any general JDBC documentation, plus each
+driver's own documentation for MySQL-specific features.
+
+</P>
+<P>
+Documentation for <code>MySQL Connector/J</code> is available online at the
+MySQL AB Web site at <a HREF="http://dev.mysql.com/doc/">http://dev.mysql.com/doc/</a>.
+
+</P>
+
+<P><HR><P>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_MySQL_APIs.html">previous</A>, <A HREF="manual_Error-handling.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+ </BODY>
+ </HTML>

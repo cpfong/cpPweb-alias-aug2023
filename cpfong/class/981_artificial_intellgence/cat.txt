@@ -1,0 +1,19 @@
+facts:
+cat like fish
+cat eat what ever they like
+Garfield is a cat
+
+pls prove Garfiled eath fish
+
+-------------------------
+likes(X,Y)	X like Y
+iscat(X)	X is a cat 
+eats(X,Y)	X eat Y
+
+-------------------------
+likes(Cat, fish)
+iscat(G)
+
+iscat(X) -> likes(X,fish)
+iscat(X) and likes(X,Y) -> eat(X,Y)
+

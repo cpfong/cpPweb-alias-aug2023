@@ -1,0 +1,28 @@
+my @fred = ('yabba', 'dabba');
+$fred[2]='doo';
+print "@fred\n";
+print $fred[-1], "\n";
+
+my @arr = qw /fred barney betty wilma dino/;
+print "@arr\n";
+
+my @array=5..9;
+push @array, 10..15;
+
+print "@array\n";
+
+my $t = pop @array;
+print $t, "\n";
+print "@array\n";
+
+my @array = qw /pebbles dino fred barney betty/;
+my @removed = splice @array, 3; #remove from index 3 to the end
+print "@array\n";
+
+@array=0..10;
+@removed = splice @array, 3, 2;
+print "@array\n";
+
+@array=0..10;
+@removed = splice @array, 3, 2, a..d;
+print @array

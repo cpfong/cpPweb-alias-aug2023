@@ -1,0 +1,31 @@
+<powershell>
+#
+# short version of cp_class/my-own-data-7zip.txt
+# so i name as my-own-data-7zip-short.txt
+# zip all necessay files into one.zip
+# remove all comments, ask 4 comments should check my-own-data-7zip.txt
+#
+net user administrator mySecretPwd
+cd c:\users\administrator
+Invoke-WebRequest -Uri 'https://drive.google.com/uc?id=0B4ptjtfKqcukcVNjZ0dlWk9FY2M&export=download' -Outfile ./7z1604-w32.exe
+./7z1604-w32.exe /S
+
+Invoke-WebRequest -Uri http://163.15.203.14:8080/tmp/test.zip -Outfile ./test.zip
+& 'C:\Program Files\7-Zip\7z.exe' e .\test.zip
+mv ./msvcr110.dll /windows/system32
+./vcredist_x86.exe /S
+
+$myip=./curl.exe http://myexternalip.com/raw
+
+Add-Content nsupdate.txt "server ns.ifong.org."
+Add-Content nsupdate.txt "zone ddns.ifong.org"
+Add-Content nsupdate.txt "update delete mdeelw08.ddns.ifong.org. 60 A"
+$text="update add mdeelw08.ddns.ifong.org. 60 A $myip"
+Add-Content nsupdate.txt $text
+Add-Content nsupdate.txt "send"
+
+# GO update
+c:\users\administrator\nsupdate.exe -k c:\users\administrator\Kmyddns.dnssec.key.+157+04451.key -d c:\users\administrator\nsupdate.txt
+
+./firefox.exe /S
+</powershell>

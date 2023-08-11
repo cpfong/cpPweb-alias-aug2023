@@ -1,0 +1,45 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+class ListDemo extends JFrame implements ActionListener {
+
+    private JList list;
+    private DefualtListModel listModel;
+    private JTextField textField;
+
+    public static void main(String[] args) {
+        ListDemo frame = new ListDemo();
+        frame.setSize(400,300);
+        frame.createGUI();
+        frame.show();
+    }
+
+    private void createGUI() {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        Container window = getContentPane();
+        window.setLayout(new FlowLayout() );
+
+        listModel = new DefaultListModel();
+
+        listModel.addItem("Mike");
+        listModel.addItem("Maggie");
+        listModel.addItem("Matthew");
+        listModel.addItem("Eleanor");
+
+        list = new JList(listModel);
+list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        list.addSelectionListener(this);
+        window.add(list);
+
+        textField = new JTextField(15);
+        window.add(textField);
+    }
+
+    public void actionPerformed(ActionEvent event) {
+        int  index = list.getSelectedIndex();
+        String item = (String) list.getSelectedItem();
+        textField.setText("item " + Integer.toString(index)
+            + ", " + item + " selected");
+    }
+}

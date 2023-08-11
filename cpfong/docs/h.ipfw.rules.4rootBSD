@@ -1,0 +1,40 @@
+/sbin/ipfw -q -f flush # flush out fw rules 1st
+
+cmd="ipfw -q add"
+pif="xn0" # public interface
+
+jnsif="epair0b" # dns service jail interface
+
+jnsip="192.168.0.1"     # jail ns ip
+jnship="192.168.0.2"    # jail ns HOST ip
+
+## define public ip variables
+vmip="199.102.79.18" # ME, my pub ip
+vip="163.15.203.138"
+
+##### main; ipfw rules START here
+$cmd 00010 allow all from any to any via lo0 # this is loopback
+
+# IPv6 stuff to not showing those annoying fw log
+$cmd 00030 deny ip6 from any to ::1
+$cmd 00031 deny ip6 from ::1 to any
+$cmd 00032 allow ipv6-icmp from :: to ff02::/16
+$cmd 00033 allow ipv6-icmp from fe80::/10 to fe80::/10
+$cmd 00034 allow ipv6-icmp from fe80::/10 to ff02::/16
+
+# 1st priority AID, only ns.fotech can ssh me 
+$cmd 00100 allow ip from $vip to $vmip 22 in via $pif
+$cmd 00110 allow ip from $vmip to $vip out
+
+# EACH jail has to do this part
+$cmd 01000 divert natd ip from $jnsip to not me out xmit $pif
+
+# natd part
+$cmd 02000 skipto 09999 ip from any to any diverted
+$cmd 02010 divert natd ip from not me to any in recv $pif
+$cmd 02020 skipto 09999 ip from any to any diverted
+
+#####  logging every rejecting reason
+$cmd 05270 deny log logamount 80000 ip from any to any
+$cmd 09999 allow ip from any to any
+# end main

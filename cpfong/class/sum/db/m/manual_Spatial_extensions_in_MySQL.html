@@ -1,0 +1,2906 @@
+  <HTML>
+  <HEAD>
+  
+  <TITLE>MySQL Reference Manual for version 5.0.3-alpha - 18  Spatial Extensions in MySQL</TITLE>
+   <style> code {color:purple} tt {color:green} samp {color:navy} pre {color:maroon} </style>
+  </HEAD>
+  <BODY BGCOLOR=silver TEXT=#000000 LINK=#101090 VLINK=#7030B0>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_MaxDB.html">previous</A>, <A HREF="manual_Stored_Procedures.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="Spatial_extensions_in_MySQL" HREF="manual_toc.html#Spatial_extensions_in_MySQL">18  Spatial Extensions in MySQL</A></H1>
+<P>
+<A NAME="IDX1934"></A>
+
+</P>
+
+<P>
+MySQL 4.1 introduces spatial extensions to allow the
+generation, storage, and analysis of geographic features.
+Currently, these features are available for <code>MyISAM</code> tables only.
+
+</P>
+<P>
+This chapter covers the following topics:
+
+</P>
+
+<UL>
+
+<LI>
+
+The basis of these spatial extensions in the OpenGIS geometry model
+
+<LI>
+
+Data formats for representing spatial data
+
+<LI>
+
+How to use spatial data in MySQL
+
+<LI>
+
+Use of indexing for spatial data
+
+<LI>
+
+MySQL differences from the OpenGIS specification
+
+</UL>
+
+
+
+<H2><A NAME="GIS_introduction" HREF="manual_toc.html#GIS_introduction">18.1  Introduction</A></H2>
+
+<P>
+<A NAME="IDX1935"></A>
+
+</P>
+<P>
+<A NAME="IDX1936"></A>
+<A NAME="IDX1937"></A>
+
+</P>
+<P>
+MySQL implements spatial extensions following the specification of
+the <code>Open GIS Consortium</code> (OGC). This is an international consortium
+of more than 250 companies, agencies, and universities participating
+in the development of publicly available conceptual solutions that can be
+useful with all kinds of applications that manage spatial data.
+The OGC maintains a Web site at <a HREF="http://www.opengis.org/">http://www.opengis.org/</a>.
+
+</P>
+<P>
+In 1997, the Open GIS Consortium published the
+<cite>OpenGIS (R) Simple Features Specifications For SQL</cite>, a document that
+proposes several conceptual ways for extending an SQL RDBMS to support spatial
+data. This specification is available from the Open GIS Web site at
+<a HREF="http://www.opengis.org/docs/99-049.pdf">http://www.opengis.org/docs/99-049.pdf</a>.
+It contains additional information relevant to this chapter.
+
+</P>
+<P>
+MySQL implements a subset of the <strong>SQL with Geometry Types</strong>
+environment proposed by OGC.
+This term refers to an SQL environment that has been extended with a
+set of geometry types. A geometry-valued SQL column is implemented as
+a column that has a geometry type. The specifications describe a set of SQL
+geometry types, as well as functions on those types to create and
+analyze geometry values.
+
+</P>
+<P>
+<A NAME="IDX1938"></A>
+
+</P>
+<P>
+A <strong>geographic feature</strong> is anything in the world that has a location.
+A feature can be:
+
+</P>
+
+<UL>
+<LI>
+
+An entity. For example, a mountain, a pond, a city.
+<LI>
+
+A space. For example, a postcode area, the tropics.
+<LI>
+
+A definable location. For example, a crossroad,
+as a particular place where two streets intersect.
+</UL>
+
+<P>
+<A NAME="IDX1939"></A>
+
+</P>
+<P>
+You can also find documents that use the term <strong>geospatial feature</strong> to
+refer to geographic features.
+
+</P>
+<P>
+<A NAME="IDX1940"></A>
+
+</P>
+<P>
+<strong>Geometry</strong> is another word that denotes a geographic feature.
+Originally the word <strong>geometry</strong> meant measurement of the earth.
+Another meaning comes from cartography, referring to the geometric
+features that cartographers use to map the world.
+
+</P>
+<P>
+This chapter uses all of these terms synonymously:
+<strong>geographic feature</strong>, <strong>geospatial feature</strong>,
+<strong>feature</strong>, or <strong>geometry</strong>.
+The term most commonly used here is <strong>geometry</strong>.
+
+</P>
+<P>
+Let's define a <strong>geometry</strong> as <em>a point or an aggregate of
+points representing anything in the world that has a location</em>.
+
+</P>
+
+
+
+<H2><A NAME="OpenGIS_geometry_model" HREF="manual_toc.html#OpenGIS_geometry_model">18.2  The OpenGIS Geometry Model</A></H2>
+
+<P>
+The set of geometry types proposed by OGC's <strong>SQL with Geometry Types</strong>
+environment is based on the <strong>OpenGIS Geometry Model</strong>. In this model,
+each geometric object has the following general properties:
+
+</P>
+
+<UL>
+<LI>
+
+It is associated with a Spatial Reference System, which describes the
+coordinate space in which the object is defined.
+<LI>
+
+It belongs to some geometry class.
+</UL>
+
+
+
+<H3><A NAME="GIS_geometry_class_hierarchy" HREF="manual_toc.html#GIS_geometry_class_hierarchy">18.2.1  The Geometry Class Hierarchy</A></H3>
+
+<P>
+The geometry classes define a hierarchy as follows:
+
+</P>
+
+<UL>
+<LI><code>Geometry</code> (non-instantiable)
+
+
+<UL>
+<LI><code>Point</code> (instantiable)
+
+<LI><code>Curve</code> (non-instantiable)
+
+
+<UL>
+<LI><code>LineString</code> (instantiable)
+
+
+<UL>
+<LI><code>Line</code>
+
+<LI><code>LinearRing</code>
+
+</UL>
+
+</UL>
+
+<LI><code>Surface</code> (non-instantiable)
+
+
+<UL>
+<LI><code>Polygon</code> (instantiable)
+
+</UL>
+
+<LI><code>GeometryCollection</code> (instantiable)
+
+
+<UL>
+<LI><code>MultiPoint</code> (instantiable)
+
+<LI><code>MultiCurve</code> (non-instantiable)
+
+
+<UL>
+<LI><code>MultiLineString</code> (instantiable)
+
+</UL>
+
+<LI><code>MultiSurface</code> (non-instantiable)
+
+
+<UL>
+<LI><code>MultiPolygon</code> (instantiable)
+
+</UL>
+
+</UL>
+
+</UL>
+
+</UL>
+
+<P>
+It is not possible to create objects in non-instantiable classes.
+It is possible to create objects in instantiable classes.
+All classes have properties, and instantiable classes may also
+have assertions (rules that define valid class instances).
+
+</P>
+<P>
+<code>Geometry</code> is the base class. It's an abstract class.
+The instantiable subclasses of <code>Geometry</code> are restricted to zero-, one-,
+and two-dimensional geometric objects that exist in
+two-dimensional coordinate space. All instantiable geometry classes are
+defined so that valid instances of a geometry class are topologically closed
+(that is, all defined geometries include their boundary).
+
+</P>
+<P>
+The base <code>Geometry</code> class has subclasses for <code>Point</code>,
+<code>Curve</code>, <code>Surface</code>, and <code>GeometryCollection</code>:
+
+</P>
+
+<UL>
+
+<LI>
+
+<code>Point</code> represents zero-dimensional objects.
+
+<LI>
+
+<code>Curve</code> represents one-dimensional objects, and has subclass
+<code>LineString</code>, with sub-subclasses <code>Line</code> and <code>LinearRing</code>.
+
+<LI>
+
+<code>Surface</code> is designed for two-dimensional objects and
+has subclass <code>Polygon</code>.
+
+<LI>
+
+<code>GeometryCollection</code>
+has specialized zero-, one-, and two-dimensional collection classes named
+<code>MultiPoint</code>, <code>MultiLineString</code>, and <code>MultiPolygon</code>
+for modeling geometries corresponding to collections of
+<code>Points</code>, <code>LineStrings</code>, and <code>Polygons</code>, respectively.
+<code>MultiCurve</code> and <code>MultiSurface</code> are introduced as abstract superclasses
+that generalize the collection interfaces to handle <code>Curves</code> and <code>Surfaces</code>.
+
+</UL>
+
+<P>
+<code>Geometry</code>, <code>Curve</code>, <code>Surface</code>, <code>MultiCurve</code>,
+and <code>MultiSurface</code> are defined as non-instantiable classes.
+They define a common set of methods for their subclasses and
+are included for extensibility.
+
+</P>
+<P>
+<code>Point</code>, <code>LineString</code>, <code>Polygon</code>, <code>GeometryCollection</code>,
+<code>MultiPoint</code>, <code>MultiLineString</code>, and
+<code>MultiPolygon</code> are instantiable classes.
+
+</P>
+
+
+<H3><A NAME="GIS_class_geometry" HREF="manual_toc.html#GIS_class_geometry">18.2.2  Class <code>Geometry</code></A></H3>
+
+<P>
+<code>Geometry</code> is the root class of the hierarchy.  It is a
+non-instantiable class but has a number of properties that are common to
+all geometry values created from any of the <code>Geometry</code> subclasses.
+These properties are described in the following list.  (Particular
+subclasses have their own specific properties, described later.)
+
+</P>
+
+
+<H4>Geometry Properties</H4>
+
+<P>
+A geometry value has the following properties:
+
+</P>
+
+<UL>
+
+<LI>
+
+Its <strong>type</strong>.
+Each geometry belongs to one of the instantiable classes in the hierarchy.
+
+<LI>
+
+Its <strong>SRID</strong>, or Spatial Reference Identifier. This value identifies
+the geometry's associated Spatial Reference System that describes the
+coordinate space in which the geometry object is defined.
+
+In MySQL, the SRID value is just an integer associated with the geometry
+value. All calculations are done assuming Euclidean (planar) geometry.
+
+<LI>
+
+Its <strong>coordinates</strong> in its Spatial Reference System,
+represented as double-precision (eight-byte) numbers. All non-empty geometries
+include at least one pair of (X,Y) coordinates. Empty geometries contain
+no coordinates.
+
+Coordinates are related to the SRID.
+For example, in different coordinate systems, the distance between two objects
+may differ even when objects have the same coordinates, because the distance
+on the <strong>planar</strong> coordinate system and the distance on the <strong>geocentric</strong>
+system (coordinates on the Earth's surface) are different things.
+
+<LI>
+
+Its <strong>interior</strong>, <strong>boundary</strong>, and <strong>exterior</strong>.
+Every geometry occupies some position in space. The exterior of
+a geometry is all space not occupied by the geometry. The interior
+is the space occupied by the geometry. The boundary is the
+interface between the geometry's interior and exterior.
+
+<LI>
+
+Its <strong>MBR</strong> (Minimum Bounding Rectangle), or Envelope.
+This is the bounding geometry, formed by the minimum and maximum (X,Y)
+coordinates:
+
+
+<PRE>
+((MINX MINY, MAXX MINY, MAXX MAXY, MINX MAXY, MINX MINY))
+</PRE>
+
+<LI>
+
+Whether the value is <strong>simple</strong> or <strong>non-simple</strong>.
+Geometry values of types (<code>LineString</code>, <code>MultiPoint</code>,
+<code>MultiLineString</code>)
+are either simple or non-simple. Each type determines its own assertions
+for being simple or non-simple.
+
+<LI>
+
+Whether the value is <strong>closed</strong> or <strong>not closed</strong>.
+Geometry values of types (<code>LineString</code>, <code>MultiString</code>) are
+either closed
+or not closed. Each type determines its own assertions for being closed
+or not closed.
+
+<LI>
+
+Whether the value is <strong>empty</strong> or <strong>non-empty</strong>
+A geometry is empty if it does not have any points.
+Exterior, interior, and boundary of an empty geometry
+are not defined (that is, they are represented by a <code>NULL</code> value).
+An empty geometry is defined to be always simple and has an area of 0.
+
+<LI>
+
+Its <strong>dimension</strong>. A geometry can have a dimension of -1, 0, 1,
+or 2:
+
+
+<UL>
+
+<LI>-1 for an empty geometry.
+
+<LI>0 for a geometry with no length and no area.
+
+<LI>1 for a geometry with non-zero length and zero area.
+
+<LI>2 for a geometry with non-zero area.
+
+</UL>
+
+<code>Point</code> objects have a dimension of zero.  <code>LineString</code>
+objects have a dimension of 1. <code>Polygon</code> objects have a
+dimension of 2.  The dimensions of <code>MultiPoint</code>,
+<code>MultiLineString</code>, and <code>MultiPolygon</code> objects are the
+same as the dimensions of the elements they consist of.
+
+</UL>
+
+
+
+<H3><A NAME="GIS_class_point" HREF="manual_toc.html#GIS_class_point">18.2.3  Class <code>Point</code></A></H3>
+
+<P>
+A <code>Point</code> is a geometry that represents a single
+location in coordinate space.
+
+</P>
+
+<H4><code>Point</code> Examples</H4>
+
+
+<UL>
+
+<LI>
+
+Imagine a large-scale map of the world with many cities.
+A <code>Point</code> object could represent each city.
+
+<LI>
+
+On a city map, a <code>Point</code> object could represent a bus stop.
+</UL>
+
+
+<H4><code>Point</code> Properties</H4>
+
+
+<UL>
+
+<LI>
+
+X-coordinate value.
+
+<LI>
+
+Y-coordinate value.
+
+<LI>
+
+<code>Point</code> is defined as a zero-dimensional geometry.
+
+<LI>
+
+The boundary of a <code>Point</code> is the empty set.
+</UL>
+
+
+
+<H3><A NAME="GIS_class_curve" HREF="manual_toc.html#GIS_class_curve">18.2.4  Class <code>Curve</code></A></H3>
+
+<P>
+A <code>Curve</code> is a one-dimensional geometry, usually represented by a sequence
+of points. Particular subclasses of <code>Curve</code> define the type of
+interpolation between points. <code>Curve</code> is a non-instantiable class.
+
+</P>
+
+<H4><code>Curve</code> Properties</H4>
+
+
+<UL>
+
+<LI>
+
+A <code>Curve</code> has the coordinates of its points.
+
+<LI>
+
+A <code>Curve</code> is defined as a one-dimensional geometry.
+
+<LI>
+
+A <code>Curve</code> is simple if it does not pass through the same point twice.
+
+<LI>
+
+A <code>Curve</code> is closed if its start point is equal to its end point.
+
+<LI>
+
+The boundary of a closed <code>Curve</code> is empty.
+
+<LI>
+
+The boundary of a non-closed <code>Curve</code> consists of its two end points.
+
+<LI>
+
+A <code>Curve</code> that is simple and closed is a <code>LinearRing</code>.
+
+</UL>
+
+
+
+<H3><A NAME="GIS_class_linestring" HREF="manual_toc.html#GIS_class_linestring">18.2.5  Class <code>LineString</code></A></H3>
+
+<P>
+A <code>LineString</code> is a <code>Curve</code> with linear interpolation between points.
+
+</P>
+
+<H4><code>LineString</code> Examples</H4>
+
+
+<UL>
+
+<LI>
+
+On a world map, <code>LineString</code> objects could represent rivers.
+
+<LI>
+
+In a city map, <code>LineString</code> objects could represent streets.
+
+</UL>
+
+
+<H4><code>LineString</code> Properties</H4>
+
+
+<UL>
+
+<LI>
+
+A <code>LineString</code> has coordinates of segments, defined by each consecutive pair of points.
+
+<LI>
+
+A <code>LineString</code> is a <code>Line</code> if it consists of exactly two points.
+
+<LI>
+
+A <code>LineString</code> is a <code>LinearRing</code> if it is both closed and simple.
+
+</UL>
+
+
+
+<H3><A NAME="GIS_class_surface" HREF="manual_toc.html#GIS_class_surface">18.2.6  Class <code>Surface</code></A></H3>
+
+<P>
+A <code>Surface</code> is a two-dimensional geometry. It is a non-instantiable
+class. Its only instantiable subclass is <code>Polygon</code>.
+
+</P>
+
+
+<H4><code>Surface</code> Properties</H4>
+
+
+<UL>
+
+<LI>
+
+A <code>Surface</code> is defined as a two-dimensional geometry.
+
+<LI>
+
+The OpenGIS specification defines a simple <code>Surface</code> as a geometry that
+consists of a single ``patch'' that is associated with a single exterior
+boundary and zero or more interior boundaries.
+
+<LI>
+
+The boundary of a simple <code>Surface</code> is the set of closed curves
+corresponding to its exterior and interior boundaries.
+
+</UL>
+
+
+
+<H3><A NAME="GIS_class_polygon" HREF="manual_toc.html#GIS_class_polygon">18.2.7  Class <code>Polygon</code></A></H3>
+
+<P>
+A <code>Polygon</code> is a planar <code>Surface</code> representing a multisided
+geometry. It is defined by a single exterior boundary and zero or more
+interior boundaries, where
+each interior boundary defines a hole in the <code>Polygon</code>.
+
+</P>
+
+<H4><code>Polygon</code> Examples</H4>
+
+
+<UL>
+
+<LI>
+
+On a region map, <code>Polygon</code> objects could represent forests, districts, an
+so on.
+
+</UL>
+
+
+<H4><code>Polygon</code> Assertions</H4>
+
+
+<UL>
+
+<LI>
+
+The boundary of a <code>Polygon</code> consists of a set of <code>LinearRing</code> objects
+(that is, <code>LineString</code> objects that are both simple and closed) that make up its
+exterior and interior boundaries.
+
+<LI>
+
+A <code>Polygon</code> has no rings that cross. The rings in the boundary of a
+<code>Polygon</code> may intersect at a <code>Point</code>, but only as a tangent.
+
+<LI>
+
+A <code>Polygon</code> has no lines, spikes, or punctures.
+
+<LI>
+
+A <code>Polygon</code> has an interior that is a connected point set.
+
+<LI>
+
+A <code>Polygon</code> may have holes.
+The exterior of a <code>Polygon</code> with holes is not connected.
+Each hole defines a connected component of the exterior.
+
+</UL>
+
+<P>
+The preceding assertions make a <code>Polygon</code> a simple geometry.
+
+</P>
+
+
+
+<H3><A NAME="GIS_class_geometrycollection" HREF="manual_toc.html#GIS_class_geometrycollection">18.2.8  Class <code>GeometryCollection</code></A></H3>
+
+<P>
+A <code>GeometryCollection</code> is a geometry that is a collection of one or more
+geometries of any class.
+
+</P>
+<P>
+All the elements in a <code>GeometryCollection</code> must be in
+the same Spatial Reference System (that is, in the same coordinate system).
+There are no other constraints on the elements of a <code>GeometryCollection</code>,
+although the
+subclasses of <code>GeometryCollection</code> described in the following sections
+may restrict membership. Restrictions may be based on:
+
+</P>
+
+<UL>
+
+<LI>
+
+Element type (for example, a <code>MultiPoint</code> may contain only <code>Point</code>
+elements)
+
+<LI>
+
+Dimension
+
+<LI>
+
+Constraints on the degree of spatial overlap between elements
+
+</UL>
+
+
+
+<H3><A NAME="GIS_class_multipoint" HREF="manual_toc.html#GIS_class_multipoint">18.2.9  Class <code>MultiPoint</code></A></H3>
+
+<P>
+A <code>MultiPoint</code> is a geometry collection composed of
+<code>Point</code> elements. The points are not connected or ordered
+in any way.
+
+</P>
+
+<H4><code>MultiPoint</code> Examples</H4>
+
+
+<UL>
+
+<LI>
+
+On a world map, a <code>MultiPoint</code> could represent a chain of small islands.
+
+<LI>
+
+On a city map, a <code>MultiPoint</code> could represent the outlets for a ticket
+office.
+
+</UL>
+
+
+<H4><code>MultiPoint</code> Properties</H4>
+
+
+<UL>
+
+<LI>
+
+A <code>MultiPoint</code> is a zero-dimensional geometry.
+
+<LI>
+
+A <code>MultiPoint</code> is simple if no two of its <code>Point</code> values are
+equal (have identical coordinate values).
+
+<LI>
+
+The boundary of a <code>MultiPoint</code> is the empty set.
+
+</UL>
+
+
+
+<H3><A NAME="GIS_class_multicurve" HREF="manual_toc.html#GIS_class_multicurve">18.2.10  Class <code>MultiCurve</code></A></H3>
+
+<P>
+A <code>MultiCurve</code> is a geometry collection composed of
+<code>Curve</code> elements. <code>MultiCurve</code> is a non-instantiable class.
+
+</P>
+
+<H4><code>MultiCurve</code> Properties</H4>
+
+
+<UL>
+
+<LI>
+
+A <code>MultiCurve</code> is a one-dimensional geometry.
+
+<LI>
+
+A <code>MultiCurve</code> is simple if and only if all of its elements are simple;
+the only intersections between any two elements occur at points that are
+on the boundaries of both elements.
+
+<LI>
+
+A <code>MultiCurve</code> boundary is obtained by applying the ``mod 2 union
+rule'' (also known as the ``odd-even rule''):
+A point is in the boundary of a <code>MultiCurve</code> if it is in the
+boundaries of an odd number of <code>MultiCurve</code> elements.
+
+<LI>
+
+A <code>MultiCurve</code> is closed if all of its elements are closed.
+
+<LI>
+
+The boundary of a closed <code>MultiCurve</code> is always empty.
+
+</UL>
+
+
+
+<H3><A NAME="GIS_class_multilinestring" HREF="manual_toc.html#GIS_class_multilinestring">18.2.11  Class <code>MultiLineString</code></A></H3>
+
+<P>
+A <code>MultiLineString</code> is a <code>MultiCurve</code> geometry collection composed
+of <code>LineString</code> elements.
+
+</P>
+
+<H4><code>MultiLineString</code> Examples</H4>
+
+
+<UL>
+
+<LI>
+
+On a region map, a <code>MultiLineString</code> could represent a river system or
+a highway system.
+
+</UL>
+
+
+
+<H3><A NAME="GIS_class_multisurface" HREF="manual_toc.html#GIS_class_multisurface">18.2.12  Class <code>MultiSurface</code></A></H3>
+
+<P>
+A <code>MultiSurface</code> is a geometry collection composed of surface elements.
+<code>MultiSurface</code> is a non-instantiable class. Its only instantiable
+subclass is <code>MultiPolygon</code>.
+
+</P>
+
+<H4><code>MultiSurface</code> Assertions</H4>
+
+
+<UL>
+
+<LI>
+
+Two <code>MultiSurface</code> surfaces have no interiors that intersect.
+
+<LI>
+
+Two <code>MultiSurface</code> elements have boundaries that
+intersect at most at a finite number of points.
+
+</UL>
+
+
+
+<H3><A NAME="GIS_class_multipolygon" HREF="manual_toc.html#GIS_class_multipolygon">18.2.13  Class <code>MultiPolygon</code></A></H3>
+
+<P>
+A <code>MultiPolygon</code> is a <code>MultiSurface</code> object composed of
+<code>Polygon</code> elements.
+
+</P>
+
+<H4><code>MultiPolygon</code> Examples</H4>
+
+
+<UL>
+
+<LI>
+
+On a region map, a <code>MultiPolygon</code> could represent a system of lakes.
+
+</UL>
+
+
+<H4><code>MultiPolygon</code> Assertions</H4>
+
+
+<UL>
+
+<LI>
+
+A <code>MultiPolygon</code> has no two <code>Polygon</code> elements with interiors
+that intersect.
+
+<LI>
+
+A <code>MultiPolygon</code> has no two <code>Polygon</code> elements that cross
+(crossing is also forbidden by the previous assertion), or that
+touch at an infinite number of points.
+
+<LI>
+
+A <code>MultiPolygon</code> may not have cut lines, spikes, or punctures. A
+<code>MultiPolygon</code> is a regular, closed point set.
+
+<LI>
+
+A <code>MultiPolygon</code> that has more than one <code>Polygon</code> has an
+interior that is not connected. The number of connected components of the interior
+of a <code>MultiPolygon</code> is equal to the number of <code>Polygon</code> values in
+the <code>MultiPolygon</code>.
+
+</UL>
+
+
+<H4><code>MultiPolygon</code> Properties</H4>
+
+
+<UL>
+
+<LI>
+
+A <code>MultiPolygon</code> is a two-dimensional geometry.
+
+<LI>
+
+A <code>MultiPolygon</code> boundary is a set of closed curves
+(<code>LineString</code> values) corresponding to the boundaries of its
+<code>Polygon</code> elements.
+
+<LI>
+
+Each <code>Curve</code> in the boundary of the <code>MultiPolygon</code> is in the
+boundary of exactly one <code>Polygon</code> element.
+
+<LI>
+
+Every <code>Curve</code> in the boundary of an <code>Polygon</code> element is
+in the boundary of the <code>MultiPolygon</code>.
+
+</UL>
+
+
+
+<H2><A NAME="Supported_spatial_data_formats" HREF="manual_toc.html#Supported_spatial_data_formats">18.3  Supported Spatial Data Formats</A></H2>
+
+<P>
+This section describes the standard spatial data formats that are used
+to represent geometry objects in queries.
+They are:
+
+</P>
+
+<UL>
+
+<LI>Well-Known Text (WKT) format
+
+<LI>Well-Known Binary (WKB) format
+
+</UL>
+
+<P>
+Internally, MySQL stores geometry values in a format that is not identical
+to either WKT or WKB format.
+
+</P>
+
+
+
+<H3><A NAME="GIS_WKT_format" HREF="manual_toc.html#GIS_WKT_format">18.3.1  Well-Known Text (WKT) Format</A></H3>
+
+<P>
+<A NAME="IDX1941"></A>
+<A NAME="IDX1942"></A>
+
+</P>
+<P>
+The Well-Known Text (WKT) representation of Geometry is designed to
+exchange geometry data in ASCII form.
+
+</P>
+
+<P>
+Examples of WKT representations of geometry objects are:
+
+</P>
+
+<UL>
+
+<LI>
+
+A <code>Point</code>:
+
+
+<PRE>
+POINT(15 20)
+</PRE>
+
+Note that point coordinates are specified with no separating comma.
+
+<LI>
+
+A <code>LineString</code> with four points:
+
+
+<PRE>
+LINESTRING(0 0, 10 10, 20 25, 50 60)
+</PRE>
+
+Note that point coordinate pairs are separated by commas.
+
+<LI>
+
+A <code>Polygon</code> with one exterior ring and one interior ring:
+
+
+<PRE>
+POLYGON((0 0,10 0,10 10,0 10,0 0),(5 5,7 5,7 7,5 7, 5 5))
+</PRE>
+
+<LI>
+
+A <code>MultiPoint</code> with three <code>Point</code> values:
+
+
+<PRE>
+MULTIPOINT(0 0, 20 20, 60 60)
+</PRE>
+
+<LI>
+
+A <code>MultiLineString</code> with two <code>LineString</code> values:
+
+
+<PRE>
+MULTILINESTRING((10 10, 20 20), (15 15, 30 15))
+</PRE>
+
+<LI>
+
+A <code>MultiPolygon</code> with two <code>Polygon</code> values:
+
+
+<PRE>
+MULTIPOLYGON(((0 0,10 0,10 10,0 10,0 0)),((5 5,7 5,7 7,5 7, 5 5)))
+</PRE>
+
+<LI>
+
+A <code>GeometryCollection</code> consisting of two <code>Point</code> values and one
+<code>LineString</code>:
+
+
+<PRE>
+GEOMETRYCOLLECTION(POINT(10 10), POINT(30 30), LINESTRING(15 15, 20 20))
+</PRE>
+
+</UL>
+
+<P>
+A Backus-Naur grammar that specifies the formal production rules for writing
+WKT values can be found in the OGC specification document referenced near the
+beginning of this chapter.
+
+</P>
+
+
+<H3><A NAME="GIS_WKB_format" HREF="manual_toc.html#GIS_WKB_format">18.3.2  Well-Known Binary (WKB) Format</A></H3>
+
+<P>
+<A NAME="IDX1943"></A>
+<A NAME="IDX1944"></A>
+
+</P>
+<P>
+The Well-Known Binary (WKB) representation for geometric values is defined by
+the OpenGIS specifications.
+It is also defined in the ISO ``SQL/MM Part 3: Spatial'' standard.
+
+</P>
+<P>
+WKB is used to exchange geometry data as binary streams represented by
+<code>BLOB</code> values containing geometric WKB information.
+
+</P>
+<P>
+WKB uses one-byte unsigned integers, four-byte unsigned integers, and eight-byte
+double-precision numbers (IEEE 754 format). A byte is eight bits.
+
+</P>
+<P>
+For example, a WKB value that corresponds to <code>POINT(1 1)</code> consists of
+this sequence of 21 bytes (each represented here by two hex digits):
+
+</P>
+
+<PRE>
+0101000000000000000000F03F000000000000F03F
+</PRE>
+
+<P>
+The sequence may be broken down into these components:
+
+</P>
+
+<PRE>
+Byte order : 01
+WKB type   : 01000000
+X          : 000000000000F03F
+Y          : 000000000000F03F
+</PRE>
+
+<P>
+Component representation is as follows:
+
+</P>
+
+<UL>
+
+<LI>
+
+The byte order may be either 0 or 1 to indicate little-endian or big-endian
+storage. The little-endian and big-endian byte orders are also known as
+Network Data Representation (NDR) and External Data Representation (XDR),
+respectively.
+
+<LI>
+
+The WKB type is a code that indicates the geometry type. Values from 1 through
+7 indicate
+<code>Point</code>,
+<code>LineString</code>,
+<code>Polygon</code>,
+<code>MultiPoint</code>,
+<code>MultiLineString</code>,
+<code>MultiPolygon</code>,
+and
+<code>GeometryCollection</code>.
+
+<LI>
+
+A <code>Point</code> value has X and Y coordinates, each represented as a
+double-precision value.
+
+</UL>
+
+<P>
+WKB values for more complex geometry values are represented by more complex
+data structures, as detailed in the OpenGIS specification.
+
+</P>
+
+
+<H2><A NAME="Creating_a_spatially_enabled_MySQL_database" HREF="manual_toc.html#Creating_a_spatially_enabled_MySQL_database">18.4  Creating a Spatially Enabled MySQL Database</A></H2>
+
+<P>
+This section describes the data types you can use for representing
+spatial data in MySQL, and the functions available for creating and retrieving
+spatial values.
+
+</P>
+
+
+
+<H3><A NAME="MySQL_spatial_datatypes" HREF="manual_toc.html#MySQL_spatial_datatypes">18.4.1  MySQL Spatial Data Types</A></H3>
+
+<P>
+<A NAME="IDX1945"></A>
+<A NAME="IDX1946"></A>
+<A NAME="IDX1947"></A>
+<A NAME="IDX1948"></A>
+<A NAME="IDX1949"></A>
+<A NAME="IDX1950"></A>
+<A NAME="IDX1951"></A>
+<A NAME="IDX1952"></A>
+
+</P>
+<P>
+MySQL has data types that correspond to OpenGIS classes.
+Some of these types hold single geometry values:
+
+</P>
+
+<UL>
+<LI><code>GEOMETRY</code>
+
+<LI><code>POINT</code>
+
+<LI><code>LINESTRING</code>
+
+<LI><code>POLYGON</code>
+
+</UL>
+
+<P>
+<code>GEOMETRY</code> can store geometry values of any type.
+The other single-value types,
+<code>POINT</code> and <code>LINESTRING</code> and <code>POLYGON</code>,
+restrict their values to a particular geometry type.
+
+</P>
+<P>
+The other data types hold collections of values:
+
+</P>
+
+<UL>
+<LI><code>MULTIPOINT</code>
+
+<LI><code>MULTILINESTRING</code>
+
+<LI><code>MULTIPOLYGON</code>
+
+<LI><code>GEOMETRYCOLLECTION</code>
+
+</UL>
+
+<P>
+<code>GEOMETRYCOLLECTION</code> can store a collection of objects
+of any type. The other collection types,
+<code>MULTIPOINT</code> and <code>MULTILINESTRING</code> and <code>MULTIPOLYGON</code> and <code>GEOMETRYCOLLECTION</code>,
+restrict collection members to those having a particular geometry type.
+
+</P>
+
+
+
+<H3><A NAME="Creating_spatial_values" HREF="manual_toc.html#Creating_spatial_values">18.4.2  Creating Spatial Values</A></H3>
+
+<P>
+This section describes how to create spatial values using Well-Known Text
+and Well-Known Binary functions that are defined in the OpenGIS standard,
+and using MySQL-specific functions.
+
+</P>
+
+
+
+<H4><A NAME="GIS_WKT_Functions" HREF="manual_toc.html#GIS_WKT_Functions">18.4.2.1  Creating Geometry Values Using WKT Functions</A></H4>
+
+<P>
+MySQL provides a number of functions that take as input parameters a
+Well-Known Text representation and, optionally, a spatial reference
+system identifier (SRID). They return the corresponding geometry.
+
+</P>
+<P>
+<code>GeomFromText()</code> accepts a WKT of any geometry type as its first
+argument.  An implementation also provides type-specific construction
+functions for construction of geometry values of each geometry type.
+
+</P>
+
+<DL COMPACT>
+
+<DT><code>GeomCollFromText(<var>wkt</var>[,<var>srid</var>])</code>
+<DD>
+<DT><code>GeometryCollectionFromText(<var>wkt</var>[,<var>srid</var>])</code>
+<DD>
+<A NAME="IDX1953"></A>
+<A NAME="IDX1954"></A>
+Constructs a <code>GEOMETRYCOLLECTION</code> value using its WKT representation and SRID.
+
+<DT><code>GeomFromText(<var>wkt</var>[,<var>srid</var>])</code>
+<DD>
+<DT><code>GeometryFromText(<var>wkt</var>[,<var>srid</var>])</code>
+<DD>
+<A NAME="IDX1955"></A>
+<A NAME="IDX1956"></A>
+Constructs a geometry value of any type using its WKT representation and SRID.
+
+<DT><code>LineFromText(<var>wkt</var>[,<var>srid</var>])</code>
+<DD>
+<DT><code>LineStringFromText(<var>wkt</var>[,<var>srid</var>])</code>
+<DD>
+<A NAME="IDX1957"></A>
+<A NAME="IDX1958"></A>
+Constructs a <code>LINESTRING</code> value using its WKT representation and SRID.
+
+<DT><code>MLineFromText(<var>wkt</var>[,<var>srid</var>])</code>
+<DD>
+<DT><code>MultiLineStringFromText(<var>wkt</var>[,<var>srid</var>])</code>
+<DD>
+<A NAME="IDX1959"></A>
+<A NAME="IDX1960"></A>
+Constructs a <code>MULTILINESTRING</code> value using its WKT representation and SRID.
+
+<DT><code>MPointFromText(<var>wkt</var>[,<var>srid</var>])</code>
+<DD>
+<DT><code>MultiPointFromText(<var>wkt</var>[,<var>srid</var>])</code>
+<DD>
+<A NAME="IDX1961"></A>
+<A NAME="IDX1962"></A>
+Constructs a <code>MULTIPOINT</code> value using its WKT representation and SRID.
+
+<DT><code>MPolyFromText(<var>wkt</var>[,<var>srid</var>])</code>
+<DD>
+<DT><code>MultiPolygonFromText(<var>wkt</var>[,<var>srid</var>])</code>
+<DD>
+<A NAME="IDX1963"></A>
+<A NAME="IDX1964"></A>
+Constructs a <code>MULTIPOLYGON</code> value using its WKT representation and SRID.
+
+<DT><code>PointFromText(<var>wkt</var>[,<var>srid</var>])</code>
+<DD>
+<A NAME="IDX1965"></A>
+Constructs a <code>POINT</code> value using its WKT representation and SRID.
+
+<DT><code>PolyFromText(<var>wkt</var>[,<var>srid</var>])</code>
+<DD>
+<DT><code>PolygonFromText(<var>wkt</var>[,<var>srid</var>])</code>
+<DD>
+<A NAME="IDX1966"></A>
+<A NAME="IDX1967"></A>
+Constructs a <code>POLYGON</code> value using its WKT representation and SRID.
+
+</DL>
+
+<P>
+The OpenGIS specification also describes optional functions for constructing
+<code>Polygon</code> or <code>MultiPolygon</code> values based on the WKT representation
+of a collection of rings or closed <code>LineString</code> values. These values
+may intersect.  MySQL does not implement these functions:
+
+</P>
+<DL COMPACT>
+
+<DT><code>BdMPolyFromText(<var>wkt</var>,<var>srid</var>)</code>
+<DD>
+<A NAME="IDX1968"></A>
+Constructs a <code>MultiPolygon</code> value from a
+<code>MultiLineString</code> value in WKT format containing
+an arbitrary collection of closed <code>LineString</code> values.
+
+<DT><code>BdPolyFromText(<var>wkt</var>,<var>srid</var>)</code>
+<DD>
+<A NAME="IDX1969"></A>
+Constructs a <code>Polygon</code> value from a
+<code>MultiLineString</code> value in WKT format containing
+an arbitrary collection of closed <code>LineString</code> values.
+
+</DL>
+
+
+
+<H4><A NAME="GIS_WKB_Functions" HREF="manual_toc.html#GIS_WKB_Functions">18.4.2.2  Creating Geometry Values Using WKB Functions</A></H4>
+
+<P>
+MySQL provides a number of functions that take as input parameters a
+<code>BLOB</code> containing a Well-Known Binary representation
+and, optionally, a spatial reference
+system identifier (SRID). They return the corresponding geometry.
+
+</P>
+<P>
+<code>GeomFromWKT()</code> accepts a WKB of any geometry type as its first
+argument.  An implementation also provides type-specific construction
+functions for construction of geometry values of each geometry type.
+
+</P>
+
+<DL COMPACT>
+
+<DT><code>GeomCollFromWKB(<var>wkb</var>[,<var>srid</var>])</code>
+<DD>
+<DT><code>GeometryCollectionFromWKB(<var>wkt</var>[,<var>srid</var>])</code>
+<DD>
+<A NAME="IDX1970"></A>
+<A NAME="IDX1971"></A>
+Constructs a <code>GEOMETRYCOLLECTION</code> value using its WKB representation and SRID.
+
+<DT><code>GeomFromWKB(<var>wkb</var>[,<var>srid</var>])</code>
+<DD>
+<DT><code>GeometryFromWKB(<var>wkt</var>[,<var>srid</var>])</code>
+<DD>
+<A NAME="IDX1972"></A>
+<A NAME="IDX1973"></A>
+Constructs a geometry value of any type using its WKB representation and SRID.
+
+<DT><code>LineFromWKB(<var>wkb</var>[,<var>srid</var>])</code>
+<DD>
+<DT><code>LineStringFromWKB(<var>wkb</var>[,<var>srid</var>])</code>
+<DD>
+<A NAME="IDX1974"></A>
+<A NAME="IDX1975"></A>
+Constructs a <code>LINESTRING</code> value using its WKB representation and SRID.
+
+<DT><code>MLineFromWKB(<var>wkb</var>[,<var>srid</var>])</code>
+<DD>
+<DT><code>MultiLineStringFromWKB(<var>wkb</var>[,<var>srid</var>])</code>
+<DD>
+<A NAME="IDX1976"></A>
+<A NAME="IDX1977"></A>
+Constructs a <code>MULTILINESTRING</code> value using its WKB representation and SRID.
+
+<DT><code>MPointFromWKB(<var>wkb</var>[,<var>srid</var>])</code>
+<DD>
+<DT><code>MultiPointFromWKB(<var>wkb</var>[,<var>srid</var>])</code>
+<DD>
+<A NAME="IDX1978"></A>
+<A NAME="IDX1979"></A>
+Constructs a <code>MULTIPOINT</code> value using its WKB representation and SRID.
+
+<DT><code>MPolyFromWKB(<var>wkb</var>[,<var>srid</var>])</code>
+<DD>
+<DT><code>MultiPolygonFromWKB(<var>wkb</var>[,<var>srid</var>])</code>
+<DD>
+<A NAME="IDX1980"></A>
+<A NAME="IDX1981"></A>
+Constructs a <code>MULTIPOLYGON</code> value using its WKB representation and SRID.
+
+<DT><code>PointFromWKB(<var>wkb</var>[,<var>srid</var>])</code>
+<DD>
+<A NAME="IDX1982"></A>
+Constructs a <code>POINT</code> value using its WKB representation and SRID.
+
+<DT><code>PolyFromWKB(<var>wkb</var>[,<var>srid</var>])</code>
+<DD>
+<DT><code>PolygonFromWKB(<var>wkb</var>[,<var>srid</var>])</code>
+<DD>
+<A NAME="IDX1983"></A>
+<A NAME="IDX1984"></A>
+Constructs a <code>POLYGON</code> value using its WKB representation and SRID.
+
+</DL>
+
+<P>
+The OpenGIS specification also describes optional functions for constructing
+<code>Polygon</code> or <code>MultiPolygon</code> values based on the WKB representation
+of a collection of rings or closed <code>LineString</code> values. These values
+may intersect.  MySQL does not implement these functions:
+
+</P>
+<DL COMPACT>
+
+<DT><code>BdMPolyFromWKB(<var>wkb</var>,<var>srid</var>)</code>
+<DD>
+<A NAME="IDX1985"></A>
+Constructs a <code>MultiPolygon</code> value from a
+<code>MultiLineString</code> value in WKB format containing
+an arbitrary collection of closed <code>LineString</code> values.
+
+<DT><code>BdPolyFromWKB(<var>wkb</var>,<var>srid</var>)</code>
+<DD>
+<A NAME="IDX1986"></A>
+Constructs a <code>Polygon</code> value from a
+<code>MultiLineString</code> value in WKB format containing
+an arbitrary collection of closed <code>LineString</code> values.
+
+</DL>
+
+
+
+<H4><A NAME="GIS_MySQL-Specific_Functions" HREF="manual_toc.html#GIS_MySQL-Specific_Functions">18.4.2.3  Creating Geometry Values Using MySQL-Specific Functions</A></H4>
+
+<P>
+<strong>Note</strong>: MySQL does not implement the functions listed in this
+section.
+
+</P>
+<P>
+MySQL provides a set of useful functions for creating geometry WKB
+representations. The functions described in this section are MySQL
+extensions to the OpenGIS specifications. The results of these
+functions are <code>BLOB</code> values containing WKB representations of geometry
+values with no SRID.
+The results of these functions can be substituted as the first argument
+for any function in the <code>GeomFromWKB()</code> function family.
+
+</P>
+<DL COMPACT>
+
+<DT><code>GeometryCollection(<var>g1</var>,<var>g2</var>,...)</code>
+<DD>
+<A NAME="IDX1987"></A>
+Constructs a WKB <code>GeometryCollection</code>. If any argument is not a
+well-formed WKB representation of a geometry, the return value is
+<code>NULL</code>.
+
+<DT><code>LineString(<var>pt1</var>,<var>pt2</var>,...)</code>
+<DD>
+<A NAME="IDX1988"></A>
+Constructs a WKB <code>LineString</code> value from a number of WKB <code>Point</code>
+arguments.  If any argument is not a WKB <code>Point</code>, the return value
+is <code>NULL</code>.  If the number of <code>Point</code> arguments is less than two,
+the return value is <code>NULL</code>.
+
+<DT><code>MultiLineString(<var>ls1</var>,<var>ls2</var>,...)</code>
+<DD>
+<A NAME="IDX1989"></A>
+Constructs a WKB <code>MultiLineString</code> value using WKB <code>LineString</code>
+arguments.  If any argument is not a WKB <code>LineString</code>, the return
+value is <code>NULL</code>.
+
+<DT><code>MultiPoint(<var>pt1</var>,<var>pt2</var>,...)</code>
+<DD>
+<A NAME="IDX1990"></A>
+Constructs a WKB <code>MultiPoint</code> value using WKB <code>Point</code> arguments.
+If any argument is not a WKB <code>Point</code>, the return value is <code>NULL</code>.
+
+<DT><code>MultiPolygon(<var>poly1</var>,<var>poly2</var>,...)</code>
+<DD>
+<A NAME="IDX1991"></A>
+Constructs a WKB <code>MultiPolygon</code> value from a set of WKB <code>Polygon</code>
+arguments.
+If any argument is not a WKB <code>Polygon</code>, the rerurn value is <code>NULL</code>.
+
+<DT><code>Point(<var>x</var>,<var>y</var>)</code>
+<DD>
+<A NAME="IDX1992"></A>
+Constructs a WKB <code>Point</code> using its coordinates.
+
+<DT><code>Polygon(<var>ls1</var>,<var>ls2</var>,...)</code>
+<DD>
+<A NAME="IDX1993"></A>
+Constructs a WKB <code>Polygon</code> value from a number of WKB <code>LineString</code>
+arguments. If any argument does not represent the WKB of a <code>LinearRing</code>
+(that is, not a closed and simple <code>LineString</code>) the return value
+is <code>NULL</code>.
+
+</DL>
+
+
+
+<H3><A NAME="Creating_spatial_columns" HREF="manual_toc.html#Creating_spatial_columns">18.4.3  Creating Spatial Columns</A></H3>
+
+<P>
+MySQL provides a standard way of creating spatial columns for
+geometry types, for example, with <code>CREATE TABLE</code> or <code>ALTER TABLE</code>.
+Currently, spatial columns are supported only for <code>MyISAM</code> tables.
+
+</P>
+
+<UL>
+
+<LI>
+
+Use the <code>CREATE TABLE</code> statement to create a table with a spatial column:
+
+
+<PRE>
+mysql&#62; CREATE TABLE geom (g GEOMETRY);
+Query OK, 0 rows affected (0.02 sec)
+</PRE>
+
+<LI>
+
+Use the <code>ALTER TABLE</code> statement to add or drop a spatial column to or
+from an existing table:
+
+
+<PRE>
+mysql&#62; ALTER TABLE geom ADD pt POINT;
+Query OK, 0 rows affected (0.00 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+mysql&#62; ALTER TABLE geom DROP pt;
+Query OK, 0 rows affected (0.00 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+</PRE>
+
+</UL>
+
+
+
+<H3><A NAME="Populating_spatial_columns" HREF="manual_toc.html#Populating_spatial_columns">18.4.4  Populating Spatial Columns</A></H3>
+
+<P>
+After you have created spatial columns, you can populate them
+with spatial data.
+
+</P>
+<P>
+Values should be stored in internal geometry format, but you can convert them
+to that format from either Well-Known Text (WKT) or Well-Known Binary (WKB)
+format. The following examples demonstrate how to insert geometry values into
+a table by converting WKT values into internal geometry format.
+
+</P>
+<P>
+You can perform the conversion directly in the <code>INSERT</code> statement:
+
+</P>
+
+<PRE>
+INSERT INTO geom VALUES (GeomFromText('POINT(1 1)'));
+
+SET @g = 'POINT(1 1)';
+INSERT INTO geom VALUES (GeomFromText(@g));
+</PRE>
+
+<P>
+Or you can perform the conversion prior to the <code>INSERT</code>:
+
+</P>
+
+<PRE>
+SET @g = GeomFromText('POINT(1 1)');
+INSERT INTO geom VALUES (@g);
+</PRE>
+
+<P>
+The following examples insert more complex geometries into the table:
+
+</P>
+
+<PRE>
+SET @g = 'LINESTRING(0 0,1 1,2 2)';
+INSERT INTO geom VALUES (GeomFromText(@g));
+
+SET @g = 'POLYGON((0 0,10 0,10 10,0 10,0 0),(5 5,7 5,7 7,5 7, 5 5))';
+INSERT INTO geom VALUES (GeomFromText(@g));
+
+SET @g =
+'GEOMETRYCOLLECTION(POINT(1 1),LINESTRING(0 0,1 1,2 2,3 3,4 4))';
+INSERT INTO geom VALUES (GeomFromText(@g));
+</PRE>
+
+<P>
+The preceding examples all use <code>GeomFromText()</code> to create geometry
+values.  You can also use type-specific functions:
+
+</P>
+
+<PRE>
+SET @g = 'POINT(1 1)';
+INSERT INTO geom VALUES (PointFromText(@g));
+
+SET @g = 'LINESTRING(0 0,1 1,2 2)';
+INSERT INTO geom VALUES (LineStringFromText(@g));
+
+SET @g = 'POLYGON((0 0,10 0,10 10,0 10,0 0),(5 5,7 5,7 7,5 7, 5 5))';
+INSERT INTO geom VALUES (PolygonFromText(@g));
+
+SET @g =
+'GEOMETRYCOLLECTION(POINT(1 1),LINESTRING(0 0,1 1,2 2,3 3,4 4))';
+INSERT INTO geom VALUES (GeomCollFromText(@g));
+</PRE>
+
+<P>
+Note that if a client application program wants to use WKB representations
+of geometry values, it is responsible for sending correctly formed WKB in
+queries to the server. However, there are several ways of satisfying this
+requirement. For example:
+
+</P>
+
+<UL>
+
+<LI>Inserting a <code>POINT(1 1)</code> value with hex literal syntax:
+
+
+<PRE>
+mysql&#62; INSERT INTO geom VALUES
+    -&#62; (GeomFromWKB(0x0101000000000000000000F03F000000000000F03F));
+</PRE>
+
+<LI>An ODBC application can send a WKB representation, binding it to a
+
+placeholder using an argument of <code>BLOB</code> type:
+
+<PRE>
+INSERT INTO geom VALUES (GeomFromWKB(?))
+</PRE>
+
+Other programming interfaces may support a similar placeholder mechanism.
+
+<LI>In a C program, you can escape a binary value using
+
+<code>mysql_real_escape_string()</code> and include the result in a query string
+that is sent to the server.
+See section <A HREF="manual_MySQL_APIs.html#mysql_real_escape_string">21.2.3.45  <code>mysql_real_escape_string()</code></A>.
+
+</UL>
+
+
+
+<H3><A NAME="Fetching_spatial_data" HREF="manual_toc.html#Fetching_spatial_data">18.4.5  Fetching Spatial Data</A></H3>
+
+<P>
+Geometry values stored in a table can be fetched in internal
+format. You can also convert them into WKT or WKB format.
+
+</P>
+
+
+
+<H4><A NAME="Fetching_spatial_data_in_internal_format" HREF="manual_toc.html#Fetching_spatial_data_in_internal_format">18.4.5.1  Fetching Spatial Data in Internal Format</A></H4>
+
+<P>
+Fetching geometry values using internal format can be useful in
+table-to-table transfers:
+
+</P>
+
+<PRE>
+CREATE TABLE geom2 (g GEOMETRY) SELECT g FROM geom;
+</PRE>
+
+
+
+<H4><A NAME="Fetching_spatial_data_in_WKT_format" HREF="manual_toc.html#Fetching_spatial_data_in_WKT_format">18.4.5.2  Fetching Spatial Data in WKT Format</A></H4>
+
+<P>
+The <code>AsText()</code> function converts a geometry from internal format into a WKT string.
+
+</P>
+
+
+<PRE>
+mysql&#62; SELECT AsText(g) FROM geom;
++-------------------------+
+| AsText(p1)              |
++-------------------------+
+| POINT(1 1)              |
+| LINESTRING(0 0,1 1,2 2) |
++-------------------------+
+</PRE>
+
+
+
+<H4><A NAME="Fetching_spatial_data_in_WKB_format" HREF="manual_toc.html#Fetching_spatial_data_in_WKB_format">18.4.5.3  Fetching Spatial Data in WKB Format</A></H4>
+
+<P>
+The <code>AsBinary()</code> function converts a geometry from internal format into a <code>BLOB</code> containing
+the WKB value.
+
+</P>
+
+<PRE>
+SELECT AsBinary(g) FROM geom;
+</PRE>
+
+
+
+<H2><A NAME="Analysing_spatial_information" HREF="manual_toc.html#Analysing_spatial_information">18.5  Analyzing Spatial Information</A></H2>
+
+<P>
+After populating spatial columns with values, you are ready to
+query and analyze them.  MySQL provides a set of functions to
+perform various operations on spatial data. These functions can be
+grouped into four major categories according to the type of operation
+they perform:
+
+</P>
+
+<UL>
+
+<LI>
+
+Functions that convert geometries between various formats
+
+<LI>
+
+Functions that provide access to qualitative or quantitative properties of a geometry
+
+<LI>
+
+Functions that describe relations between two geometries
+
+<LI>
+
+Functions that create new geometries from existing ones
+
+</UL>
+
+<P>
+Spatial analysis functions can be used in many contexts, such as:
+
+</P>
+
+<UL>
+
+<LI>
+
+Any interactive SQL program, such as <code>mysql</code> or <code>MySQLCC</code>
+
+<LI>
+
+Application programs written in any language that supports a MySQL client API
+
+</UL>
+
+
+
+<H3><A NAME="Functions_to_convert_geometries_between_formats" HREF="manual_toc.html#Functions_to_convert_geometries_between_formats">18.5.1  Geometry Format Conversion Functions</A></H3>
+
+<P>
+MySQL supports the following functions for converting geometry values between
+internal format and either WKT or WKB format:
+
+</P>
+<DL COMPACT>
+
+<DT><code>AsBinary(<var>g</var>)</code>
+<DD>
+<A NAME="IDX1994"></A>
+Converts a value in internal geometry format to its WKB representation
+and returns the binary result.
+
+<DT><code>AsText(<var>g</var>)</code>
+<DD>
+<A NAME="IDX1995"></A>
+Converts a value in internal geometry format to its WKT representation
+and returns the string result.
+
+
+<PRE>
+mysql&#62; SET @g = 'LineString(1 1,2 2,3 3)';
+mysql&#62; SELECT AsText(GeomFromText(@g));
++--------------------------+
+| AsText(GeomFromText(@G)) |
++--------------------------+
+| LINESTRING(1 1,2 2,3 3)  |
++--------------------------+
+</PRE>
+
+<DT><code>GeomFromText(<var>wkt</var>[,<var>srid</var>])</code>
+<DD>
+<A NAME="IDX1996"></A>
+Converts a string value from its WKT representation into internal geometry
+format and returns the result.
+A number of type-specific functions are also supported, such as
+<code>PointFromText()</code> and <code>LineFromText()</code>; see
+section <A HREF="manual_Spatial_extensions_in_MySQL.html#GIS_WKT_Functions">18.4.2.1  Creating Geometry Values Using WKT Functions</A>.
+
+<DT><code>GeomFromWKB(<var>wkb</var>[,<var>srid</var>])</code>
+<DD>
+<A NAME="IDX1997"></A>
+Converts a binary value from its WKB representation into internal geometry
+format and returns the result.
+A number of type-specific functions are also supported, such as
+<code>PointFromWKB()</code> and <code>LineFromWKB()</code>; see
+section <A HREF="manual_Spatial_extensions_in_MySQL.html#GIS_WKB_Functions">18.4.2.2  Creating Geometry Values Using WKB Functions</A>.
+
+</DL>
+
+
+
+<H3><A NAME="Geometry_property_functions" HREF="manual_toc.html#Geometry_property_functions">18.5.2  <code>Geometry</code> Functions</A></H3>
+
+<P>
+Each function that belongs to this group takes a geometry value as its
+argument and returns some quantitative or qualitative property of the
+geometry. Some functions restrict their argument type. Such functions
+return <code>NULL</code> if the argument is of an incorrect geometry
+type.  For example, <code>Area()</code> returns <code>NULL</code> if the object
+type is neither <code>Polygon</code> nor <code>MultiPolygon</code>.
+
+</P>
+
+
+
+<H4><A NAME="General_geometry_property_functions" HREF="manual_toc.html#General_geometry_property_functions">18.5.2.1  General Geometry Functions</A></H4>
+
+<P>
+The functions listed in this section do not restrict their argument and
+accept a geometry value of any type.
+
+</P>
+<DL COMPACT>
+
+<DT><code>Dimension(<var>g</var>)</code>
+<DD>
+<A NAME="IDX1998"></A>
+Returns the inherent dimension of the geometry value <var>g</var>. The result
+can be -1, 0, 1, or 2. (The meaning of these values is given in
+section <A HREF="manual_Spatial_extensions_in_MySQL.html#GIS_class_geometry">18.2.2  Class <code>Geometry</code></A>.)
+
+
+<PRE>
+mysql&#62; SELECT Dimension(GeomFromText('LineString(1 1,2 2)'));
++------------------------------------------------+
+| Dimension(GeomFromText('LineString(1 1,2 2)')) |
++------------------------------------------------+
+|                                              1 |
++------------------------------------------------+
+</PRE>
+
+<DT><code>Envelope(<var>g</var>)</code>
+<DD>
+<A NAME="IDX1999"></A>
+Returns the Minimum Bounding Rectangle (MBR) for the geometry value <var>g</var>.
+The result is returned as a <code>Polygon</code> value.
+
+
+<PRE>
+mysql&#62; SELECT AsText(Envelope(GeomFromText('LineString(1 1,2 2)')));
++-------------------------------------------------------+
+| AsText(Envelope(GeomFromText('LineString(1 1,2 2)'))) |
++-------------------------------------------------------+
+| POLYGON((1 1,2 1,2 2,1 2,1 1))                        |
++-------------------------------------------------------+
+</PRE>
+
+The polygon is defined by the corner points of the bounding box:
+
+
+<PRE>
+POLYGON((MINX MINY, MAXX MINY, MAXX MAXY, MINX MAXY, MINX MINY))
+</PRE>
+
+<DT><code>GeometryType(<var>g</var>)</code>
+<DD>
+<A NAME="IDX2000"></A>
+Returns as a string the name of the geometry type of which
+the geometry instance <var>g</var> is a member.
+The name will correspond to one of the instantiable <code>Geometry</code> subclasses.
+
+
+<PRE>
+mysql&#62; SELECT GeometryType(GeomFromText('POINT(1 1)'));
++------------------------------------------+
+| GeometryType(GeomFromText('POINT(1 1)')) |
++------------------------------------------+
+| POINT                                    |
++------------------------------------------+
+</PRE>
+
+<DT><code>SRID(<var>g</var>)</code>
+<DD>
+<A NAME="IDX2001"></A>
+Returns an integer indicating the Spatial Reference System ID for the geometry
+value <var>g</var>.
+
+In MySQL, the SRID value is just an integer associated with the geometry
+value. All calculations are done assuming Euclidean (planar) geometry.
+
+
+<PRE>
+mysql&#62; SELECT SRID(GeomFromText('LineString(1 1,2 2)',101));
++-----------------------------------------------+
+| SRID(GeomFromText('LineString(1 1,2 2)',101)) |
++-----------------------------------------------+
+|                                           101 |
++-----------------------------------------------+
+</PRE>
+
+</DL>
+
+<P>
+The OpenGIS specification also defines the following functions, which MySQL
+does not implement:
+
+</P>
+<DL COMPACT>
+
+<DT><code>Boundary(<var>g</var>)</code>
+<DD>
+<A NAME="IDX2002"></A>
+Returns a geometry that is the closure of the combinatorial boundary of the
+geometry value <var>g</var>.
+
+<DT><code>IsEmpty(<var>g</var>)</code>
+<DD>
+<A NAME="IDX2003"></A>
+Returns 1 if the geometry value <var>g</var> is the empty geometry, 0 if it is not
+empty, and -1 if the argument is <code>NULL</code>.
+If the geometry is empty, it represents the empty point set.
+
+<DT><code>IsSimple(<var>g</var>)</code>
+<DD>
+<A NAME="IDX2004"></A>
+
+Currently, this function is a placeholder and should not be used.
+If implemented, its behavior will be as described in the next paragraph.
+
+Returns 1 if the geometry value <var>g</var> has no anomalous geometric points,
+such as self-intersection or self-tangency. <code>IsSimple()</code> returns 0 if the
+argument is not simple, and -1 if it is <code>NULL</code>.
+
+The description of each instantiable geometric class given earlier in
+the chapter includes the specific conditions that cause an instance of
+that class to be classified as not simple.
+
+</DL>
+
+
+
+<H4><A NAME="Point_property_functions" HREF="manual_toc.html#Point_property_functions">18.5.2.2  <code>Point</code> Functions</A></H4>
+
+<P>
+A <code>Point</code> consists of X and Y coordinates, which may be obtained
+using the following functions:
+
+</P>
+<DL COMPACT>
+
+<DT><code>X(<var>p</var>)</code>
+<DD>
+<A NAME="IDX2005"></A>
+Returns the X-coordinate value for the point <var>p</var> as a double-precision
+number.
+
+<PRE>
+mysql&#62; SELECT X(GeomFromText('Point(56.7 53.34)'));
++--------------------------------------+
+| X(GeomFromText('Point(56.7 53.34)')) |
++--------------------------------------+
+|                                 56.7 |
++--------------------------------------+
+</PRE>
+
+<DT><code>Y(<var>p</var>)</code>
+<DD>
+<A NAME="IDX2006"></A>
+Returns the Y-coordinate value for the point <var>p</var> as a double-precision
+number.
+
+<PRE>
+mysql&#62; SELECT Y(GeomFromText('Point(56.7 53.34)'));
++--------------------------------------+
+| Y(GeomFromText('Point(56.7 53.34)')) |
++--------------------------------------+
+|                                53.34 |
++--------------------------------------+
+</PRE>
+
+</DL>
+
+
+
+<H4><A NAME="Linestring_property_functions" HREF="manual_toc.html#Linestring_property_functions">18.5.2.3  <code>LineString</code> Functions</A></H4>
+
+<P>
+A <code>LineString</code> consists of <code>Point</code> values. You can extract
+particular points of a <code>LineString</code>, count the number of points that it
+contains, or obtain its length.
+
+</P>
+
+<DL COMPACT>
+
+<DT><code>EndPoint(<var>ls</var>)</code>
+<DD>
+<A NAME="IDX2007"></A>
+Returns the <code>Point</code> that is the end point of the <code>LineString</code> value
+<var>ls</var>.
+
+
+<PRE>
+mysql&#62; SET @ls = 'LineString(1 1,2 2,3 3)';
+mysql&#62; SELECT AsText(EndPoint(GeomFromText(@ls)));
++-------------------------------------+
+| AsText(EndPoint(GeomFromText(@ls))) |
++-------------------------------------+
+| POINT(3 3)                          |
++-------------------------------------+
+</PRE>
+
+<DT><code>GLength(<var>ls</var>)</code>
+<DD>
+<A NAME="IDX2008"></A>
+Returns as a double-precision number the length of the <code>LineString</code>
+value <var>ls</var> in its associated spatial reference.
+
+
+<PRE>
+mysql&#62; SET @ls = 'LineString(1 1,2 2,3 3)';
+mysql&#62; SELECT GLength(GeomFromText(@ls));
++----------------------------+
+| GLength(GeomFromText(@ls)) |
++----------------------------+
+|            2.8284271247462 |
++----------------------------+
+</PRE>
+
+<DT><code>IsClosed(<var>ls</var>)</code>
+<DD>
+<A NAME="IDX2009"></A>
+Returns 1 if the <code>LineString</code> value <var>ls</var> is closed
+(that is, its <code>StartPoint()</code> and <code>EndPoint()</code> values are the same).
+Returns 0 if <var>ls</var> is not closed, and -1 if it is <code>NULL</code>.
+
+
+<PRE>
+mysql&#62; SET @ls = 'LineString(1 1,2 2,3 3)';
+mysql&#62; SELECT IsClosed(GeomFromText(@ls));
++-----------------------------+
+| IsClosed(GeomFromText(@ls)) |
++-----------------------------+
+|                           0 |
++-----------------------------+
+</PRE>
+
+<DT><code>NumPoints(<var>ls</var>)</code>
+<DD>
+<A NAME="IDX2010"></A>
+Returns the number of points in the <code>LineString</code> value <var>ls</var>.
+
+
+<PRE>
+mysql&#62; SET @ls = 'LineString(1 1,2 2,3 3)';
+mysql&#62; SELECT NumPoints(GeomFromText(@ls));
++------------------------------+
+| NumPoints(GeomFromText(@ls)) |
++------------------------------+
+|                            3 |
++------------------------------+
+</PRE>
+
+<DT><code>PointN(<var>ls</var>,<var>n</var>)</code>
+<DD>
+<A NAME="IDX2011"></A>
+Returns the <var>n</var>-th point in the <code>Linestring</code> value <var>ls</var>.
+Point numbers begin at 1.
+
+
+<PRE>
+mysql&#62; SET @ls = 'LineString(1 1,2 2,3 3)';
+mysql&#62; SELECT AsText(PointN(GeomFromText(@ls),2));
++-------------------------------------+
+| AsText(PointN(GeomFromText(@ls),2)) |
++-------------------------------------+
+| POINT(2 2)                          |
++-------------------------------------+
+</PRE>
+
+<DT><code>StartPoint(<var>ls</var>)</code>
+<DD>
+<A NAME="IDX2012"></A>
+Returns the <code>Point</code> that is the start point of the <code>LineString</code> value
+<var>ls</var>.
+
+
+<PRE>
+mysql&#62; SET @ls = 'LineString(1 1,2 2,3 3)';
+mysql&#62; SELECT AsText(StartPoint(GeomFromText(@ls)));
++---------------------------------------+
+| AsText(StartPoint(GeomFromText(@ls))) |
++---------------------------------------+
+| POINT(1 1)                            |
++---------------------------------------+
+</PRE>
+
+</DL>
+
+<P>
+The OpenGIS specification also defines the following function, which MySQL
+does not implement:
+
+</P>
+<DL COMPACT>
+
+<DT><code>IsRing(<var>ls</var>)</code>
+<DD>
+<A NAME="IDX2013"></A>
+Returns 1 if the <code>LineString</code> value <var>ls</var> is closed
+(that is, its <code>StartPoint()</code> and <code>EndPoint()</code> values are the same)
+and is simple (does not pass through the same point more than once).
+Returns 0 if <var>ls</var> is not a ring, and -1 if it is <code>NULL</code>.
+
+</DL>
+
+
+
+<H4><A NAME="Multilinestring_property_functions" HREF="manual_toc.html#Multilinestring_property_functions">18.5.2.4  <code>MultiLineString</code> Functions</A></H4>
+
+<DL COMPACT>
+
+<DT><code>GLength(<var>mls</var>)</code>
+<DD>
+<A NAME="IDX2014"></A>
+Returns as a double-precision number
+the length of the <code>MultiLineString</code> value <var>mls</var>. The length of
+<var>mls</var> is equal to the sum of the lengths of its elements.
+
+
+<PRE>
+mysql&#62; SET @mls = 'MultiLineString((1 1,2 2,3 3),(4 4,5 5))';
+mysql&#62; SELECT GLength(GeomFromText(@mls));
++-----------------------------+
+| GLength(GeomFromText(@mls)) |
++-----------------------------+
+|             4.2426406871193 |
++-----------------------------+
+</PRE>
+
+<DT><code>IsClosed(<var>mls</var>)</code>
+<DD>
+<A NAME="IDX2015"></A>
+Returns 1 if the <code>MultiLineString</code> value <var>mls</var> is closed
+(that is, the <code>StartPoint()</code> and <code>EndPoint()</code> values are the same
+for each <code>LineString</code> in <var>mls</var>).
+Returns 0 if <var>mls</var> is not closed, and -1 if it is <code>NULL</code>.
+
+
+<PRE>
+mysql&#62; SET @mls = 'MultiLineString((1 1,2 2,3 3),(4 4,5 5))';
+mysql&#62; SELECT IsClosed(GeomFromText(@mls));
++------------------------------+
+| IsClosed(GeomFromText(@mls)) |
++------------------------------+
+|                            0 |
++------------------------------+
+</PRE>
+
+</DL>
+
+
+
+<H4><A NAME="Polygon_property_functions" HREF="manual_toc.html#Polygon_property_functions">18.5.2.5  <code>Polygon</code> Functions</A></H4>
+
+<DL COMPACT>
+
+<DT><code>Area(<var>poly</var>)</code>
+<DD>
+<A NAME="IDX2016"></A>
+Returns as a double-precision number the area of the <code>Polygon</code> value
+<var>poly</var>, as measured in its spatial reference system.
+
+
+<PRE>
+mysql&#62; SET @poly = 'Polygon((0 0,0 3,3 0,0 0),(1 1,1 2,2 1,1 1))';
+mysql&#62; SELECT Area(GeomFromText(@poly));
++---------------------------+
+| Area(GeomFromText(@poly)) |
++---------------------------+
+|                         4 |
++---------------------------+
+</PRE>
+
+<DT><code>ExteriorRing(<var>poly</var>)</code>
+<DD>
+<A NAME="IDX2017"></A>
+Returns the exterior ring of the <code>Polygon</code> value <var>poly</var>
+as a <code>LineString</code>.
+
+<PRE>
+mysql&#62; SET @poly =
+    -&#62; 'Polygon((0 0,0 3,3 3,3 0,0 0),(1 1,1 2,2 2,2 1,1 1))';
+mysql&#62; SELECT AsText(ExteriorRing(GeomFromText(@poly)));
++-------------------------------------------+
+| AsText(ExteriorRing(GeomFromText(@poly))) |
++-------------------------------------------+
+| LINESTRING(0 0,0 3,3 3,3 0,0 0)           |
++-------------------------------------------+
+</PRE>
+
+<DT><code>InteriorRingN(<var>poly</var>,<var>n</var>)</code>
+<DD>
+<A NAME="IDX2018"></A>
+Returns the <var>n</var>-th interior ring for the <code>Polygon</code> value
+<var>poly</var> as a <code>LineString</code>.
+Ring numbers begin at 1.
+
+<PRE>
+mysql&#62; SET @poly =
+    -&#62; 'Polygon((0 0,0 3,3 3,3 0,0 0),(1 1,1 2,2 2,2 1,1 1))';
+mysql&#62; SELECT AsText(InteriorRingN(GeomFromText(@poly),1));
++----------------------------------------------+
+| AsText(InteriorRingN(GeomFromText(@poly),1)) |
++----------------------------------------------+
+| LINESTRING(1 1,1 2,2 2,2 1,1 1)              |
++----------------------------------------------+
+</PRE>
+
+<DT><code>NumInteriorRings(<var>poly</var>)</code>
+<DD>
+<A NAME="IDX2019"></A>
+Returns the number of interior rings in the <code>Polygon</code> value <var>poly</var>.
+
+<PRE>
+mysql&#62; SET @poly =
+    -&#62; 'Polygon((0 0,0 3,3 3,3 0,0 0),(1 1,1 2,2 2,2 1,1 1))';
+mysql&#62; SELECT NumInteriorRings(GeomFromText(@poly));
++---------------------------------------+
+| NumInteriorRings(GeomFromText(@poly)) |
++---------------------------------------+
+|                                     1 |
++---------------------------------------+
+</PRE>
+
+</DL>
+
+
+
+<H4><A NAME="Multipolygon_property_functions" HREF="manual_toc.html#Multipolygon_property_functions">18.5.2.6  <code>MultiPolygon</code> Functions</A></H4>
+
+<DL COMPACT>
+
+<DT><code>Area(<var>mpoly</var>)</code>
+<DD>
+<A NAME="IDX2020"></A>
+
+Returns as a double-precision number the area of the <code>MultiPolygon</code>
+value <var>mpoly</var>, as measured in its spatial reference system.
+
+
+<PRE>
+mysql&#62; SET @mpoly =
+    -&#62; 'MultiPolygon(((0 0,0 3,3 3,3 0,0 0),(1 1,1 2,2 2,2 1,1 1)))';
+mysql&#62; SELECT Area(GeomFromText(@mpoly));
++----------------------------+
+| Area(GeomFromText(@mpoly)) |
++----------------------------+
+|                          8 |
++----------------------------+
+</PRE>
+
+</DL>
+
+<P>
+The OpenGIS specification also defines the following functions, which MySQL
+does not implement:
+
+</P>
+<DL COMPACT>
+
+<DT><code>Centroid(<var>mpoly</var>)</code>
+<DD>
+<A NAME="IDX2021"></A>
+Returns the mathematical centroid for the <code>MultiPolygon</code> value
+<var>mpoly</var> as a <code>Point</code>.  The result is not guaranteed to be on
+the <code>MultiPolygon</code>.
+
+<DT><code>PointOnSurface(<var>mpoly</var>)</code>
+<DD>
+<A NAME="IDX2022"></A>
+Returns a <code>Point</code> value that is guaranteed to be on the
+<code>MultiPolygon</code> value <var>mpoly</var>.
+
+</DL>
+
+
+
+<H4><A NAME="Geometrycollection_property_functions" HREF="manual_toc.html#Geometrycollection_property_functions">18.5.2.7  <code>GeometryCollection</code> Functions</A></H4>
+
+<DL COMPACT>
+
+<DT><code>GeometryN(<var>gc</var>,<var>n</var>)</code>
+<DD>
+<A NAME="IDX2023"></A>
+Returns the <var>n</var>-th geometry in the <code>GeometryCollection</code> value
+<var>gc</var>.  Geometry numbers begin at 1.
+
+
+<PRE>
+mysql&#62; SET @gc = 'GeometryCollection(Point(1 1),LineString(2 2, 3 3))';
+mysql&#62; SELECT AsText(GeometryN(GeomFromText(@gc),1));
++----------------------------------------+
+| AsText(GeometryN(GeomFromText(@gc),1)) |
++----------------------------------------+
+| POINT(1 1)                             |
++----------------------------------------+
+</PRE>
+
+<DT><code>NumGeometries(<var>gc</var>)</code>
+<DD>
+<A NAME="IDX2024"></A>
+Returns the number of geometries in the <code>GeometryCollection</code> value
+<var>gc</var>.
+
+
+<PRE>
+mysql&#62; SET @gc = 'GeometryCollection(Point(1 1),LineString(2 2, 3 3))';
+mysql&#62; SELECT NumGeometries(GeomFromText(@gc));
++----------------------------------+
+| NumGeometries(GeomFromText(@gc)) |
++----------------------------------+
+|                                2 |
++----------------------------------+
+</PRE>
+
+</DL>
+
+
+
+<H3><A NAME="Functions_that_create_new_geometries_from_existing_ones" HREF="manual_toc.html#Functions_that_create_new_geometries_from_existing_ones">18.5.3  Functions That Create New Geometries from Existing Ones</A></H3>
+
+
+
+<H4><A NAME="Functions_that_produce_new_geometries" HREF="manual_toc.html#Functions_that_produce_new_geometries">18.5.3.1  Geometry Functions That Produce New Geometries</A></H4>
+
+<P>
+In the section section <A HREF="manual_Spatial_extensions_in_MySQL.html#Geometry_property_functions">18.5.2  <code>Geometry</code> Functions</A>,
+we've already discussed some functions that can construct new geometries
+from the existing ones:
+
+</P>
+
+<UL>
+<LI><code>Envelope(<var>g</var>)</code>
+
+<LI><code>StartPoint(<var>ls</var>)</code>
+
+<LI><code>EndPoint(<var>ls</var>)</code>
+
+<LI><code>PointN(<var>ls</var>,<var>n</var>)</code>
+
+<LI><code>ExteriorRing(<var>poly</var>)</code>
+
+<LI><code>InteriorRingN(<var>poly</var>,<var>n</var>)</code>
+
+<LI><code>GeometryN(<var>gc</var>,<var>n</var>)</code>
+
+</UL>
+
+
+
+<H4><A NAME="Spatial_operators" HREF="manual_toc.html#Spatial_operators">18.5.3.2  Spatial Operators</A></H4>
+
+<P>
+OpenGIS proposes a number of other functions that can produce
+geometries. They are designed to implement spatial operators.
+
+</P>
+<P>
+These functions are not implemented in MySQL.
+They may appear in future releases.
+
+</P>
+<DL COMPACT>
+
+<DT><code>Buffer(<var>g</var>,<var>d</var>)</code>
+<DD>
+<A NAME="IDX2025"></A>
+Returns a geometry that represents all points whose distance from the geometry
+value <var>g</var> is less than or equal to a distance of <var>d</var>.
+
+<DT><code>ConvexHull(<var>g</var>)</code>
+<DD>
+<A NAME="IDX2026"></A>
+Returns a geometry that represents the convex hull of the geometry value
+<var>g</var>.
+
+<DT><code>Difference(<var>g1</var>,<var>g2</var>)</code>
+<DD>
+<A NAME="IDX2027"></A>
+Returns a geometry that represents the point set difference of the geometry
+value <var>g1</var> with <var>g2</var>.
+
+<DT><code>Intersection(<var>g1</var>,<var>g2</var>)</code>
+<DD>
+<A NAME="IDX2028"></A>
+Returns a geometry that represents the point set intersection of the geometry
+values <var>g1</var> with <var>g2</var>.
+
+<DT><code>SymDifference(<var>g1</var>,<var>g2</var>)</code>
+<DD>
+<A NAME="IDX2029"></A>
+Returns a geometry that represents the point set symmetric difference of the
+geometry value <var>g1</var> with <var>g2</var>.
+
+<DT><code>Union(<var>g1</var>,<var>g2</var>)</code>
+<DD>
+<A NAME="IDX2030"></A>
+Returns a geometry that represents the point set union of the geometry values
+<var>g1</var> and <var>g2</var>.
+
+</DL>
+
+
+
+<H3><A NAME="Functions_for_testing_spatial_relations_between_geometric_objects" HREF="manual_toc.html#Functions_for_testing_spatial_relations_between_geometric_objects">18.5.4  Functions for Testing Spatial Relations Between Geometric Objects</A></H3>
+
+<P>
+The functions described in these sections take two geometries as input
+parameters and return a qualitative or quantitative relation between them.
+
+</P>
+
+
+<H3><A NAME="Relations_on_geometry_MBR" HREF="manual_toc.html#Relations_on_geometry_MBR">18.5.5  Relations on Geometry Minimal Bounding Rectangles (MBRs)</A></H3>
+
+<P>
+<A NAME="IDX2031"></A>
+<A NAME="IDX2032"></A>
+
+</P>
+
+<P>
+MySQL provides some functions that can test relations
+between minimal bounding rectangles of two geometries <code>g1</code> and <code>g2</code>.
+They include:
+
+</P>
+<DL COMPACT>
+
+<DT><code>MBRContains(<var>g1</var>,<var>g2</var>)</code>
+<DD>
+<A NAME="IDX2033"></A>
+Returns 1 or 0 to indicate whether or not the Minimum Bounding Rectangle of
+<var>g1</var> contains the Minimum Bounding Rectangle of <var>g2</var>.
+
+
+<PRE>
+mysql&#62; SET @g1 = GeomFromText('Polygon((0 0,0 3,3 3,3 0,0 0))');
+mysql&#62; SET @g2 = GeomFromText('Point(1 1)');
+mysql&#62; SELECT MBRContains(@g1,@g2), MBRContains(@g2,@g1);
+----------------------+----------------------+
+| MBRContains(@g1,@g2) | MBRContains(@g2,@g1) |
++----------------------+----------------------+
+|                    1 |                    0 |
++----------------------+----------------------+
+</PRE>
+
+<DT><code>MBRDisjoint(<var>g1</var>,<var>g2</var>)</code>
+<DD>
+<A NAME="IDX2034"></A>
+Returns 1 or 0 to indicate whether or not the Minimum Bounding Rectangles of
+the two geometries <var>g1</var> and <var>g2</var> are disjoint (do not intersect).
+
+<DT><code>MBREqual(<var>g1</var>,<var>g2</var>)</code>
+<DD>
+<A NAME="IDX2035"></A>
+Returns 1 or 0 to indicate whether or not the Minimum Bounding Rectangles of
+the two geometries <var>g1</var> and <var>g2</var> are the same.
+
+<DT><code>MBRIntersects(<var>g1</var>,<var>g2</var>)</code>
+<DD>
+<A NAME="IDX2036"></A>
+Returns 1 or 0 to indicate whether or not the Minimum Bounding Rectangles of
+the two geometries <var>g1</var> and <var>g2</var> intersect.
+
+<DT><code>MBROverlaps(<var>g1</var>,<var>g2</var>)</code>
+<DD>
+<A NAME="IDX2037"></A>
+Returns 1 or 0 to indicate whether or not the Minimum Bounding Rectangles of
+the two geometries <var>g1</var> and <var>g2</var> overlap.
+
+<DT><code>MBRTouches(<var>g1</var>,<var>g2</var>)</code>
+<DD>
+<A NAME="IDX2038"></A>
+Returns 1 or 0 to indicate whether or not the Minimum Bounding Rectangles of
+the two geometries <var>g1</var> and <var>g2</var> touch.
+
+<DT><code>MBRWithin(<var>g1</var>,<var>g2</var>)</code>
+<DD>
+<A NAME="IDX2039"></A>
+Returns 1 or 0 to indicate whether or not the Minimum Bounding Rectangle
+of <var>g1</var> is within the Minimum Bounding Rectangle of <var>g2</var>.
+
+
+<PRE>
+mysql&#62; SET @g1 = GeomFromText('Polygon((0 0,0 3,3 3,3 0,0 0))');
+mysql&#62; SET @g2 = GeomFromText('Polygon((0 0,0 5,5 5,5 0,0 0))');
+mysql&#62; SELECT MBRWithin(@g1,@g2), MBRWithin(@g2,@g1);
++--------------------+--------------------+
+| MBRWithin(@g1,@g2) | MBRWithin(@g2,@g1) |
++--------------------+--------------------+
+|                  1 |                  0 |
++--------------------+--------------------+
+</PRE>
+
+</DL>
+
+
+
+<H3><A NAME="Functions_that_test_spatial_relationships_between_geometries" HREF="manual_toc.html#Functions_that_test_spatial_relationships_between_geometries">18.5.6  Functions That Test Spatial Relationships Between Geometries</A></H3>
+
+<P>
+The OpenGIS specification defines the following functions. Currently,
+MySQL does not implement them according to the specification. Those that
+are implemented return the same result as the corresponding
+MBR-based functions.  This includes functions in the following list
+other than <code>Distance()</code> and <code>Related()</code>.
+
+</P>
+
+<P>
+These functions may be implemented in future releases with full
+support for spatial analysis, not just MBR-based support.
+
+</P>
+<P>
+The functions operate on two geometry values <code>g1</code> and <code>g2</code>.
+
+</P>
+<DL COMPACT>
+
+<DT><code>Contains(<var>g1</var>,<var>g2</var>)</code>
+<DD>
+<A NAME="IDX2040"></A>
+Returns 1 or 0 to indicate whether or not <var>g1</var> completely contains
+<var>g2</var>.
+
+<DT><code>Crosses(<var>g1</var>,<var>g2</var>)</code>
+<DD>
+<A NAME="IDX2041"></A>
+Returns 1 if <var>g1</var> spatially crosses <var>g2</var>.
+Returns <code>NULL</code> if <code>g1</code> is a <code>Polygon</code> or a <code>MultiPolygon</code>,
+or if <var>g2</var> is a <code>Point</code> or a <code>MultiPoint</code>.
+Otherwise, returns 0.
+
+The term <em>spatially crosses</em> denotes a spatial relation between two given
+geometries that has the following properties:
+
+
+<UL>
+
+<LI>
+
+The two geometries intersect
+
+<LI>
+
+Their intersection results in a geometry that has
+a dimension that is one less than the maximum dimension of the two given
+geometries
+
+<LI>
+
+Their intersection is not equal to either of the two given geometries
+
+</UL>
+
+<DT><code>Disjoint(<var>g1</var>,<var>g2</var>)</code>
+<DD>
+<A NAME="IDX2042"></A>
+Returns 1 or 0 to indicate whether or not <var>g1</var> is spatially disjoint
+from (does not intersect) <var>g2</var>.
+
+<DT><code>Distance(<var>g1</var>,<var>g2</var>)</code>
+<DD>
+<A NAME="IDX2043"></A>
+Returns as a double-precision number
+the shortest distance between any two points in the two geometries.
+
+<DT><code>Equals(<var>g1</var>,<var>g2</var>)</code>
+<DD>
+<A NAME="IDX2044"></A>
+Returns 1 or 0 to indicate whether or not <var>g1</var> is spatially equal to
+<var>g2</var>.
+
+<DT><code>Intersects(<var>g1</var>,<var>g2</var>)</code>
+<DD>
+<A NAME="IDX2045"></A>
+Returns 1 or 0 to indicate whether or not <var>g1</var> spatially intersects
+<var>g2</var>.
+
+<DT><code>Overlaps(<var>g1</var>,<var>g2</var>)</code>
+<DD>
+<A NAME="IDX2046"></A>
+Returns 1 or 0 to indicate whether or not <var>g1</var> spatially overlaps
+<var>g2</var>.
+The term <em>spatially overlaps</em> is used if two
+geometries intersect and their intersection results in a geometry of the
+same dimension but not equal to either of the given geometries.
+
+<DT><code>Related(<var>g1</var>,<var>g2</var>,<var>pattern_matrix</var>)</code>
+<DD>
+<A NAME="IDX2047"></A>
+Returns 1 or 0 to indicate whether or not the spatial relationship specified
+by <var>pattern_matrix</var> exists between <var>g1</var> and <var>g2</var>.
+Returns -1 if the arguments are <code>NULL</code>.
+The pattern matrix is a string. Its specification will be noted here if this
+function is implemented.
+
+<DT><code>Touches(<var>g1</var>,<var>g2</var>)</code>
+<DD>
+<A NAME="IDX2048"></A>
+Returns 1 or 0 to indicate whether or not <var>g1</var> spatially touches
+<var>g2</var>. Two geometries <em>spatially touch</em> if the interiors of
+the geometries do not intersect, but the boundary of one of the geometries
+intersects either the boundary or the interior of the other.
+
+<DT><code>Within(<var>g1</var>,<var>g2</var>)</code>
+<DD>
+<A NAME="IDX2049"></A>
+Returns 1 or 0 to indicate whether or not <var>g1</var> is spatially within
+<var>g2</var>.
+
+</DL>
+
+
+
+<H2><A NAME="Optimizing_spatial_analysis" HREF="manual_toc.html#Optimizing_spatial_analysis">18.6  Optimizing Spatial Analysis</A></H2>
+
+<P>
+Search operations in non-spatial databases can be optimized
+using indexes. This is true for spatial databases as well.
+With the help of a great variety of multi-dimensional indexing methods that
+have already been designed, it is possible to optimize
+spatial searches. The most typical of these are:
+
+</P>
+
+<UL>
+
+<LI>Point queries that search for all objects that contain a given point
+
+<LI>Region queries that search for all objects that overlap a given region
+
+</UL>
+
+<P>
+MySQL uses <strong>R-Trees with quadratic splitting</strong> to index
+spatial columns. A spatial index is built using the MBR of a geometry.
+For most geometries, the MBR is a minimum rectangle that
+surrounds the geometries. For a horizontal or a vertical
+linestring, the MBR is a rectangle degenerated into the linestring.
+For a point, the MBR is a rectangle degenerated into the point.
+
+</P>
+
+
+
+<H3><A NAME="Creating_spatial_indexes" HREF="manual_toc.html#Creating_spatial_indexes">18.6.1  Creating Spatial Indexes</A></H3>
+
+<P>
+MySQL can create spatial indexes using syntax similar to that for creating
+regular indexes, but extended with the <code>SPATIAL</code> keyword.
+Spatial columns that are indexed currently must be declared <code>NOT NULL</code>.
+The following examples demonstrate how to create spatial indexes.
+
+</P>
+
+<UL>
+
+<LI>With <code>CREATE TABLE</code>:
+
+
+<PRE>
+mysql&#62; CREATE TABLE geom (g GEOMETRY NOT NULL, SPATIAL INDEX(g));
+</PRE>
+
+<LI>With <code>ALTER TABLE</code>:
+
+
+<PRE>
+mysql&#62; ALTER TABLE geom ADD SPATIAL INDEX(g);
+</PRE>
+
+<LI>With <code>CREATE INDEX</code>:
+
+
+<PRE>
+mysql&#62; CREATE SPATIAL INDEX sp_index ON geom (g);
+</PRE>
+
+</UL>
+
+<P>
+To drop spatial indexes, use <code>ALTER TABLE</code> or <code>DROP INDEX</code>:
+
+</P>
+
+<UL>
+
+<LI>With <code>ALTER TABLE</code>:
+
+
+<PRE>
+mysql&#62; ALTER TABLE geom DROP INDEX g;
+</PRE>
+
+<LI>With <code>DROP INDEX</code>:
+
+
+<PRE>
+mysql&#62; DROP INDEX sp_index ON geom;
+</PRE>
+
+</UL>
+
+<P>
+Example: Suppose that a table <code>geom</code> contains more than 32,000 geometries,
+which are stored in the column <code>g</code> of type <code>GEOMETRY</code>.
+The table also has an <code>AUTO_INCREMENT</code> column <code>fid</code> for storing
+object ID values.
+
+</P>
+
+<PRE>
+mysql&#62; DESCRIBE geom;
++-------+----------+------+-----+---------+----------------+
+| Field | Type     | Null | Key | Default | Extra          |
++-------+----------+------+-----+---------+----------------+
+| fid   | int(11)  |      | PRI | NULL    | auto_increment |
+| g     | geometry |      |     |         |                |
++-------+----------+------+-----+---------+----------------+
+2 rows in set (0.00 sec)
+
+mysql&#62; SELECT COUNT(*) FROM geom;
++----------+
+| count(*) |
++----------+
+|    32376 |
++----------+
+1 row in set (0.00 sec)
+</PRE>
+
+<P>
+To add a spatial index on the column <code>g</code>, use this statement:
+
+<PRE>
+mysql&#62; ALTER TABLE geom ADD SPATIAL INDEX(g);
+Query OK, 32376 rows affected (4.05 sec)
+Records: 32376  Duplicates: 0  Warnings: 0
+</PRE>
+
+
+
+<H3><A NAME="Using_a_spatial_index" HREF="manual_toc.html#Using_a_spatial_index">18.6.2  Using a Spatial Index</A></H3>
+
+<P>
+The optimizer investigates whether available spatial indexes can
+be involved in the search for queries that use a function such as
+<code>MBRContains()</code> or <code>MBRWithin()</code> in the <code>WHERE</code> clause.
+For example, let's say we want to find all objects that are in the
+given rectangle:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT fid,AsText(g) FROM geom WHERE
+mysql&#62; MBRContains(GeomFromText('Polygon((30000 15000,31000 15000,31000 16000,30000 16000,30000 15000))'),g);
++-----+-----------------------------------------------------------------------------+
+| fid | AsText(g)                                                                   |
++-----+-----------------------------------------------------------------------------+
+|  21 | LINESTRING(30350.4 15828.8,30350.6 15845,30333.8 15845,30333.8 15828.8)     |
+|  22 | LINESTRING(30350.6 15871.4,30350.6 15887.8,30334 15887.8,30334 15871.4)     |
+|  23 | LINESTRING(30350.6 15914.2,30350.6 15930.4,30334 15930.4,30334 15914.2)     |
+|  24 | LINESTRING(30290.2 15823,30290.2 15839.4,30273.4 15839.4,30273.4 15823)     |
+|  25 | LINESTRING(30291.4 15866.2,30291.6 15882.4,30274.8 15882.4,30274.8 15866.2) |
+|  26 | LINESTRING(30291.6 15918.2,30291.6 15934.4,30275 15934.4,30275 15918.2)     |
+| 249 | LINESTRING(30337.8 15938.6,30337.8 15946.8,30320.4 15946.8,30320.4 15938.4) |
+|   1 | LINESTRING(30250.4 15129.2,30248.8 15138.4,30238.2 15136.4,30240 15127.2)   |
+|   2 | LINESTRING(30220.2 15122.8,30217.2 15137.8,30207.6 15136,30210.4 15121)     |
+|   3 | LINESTRING(30179 15114.4,30176.6 15129.4,30167 15128,30169 15113)           |
+|   4 | LINESTRING(30155.2 15121.4,30140.4 15118.6,30142 15109,30157 15111.6)       |
+|   5 | LINESTRING(30192.4 15085,30177.6 15082.2,30179.2 15072.4,30194.2 15075.2)   |
+|   6 | LINESTRING(30244 15087,30229 15086.2,30229.4 15076.4,30244.6 15077)         |
+|   7 | LINESTRING(30200.6 15059.4,30185.6 15058.6,30186 15048.8,30201.2 15049.4)   |
+|  10 | LINESTRING(30179.6 15017.8,30181 15002.8,30190.8 15003.6,30189.6 15019)     |
+|  11 | LINESTRING(30154.2 15000.4,30168.6 15004.8,30166 15014.2,30151.2 15009.8)   |
+|  13 | LINESTRING(30105 15065.8,30108.4 15050.8,30118 15053,30114.6 15067.8)       |
+| 154 | LINESTRING(30276.2 15143.8,30261.4 15141,30263 15131.4,30278 15134)         |
+| 155 | LINESTRING(30269.8 15084,30269.4 15093.4,30258.6 15093,30259 15083.4)       |
+| 157 | LINESTRING(30128.2 15011,30113.2 15010.2,30113.6 15000.4,30128.8 15001)     |
++-----+-----------------------------------------------------------------------------+
+20 rows in set (0.00 sec)
+</PRE>
+
+<P>
+Now let's use <code>EXPLAIN</code> to check the way this query is executed (the
+<code>id</code> column has been removed so the output better fits the page):
+
+<PRE>
+mysql&#62; EXPLAIN SELECT fid,AsText(g) FROM geom WHERE
+mysql&#62; MBRContains(GeomFromText('Polygon((30000 15000,31000 15000,31000 16000,30000 16000,30000 15000))'),g);
++-------------+-------+-------+---------------+------+---------+------+------+-------------+
+| select_type | table | type  | possible_keys | key  | key_len | ref  | rows | Extra       |
++-------------+-------+-------+---------------+------+---------+------+------+-------------+
+| SIMPLE      | geom  | range | g             | g    |      32 | NULL |   50 | Using where |
++-------------+-------+-------+---------------+------+---------+------+------+-------------+
+1 row in set (0.00 sec)
+</PRE>
+
+<P>
+Now let's check what would happen without a spatial index:
+
+<PRE>
+mysql&#62; EXPLAIN SELECT fid,AsText(g) FROM g IGNORE INDEX (g) WHERE
+mysql&#62; MBRContains(GeomFromText('Polygon((30000 15000,31000 15000,31000 16000,30000 16000,30000 15000))'),g);
++-------------+-------+------+---------------+------+---------+------+-------+-------------+
+| select_type | table | type | possible_keys | key  | key_len | ref  | rows  | Extra       |
++-------------+-------+------+---------------+------+---------+------+-------+-------------+
+| SIMPLE      | geom  | ALL  | NULL          | NULL |    NULL | NULL | 32376 | Using where |
++-------------+-------+------+---------------+------+---------+------+-------+-------------+
+1 row in set (0.00 sec)
+</PRE>
+
+<P>
+Let's execute the <code>SELECT</code> statement, ignoring the spatial key we have:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT fid,AsText(g) FROM geom IGNORE INDEX (g) WHERE
+mysql&#62; MBRContains(GeomFromText('Polygon((30000 15000,31000 15000,31000 16000,30000 16000,30000 15000))'),g);
++-----+-----------------------------------------------------------------------------+
+| fid | AsText(g)                                                                   |
++-----+-----------------------------------------------------------------------------+
+|   1 | LINESTRING(30250.4 15129.2,30248.8 15138.4,30238.2 15136.4,30240 15127.2)   |
+|   2 | LINESTRING(30220.2 15122.8,30217.2 15137.8,30207.6 15136,30210.4 15121)     |
+|   3 | LINESTRING(30179 15114.4,30176.6 15129.4,30167 15128,30169 15113)           |
+|   4 | LINESTRING(30155.2 15121.4,30140.4 15118.6,30142 15109,30157 15111.6)       |
+|   5 | LINESTRING(30192.4 15085,30177.6 15082.2,30179.2 15072.4,30194.2 15075.2)   |
+|   6 | LINESTRING(30244 15087,30229 15086.2,30229.4 15076.4,30244.6 15077)         |
+|   7 | LINESTRING(30200.6 15059.4,30185.6 15058.6,30186 15048.8,30201.2 15049.4)   |
+|  10 | LINESTRING(30179.6 15017.8,30181 15002.8,30190.8 15003.6,30189.6 15019)     |
+|  11 | LINESTRING(30154.2 15000.4,30168.6 15004.8,30166 15014.2,30151.2 15009.8)   |
+|  13 | LINESTRING(30105 15065.8,30108.4 15050.8,30118 15053,30114.6 15067.8)       |
+|  21 | LINESTRING(30350.4 15828.8,30350.6 15845,30333.8 15845,30333.8 15828.8)     |
+|  22 | LINESTRING(30350.6 15871.4,30350.6 15887.8,30334 15887.8,30334 15871.4)     |
+|  23 | LINESTRING(30350.6 15914.2,30350.6 15930.4,30334 15930.4,30334 15914.2)     |
+|  24 | LINESTRING(30290.2 15823,30290.2 15839.4,30273.4 15839.4,30273.4 15823)     |
+|  25 | LINESTRING(30291.4 15866.2,30291.6 15882.4,30274.8 15882.4,30274.8 15866.2) |
+|  26 | LINESTRING(30291.6 15918.2,30291.6 15934.4,30275 15934.4,30275 15918.2)     |
+| 154 | LINESTRING(30276.2 15143.8,30261.4 15141,30263 15131.4,30278 15134)         |
+| 155 | LINESTRING(30269.8 15084,30269.4 15093.4,30258.6 15093,30259 15083.4)       |
+| 157 | LINESTRING(30128.2 15011,30113.2 15010.2,30113.6 15000.4,30128.8 15001)     |
+| 249 | LINESTRING(30337.8 15938.6,30337.8 15946.8,30320.4 15946.8,30320.4 15938.4) |
++-----+-----------------------------------------------------------------------------+
+20 rows in set (0.46 sec)
+</PRE>
+
+<P>
+When the index is not used, the execution time for this query rises from
+0.00 seconds to 0.46 seconds.
+
+</P>
+<P>
+In future releases, spatial indexes may also be used for optimizing
+other functions.
+See section <A HREF="manual_Spatial_extensions_in_MySQL.html#Functions_for_testing_spatial_relations_between_geometric_objects">18.5.4  Functions for Testing Spatial Relations Between Geometric Objects</A>.
+
+</P>
+
+
+
+<H2><A NAME="MySQL_GIS_conformance_and_compatibility" HREF="manual_toc.html#MySQL_GIS_conformance_and_compatibility">18.7  MySQL Conformance and Compatibility</A></H2>
+
+
+
+<H3><A NAME="GIS_features_that_are_not_yet_implemented" HREF="manual_toc.html#GIS_features_that_are_not_yet_implemented">18.7.1  GIS Features That Are Not Yet Implemented</A></H3>
+
+<DL COMPACT>
+
+<DT>Additional Metadata Views
+<DD>
+OpenGIS specifications propose several additional metadata views.
+For example, a system view named <code>GEOMETRY_COLUMNS</code> contains a
+description of geometry columns, one row for each geometry column
+in the database.
+
+<DT>The OpenGIS function <code>Length()</code> on <code>LineString</code> and <code>MultiLineString</code> currently should be called in MySQL as <code>GLength()</code>
+<DD>
+The problem is that there is an existing SQL function
+<code>Length()</code> which calculates the length of string values,
+and sometimes it is not possible to distinguish whether the function is
+called in a textual or spatial context. We need either to solve this
+somehow, or decide on another function name.
+</DL>
+
+<P><HR><P>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_MaxDB.html">previous</A>, <A HREF="manual_Stored_Procedures.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+ </BODY>
+ </HTML>

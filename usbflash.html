@@ -1,0 +1,642 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <link rel="stylesheet" href="s1.css" type="text/css" />
+  <title>FreeBSD System on USB flash stick</title>
+</head>
+<body>
+<p>
+<a href="/">[top]</a><br />
+Date: October 17, 2007<br />
+Author: Chris Peiffer</p>
+
+<h1>FreeBSD System on USB flash stick</h1>
+
+<h2>Introduction</h2>
+
+<p>This document describes the steps taken to put a full booting FreeBSD system on  
+a USB flash disk, with the goal of setting up a group of identically-configured
+machines that can be easily upgraded and maintained. The machines have an internal 
+magnetic
+disk (SATA RAID in my case, but it could be anything) that contains only application 
+data and 
+some web app code, with all system and third-party application software on the 
+flash.</p>
+
+<p>This document assumes a basic familiarity with the process of setting up a single 
+FreeBSD
+system and keeping it up to date. </p>
+
+<p>I made extensive use of these URLs:
+<ul>
+<li><a href="http://lists.freebsd.org/pipermail/freebsd-questions/2005-September/099754.html">How to use USB memory-stick for booting FreeBSD?</a></li>
+
+<li><a href="http://typo.submonkey.net/articles/2006/04/13/installing-freebsd-on-usb-stick-episode-2">Installing FreeBSD on a USB stick, episode II</a></li>
+</ul>
+<br/>
+However, this document will go further in its attempt to provide for multiple
+machines and future upgrades.
+</p>
+
+<p>Examples of shell commands have the
+<span class="terminal">terminal</span> style and examples of files have the 
+<span class="file">file</span> style.</p>
+
+<h2>Contents</h2>
+<p>
+<ul>
+<li><a href="#background">Background</a></li>
+<li><a href="#why_usb">Why USB?</a></li>
+<li><a href="#materials">Materials</a></li>
+<li><A href="#init_flash">Initial Flash Setup</a>
+    <ul><li><a href="#flash_slices">Slices</a></li>
+		<li><a href="#flash_parts">Partitions</a></li>
+		<li><a href="#flash_system">System</a></li>
+		<li><a href="#flash_config">Configuration</a></li>
+		<li><a href="#flash_software">Third Party Software</a></li>
+		</ul></li>
+<li><a href="#init_disk">Initial Disk Setup</a></li>
+<li><a href="#dupe_flash">Duplicating the Flash</a>
+  <ul><li><a href="#dupe_first_time">First Time</a></li>
+	<li><a href="#dupe_subs_times">Subsequent Times</a></li>
+	<li><a href="#dupe_common">Common Steps</a></li>
+	</ul></li>
+<li><a href="#config_duped_slice">Configuring Duplicated Slice</a></li>
+<li><a href="#upgrade">Upgrading a Running System</a></li>
+<li><a href="#summary">Summary</a></li>
+</ul>
+</p>
+
+<a name="background" />
+<h2>Background</h2>
+
+<p>
+Installing and configuring FreeBSD is laudably simple, thanks to 
+<a href="http://www.freebsd.org/cgi/man.cgi?query=sysinstall&sektion=8">sysinstall</a>, 
+<a href="http://www.freebsd.org/cgi/url.cgi?ports/net/cvsup/pkg-descr">cvsup</a>,
+the <a href="http://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/">FreeBSD 
+handbook</a> and the many ways to obtain the source. Upgrading a running
+system's crucial software requires a few more steps: staying on top of 
+<a href="http://www.freebsd.org/cgi/url.cgi?ports/ports-mgmt/portupgrade/pkg-descr">
+portupgrade</a>,
+cvsuping ports and src and following the steps in <a href="http://www.freebsd.org/cgi/cvsweb.cgi/src/Makefile">/usr/src/Makefile</a> to build world
+and kernel. But it's all fairly manageable.
+</p>
+
+<p>
+The problem is that I've never found a simple way to keep multiple machines upgraded
+at once.</p>
+
+<h3>Problem area: system software</h3>
+<p>The official source upgrade process in /usr/src/Makefile mandates
+running 
+'make installworld' after rebooting single user. Even if you run 'make world' once
+and mount a common /usr/obj/, this entails taking every machine down separately and 
+keeping it offline while the installworld completes.</p>
+
+<h3>Problem area: third-party software (ports)</h3>
+<p>Installing an upgraded port multiple times from the 
+same mounted /usr/ports/ 
+doesn't always work, because so many ports depend on touching parts of the /var/db and 
+/etc/ trees. Even if it did work, the labor of running portupgrade or 
+"make deinstall; make install" on multiple machines is frustrating and ultimately 
+unsustainable.</p>
+
+<h3>Problem summary</h3>
+<p>Keeping src and third-party ports up to date on a set of machines 
+is hard. Common mounted sources are a pain and they usually break.</p>
+
+<p>What we need is a solution where we can do all the portupgrade and make world
+interaction in one place, and then blast the resulting installed system
+ onto multiple machines safely and cleanly,
+with minimal downtimes and no risk of losing application data.</p>
+
+<a name="why_usb" />
+<h2>Why USB?</h2>
+
+<p>The solution described here entails a separate booting storage volume with all system 
+software enclosed within 
+defined identical slices that can be duplicated entirely and then replicated 
+machine-to-machine. Although this is possible using only internal magnetic disks in a
+conventional system architecture, the rise of cheap, 2-gb-plus, BIOS-bootable, 
+USB-connected flash storage devices makes everything a lot easier, especially initial
+system setup.</p>
+
+<p>
+Booting off a USB slice makes the booting system discrete and separate from the permanent
+data on the magnetic disk. You can have a "classic" partition setup with no 
+intermixing of application data. With two slices set up, one inactive and one active, you 
+can install an upgrade with only the reboot period as downtime, and roll back to the
+ previous version of the entire system seamlessly if there is a problem.
+All the while, your application data on the magnetic drive is never touched.</p>
+
+<p>Although all this can be done remotely, should something go wrong the in-person
+administration is extremely simple. The physical USB flash connected externally
+makes it possible to literally pull the current system and install a new one much easier
+than anything involving internal magnetic disks.</p>
+
+<p>Additionally, it is much easier to standardize the USB disk than the magnetic disk.
+It is easier to have a uniform slice image that the flash can boot from, while
+potentially having slightly different RAID controllers and partition sizes from 
+machine to machine.</p>  
+
+<a name="materials" />
+<h2>Materials</h2>
+
+<p>Since we're going to be working with systems that have magnetic disks, this
+document assumes you've got a <b>system with some sort of disk</b> and a <b>working 
+FreeBSD install </b>up and running. You should have a <b>built world and kernel</b>
+in the /usr/src/ tree on that system. 
+We also assume you've got at least <b>one USB port</b>, a <b>BIOS that recognizes and can
+ boot from USB
+drives</b> (most modern BIOSes as of 8/2007 can), and several <b>USB flash disks of at 
+least 2 gb</b>. 
+The Cruzer from SanDisk is a popular model, but anything will probably work.</p>
+
+<a name="init_flash" />
+<h2>Initial Flash Setup</h2>
+
+<a name="flash_slices" />
+<h3>Slices</h3>
+
+<p>We want a disk with two identical slices, each about 1 GB in size, that we can boot
+from. Later we'll set up these from a script, but the first one we need to walk 
+through.</p>
+
+<p>First plug in your USB drive. You should see some console message about it being
+recognized.</p>
+
+<pre class="terminal">
+# dmesg | tail -5
+umass1: LEXAR JD Secure II +, rev 2.00/11.00, addr 3
+da2 at umass-sim1 bus 1 target 0 lun 0
+da2: <LEXAR JD Secure II + 1100> Removable Direct Access SCSI-0 device
+da2: 40.000MB/s transfers
+da2: 3840MB (7864320 512 byte sectors: 255H 63S/T 489C)
+</pre>
+
+<p>Depending on what your disk is recognized as, replace da2 below accordingly.
+The first thing we need to do is blow away the factory layout of the flash disk
+and install two identical FreeBSD slices. The easiest way to do this is by using
+a prototype file for <a href="http://www.freebsd.org/cgi/man.cgi?query=fdisk&sektion=8">
+fdisk</a>. Just to review: In FreeBSD, slices are handled with fdisk.
+A slice usually includes multiple partitions, which are handled with 
+<a href="http://www.freebsd.org/cgi/man.cgi?query=bsdlabel&sektion=8">bsdlabel 
+(disklabel)</a>. 
+Most of the time you only
+have one slice. Most of the time you have many partitions, which map to mountpoints 
+(e.g. / or /usr) or are used for swap. 
+</p>
+
+<p>Here is our fdisk.proto file:</p>
+
+<pre class="file">
+#     slice     type    start   length
+p       1       165     63      1991997
+p       2       165     1992123 1991997
+# set slice one active
+a       1
+</pre>
+
+<p>The 63 sector offset at the top of the disk is to reserve space for booting 
+code, and the 63 missing sectors between the slices preserves some kind of track
+alignment so that the two slices can be identically sized. The legacy bootcode
+stuff and the false geometry fakery (a flash drive is a long way from heads and
+cylinders, in its real physical sense) is a big pain, but in general FreeBSD will
+complain a little but work with reasonable settings.</p>
+
+<pre class="terminal">
+# fdisk -f fdisk.proto -i da2
+</pre>
+
+<p>This sets up our slices with one active, but to fully initialize the disk
+we need to use <a href="http://www.freebsd.org/cgi/man.cgi?query=boot0cfg&sektion=8">
+boot0cfg</a>.
+
+<pre class="terminal">
+# boot0cfg -o noupdate da2
+</pre>
+
+<p> The noupdate option keeps the MBR from writing itself back
+after every boot, a minor precaution against flash abuse.
+</p>
+
+<pre class="terminal">
+# boot0cfg -B da2
+</pre>
+
+<p>This installs the MBR code on the flash so we can have the standard
+F1/F2 FreeBSD slice boot menu.</p>
+
+<pre class="terminal">
+# boot0cfg -s 1 da2
+</pre>
+
+<p>This makes sure we're booting off slice 1 the next time we boot this disk.</p>
+
+<a name="flash_parts" />
+<h3>Partitions</h3>
+
+<p>Now we need to set up our initial flash with some partitions. We could in theory
+just have one big partition, but since we're using 1-GB slices that's not a good idea.
+FreeBSD doesn't like to boot off such a giant (by historical standards) partition, so 
+we're going to divide each slice up into three partitions along traditional lines: 
+/, /var and /usr. /var/run, /var/log, and /tmp will be handled by memory disks on the 
+running system. Swap will be on the magnetic disk.
+</p>
+
+<p>The file flash_labels.proto:</p>
+
+<pre class="file">
+#        size   offset    fstype   [fsize bsize bps/cpg]
+  a:   262144        0    4.2BSD     2048 16384 16392
+  c:       *         0    unused        0     0      
+  d:   163840        *    4.2BSD     2048 16384 10248
+  e:       *         *    4.2BSD     2048 16384 28528
+</pre>
+
+<p>The '*' parameters are convenient wildcards that basically mean 
+"do the right thing"
+in the 'offset' column and "as much as possible" in the 'size' column.
+Set up the partitions, <a href="http://www.freebsd.org/cgi/man.cgi?query=newfs&sektion=8">
+newfs</a> them and <a href="http://www.freebsd.org/cgi/man.cgi?query=mount&sektion=8">
+mount</a> them somewhere. (Here we use /mnt.)
+</p>
+
+<pre class="terminal">
+# bsdlabel -R da2s1 flash_labels.proto
+# bsdlabel -B da2s1
+# newfs -U da2s1a
+# newfs -U da2s1d
+# newfs -U da2s1e
+# mount /dev/da2s1a /mnt
+# mkdir /mnt/var
+# mount /dev/da2s1d /mnt/var
+# mkdir /mnt/usr
+# mount /dev/da2s1e /mnt/usr
+</pre>
+
+<p>Don't worry about slice 2-- we'll deal with that later by duping s1's image.
+All this laborious stuff is just to get the first valid slice up and running.
+</p>
+
+<a name="flash_system" />
+<h3>System</h3>
+
+<p>Now we need to install system software on this newly partitioned and formatted 
+slice.</p>
+
+<pre class="terminal">
+# cd /usr/src
+# make DESTDIR=/mnt installkernel
+# make DESTDIR=/mnt installworld
+</pre>
+
+<p>
+This doesn't install a full /etc hierarchy, so you'll
+have to run this too:
+</p>
+
+<pre class="terminal">
+# cd /usr/src/etc
+# make DESTDIR=/mnt distrib-dirs
+# make DESTDIR=/mnt distribution
+</pre>
+
+<a name="flash_config" />
+<h3>Configuration</h3>
+
+<p>We need to get a few basic config file info on there before we can boot off the
+USB. We need a skeletal /etc/fstab:</p>
+
+<pre class="file">
+/dev/da0s1a     /       ufs     rw,noatime      1       1
+/dev/da0s1d     /var    ufs     rw,noatime      0       0
+/dev/da0s1e     /usr    ufs     rw,noatime      0       0
+md              /tmp    mfs     rw,-s24M,noatime        0       0
+md              /var/run        mfs     rw,-s4M,noatime    0       0
+md              /var/log        mfs     rw,-s32M,noatime   0       0
+</pre>
+
+<p>Note that this sets up our memory-disk volumes on three volatile parts of the 
+disk. Although modern flash drives can handle a lot of writes, it's not a good idea to
+have continual writes hitting them over the life of the system. If you need persistent
+/var/run or /var/log info, map these somewhere on the magnetic disk. We'll see later on
+how we devote a partition to app log info.</p>
+
+<p>We also need a very skeletal /etc/rc.conf so the network comes up:</p>
+
+<pre class="file">
+hostname="host.domain.com"
+ifconfig_nfe0="DHCP"
+</pre>
+
+<p>Substitute a hostname and the proper interface/network scheme that fits your
+world.</p>
+
+<p>At this point we could continue setting up the disk with chroot, but I think 
+it's worthwhile to boot off the flash and make sure things are working. 
+Reboot, and enter your BIOS setup to make sure it is set to boot off the USB HD 
+first.</p>
+
+<a name="flash_software" />
+<h3>Third Party Software</h3>
+
+<p>If the system boots up all right, mount your magnetic disk's /usr partition
+somewhere, 
+link up to your ports collection and install whatever ports you need.</p>
+
+<pre class="terminal">
+# mount /dev/da1s1e /mnt
+# cd /usr
+# ln -s /mnt/ports
+# cd /usr/ports/shells/bash; make; make install
+# [...]
+</pre>
+
+<p>
+With 730 MB on the flash's /usr volume, you should be able to fit anything you need.
+At this point, the flash-based system is running and ready to go. 
+</p>
+<p>There's a little bit of a chicken-and-egg problem for the next part-- we either
+have to walk through setting up a magnetic disk before we finalize the flash image
+and discuss upgrades, or assume the existence of a few subservient partitions 
+that we conjure up out of thin air.
+</p>
+
+<p>This document is going to take the former path and deal with initializing and 
+hooking in the magnetic disk, but if you want to do that all yourself you can skip
+to <a href="#dupe_flash">Duplicating the Flash</a> below.</p>
+
+<a name="init_disk" />
+<h2>Initial magnetic disk setup</h2>
+
+<p>For running systems within our new flash-booting setup, the magnetic disk
+is going to be completely reserved for application code, data and logs. We're going
+to blow away mostly all FreeBSD (or other OS) vestiges. That's the point-- the 
+system boots off flash, so the internal disk is data only.</p>
+
+<p>For that reason, it's advisable to perform these next steps on a different
+machine than the one you've started working on. We'll call our original machine M1 and
+the new one M2. Presumably you have at least two identical machines that you want
+to keep upgraded.
+</p>
+
+<p>Now that you've booted on M2, whose internal disk contents are
+worthless, we can begin.</p>
+
+<p>For my application, I'm setting up a big swap partition, one fs partition that 
+uses 10% of remaining space (for web-app code, a few homedirs, etc.) and a giant
+partition that uses the remainder.</p>
+
+<p>The file internal_labels.proto looks like this:</p>
+<pre class="file">
+# a is small and unused
+# b is swap
+# d is where we put our app code, homedirs, ports,
+#   system src, anything we need. 10% is a little generous.
+# e is the rest of the disk. It mounts on /usr/local/var and holds
+#   all the growable data-- app data and logs.
+#
+#8 partitions:
+#        size   offset    fstype   [fsize bsize bps/cpg]
+
+  a:  1048576        0    4.2BSD        0     0     0
+  b:  30G            *    swap
+  c:  *              0    unused        0     0         # "raw" part, don't edit
+  d:  10%            *    4.2BSD     2048 16384 28528
+  e:  *              *    4.2BSD     2048 16384 28528
+</pre>
+
+<p>The initializion script init_disk.sh looks like this:</p>
+<pre class="file">
+#!/bin/sh -x
+#
+
+DISK=${DISK:-da1}
+
+# Initialize the disk with one all-encompassing FreeBSD slice
+#
+fdisk -I ${DISK}
+
+# Initialize partitions from prototype file
+#
+bsdlabel -R ${DISK}s1 internal_labels.proto
+
+newfs -U ${DISK}s1d
+newfs -U ${DISK}s1e
+
+# mount the new vols and do app-specific setup
+</pre>
+
+<p>It respects the environment variable DISK in case da1 is not it.</p>
+
+<p>After the newfs commands are complete, you can mount
+the new filesystems where you want and do whatever app-specific setup is
+needed. Extend the script as neccessary.</p>
+
+<p>In my case, the new volumes are mounted on /usr/local/pd2 and /usr/local/var, 
+neccessitating the following additions to /etc/fstab:
+</p>
+<pre class="file">
+/dev/da1s1b     none    swap    sw      0       0
+/dev/da1s1d     /usr/local/pd2  ufs     rw      0       0
+/dev/da1s1e     /usr/local/var  ufs     rw,noatime      0       0
+</pre>
+
+<p>Note that because I'm using SATA RAID for my internal disk, I've assumed
+da1 as the disk's device name. If you use a plain SATA disk/controller you
+might use ad1 or ad4.</p>
+
+<a name="dupe_flash" />
+<h2>Duplicating the Flash</h2>
+
+
+<p>Now we have a booting slice that lives on a USB flash with another slice
+available, as well as a script to initialize the internal disk on new machines
+and at least one machine so initialized (M2), as well as our first machine which
+still has a bootable internal disk (M1).</p>
+
+<a name="dupe_first_time" />
+<h3>The First Time</h3>
+<p>For this first time, we need to boot off that original internal disk on M1.</p>
+
+<p>The reason is that we need to boot off something other than our flash if 
+we're going to duplicate that flash, since we need the entire image to be
+completely quiescent. If the filesystems are open we'll be duplicating an open
+filesystem, which will look like a crashed filesystem whenever we reboot.</p>
+
+<a name="dupe_subs_times" />
+<h3>All subsequent times</h3>
+<p>Once we have flash disks with two working slices on them, we can finalize the new
+image on s1, then boot off the other slice, then duplicate s1's image.</p> 
+
+<p>We switch booting slices with the script swap_boot.sh:</p>
+<pre class="file">
+#!/bin/sh -x
+#
+# Shell script that swaps which slice will boot the flash.
+# Takes an argument: 1 or 2. Relies on the DISK variable,
+# which can be set but defaults to da0.
+
+DISK=${DISK:-da0}
+fdisk -f ./active_slice.$1 ${DISK}
+boot0cfg -s $1 ${DISK}
+</pre>
+
+<p>This runs fdisk and boot0cfg to switch the default booting slice. It
+relies on two dummy fdisk prototype files, active_slice.1 and active_slice.2:</p>
+
+<pre class="file">
+# dummy prototype to set slice 1 to active
+a 1
+</pre>
+
+<pre class="file">
+# dummy prototype to set slice 2 to active
+a 2
+</pre>
+
+<p>Since all that is required in these files is a line with 'a' and a number,
+the script should probably be improved to create them on the fly automatically.
+</p>
+
+<a name="dupe_common" />
+<h3>Common steps</h3>
+
+<p>After we boot, copy off the image of the non-booting flash slice using 
+<a href="http://www.freebsd.org/cgi/man.cgi?query=dd&sektion=1">dd</a>
+on the /dev/ special file:</p>
+
+<pre class="terminal">
+# dd if=/dev/da2s1 of=FLASH_SLICE_1 bs=32768
+</pre>
+
+<p>This flash image can now serve as our source image for all the other machines
+we need to create, or, in the future, update. The basic command to write this
+image to a flash is the reverse of the above:</p>
+
+<pre class="terminal">
+dd if=FLASH_SLICE_1 of=/dev/da2s2 bs=32768
+</pre>
+
+<p>It is intended to work as part of these two scripts. First, init_flash.sh,
+for when you've got a completely new flash:</p>
+
+<pre class="file">
+#!/bin/sh -x
+#
+DISK=${DISK:-da2}
+
+/usr/sbin/boot0cfg -B ${DISK}
+
+/usr/sbin/boot0cfg -o noupdate ${DISK}
+
+/sbin/fdisk -f fdisk.proto -i ${DISK}
+
+/usr/sbin/boot0cfg -B ${DISK}
+
+./update_flash_slice.sh
+</pre>
+
+<p>That performs the basic steps that are explained above and then calls
+update_flash_slice.sh:</p>
+
+<pre class="file">
+#!/bin/sh
+#
+if [ -z ${SLICE_SRC} ] ; then
+    echo "must set SLICE_SRC for slice source file"
+    exit 1
+fi
+if [ -z ${SLICE_DST} ] ; then
+    echo "must set SLICE_DST with number of slice to write"
+    exit 1
+fi
+DISK=${DISK:-da2}
+
+dd if=${SLICE_SRC} of=/dev/${DISK}s${SLICE_DST} bs=32768
+</pre>
+
+<p>That enforces the exact definition of the source file and the target
+slice and performs the dd. Example usage (in bash):</p>
+
+<pre class="terminal">
+# SLICE_SRC=./FLASH_SLICE_1 SLICE_DEST=2 DISK=da2 \
+ ./update_flash_slice.sh
+</pre>
+
+<a name="config_duped_slice" />
+<h2>Configuring the duplicated flash slice</h2>
+
+<p>Once the duplication is complete, you'll want to mount the new slice briefly
+and at least change the hostname in /etc/rc.conf and fix /etc/fstab if 
+the target slice was s2, since our initial /etc/fstab assumes s1.
+
+<pre class="terminal">
+# mount /dev/da2s2a /mnt
+</pre>
+
+<p>Here is an example top of an /etc/fstab file for a slice 2 install:</p>
+
+<pre class="file">
+/dev/da0s2a     /       ufs     rw,noatime      1       1
+/dev/da0s2d     /var    ufs     rw,noatime      0       0
+/dev/da0s2e     /usr    ufs     rw,noatime      0       0
+</pre>
+
+<p>If this was all that was needed, you could extend the update_flash_slice.sh script
+to take care of this.</p>
+
+<a name="upgrade" />
+<h2>Upgrading a running system</h2>
+
+<p>Once we make a new flash image on M1, for instance after an upgrade, we can put
+the tools together to upgrade running systems with the only downtime being the reboot.
+Assume that M1 is our seed machine, and we've created a flash image using dd as above 
+and it resides in /usr/local/var.</p>
+
+<p>Assume we have another machine, M3, that we want to upgrade. First we
+scp the image over onto M3's internal disk:</p>
+
+<pre class="terminal">
+# scp M1:/usr/local/var/FLASH_SRC.NEW /usr/local/var/
+</pre>
+
+<p>Then we copy it onto whatever slice is inactive, 
+make whatever edits are needed, swap the booting information and reboot:</p>
+
+<pre class="terminal">
+# SLICE_SRC=/usr/local/var/FLASH_SRC.NEW SLICE_DEST=2 DISK=da0 \
+ ./update_flash_slice.sh
+# mount /dev/da0s2a /mnt
+# [edit /mnt/etc/fstab and /mnt/etc/rc.conf if needed]
+# ./swap_boot.sh 2
+# reboot
+</pre>
+
+<a name="summary" />
+<h2>Summary</h2>
+
+<p>Although this process may seem complicated, it eliminates repetition of complex jobs
+over the life of the running systems.</p>
+
+<p>Initializing all the machines happens one time, when they are first 
+brought up. It consists only of booting off the flash and initializing the
+internal disk-- no software installs.</p>
+
+<p>All "system building" software installs and subsequent upgrades are done once,
+on one machine. When you have a satisfactory build you dupe that flash slice
+and copy it all around. Recurring jobs are cut to the bone and keeping many machines
+up to date and identical is easy.</p>
+
+<p>Contact chris@cabstand.com with questions, suggestions and corrections.</p>
+
+<p>This piece is licensed under a 
+<a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 
+3.0 United States License</a>.</p>
+
+
+</body>
+</html>

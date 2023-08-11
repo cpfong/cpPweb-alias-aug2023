@@ -1,0 +1,69 @@
+FreeBSD on aws and alibaba
+--
+Q: install package?
+A: pkg install -y sudo
+
+Q: what are packages available?
+A: pluto@Oregon % pkg search bind9
+
+Q: what have i already installed?
+A: pkg info | grep sudo
+
+Q: package update how2?
+A:
+ pkg update
+ pkg update -f  (force)
+
+Q: where is sudo connfig?
+A: /usr/local/etc/sudoers
+
+Q: fix your ip
+A:
+elastic ip
+domain name -> ip
+
+Q: new user?
+A: adduser
+ and make this user as wheel group
+--
+
+Q: vm port
+A: open only 22, open more how2
+
+Q: change ssh default port
+A:
+
+Q: rc.conf
+some.SERVICE_enable="YES"
+
+security group
+apache cannot start rc.conf
+open port 80 (security group)
+add some hyperlink into your web site
+
+tmux -- terminal multiplexer
+https://www.cnblogs.com/kevingrace/p/6496899.html
+--
+Newplu09feb@Oregon % cat ~/.tmux.conf
+unbind C-b
+set -g prefix ^A
+
+C-a c		create
+C-a n		next window
+C-a 1..9	goto number n window
+C-a ,		name window
+C-a [		copy jkhl to move and space to select, move and ENTER to select
+C-a ]		paste
+
+Q: personal web page?
+A:
+vi /usr/local/www/apache/data/index.html
+
+who own web page: www
+cd /usr/local/www/apache/data
+chown -R www:www  .
+
+Q: take your VM as storage
+A: secure copy which is scp
+scp -P new_port_number src dst
+scp -P 2222 ./foo.txt cpfong@pluto.ifong.org:~/tmp/

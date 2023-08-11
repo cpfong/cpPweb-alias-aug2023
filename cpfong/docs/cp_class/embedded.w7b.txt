@@ -1,0 +1,35 @@
+#!/bin/sh
+rclone purge koofr:repo
+rclone mkdir koofr:repo
+restic --repo=rclone:koofr:repo --password-file=./pwd init
+restic --repo=rclone:koofr:repo --password-file=./pwd backup /usr/local/etc/
+`
+
+
+
+tools
+--
+sh script
+history grep
+
+init repository at cloud
+--
+restic --repo=./foo/ --password-file=./trash/foo.pwd init --verbose
+restic --repo=rclone:koocn:foo/ --password-file=./trash/foo.pwd init
+
+backup
+--
+restic -r rclone:koocn:foo/ --password-file=./trash/foo.pwd backup ./trash
+restic -r rclone:koocn:foo/ snapshots
+
+list snapshots
+--
+restic snapshots --repo=rclone:koocn:foo/ --password-file=./trash/foo.pwd 
+
+ls snapshot
+--
+restic ls 17adfc7c --repo=rclone:koocn:foo/ --password-file=./trash/foo.pwd
+
+restore
+--
+restic restore 17adfc7c --repo=rclone:koocn:foo/ --password-file=./foo.pwd --target=./target/

@@ -1,0 +1,43 @@
+general structure of http requests
+--
+
+Client					Server
+	 --> client Request
+		Method URI HTTP-version	#cmd file protocol
+		General-header
+		Request-header
+		Entity-header
+		Entity-body
+
+	 <-- Server Response	
+		HTTP-version Status-code Reason-phrase
+		General-header
+		Response-header
+		Entity-header
+		Entity-body
+
+
+Client Request
+ Method URI HTTP-version	POST /cgi-bin/query HTTP/1.0
+ General-header			Connection: Keep-Alive
+ Request-header			Refer http://hypotherical.ora.com/search.html
+				User-Agent Mozilla/3.0Gold (WinNT:1)
+				Host: hypothetical.org.com
+				Accept:image/gif, image/x-xbitmap, image/jpeg
+				image/pjpeg,*/*
+ Entity-header			Content-type: application/x-www-from-urlencoded Content-length 23
+ Entity-body			query=knuth&type=author
+
+Server Response	
+ HTTP-version Status-code Reas	HTTP/1.0 200 OK
+ General-header			Date: Fri, 04
+ Response-header		Server: Apache/1.1.1
+ Entity-header			Content-type:text/html
+				Content-length:327
+				Last-modified: Fri,04 Oct
+ Entity-body			<title>Sample Homepage</title>
+				<img src='/image/orilly_mast.gif'>
+
+HTTP transactions do not need to use all the headers. In fact, it is possible to perform 
+some HTTP requests without supplying any header information at all. 
+A request of GET / HTTP/1.0 with an empty header is sufficient for most servers to understand the client.

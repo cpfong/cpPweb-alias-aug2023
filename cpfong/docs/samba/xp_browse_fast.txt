@@ -1,0 +1,20 @@
+另外許多人常有碰到 Win2K / WinXP 存取 Win9x / WinME 的延滯問題，其原因是因
+為 Win2K / WinXP 的電腦瀏覽連線到 Win9x / WinME 的電腦時，會花額外的時間檢
+查是否有「排定的工作（Scheduled Tasks）」要在 Win9x / WinME 的電腦上執行。
+解決的方法必須要編輯 Win2K / WinXP 的登錄檔： 
+
+　　把 
+        HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion
+        \Explorer\RemoteComputer\NameSpace 
+    下面的 
+        {D6277990-4C6A-11CF-8D87-00AA0060F5BF} 
+
+    刪除，不需要重開機馬上就見效，對於 Win2k 及 WinXP 均有用。關於此部分相
+關資料可以看「Increase Computer Browsing Speed
+ (http://www.winguides.com/registry/display.php/913/)」  
+
+
+此外還有一種可能發生在 Win9x 及 WinNT 的問題，可以看一下 Multiple NetBT 
+Sessions May Hang Local Host 
+(http://support.microsoft.com/directory/article.asp?ID=KB;en-us;q275567)。
+

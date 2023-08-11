@@ -1,0 +1,13 @@
+Q: skip buildworld, just buildkernel and stop at install kernel (no result from image/_.disk)
+A: 
+cp's comment: sometimes cannot just skip build world, go directly build kernel
+
+check logging
+# tail /usr/embedded/qemu-i386/_.iw# tail /usr/embedded/qemu-i386/_.iw
+--
+
+Setting variable: __MAKE_CONF="/usr/embedded/obj/make.conf.install"
++ cd /usr/src
++ make installworld 'DESTDIR=/usr/embedded/qemu-i386/_.w' 'DB_FROM_SRC=yes'
+make[1]: "/usr/src/Makefile.inc1" line 97: A build is required first.  You may have the wrong MAKEOBJDIRPREFIX set.
+*** Error code 1

@@ -1,0 +1,13 @@
+    Sub Main()
+        Dim a(,) As Integer = {{0, 0}, {32, 2}, {26, 3}, {30, -1}}
+
+
+        Dim link As Integer = 1
+
+        While (link <> -1)
+            Console.Write(a(link, 0) & " ")
+            link = a(link, 1)
+        End While
+
+        Console.ReadKey()
+    End Sub

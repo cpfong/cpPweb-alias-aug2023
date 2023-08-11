@@ -1,0 +1,110 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="zh-tw">
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>何謂 Samba</title>
+</head>
+
+<body>
+
+<p align="center"><img border="0" src="vision8.gif" width="195" height="51"></p>
+<p><span style="font-size:18.0pt">何謂<span lang="EN-US"> Samba</span></span></p>  
+<div class="MsoNormal" align="center" style="text-align:center">  
+  <span lang="EN-US">  
+  <hr size="2" width="100%" align="center">  
+  </span>  
+</div>  
+<span lang="EN-US" style="font-size:12.0pt;font-family:新細明體;mso-hansi-font-family:  
+&quot;Times New Roman&quot;;mso-bidi-font-family:&quot;Times New Roman&quot;;mso-ansi-language:  
+EN-US;mso-fareast-language:ZH-TW;mso-bidi-language:AR-SA">  
+<ul type="disc">  
+  <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;  
+     mso-list:l0 level1 lfo1;tab-stops:list 36.0pt">簡單來說，Samba   
+    就是一套程式能讓你的 Unix 系統認識 SMB （Server Message Block）協定</li>  
+</ul>  
+<ul type="disc">  
+  <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;  
+     mso-list:l1 level1 lfo2;tab-stops:list 36.0pt">也就是說，裝上 Smaba   
+    之後，你將可以提供檔案共享跟印表機的服務</li>  
+</ul>  
+</span>  
+<h2><a name="s1"><span lang="EN-US">1. 一般資訊</span></a></h2>  
+<p>所有有關<span lang="EN-US">Samba，什麼是Samba，如何取得相關的來源資訊，如何了解版本編號系統</span></p>  
+<h2><a name="ss1.1"><span lang="EN-US">1.1 Samba是什麼?</span></a></h2>  
+<p><span lang="EN-US">Samba是由許多程式所組成的一套軟体，而這一套軟体中的程式可共同執行工作，進而允許Client透過SMB(Server   
+Message Block)協定，早期Samba是專為Unix系統所寫，但是現在的Samba可以執行在Netware，OS/2   
+and UMS.</span></p>  
+<p>實際上，這意謂著你可以從<span lang="EN-US">Lan Manager   
+客戶端重導磁碟和印表機到Unixi or Windows for workgroups 3.1 or   
+Windows Clients, Linux Clients and O/S 2 Clients   
+的磁碟和印表機，也有一部份Unix一般的程式也成為Samba的一部分，允許Unix使用者使用類似FTP介面可操作檔案空間和印表機，只要是伺服器上SMB服務即可Samba使得以上所提的這些系統有能力，扮演像一個Lan   
+Manager or Windows NT Server的角色，而且只是利用新增功能並且可達到專為系統管理者操作與管理便利而設計。   
+?</span></p>  
+<p>以摘要的方式一一列舉這套軟体的組成份子<span lang="EN-US">:</span></p>  
+<ul type="disc">  
+  <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;  
+     mso-list:l2 level1 lfo1;tab-stops:list 36.0pt"><b><span lang="EN-US">smbd</span></b><span lang="EN-US">,   
+    是一部SMB 伺服器.   
+    是實際處理來自於客戶端的連接，處理檔案，授權和使用者名稱的工作</span></li>  
+  <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;  
+     mso-list:l2 level1 lfo1;tab-stops:list 36.0pt"><b><span lang="EN-US">nmbd</span></b><span lang="EN-US">,   
+    這是Netbios 名稱伺服器,   
+    專門協調客戶端找出伺服器的位置，進行瀏灠工作和管理網域，這些功能已內建在Samba裡面。</span></li>  
+  <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;  
+     mso-list:l2 level1 lfo1;tab-stops:list 36.0pt"><b><span lang="EN-US">smbclient</span></b><span lang="EN-US">,   
+    這是Unix主機的客戶端程式</span></li>  
+  <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;  
+     mso-list:l2 level1 lfo1;tab-stops:list 36.0pt"><b><span lang="EN-US">smbrun</span></b><span lang="EN-US">,   
+    是一個小小的附加程式，協助伺服器執行外部程式。</span></li>  
+  <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;  
+     mso-list:l2 level1 lfo1;tab-stops:list 36.0pt"><b><span lang="EN-US">testprns</span></b><span lang="EN-US">,   
+    這是一個測試伺服器存取印表機的程式。</span></li>  
+  <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;  
+     mso-list:l2 level1 lfo1;tab-stops:list 36.0pt"><b><span lang="EN-US">testparms</span></b><span lang="EN-US">,   
+    這是一個測試Samba組態檔案的正確性</span></li>  
+  <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;  
+     mso-list:l2 level1 lfo1;tab-stops:list 36.0pt"><b><span lang="EN-US">smb.conf</span></b><span lang="EN-US">,   
+    此為Samba的組態檔</span></li>  
+  <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;  
+     mso-list:l2 level1 lfo1;tab-stops:list 36.0pt"><b><span lang="EN-US">smbprint</span></b><span lang="EN-US">,   
+    此為一個範例批次執行檔，允許Unix主機使用smbclient將列印工作送給SMB伺服器。。</span></li>  
+  <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;  
+     mso-list:l2 level1 lfo1;tab-stops:list 36.0pt"><b>文件<span lang="EN-US">!</span></b><span lang="EN-US">   
+    千萬別忽視去看它喔，你可以省下許多時間</span></li>  
+</ul>  
+<p><span lang="EN-US">Samba suite 原創者是Andrew Tridgell.   
+以後的版本由許多net.helpers所共同創作，man pagers和FAQ原作者Karl   
+Auer.</span></p>  
+<h2><a name="ss1.2"><span lang="EN-US">1.2 Samba現在的版本是多少呢?</span></a></h2>  
+<p>目前最新的版本是<span lang="EN-US">2.0.6，假如你要查看版本改變的記錄檔請至此：   
+<a href="ftp://samba.org/pub/samba/alpha/change-log">ftp://www.samba.org</a></span></p> 
+<h2><a name="ss1.3"><span lang="EN-US">1.3 到那裡取得？</span></a></h2>  
+<p><span lang="EN-US">Samba suite可以從samba.org以匿名方式取得最新的版本：目錄位置/pub/samba/alpha   
+要注意的是以上不括任何二進位的形式，Samba只可以source form(來源形式散發)，雖然二進位從其他網站是可以的，最近一些FreeBSD散發出去的版本，例如，Samba二進位可提供FreeBSD的平台。</span></p> 
+<h2><a name="ss1.4"><span lang="EN-US">1.4 版本編號代表什麼意思?</span></a></h2>  
+<p>我們並不建議您使用<span lang="EN-US">Samba的Alpha版本，除非你曉得並自願從事除錯的工作，許多人取用最新我們建議使用穩定的版本皆能用的稱心如意。假如你是大膽的人，絕對不要冒然不顧一切的協助測試與開發，請別按裝在你們的部門的伺服器上，Samba是非常穩定與安全的，並且應該歸功於許多公開發行的政策。</span></p> 
+<p>可何進行編碼<span lang="EN-US">:</span></p> 
+<span lang="EN-US">1.每當軟体有大變動時版本的數字就遞增，例如從1.9.15數字轉移到1.9.16，不過這個版本數字將不會立即出現，並且你們應該繼續使用1.9.15做為生產系統。</span>
+<p><span lang="EN-US">2.就在大改變之後被認為尚未穩定，此時會一連串發行Alpha版，例如1.9.16   
+    alpha1，這些者是提供給，熟悉此軟体的專業人士做為測試用途，以alpha的檔案名稱?</span> 
+<p><span lang="EN-US">3.當Andrew認為alpha版已經穩定了，那麼也就是他開始建議新的使用者按裝的時候，這時他會將以相同版本的數字但去掉alpha字眼，例如1.9.16</span> 
+<p><span lang="EN-US">4.在穩定的發行版裡發現了無法避免的程式錯誤時就發行輕微修補程式，就以   
+    pxx命名1.9.16p2</span>  
+<p class="MsoNormal">發行進度如下：</p>  
+<pre><span lang="EN-US"><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>1.9.15p7<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>(生產階段)</span></pre>  
+<pre><span lang="EN-US"><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>1.9.15p8<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>(生產階段)</span></pre>  
+<pre><span lang="EN-US"><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>1.9.16alpha1<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>(僅供專業人員測試)</span></pre>  
+<pre><span lang="EN-US"><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>:</span></pre>  
+<pre><span lang="EN-US"><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>1.9.16alpha20<span style="mso-spacerun: yes">&nbsp;&nbsp; </span>(僅供專業人員測試)</span></pre>  
+<pre><span lang="EN-US"><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>1.9.16<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>(生產階段)</span></pre>  
+<pre><span lang="EN-US"><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>1.9.16p1<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>(生產階段)</span></pre>  
+<p class="MsoNormal">以上系統意謂不管何時何人在<span lang="EN-US">samba   
+ftp 網站瀏灠時他們階能夠抓下最高數字沒有尾隨alpha名稱的現行版本：file：c:\faq\sambafaq-1.html</span></p>  
+<p align="left">　</p>
+
+</body>
+
+</html>

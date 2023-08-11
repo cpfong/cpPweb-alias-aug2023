@@ -1,0 +1,2 @@
+# how in windows 2008 Server PowerShell command line change password
+ps> net user administrator MyNewPassWord

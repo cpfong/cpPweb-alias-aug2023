@@ -1,0 +1,30 @@
+7 To enable win98 to negociate plain-text password, you need to to modify one
+settings in the registry :
+
+1)      Launch the Registry Editor as follows:
+        Click on:       /Start/Run
+        Type "regedit" and press enter.
+ 
+2)      Double click on:        HKEY_LOCAL_MACHINE
+ 
+3)      Locate the following Key:
+        /HKEY_LOCAL_MACHINE/System/CurrentControlSet/Services/VxD/VNETSUP
+ 
+4)      From the menu bar select Edit/New/DWORD Value
+ 
+5)      Rename the entry from "New Value #1" to EnablePlainTextPassword
+
+6)      Press Enter, then double click on the new entry.         
+        A dialog box will pop up and enable you to set a value. You must set
+this value to 1. 
+
+
+The best solution is always to enable your Samba server to use encrypted
+passwords :
+In the global section put the line 
+       encrypt passwords = Yes
+Then, with the tools smbpasswd you must create a pair of account and his
+encrypted password. Use 'smbpasswd -a USERNAME', where username is one of the
+Unix accounts.
+
+

@@ -1,0 +1,73 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import java.util.*; 
+import java.io.*;
+
+public class FileClassDemo extends JFrame
+implements  ActionListener {
+    private JButton startButton;
+
+    public static void main (String [] args) {
+        FileClassDemo frame = new FileClassDemo();
+        frame.setSize(400, 300);
+        frame.createGUI();
+        frame.setVisible(true);
+    }
+
+    private void createGUI() {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        Container window = getContentPane();
+        window.setLayout(new FlowLayout());
+
+        startButton = new JButton("start");
+        window.add(startButton);
+        startButton.addActionListener(this);
+    }
+
+    public void actionPerformed(ActionEvent event) {
+      //-------STARTEXTRACT=fileclass.xtr
+        if (event.getSource() == startButton) {
+            //---------------STARTEXTRACT=newfile.xtr
+            File myFile = new File("c:\\temp\\java\\demo.txt");
+            //----------------ENDEXTRACT=newfile.xtr
+            //-----------------STARTEXTRACT=getparent.xtr
+            String parent = myFile.getParent();
+            //-------------ENDEXTRACT=getparent.xtr
+            JOptionPane.showMessageDialog(null,
+                                     "Parent is: " + parent);
+
+            //-----------------STARTEXTRACT=abspath.xtr
+            String absolute = myFile.getAbsolutePath();
+            //--------------------ENDEXTRACT=abspath.xtr
+            JOptionPane.showMessageDialog(null,
+                            "Absolute path is: " + absolute);
+            //-----------------STARTEXTRACT=exists.xtr
+            boolean isThere = myFile.exists();
+            //----------------ENDEXTRACT=exists.xtr
+ 
+
+           //-----------------STARTEXTRACT=getname.xtr
+            String name = myFile.getName();
+            //-------------ENDEXTRACT=getname.xtr
+            JOptionPane.showMessageDialog(null, 
+                                          "Name is: "+ name);
+
+
+            //------------STARTEXTRACT=isdirectory.xtr
+            boolean checkDirectory = myFile.isDirectory();
+            //---------------ENDEXTRACT=isdirectory.xtr
+            //------------STARTEXTRACT=length.xtr
+            int myLength = (int)myFile.length();
+            //------------ENDEXTRACT=length.xtr
+            //--------------STARTEXTRACT=list.xtr
+            String[] allFiles = myFile.list();
+            //-----------------ENDEXTRACT=list.xtr
+        }
+//------------ENDEXTRACT=fileclass.xtr
+
+    }
+}
+
+
+

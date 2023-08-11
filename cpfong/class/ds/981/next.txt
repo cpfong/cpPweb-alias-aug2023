@@ -1,0 +1,8 @@
+       Dim link(,) As Integer = {{10, 4}, {20, 3}, {30, 0}, {40, 2}, {50, 5}, {60, -1}}
+        Dim head = 1
+        Dim ll As Integer = head
+
+        While (ll <> -1)
+            Console.Write(link(ll, 0) & " ")
+            ll = link(ll, 1)
+        End While

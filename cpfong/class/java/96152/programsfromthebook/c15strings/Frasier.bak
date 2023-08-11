@@ -1,0 +1,49 @@
+//--------------STARTEXTRACT=sumtextfields.xtr
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class SumTextFields extends JFrame implements ActionListener {
+
+    private JTextField number1Field, number2Field, resultField;
+    private JLabel plusLabel, equalsLabel;
+
+    public static void main(String[] args) {
+        SumTextFields frame = new SumTextFields();
+        frame.setSize(400, 300);
+        frame.createGUI();
+        frame.show();
+    }
+
+    private void createGUI() {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        Container window = getContentPane();
+        window.setLayout(new FlowLayout());
+
+        number1Field = new JTextField(7);
+        window.add(number1Field);
+//-------------------STARTEXTRACT=sumlabelconstructor.xtr
+        plusLabel = new JLabel("  +  ");
+//--------------------ENDEXTRACT=sumlabelconstructor.xtr
+        window.add(plusLabel);
+
+        number2Field = new JTextField(7);
+        window.add(number2Field);
+        number2Field.addActionListener(this);
+
+        equalsLabel = new JLabel("  =  ");
+        window.add(equalsLabel);
+
+        resultField = new JTextField(7);
+        window.add(resultField);
+    }
+
+    public void actionPerformed(ActionEvent event) {
+//---------------STARTEXTRACT=sumtextinout.xtr
+        int number1 = Integer.parseInt(number1Field.getText());
+        int number2 = Integer.parseInt(number2Field.getText());
+        resultField.setText(Integer.toString(number1 + number2));
+//-------------------ENDEXTRACT=sumtextinout.xtr
+    }
+}
+//-----------------ENDEXTRACT=sumtextfields.xtr

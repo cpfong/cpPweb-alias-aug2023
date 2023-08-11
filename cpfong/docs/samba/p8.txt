@@ -1,0 +1,91 @@
+1/14/99 - P.Sery
+
+   I have included the Samba RPM off the Red Hat 5.2 distribution, in the
+new companion CD-ROM/IDG directory, because it can handle password encryption. 
+If you want to use Windows NT 4.0 or Windows 98 (or Windows 95 with password 
+encryption added) then you will have to set up Samba to use encryption; the 
+alternative is to set your Windows client to use plain text passwords - see 
+below for more details). I have successfully tested Samba and Windows 98 
+using encrypted passwords.
+
+   Note that if you configure Samba to use encryption then your older,
+non-encrypted OS's can still be authenticated because Samba will back off
+and accept plain-text passwords.
+
+   You can also enable Windows 95 to use encryption by installing the 
+VRDRUPD.EXE (from www.microsoft.com) update. (I have not done this myself
+but have been told by people who have that it works.
+
+   You can turn off password encryption by modifying your registry. Please 
+see the Win95_PlainPassword.reg and the NT4_PlainPassword.reg files in 
+the /usr/doc/samba../docs directory for the registry necessary modifications.
+
+
+Instructions for turning on Samba password encryption:
+
+   Turn on the password encryption by editing the /etc/smb.conf file and
+uncomment the following lines:
+
+# ENCRYPTION.txt, Win95.txt and WinNT.txt in the Samba documentation.
+# Do not enable this option unless you have read those documents
+  encrypt passwords = yes
+  smb passwd file = /etc/smbpasswd
+
+   The Red Hat 5.2 Samba /etc/smb.conf uses the workgroup default of 
+"MYGROUP" where Red Hat 5.0 defaults uses "WORKGROUP". My instructions, of 
+course, use "WORKGROUP". Therefore, to use the instructions found in the book
+you must change the workgroup designation on both sides of the house (Windows
+and Linux) to match each other. I choose to change the /etc/smb.conf file to
+to "workgroup = WORKGROUP" (case is important). You can work it the other way
+if you choose but the important thing is to have them synced up.
+
+   Next, create the smbpasswd file from you /etc/passwd file by running the 
+command:
+
+   cat /etc/passwd | mksmbpasswd.sh >/etc/smbpasswd
+
+   Erase the lines for the root, daemon, bin users since if you leave them in 
+it can create security holes; you also can eliminate all but the actual users
+as well but I have to test my system first to make sure that Samba doesn't need
+them to operate. Please also note that until the second half of chapter 6 I
+have you use the root user to provide a simple way to get up and running fast. 
+While this is okay for the initial demonstration it is not a good practice to 
+continue in a production system. I make note of that in the book but want to
+reiterate it here.
+
+   Create a Samba password for each user that you want to provide with
+Samba access by running the smbpasswd command as follows:
+
+   smbpasswd iamauser
+
+   The smbpasswd program will prompt you to enter a password twice.
+
+   Restart the Samba daemons:
+
+   /etc/rc.d/init.d/smb restart
+
+   Log on to your Windows 98 box and enter a user name/password that 
+corresponds to one that you have created a Samba password file for on 
+the Linux/Samba server and you should see your home directory in the
+Network Neighborhood.
+
+___________________________
+
+A reader sent me the following information on turning off encryption on
+Win95 and Win98 boxes:
+<<<
+What I did was used Regedit (a windows 95/98 program provided by Microsoft)
+to adda DWORD in this registry:
+HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\VxD\VNETSETUP
+The new DWORD was named EnablePlainTextPassword and I gave it a value of one.
+
+Like all things Linux I found this on the net on this page.
+http://www.sambaix.com/sambaix/config-misc.html
+
+It is a page for an HP-UX version of samba. It also has instructions for
+modifying versions of NT.
+
+Hope this helps,
+Jim
+>>>
+

@@ -1,0 +1,7 @@
+email 1st
+password 2nd
+not_dup_account 3rd
+verify puzzle (note: twice puzzle)
+it will send sec code to your email
+DONE! (#skip its questions)
+

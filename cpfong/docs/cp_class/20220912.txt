@@ -1,0 +1,35 @@
+chapter 2 scalar
+
+1.25
+7.25e45 	#7.25 x 10^45
+-1.2E-23	#E same as e means exp
+
+0
+2001
+-40
+61298040283768
+61_298_040_283_768
+
+0377		#octal
+0xff		#hex
+0b11111111	#binary
+
+math operator + - * / % 	#note: 1+2 is math (number operator, you canNOT s+y since s is not a number)
+string operator . x 		#note: diff of 1.2 "1"."2" 
+
+single quote is different than double quote
+
+automatically conversion of number and string
+
+0337 diff '0337' 255 vs 337
+
+$superbowl $super_bowl $superb_owl
+$stopit $sto_pid $stop_id $stupid #typo
+
+assignment operator
+$fred = 17;
+
+binary assignment operator
+$fred += 1;
+$str .= ' '; # append one space
+

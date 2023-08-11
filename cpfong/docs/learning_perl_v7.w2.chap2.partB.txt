@@ -1,0 +1,54 @@
+dd bs=1 skip=3 if=./notepad.UTF-8.txt >out
+
+$alef= chr( 0x05D0 ); # use chr to get code point
+
+p47 compare operators
+number		string
+----------------------
+==		eq
+!=		ne
+<		lt
+>		gt
+<=		le
+>=		ge
+
+if condition
+note: no boolean type in perl
+how to decide TRUE or FALSE
+
+number:	0 is False, others number are True
+string: empty string and null are False '' 'o' others are True
+undefined variable is False
+
+Boolean operator !
+if (! $is_bigger){
+}
+
+p49
+get input from standard input
+note: <STDIN> include "\n"
+
+$line=<STDIN>;
+if ($line eq "\n"){
+ print "blank\n";
+}
+else {
+ print "line input was: $line";
+}
+
+chomp
+--
+$text=<STDIN>;
+chomp $text; # equal chomp($text)
+
+chomp($text=<STDIN>);
+
+p50
+--
+while 
+
+$count=0
+while ($count < 10){
+ $count += 2;
+ print "count is $count\n";
+}

@@ -1,0 +1,26 @@
+
+vi cronch.conf
+-------------------
+
+On Wed, Jun 05, 2002 at 07:23:28PM -0400, Peter Brezny scribbled:
+# I'm stuck...
+# 
+# /usr/lib/libedit.a(editline.o): In function `el_gets':
+# editline.o(.text+0x67d2): undefined reference to `tgoto'
+[snip duplicates]
+# editline.o(.text+0x6eb5): undefined reference to `tgetent'
+# editline.o(.text+0x6f79): undefined reference to `tgetflag'
+# editline.o(.text+0x6fde): undefined reference to `tgetnum'
+# editline.o(.text+0x7bd8): undefined reference to `tgetstr'
+[snip many more]
+# *** Error code 1
+[snip again :)]
+# Any ideas?
+
+
+My best guess.. try editing crunch.conf, and at the bottom, where
+there are a bunch of libraries listed, add -ltermcap to the list;
+these functions that are undefined, should be contained there..
+
+Hope this helps;
+

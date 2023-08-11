@@ -1,0 +1,2 @@
+default baud rate 19200 (after reset)
+nanoBSD default baud rate 9600

@@ -1,0 +1,47 @@
+Q: acc and password of soekris 4826 ap?
+A:
+root
+48264826 (or no password)
+
+Q: how to login in?
+A: 
+ssh port 22 or com port baud rate 9600
+ip of gateway should be 172.16.16.x or 192.168.0.x (local ip)
+ssh root@172.16.16.254
+
+Q: any config will be saved after reboot?
+A: NO. unless save_cfg
+
+1. unless save_cfg, all data will no be saved
+2. mount
+3. cat 
+4. >
+5. echo 
+6. sed
+7. vi command
+8. /etc/rc.conf /etc/rc.local
+
+Q: files need to pay attentation?
+A:
+root@4GCF-sisDHCP-wlanOK:~ # ls /etc/rc.local /etc/rc.conf
+/etc/rc.conf	/etc/rc.local
+
+Q: how to modify ssid?
+A: 2 files /etc/hostapd.conf && /etc/rc.conf
+
+root@4GCF-sisDHCP-wlanOK:~ # cat /etc/hostapd.conf | grep ssid
+ssid=SoeKris4G
+
+root@4GCF-sisDHCP-wlanOK:~ # cat /etc/rc.conf|grep ssid
+ifconfig_wlan0="inet 172.16.16.254 netmask 255.255.255.0 ssid SoeKris mode 11g channel 11 -bgscan up"
+
+Q: modify ssid password
+A:
+root@4GCF-sisDHCP-wlanOK:~ # cat /etc/hostapd.conf | grep pass
+wpa_passphrase=48264826
+
+Q: dhcp or fix ip?
+A:
+the interface is sis0 and check these 2 files
+/etc/rc.conf 
+/etc/rc.local

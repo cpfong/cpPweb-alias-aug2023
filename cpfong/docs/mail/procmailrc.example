@@ -1,0 +1,127 @@
+
+:0 B 
+* ^Hi\! How are you(\.|=3F) 
+* ^I send you this file in order to have your advice 
+* ^See you later(\.|=2E) Thanks 
+/dev/null
+
+
+:0 B 
+* ^Hi\! How are you\? 
+* ^=20
+* ^I send you this file in order to have your advice 
+* ^=20
+* ^See you later\. Thanks 
+/dev/null
+
+:0 B
+* ^Hi! How are you=3F
+* .* 
+* ^This is the file with the information that you ask for
+* .* 
+* ^See you later=2E Thanks
+/dev/null
+
+:0 B
+* ^Content-Type:.*application.*
+* name="readme.exe"
+/dev/null
+
+:0 B
+* ^Content-Type:.*audio/x-wav.*
+* name="readme.exe"
+/dev/null
+
+:0 B
+* ^Content-Type:.*multipart/mixed.*
+* name="ANTI_CIH.EXE"
+/dev/null
+
+:0
+* ^To:.*undisclosed-recipients:.*
+/dev/null
+
+:0 B
+* ^Content-Type:.*application.*
+* name="sample.exe"
+/dev/null
+
+:0 B
+* ^Content-Type:.*audio/x-wav.*
+* name="sample.exe"
+/dev/null
+
+:0 B
+* ^Content-Type:.*application.*
+* name="Sample.exe"
+/dev/null
+
+:0 B
+* ^Content-Type:.*audio/x-wav.*
+* name="Sample.exe"
+/dev/null
+
+:0 B
+* ^Content-Type:.*audio/x-midi;.*
+* name=".*.scr"
+/dev/null
+
+:0 B
+* ^Content-Type:.*audio/x-midi;.*
+* name=".*.exe"
+/dev/null
+
+:0 B
+* ^Content-Type:.*audio/x-midi;.*
+* name=".*.pif"
+/dev/null
+
+:0 B
+* ^Content-Type:.*audio/x-midi;.*
+* name=".*.bat"
+/dev/null
+
+:0 B 
+* ^Content-Type:.*audio/x-midi;.*
+* .*name=.*\.scr
+/dev/null
+
+:0 B
+* ^Content-Type:.*audio/x-midi;.*
+* .*name=.*\.pif
+/dev/null
+
+:0 B
+* ^Content-Type:.*audio/x-midi;.*
+* .*name=.*\.exe
+/dev/null
+
+:0 B
+* ^Content-Type:.*audio/x-midi;.*
+* .*name=.*\.bat
+/dev/null
+
+:0 B
+* \<iframe.*src=.*height=3D0.*width=3D0\>
+/dev/null
+
+:0 B
+* ^Content-Type:.*application/octet-stream;.*
+* .*name=.*\.exe
+/dev/null
+
+:0 B
+* ^Content-Type:.*application/octet-stream;.*
+* .*name=.*\.scr
+/dev/null
+
+:0 B
+* ^Content-Type:.*application/octet-stream;.*
+* .*name=.*\.pif
+/dev/null
+
+:0 B
+* ^Content-Type:.*application/octet-stream;.*
+* .*name=.*\.bat
+/dev/null
+

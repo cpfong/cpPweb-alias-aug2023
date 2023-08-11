@@ -1,0 +1,209 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=big5">
+<META NAME="Generator" CONTENT="Microsoft FrontPage 4.0">
+<TITLE>mysql的安裝</TITLE>
+</HEAD>
+<BODY LINK="#0000ff" bgcolor="#C0C0C0">
+
+<B><FONT FACE="Arial" SIZE=5><P ALIGN="CENTER">mysql</FONT><FONT FACE="新細明體" LANG="ZH-TW" SIZE=5>的安裝</P>
+
+</B></FONT><FONT FACE="新細明體" LANG="ZH-TW"><a href="./mysqlport.htm">使用ports安裝</a>
+<OL>
+
+<LI>改為 root 的身份,即 <font color="#FF0000">su - root</font>     
+  <ul>     
+    <li>建立帳號名稱分別為 mysql 使用者,並為其建立適當之群組mysql     
+      <ul>     
+        <li>使用vipw建立 mysql 使用者帳號<br>     
+          <font color="#FF0000">vipw<br>     
+          </font>在最底下加入一列<br>     
+          mysql:*:88:88::0:0:mysql daemo:/home/mysql:/sbin/nologin<br>     
+          <br>     
+          <font color="#FF0000">ee /etc/group<br>     
+          </font><br>     
+          在最底下加入下列一列<br>     
+          <font color="#FF0000">mysql:*:88:</font></li>     
+      </ul>     
+  </ul>     
+</LI>           
+     
+<LI>將mysql-3.22.32.tar.gz複製到/tmp或/usr/src目錄下     
+  <font color="#FF0000">     
+<br>     
+  </font><font color="#FF0000">    
+cp mysql-3.22.32.tar.gz /usr/src<br>     
+  </font>或直接抓取檔案<br>     
+  <font color="#FF0000">cd /usr/src<br>          
+  fetch ftp://ftp.center.kl.edu.tw/pub1/src/mysql-3.22.32.tar.gz</font></LI>          
+<LI>切換到/usr/src目錄下並解壓縮<BR>          
+  <font color="#FF0000">         
+cd /usr/src<BR>            
+tar </font> </FONT><font color="#FF0000">-</font><FONT FACE="新細明體" LANG="ZH-TW"><font color="#FF0000">zxvf mysql-3.22.32.tar.gz</font></LI>             
+<LI>切換到mysql目錄下並執行configure程式它會產生必要的Makefile及相關檔案<BR>             
+  <font color="#FF0000">          
+cd mysql-3.22.32<br>          
+./configure \<br>         
+--with-charset=big5 \<br>         
+--with-mysqld-user=mysql \<br>         
+--without-debug \<br>         
+--without-readline</font></LI>           
+<LI>開始編譯、鏈結檔案<BR>           
+  <font color="#FF0000">make NATIVE_THREADS=yes</font></LI>        
+<LI>安裝程式<BR>        
+  <font color="#FF0000">        
+make install</font></LI>            
+<LI>執行初始化程式〈第一次安裝才需執行這個步驟〉<BR>            
+  <font color="#FF0000">         
+./scripts/mysql_install_db</font></LI>         
+<LI><a name="改變目錄檔案、存取權限">改變目錄檔案、存取權限<BR>        
+  </a>        
+  <font color="#FF0000">        
+chown -R mysql.mysql /usr/local/share/mysql<BR>           
+chown -R mysql.mysql /usr/local/var<BR>           
+chmod -R 755 /usr/local/var<BR>           
+chmod 744 /usr/local/share/mysql/mysql.server</font></LI>           
+<LI>啟動與停止mysql方式<BR>          
+<B><span style="background-color: #FFFF00">I )</span></B>第一種啟動與停止mysql方式<BR>          
+  <font color="#FF0000">       
+  /usr/local/share/mysql/mysql.server start<br>         
+  <br>         
+  /usr/local/share/mysql/mysql.server stop<BR>          
+  </font>          
+<B><span style="background-color: #FFFF00">II)</span></B>第二種啟動與停止mysql方式<BR>         
+  <font color="#FF0000">/usr/local/bin/safe_mysqld &amp;<br>         
+  </font>若還未設密碼則停止mysql方式<br>        
+  <font color="#FF0000">/usr/local/bin/mysqladmin shutdown<br>        
+  </font>若已設密碼則停止mysql方式<font color="#FFFF00"><br>        
+  </font><font color="#FF0000">       
+  /usr/local/bin/mysqladmin -u root -p shutdown<br>        
+  </font>Enter password:輸入密碼<font color="#FF0000">12345</font><font color="#0000FF">(假設密碼為12345)</font><font color="#FFFF00"><br>       
+  </font></LI>         
+<LI>檢查mysql是否正常運作、設定是否正確請輸入<BR>         
+  <font color="#FF0000">       
+mysqladmin version<br>         
+  </font>會看到底下的幾行字          
+  <font color="#FFFF00">        
+<br>        
+  </font>mysqladmin  Ver 8.0 Distrib 3.22.32, for -freebsd5.0 on i386<br>         
+  TCX Datakonsult AB, by Monty<br>         
+  <br>         
+  Server version          3.22.32<br>         
+  Protocol version        10<br>         
+  Connection              Localhost via UNIX socket<br>         
+  UNIX socket             /tmp/mysql.sock<br>         
+  Uptime:                 25 sec<br>         
+  <br>         
+  Threads: 1  Questions: 1  Slow queries: 0  Opens: 6  Flush tables: 1  Open tables: 2<br>         
+  <font color="#FFFF00">         
+<BR>           
+  </font><font color="#FF0000">          
+mysqladmin variables<br>         
+  </font>會看到底下的表格<br> 
+  <table border="1" width="432">
+    <tr>
+      <td width="222" valign="top" style="border: 3 dotted #008080; padding: 0"><FONT FACE="新細明體" LANG="ZH-TW"> Variable_name</FONT></td>
+      <td width="194" valign="top" style="border: 3 dotted #008080; padding: 0"><FONT FACE="新細明體" LANG="ZH-TW"> Value</FONT></td>
+    </tr>
+    <tr>
+      <td width="222" valign="top" style="border: 3 dotted #008080; padding: 0">
+        <p align="left"><FONT FACE="新細明體" LANG="ZH-TW"> back_log<br>
+        connect_timeout<br>
+ basedir<br>
+ datadir<br>
+ delayed_insert_limit<br>
+ delayed_insert_timeout<br>
+ delayed_queue_size<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+        :<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+        :<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+        :<br>
+        </FONT></td>
+      <td width="194" valign="top" style="border: 3 dotted #008080; padding: 0"><FONT FACE="新細明體" LANG="ZH-TW">5<br>
+        /usr/local/<br>
+        5<br>
+        /usr/local/var/<br>
+ 100<br>
+ 300<br>
+ 1000<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :<br>
+        </FONT></td>
+    </tr>
+  </table>
+  <p>　</LI>         
+<LI>讓mysql在server一啟動就執行<BR>         
+  <font color="#FF0000">      
+ee /usr/local/etc/rc.d/mysql.sh<BR>         
+  </font>         
+編輯mysql.sh內容如下<BR>         
+  <font color="#FF0000">      
+#!/bin/sh<BR>      
+/usr/local/share/mysql/mysql.server start &gt; /dev/null &amp;&amp; echo -n ' mysql'<BR>         
+  </font>         
+更改mysql.sh的權限<BR>         
+  <font color="#FF0000">      
+chmod 755 /usr/local/etc/rc.d/mysql.sh</font></LI>           
+<LI>設定存取權限<BR>           
+<B><span style="background-color: #FFFF00">I)</span></B> 更改root帳號的密碼</FONT><FONT FACE="新細明體" LANG="ZH-TW" color="#0000FF">(<U>此root非freebsd系統之root</U>故第一次進入mysql時不需密碼)</FONT><FONT FACE="新細明體" LANG="ZH-TW"><BR>           
+  <B><font color="#00FF00"><span style="background-color: #0000FF">A.</span></font></B>      
+<font color="#FF0000"> mysql</font><BR>         
+    <B>mysql &gt;</B><font color="#FF0000">SET PASSWORD FOR root=PASSWORD('12345');</font><BR>           
+下次進入mysql時需密碼12345<br>        
+<font color="#FF0000">        
+    mysql </font> </FONT><font color="#FF0000">–<FONT FACE="新細明體" LANG="ZH-TW">u root </FONT>–p<br>       
+</font><font FACE="新細明體" LANG="ZH-TW">Enter password:</font><font FACE="新細明體" LANG="ZH-TW">輸入</font><FONT FACE="新細明體" LANG="ZH-TW">密碼<font color="#FF0000">12345</font><font color="#FFFF00"><br>       
+</font>或者用底下方式進入mysql<BR>         
+<font color="#FF0000">        
+    mysql </font> </FONT><font color="#FF0000">–<FONT FACE="新細明體" LANG="ZH-TW">u root </FONT>–<FONT FACE="新細明體" LANG="ZH-TW">p12345               </FONT></font><font color="#0000FF"><FONT FACE="新細明體" LANG="ZH-TW">(</FONT>–<FONT FACE="新細明體" LANG="ZH-TW">p與密碼12345間不能有空白)          
+  </FONT></font><FONT FACE="新細明體" LANG="ZH-TW" COLOR="#ff0000"><br>        
+<BR>          
+  </FONT><B><font FACE="新細明體" LANG="ZH-TW" color="#00FF00"><span style="background-color: #0000FF">B.</span></font></B>  <FONT FACE="新細明體" LANG="ZH-TW">  <font color="#FF0000"> mysqladmin -u root -p password 1234</font>    </FONT><FONT FACE="新細明體" LANG="ZH-TW" color="#0000FF">(1234為新的密碼)</FONT><FONT FACE="新細明體" LANG="ZH-TW"><BR>           
+    Enter password:<font color="#FF0000">12345 </font> </FONT><FONT FACE="新細明體" LANG="ZH-TW" color="#0000FF">(12345為舊的密碼)</FONT><FONT FACE="新細明體" LANG="ZH-TW"><BR>          
+下次進入mysql時需密碼1234<BR>         
+<font color="#FF0000">        
+    mysql </font> </FONT><font color="#FF0000">-<FONT FACE="新細明體" LANG="ZH-TW">u root </FONT>-</font><FONT FACE="新細明體" LANG="ZH-TW"><font color="#FF0000">p1234<br>       
+</font><font color="#FFFF00">       
+<br>       
+</font><b><font color="#00FF00"><span style="background-color: #0000FF">C.</span></font></b><font color="#FF0000">mysql    
+</font></FONT><font color="#FF0000">-<FONT FACE="新細明體" LANG="ZH-TW">u root        
+</FONT></font><FONT FACE="新細明體" LANG="ZH-TW"><font color="#FF0000">-p mysql</font><font color="#FFFF00"><br>        
+</font>Enter password:</FONT><font FACE="新細明體" LANG="ZH-TW">輸入</font><FONT FACE="新細明體" LANG="ZH-TW">密碼<font color="#FF0000">1234</font><font color="#FFFF00"><br>       
+</font>mysql&gt; <font color="#FF0000"> UPDATE user SET password=password('12345')</font> <font color="#FFFF00"> <br>        
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font> -><font color="#FFFF00">          
+</font><font color="#FF0000"> where user='root';</font><font color="#FFFF00"> <br>         
+</font>mysql&gt;<font color="#FFFF00">         
+</font><font color="#FF0000"> FLUSH PRIVILEGES;</font><font color="#FFFF00"> <br>        
+</font></FONT><FONT FACE="新細明體" LANG="ZH-TW">下次進入mysql時需密碼12345<BR>          
+<b><span style="background-color: #FFFF00">II)</span></b>若要將super user&nbsp; root改名為myadmin<br>        
+</FONT><font color="#FF0000"><FONT FACE="新細明體" LANG="ZH-TW"> mysql </FONT>-<FONT FACE="新細明體" LANG="ZH-TW">u root        
+</FONT></font><FONT FACE="新細明體" LANG="ZH-TW"><font color="#FF0000">-p mysql</font><font color="#FFFF00"><br>        
+</font>Enter password:</FONT><font FACE="新細明體" LANG="ZH-TW">輸入</font><FONT FACE="新細明體" LANG="ZH-TW">密碼<font color="#FF0000">12345</font><font color="#FFFF00"><br>       
+</font>mysql&gt;<font color="#FF0000">UPDATE user SET user='myadmin'</font><font color="#FFFF00"><br>       
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font> -><font color="#FFFF00">          
+</font><font color="#FF0000"> where user='root';</font><font color="#FFFF00"> <br>         
+</font>mysql&gt;<font color="#FFFF00">         
+</font><font color="#FF0000"> FLUSH PRIVILEGES;</font><font color="#FFFF00"> <br>        
+</font></FONT><FONT FACE="新細明體" LANG="ZH-TW">下次進入mysql時需<br>        
+</FONT><font color="#FF0000"> mysql -</font><FONT FACE="新細明體" LANG="ZH-TW"><font color="#FF0000">u         
+myadmin -p</font><br>        
+</FONT><FONT FACE="新細明體" LANG="ZH-TW">而不是用</FONT><FONT FACE="新細明體" LANG="ZH-TW"><br>        
+</FONT><FONT FACE="新細明體" LANG="ZH-TW"> mysql </FONT>-<FONT FACE="新細明體" LANG="ZH-TW">u root         
+-p mysql<br>        
+</FONT><FONT FACE="新細明體" LANG="ZH-TW"><BR>         
+<B><span style="background-color: #FFFF00">III)</span></B> 增加新使用者<BR>           
+  A.  增加test的新使用者具<B>完全的權限，</B>test的密碼為1234567<BR>         
+      <B>mysql &gt;</B><font color="#FF0000">GRANT ALL PRIVILEGES ON *.* TO </font> </FONT><font color="#FF0000">test@lin.kl.edu.tw</font><FONT FACE="新細明體" LANG="ZH-TW"><BR>        
+       -&gt; <font color="#FF0000"> IDENTIFIED BY '1234567';</font><BR>          
+<BR>          
+<BR>          
+<BR>          
+  B. 增加test1的新使用者具<B>部分的權限<BR>          
+    mysql &gt;</B><font color="#FF0000">GRANT</font> <BR>         
+</LI></OL>         
+         
+<B><P></P></B></FONT></BODY>         
+</HTML>         

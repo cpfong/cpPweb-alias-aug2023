@@ -1,0 +1,73 @@
+Q: how to make a bootable TC usb at TinyCoreLinux system? (only text mode)
+A:
+best way (this is the best way, others not that good)
+--
+install tc-installer.tcz
+busybox mount new_iso
+after reboot new_usb then tce-load -wi Xvesa Xprogs wbar
+
+--
+clean  mbr (1 sec will do)
+# dd if=/dev/zero of=/dev/sdc bs=512 count=1 (NOT sdc1)
+
+as ref, do NOT need and take LONG LONG time for  low level format 
+!! think it again
+root@box:~# dd if=/dev/zero of=/dev/sdc conv=sync bs=1M count=1024
+
+fdisk make it type 83 (linux ext2)
+fdisk /dev/sdc --> n p 1 83 w q --> fdisk /dev/sdc p (print it out 2 see the result)
+
+format
+#mkfs.ext2 /dev/sdc1
+
+label a partition
+# tune2fs -L tinycore /dev/sdc1 
+DONE----
+
+There is another way to do it (probably I won't need it)
+-
+partition table and format (using gparted)
+tce-load -wi gparted
+
+note: ext2 filesystem is recommended
+
+-- these following is for reference, do not take it too serious
+mbr stuff (grub4dos is the app like syslinux)
+tce-load -wi grub4dos 
+/usr/local/share/grub4dos/bootlace.com --time-out=0 /dev/of_usb_stick (like /dev/sdb, not /dev/sdb1)
+
+mount /dev/sde1 ./new
+cp /tmp/tcloop/grub4dos/usr/local/share/grub4dos/grldr ~tc/new
+cd ~tc/new
+cp /usr/local/share/grub4dos/menu.lst_example ./menu.lst
+
+-- this is my mneu.lst
+color cyan/blue white/cyan white/black white/black
+timeout 5
+default 0
+
+title Tiny Core Linux
+find --set-root /tce/boot/vmlinuz
+kernel /tce/boot/vmlinuz quiet
+initrd /tce/boot/core.gz
+--
+
+tc@box:~/mnt$ s mkdir -p tce/boot
+s cp /mnt/sdb/boot/core.gz .
+s cp /mnt/sdb/boot/vmlinuz .
+
+-- sdb1 as ext2 file system
+tc@box:~$ ls /mnt/sdb1/
+grldr       keep-me/    lost+found/ menu.lst    tce/
+
+-- preload packages how2
+c@box:/mnt/sdb1/tce$ ls
+boot/       mydata.tgz  onboot.lst  ondemand/   optional/   xwbar.lst
+
+tc@box:/mnt/sdb1/tce$ ls optional/ | head -3
+Xlibs.tcz
+Xorg-7.6-lib.tcz
+
+tc@box:/mnt/sdb1/tce$ head -2 onboot.lst 
+Xvesa.tcz
+Xlibs.tcz

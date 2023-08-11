@@ -1,0 +1,14 @@
+[cpfong@mail ~/tmp/trash] which find
+/usr/bin/find
+
+touch '1 .a1.txt.bak'
+touch '2.b2.txt.bak'
+
+# adding \ to each (even space)
+find . -name "*.bak" -type f -print |  sed 's/./\\&/g' | xargs rm -f
+
+# note exec better than xargs (since each exec cmd has its own parameter, xargs just input a long argument)
+[cpfong@mail ~/tmp/trash] find . -name "*.doc" -type f -exec ls '{}' +
+
+find ~cpfong/* -name "*.doc" -exec rm -f         '{}' +
+find ~cpfong/* -name "*.doc" -exec printf "%s\n" '{}' +

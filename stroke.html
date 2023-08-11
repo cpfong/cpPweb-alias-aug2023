@@ -1,0 +1,991 @@
+<!DOCTYPE HTML>
+<html  manifest="stroke.manifest">
+<head>
+<meta name="Author" content="gsyan, 顏國雄, 2012.02.19">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<link rel="apple-touch-icon" href="icon.png" />
+
+<!-- VIEWPORT -->
+
+<!-- optimized for mobile -->
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<!-- optimized for mobile, zoom/scaling disabled -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+
+
+<!-- STARTUP IMAGES -->
+
+<!-- startup image for web apps - iPad - landscape (748x1024) 
+     Note: iPad landscape startup image has to be exactly 748x1024 pixels (portrait, with contents rotated).-->
+<link rel="apple-touch-startup-image" href="startup-ipad-l.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)" />
+
+<!-- startup image for web apps - iPad - portrait (768x1004) -->
+<link rel="apple-touch-startup-image" href="startup-ipad-p.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)" />
+
+<!-- startup image for web apps (320x460) -->
+<link rel="apple-touch-startup-image" href="startup.png" media="screen and (max-device-width: 320px)" />
+
+<title>筆順練習</title>
+<style type="text/css">
+html, body {
+	width:  100%;
+	height: 100%;
+	margin: 0px;
+}
+a { 
+		text-decoration : none;
+	}	
+#myCanvas {
+		position: fixed;; 
+		top: 25px;
+		left: 25px;
+	}
+#stroke {
+		position:relative;
+		border: 2px solid #808000;
+		top: 0px;
+		left: 0px;
+	}
+#trackLayer {
+		position:absolute;
+		border: 2px solid #808000;
+		top: 0px;
+		left: 0px;
+		z-index: 1;
+	}
+#credit {
+		position: fixed;
+		font-size:10px;
+		top: 700px;
+		left: 25pt;
+	}
+#menu {
+		position:fixed; 
+		font-size:50px;
+		font-family:標楷體; 
+		word-wrap: break-word;
+		word-break: break-all;
+		text-decoration:none;
+		top: 25px;
+		left: 600px;
+	}
+#buttons {
+		position:fixed;
+		top:600px; 
+		left:600px;
+	}
+#overlay {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 90;
+		width: 100%;
+		height: 100%;
+		background-color: #000;
+		filter:alpha(opacity=40);
+		opacity: 0.4;
+	}
+#dialog {
+		position: fixed;
+		width: 700px;
+		top: 200px;
+		left: 200px;
+		z-index: 99;
+		padding: 4px;
+		background-color: white;
+		border: #ade 2px solid;
+}
+#progressbar {
+		visibility : hidden;
+		width:250px;
+		padding:1px;
+		background-color:white;
+		border:1px solid black;
+		height:28px;
+	}
+#indicator {
+		position: absolute;
+		width:0px;
+		background-color:#228b22;
+		height:28px;
+		margin:0;
+		
+}
+#progressnum {
+		position: absolute;
+		width:250px;
+		text-align:center;
+	}
+
+</style>
+<script type="text/javascript">
+/*
+=============================================================
+2012.02.19 by gsyan ( http://gsyan888.blogspot.com )
+2012.02.22 加入離線功能
+2012.02.23 修正豎畫的問題
+2012.02.25 修正下載筆順檔的程序，顯示下載進度;已下載過的字保留
+============================================================= 
+*/
+//
+//底下這行加入要練習的字
+//-------------------------------------------------------------
+var words = ''; //'雄教育噗浪客';
+//-------------------------------------------------------------
+var penSize = 5;	//畫筆的粗細
+//-------------------------------------------------------------
+var demoDelay = 80;	//用來控制示範筆畫時的速度
+//-------------------------------------------------------------
+var enableShowStrokeNumber = false;	//是否要顯示筆順序號
+//-------------------------------------------------------------
+var finishedMessage = new Array('哇～好厲害!' , '恭喜，過關!' , '你好棒!' , '太帥了!' , '真厲害!' , '讚!' );
+//-------------------------------------------------------------
+var maxSizeOfLocalStorage = 50;
+//-------------------------------------------------------------
+var defaultDemoPenSize = 45;
+var demoPenSize;
+var isGotData = false;
+var enableHint = false;
+var xmlDoc;
+var loadError;
+var started = false;
+var X0,Y0,X1,Y1;
+var scale;
+var mouseScale;
+var myCanvas;
+var stroke;
+var context;
+var trackLayer;
+var trackContext;
+var strokeArray = new Array();
+var trackArray = new Array();
+var restorePoints = new Array();
+var pass;
+var strokePass;
+var isOneStrokeFinished = false;
+var isFinished = false;
+var isPracticeClick = false;
+var score;
+var scoreText;
+var strokeShowIndex=0;
+var strokeShowInterval;
+var fontsize=50;
+var strokeDataArray = new Array();
+
+window.addEventListener("resize", checkOrientation, false);
+function checkOrientation() {
+	init();
+}
+function init() {
+	var w = window.innerWidth;
+	var h = window.innerHeight;
+	var size = Math.min(w, h)-100;
+
+	scale = size/2048;
+	
+	//alert(scale + ' , ' + size);
+	
+	scale = Math.floor(scale*100)/100;
+	size = 2048*scale;
+	
+	demoPenSize = Math.ceil(defaultDemoPenSize*(Math.min(w, h)-100)/(760-100));	
+	
+	myCanvas = document.getElementById('myCanvas');
+	stroke = document.getElementById('stroke');
+	stroke.width = size;
+	stroke.height = size;
+	context = stroke.getContext('2d');
+	
+	trackLayer = document.getElementById('trackLayer');
+	trackLayer.width = size;
+	trackLayer.height = size;
+	//trackLayer.left = stroke.left;
+	//trackLayer.top = stroke.top;
+	trackContext = trackLayer.getContext('2d');
+
+	var dialog = document.getElementById('dialog');
+	var buttons = document.getElementById('buttons');
+	buttons.style.left = (w-300)+'px';
+	if(w<500) {
+		document.getElementById('stringInput').size = 30;
+		dialog.style.width = (w-8) + 'px';
+		dialog.style.top = (h>350 ? '50px' : '5px');
+		dialog.style.left = '2px';
+		buttons.style.top = (h-70)+'px';
+		
+	} else {
+		dialog.style.top = Math.floor((h-400)/2)+'px';
+		dialog.style.left = Math.floor((w-700)/2)+'px';	
+		buttons.style.top = (h-50)+'px';
+	}
+	
+	var menu = document.getElementById('menu');
+	if(w > h) {
+		myCanvas.style.left = '25px';
+		menu.style.left = (50+stroke.width)+'px';
+		menu.style.top = '25px';
+		menu.style.height = (size-100)+'px';
+	} else {
+		myCanvas.style.left = Math.floor((w-size)/2) + 'px';
+		menu.style.left = '15px';
+		menu.style.top = (size+40)+'px';
+		menu.style.height = (h-size-100)+'px';	
+	}
+
+	document.getElementById('credit').style.top = (h-36)+'px';
+		
+	scoreText = document.getElementById('score');
+	
+	
+	if(localStorage['words'] != null || localStorage['words'] != undefined) {
+		words = localStorage['words'];
+	}
+	if(words != "") {
+		createMenu(words);
+		loadData(words.substr(0,1));
+		trackLayer.addEventListener('mousedown', touchDown, false);
+		trackLayer.addEventListener('mouseup', touchUp, false);
+		trackLayer.addEventListener('mousemove', touchMove, false);
+		trackLayer.addEventListener("mouseout", touchUp, false);
+		trackLayer.addEventListener("touchstart", touchDown, false);
+		trackLayer.addEventListener("touchend", touchUp, false);
+		trackLayer.addEventListener("touchmove", touchMove, false);		
+	} else {
+		showDialog();
+	}
+}
+
+window.onorientationchange = function(){
+    var orientation = window.orientation;
+
+    // Look at the value of window.orientation:
+
+    if (orientation === 0){
+
+        // iPad is in Portrait mode.
+
+    }
+
+    else if (orientation === 90){
+
+        // iPad is in Landscape mode. The screen is turned to the left.
+
+    }
+
+
+    else if (orientation === -90){
+
+        // iPad is in Landscape mode. The screen is turned to the right.
+
+    }
+}
+
+function drawClear() {
+	if(stroke.getContext) {
+		if(!isGotData) return;	
+		
+		var w=stroke.width;
+		var h=stroke.height;
+		context.beginPath();
+		context.clearRect(0, 0, w, h);
+		context.stroke();
+		context.closePath();
+
+		stopStokeDemo();
+		
+		trackContext.beginPath();
+		trackContext.clearRect(0, 0, w, h);
+		trackContext.stroke();
+		trackContext.closePath();
+
+		drawOutline();
+		score = 0;
+		isOneStrokeFinished = false;
+		isFinished = false;
+		enableHint = false;
+		pass = 0;
+		strokePass = 0;
+		updateScore();
+		
+		var txt = document.getElementById('message');
+		txt.innerHTML = "";
+		
+		if(restorePoints[0] != undefined) {
+			restorePoints.splice(0);
+		}
+		
+		document.getElementById('button_reset').value = "擦掉重寫";
+			
+	}
+}
+function practice() {
+	drawClear();
+	isPracticeClick=true;
+}
+function updateMessage(msg) {
+	var txt = document.getElementById('message');
+	txt.innerHTML += msg;
+}
+function createMenu(str) {
+	var menu = document.getElementById('menu');
+	var html = "";
+	for(i=0; i<str.length; i++) {
+		var w = str.substr(i,1);
+		html += "<a href=\"#\" onClick=\"loadData('"+w+"');\">"+w+"</a>\n";
+	}
+	menu.innerHTML = html;
+}
+
+function getX(x) {
+	//document.getElementById('message').innerHTML = x + ' - ' + myCanvas.offsetLeft + ' - ' + trackLayer.offsetLeft;
+	return (x-myCanvas.offsetLeft-trackLayer.offsetLeft);
+}
+function getY(y) {
+	return (y-myCanvas.offsetTop-trackLayer.offsetTop);
+}
+function isDemonstrating() {
+	return (!isGotData || strokeShowInterval>0 || !isPracticeClick);
+}
+function touchDown (ev) 
+{
+	if( isDemonstrating() ) {
+		practice();
+		return;
+	}
+	
+	ev.preventDefault();	
+	
+	if(ev.targetTouches != undefined) {		//touch pad mode
+		X0 = getX(ev.targetTouches[0].pageX);
+		Y0 = getY(ev.targetTouches[0].pageY);
+	} else {								//mouse
+		X0 = getX(ev.pageX);
+		Y0 = getY(ev.pageY);
+	}
+	started = true;
+	
+	if(!isFinished) {
+		savePoints(X0, Y0);
+		checkPoint(X0, Y0);
+	}
+		
+}
+function touchUp(ev) 
+{
+	if( isDemonstrating() ) return;
+	
+	if(started) {
+		started = false;
+		if(isOneStrokeFinished) {
+			enableHint = false;
+			isOneStrokeFinished = false;
+			oneStroke(strokePass, context, "rgba(255, 0, 0, 0.3)", "rgba(255, 0, 0, 0.3)", false);
+			pass = 0;
+			strokePass++;
+			if(strokePass >= strokeArray.length) {
+				isFinished = true;
+				strokePass = 0;
+				alert(finishedMessage[Math.floor(Math.random()*finishedMessage.length)]);
+			}
+		} else if(!isFinished) {
+			enableHint = true;
+			redraw_lines();
+		}
+	}
+	//get a pixel and check the color
+	//var data = context.getImageData(x, y, 1,1).data;
+	//scoreText.innerHTML = data[0] + ',' + data[1]  + ',' + data[2];
+
+}
+function touchMove (ev) 
+{
+	if( isDemonstrating() ) return;
+	
+	// Get the mouse position relative to the canvas element.
+	if(ev.targetTouches != undefined) {		//touch pad mode
+		X1 = getX(ev.targetTouches[0].pageX);
+		Y1 = getY(ev.targetTouches[0].pageY);
+	} else {								//mouse
+		X1 = getX(ev.pageX);
+		Y1 = getY(ev.pageY);
+	}
+	//if(started && ((X1-X0)*(X1-X0)>4 || (Y1-Y0)*(Y1-Y0)>4)) {
+	if(started && ((X1-X0)*(X1-X0)+(Y1-Y0)*(Y1-Y0)>=4)) {
+		if(!isFinished) {
+			savePoints(X1, Y1);
+		}
+		draw_line();
+		
+	}
+}
+function savePoints(x, y) {
+	if(restorePoints[0] == undefined || restorePoints.length <= strokePass) {
+		restorePoints[strokePass] = new Array();
+	}
+	var index = restorePoints[strokePass].length;
+	restorePoints[strokePass][index] = new Array(2);
+	restorePoints[strokePass][index][0] = x;
+	restorePoints[strokePass][index][1] = y;
+}
+function redraw_lines() {
+	var x0,x1, y0,y1;
+	//clear
+	var w=stroke.width;
+	var h=stroke.height;
+	trackContext.beginPath();
+	trackContext.clearRect(0, 0, w, h);
+	trackContext.stroke();
+	trackContext.closePath();
+	trackContext.lineWidth = penSize;
+	trackContext.lineJoin = "round";
+	trackContext.strokeStyle = '#000000';
+	
+	if(restorePoints.length > 0) {
+		restorePoints.splice(restorePoints.length-1,1);
+	}
+	
+	//draw
+	for(var i=0; i<restorePoints.length; i++) {
+
+		x0 = restorePoints[i][0][0];
+		y0 = restorePoints[i][0][1];
+		
+		for(var j=1; j<restorePoints[i].length; j++) {
+			trackContext.beginPath();
+			x1 = restorePoints[i][j][0];
+			y1 = restorePoints[i][j][1];
+			trackContext.moveTo(x0, y0);
+			trackContext.lineTo(x1, y1);
+			x0 = x1;
+			y0 = y1;
+			trackContext.closePath();
+			trackContext.stroke();
+		}
+	}
+}
+
+function draw_line() {
+	trackContext.lineWidth = penSize;
+	trackContext.lineJoin = "round";
+	trackContext.strokeStyle = '#000000';
+	trackContext.beginPath();
+    trackContext.moveTo(X0, Y0);
+	trackContext.lineTo(X1, Y1);
+	trackContext.closePath();
+    trackContext.stroke();
+
+	
+	if(!isFinished && !isOneStrokeFinished) {
+		checkPoint(X1, Y1);
+	}
+	
+	X0=X1;
+	Y0=Y1;
+}
+function updateScore() {
+	//scoreText.innerHTML = score;
+}
+function checkPoint(x, y) {
+	var xx,yy,offset;
+	
+	xx = Math.ceil(trackArray[strokePass][pass].getAttribute('x')*scale);
+	yy = Math.ceil(trackArray[strokePass][pass].getAttribute('y')*scale);
+	//offset = trackArray[strokePass][pass].getAttribute('size');
+
+	//offset = Math.min(window.innerWidth,window.innerHeight)/20;
+	
+	offset = Math.floor(demoPenSize*0.7);
+
+	if(enableHint) {
+		//hint
+		var radius = 15;
+		trackContext.beginPath();
+		trackContext.lineWidth =1;
+		trackContext.strokeStyle = '#ff6699';
+		trackContext.arc(xx, yy, radius, 0, 2 * Math.PI, false);
+		trackContext.closePath();
+		trackContext.fillStyle = 'rgba(0,255,0,0.1)';
+		trackContext.fill();
+		trackContext.stroke();
+	}
+	
+	//document.getElementById('message').innerHTML = scale + ' : '+ offset + ' : ' + x+','+y+' -- '+xx+','+yy + ' -- ' + trackArray[strokePass][pass].getAttribute('x');
+	//document.getElementById('message').innerHTML = strokePass + ':' +pass + ' : ' +((x-xx)*(x-xx)+(y-yy)*(y-yy)) + ' , ' + (offset*offset);
+	//if (Math.abs(x-xx)<=offset && Math.abs(y-yy) <=offset) {
+	if ((x-xx)*(x-xx)+(y-yy)*(y-yy) <= offset*offset) {
+		if(!isOneStrokeFinished) {
+			pass++;
+			score++;
+			updateScore();
+			if(pass>=trackArray[strokePass].length) {
+				isOneStrokeFinished = true;
+				//oneStroke(strokePass, context, "rgba(255, 0, 0, 0.3)", "rgba(255, 0, 0, 0.3)", false);
+			}
+		}
+	}
+}
+
+
+function convert_xml_to_string(xmlObject)  
+{  
+    if (window.ActiveXObject) { // for IE  
+        return xmlObject.xml;  
+    } else {  
+        return (new XMLSerializer()).serializeToString(xmlObject);  
+    }  
+}
+function convert_string_to_xml(strXML)  
+{  
+    if (window.ActiveXObject) {  
+        xmlDoc=new ActiveXObject("Microsoft.XMLDOM");  
+        xmlDoc.async="false";  
+        xmlDoc.loadXML(strXML);  
+        return xmlDoc;  
+    } else {  
+        parser=new DOMParser();  
+        xmlDoc=parser.parseFromString(strXML,"text/xml");  
+        return xmlDoc;  
+    }  
+}
+function loadXMLFromMoe(word) {
+	if (window.XMLHttpRequest) 
+	{// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	}
+	else
+	{// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	//xmlUrl = 'stroke_sample.xml';  
+	//xmlUrl = 'http://stroke-order.learningweb.moe.edu.tw/provideStrokeInfo.do?big5=abbd';
+	xmlUrl = 'http://mail.lsps.tp.edu.tw/~gsyan/works/html5/stroke/stroke_xml.php?word='+encodeURIComponent(word);
+	
+	xmlhttp.onreadystatechange = function() { 
+		if(this.readyState == this.DONE) {
+			getStrokeTimer++;
+		}
+	}
+	
+	try {
+		xmlhttp.open("GET", xmlUrl,false);
+		xmlhttp.send(null);
+	} catch(e) {
+		xmlhttp = false;
+		//alert('無法下載「'+word+'」的筆順資料'+"\n\n"+e.message);
+		if(loadError == "") {
+			loadError = '無法下載筆順資的字如下:\n';
+		}
+		loadError += word;
+	}
+	if(xmlhttp != false) {
+		xmlDoc=xmlhttp.responseXML;
+		return xmlDoc;
+	} else {
+		return null;
+	}
+}
+function loadData(word) {
+	if(word == "") return;
+	
+	isGotData = false;
+	if(localStorage[0] != null || localStorage[word] != undefined) {	//由 localStorage載入資料
+		xmlDoc = convert_string_to_xml(localStorage[word]);
+		isGotData = true;
+		//alert('from local');
+	} else {		//由網路載入資料
+		xmlDoc = loadXMLFromMoe(word);
+		if(xmlDoc != null) {
+			localStorage[word] = convert_xml_to_string(xmlDoc);	//將 XML 資料轉為 string 並儲存在 localStorage
+			isGotData = true;
+		}
+	}
+	if(isGotData) {
+		parseXML();
+
+		drawClear();
+		
+		strokeShowIndex=0
+		
+		demo();
+	}
+}
+
+function parseXML() {
+	if(strokeArray != undefined) {
+		strokeArray.splice(0);
+	}
+	strokeArray = new Array();
+	if(trackArray != undefined) {
+		trackArray.splice(0);
+	}
+	traceArray = new Array();
+	var strokeIndex = 0;
+	var nodes = xmlDoc.getElementsByTagName("Stroke");
+	for(var n=0; n<nodes.length; n++) {
+		if(nodes[n].nodeType == 1) {	
+			strokeArray[strokeIndex] = new Array();
+			trackArray[strokeIndex] = new Array();
+			var nodeStroke = nodes[n].childNodes;
+			var outlineIndex = 0;
+			var trackIndex = 0;
+			for(var s=0; s<nodeStroke.length; s++) {
+				if(nodeStroke[s].nodeType == 1) {
+					if(nodeStroke[s].nodeName == 'Outline') {
+						//strokeArray[strokeIndex][outlineIndex] = new Array();
+						var targets = nodeStroke[s].childNodes;
+						for(var t=0; t<targets.length; t++) {
+							if(targets[t].nodeType == 1) {
+								strokeArray[strokeIndex][outlineIndex]= targets[t];
+								outlineIndex++;
+							}
+						}
+						
+					} else if(nodeStroke[s].nodeName == 'Track') {
+						trackArray[strokeIndex][trackIndex] = new Array();
+						var targets = nodeStroke[s].childNodes;
+						for(var t=0; t<targets.length; t++) {
+							if(targets[t].nodeType == 1) {
+								trackArray[strokeIndex][trackIndex] = targets[t];
+								trackIndex++;
+							}
+						}
+					}
+				}
+			}
+			strokeIndex++;
+		}
+	}
+}
+
+function drawOutline() {
+	for(strokeIndex=0; strokeIndex<strokeArray.length; strokeIndex++) {
+		oneStroke(strokeIndex, context, "#ffffff", "#000000", false);
+	}
+	showOrderNumber(fontsize, "#8ED6FF", false );
+}
+
+function showOrderNumber(size, style, showCheckPoint) {
+	var x,y,x1,y1,x2,y2;
+	var checkPointSize = 30;
+	
+	context.save();
+	context.scale(scale, scale);
+	
+	context.lineWidth = 1;
+	context.strokeStyle = "#000000";
+	for(strokeIndex=0; strokeIndex<strokeArray.length; strokeIndex++) {	
+		context.beginPath();
+		tracks = trackArray[strokeIndex];
+		for(trackIndex=0; trackIndex<tracks.length; trackIndex++) {
+			action = tracks[trackIndex];
+			isFirst = true;
+			switch(action.nodeName) {
+				case 'MoveTo' :
+					x = action.getAttribute('x');
+					y = action.getAttribute('y');
+					if(trackIndex==0 && enableShowStrokeNumber) {
+						context.textAlign = "center";
+						context.font = fontsize+"pt Calibri";
+						context.fillStyle = style;
+						context.fillText(strokeIndex+1, x, y+fontsize/2);
+					} else {
+						//context.lineTo(x,y);
+					}
+					
+					if(showCheckPoint) {
+						var radius = checkPointSize;
+						context.arc(x, y, radius, 0, 2 * Math.PI, false);
+						context.fillStyle = style;
+						context.fill();
+					}
+					
+					context.moveTo(x,y);
+										
+					//context.fillStyle = "#8ED6FF";
+					//context.fill();
+					break;
+			}
+		}
+		context.closePath();
+		context.stroke();
+	}
+	context.restore();
+}
+
+
+function oneStroke(n, ctx, fillStyle, strokeStyle, isMask) {
+	var x,y,x1,y1,x2,y2;
+	
+	ctx.save();
+
+	ctx.scale(scale, scale);		
+	var actions = strokeArray[n];
+	ctx.beginPath();
+	for(var j=0; j<actions.length; j++) {
+		var action = actions[j];
+		switch(action.nodeName) {
+			case 'MoveTo' :
+				x = action.getAttribute('x');
+				y = action.getAttribute('y');
+				/*
+				ctx.font = fontsize+"pt Calibri";
+				ctx.fillText(i+1, x+fontsize/4, y+fontsize/4);
+				*/
+				ctx.moveTo(x,y);
+				break;
+			case 'LineTo' :
+				x = action.getAttribute('x');
+				y = action.getAttribute('y');
+				ctx.lineTo(x,y);
+				break;
+			case 'QuadTo' :
+				x1 = action.getAttribute('x1');
+				y1 = action.getAttribute('y1');
+				x2 = action.getAttribute('x2');
+				y2 = action.getAttribute('y2');
+				ctx.quadraticCurveTo(x1, y1, x2, y2);
+				break;
+		}
+		//if(action.getAttribute('flexible') == 'true') {
+			//ctx.fillStyle = "#ff0000";
+			//ctx.fill();
+		//}
+	}
+	ctx.closePath();
+	ctx.fillStyle = fillStyle;
+	ctx.fill();
+	ctx.lineWidth = 1;
+	ctx.strokeStyle = strokeStyle;
+	//ctx.strokeStyle = "rgba(255,0, 0, 0.1)";
+	ctx.stroke();
+	
+	ctx.restore();
+	
+	if(isMask) {
+		ctx.save();
+		ctx.clip();
+	}
+
+}
+	
+
+var aniX = 0;
+var moveCounter = 0;
+var moveTotal;
+var aniStroke=0;
+var aniTrack=0;
+var isNewTrack = true;
+var strokeShowInterval;
+function demo() {
+	if(!isGotData) return;	
+	
+	aniX = 0;
+	aniStroke=0;
+	aniTrack=0;
+	isNewTrack = true;
+	
+	isPracticeClick = false;
+	
+	if(strokeShowInterval > 0) {
+		stopStokeDemo();
+	} else {
+		drawClear();
+		strokeShowInterval = window.setInterval(showStroke, demoDelay);
+		document.getElementById('button_reset').value = "開始練習";
+		document.getElementById('button_demo').value = "暫停示範";
+	}
+}
+function stopStokeDemo() {
+	if(strokeShowInterval > 0) {
+		clearInterval(strokeShowInterval);
+		trackContext.restore();
+		strokeShowInterval = -1;
+		document.getElementById('button_demo').value = "筆順示範";
+	}
+}
+function showStroke() {
+	var ctx = trackContext;
+	var x, y, x0, y0, x1, y1, size, moveDirectionX;
+	var action;
+	var sizeFactor=0.4;
+		
+	if(aniTrack==0 && isNewTrack) {		//mask
+		oneStroke(aniStroke, ctx, "rgba(111, 0, 0, 0)", "rgba(0, 0, 0, 0)", true);
+	}
+	if(aniTrack< trackArray[aniStroke].length-1) {	
+		action = trackArray[aniStroke][aniTrack];
+		x0 = action.getAttribute('x')*scale;
+		y0 = action.getAttribute('y')*scale;
+		action = trackArray[aniStroke][aniTrack+1];
+		x1 = action.getAttribute('x')*scale;
+		y1 = action.getAttribute('y')*scale;
+		m = (y1-y0)/(x1-x0);	//斜率
+		size = action.getAttribute('size');
+		if(size==null || size <=0) {
+			size = demoPenSize;
+		}
+		if(isNewTrack) {
+			aniX = x0;
+			isNewTrack = false;
+			var xTotal = Math.ceil(Math.abs(x1-x0)/(size*sizeFactor));
+			var yTotal = Math.ceil(Math.abs(y1-y0)/(size*sizeFactor));
+			moveTotal = Math.max(xTotal, yTotal);
+			moveCounter = 0;
+			//alert(moveTotal);
+		}
+		
+		offsetX = Math.abs(x1-x0)/moveTotal;
+		
+		if(offsetX != 0) {
+			moveDirectionX = (x1-x0)/Math.abs(x1-x0);  // +1 or -1
+			aniY = m*(aniX-x0)+y0;	
+		} else {
+			moveDirectionX = 0;
+			aniY = moveCounter*size*sizeFactor*((y1-y0)/Math.abs(y1-y0)) + y0;
+		}
+
+		ctx.beginPath();
+		var radius = size;
+		ctx.arc(aniX, aniY, radius, 0, 2 * Math.PI, false);
+		ctx.fillStyle = "#000000";
+		ctx.fill();
+		ctx.closePath();
+				
+		aniX += offsetX*moveDirectionX;
+		
+		if(moveCounter++ >= moveTotal) {
+			aniX = x1;
+			aniTrack++;
+			isNewTrack = true;
+		}
+		//updateMessage(';'+aniTrack+','+trackArray[aniStroke].length);
+	} else {
+		isNewTrack = true;
+		aniStroke++;
+		aniTrack=0;
+		ctx.restore();
+		if(aniStroke >= strokeArray.length) {	//finish
+			stopStokeDemo()
+		}
+	}
+}
+
+var stringLength;
+var getStrokeCounter;
+var getStrokeTimer;
+var getStrokeInterval = -1;
+function getStroke() {
+	var str = document.getElementById("stringInput").value;
+	if(str.length > 0) {
+		if(getStrokeTimer == 0) {
+			var indicator = document.getElementById("indicator");
+			var w = Math.ceil(250*(stringLength-str.length)/stringLength);
+			indicator.style.left = document.getElementById("progressbar").style.left;
+			indicator.style.width =  Math.ceil(250*(stringLength-str.length)/stringLength) + 'px';
+			document.getElementById("progressnum").innerHTML = '正在下載 '+(stringLength-str.length+1)+'/'+stringLength;
+			word = str.substr(0, 1);
+			if(localStorage[word] != null || localStorage[word] != undefined) {
+				//exist ,skip
+				getStrokeTimer++
+				localStorage['words'] += word;
+			} else {
+				xmlDoc = loadXMLFromMoe(word);
+				if(xmlDoc != null) {
+					localStorage[word] = convert_xml_to_string(xmlDoc);	//將 XML 資料轉為 string 並儲存在 localStorage
+					localStorage['words'] += word;
+				}
+			}
+			document.getElementById("stringInput").value = str.substr(1, str.length-1);
+		} else if(getStrokeTimer++ > 5) {
+			getStrokeTimer = 0;
+		}
+	} else {
+		hideDialog();
+	}	
+}
+function getStrokes() {
+	document.getElementById("progressbar").style.visibility = 'visible';
+	if(getStrokeInterval < 0 ) {	
+		var str = document.getElementById("stringInput").value;
+		stringLength = str.length;	
+		getStrokeTimer = 0;
+		if(localStorage.length > maxSizeOfLocalStorage) {
+			var i=0;
+			do {
+				var key = localStorage.key[0];
+				if(str.indexOf(key) < 0) {
+					localStorage.removeItem(key);
+				}
+			} while(++i<stringLength && localStorage.length>0);
+		}
+		//localStorage.clear();
+		localStorage['words'] = "";
+		loadError = "";
+		getStrokeInterval = window.setInterval(getStroke, 100);
+	}
+}
+function showDialog() {
+	if(document.getElementById("stringInput").value=="") {
+		document.getElementById("stringInput").value = words;
+	}
+	document.getElementById("overlay").style.display='';
+	document.getElementById("dialog").style.display='';
+}
+function hideDialog() {
+	if(getStrokeInterval > 0) {
+		clearInterval(getStrokeInterval);
+		getStrokeInterval = -1;	
+		if(loadError != '') {
+			alert(loadError);
+		}
+		if(localStorage['words'] != "") {
+			init();
+		}
+	}
+	document.getElementById("indicator").style.width='0px';
+	document.getElementById("progressnum").innerHTML = '';
+	document.getElementById("stringInput").value="";
+	document.getElementById("progressbar").style.visibility= 'hidden';
+	document.getElementById("overlay").style.display='none';
+	document.getElementById("dialog").style.display='none';
+
+}
+</script>
+</head>
+<body onload="init();">
+<div id="myCanvas">
+<canvas id="stroke">
+<p>Your browser doesn't support canvas.</p>
+</canvas>
+<canvas id="trackLayer"><p>Your browser doesn't support canvas.</p></canvas>
+</div>
+<div id="credit">
+筆順資料來源:<a href="http://stroke-order.learningweb.moe.edu.tw">中華民國教育部 [常用國字標準字體筆順學習網]</a>
+<br />
+2012.02.27b by gsyan
+</div>
+<div id="score"></div>
+<div id="menu"></div>
+<div id="buttons">
+<input id="button_reset" type="button" value="開始練習" onClick="practice();">
+<input id="button_demo" type="button" value="筆順示範" onClick="demo();">
+<input id="button_offline" type="button" value="下載筆順" onclick="showDialog();">
+</div>
+<div id="message"></div>
+
+<!-- user input dialog -->
+<div id="dialog" style="display:none">
+<center>
+<h3>請輸入要練習的字</h3>
+<input id="stringInput" type="text" value="" size="80">
+<p>注意:按了確定以後會清除已儲存的筆順資料，並重新下載上面這些字的筆順資料。</p>
+<p><div id="progressbar"><div id="indicator"></div><div id="progressnum"></div></div></p>
+<button onclick="hideDialog();">取消</button>
+<button onclick="getStrokes();">確定</button>
+</center>
+</div>
+<div id="overlay" style="display:none"></div>
+</body>
+</html>

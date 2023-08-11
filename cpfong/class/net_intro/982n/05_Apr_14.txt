@@ -1,0 +1,10 @@
+network address ?
+host address ?
+ip = network + host
+
+how to set netmask
+what is subnet ?
+
+如何計算網路位址, 如何設計可以達到多網段 ?
+
+class A, B, C 是如何劃分的 ? 

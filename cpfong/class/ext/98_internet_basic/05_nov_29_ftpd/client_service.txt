@@ -1,0 +1,36 @@
+Q: what are those services?
+A: telnet,ftp,smtp,http,icmp,arp,dns,ssh,scp,sftp
+
+Q: how to add an user
+A: /usr/sbin/useradd newone , then passwd it, to delete : /usr/sbin/userdel
+
+Q: at which port?
+A: cat /etc/services |grep '^telnet\b'
+
+Q: does server offer this service?
+A: telnet host_name port 
+telnet msa.hinet.net smtp ( to stop)
+telnet msa.hinet.net 25
+
+Q: secure copy 
+A: scp file1 user@remote.host:/home/user/file2
+
+
+Q: xinetd and telnet
+A: telnet daemon binding with xinetd
+	yum install telnet.d
+	vi /etc/xinet.d/telnet
+	you can also vi /etc/xinetd.d/krb5-telnet to make the telnetd work
+
+Q: what is /etc/xinetd.d/echo-stream
+A: telnet localhost echo
+
+Q: how to add a new user?
+A: useradd
+
+Q: how to ftp without password?
+A: vi ~/.netrc --> machine login password
+chmod 700 .netrc
+
+Q: how to ssh without password?
+A: ssh-keygen -t rsa

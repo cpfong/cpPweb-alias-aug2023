@@ -1,0 +1,12 @@
+        Dim head As Integer = 4
+        Dim data() As Integer = {50, 70, 20, 60, 10, 80, 30, 40}
+        Dim index() As Integer = {3, 5, 6, 1, 2, -1, 7, 0}
+        Console.WriteLine("data num =>" & index.GetUpperBound(0) + 1)
+        Console.WriteLine("index")
+
+        For i As Integer = 0 To index.GetUpperBound(0)
+            Console.WriteLine("order" & i & "==>" & head & "  ==>" & data(head))
+            head = index(head)
+        Next
+
+        Console.ReadKey()

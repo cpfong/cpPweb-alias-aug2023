@@ -1,0 +1,11 @@
+rclone config
+n	#for new
+google
+15
+ENTER
+ENTER
+1
+ENTER
+ENTER
+n
+n	#note MUST n to skip localhost:80

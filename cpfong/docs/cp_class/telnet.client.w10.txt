@@ -1,0 +1,2 @@
+pkgmgr /iu:"TelnetClient"
+OR dism /online /Enable-Feature /FeatureName:TelnetClient 

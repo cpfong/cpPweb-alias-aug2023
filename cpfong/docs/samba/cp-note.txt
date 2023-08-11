@@ -1,0 +1,122 @@
+注意事項:
+----------------------------------------------------
+1. 讓那些機器連進來一定要設定好.
+Comaq-> cat  /usr/local/etc/smb.conf | grep allow
+hosts allow = 127. 61.222.240.74 163.15.196.110 172.16.1.1 192.168.0. 163.15.196.3
+
+2. smb.conf 之設定 (連時用 \\\\aa\\cpdir) 確定主機和目錄
+	[global]
+        workgroup = AAGROUP
+        netbios name = aa
+
+	[cpdir]
+	comment = CP's private directory for saving data
+	path = /aa/cpfong
+	valid users = cpfong
+
+
+詢問使用實例說明:
+----------------------------------------------------
+1. 以匿名去問 172.16.1.1 有那些 service
+smbclient -L 172.16.1.1 -N (ask as anonymouse)
+
+2. 以 cpfong 去問 172.16.1.1 有那些 service
+smbclient -L 172.16.1.1    (ask as cpfong)
+
+
+密碼設定及使用:
+----------------------------------------------------
+Comaq-> s ls /usr/local/private/
+Password:
+secrets.tdb     smbpasswd
+
+* In addition, the smbpasswd command is only useful if Samba
+  has  been  set up to use encrypted passwords (man smbpasswd)
+* smb 有自己的 password 在 /usr/local/private , 可以不和 /etc/passwd 相同
+* 一開始時是 smb 由 /etc/passwd 給 copy 在 /usr/local/private 之下, 所以相同
+* 要改則 /usr/local/bin/smbpasswd 可改自己的 
+* root 可以改別人的 smb 密碼 smbpasswd cpfong new_password
+* 加密 passwd 也可以用
+Comaq-> cat samba/smb.conf |grep encr
+encrypt passwords = yes
+* 不加密時, 在 unix 上只要一開一新的帳號 abc, smb 不必任何設定
+  即可以使用 unix 之密碼來進入 smb
+bash-2.05$ whoami
+abc
+bash-2.05$ smbclient -L 127.0.0.1
+Password: 
+Domain=[AAGROUP] OS=[Unix] Server=[Samba 2.2.7]
+...
+* 加了密之後, 則要新用 smbpasswd -a 再加一次 (-a 對已存在的 account 為更換 passwd)
+* smbpasswd -e (enable), smbpasswd -d (disable) smbpasse -x (delete account)
+
+
+Win98 password 密碼不能進 samba
+----------------------------------------------------
+往上一層 check http://hiedoc.fjtc.edu.tw/~cpfong/docs/samba/index.html
+
+
+連線使用實例說明:
+----------------------------------------------------
+1. 連線成功實例 (unix 模式)
+Comaq-> smbclient //aa/cpdir
+Got a positive name query response from 61.222.240.74 ( 61.222.240.74 )
+Password: 
+Domain=[AAGROUP] OS=[Unix] Server=[Samba 2.2.7]
+smb: \> 
+
+2. 以匿名去連到主機成功的例子 (dos, win 模式):
+use anonymous (-N) login to aa (which is 163.15.196.110) 
+=== cpfong@cc-> smbclient \\\\aa\\tmp -N
+added interface ip=163.15.196.3 bcast=163.15.196.255 nmask=255.255.255.0
+Got a positive name query response from 163.15.196.110 ( 163.15.196.110 )
+Anonymous login successful
+Domain=[AAGROUP] OS=[Unix] Server=[Samba 2.2.7]
+smb: \> 
+
+3. 以 cpfong 連到主機成功的例子 (dos, win 模式):
+=== cpfong@cc-> smbclient \\\\aa\\tmp (login as cpfong)
+added interface ip=163.15.196.3 bcast=163.15.196.255 nmask=255.255.255.0
+Got a positive name query response from 163.15.196.110 ( 163.15.196.110 )
+Password: 
+Domain=[AAGROUP] OS=[Unix] Server=[Samba 2.2.7]
+smb: \> 
+
+4. 以 cpfong 連到主機成功的例子二 (dos, win 模式):
+=== cpfong@cc-> smbclient \\\\aa\\cpdir 
+added interface ip=163.15.196.3 bcast=163.15.196.255 nmask=255.255.255.0
+Got a positive name query response from 163.15.196.110 ( 163.15.196.110 )
+Password: 
+Domain=[AAGROUP] OS=[Unix] Server=[Samba 2.2.7]
+smb: \> ls
+
+5. 更多的 smbclient 例子
+smbclient //bigserver/tmp -Ulogin_not_as_cpfong_but_ohter_people
+smbclient //bigserver/tmp -Ucpfong%secret_pass_word
+
+一些 Windows 下的有用指令:
+----------------------------------------------------
+c:\windows\nbtstat
+Comaq-> which nmblookup
+/usr/local/bin/nmblookup
+
+c:\windows\net use
+c:\windows\net view
+
+
+在 dos (win9x) 下連線到 smb
+----------------------------------------------------
+C:\WINDOWS\> net use d: \\servername\service 
+
+
+在 edoc 下操作的步驟
+----------------------------------------------------
+unix: 
+	1. create account (without shell)
+	2. mkdir /aa/new_account
+	3. chown new_account /aa/new_account
+	4. chgrp nogroup /aa/new_account
+	5. chmod 700 /aa/new_account
+	6. vi ~cpfong/samba/smb.conf put /aa/new_account in
+	7. allow this ip in smb.conf/host allow
+	8. using root to smbpasswd -a new_account

@@ -1,0 +1,17 @@
+tce-load -wi openssh
+
+sudo cp /usr/local/etc/ssh/sshd_config.example /usr/local/etc/ssh/sshd_config
+sudo cp /usr/local/etc/ssh/ssh_config.example /usr/local/etc/ssh/ssh_config
+
+tc@box:~$ sudo /usr/local/etc/init.d/openssh start
+
+vi /usr/local/etc/ssh/sshd_config
+X11Forwarding yes
+
+root@box:/usr/local/etc/ssh# /usr/local/etc/init.d/openssh restart
+
+-- change password for TC
+passwd 
+
+ssh -X tc@localhost
+

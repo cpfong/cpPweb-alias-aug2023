@@ -1,0 +1,5 @@
+dr.huang get a new proj and i want to test here
+--
+step 1 add to config: sep19@mars% tail -n5 perl-apache-module.conf
+step 2 go to /usr/local/www/apache24/perl/MyApache2 edit own pm to handle (handler) web request
+step 3 href=http://mars.ifong.org/hjuly20 now can be added to html to test

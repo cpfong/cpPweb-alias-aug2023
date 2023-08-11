@@ -1,0 +1,16 @@
+Comaq-> cd log/
+Comaq-> ls
+errlog          innfeed.status  news.crit       news.notice
+innfeed.log     news            news.err
+Comaq-> ls -la
+total 54
+drwxr-xr-x   2 news  news     512 12 28 01:24 .
+drwxr-xr-x  10 root  wheel    512 12 27 20:34 ..
+-rw-rw-r--   1 news  news       0 12 27 21:42 errlog
+-rw-rw-r--   1 news  news       0 12 28 01:24 innfeed.log
+-rw-rw-r--   1 news  news    2827 12 28 02:10 innfeed.status
+-rw-rw-r--   1 news  news     672 12 28 02:11 news
+-rw-r--r--   1 news  news     134 12 28 01:24 news.crit
+-rw-r--r--   1 news  news    2082 12 28 01:24 news.err
+-rw-r--r--   1 news  news   44795 12 28 09:59 news.notice
+

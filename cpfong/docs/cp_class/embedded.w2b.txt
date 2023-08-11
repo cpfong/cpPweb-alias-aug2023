@@ -1,0 +1,116 @@
+hw2
+--
+1. cpfong as wheel group
+2. sudoers has to be modified
+
+as regular user
+--
+ls 
+ls -l	# l stand for long
+ls -la	# a stand for all
+ls ~/.*
+file, hidden file, dir, . and .. (directory structure)
+.	# stand for current dir
+..	# stand for parent dir
+
+rw-r--r--    # read write execute / owner group others
+
+cd with tab completion
+/etc			# system config
+/usr/local/etc		# local config
+/var			
+
+permission 
+ use echo as an example
+
+ vi foo.sh
+  echo 'hello world'
+
+ sh ./foo.sh
+ ./foo.sh
+
+chmod			# change file (directory) permission
+chmod +x  ./foo.sh	# add execute to everyone
+chmod 744 ./foo.sh	# rwx 421 4+2+1=7
+
+for dir	x is enter permission 
+chmod 600 x		# you cannot enter x
+
+chmod
+https://www.computerhope.com/unix/uchmod.htm
+
+mosh
+--
+#pkg delete -f pkg ; pkg install pkg ; pkg update -f	#force using new pkg, since old one does NOT work
+pkg info | grep mosh
+mobaXterm / Sessions / New session / Mosh / ip Username 
+
+Q: why mosh?
+A: keep in line
+
+shell
+--
+echo $SHELL
+cd	# change to home dir
+cp .cshrc .cshrc.bak	# backup file using copy
+ls .cs*			# check for all .cs file
+diff .cshrc .cshrc.bak	# check for difference
+mv .cshrc.bak .cshrc	# replace .cshrc using .cshrc.bak
+
+vi ~/.cshrc
+change alias
+alias s sudo		# using s instead sudo
+
+csh
+--
+find / -name dot.cshrc -type f |& grep dot		#find file and stderr to null
+
+tmux
+--
+https://www.hamvocke.com/blog/a-quick-and-easy-guide-to-tmux/
+
+vi ~/.tmux.conf
+
+# start
+unbind C-b
+set -g prefix ^A
+bind a send-prefix
+
+set -g status-bg black
+set -g status-fg white
+# end
+
+split pane
+--
+Ctrl+a then % 	# left right
+Ctrl+a then "	# top down
+
+moving between windows
+--
+Ctrl+a then arrow key ->
+
+close pane
+--
+exit
+
+create window
+--
+Ctrl+a then c
+
+naming window
+--
+Ctrl+a then ,
+
+moveing 
+--
+Ctrl+a then 0 1 2 (number)
+
+copy text between windows
+--
+Ctrl+a [ for copy
+Ctrl+a ] for paste
+
+moving using arrow
+start to select using space
+then using arrow to drag
+enter means end of selection

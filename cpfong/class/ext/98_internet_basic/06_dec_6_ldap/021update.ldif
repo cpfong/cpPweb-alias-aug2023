@@ -1,0 +1,15 @@
+## 021update.ldif
+## add a person web hyperlink (labeledURI) to the new user Jerry (put in by 01users.ldif)
+# before this and after
+# [cpfong@ubuntu ldif]$ ldapsearch -x -b "dc=plainjoe,dc=org" "cn=Jerry*"
+##Jerry Carter, people, plainjoe.org
+#dn: cn=Jerry Carter,ou=people,dc=plainjoe,dc=org
+#
+# Jerry Carter, people, plainjoe.org
+#dn: cn=Jerry Carter,ou=people,dc=plainjoe,dc=org
+#labeledURI: http://www.plainjoe.org/~jerry
+
+dn: cn=Jerry Carter,ou=people,dc=plainjoe,dc=org
+changetype: modify
+add: labeledURI
+labeledURI: http://www.plainjoe.org/~jerry

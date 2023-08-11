@@ -1,0 +1,45 @@
+個人目前的採用方式如下:cnfs, timecaf, trash
+採用的方式為: 要永久保存的用 timecaf, 不必的全用 cnfs, 而測試的用 trash
+
+hd (9g) 空間的分配 concept 如下: 一些給永久保存, 其它的全給 cnfs 但如同
+錢應有多種幣值 1000, 500, 100, 50, 10, 5, 1 所以 cnfs 也該有相同的 concept 以方
+便利用. 另一要考量的為應去分門別類去看這 group 的文章你想留多久, 且平均
+one article 佔多少個 byte 以決定它要放在那個 cnfs 之中.
+
+作新的 sliec 的命令: mke2fs -b 4096 -f 1024 -i 1024 -m 0 /dev/sda3
+
+9g	1g: timecaf (internal articles) 
+	2g: cnfs
+	1g: cnfs
+	1g: cnfs
+	500m:
+	500m:
+	500m:
+	500m:
+	145m: reserved for this 1g (1000-100x5+50x5+10x5+10x5+5=145)
+	100m:
+	100m:
+	100m:
+	100m:
+	100m:
+	 50m:
+	 50m:
+	 50m:
+	 50m:
+	 50m:
+	 10m:
+	 10m:
+	 10m:
+	 10m:
+	 10m:
+	  5m:
+	  5m:
+	  5m:
+	  5m:
+	  5m:
+	  1m:
+	  1m:
+	  1m:
+	  1m:
+	  1m:
+	2g: reserved for future

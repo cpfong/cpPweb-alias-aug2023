@@ -1,0 +1,4 @@
+useradd 加一個 usrer 用它去訂所有的文章
+在它 account 下利用 procmail 的功能把所有的信分組, 
+每次有信利用 mail2news.pl (它會去叫 /usr/local/news/bin/news)
+來把信 post 上 newsgroup

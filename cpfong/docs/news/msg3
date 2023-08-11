@@ -1,0 +1,13 @@
+Comaq-> tail news.notice 
+Dec 28 10:57:19 hiedoc innd: SERVER ccsetup control:12
+Dec 28 10:57:19 hiedoc innd: SERVER lcsetup localconn:14
+Dec 28 10:57:19 hiedoc innd: SERVER rcsetup remconn:4
+Dec 28 10:57:19 hiedoc innd: innfeed! spawned innfeed!:17:proc:33888
+Dec 28 10:57:19 hiedoc innd: SERVER perl filtering enabled
+Dec 28 10:57:19 hiedoc innd: SERVER starting
+Dec 28 10:57:20 hiedoc innfeed[33888]: ME starting innfeed 2.3.4 (20021126 prerelease) at Sat Dec 28 10:57:20 2002
+Dec 28 10:57:20 hiedoc innfeed[33888]: loading /usr/local/news/etc/innfeed.conf
+Dec 28 10:57:22 hiedoc innfeed[33888]: fjtc:0 connected
+Dec 28 10:57:22 hiedoc innfeed[33888]: fjtc remote MODE STREAM
+
+connected ¤W½u¤F...

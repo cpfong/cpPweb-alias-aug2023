@@ -1,0 +1,45 @@
+data-mining 
+資料探勘將看似無有用的資料經整理後變成有用的資訊
+
+木馬
+經由網路把程式放入電腦中, 發作時可把電腦中的資料傳送出去. 
+
+raid4
+stripping with parity 的方式來完成 raid, 把資料放不同的 hd
+但當某一 hd 故障時, 資料還可以救回
+
+IS information system
+
+stripping
+raid 0 的技術, 把 data 放在二個不同的 hd, 有其中一 hd 固障,
+則資料無法回復.
+
+web bug
+一個圖檔, 藏在 html 中會追蹤使用者在網路上行蹤
+
+cookies
+拜訪伺服器後, 伺服端放到顧客端的上用來記錄使用者
+使用習慣, 以便在再次造訪時提供較快的服務.
+
+ddos
+分散式阻斷服務攻擊, 利用不同的機器同時對某一特定
+伺服器發出大量的要求以使謂機因負荷過重而當機
+
+hacker
+駭客, 對於電腦特定部份十分瞭解的人, 利用這個知識從事
+入侵它的的電腦的這個動作
+
+問答題: (每題回答)
+隱私權如何不見的 (舉出三個例子)?
+去租片, 上醫院, 去購物
+
+舉出三家線上購物網站 (要寫全名例如: http://www.hinet.net)
+yahoo, ruten, pchome
+
+舉出三種 IS
+專家系統, 交易處理, 決策支援
+
+舉出三家免費撥接號碼有公司.
+http://www.pchome.com.tw
+http://www.yam.com 
+http://www.sina.com.tw

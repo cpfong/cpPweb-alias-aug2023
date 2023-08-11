@@ -1,0 +1,55 @@
+.cshrc
+--
+set prompt = "101%/->"
+
+apache access
+--
+apache24 pkg installed
+sudo vi /etc/rc.conf 
+apache24_enable="YES"
+
+sudo /usr/local/etc/rc.d/apache24 start
+firewall (Aliyun) port 80 open
+
+start error msg
+--
+AH00558: httpd: Could not reliably determine the server's fully qualified domain name
+ServerName: ip:80
+
+vi httpd.conf
+--
+ServerName 116.62.161.166:80
+
+apache httpd config (setting)
+--
+/usr/local/etc/apache24
+Include: files under include automatically
+extra: what can apache extend
+
+extra
+--
+httpd-userdir.conf
+httpd-autoindex.conf
+httpd-vhosts.conf
+
+1
+cd /usr/local/etc/apache24
+cp extra/httpd-userdir.conf Include/
+
+2
+httpd.conf
+--
+vi: find userdir_module (using /userdir)
+#LoadModule userdir_module libexec/apache24/mod_userdir.so --> change
+LoadModule userdir_module libexec/apache24/mod_userdir.so
+
+service apache24 restart
+
+3
+mkdir ~/public_html
+cd ~/public_html
+vi index.html
+
+hw4
+--
+personal web 

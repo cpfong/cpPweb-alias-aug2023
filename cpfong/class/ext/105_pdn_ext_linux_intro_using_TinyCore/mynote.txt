@@ -1,0 +1,10 @@
+dhcpd gw 192.168.1.1 (which is hinet ADSL) 
+and i just make soekris as 192.168.1.254 but gw as 192.168.1.1
+
+alghough dhcp client boot get ip right, but route is flushed
+you need to do it after boot
+
+ifconfig eht0 add -net 0.0.0.0 netmask 0.0.0.0 gw 192.168.1.1
+
+after this, you can ping 8.8.8.8 OK!
+

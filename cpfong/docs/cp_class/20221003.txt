@@ -1,0 +1,35 @@
+my @rocks = qw /bedrock slate lava/;
+
+foreach (@rocks){
+ print; #note use $_
+ print "\n";
+}
+
+my @rocks=qw /bedrock slate rubble granite/;
+
+#foreach my $index (0 .. $#rocks){
+foreach my $index (0 .. @rocks-1){
+ print "$index: $rocks[$index]\n";
+}
+
+my @arr=qw /a b c/;
+
+while (my ($index, $value)=each @arr){
+ print $index, "\t", $value, "\n";
+}
+
+my @people = qw /fred barney betty/;
+
+$number = 42 + @people;
+print "number = $number\n";
+print "@people\n";
+
+#my $line = <STDIN>;
+#print "$line";
+
+my @lines= <STDIN>;
+print "@lines";
+
+chomp(my @lines = <STDIN>);
+my @r = reverse @lines;
+print "@r\n";

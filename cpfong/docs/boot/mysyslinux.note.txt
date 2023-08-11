@@ -1,0 +1,39 @@
+# use fdisk to create partition
+root@cpfong-1018P:/home/cpfong/tmp/trash/syslinux-603/bios/linux# fdisk -l /dev/sdb
+Device     Boot Start    End Sectors  Size Id Type
+/dev/sdb1        2048 206847  204800  100M  b W95 FAT32
+
+# copy file to /dev/sdb1
+root@cpfong-1018P:/home/cpfong/tmp/trash/syslinux-603/bios/linux# ./syslinux -i /dev/sdb1
+root@cpfong-1018P:/home/cpfong/tmp/trash/syslinux-603/bios/linux# ls -l /mnt
+-r-xr-xr-x 1 root root 122308 Jan 30 10:08 ldlinux.c32
+-r-xr-xr-x 1 root root  69632 Jan 30 10:08 ldlinux.sys
+
+# note: sdb NOT sdb1 
+# write the Syslinux mbr code (mbr.bin) into the master boot record
+root@cpfong-1018P:/home/cpfong/tmp/trash/syslinux-603/bios/mbr# dd conv=notrunc bs=440 count=1 if=mbr.bin of=/dev/sdb
+
+# make sdb1 bootable, you may use fdisk
+root@cpfong-1018P:/home/cpfong/tmp/trash/syslinux-603/bios/mbr# parted /dev/sdb set 1 boot on
+fdisk
+--
+Command (m for help): a
+Selected partition 1
+The bootable flag on partition 1 is enabled now.
+
+# syslinux.cfg
+default vesamenu.c32
+prompt 0
+timeout 600
+
+MENU TITLE Multi Boot Menu Edit by Barry
+
+label 98DOS
+MENU LABEL Win98 DOS Simple
+kernel memdisk
+append initrd=98dos.IMA
+
+# after work
+cp xxxx.c32 to sdb1
+
+boot usb can enter dos NOW

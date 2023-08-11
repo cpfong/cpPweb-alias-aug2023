@@ -1,0 +1,9 @@
+#!/usr/local/bin/expect
+
+spawn ssh 18101
+
+expect -exact 'cpfong@18101~ % '
+send -- "echo foo >foo.txt\r"
+
+expect -exact 'cpfong@18101~ % '
+send -- "logout"

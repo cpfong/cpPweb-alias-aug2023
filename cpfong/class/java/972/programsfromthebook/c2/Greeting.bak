@@ -1,0 +1,30 @@
+//----------------STARTEXTRACT=prog2.xtr
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class Greeting extends JFrame {
+
+    private JTextField textField;
+
+    public static void main (String[] args) {
+        Greeting frame = new Greeting();
+//----------------STARTEXTRACT=prog2setsize.xtr
+        frame.setSize(300, 200);
+//----------------ENDEXTRACT=prog2setsize.xtr
+        frame.createGUI();
+        frame.setVisible(true);
+    }
+
+    private void createGUI() {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        Container window = getContentPane();
+        window.setLayout(new FlowLayout() );
+//----------------STARTEXTRACT=prog2addnew.xtr
+        textField = new JTextField("Hello!");
+        window.add(textField);
+//----------------ENDEXTRACT=prog2addnew.xtr
+    }
+}
+//----------------ENDEXTRACT=prog2.xtr
+

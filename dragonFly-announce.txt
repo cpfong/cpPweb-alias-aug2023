@@ -1,0 +1,22 @@
+(o,o)
+This is MaheshaDragonFlyBSD, a modular CD(USB) distro. 
+It can be easily put onto a  CD. Vkernel  is  prebuilt  for you in 
+/myinstall/vkernel directory.
+
+To use network, type dhclient nic  and replace "nic" with your real network
+card. 
+To start the simple  icewm  desktop,  type startx  or startxaut.  
+Run /makeiso to make the ISO image from this thing, but you must have a DVD, as
+this  BSD  takes about 1 GB of space (first mount a partition to /mnt4 from
+within the MaheshaDragonFlyBSD environment.This thing does not use swap, so
+expect it will be slower. 
+
+Press Alt+F2 to  switch  between  consoles.  This
+thing has a nice console file manager - Midnight Commander, so  type mc  to
+use it. If you want to hear audio, you must first load the sound  driver  -
+type kldload snd_driver. This thing  supports  text  to  speech  conversion
+(espeak), is mounted read-only with a few dirs in memory  (/etc,  /var...).
+
+You  may  remount  this  thing  read-write  anytime  and  install packages:
+mount /dev/da8s1a /
+Enjoy BSD!

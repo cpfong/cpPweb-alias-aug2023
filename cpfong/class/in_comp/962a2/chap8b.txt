@@ -1,0 +1,30 @@
+第八章第二部份
+
+所有的圖檔可以分成二個基本類別: 位元映像, 向量檔
+位元映像: Bit Mapping 是一個一個的 bit 來組成一個圖檔
+向量檔: vector 是利用數學的方程式來描述一個圖型
+
+Table 8B.1 (p334) bit mapping 的標準格式 
+bmp: bitmap 可以支援到 24 bits 即 2^24 個顏色
+pict: picture 在 apple 電腦上常用
+tiff: 列印及編輯時為佳 
+jpeg: 簡稱 jpg 常在 www 上使用, 可到 2^24 色 
+gif: 和 jpg 相近, 但只有 256 色
+emf: office 下常用的格式
+
+把影像放入電腦中的常用方式:
+1. scanner 掃描器
+2. digital camera 數位相機
+3. digital video camera 數位攝影機
+4. clip art 美工圖片
+
+http://www.picnik.com 可以幫忙你在線上編圖
+http://www.flickr.com 可以線上存你的圖片
+
+色彩大都使用 RGB 三原色, 其中 R 表示 Red, G 為 Green
+B 為 Blue, 即紅綠藍三個原色, 其中 R 有 255 個色階, 其它
+二個也是如此, 所以 255 255 255 的 RGB 為白色, 因為所謂的
+白光即是所有色都有, 反之若 0 0 0 則為黑色
+
+繪圖用具中, windows 在附屬應用程式中有小畫家為常使用的軟體,
+它的檔名為 pbrush , 它可以存成不同種型態的檔案格式

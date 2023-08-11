@@ -1,0 +1,4 @@
+所在位置: /etc/hosts.allow
+
+語法如下:
+daemon : client : option1 : option2 ...

@@ -1,0 +1,72 @@
+/usr/ports/news/c-nocem make install 
+cp /usr/ports/news/c-nocem/work/c-nocem/c-nocem ~news/bin/ 
+
+CPFong@News-> pwd
+/home/cpfong/ln.news/etc
+CPFong@News-> ls -l ncmperm 
+lrwxr-xr-x  1 news  news  44  1 11 13:38 ncmperm -> /usr/ports/news/c-nocem/work/c-nocem/ncmperm
+
+vi ~news/bin/c-nocem
+$pathnews="/usr/local/news";
+$pathetc="/usr/local/news/etc";
+$pathpgp="/usr/local/news/.gnupg";
+$pathdb="/usr/local/news/db";
+$patharticles="/usr/local/news/spool/articles";
+$tmp="/usr/local/news/lib/tmp";
+$logfile="/usr/local/news/log/c-nocem.log";
+$ENV{'PATH'}="/sbin:/bin:/usr/sbin:/usr/bin:/usr/games:/usr/local/sbin:/usr/local/bin:/usr/X11R
+6/bin:/root/bin:/usr/local/libexec/cnews:/usr/local/news/bin";
+
+$pubring="$pathetc/ncmring.pgp";
+$perm="$pathetc/ncmperm";
+$groups="$pathetc/ncmgroups";
+$inputfile="$tmp/nocem.input";
+$batchfile="$tmp/nocem";
+$PGP="/usr/local/bin/gpg --batch -q --keyring $pubring";
+$ENV{'PGPPATH'}="$pathnews/.pgp";
+$ENV{'LANG'}="en";
+
+news@News-> pwd
+/usr/local/news/.gnupg
+news@News-> ls
+nocem-1-12-2002 pubring.gpg     secring.gpg
+options         pubring.gpg~    trustdb.gpg
+news@News-> ls -la
+total 56
+drwx------   2 news  news   512  1 12 19:30 .
+drwxr-xr-x  18 news  news   512  1 12 14:43 ..
+-rw-r--r--   1 news  news  1616  1 12 11:07 nocem-1-12-2002
+-rw-r--r--   1 news  news  7793  1 11 12:38 options
+-rw-r--r--   1 news  news   919  1 12 11:07 pubring.gpg
+-rw-r--r--   1 news  news   591  1 12 11:07 pubring.gpg~
+-rw-------   1 news  news     0  1 11 12:39 secring.gpg
+-rw-r--r--   1 news  news  1200  1 12 12:25 trustdb.gpg
+
+HiEdoc-> pgp -kv
+Type bits      keyID      Date       User ID
+RSA  1024      0x8F8F4B4B 2003/01/12 expires 2004/01/12                                      
+                                      *** DEFAULT SIGNING KEY ***
+                                     cpfong
+RSA  1024      0xCFE44B09 2003/01/12 NoCeM@hiedoc.FJTC.edu.tw
+2 matching keys found.
+
+pgp -kx NoCeM@hiedoc.FJTC.edu.tw keyfile-nocem
+
+news@News-> ftp cpfong.fjtc.edu.tw
+ftp> get keyfile-nocem
+
+news@News-> cat keyfile-nocem >> nocem-1-12-2002
+news@News-> gpg -h|grep import
+     --import                     import/merge keys
+
+news@News-> gpg --import ./nocem-1-12-2002 
+gpg: Warning: using insecure memory!
+gpg: please see http://www.gnupg.org/faq.html for more information
+gpg: key 5B5FDC5F: not changed
+gpg: key FC58AB19: not changed
+gpg: key BF5261B1: not changed
+gpg: key CFE44B09: public key imported
+gpg: Total number processed: 4
+gpg:               imported: 1  (RSA: 1)
+gpg:              unchanged: 3
+

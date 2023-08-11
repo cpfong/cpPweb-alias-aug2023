@@ -1,0 +1,22 @@
+use strict;
+use warnings;
+use LWP::UserAgent;
+use URI;
+
+my $host_dir='http://pluto.ifong.org:8080/dr_haung_2019_device';
+my $browser = LWP::UserAgent->new;
+my $url = URI->new( $host_dir );
+
+#action
+foreach (1..2){
+ my $t=int(rand(30)); #temperature
+ my $h=sprintf("%.2f", rand(120)); #humidity
+
+ $url->query_form(
+    'tem'       => $t,
+    'hum'       => $h,
+ );
+
+ my $response = $browser->get($url);
+ sleep(3);
+}

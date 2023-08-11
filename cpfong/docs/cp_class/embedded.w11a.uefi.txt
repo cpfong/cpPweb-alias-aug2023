@@ -1,0 +1,11 @@
+UEFI stands for Unified Extensible Firmware Interface. It does the same job as a BIOS
+
+bios: store initialized data on the firmware
+uefi: stores all data about initialization and startup in an .efi file
+
+UEFI was designed to overcome many limitations of the old BIOS
+ drive sizes upto 9 zettabytes
+ faster boot up time
+ UEFI runs in 32bit or 64bit mode, whereas BIOS runs in 16bit mode. 
+ UEFI  is able to provide a GUI
+ 

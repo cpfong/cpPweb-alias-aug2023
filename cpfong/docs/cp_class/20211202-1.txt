@@ -1,0 +1,83 @@
+mobaxterm can copy easily
+
+chapter 3 variables and constant
+
+string_double = "The language 'Python' is named after Monty Python, not the snake."
+string_single = 'I told my friend, "Python is my favorite language!"'
+string_mix = "One of Python's strengths is its diverse and supportive community."
+
+print (string_double)
+print (string_single)
+print (string_mix)
+
+t_name = "ada"
+last_name = "lovelace"
+full_name = first_name + " " + last_name
+print (full_name)
+
+p3-5 + - * / ** %
+
+p3-11 += ...
+
+p3-12 input (basic IO)
+
+p3-13
+>>> str=input('input string:')
+>>> str
+'test' #note single quote
+
+# using eval to convert string into value
+>>> i=eval( input('integet i=') )
+3
+>>> i
+
+
+p3-17
+r=eval (input ('r='))
+a = r * r * 3.14
+print ('a = %.2f' % a)
+
+p3-17-2.py
+import math
+r=eval (input('r='))
+a=r*r*math.pi
+print ('a=%.2f' % a) 
+
+input read in TWO 
+--
+x,y=input().split() #must split
+
+x=eval(x)
+y=eval(y)
+
+print("x+y=", (x+y))
+#!/usr/local/bin/python
+
+#p3-26ex9
+
+#!/usr/local/bin/python
+
+s=input("input 5 numbers sep with space: ")
+
+#n1, n2, n3, n4, n5=s.split(',')
+n1, n2, n3, n4, n5=s.split()
+
+sum=eval(n1) + eval(n2) + eval(n3) + eval(n4) + eval(n5)
+avg=sum/5
+print ("sum = %s" % sum, "avg = %s" % avg)
+
+
+#!/usr/local/bin/python
+from random import random
+
+tar=int(random() * 100 % 3)
+
+i=int(eval(input('number: ')))
+
+if (i == tar) :
+ print("bingo\n")
+else :
+ print("miss\n")
+ print("tar=%d" % tar)
+~
+~

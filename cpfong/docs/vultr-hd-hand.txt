@@ -1,0 +1,48 @@
+#!/bin/sh
+# obj: part vultr manually
+# 2021jan: FreeBSD 12.1 need swap and zfs
+# https://wiki.freebsd.org/RootOnZFS/GPTZFSBoot
+
+gpart create -s GPT vtbd0
+
+#Legacy Boot:
+gpart add -a 4k -s 512K -t freebsd-boot vtbd0
+gpart bootcode -b /boot/pmbr -p /boot/gptzfsboot -i 1 vtbd0
+
+#Create Partitions
+gpart add -a 1m -s 4G -t freebsd-swap -l swap0 vtbd0
+gpart add -a 1m -t freebsd-zfs -l disk0 vtbd0
+
+#Create the Pool
+mount -t tmpfs tmpfs /mnt
+zpool create -o altroot=/mnt zroot vtbd0p3
+
+#Create ZFS file system hierarchy
+zfs set compress=on zroot
+
+zfs create -o mountpoint=none zroot/ROOT
+zfs create -o mountpoint=/ -o canmount=noauto zroot/ROOT/default
+mount -t zfs zroot/ROOT/default /mnt
+
+zfs create -o mountpoint=/tmp  -o exec=on      -o setuid=off	zroot/tmp
+zfs create -o canmount=off -o mountpoint=/usr zroot/usr
+zfs create 							zroot/usr/home
+zfs create                     -o exec=off     -o setuid=off	zroot/usr/src
+zfs create							zroot/usr/obj
+zfs create -o mountpoint=/usr/ports            -o setuid=off	zroot/usr/ports
+zfs create                     -o exec=off     -o setuid=off	zroot/usr/ports/distfiles
+zfs create                     -o exec=off     -o setuid=off	zroot/usr/ports/packages
+zfs create -o canmount=off -o mountpoint=/var			zroot/var
+zfs create                     -o exec=off     -o setuid=off	zroot/var/audit
+zfs create                     -o exec=off     -o setuid=off	zroot/var/crash
+zfs create                     -o exec=off     -o setuid=off	zroot/var/log
+zfs create -o atime=on         -o exec=off     -o setuid=off	zroot/var/mail
+zfs create                     -o exec=on      -o setuid=off	zroot/var/tmp
+
+ln -s /usr/home /mnt/home
+chmod 1777 /mnt/var/tmp
+chmod 1777 /mnt/tmp
+
+zpool set bootfs=zroot/ROOT/default zroot
+
+# more to do (check heading ref site)

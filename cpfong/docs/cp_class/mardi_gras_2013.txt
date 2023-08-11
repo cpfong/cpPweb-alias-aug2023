@@ -1,0 +1,4 @@
+dup orig to make 2 layer
+change one to black-white (top layer)
+add mask to top layer
+let bottom (color to show on top of black)

@@ -1,0 +1,3030 @@
+  <HTML>
+  <HEAD>
+  
+  <TITLE>MySQL Reference Manual for version 5.0.3-alpha - 6  Replication in MySQL</TITLE>
+   <style> code {color:purple} tt {color:green} samp {color:navy} pre {color:maroon} </style>
+  </HEAD>
+  <BODY BGCOLOR=silver TEXT=#000000 LINK=#101090 VLINK=#7030B0>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_MySQL_Database_Administration.html">previous</A>, <A HREF="manual_MySQL_Optimization.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="Replication" HREF="manual_toc.html#Replication">6  Replication in MySQL</A></H1>
+
+<P>
+<A NAME="IDX673"></A>
+<A NAME="IDX674"></A>
+<A NAME="IDX675"></A>
+<A NAME="IDX676"></A>
+
+</P>
+
+<P>
+Replication capabilities allowing the databases on one MySQL server to be
+duplicated on another were introduced in MySQL 3.23.15.
+This chapter describes the various replication features provided by MySQL.
+It introduces replication concepts, shows how to set up replication servers,
+and serves as a reference to the available replication options.
+It also provides a list of
+frequently asked questions (with answers), and troubleshooting advice for
+solving problems.
+
+</P>
+<P>
+For a description of the syntax of replication-related SQL statements, see
+section <A HREF="manual_SQL_Syntax.html#Replication_SQL">13.6  Replication Statements</A>.
+
+</P>
+<P>
+We suggest that you visit our Web site at <a HREF="http://www.mysql.com">http://www.mysql.com</a>
+often and read updates to this chapter. Replication is constantly being
+improved, and we update the manual frequently with the most current
+information.
+
+</P>
+
+
+<H2><A NAME="Replication_Intro" HREF="manual_toc.html#Replication_Intro">6.1  Introduction to Replication</A></H2>
+
+<P>
+MySQL 3.23.15 and up features support for one-way replication.
+One server acts as the master, while one or more other servers
+act as slaves.  The master server writes updates to its binary log files,
+and maintains an index of the files to keep track of log rotation.  These logs
+serve as a record of updates to be sent to slave servers.  When a
+slave server connects to the master server, it informs the master of its last
+position within the logs since the last successfully propagated update.
+The slave catches up any updates that have occurred since then, and then
+blocks and waits for the master to notify it of new updates.
+
+</P>
+<P>
+A slave server can also serve as a master if you want to set up chained
+replication servers.
+
+</P>
+<P>
+Note that when you are using replication, all updates to the
+tables that are replicated
+should be performed on the master server. Otherwise, you must always be
+careful to avoid conflicts between updates that users make to tables on the
+master and updates that they make to tables on the slave.
+
+</P>
+<P>
+One-way replication has benefits for robustness, speed, and system
+administration:
+
+</P>
+
+<UL>
+
+<LI>
+
+Robustness is increased with a master/slave setup.
+In the event of problems with the master, you can switch to the slave as a
+backup.
+
+<LI>
+
+Better response time for clients can be achieved by splitting the load
+for processing client queries between the master and slave servers.
+<code>SELECT</code> queries may be sent to the slave to reduce the query
+processing load of the master. Statements that modify data should still
+be sent to the master so that the master and slave do not get out of sync.
+This load-balancing strategy is effective if non-updating queries dominate,
+but that is the normal case.
+
+<LI>
+
+Another benefit of using replication is that you can perform backups using a
+slave server without disturbing the master. The master continues to process
+updates while the backup is being made.
+See section <A HREF="manual_MySQL_Database_Administration.html#Backup">5.7.1  Database Backups</A>.
+
+</UL>
+
+
+
+<H2><A NAME="Replication_Implementation" HREF="manual_toc.html#Replication_Implementation">6.2  Replication Implementation Overview</A></H2>
+
+<P>
+<A NAME="IDX677"></A>
+
+</P>
+<P>
+MySQL replication is based on the master server keeping track of all changes
+to your databases (updates, deletes, and so on) in the binary logs. Therefore,
+to use replication, you must enable binary logging on the master server.
+See section <A HREF="manual_MySQL_Database_Administration.html#Binary_log">5.9.4  The Binary Log</A>.
+
+</P>
+<P>
+Each slave server receives from the master the saved updates that the
+master has recorded in its binary log, so that the slave can execute the
+same updates on its copy of the data.
+
+</P>
+<P>
+It is <strong>very important</strong> to realize that the binary log is simply a
+record starting from the fixed point in time at which you enable binary
+logging. Any slaves that you set up will need copies of the databases on
+your master as they existed at the moment you enabled binary
+logging on the master. If you start your slaves with databases that are not the same
+as what was on the master <strong>when the binary log was
+started</strong>, your slaves may fail.
+
+</P>
+<P>
+One way to copy the master's data to the slave is to use the <code>LOAD
+DATA FROM MASTER</code> statement.  Be aware that <code>LOAD DATA FROM MASTER</code>
+is available only as of MySQL 4.0.0 and currently works only if all the
+tables on the master are <code>MyISAM</code> type. Also, this statement acquires a
+global read lock, so no updates on the master are possible while the tables
+are being transferred to the slave. When we implement lock-free hot table
+backup (in MySQL 5.0), this global read lock will no longer be necessary.
+
+</P>
+<P>
+Due to these limitations, we recommend that at this point  you use
+<code>LOAD DATA FROM MASTER</code> only if the dataset on the master is relatively
+small, or if a prolonged read lock on the master is acceptable. While the
+actual speed of <code>LOAD DATA FROM MASTER</code> may vary from system to system,
+a good rule of thumb for how long it will take is 1 second per 1MB of data.
+That is only a rough estimate, but you should get close to it if both
+master and slave are equivalent to 700MHz Pentium performance and are
+connected through a 100MBit/s network.
+
+</P>
+<P>
+After the slave has been set up with a copy of the master's data, it
+will simply connect to the master and wait for updates to process. If
+the master goes away or the slave loses connectivity with your master,
+it will keep trying to connect periodically until it is able to reconnect
+and resume listening for updates. The retry interval is controlled by the
+<code>--master-connect-retry</code> option. The default is 60 seconds.
+
+</P>
+<P>
+Each slave keeps track of where it left off. The master server has no
+knowledge of how many slaves there are or which ones are up to date at
+any given time.
+
+</P>
+
+
+
+<H2><A NAME="Replication_Implementation_Details" HREF="manual_toc.html#Replication_Implementation_Details">6.3  Replication Implementation Details</A></H2>
+
+<P>
+MySQL replication capabilities are implemented using three threads (one
+on the master server and two on the slave).  When <code>START SLAVE</code> is
+issued, the slave creates an I/O thread.  The I/O thread connects to the
+master and asks it to send the statements recorded in its binary logs. The
+master creates a thread to send the binary log contents to the slave.
+This thread can be identified as the <code>Binlog Dump</code> thread in the
+output of <code>SHOW PROCESSLIST</code> on the master.  The slave I/O thread
+reads what the master <code>Binlog Dump</code> thread sends and simply copies
+it to some local files in the slave's data directory called relay logs.
+The third thread is the SQL thread, which the slave creates to read the
+relay logs and execute the updates they contain.
+
+</P>
+<P>
+In the preceding description, there are three threads per slave. For a
+master that has multiple slaves, it creates one thread for each currently
+connected slave, and each slave has its own I/O and SQL threads.
+
+</P>
+<P>
+For versions of MySQL before 4.0.2, replication involves only two threads
+(one on the master and one on the slave). The slave I/O and SQL threads
+are combined as a single thread, and no relay log files are used.
+
+</P>
+<P>
+The advantage of using two slave threads is that statement reading and
+execution are separated into two independent tasks. The task of reading
+statements is not slowed down if statement execution is slow.  For example,
+if the slave server has not been running for a while, its I/O thread can
+quickly fetch all the binary log contents from the master when the slave starts,
+even if the SQL thread lags far behind and may take hours to catch up.
+If the slave stops before the SQL thread has executed all the fetched
+statements, the I/O thread has at least fetched everything so that a
+safe copy of the statements is locally stored in the slave's relay logs
+for execution when next the slave starts. This allows the binary logs to be
+purged on the master, because it no longer need wait for the slave to
+fetch their contents.
+
+</P>
+<P>
+The <code>SHOW PROCESSLIST</code> statement provides information that tells you
+what is happening on the master and on the slave regarding replication.
+
+</P>
+<P>
+The following example illustrates how the three threads show up in
+<code>SHOW PROCESSLIST</code>.  The output format is that used by <code>SHOW
+PROCESSLIST</code> as of MySQL version 4.0.15, when the content of the
+<code>State</code> column was changed to be more meaningful compared to
+earlier versions.
+
+</P>
+<P>
+On the master server, the output from <code>SHOW PROCESSLIST</code> looks like this:
+
+</P>
+
+<PRE>
+mysql&#62; SHOW PROCESSLIST\G
+*************************** 1. row ***************************
+     Id: 2
+   User: root
+   Host: localhost:32931
+     db: NULL
+Command: Binlog Dump
+   Time: 94
+  State: Has sent all binlog to slave; waiting for binlog to
+         be updated
+   Info: NULL
+</PRE>
+
+<P>
+Here, thread 2 is a replication thread for a connected slave. The information
+indicates that all outstanding updates have been sent to the slave and that
+the master is waiting for more updates to occur.
+
+</P>
+<P>
+On the slave server, the output from <code>SHOW PROCESSLIST</code> looks like this:
+
+</P>
+
+<PRE>
+mysql&#62; SHOW PROCESSLIST\G
+*************************** 1. row ***************************
+     Id: 10
+   User: system user
+   Host:
+     db: NULL
+Command: Connect
+   Time: 11
+  State: Waiting for master to send event
+   Info: NULL
+*************************** 2. row ***************************
+     Id: 11
+   User: system user
+   Host:
+     db: NULL
+Command: Connect
+   Time: 11
+  State: Has read all relay log; waiting for the slave I/O
+         thread to update it
+   Info: NULL
+</PRE>
+
+<P>
+This information indicates that thread 10 is the I/O thread that is
+communicating with the master server, and thread 11 is the SQL thread that
+is processing the updates stored in the relay logs.  Currently, both threads
+are idle, waiting for further updates.
+
+</P>
+<P>
+Note that the value in the <code>Time</code> column can tell how late the slave
+is compared to the master.
+See section <A HREF="manual_Replication.html#Replication_FAQ">6.9  Replication FAQ</A>.
+
+</P>
+
+
+
+<H3><A NAME="Master_thread_states" HREF="manual_toc.html#Master_thread_states">6.3.1  Replication Master Thread States</A></H3>
+
+<P>
+The following list shows the most common states you will see in the
+<code>State</code> column for the master's <code>Binlog Dump</code> thread. If you
+don't see any <code>Binlog Dump</code> threads on a master server, replication
+is not running. That is, no slaves currently are connected.
+
+</P>
+<DL COMPACT>
+
+<DT><code>Sending binlog event to slave</code>
+<DD>
+Binary logs consist of events, where an event is usually an update statement
+plus some other information. The thread has read an event from the binary
+log and is sending it to the slave.
+
+<DT><code>Finished reading one binlog; switching to next binlog</code>
+<DD>
+The thread has finished reading a binary log file and is opening
+the next one to send to the slave.
+
+<DT><code>Has sent all binlog to slave; waiting for binlog to be updated</code>
+<DD>
+The thread has read all outstanding updates from the binary logs and sent
+them to the slave. It is idle, waiting for new events to appear in the
+binary log resulting from new update statements being executed on the master.
+
+<DT><code>Waiting to finalize termination</code>
+<DD>
+A very brief state that occurs as the thread is stopping.
+
+</DL>
+
+
+
+<H3><A NAME="Slave_I_O_thread_states" HREF="manual_toc.html#Slave_I_O_thread_states">6.3.2  Replication Slave I/O Thread States</A></H3>
+
+<P>
+The following list shows the most common states you will see in the
+<code>State</code> column for a slave server I/O thread. Beginning with MySQL
+4.1.1, this state also appears in the <code>Slave_IO_State</code> column displayed
+by the <code>SHOW SLAVE STATUS</code> statement. This means that you can get a
+good view of what is happening by using only <code>SHOW SLAVE STATUS</code>.
+
+</P>
+<DL COMPACT>
+
+<DT><code>Connecting to master</code>
+<DD>
+The thread is attempting to connect to the master.
+
+<DT><code>Checking master version</code>
+<DD>
+A very brief state that occurs just after the connection to the master
+is established.
+
+<DT><code>Registering slave on master</code>
+<DD>
+A very brief state that occurs just after the connection to the master
+is established.
+
+<DT><code>Requesting binlog dump</code>
+<DD>
+A very brief state that occurs just after the connection to the master is
+established.  The thread sends to the master a request for the contents
+of its binary logs, starting from the requested binary log filename and
+position.
+
+<DT><code>Waiting to reconnect after a failed binlog dump request</code>
+<DD>
+If the binary log dump request failed (due to disconnection), the
+thread goes into this state while it sleeps, then tries to reconnect
+periodically. The interval between retries can
+be specified using the
+<code>--master-connect-retry</code> option.
+
+<DT><code>Reconnecting after a failed binlog dump request</code>
+<DD>
+The thread is trying to reconnect to the master.
+
+<DT><code>Waiting for master to send event</code>
+<DD>
+The thread has connected to the master and is waiting for binary log events
+to arrive. This can last for a long time if the master is idle. If the
+wait lasts for <code>slave_read_timeout</code> seconds, a timeout will occur.
+At that point, the thread will consider the connection to be broken and
+make an attempt to reconnect.
+
+<DT><code>Queueing master event to the relay log</code>
+<DD>
+The thread has read an event and is copying it to the relay log so that the SQL
+thread can process it.
+
+<DT><code>Waiting to reconnect after a failed master event read</code>
+<DD>
+An error occurred while reading (due to disconnection). The thread is sleeping
+for <code>master-connect-retry</code> seconds before attempting to reconnect.
+
+<DT><code>Reconnecting after a failed master event read</code>
+<DD>
+The thread is trying to reconnect to the master. When connection is established
+again, the state will become <code>Waiting for master to send event</code>.
+
+<DT><code>Waiting for the slave SQL thread to free enough relay log space</code>
+<DD>
+You are using a non-zero <code>relay_log_space_limit</code> value, and the relay
+logs have grown so much that their combined size exceeds this value.
+The I/O thread is waiting until the SQL
+thread frees enough space by processing relay log contents so that it can
+delete some relay log files.
+
+<DT><code>Waiting for slave mutex on exit</code>
+<DD>
+A very brief state that occurs as the thread is stopping.
+
+</DL>
+
+
+
+<H3><A NAME="Slave_SQL_thread_states" HREF="manual_toc.html#Slave_SQL_thread_states">6.3.3  Replication Slave SQL Thread States</A></H3>
+
+<P>
+The following list shows the most common states you will see in the
+<code>State</code> column for a slave server SQL thread:
+
+</P>
+<DL COMPACT>
+
+<DT><code>Reading event from the relay log</code>
+<DD>
+The thread has read an event from the relay log so that it can process it.
+
+<DT><code>Has read all relay log; waiting for the slave I/O thread to update it</code>
+<DD>
+The thread has processed all events in the relay log files and is waiting for
+the I/O thread to write new events to the relay log.
+
+<DT><code>Waiting for slave mutex on exit</code>
+<DD>
+A very brief state that occurs as the thread is stopping.
+
+</DL>
+
+<P>
+The <code>State</code> column for the I/O thread may also show the text of
+a statement.  This indicates that the thread has read an event from the
+relay log, extracted the statement from it, and is executing it.
+
+</P>
+
+
+
+<H3><A NAME="Slave_logs" HREF="manual_toc.html#Slave_logs">6.3.4  Replication Relay and Status Files</A></H3>
+
+<P>
+By default, relay logs are named using filenames of the form
+<tt>`<var>host_name</var>-relay-bin.<var>nnnnnn</var>'</tt>, where <var>host_name</var> is the name of the
+slave server host and <var>nnnnnn</var> is a sequence number.
+Successive relay log files are created using successive sequence numbers,
+beginning with <code>000001</code> (<code>001</code> in MySQL 4.0 or older).
+The slave keeps track of relay logs currently in use in an index file.
+The default relay log index filename is
+<tt>`<var>host_name</var>-relay-bin.index'</tt>.
+By default, these files are created in the slave's data directory.
+The default filenames may be overridden with the <code>--relay-log</code> and
+<code>--relay-log-index</code> server options.
+See section <A HREF="manual_Replication.html#Replication_Options">6.8  Replication Startup Options</A>.
+
+</P>
+<P>
+Relay logs have the same format as binary logs, so you can use
+<code>mysqlbinlog</code> to read them.  A relay log is automatically deleted by
+the SQL thread as soon as it has executed all its events and no longer needs
+it). There is no explicit mechanism for deleting relay logs, because the SQL
+thread takes care of doing so. However, from MySQL 4.0.14, <code>FLUSH LOGS</code>
+rotates relay logs, which will influence when the SQL thread deletes them.
+
+</P>
+<P>
+A new relay log is created under the following conditions:
+
+</P>
+
+<UL>
+
+<LI>
+
+When the I/O thread starts for the first time
+after the slave server starts.
+(In MySQL 5.0, a new relay log is created each time the I/O thread
+starts, not just the first time.)
+
+<LI>
+
+When the logs are flushed; for example, with <code>FLUSH LOGS</code> or
+<code>mysqladmin flush-logs</code>. (This creates a new relay log only as of MySQL
+4.0.14.)
+
+<LI>
+
+When the size of the current relay log file becomes too large. The meaning of
+``too large'' is determined as follows:
+
+<UL>
+<LI>
+
+<code>max_relay_log_size</code>, if <code>max_relay_log_size</code> &#62; 0
+<LI>
+
+<code>max_binlog_size</code>, if <code>max_relay_log_size</code> = 0
+or MySQL is older than 4.0.14
+</UL>
+
+</UL>
+
+<P>
+A slave replication server creates two additional small files in the
+data directory.  These are status files and are named <tt>`master.info'</tt>
+and <tt>`relay-log.info'</tt> by default.  They contain information like
+that shown in the output of the <code>SHOW SLAVE STATUS</code> statement
+(see section <A HREF="manual_SQL_Syntax.html#Replication_Slave_SQL">13.6.2  SQL Statements for Controlling Slave Servers</A> for a description of this statement).
+As disk files, they survive a slave server's shutdown. The next time the
+slave starts up, it reads these files to determine how far it has proceeded
+in reading binary logs from the master and in processing its own relay logs.
+
+</P>
+<P>
+The <tt>`master.info'</tt> file is updated by the I/O thread.
+Before MySQL 4.1,
+the correspondence between the lines in the file and the
+columns displayed by <code>SHOW SLAVE STATUS</code> is as follows:
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Line</strong> </TD><TD> <strong>Description</strong>
+</TD></TR>
+<TR><TD>1 </TD><TD> <code>Master_Log_File</code>
+</TD></TR>
+<TR><TD>2 </TD><TD> <code>Read_Master_Log_Pos</code>
+</TD></TR>
+<TR><TD>3 </TD><TD> <code>Master_Host</code>
+</TD></TR>
+<TR><TD>4 </TD><TD> <code>Master_User</code>
+</TD></TR>
+<TR><TD>5 </TD><TD> Password (not shown by <code>SHOW SLAVE STATUS</code>)
+</TD></TR>
+<TR><TD>6 </TD><TD> <code>Master_Port</code>
+</TD></TR>
+<TR><TD>7 </TD><TD> <code>Connect_Retry</code>
+</TD></TR>
+</TABLE>
+
+<P>
+As of MySQL 4.1, the file includes a line count and information about
+SSL options:
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Line</strong> </TD><TD> <strong>Description</strong>
+</TD></TR>
+<TR><TD>1 </TD><TD> Number of lines in the file
+</TD></TR>
+<TR><TD>2 </TD><TD> <code>Master_Log_File</code>
+</TD></TR>
+<TR><TD>3 </TD><TD> <code>Read_Master_Log_Pos</code>
+</TD></TR>
+<TR><TD>4 </TD><TD> <code>Master_Host</code>
+</TD></TR>
+<TR><TD>5 </TD><TD> <code>Master_User</code>
+</TD></TR>
+<TR><TD>6 </TD><TD> Password (not shown by <code>SHOW SLAVE STATUS</code>)
+</TD></TR>
+<TR><TD>7 </TD><TD> <code>Master_Port</code>
+</TD></TR>
+<TR><TD>8 </TD><TD> <code>Connect_Retry</code>
+</TD></TR>
+<TR><TD>9 </TD><TD> <code>Master_SSL_Allowed</code>
+</TD></TR>
+<TR><TD>10 </TD><TD> <code>Master_SSL_CA_File</code>
+</TD></TR>
+<TR><TD>11 </TD><TD> <code>Master_SSL_CA_Path</code>
+</TD></TR>
+<TR><TD>12 </TD><TD> <code>Master_SSL_Cert</code>
+</TD></TR>
+<TR><TD>13 </TD><TD> <code>Master_SSL_Cipher</code>
+</TD></TR>
+<TR><TD>14 </TD><TD> <code>Master_SSL_Key</code>
+</TD></TR>
+</TABLE>
+
+<P>
+The <tt>`relay-log.info'</tt> file is updated by the SQL thread.
+The correspondence between the lines in the file and the
+columns displayed by <code>SHOW SLAVE STATUS</code> is as follows:
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Line</strong> </TD><TD> <strong>Description</strong>
+</TD></TR>
+<TR><TD>1 </TD><TD> <code>Relay_Log_File</code>
+</TD></TR>
+<TR><TD>2 </TD><TD> <code>Relay_Log_Pos</code>
+</TD></TR>
+<TR><TD>3 </TD><TD> <code>Relay_Master_Log_File</code>
+</TD></TR>
+<TR><TD>4 </TD><TD> <code>Exec_Master_Log_Pos</code>
+</TD></TR>
+</TABLE>
+
+<P>
+When you back up your slave's data, you should back up these two small files
+as well, along with the relay log files. They are needed to resume
+replication after you restore the slave's data.  If you lose the relay logs
+but still have the <tt>`relay-log.info'</tt> file, you can check it to determine
+how far the SQL thread has executed in the master binary logs. Then you
+can use <code>CHANGE MASTER TO</code> with the <code>MASTER_LOG_FILE</code> and
+<code>MASTER_LOG_POS</code> options to tell the slave to re-read the binary
+logs from that point.  This requires that the binary logs still exist on
+the master server.
+
+</P>
+<P>
+If your slave is subject to replicating <code>LOAD DATA INFILE</code> statements,
+you should also back up any <tt>`SQL_LOAD-*'</tt> files that exist in the
+directory that the slave uses for this purpose.  The slave needs these files
+to resume replication of any interrupted <code>LOAD DATA INFILE</code> operations.
+The directory location is specified using the <code>--slave-load-tmpdir</code>
+option.  Its default value, if not specified, is the value of the <code>tmpdir</code>
+variable.
+
+</P>
+
+
+<H2><A NAME="Replication_HOWTO" HREF="manual_toc.html#Replication_HOWTO">6.4  How to Set Up Replication</A></H2>
+
+<P>
+Here is a quick description of how to set up complete replication of
+your current MySQL server. It assumes that you want to replicate all
+your databases and have not configured replication before. You will need
+to shut down your master server briefly to complete the steps outlined
+here.
+
+</P>
+<P>
+The procedure is written in terms of setting up a single slave, but you can
+use it to set up multiple slaves.
+
+</P>
+<P>
+While this method is the most straightforward way to set up a slave,
+it is not the only one. For example, if you already have a snapshot
+of the master's data, and
+the master already has its server ID set and binary logging enabled, you can
+set up a slave without shutting down the master or even blocking updates to it.
+For more details, please see section <A HREF="manual_Replication.html#Replication_FAQ">6.9  Replication FAQ</A>.
+
+</P>
+<P>
+If you want to administer a MySQL replication setup, we suggest that
+you read this entire chapter through and try all statements mentioned in
+section <A HREF="manual_SQL_Syntax.html#Replication_Master_SQL">13.6.1  SQL Statements for Controlling Master Servers</A> and section <A HREF="manual_SQL_Syntax.html#Replication_Slave_SQL">13.6.2  SQL Statements for Controlling Slave Servers</A>.  You should
+also familiarize yourself with replication startup options described in
+section <A HREF="manual_Replication.html#Replication_Options">6.8  Replication Startup Options</A>.
+
+</P>
+<P>
+Note that this procedure and some of the replication SQL statements
+in later sections refer to the <code>SUPER</code> privilege. Prior to MySQL
+4.0.2, use the <code>PROCESS</code> privilege instead.
+
+</P>
+
+<OL>
+<LI>
+
+Make sure that you have a recent version of MySQL installed on the master
+and slaves, and that these versions are compatible according to the table
+shown in section <A HREF="manual_Replication.html#Replication_Compatibility">6.5  Replication Compatibility Between MySQL Versions</A>.
+
+Please do not report bugs until you have verified that the problem is present
+in the latest release.
+
+<LI>
+
+Set up an account on the master server that the slave server can use to
+connect. This account must be given the <code>REPLICATION SLAVE</code> privilege.
+If the account is used only for replication
+(which is recommended), you don't need to grant any additional privileges.
+
+Suppose that your domain is <code>mydomain.com</code> and you want to create an
+account with a username of <code>repl</code> such that slave servers can use the
+account to access the master server from any host in your domain using a
+password of <code>slavepass</code>.
+To create the account, this use <code>GRANT</code> statement:
+
+
+<PRE>
+mysql&#62; GRANT REPLICATION SLAVE ON *.*
+    -&#62; TO 'repl'@'%.mydomain.com' IDENTIFIED BY 'slavepass';
+</PRE>
+
+For MySQL versions older than 4.0.2, the <code>REPLICATION SLAVE</code> privilege
+does not exist. Grant the <code>FILE</code> privilege instead:
+
+
+<PRE>
+mysql&#62; GRANT FILE ON *.*
+    -&#62; TO 'repl'@'%.mydomain.com' IDENTIFIED BY 'slavepass';
+</PRE>
+
+If you plan to use the <code>LOAD TABLE FROM MASTER</code> or <code>LOAD DATA
+FROM MASTER</code> statements from the slave host, you will need to grant this
+account additional privileges:
+
+
+<UL>
+
+<LI>
+
+Grant the account the <code>SUPER</code> and <code>RELOAD</code> global privileges.
+
+<LI>
+
+Grant the <code>SELECT</code> privilege for all tables that
+you want to load. Any master tables from which the account cannot
+<code>SELECT</code> will be ignored by <code>LOAD DATA FROM MASTER</code>.
+</UL>
+
+<LI>
+
+If you are using only <code>MyISAM</code> tables, flush all the tables and block
+write statements by executing a <code>FLUSH TABLES WITH READ LOCK</code> statement.
+
+
+<PRE>
+mysql&#62; FLUSH TABLES WITH READ LOCK;
+</PRE>
+
+Leave the client running from which you issue the <code>FLUSH TABLES</code>
+statement so that the read lock remains in effect. (If you exit the client,
+the lock is released.) Then take a snapshot of the data on your master server.
+
+The easiest way to create a snapshot is to use an archiving program to make a
+binary backup of the databases in your master's data directory. 
+For example, use <code>tar</code> on Unix, or <code>PowerArchiver</code>, <code>WinRAR</code>,
+<code>WinZip</code>, or any similar software on Windows.
+To use <code>tar</code> to create an archive that includes all
+databases, change location into the master server's data directory, then
+execute this command:
+
+
+<PRE>
+shell&#62; tar -cvf /tmp/mysql-snapshot.tar .
+</PRE>
+
+If you want the archive to include only a database called <code>this_db</code>, use
+this command instead:
+
+
+<PRE>
+shell&#62; tar -cvf /tmp/mysql-snapshot.tar ./this_db
+</PRE>
+
+Then copy the archive file to the <tt>`/tmp'</tt> directory on the slave server
+host. On that machine, change location into the slave's data directory, and
+unpack the archive file using this command:
+
+
+<PRE>
+shell&#62; tar -xvf /tmp/mysql-snapshot.tar
+</PRE>
+
+You may not want to replicate the <code>mysql</code> database if the slave
+server has a different set of user accounts from those that exist on the
+master. In this case, you should exclude it from the archive. You also
+need not include any log files in the archive, or the <tt>`master.info'</tt>
+or <tt>`relay-log.info'</tt> files.
+
+While the read lock placed by <code>FLUSH TABLES WITH READ LOCK</code> is in effect,
+read the value of the current binary log name and offset on the master:
+
+
+<PRE>
+mysql &#62; SHOW MASTER STATUS;
++---------------+----------+--------------+------------------+
+| File          | Position | Binlog_Do_DB | Binlog_Ignore_DB |
++---------------+----------+--------------+------------------+
+| mysql-bin.003 | 73       | test         | manual,mysql     |
++---------------+----------+--------------+------------------+
+</PRE>
+
+The <code>File</code> column shows the name of the log,  while <code>Position</code> shows
+the offset. In this example, the binary log value is
+<code>mysql-bin.003</code> and the offset is 73. Record the values. You will need
+to use them later when you are setting up the slave. They represent the
+replication coordinates at which the slave should begin processing new updates
+from the master.
+
+After you have taken the snapshot and recorded the log name and offset,
+you can re-enable write activity on the master:
+
+
+<PRE>
+mysql&#62; UNLOCK TABLES;
+</PRE>
+
+If you are using <code>InnoDB</code> tables, ideally you should use the <code>InnoDB Hot
+Backup</code> tool.  It takes a consistent snapshot without acquiring any locks on
+the master server, and records the log name and offset corresponding to the
+snapshot to be later used on the slave.  <code>InnoDB Hot Backup</code> is a non-free
+(commercial) additional tool that is not included in the standard MySQL distribution.
+See the <code>InnoDB Hot Backup</code> home page at <a HREF="http://www.innodb.com/manual.php">http://www.innodb.com/manual.php</a>
+for detailed information and screenshots.
+
+Without the <code>Hot Backup</code> tool, the quickest way to take a binary snapshot
+of <code>InnoDB</code> tables is to shut down the master server and copy the
+<code>InnoDB</code> data files, log files, and table definition files (<tt>`.frm'</tt>
+files). To record the current log file name and offset, you should issue
+the following statements before you shut down the server:
+
+
+<PRE>
+mysql&#62; FLUSH TABLES WITH READ LOCK;
+mysql&#62; SHOW MASTER STATUS;
+</PRE>
+
+Then record the log name and the offset from the output of <code>SHOW MASTER
+STATUS</code> as was shown earlier. After recording the log name and the offset,
+shut down the server <em>without</em> unlocking the tables to make sure that the
+server goes down with the snapshot corresponding to the current log file
+and offset:
+
+
+<PRE>
+shell&#62; mysqladmin -u root shutdown
+</PRE>
+
+An alternative that works for both <code>MyISAM</code> and <code>InnoDB</code>
+tables is to take an SQL dump of the master instead of a binary copy as
+described in the preceding discussion. For this, you can use <code>mysqldump
+--master-data</code> on your master and later load the SQL dump file into your
+slave. However, this is slower than doing a binary copy.
+
+If the master has been previously running without <code>--log-bin</code> enabled,
+the log name and position values displayed by <code>SHOW MASTER STATUS</code>
+or <code>mysqldump --master-data</code> will be empty. In that case, the values
+that you will need to use later when specifying the slave's log file and
+position are the empty string (<code>''</code>) and <code>4</code>.
+
+<LI>
+
+Make sure that the <code>[mysqld]</code> section of the <tt>`my.cnf'</tt> file on
+the master host includes a <code>log-bin</code> option. The section should also
+have a <code>server-id=master_id</code> option, where <code>master_id</code> must be
+a positive integer value from 1 to 2^32 - 1. For example:
+
+
+<PRE>
+[mysqld]
+log-bin
+server-id=1
+</PRE>
+
+If those options are not present, add them and restart the server.
+
+<LI>
+
+Stop the server that is to be used as a slave server and add the following to
+its <tt>`my.cnf'</tt> file:
+
+
+<PRE>
+[mysqld]
+server-id=slave_id
+</PRE>
+
+The <code>slave_id</code> value, like the <code>master_id</code> value, must
+be a positive integer value from 1 to 2^32 - 1. In addition, it is very
+important that the ID of the slave be different from the ID of the
+master. For example:
+
+
+<PRE>
+[mysqld]
+server-id=2
+</PRE>
+
+If you are setting up multiple slaves, each one must have a unique
+<code>server-id</code> value that differs from that of the master and from each
+of the other slaves.  Think of <code>server-id</code> values as something similar
+to IP addresses: These IDs uniquely identify each server instance in the
+community of replication partners.
+
+If you don't specify a <code>server-id</code> value, it will be set to 1 if
+you have not defined <code>master-host</code>, else it will be set to 2. Note
+that in the case of <code>server-id</code> omission, a master will refuse
+connections from all slaves, and a slave will refuse to connect to a
+master. Thus, omitting <code>server-id</code> is good only for backup with a
+binary log.
+
+<LI>
+
+If you made a binary backup of the master server's data, copy it to the
+slave server's data directory before starting the slave.  Make sure that the
+privileges on the files and directories are correct. The user that the server
+MySQL runs as must able to read and write the files, just as on the master.
+
+If you made a backup using <code>mysqldump</code>, start the slave first (see next
+step).
+
+<LI>
+
+Start the slave server. If it has been replicating previously,
+start the slave server with the <code>--skip-slave-start</code> option so that it
+doesn't immediately try to connect to its master.
+You also may want to start the slave server with the
+<code>--log-warnings</code> option (enabled by default as of MySQL 4.0.19 and 4.1.2),
+to get more messages in the error log about 
+problems (for example, network or connection problems).
+As of MySQL 4.0.21 and 4.1.3, aborted connections are not logged to the error
+log unless the value is greater than 1.
+
+<LI>
+
+If you made a backup of the master server's data using <code>mysqldump</code>, load
+the dump file into the slave server:
+
+
+<PRE>
+shell&#62; mysql -u root -p &#60; dump_file.sql
+</PRE>
+
+<LI>
+
+Execute the following statement on the slave, replacing the option values
+with the actual values relevant to your system:
+
+
+<PRE>
+mysql&#62; CHANGE MASTER TO
+    -&#62;     MASTER_HOST='master_host_name',
+    -&#62;     MASTER_USER='replication_user_name',
+    -&#62;     MASTER_PASSWORD='replication_password',
+    -&#62;     MASTER_LOG_FILE='recorded_log_file_name',
+    -&#62;     MASTER_LOG_POS=recorded_log_position;
+</PRE>
+
+The following table shows the maximum length for the string options:
+
+<TABLE BORDER>
+<TR><TD><code>MASTER_HOST</code> </TD><TD> 60
+</TD></TR>
+<TR><TD><code>MASTER_USER</code> </TD><TD> 16
+</TD></TR>
+<TR><TD><code>MASTER_PASSWORD</code> </TD><TD> 32
+</TD></TR>
+<TR><TD><code>MASTER_LOG_FILE</code> </TD><TD> 255
+</TD></TR>
+</TABLE>
+
+<LI>
+
+Start the slave threads:
+
+
+<PRE>
+mysql&#62; START SLAVE; 
+</PRE>
+
+</OL>
+
+<P>
+After you have performed this procedure, the slave should connect to the master
+and catch up on any updates that have occurred since the snapshot was taken.
+
+</P>
+<P>
+If you have forgotten to set the <code>server-id</code> value for the master, slaves will
+not be able to connect to it.
+
+</P>
+<P>
+If you have forgotten to set the <code>server-id</code> value for the slave, you will get
+the following error in its error log:
+
+</P>
+
+<PRE>
+Warning: You should set server-id to a non-0 value if master_host is set;
+we force server id to 2, but this MySQL server will not act as a slave.
+</PRE>
+
+<P>
+You will also find error messages in the slave's error log if it
+is not able to replicate for any other reason.
+
+</P>
+<P>
+Once a slave is replicating, you will find in its data directory one
+file named
+<tt>`master.info'</tt> and another named <tt>`relay-log.info'</tt>.
+The slave uses these two files to keep track of how much
+of the master's binary log it has processed. <strong>Do not</strong> remove or
+edit these files, unless you really know what you are doing and understand
+the implications. Even in that case,
+it is preferred that you use the <code>CHANGE MASTER TO</code> statement.
+
+</P>
+<P>
+<strong>Note</strong>: The content of <tt>`master.info'</tt> overrides some
+options specified on the command line or in <tt>`my.cnf'</tt>.
+See section <A HREF="manual_Replication.html#Replication_Options">6.8  Replication Startup Options</A> for more details.
+
+</P>
+<P>
+Once you have a snapshot, you can use it to set up other slaves by
+following the slave portion of the procedure just described. You do not need to
+take another snapshot of the master; you can use the same one for each slave.
+
+</P>
+
+
+
+<H2><A NAME="Replication_Compatibility" HREF="manual_toc.html#Replication_Compatibility">6.5  Replication Compatibility Between MySQL Versions</A></H2>
+
+<P>
+The original binary log format was developed in MySQL 3.23. It changed in
+MySQL 4.0, and again in MySQL 5.0. This has consequences when you upgrade
+servers in a replication setup, as described in section <A HREF="manual_Replication.html#Replication_Upgrade">6.6  Upgrading a Replication Setup</A>.
+
+</P>
+<P>
+As far as replication is concerned, any MySQL 4.1.x version and any 4.0.x
+version are identical, because they all use the same binary log format.
+Thus, any servers from these versions are compatible, and replication between
+them should work seamlessly.
+The exceptions to this compatibility is that versions from MySQL 4.0.0 to
+4.0.2 were very early development versions that should not be used anymore.
+(These were the alpha versions in the 4.0 release series.  Compatibility for
+them is still documented in the manual included with their distributions.)
+
+</P>
+<P>
+The following table indicates master/slave replication compatibility between
+different versions of MySQL.
+
+</P>
+<TABLE BORDER>
+<TR><TD></TD><TD> </TD><TD> <strong>Master</strong> </TD><TD> <strong>Master</strong> </TD><TD> <strong>Master</strong>
+</TD></TR>
+<TR><TD></TD><TD> </TD><TD> <strong>3.23.33 and up</strong> </TD><TD> <strong>4.0.3 and up or any 4.1.x</strong> </TD><TD> <strong>5.0.0</strong>
+</TD></TR>
+<TR><TD><strong>Slave</strong> </TD><TD> <strong>3.23.33 and up</strong> </TD><TD> yes </TD><TD> no </TD><TD> no
+</TD></TR>
+<TR><TD><strong>Slave</strong> </TD><TD> <strong>4.0.3 and up</strong> </TD><TD> yes </TD><TD> yes </TD><TD> no
+</TD></TR>
+<TR><TD><strong>Slave</strong> </TD><TD> <strong>5.0.0</strong> </TD><TD> yes </TD><TD> yes </TD><TD> yes
+</TD></TR>
+</TABLE>
+
+<P>
+As a general rule, we recommended using recent MySQL versions,
+because replication capabilities are continually being improved.
+We also recommend using the same version for both the master and the slave.
+
+</P>
+
+
+
+<H2><A NAME="Replication_Upgrade" HREF="manual_toc.html#Replication_Upgrade">6.6  Upgrading a Replication Setup</A></H2>
+
+<P>
+When you upgrade servers that participate in a replication setup, the
+procedure for upgrading depends on the current server versions and the
+version to which you are upgrading.
+
+</P>
+
+
+
+<H3><A NAME="Replication_upgrade_4.0" HREF="manual_toc.html#Replication_upgrade_4.0">6.6.1  Upgrading Replication to 4.0 or 4.1</A></H3>
+
+<P>
+This section applies to upgrading replication from MySQL 3.23 to 4.0 or 4.1.
+A 4.0 server should be 4.0.3 or newer, as mentioned in section <A HREF="manual_Replication.html#Replication_Compatibility">6.5  Replication Compatibility Between MySQL Versions</A>.
+
+</P>
+<P>
+When you upgrade a master from MySQL 3.23 to MySQL 4.0 or 4.1, you should
+first ensure that all the slaves of this master are already at 4.0 or 4.1. If
+that is not the case, you should first upgrade your slaves: Shut down each
+one, upgrade it, restart it, and restart replication.
+
+</P>
+
+<P>
+The upgrade can safely be done using the following procedure, assuming that you
+have a 3.23 master to upgrade and the slaves are 4.0 or 4.1.  Note that
+after the master has been upgraded, you should not restart replication using
+any old 3.23 binary logs, because this will unfortunately confuse the 4.0 or
+4.1 slave.
+
+</P>
+
+<OL>
+<LI>
+
+Block all updates on the master by issuing a <code>FLUSH TABLES WITH READ LOCK</code>
+statement.
+<LI>
+
+Wait until all the slaves have caught up with all changes from the master
+server.
+Use <code>SHOW MASTER STATUS</code> on the master to obtain its current binary log
+file and position. Then, for each slave, use those values with a <code>SELECT
+MASTER_POS_WAIT()</code> statement. The statement will block on the slave and return
+when the slave has caught up. Then run <code>STOP SLAVE</code> on the slave.
+<LI>
+
+Stop the master server and upgrade it to MySQL 4.0 or 4.1.
+<LI>
+
+Restart the master server and record the name of its newly
+created binary log. You can obtain the name of the file by issuing a
+<code>SHOW MASTER STATUS</code> statement on the master. Then issue these
+statements on each slave:
+
+
+<PRE>
+mysql&#62; CHANGE MASTER TO MASTER_LOG_FILE='binary_log_name',
+    -&#62;     MASTER_LOG_POS=4;
+mysql&#62; START SLAVE;
+</PRE>
+
+</OL>
+
+
+
+<H3><A NAME="Replication_upgrade_5.0" HREF="manual_toc.html#Replication_upgrade_5.0">6.6.2  Upgrading Replication to 5.0</A></H3>
+
+<P>
+This section applies to upgrading replication from MySQL 3.23, 4.0, or 4.1
+to 5.0.0.  A 4.0 server should be 4.0.3 or newer, as mentioned in
+section <A HREF="manual_Replication.html#Replication_Compatibility">6.5  Replication Compatibility Between MySQL Versions</A>.
+
+</P>
+<P>
+First, note that MySQL 5.0.0 is an alpha release. It is intended to work
+better than older versions (easier upgrade, replication of some important
+session variables such as <code>sql_mode</code>; see section <A HREF="manual_News.html#News-5.0.0">D.1.4  Changes in release 5.0.0 (22 Dec 2003: Alpha)</A>).  However
+it has not yet been extensively tested. As with any alpha release, we
+recommend that you not use it in critical production environments yet.
+
+</P>
+<P>
+When you upgrade a master from MySQL 3.23, 4.0, or 4.1 to 5.0.0, you should
+first ensure that all the slaves of this master are already 5.0.0. If that's
+not the case, you should first upgrade your slaves.  To upgrade each slave,
+just shut it down, upgrade it to 5.0.0, restart it, and restart replication.
+The 5.0.0 slave will be able to read its old relay logs that were written
+before the upgrade and execute the statements they contain. Relay logs
+created by the slave after the upgrade will be in 5.0.0 format.
+
+</P>
+<P>
+After the slaves have been upgraded, shut down your master, upgrade it to
+5.0.0, and restart it.  The 5.0.0 master will be able to read its old binary
+logs that were written before the upgrade and send them to the 5.0.0 slaves.
+The slaves will recognize the old format and handle it properly. Binary logs
+created by master after the upgrade will be in 5.0.0 format. These too will
+be recognized by the 5.0.0 slaves.
+
+</P>
+<P>
+In other words, there are no measures to take when upgrading to 5.0.0,
+except that slaves must be 5.0.0 before you can upgrade the master to 5.0.0.
+Note that downgrading from 5.0.0 to older versions does not work so
+automatically: You must ensure that any 5.0.0 binary logs or relay logs have
+been fully processed, so that you can remove them before proceeding with the
+downgrade.
+
+</P>
+
+
+
+<H2><A NAME="Replication_Features" HREF="manual_toc.html#Replication_Features">6.7  Replication Features and Known Problems</A></H2>
+
+<P>
+<A NAME="IDX678"></A>
+<A NAME="IDX679"></A>
+<A NAME="IDX680"></A>
+<A NAME="IDX681"></A>
+<A NAME="IDX682"></A>
+<A NAME="IDX683"></A>
+
+</P>
+<P>
+The following list explains
+what is supported and what is not.
+Additional <code>InnoDB</code>-specific information about replication is given in
+section <A HREF="manual_InnoDB.html#InnoDB_and_MySQL_Replication">15.7.5  <code>InnoDB</code> and MySQL Replication</A>.
+
+</P>
+
+<UL>
+
+<LI>
+
+Replication will be done correctly with <code>AUTO_INCREMENT</code>,
+<code>LAST_INSERT_ID()</code>, and <code>TIMESTAMP</code> values.
+
+<LI>
+
+The <code>USER()</code>, <code>UUID()</code>, and <code>LOAD_FILE()</code> functions
+are replicated without changes and will thus not work reliably on the
+slave. This is also true for <code>CONNECTION_ID()</code> in slave versions
+older than 4.1.1.
+The <strong>new</strong> <code>PASSWORD()</code> function in MySQL 4.1 is well
+replicated in masters from 4.1.1 and up; your slaves also must be 4.1.1 or above
+to replicate it. If you have older slaves and need to replicate
+<code>PASSWORD()</code> from your 4.1.x master, you must start your master
+with the <code>--old-password</code> option, so that it uses the old implementation
+of <code>PASSWORD()</code>. (Note that the <code>PASSWORD()</code> implementation in
+MySQL 4.1.0 differs from every other version of MySQL. It is best to avoid
+4.1.0 in a replication situation.)
+
+<LI>
+
+The <code>FOREIGN_KEY_CHECKS</code> variable is replicated as of MySQL 4.0.14.
+The <code>SQL_MODE</code>, <code>UNIQUE_CHECKS</code>, and <code>SQL_AUTO_IS_NULL</code>
+variables are replicated as of 5.0.0.  The <code>table_type</code> variables is not
+yet replicated, which is a good thing for replication between different storage
+engines.
+
+<LI>
+
+Replication between MySQL servers using different character sets is discussed
+here. First, you must ALWAYS use the same <strong>global</strong> character set and
+collation (<code>--default-character-set</code>, <code>--default-collation</code>) on the
+master and the slave. Otherwise, you may get duplicate-key errors on 
+the slave, because a key that is regarded as unique in the master's character
+set may not be unique in the slave's character set.
+Second, if the master is strictly older than MySQL 4.1.3, the character set of
+the session should never be made different from its global value (in other words, don't
+use <code>SET NAMES</code>, <code>SET CHARACTER SET</code> etc) because this character set
+change will not be known to the slave. If the master is 4.1.3 or newer, and the
+slave too, the session can freely set its local value of character set
+variables (<code>NAMES</code>, <code>CHARACTER SET</code>, <code>COLLATION_CLIENT</code>,
+<code>COLLATION_SERVER</code> etc) as these settings will be written to the binary
+log and then known to the slave. The session will however be prevented from
+changing the <strong>global</strong> value of these; as said already the master and
+slave must always have identical global character set values. There also is one
+last limitation: if on the master you have databases with different character
+sets from the global <code>collation_server</code> value, you should design your
+<code>CREATE TABLE</code> statements so that they don't implicitly rely on the
+default database's character set, because there currently is a bug (Bug #2326);
+a good workaround is to explicitly state the character set and collation in a
+clause of the <code>CREATE TABLE</code>.
+
+<LI>
+
+It is possible to replicate transactional tables on the master using
+non-transactional tables on the slave. For example, you can replicate an
+<code>InnoDB</code> master table as a <code>MyISAM</code> slave table. However, if you do
+this, you will have problems if
+the slave is stopped in the middle of a <code>BEGIN/COMMIT</code> block, because
+the slave will restart at the beginning of the <code>BEGIN</code> block.
+This issue is on our TODO and will be fixed in the near future.
+
+<LI>
+
+Update statements that refer to user variables (that is, variables of the
+form <code>@<var>var_name</var></code>) are badly replicated in 3.23 and 4.0. This is fixed
+in 4.1. Note that user variable names are case insensitive starting from
+MySQL 5.0.  You should take this into account when setting up replication
+between 5.0 and an older version.
+
+<LI>
+
+The slave can connect to the master using SSL if
+both are 4.1.1 or newer.
+
+<LI>
+
+If a <code>DATA DIRECTORY</code> or <code>INDEX DIRECTORY</code> clause is used in a
+<code>CREATE TABLE</code> statement on the master server, the clause is also used
+on the slave. This can cause problems if no corresponding directory exists
+in the slave host filesystem or exists but is not accessible to the slave
+server.  Starting from MySQL 4.0.15, there is a <code>sql_mode</code> option
+called <code>NO_DIR_IN_CREATE</code>. If the slave server is run with its SQL mode
+set to include this option, it will simply ignore the clauses before
+replicating the <code>CREATE TABLE</code> statement.  The result is that the
+<code>MyISAM</code> data and index files are created in the table's database
+directory.
+
+<LI>
+
+Although we have never heard of it actually occurring, it is theoretically
+possible for the data on the master and slave to become different if a
+query is designed in such a way that the data modification is
+non-deterministic; that is, left to the will of the query optimizer. (That
+generally is not a good practice anyway, even outside of replication!).
+For a detailed explanation of this issue, see
+section <A HREF="manual_Introduction.html#Open_bugs">1.5.7.3  Open Bugs and Design Deficiencies in MySQL</A>.
+
+<LI>
+
+If on master a <code>LOAD DATA INFILE</code> is interrupted in the middle (integrity
+constraint violation, killed connection...), the slave will skip this
+<code>LOAD DATA INFILE</code> entirely. It means that if this command permanently
+inserted/updated some table records before being interrupted, these
+modifications won't be replicated to the slave. This will be fixed when MySQL
+features a record-level binary log format, in development.
+
+<LI>
+
+Before MySQL 4.1.1, <code>FLUSH</code>, <code>ANALYZE TABLE</code>, <code>OPTIMIZE
+TABLE</code>, and <code>REPAIR TABLE</code> statements are not written to the binary
+log and thus are not replicated to the slaves. This is not normally
+a problem because these statements do not modify table data. However,
+it can cause difficulties under certain circumstances. If you replicate
+the privilege tables in the <code>mysql</code> database and update those tables
+directly without using the <code>GRANT</code> statement, you
+must issue a <code>FLUSH PRIVILEGES</code> statement on your slaves to put
+the new privileges into effect. Also if you use
+<code>FLUSH TABLES</code> when renaming a <code>MyISAM</code> table that is part of a
+<code>MERGE</code> table, you will have to issue <code>FLUSH TABLES</code>
+manually on the slaves.
+As of MySQL 4.1.1, these statements are written to the binary log
+(unless you specify <code>NO_WRITE_TO_BINLOG</code>, or its alias <code>LOCAL</code>).
+Exceptions are that <code>FLUSH LOGS</code>, <code>FLUSH MASTER</code>,
+<code>FLUSH SLAVE</code>, and <code>FLUSH TABLES WITH READ LOCK</code> are not logged in
+any case.  (Any of them may cause problems if replicated to a slave.)
+For a syntax example, see section <A HREF="manual_SQL_Syntax.html#FLUSH">13.5.5.2  <code>FLUSH</code> Syntax</A>.
+
+<LI>
+
+MySQL only supports one master and many slaves. Later we will
+add a voting algorithm to automatically change master if something goes
+wrong with the current master. We will also introduce ``agent'' processes
+to help do load balancing by sending <code>SELECT</code> queries to different
+slaves.
+
+<LI>
+
+When a server shuts down and restarts, its <code>MEMORY</code> (<code>HEAP</code>) tables become empty.
+As of MySQL 4.0.18, the master replicates this effect as follows:
+The first time that the master uses each <code>MEMORY</code> table after startup,
+it notifies slaves that the table needs to be emptied by writing a
+<code>DELETE FROM</code> statement for the table to its binary log.
+See section <A HREF="manual_Storage_engines.html#MEMORY_storage_engine">14.3  The <code>MEMORY</code> (<code>HEAP</code>) Storage Engine</A>
+for more details.
+
+<LI>
+
+Temporary tables are replicated with the exception of the case that you
+shut down the slave server (not just the slave threads) and you have some
+replicated temporary tables that are used in update statements that have
+not yet been executed on the slave.  If you shut down the slave server,
+the temporary tables needed by those updates no longer are available when
+the slave starts again.  To avoid this problem, do not shut down the
+slave while it has temporary tables open. Instead, use this procedure:
+
+
+<OL>
+
+<LI>
+
+Issue a <code>STOP SLAVE</code> statement.
+
+<LI>
+
+Use <code>SHOW STATUS</code> to check the value of the <code>Slave_open_temp_tables</code>
+variable.
+
+<LI>
+
+If the value is 0, issue a <code>mysqladmin shutdown</code> command to
+shut down the slave.
+
+<LI>
+
+If the value is not 0, restart the slave threads with <code>START SLAVE</code>.
+
+<LI>
+
+Repeat the procedure later to see if you have better luck next time.
+
+</OL>
+
+We have plans to fix this problem in the near future.
+
+<LI>
+
+It is safe to connect servers in a circular
+master/slave relationship with the <code>--log-slave-updates</code> option specified.
+Note, however, that many statements will not work correctly in this kind of
+setup unless your client code is written to take care of the potential
+problems that can occur from updates that occur in different sequence
+on different servers.
+
+This means that you can create a setup such as this:
+
+
+<PRE>
+A -&#62; B -&#62; C -&#62; A
+</PRE>
+
+Server IDs are encoded in the binary log events, so server A will know when
+an event that it reads was originally created by itself and will not
+execute the event (unless server A was started with the
+<code>--replicate-same-server-id</code> option, which is meaningful only in rare
+setups). Thus, there will be no infinite loop.  But this circular
+setup will work only if you perform no conflicting
+updates between the tables.  In other words, if you insert data in both
+A and C, you should never insert a row in A that may have a key that
+conflicts with a row inserted in C.  You should also not update
+the same rows on two servers if the order in which the updates are
+applied is significant.
+
+<LI>
+
+If a statement on the slave produces an error, the slave SQL thread
+terminates, and the slave writes a message to its error log. You should
+then connect to the slave manually, fix the problem (for
+example, a non-existent table), and then run <code>START SLAVE</code>.
+
+<LI>
+
+It is safe to shut down a master server and restart it later.
+If a slave loses its connection to the master, the slave tries to reconnect
+immediately. If that fails, the slave retries periodically. (The default is
+to retry every 60 seconds. This may be changed with the
+<code>--master-connect-retry</code> option.)
+The slave will also be able to deal with
+network connectivity outages. However, the slave will notice the
+network outage only after receiving no data from the master for
+<code>slave_net_timeout</code> seconds. If your outages are short, you may want
+to decrease <code>slave_net_timeout</code>.
+See section <A HREF="manual_MySQL_Database_Administration.html#Server_system_variables">5.2.3  Server System Variables</A>.
+
+<LI>
+
+Shutting down the slave (cleanly) is also safe, as it keeps track of where
+it left off.  Unclean shutdowns might produce problems, especially if disk
+cache was not flushed to disk before the system went down. Your system fault
+tolerance will be greatly increased if you have a good uninterruptible power
+supply. Unclean shutdowns of the master may cause inconsistencies between the
+content of tables and the binary log in master; this can be avoided by using
+<code>InnoDB</code> tables and the <code>--innodb-safe-binlog</code> option on the
+master. See section <A HREF="manual_MySQL_Database_Administration.html#Binary_log">5.9.4  The Binary Log</A>.
+
+<LI>
+
+Due to the non-transactional nature of <code>MyISAM</code> tables, it is possible
+to have a statement that only partially updates a table and returns an
+error code. This can happen, for example, on a multiple-row insert that has
+one row violating a key constraint, or if a long update statement is killed
+after updating some of the rows. If that happens on the master, the slave
+thread will exit and wait for the database administrator
+to decide what to do about it unless
+the error code is legitimate and the statement execution results in the same
+error code. If this error code validation behavior is not desirable, some or
+all errors can be masked out (ignored) with the <code>--slave-skip-errors</code>
+option.  This option is available starting with MySQL 3.23.47.
+
+<LI>
+
+If you update transactional tables from non-transactional tables inside a
+<code>BEGIN/COMMIT</code> segment, updates to the binary log may be out of sync
+if some thread changes the non-transactional table before the
+transaction commits.  This is because the transaction is written to the
+binary log only when it is committed.
+
+<LI>
+
+Before version 4.0.15, any update to a non-transactional table is written to
+the binary log at once when the update is made, whereas transactional
+updates are written on <code>COMMIT</code> or not written at all if you use
+<code>ROLLBACK</code>. You must take this into account when updating both
+transactional tables and non-transactional tables within the same
+transaction. (This is true not only for replication, but also if you are
+using binary logging for backups.) In version 4.0.15, we changed the logging
+behavior for transactions that mix updates to transactional and
+non-transactional tables, which solves the problems (order of statements is
+good in the binary log, and all needed statements are written to the binary log
+even in case of <code>ROLLBACK</code>). The problem that remains is when a second
+connection updates the non-transactional table while the first connection's
+transaction is not finished yet; wrong order can still occur, because the
+second connection's update will be written immediately after it is done.
+
+<LI>
+
+When a 4.x slave replicates a <code>LOAD DATA INFILE</code> from a 3.23 master, the
+values of the <code>Exec_Master_Log_Pos</code> and <code>Relay_Log_Space</code> columns of
+<code>SHOW SLAVE STATUS</code> become incorrect.
+The incorrectness of <code>Exec_Master_Log_Pos</code> will cause a problem when you
+stop and restart replication; so it is a good idea to correct the value before
+this, by doing <code>FLUSH LOGS</code> on the master.
+These bugs are already fixed in MySQL 5.0.0 slaves.
+
+</UL>
+
+<P>
+The following table lists replication problems in MySQL 3.23 that are
+fixed in MySQL 4.0:
+
+</P>
+
+<UL>
+<LI>
+
+<code>LOAD DATA INFILE</code> is handled properly, as long as the data file
+still resides on the master server at the time of update
+propagation.
+
+<LI>
+
+<code>LOAD DATA LOCAL INFILE</code> is no longer skipped on the slave as it
+was in 3.23.
+
+<LI>
+
+In 3.23, <code>RAND()</code> in updates does not replicate properly.
+Use <code>RAND(some_non_rand_expr)</code> if you are replicating updates with
+<code>RAND()</code>. You can, for example, use <code>UNIX_TIMESTAMP()</code> as the
+argument to <code>RAND()</code>.
+</UL>
+
+
+
+<H2><A NAME="Replication_Options" HREF="manual_toc.html#Replication_Options">6.8  Replication Startup Options</A></H2>
+
+<P>
+On both the master and the slave, you must use the <code>server-id</code> option
+to establish a unique replication ID for each server. You should pick a unique
+positive integer in the range from 1 to 2^32 - 1 for each master and slave.
+Example: <code>server-id=3</code>
+
+</P>
+<P>
+The options that you can use on the master server for controlling binary
+logging are described in section <A HREF="manual_MySQL_Database_Administration.html#Binary_log">5.9.4  The Binary Log</A>.
+
+</P>
+<P>
+The following table describes the options you can use on slave replication servers.
+You can specify them on the command line or in an option file.
+
+</P>
+<P>
+Some slave server replication options are handled in a special way, in the
+sense that they are ignored if a <tt>`master.info'</tt> file exists when the slave
+starts and contains values for the options.
+The following options are handled this way:
+
+</P>
+
+<UL>
+<LI><code>--master-host</code>
+
+<LI><code>--master-user</code>
+
+<LI><code>--master-password</code>
+
+<LI><code>--master-port</code>
+
+<LI><code>--master-connect-retry</code>
+
+</UL>
+
+<P>
+As of MySQL 4.1.1, the following options also are handled specially:
+
+</P>
+
+<UL>
+<LI><code>--master-ssl</code>
+
+<LI><code>--master-ssl-ca</code>
+
+<LI><code>--master-ssl-capath</code>
+
+<LI><code>--master-ssl-cert</code>
+
+<LI><code>--master-ssl-cipher</code>
+
+<LI><code>--master-ssl-key</code>
+
+</UL>
+
+<P>
+The <tt>`master.info'</tt> file format in 4.1.1 changed to include values
+corresponding to the SSL options. In addition, the 4.1.1 file format includes
+as its first line the number of lines in the file. If you upgrade an older
+server to 4.1.1, the new server upgrades the <tt>`master.info'</tt> file to the
+new format automatically when it starts.  However, if you downgrade a 4.1.1
+or newer server to a version older than 4.1.1, you should manually remove
+the first line before starting the older server for the first time.  Note
+that, in this case, the downgraded server no longer can use an SSL connection
+to communicate with the master.
+
+</P>
+<P>
+If no <tt>`master.info'</tt> file exists when the slave server starts,
+it uses values for those options that are specified in option files
+or on the command line.  This will occur when you start the server
+as a replication slave for the very first time, or when you have run
+<code>RESET SLAVE</code> and shut down and restarted the slave server.
+
+</P>
+<P>
+If the <tt>`master.info'</tt> file exists when the slave server starts, the
+server ignores those options. Instead, it uses the values found in the
+<tt>`master.info'</tt> file.
+
+</P>
+<P>
+If you restart the slave server with different values of the startup options
+that correspond to values in the <tt>`master.info'</tt> file, the different
+values have no effect, because the server continues to use the
+<tt>`master.info'</tt> file. To use different values, you must either restart
+after removing the <tt>`master.info'</tt> file or (preferably) use the
+<code>CHANGE MASTER TO</code> statement to reset the values while the slave is
+running.
+
+</P>
+<P>
+Suppose that you specify this option in your <tt>`my.cnf'</tt> file:
+
+</P>
+
+<PRE>
+[mysqld]
+master-host=some_host
+</PRE>
+
+<P>
+The first time you start the server as a replication slave, it reads and
+uses that option from the <tt>`my.cnf'</tt> file.  The server then records the
+value in the <tt>`master.info'</tt> file.  The next time you start the server,
+it reads the master host value from the <tt>`master.info'</tt> file only and
+ignores the value in the option file.  If you modify the <tt>`my.cnf'</tt> file
+to specify a different master host of <code>some_other_host</code>, the change
+still will have no effect.  You should use <code>CHANGE MASTER TO</code> instead.
+
+</P>
+<P>
+Because the server gives an existing <tt>`master.info'</tt> file precedence
+over the startup options just described, you might prefer not to use startup
+options for these values at all, and instead specify them by using the
+<code>CHANGE MASTER TO</code> statement.
+See section <A HREF="manual_SQL_Syntax.html#CHANGE_MASTER_TO">13.6.2.1  <code>CHANGE MASTER TO</code> Syntax</A>.
+
+</P>
+<P>
+This example shows a more extensive use of startup options to configure a
+slave server:
+
+</P>
+
+<PRE>
+[mysqld]
+server-id=2
+master-host=db-master.mycompany.com
+master-port=3306
+master-user=pertinax
+master-password=freitag
+master-connect-retry=60
+report-host=db-slave.mycompany.com
+</PRE>
+
+<P>
+The following list describes startup options for controlling replication:
+Many of these options can be reset while the server is running by using the
+<code>CHANGE MASTER TO</code> statement. Others, such as the <code>--replicate-*</code>
+options, can be set only when the slave server starts. We plan to fix this.
+
+</P>
+<DL COMPACT>
+
+<DT><code>--log-slave-updates</code>
+<DD>
+Normally, updates received from a master server by a slave are not logged to
+its binary log. This option tells the slave to log the updates performed by
+its SQL thread to the slave's own binary log.  For this option to have any
+effect, the slave must also be started with the <code>--log-bin</code> option to
+enable binary logging.  <code>--log-slave-updates</code> is used when you want to
+chain replication servers.  For example, you might want a setup like this:
+
+
+<PRE>
+A -&#62; B -&#62; C
+</PRE>
+
+That is, A serves as the master for the slave B, and B serves as the master
+for the slave C. For this to work, B must be both a master and a slave.
+You must start both A and B with <code>--log-bin</code> to enable binary logging,
+and B with the <code>--log-slave-updates</code> option.
+
+<DT><code>--log-warnings</code>
+<DD>
+Makes the slave print more messages to the error log about what it is doing.
+For example, it will warn you that it succeeded in reconnecting after a
+network/connection failure, and warn you about how each slave thread started.
+This option is enabled by default as of MySQL 4.0.19 and 4.1.2; to disable it,
+use <code>--skip-log-warnings</code>.
+As of MySQL 4.0.21 and 4.1.3, aborted connections are not logged to the error
+log unless the value is greater than 1.
+
+This option is not limited to replication use only. It produces warnings
+across a spectrum of server activities.
+
+<DT><code>--master-connect-retry=<var>seconds</var></code>
+<DD>
+The number of seconds the slave thread sleeps before retrying to connect to
+the master in case the master goes down or the connection is lost.  The
+value in the <tt>`master.info'</tt> file takes precedence if it can be read.  If
+not set, the default is 60.
+
+<DT><code>--master-host=<var>host</var></code>
+<DD>
+The hostname or IP number of the master replication server.
+If this option is not given, the slave
+thread will not be started.  The value in <tt>`master.info'</tt>
+takes precedence if it can be read.
+
+<DT><code>--master-info-file=<var>file_name</var></code>
+<DD>
+The name to use for the file in which the slave records
+information about the master.
+The default name is <tt>`mysql.info'</tt> in the data directory.
+
+<DT><code>--master-password=<var>password</var></code>
+<DD>
+The password of the account that the slave thread uses for authentication when
+connecting to the master.
+The value in the <tt>`master.info'</tt> file takes precedence if it can be read.
+If not set, an empty password is assumed.
+
+<DT><code>--master-port=<var>port_number</var></code>
+<DD>
+The TCP/IP port the master is listening on.
+The value in the <tt>`master.info'</tt> file takes precedence if it can be read.
+If not set, the compiled-in setting is assumed. If you have not tinkered with
+<code>configure</code> options, this should be 3306.
+
+<DT><code>--master-ssl</code>
+<DD>
+<DT><code>--master-ssl-ca=<var>file_name</var></code>
+<DD>
+<DT><code>--master-ssl-capath=<var>directory_name</var></code>
+<DD>
+<DT><code>--master-ssl-cert=<var>file_name</var></code>
+<DD>
+<DT><code>--master-ssl-cipher=<var>cipher_list</var></code>
+<DD>
+<DT><code>--master-ssl-key=<var>file_name</var></code>
+<DD>
+These options are used for setting up a secure replication connection to
+the master server using SSL.
+Their meanings are the same as the corresponding
+<code>--ssl</code>,
+<code>--ssl-ca</code>,
+<code>--ssl-capath</code>,
+<code>--ssl-cert</code>,
+<code>--ssl-cipher</code>,
+<code>--ssl-key</code>
+options described in
+section <A HREF="manual_MySQL_Database_Administration.html#SSL_options">5.6.7.5  SSL Command-Line Options</A>.
+The values in the <tt>`master.info'</tt> file take precedence if they can be read.
+
+These options are operational as of MySQL 4.1.1.
+
+<DT><code>--master-user=<var>username</var></code>
+<DD>
+The username of the account that the slave thread uses for authentication when
+connecting to the master. The account must have the
+<code>REPLICATION SLAVE</code> privilege. (Prior to MySQL 4.0.2, it must have the
+<code>FILE</code> privilege instead.)
+The value in the <tt>`master.info'</tt> file takes precedence if it can be read.
+If the master user is not set, user <code>test</code> is assumed.
+
+<DT><code>--max-relay-log-size=<var>#</var></code>
+<DD>
+To rotate the relay log automatically.
+See section <A HREF="manual_MySQL_Database_Administration.html#Server_system_variables">5.2.3  Server System Variables</A>.
+
+This option is available as of MySQL 4.0.14.
+
+<DT><code>--read-only</code>
+<DD>
+This option causes the slave to allow no updates except from slave threads
+or from users with the <code>SUPER</code> privilege.  This can be useful to ensure
+that a slave server accepts no updates from clients.
+
+This option is available as of MySQL 4.0.14.
+
+<DT><code>--relay-log=<var>file_name</var></code>
+<DD>
+The name for the relay log. The default name is
+<code><var>host_name</var>-relay-bin.<var>nnnnnn</var></code>, where <var>host_name</var> is the name of
+the slave server host and <var>nnnnnn</var> indicates that relay logs are
+created in numbered sequence.
+You can specify the option to create hostname-independent relay log names, or
+if your relay logs tend to be big (and you don't want to decrease
+<code>max_relay_log_size</code>) and you need to put them in some area
+different from the data directory, or if you want to increase speed by
+balancing load between disks.
+
+<DT><code>--relay-log-index=<var>file_name</var></code>
+<DD>
+The location and name that should be used for the relay
+log index file. The default name is
+<code><var>host_name</var>-relay-bin.index</code>, where <var>host_name</var> is the name of
+the slave server.
+
+<DT><code>--relay-log-info-file=<var>file_name</var></code>
+<DD>
+The name to use for the file in which the slave records
+information about the relay logs. The default name is
+<tt>`relay-log.info'</tt> in the data directory.
+
+<DT><code>--relay-log-purge={0|1}</code>
+<DD>
+Disables or enables automatic purging of relay logs as soon as they are not
+needed any more.  The default value is 1 (enabled).  This is a global
+variable that can be changed dynamically with <code>SET GLOBAL
+relay_log_purge</code>.
+
+This option is available as of MySQL 4.1.1.
+
+<DT><code>--relay-log-space-limit=<var>#</var></code>
+<DD>
+Places an upper limit on the total size of all relay logs on the slave (a
+value of 0 means ``unlimited''). This is useful for a slave server host that
+has limited disk space.  When the limit is reached, the I/O thread stops
+reading binary log events from the master server until the SQL thread has
+caught up and deleted some now unused relay logs. Note that this limit is
+not absolute: There are cases where the SQL thread needs more events
+before it can delete relay logs.
+In that case, the I/O thread will exceed the limit until it
+becomes possible for the SQL thread to delete some relay logs. Not doing so
+would cause a deadlock (which is what happens before MySQL 4.0.13).  You
+should not set <code>--relay-log-space-limit</code> to less than twice the value
+of <code>--max-relay-log-size</code> (or <code>--max-binlog-size</code> if
+<code>--max-relay-log-size</code> is 0). In that case, there is a chance that the
+I/O thread will wait for free space because <code>--relay-log-space-limit</code>
+is exceeded, but the SQL thread will have no relay log to purge and be
+unable to satisfy the I/O thread. This forces the I/O thread to temporarily
+ignore <code>--relay-log-space-limit</code>.
+
+<DT><code>--replicate-do-db=<var>db_name</var></code>
+<DD>
+Tells the slave to restrict replication to statements where
+the default database (that is, the one selected by <code>USE</code>)
+is <var>db_name</var>.
+To specify more than one database, use this option multiple
+times, once for each database. Note that this will not replicate
+cross-database statements such as <code>UPDATE <var>some_db.some_table</var>
+SET foo='bar'</code> while having selected a different database or no database. If you
+need cross-database updates to work, make sure that you have MySQL 3.23.28 or
+later, and use <code>--replicate-wild-do-table=<var>db_name</var>.%</code>.
+Please read the notes that follow this option list.
+
+An example of what does not work as you might expect: If the slave is
+started with <code>--replicate-do-db=sales</code> and you issue the following
+statements on the master, the <code>UPDATE</code> statement will not be
+replicated:
+
+
+<PRE>
+USE prices;
+UPDATE sales.january SET amount=amount+1000;
+</PRE>
+
+If you need cross-database updates to work, 
+use <code>--replicate-wild-do-table=<var>db_name</var>.%</code> instead.
+
+The main reason for this ``just-check-the-default-database''
+behavior is that it's difficult from the statement
+alone to know whether or not it should be replicated (for example, if you
+are using multiple-table <code>DELETE</code> or multiple-table <code>UPDATE</code>
+statements
+that go across multiple databases).  It's also very fast to just check
+the default database.
+
+<DT><code>--replicate-do-table=<var>db_name.tbl_name</var></code>
+<DD>
+Tells the slave thread to restrict replication to the specified table.
+To specify more than one table, use this option multiple times, once
+for each table.  This will work for cross-database updates, in
+contrast to <code>--replicate-do-db</code>. 
+Please read the notes that follow this option list.
+
+<DT><code>--replicate-ignore-db=<var>db_name</var></code>
+<DD>
+Tells the slave to not replicate any statement where the default
+database (that is, the one selected by <code>USE</code>)
+is <var>db_name</var>. To specify more than one database to
+ignore, use this option multiple times, once for each database.
+You should not use this option if you are using cross-database updates
+and you don't want these updates to be replicated.
+Please read the notes that follow this option list.
+
+An example of what does not work as you might expect: If the slave is
+started with <code>--replicate-ignore-db=sales</code> and you issue the following
+statements on the master, the <code>UPDATE</code> statement will be replicated:
+
+
+<PRE>
+USE prices;
+UPDATE sales.january SET amount=amount+1000;
+</PRE>
+
+If you need cross-database updates to work, 
+use <code>--replicate-wild-ignore-table=<var>db_name</var>.%</code> instead.
+
+<DT><code>--replicate-ignore-table=<var>db_name.tbl_name</var></code>
+<DD>
+Tells the slave thread to not replicate any statement that updates the
+specified table (even if any other tables might be updated by the same
+statement). To specify more than one table to ignore, use this option
+multiple times, once for each table. This will work for cross-database
+updates, in contrast to <code>--replicate-ignore-db</code>.
+Please read the notes that follow this option list.
+
+<DT><code>--replicate-wild-do-table=<var>db_name.tbl_name</var></code>
+<DD>
+Tells the slave thread to restrict replication to statements where any of
+the updated tables match the specified database and table name patterns.
+Patterns can contain the <samp>`%'</samp> and <samp>`_'</samp> wildcard characters, which have
+the same meaning as for the <code>LIKE</code> pattern-matching operator.  To specify
+more than one table, use this option multiple times, once for each
+table.  This will work for cross-database updates.
+Please read the notes that follow this option list.
+
+Example: <code>--replicate-wild-do-table=foo%.bar%</code> will replicate only
+updates that use a table where the database name starts with <code>foo</code>
+and the table name starts with <code>bar</code>.
+
+If the table name pattern is <code>%</code>, it matches any table name and the
+option also applies to database-level statements (<code>CREATE DATABASE</code>, <code>DROP DATABASE</code>, and
+<code>ALTER DATABASE</code>).
+For example, if you use <code>--replicate-wild-do-table=foo%.%</code>,
+database-level statements are replicated
+if the database name matches the pattern <code>foo%</code>.
+
+To include literal wildcard characters in the database or table name
+patterns, escape them with a backslash.  For example, to replicate all tables
+of a database that is named <code>my_own%db</code>, but not replicate tables
+from the <code>my1ownAABCdb</code> database, you should escape the <samp>`_'</samp> and
+<samp>`%'</samp> characters like this: <code>--replicate-wild-do-table=my\_own\%db</code>.
+If you're using the option on the command line, you might need to double
+the backslashes or quote the option value, depending on your command
+interpreter.  For example, with the <code>bash</code> shell, you would need to
+type <code>--replicate-wild-do-table=my\\_own\\%db</code>.
+
+<DT><code>--replicate-wild-ignore-table=<var>db_name.tbl_name</var></code>
+<DD>
+Tells the slave thread to not replicate a statement where any table matches the
+given wildcard pattern. To specify more than one table to ignore, use
+this option multiple times, once for each table. This will work for
+cross-database updates.
+Please read the notes that follow this option list.
+
+Example: <code>--replicate-wild-ignore-table=foo%.bar%</code> will not replicate
+updates that use a table where the database name starts with <code>foo</code>
+and the table name starts with <code>bar</code>.
+
+For information about how matching works, see the description of
+the <code>--replicate-wild-ignore-table</code> option.
+The rules for including literal wildcard characters in the option value
+are the same as for
+<code>--replicate-wild-ignore-table</code> as well.
+
+<DT><code>--replicate-rewrite-db=<var>from_name</var>-&#62;<var>to_name</var></code>
+<DD>
+Tells the slave to translate the default database
+(that is, the one selected by <code>USE</code>)
+to <var>to_name</var> if it was <var>from_name</var> on the master.
+Only statements involving tables are affected
+(not statements such as <code>CREATE DATABASE</code>, <code>DROP DATABASE</code>,
+and <code>ALTER DATABASE</code>),
+and only if <var>from_name</var> was the default database on the master.
+This will not work for cross-database updates.
+Note that the database name translation is done before <code>--replicate-*</code>
+rules are tested.
+
+If you use this option on the command line and the <samp>`&#62;'</samp> character is
+special to your command interpreter, quote the option value. For example:
+
+
+<PRE>
+shell&#62; mysqld --replicate-rewrite-db="<var>olddb</var>-&#62;<var>newdb</var>"
+</PRE>
+
+<DT><code>--replicate-same-server-id</code>
+<DD>
+To be used on slave servers.  Usually you can should the default setting of
+0, to prevent infinite loops in circular replication.  If set to 1, this
+slave will not skip events having its own server id; normally this is useful
+only in rare configurations.  Cannot be set to 1 if
+<code>--log-slave-updates</code> is used.
+Be careful that starting from MySQL 4.1, by default the slave I/O thread does
+not even write binary log events to the relay log if they have the slave's server
+id (this optimization helps save disk usage compared to 4.0). So if you want to
+use <code>--replicate-same-server-id</code> in 4.1 versions, be sure to start the
+slave with this option before you make the slave read its own events which you
+want the slave SQL thread to execute.
+
+<DT><code>--report-host=<var>host</var></code>
+<DD>
+The hostname or IP number of the slave to be reported to the master during
+slave registration. This value will appear in the output of <code>SHOW SLAVE
+HOSTS</code> on the master server. Leave the value unset if you do not want the
+slave to register itself with the master. Note that it is not sufficient for
+the master to simply read the IP number of the slave from the TCP/IP socket
+after the slave connects. Due to <code>NAT</code> and other routing issues, that IP
+may not be valid for connecting to the slave from the master or other hosts.
+
+This option is available as of MySQL 4.0.0.
+
+<DT><code>--report-port=<var>port_number</var></code>
+<DD>
+The TCP/IP port for connecting to the slave, to be reported to the
+master during slave registration.  Set it only if the slave is listening
+on a non-default port or if you have a special tunnel from the master or
+other clients to the slave. If you are not sure, leave this option unset.
+
+This option is available as of MySQL 4.0.0.
+
+<DT><code>--skip-slave-start</code>
+<DD>
+Tells the slave server not to start the slave threads when the server starts.
+To start the threads later, use a <code>START SLAVE</code> statement.
+
+<DT><code>--slave_compressed_protocol={0|1}</code>
+<DD>
+If this option is set to
+1, use compression of the slave/master protocol if both the
+slave and the master support it.
+
+<DT><code>--slave-load-tmpdir=<var>file_name</var></code>
+<DD>
+The name of the directory where the slave creates temporary files.
+This option is by default equal to the value of the <code>tmpdir</code> system variable.
+When the slave SQL thread replicates a <code>LOAD DATA INFILE</code> statement, it
+extracts the to-be-loaded file from the relay log into temporary files,
+then loads these into the table. If the file loaded on the master was
+huge, the temporary files on the slave will be huge, too. Therefore, it might
+be advisable to use this option to tell the slave to put temporary files in
+a directory located in some filesystem that has a lot of available space.
+In that case, you may also use the <code>--relay-log</code> option to place
+the relay logs in that filesystem, because the relay logs
+will be huge as well.
+<code>--slave-load-tmpdir</code> should point to a disk-based filesystem, not a
+memory-based one: The slave needs the
+temporary files used to replicate <code>LOAD DATA INFILE</code> to survive a
+machine's restart.
+The directory also should not be one that is cleared by the operating system
+during the system startup process.
+
+<DT><code>--slave-net-timeout=<var>seconds</var></code>
+<DD>
+The number of seconds to wait for more data from the master before aborting
+the read, considering the connection broken, and trying to reconnect. The first
+retry occurs immediately after the timeout. The interval between retries is
+controlled by the <code>--master-connect-retry</code> option.
+
+<DT><code>--slave-skip-errors= [<var>err_code1</var>,<var>err_code2</var>,... | all]</code>
+<DD>
+Normally, replication stops when an error occurs, which gives you the
+opportunity to resolve the inconsistency in the data manually.  This option
+tells the slave SQL thread to continue replication when a statement returns
+any of the errors listed in the option value.
+
+Do not use this option unless you fully understand why you are getting the
+errors.  If there are no bugs in your replication setup and client programs,
+and no bugs in MySQL itself, an error that stops replication should never
+occur.  Indiscriminate use of this option will result in slaves becoming
+hopelessly out of sync with the master, and you will have no idea why.
+
+For error codes, you should use the numbers provided by the error message in
+your slave error log and in the output of <code>SHOW SLAVE STATUS</code>.
+The server error codes are listed in section <A HREF="manual_Error-handling.html#Error-handling">23  Error Handling in MySQL</A>.
+
+You can (but should not) also use the very non-recommended value of <code>all</code>
+which will ignore all error messages and keep barging along regardless of what
+happens.  Needless to say, if you use it, we make no promises regarding your
+data integrity. Please do not complain if your data on the slave is not
+anywhere close to what it is on the master in this case. You have been
+warned.
+
+Examples:
+
+
+<PRE>
+--slave-skip-errors=1062,1053
+--slave-skip-errors=all
+</PRE>
+
+</DL>
+
+<P>
+The <code>--replicate-*</code> rules are evaluated as follows to determine whether a
+statement will be executed by the slave or ignored:
+
+</P>
+
+<OL>
+<LI>
+
+Are there some <code>--replicate-do-db</code> or <code>--replicate-ignore-db</code>
+rules?
+
+
+<UL>
+<LI>Yes:
+
+Test them as for <code>--binlog-do-db</code> and <code>--binlog-ignore-db</code>
+(see section <A HREF="manual_MySQL_Database_Administration.html#Binary_log">5.9.4  The Binary Log</A>). What is the result of the test?
+
+
+<UL>
+<LI>Ignore the statement:
+
+Ignore it and exit.
+<LI>Execute the statement:
+
+Don't execute it immediately, defer the decision, go to the next step.
+</UL>
+
+<LI>No:
+
+Go to the next step.
+</UL>
+
+<LI>
+
+Are there some <code>--replicate-*-table</code> rules?
+
+
+<UL>
+<LI>No:
+
+Execute the query and exit.
+<LI>Yes:
+
+Go to the next step. Only tables that are to be updated are compared
+to the rules (<code>INSERT INTO sales SELECT * FROM prices</code>: only
+<code>sales</code> will be compared to the rules). If several tables are to be
+updated (multiple-table statement),
+the first matching table (matching ``do'' or ``ignore'') wins.
+That is, the first table is compared to the rules. Then, if no decision could
+be mad, the second table is compared to the rules, and so forth.
+</UL>
+
+<LI>
+
+Are there some <code>--replicate-do-table</code> rules?
+
+
+<UL>
+<LI>Yes:
+
+Does the table match any of them?
+
+<UL>
+<LI>Yes:
+
+Execute the query and exit.
+<LI>No:
+
+Go to the next step.
+</UL>
+
+<LI>No:
+
+Go to the next step.
+</UL>
+
+<LI>
+
+Are there some <code>--replicate-ignore-table</code> rules?
+
+
+<UL>
+<LI>Yes:
+
+Does the table match any of them?
+
+<UL>
+<LI>Yes:
+
+Ignore the query and exit.
+<LI>No:
+
+Go to the next step.
+</UL>
+
+<LI>No:
+
+Go to the next step.
+</UL>
+
+<LI>
+
+Are there some <code>--replicate-wild-do-table</code> rules?
+
+
+<UL>
+<LI>Yes:
+
+Does the table match any of them?
+
+
+<UL>
+<LI>Yes:
+
+Execute the query and exit.
+<LI>No:
+
+Go to the next step.
+</UL>
+
+<LI>No:
+
+Go to the next step.
+</UL>
+
+<LI>
+
+Are there some <code>--replicate-wild-ignore-table</code> rules?
+
+
+<UL>
+<LI>Yes:
+
+Does the table match any of them?
+
+
+<UL>
+<LI>Yes:
+
+Ignore the query and exit.
+<LI>No:
+
+Go to the next step.
+</UL>
+
+<LI>No:
+
+Go to the next step.
+</UL>
+
+<LI>
+
+No <code>--replicate-*-table</code> rule was matched.
+Is there another table to test against these rules?
+
+
+<UL>
+<LI>Yes:
+
+Loop.
+<LI>No:
+
+We have tested all tables to be updated and could not match any rule.
+Are there <code>--replicate-do-table</code> or <code>--replicate-wild-do-table</code>
+rules?
+
+
+<UL>
+<LI>Yes:
+
+Ignore the query and exit.
+<LI>No:
+
+Execute the query and exit.
+</UL>
+
+</UL>
+
+</OL>
+
+
+
+<H2><A NAME="Replication_FAQ" HREF="manual_toc.html#Replication_FAQ">6.9  Replication FAQ</A></H2>
+
+<P>
+<strong>Q</strong>: How do I configure a slave if the master is already running
+and I do not want to stop it?
+
+</P>
+<P>
+<strong>A</strong>: There are several options. If you have taken a backup of the
+master at some point and recorded the binary log name and offset (from the
+output of <code>SHOW MASTER STATUS</code> ) corresponding to the snapshot, use
+the following procedure:
+
+</P>
+
+<OL>
+<LI>
+
+Make sure that the slave is assigned a unique server ID.
+<LI>
+
+Execute the following statement on the slave, filling in appropriate values for each
+option:
+
+
+<PRE>
+mysql&#62; CHANGE MASTER TO
+    -&#62;     MASTER_HOST='master_host_name',
+    -&#62;     MASTER_USER='master_user_name',
+    -&#62;     MASTER_PASSWORD='master_pass',
+    -&#62;     MASTER_LOG_FILE='recorded_log_file_name',
+    -&#62;     MASTER_LOG_POS=recorded_log_position;
+</PRE>
+
+<LI>
+
+Execute <code>START SLAVE</code> on the slave.
+</OL>
+
+<P>
+If you do not have a backup of the master server already, here is a quick
+procedure for creating one. All steps should be performed on the master host.
+
+</P>
+
+<OL>
+<LI>
+
+Issue this statement:
+
+
+<PRE>
+mysql&#62; FLUSH TABLES WITH READ LOCK;
+</PRE>
+
+<LI>
+
+With the lock still in place, execute this command (or a variation of it):
+
+
+<PRE>
+shell&#62; tar zcf /tmp/backup.tar.gz /var/lib/mysql
+</PRE>
+
+<LI>
+
+Issue this statement and
+make sure to record the output, which you will need later:
+
+
+<PRE>
+mysql&#62; SHOW MASTER STATUS;
+</PRE>
+
+<LI>
+
+Release the lock:
+
+
+<PRE>
+mysql&#62; UNLOCK TABLES;
+</PRE>
+
+</OL>
+
+<P>
+An alternative is to make an SQL dump of the master instead of a binary copy
+as in the preceding procedure. To do this, you can use <code>mysqldump
+--master-data</code> on your master and later load the SQL dump into your slave.
+However, this is slower than making a binary copy.
+
+</P>
+<P>
+No matter which of the two methods you use, afterward follow the
+instructions for the case when you have a snapshot and have recorded the log
+name and offset. You can use the same snapshot to set up several slaves.
+Once you have the snapshot of the master, you can wait to set up a slave as
+long as the binary logs of the master are left intact.  The two practical
+limitations on the length of time you can wait are the amount of disk space
+available to retain binary logs on the master and the length of time it
+will take the slave to catch up.
+
+</P>
+<P>
+You can also use <code>LOAD DATA FROM MASTER</code>.  This is a convenient
+statement that transfers a snapshot to the slave and adjusts the log name
+and offset all at once. In the future, <code>LOAD DATA FROM MASTER</code> will be
+the recommended way to set up a slave.  Be warned, however, that it works
+only for <code>MyISAM</code> tables and it may hold a read lock for a long time.
+It is not yet implemented as efficiently as we would like. If you have large
+tables, the preferred method at this time is still to make a binary snapshot
+on the master server after executing <code>FLUSH TABLES WITH READ LOCK</code>.
+
+</P>
+<P>
+<strong>Q</strong>: Does the slave need to be connected to the master all the time?
+
+</P>
+<P>
+<strong>A</strong>: No, it does not. The slave can go down or stay
+disconnected for hours or even days, then reconnect and catch up on the
+updates.
+For example, you can set up a master/slave relationship over a dial-up link
+where the link is up only sporadically and
+for short periods of time. The implication of this is that, at any
+given time, the slave is not guaranteed to be in sync with the master
+unless you take some special measures. In the future, we will have the
+option to block the master until at least one slave is in sync.
+
+</P>
+<P>
+<strong>Q</strong>: How do I know how late a slave is compared to the
+master? In other words, how do I know the date of the last query
+replicated by the slave?
+
+</P>
+<P>
+<strong>A</strong>: 
+If the slave is 4.1.1 or newer, read the <code>Seconds_Behind_Master</code> column
+in <code>SHOW SLAVE STATUS</code>. For older versions, the following applies.
+This is possible only if <code>SHOW SLAVE STATUS</code> on the slave shows that the
+SQL thread is running (or for MySQL 3.23, that the slave thread is running),
+and that the thread has executed at least one event from the master.
+See section <A HREF="manual_Replication.html#Replication_Implementation_Details">6.3  Replication Implementation Details</A>.
+
+</P>
+<P>
+When the slave SQL thread executes an event read from the master, it
+modifies its own time to the event timestamp (this is why <code>TIMESTAMP</code>
+is well replicated). In the <code>Time</code> column in the output of
+<code>SHOW PROCESSLIST</code>, the number of seconds displayed for the slave SQL
+thread is the number of seconds between the timestamp of the last replicated
+event and the real time of the slave machine. You can use this to determine
+the date of the last replicated event. Note that if your slave has been
+disconnected from the master for one hour, and then reconnects, you may
+immediately see <code>Time</code> values like 3600 for the slave SQL thread in
+<code>SHOW PROCESSLIST</code>. This would be because the slave is executing
+statements that are one hour old.
+
+</P>
+<P>
+<strong>Q</strong>: How do I force the master to block updates until the slave catches
+up?
+
+</P>
+<P>
+<strong>A</strong>: Use the following procedure:
+
+</P>
+
+<OL>
+
+<LI>
+
+On the master, execute these statements:
+
+
+<PRE>
+mysql&#62; FLUSH TABLES WITH READ LOCK;
+mysql&#62; SHOW MASTER STATUS;
+</PRE>
+
+Record the log name and the offset from the output of the <code>SHOW</code>
+statement. These are the replication coordinates.
+
+<LI>
+
+On the slave, issue the following statement, where the arguments to the
+<code>MASTER_POS_WAIT()</code> function are the replication coordinate values
+obtained in the previous step:
+
+
+<PRE>
+mysql&#62; SELECT MASTER_POS_WAIT('log_name', log_offset);
+</PRE>
+
+The <code>SELECT</code> statement will block until the slave reaches the specified
+log file and offset. At that point, the slave will be in sync with the master
+and the statement will return.
+
+<LI>
+
+On the master, issue the following statement to allow the master to begin
+processing updates again:
+
+
+<PRE>
+mysql&#62; UNLOCK TABLES;
+</PRE>
+
+</OL>
+
+<P>
+<strong>Q</strong>: What issues should I be aware of when setting up two-way
+replication?
+
+</P>
+<P>
+<strong>A</strong>: MySQL replication currently does not support any
+locking protocol between master and slave to guarantee the atomicity of
+a distributed (cross-server) update. In other words, it is possible
+for client A to make an update to  co-master 1, and in the meantime,
+before it propagates to co-master 2, client B could make an update to
+co-master 2 that will make the update of client A work differently than
+it did on co-master 1. Thus, when the update of client A makes it
+to co-master 2, it will produce  tables that are different than
+what you have on co-master 1, even after all the updates from co-master
+2 have also propagated. This means that you should not co-chain two servers
+in a two-way replication relationship unless you are sure that your updates
+can safely happen in any order, or unless you take care of mis-ordered
+updates somehow in the client code.
+
+</P>
+<P>
+You must also realize that two-way replication actually does not improve
+performance very much (if at all), as far as updates are concerned. Both
+servers need to do the same number of updates each, as you would have
+one server do. The only difference is that there will be a little less
+lock contention, because the updates originating on another server will
+be serialized in one slave thread. Even this benefit might be
+offset by network delays.
+
+</P>
+<P>
+<A NAME="IDX684"></A>
+<A NAME="IDX685"></A>
+<strong>Q</strong>: How can I use replication to improve performance of my system?
+
+</P>
+<P>
+<strong>A</strong>: You should set up one server as the master and direct all
+writes to it. Then configure as many slaves as you have the budget and
+rackspace for, and distribute the reads among the master and the slaves.
+You can also start the slaves with the <code>--skip-innodb</code>, <code>--skip-bdb</code>,
+<code>--low-priority-updates</code>, and <code>--delay-key-write=ALL</code> options
+to get speed improvements on the slave end.  In this case, the slave will
+use non-transactional <code>MyISAM</code> tables instead of <code>InnoDB</code> and
+<code>BDB</code> tables to get more speed.
+
+</P>
+<P>
+<strong>Q</strong>: What should I do to prepare client code in my own applications
+to use performance-enhancing replication?
+
+</P>
+<P>
+<strong>A</strong>:
+If the part of your code that is responsible for database access has
+been properly abstracted/modularized, converting it to run with a
+replicated setup should be very smooth and easy. Just change the
+implementation of your database access to send all writes to the master,
+and to send reads to either the master or a slave.
+If your code does not have this level of abstraction,
+setting up a replicated system will give you the opportunity and motivation
+to it clean up.
+You should start by creating a wrapper library or module with the following
+functions:
+
+</P>
+
+<UL>
+<LI>
+
+<code>safe_writer_connect()</code>
+<LI>
+
+<code>safe_reader_connect()</code>
+<LI>
+
+<code>safe_reader_statement()</code>
+<LI>
+
+<code>safe_writer_statement()</code>
+</UL>
+
+<P>
+<code>safe_</code> in each function name means that the function will take care
+of handling all the error conditions.
+You can use different names for the
+functions. The important thing is to have a unified interface for connecting
+for reads, connecting for writes, doing a read, and doing a write.
+
+</P>
+<P>
+You should then convert your client code to use the wrapper library.
+This may be a painful and scary process at first, but it will pay off in
+the long run. All applications that use the approach just described will be
+able to take advantage of a master/slave configuration, even one involving
+multiple slaves.  The
+code will be a lot easier to maintain, and adding troubleshooting
+options will be trivial. You will just need to modify one or two
+functions; for example, to log how long each statement took, or which
+statement among your many thousands gave you an error.
+
+</P>
+<P>
+If you have
+written a lot of code already, you may want to automate the conversion
+task by using the <code>replace</code> utility that comes with standard MySQL
+distributions, or just write your own conversion script.  Ideally, your
+code already uses consistent programming style conventions. If not, then you
+are probably better off rewriting it anyway, or at least going through
+and manually regularizing it to use a consistent style.
+
+</P>
+<P>
+<strong>Q</strong>: When and how much can MySQL replication improve the performance
+of my system?
+
+</P>
+<P>
+<strong>A</strong>: MySQL replication is most beneficial for a system
+with frequent reads and infrequent writes. In theory, by using a
+single-master/multiple-slave setup, you can scale the system by adding more
+slaves until you either run out of network bandwidth, or your update
+load grows to the point that the master cannot handle it.
+
+</P>
+<P>
+In order to determine how many slaves you can get before the added benefits
+begin to level out, and how much you can improve performance of your site,
+you need to know your query patterns, and to determine empirically by
+benchmarking the relationship between the throughput for reads (reads per
+second, or <code>max_reads</code>) and for writes (<code>max_writes</code>) on a typical
+master and a typical slave. The example here shows a rather simplified
+calculation of what you can get with replication for a hypothetical system.
+
+</P>
+<P>
+Let's say that system load consists of 10% writes and 90% reads, and we
+have determined by benchmarking that <code>max_reads</code> is 1200 -
+2 * <code>max_writes</code>.  In other words, the system can do 1,200 reads per
+second with no writes, the average write is twice as slow as the average
+read, and the relationship is linear. Let us suppose that the master
+and each slave have the same capacity, and that we have one master and N
+slaves. Then we have for each server (master or slave):
+
+</P>
+<P>
+<code>reads = 1200 - 2 * writes</code>
+
+</P>
+<P>
+<code>reads = 9 * writes / (N + 1) </code> (reads are split, but writes go
+to all servers)
+
+</P>
+<P>
+<code>9 * writes / (N + 1) + 2 * writes = 1200</code>
+
+</P>
+<P>
+<code>writes = 1200 / (2 + 9/(N+1)) </code>
+
+</P>
+<P>
+The last equation indicates that the maximum number of writes for N slaves,
+given a maximum possible read rate of 1,200 per minute and a ratio of nine
+reads per write.
+
+</P>
+<P>
+This analysis yields the following conclusions:
+
+</P>
+
+<UL>
+
+<LI>
+
+If N = 0 (which means we have no replication), our system can handle about
+1200/11 = 109 writes per second.
+
+<LI>
+
+If N = 1, we get up to 184 writes per second.
+
+<LI>
+
+If N = 8, we get up to 400 writes per second.
+
+<LI>
+
+If N = 17, we get up to 480 writes per second.
+
+<LI>
+
+Eventually, as N approaches infinity (and our budget negative infinity),
+we can get very close to 600 writes per second, increasing system
+throughput about 5.5 times. However, with only eight servers, we increased
+it almost four times already.
+
+</UL>
+
+<P>
+Note that these computations assume infinite network bandwidth and
+neglect several other factors that could turn out to be significant on
+your system. In many cases, you may not be able to perform a computation
+similar to the just shown that will accurately predict what will happen
+on your system if you add N replication slaves. However, answering the
+following questions should help you decide whether and how much
+replication will improve the performance of your system:
+
+</P>
+
+<UL>
+<LI>
+
+What is the read/write ratio on your system?
+<LI>
+
+How much more write load can one server handle if you reduce the reads?
+<LI>
+
+For how many slaves do you have bandwidth available on your network?
+</UL>
+
+<P>
+<strong>Q</strong>: How can I use replication to provide redundancy/high
+availability?
+
+</P>
+<P>
+<strong>A</strong>: With the currently available features, you would have to
+set up a master and a slave (or several slaves), and write a script
+that will monitor the
+master to see whether it is up. Then instruct your applications and
+the slaves to change master in case of failure. Some suggestions:
+
+</P>
+
+<UL>
+<LI>
+
+To tell a slave to change its master, use the <code>CHANGE MASTER TO</code>
+statement.
+<LI>
+
+A good way to keep your applications informed as to the location of the
+master is by having a dynamic DNS entry for the master.
+With <code>bind</code> you can use <tt>`nsupdate'</tt> to dynamically update your DNS.
+<LI>
+
+You should run your slaves with the <code>--log-bin</code> option and without
+<code>--log-slave-updates</code>. This way the slave will be ready to become a
+master as soon as you issue <code>STOP SLAVE</code>; <code>RESET MASTER</code>, and
+<code>CHANGE MASTER TO</code> on the other slaves.
+For example, assume that you have the following setup:
+
+
+<PRE>
+       WC   
+        \  
+         v
+ WC----&#62; M
+       / | \  
+      /  |  \     
+     v   v   v
+    S1   S2  S3  
+</PRE>
+
+M means the master, S the slaves, WC the clients that issue database writes
+and reads; clients that issue only database reads are not represented,
+because they need not switch.  S1, S2, and S3 are slaves running with
+<code>--log-bin</code> and without <code>--log-slave-updates</code>.
+Because updates received by a slave from the master are not logged in the
+binary log unless <code>--log-slave-updates</code> is specified, the binary log on
+each slave is empty.  If for some reason M becomes unavailable, you can
+pick one slave to become the new master. For example, if you pick S1,
+all WC should be redirected to S1, and S2 and S3 should replicate from S1.
+
+Make sure that all slaves have processed any statements in their relay log.
+On each slave, issue <code>STOP SLAVE IO_THREAD</code>, then check the output
+of <code>SHOW PROCESSLIST</code> until you see <code>Has read all relay log</code>.
+When this is true for all slaves, they can be reconfigured to the new setup.
+On the slave S1 being promoted to become the master, issue
+<code>STOP SLAVE</code> and  <code>RESET MASTER</code>.
+
+On the other slaves S2 and S3, use <code>STOP SLAVE</code> and <code>CHANGE MASTER
+TO MASTER_HOST='S1'</code> (where <code>'S1'</code> represents the real hostname of
+S1). To <code>CHANGE MASTER</code>, add all information about how to connect to
+S1 from S2 or S3 (user, password, port). In <code>CHANGE MASTER</code>, there is
+no need to specify the name of S1's binary log or binary log position to
+read from: We know it is the first binary log and position 4, which are
+the defaults for <code>CHANGE MASTER</code>. Finally, use <code>START SLAVE</code>
+on S2 and S3.
+
+Then instruct all WC to direct their statements to S1. From that point on,
+all updates statements sent by WC to S1 are written to the binary log of S1,
+which will contain exactly every update statement sent to S1 since M died.
+
+The result is this configuration:
+
+
+<PRE>
+       WC   
+      /   
+      |  
+ WC   |  M(unavailable)
+  \   | 
+   \  | 
+    v v
+     S1&#60;--S2  S3  
+      ^       |
+      +-------+
+</PRE>
+
+When M is up again, you just have to issue on it the same <code>CHANGE
+MASTER</code> as the one issued on S2 and S3, so that M becomes a slave of S1 and
+picks all the WC writes it has missed while it was down. Now to make M a
+master again (because it is the most powerful machine, for example), use
+the preceding procedure as if S1 was unavailable and M was to be the new
+master. During the procedure, don't forget to run <code>RESET MASTER</code> on M
+before making S1, S2,  and S3 slaves of M. Otherwise, they may pick up old
+WC writes from before the point at which M became unavailable.
+
+</UL>
+
+<P>
+We are currently working on integrating an automatic master election
+system into MySQL, but until it is ready, you will have to
+create your own monitoring tools.
+
+</P>
+
+
+
+<H2><A NAME="Replication_Problems" HREF="manual_toc.html#Replication_Problems">6.10  Troubleshooting Replication</A></H2>
+
+<P>
+If you have followed the instructions, and your replication setup is not
+working, first check the following:
+
+</P>
+
+<UL>
+<LI>
+
+<strong>Check the error log for messages</strong>. Many users have lost time
+by not doing this early enough.
+
+<LI>
+
+Is the master logging to the binary log? Check with <code>SHOW MASTER STATUS</code>.
+If it is, <code>Position</code> will be non-zero. If not, verify that you are
+running the master with the <code>log-bin</code> and <code>server-id</code> options.
+
+<LI>
+
+Is the slave running? Use <code>SHOW SLAVE STATUS</code> to check whether the
+<code>Slave_IO_Running</code> and <code>Slave_SQL_Running</code> values are both
+<code>Yes</code>.
+If not, verify the options that were used when starting the slave server.
+
+<LI>
+
+If the slave is running, did it establish a connection to the master? Use
+<code>SHOW PROCESSLIST</code>, find the I/O and SQL threads and check their 
+<code>State</code> column to see how they display.
+See section <A HREF="manual_Replication.html#Replication_Implementation_Details">6.3  Replication Implementation Details</A>.
+If the I/O thread state says <code>Connecting to master</code>, verify the
+privileges for the replication user on the master, master hostname, your
+DNS setup, whether the master is actually running, and whether it is reachable
+from the slave.
+
+<LI>
+
+If the slave was running before but now has stopped, the reason usually is
+that some statement that succeeded on the master failed on the slave. This
+should never happen if you have taken a proper snapshot of the master, and
+never modify the data on the slave outside of the slave thread. If it does,
+it is a bug or you have encountered one of the known replication limitations
+described in section <A HREF="manual_Replication.html#Replication_Features">6.7  Replication Features and Known Problems</A>.  If it is a bug, see
+section <A HREF="manual_Replication.html#Replication_Bugs">6.11  Reporting Replication Bugs</A> for instructions on how to report it.
+
+<LI>
+
+If a statement that succeeded on the master refuses to run on the slave, and
+it is not feasible to do a full database resynchronization (that is, to
+delete the slave's database and copy a new snapshot from the master), try
+the following:
+
+
+<OL>
+<LI>
+
+Determine whether
+the slave's table is different from the
+master's. Try to understand how this happened.
+Then make the slave's table
+identical to the master's and run <code>START SLAVE</code>.
+
+<LI>
+
+If the preceding step does not work or does not apply, try to understand
+whether it would
+be safe to make the update manually (if needed) and then ignore the next
+statement from the master.
+
+<LI>
+
+If you decide that you can skip the next statement from the master, issue
+the following statements:
+
+
+<PRE>
+mysql&#62; SET GLOBAL SQL_SLAVE_SKIP_COUNTER = n;
+mysql&#62; START SLAVE;
+</PRE>
+
+The value of <code>n</code> should be 1 if the next statement from the master
+does not use <code>AUTO_INCREMENT</code> or <code>LAST_INSERT_ID()</code>. Otherwise,
+the value should be 2.  The reason for using a value of 2 for statements
+that use <code>AUTO_INCREMENT</code> or <code>LAST_INSERT_ID()</code> is that they
+take two events in the binary log of the master.
+
+<LI>
+
+If you are sure that the slave started out perfectly synchronized with the master,
+and no one has updated the tables involved outside of slave thread, then
+presumably the discrepancy is the result of a bug. If you are running the most
+recent version, please report the problem. If you are running an older
+version of MySQL, try upgrading.
+</OL>
+
+</UL>
+
+
+
+<H2><A NAME="Replication_Bugs" HREF="manual_toc.html#Replication_Bugs">6.11  Reporting Replication Bugs</A></H2>
+
+<P>
+When you have determined that there is no user error involved, and replication
+still either does not work at all or is unstable, it is time to send
+us a bug report. We need to get as much information as possible from you to be able
+to track down the bug. Please do spend some time and effort preparing a good
+bug report. 
+
+</P>
+<P>
+If you have a repeatable test case that demonstrates the bug, please
+enter it into our bugs database
+at <a HREF="http://bugs.mysql.com/">http://bugs.mysql.com/</a>. If you have a phantom problem (one that
+you cannot duplicate ``at will''), use the following procedure:
+
+</P>
+
+<OL>
+<LI>
+
+Verify that no user error is involved. For example, if you update the
+slave outside of the slave thread, the data will go out of sync, and you can
+have unique key violations on updates. In this case, the slave thread will
+stop and wait for you to clean up the tables manually to bring them in sync.
+This is not a replication problem. It is a problem of outside interference
+that causes replication to fail.
+
+<LI>
+
+Run the slave with the <code>--log-slave-updates</code> and <code>--log-bin</code>
+options.
+They will cause the slave to log the updates that it receives from the master
+into its own binary logs.
+
+<LI>
+
+Save all evidence before resetting the replication state. If we have no
+information or only sketchy information, it becomes difficult or impossible
+for us to track down the problem. The evidence you should collect is:
+
+
+<UL>
+<LI>
+
+All binary logs from the master
+
+<LI>
+
+All binary logs from the slave
+
+<LI>
+
+The output of <code>SHOW MASTER STATUS</code> from the master at the time
+you have discovered the problem
+
+<LI>
+
+The output of <code>SHOW SLAVE STATUS</code> from the master at the time
+you have discovered the problem
+
+<LI>
+
+Error logs from the master and the slave
+</UL>
+
+<LI>
+
+Use <code>mysqlbinlog</code> to examine the binary logs. The following should
+be helpful
+to find the trouble query, for example:
+
+<PRE>
+shell&#62; mysqlbinlog -j pos_from_slave_status \
+           /path/to/log_from_slave_status | head
+</PRE>
+
+</OL>
+
+<P>
+Once you have collected the evidence for the phantom problem, try hard to
+isolate it into a separate test case first. Then enter the problem into
+our bugs database at <a HREF="http://bugs.mysql.com/">http://bugs.mysql.com/</a> with as much
+information as possible.
+
+</P>
+
+<P><HR><P>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_MySQL_Database_Administration.html">previous</A>, <A HREF="manual_MySQL_Optimization.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+ </BODY>
+ </HTML>

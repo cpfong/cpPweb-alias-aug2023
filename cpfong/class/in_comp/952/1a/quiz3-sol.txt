@@ -1,0 +1,18 @@
+解釋名詞:
+GUI: Graphic User Interface 圖型使用者介面, 電腦和人溝通的方式使用圖型而非打指令, 例如 window xp 全是圖型介面
+icon: 圖例, 在 window 桌面上有許多的程式代表的圖案, 那些小圖案即為圖例
+clipboard: 剪貼薄, 在電腦把一小段文件或物件拷貝時即先放到 clipboard 上, 再由 clipboard 複製到其它的場所
+防火牆: 防止電腦遭到破壞的防線, 可以有軟體和硬體的, 設定妥後外界不當程式不再任意可以入侵
+
+OS 可以分成那些主要的類型
+作業系統主要可以分成: 以同一時間內可以工作可分單工, 多工 以同一時間上機則可分 單人, 多人
+所以 os 大致可以分成: 單人單工, 單人多工, 多人多工, 和即時作業系統
+
+列舉 4 家防毒軟體公司
+symantec, trend, avp, panda
+
+列舉目前常見 5 個 pc 上使用的 os
+windows xp, 紅帽 linux, mac os, FreeBSD, window 2000
+
+MS office 內含那些軟體
+excel, word, powerpoint, access

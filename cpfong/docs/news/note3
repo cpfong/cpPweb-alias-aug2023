@@ -1,0 +1,5 @@
+sendmail 有一個 usenet 的值可以打開, 有一個新的 sendmail.cf
+後, 所有的送給 xxxx.usenet@news.fjtc.edu.tw 的信全會由 
+sendmail 處理 (垃圾不落地) 立即叫 /usr/local/news/bin/inew 處理
+不和 mail2news 一樣要進入 user 的信箱再處理, 但比較 danger
+因為任何人可以送信給 xxxx.usenet 

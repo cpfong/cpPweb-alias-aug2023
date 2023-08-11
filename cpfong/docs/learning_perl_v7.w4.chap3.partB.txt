@@ -1,0 +1,35 @@
+p52 exercise
+
+my $pi=3.141592654;
+my $r=12.5;
+my $p=2*$pi*$r;
+
+print "1st radius=$r per=$p\n";
+
+print "input radius now: ";
+chomp( $r=<STDIN> );
+$p=2*$pi*$r;
+print "2nd radius=$r per=$p\n";
+
+print "input radius no less than 0: ";
+chomp( $r=<STDIN> );
+if ($r <= 0){
+ $p=0;
+}
+else{
+ $p=2*$pi*$r;
+}
+print "3rd radius=$r per=$p (no less then 0)\n";
+
+print "input 2 number in two lines\n";
+my ($n1, $n2)=(<STDIN>,<STDIN>);
+chomp n1; chomp n2;
+
+print "n1 * n2 = ", n2*n1, "\n";
+
+$a=<STDIN>; #scalar
+@a=<STDIN>; #array ^d to stop input
+chomp(@a);
+chomp(@a=<>);
+
+

@@ -1,0 +1,5 @@
+s vipw
+
+#news:*:8:8::0:0:News Subsystem:/:/sbin/nologin
+news:*:8:8::0:0:News Subsystem:/:/bin/sh
+

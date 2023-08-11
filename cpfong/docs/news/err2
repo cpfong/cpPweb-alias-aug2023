@@ -1,0 +1,15 @@
+Comaq-> tail news.err 
+Dec 27 21:42:40 hiedoc innd: SERVER bad_newsfeeds no feeding sites
+----------------------------------------------------
+cpf -- don't do the feeding now, so this will be ok!!
+
+
+Comaq-> cat news.notice 
+Dec 27 21:42:40 hiedoc innd: SERVER descriptors 3722
+Dec 27 21:42:40 hiedoc innd: SERVER outgoing 3709
+Dec 27 21:42:40 hiedoc innd: SERVER ccsetup control:12
+Dec 27 21:42:40 hiedoc innd: SERVER lcsetup localconn:14
+Dec 27 21:42:40 hiedoc innd: SERVER rcsetup remconn:4
+Dec 27 21:42:40 hiedoc innd: SERVER bad_newsfeeds no feeding sites
+Dec 27 21:42:40 hiedoc innd: SERVER perl filtering enabled
+Dec 27 21:42:40 hiedoc innd: SERVER starting

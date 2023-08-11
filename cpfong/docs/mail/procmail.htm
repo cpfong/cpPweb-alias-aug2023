@@ -1,0 +1,184 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<meta name="keywords" content="procmail,virus,spam,廣告信,垃圾信,病毒,郵件,freebsd,sendmail,mail,ports,faq">
+<meta name="description" content="苗栗縣大湖鄉大南國民小學 FreeBSD 全球資訊網路架站日誌">
+<meta name="robots" content="all"><!-- 允許搜尋目前的網頁、以及所有與此連結的網頁-->
+<title>PROCMAIL</title></head>
+<body>
+<h1>PROCMAIL</h1><hr>
+最近郵件病毒肆虐，因此，我希望能從主機上直接過濾外來的郵件。procmail是不錯的選擇。<br>
+廣告、垃圾信件漫天飛，只要來第一封，就加入信件過濾規則中，就再也收不到了。
+<hr><h2>安裝procmail：</h2>
+用<a href="http://freebsd.lab.mlc.edu.tw/ports.htm">Ports</a>的方式安裝procmail。
+
+<hr><h2>建立procmail的設定檔：</h2>
+<table width="75%" border="0" bgcolor="#eeeeee">
+	<tbody><tr>
+		<td>vi /usr/local/etc/procmailrc</td>
+	</tr>
+</tbody></table>
+<table width="75%" border="0" bgcolor="#dddddd">
+	<tbody><tr>
+		<td><pre>MAILDIR=/var/mail
+VERBOSE=off
+PATH=/bin:/sbin:/usr/bin:/usr/sbin/:/usr/local/bin:/usr/local/sbin
+LOGFILE=/var/log/procmail.log
+
+# procmail 會寄進來的郵件依下列規則逐一過濾，未符合底下規則的信件都放行。
+
+# 過濾這樣的主旨(WORM_KLEZ.G)：
+:0b
+* ^Subject:.*(Let's be friends)
+/dev/null
+
+# 根據 ip 地址來防止濫發郵件？
+:0:
+* ^Received:.*(s(n[0-9]|ky)\.seed\.net\.tw|\.is\.net\.tw|\.HINET-IP\.hinet\.net|\.ethome\.net\.tw) 
+/dev/null
+
+# 過濾附件中有下列副檔名的信件。
+:0 B
+* ^Content-Type:.*
+* ^.*name=.*\.(hta|com|pif|vbs|vbe|js|jse|exe|bat|cmd|vxd|scr|shm|dll|SCR)
+/dev/null
+
+* ^.iframe src=3Dcid
+/dev /null
+
+# 這些寄件者的來信直接丟棄
+:0 Hw
+* ^.*[Ff]rom:.*MAILER-DAEMON|bgates@microsoft.com
+/dev/null
+
+#SirCam Virus
+:0 Bh  
+*I send you this file in order to have your advice
+/dev/null
+
+#Nimda Virus
+:0 Bh
+* ^Content-Type:.*audio/x-wav.*
+* name="readme.exe"
+/dev/null
+
+:0 Bh
+* ^Content-Type:.*audio/x-wav.*
+* name="sample.exe"
+/dev/null
+
+:0 B
+* ^Content-Type:.*multipart/mixed.*
+* name="readme.exe"
+/dev/null
+
+:0 B
+* ^Content-Type:.*multipart/mixed.*
+* name="sample.exe"
+/dev/null
+</pre>
+		</td>
+	</tr>
+</tbody></table>
+<p>
+請參考臺南縣教育網路中心的設定檔：
+<a href="ftp://ftp.tnc.edu.tw/pub/Sysop/MAIL/procmailrc" target="_blank">ftp://ftp.tnc.edu.tw/pub/Sysop/MAIL/procmailrc</a><br>
+修改完畢存檔後便可立即套用，無需重新啟動 sendmail 。
+</p><hr>
+2002.04.30 我發現透過 webmail 收信也會中毒，病毒(WORM_KLEZ.G)透過網頁，瀏覽時就會強迫你下載，還來不及反應就中鏢了。
+<hr><h2>Sendmail + Procmail (IN FreeBSD 4.4-RELEASE)：</h2>
+<table width="75%" border="0" bgcolor="#eeeeee">
+	<tbody><tr>
+		<td>cd /etc/mail<br>vi freebsd.mc</td>
+	</tr>
+</tbody></table>
+將
+<table width="75%" border="0" bgcolor="#dddddd">
+	<tbody><tr>
+		<td><pre>divert(-1)
+divert(0)
+VERSIONID(`$FreeBSD: src/etc/sendmail/freebsd.mc,v 1.10.2.11 2001/07/14 18:07:27
+ gshapiro Exp $')
+OSTYPE(freebsd4)
+DOMAIN(generic)
+
+FEATURE(access_db, `hash -o /etc/mail/access')
+FEATURE(blacklist_recipients)
+FEATURE(local_lmtp)
+FEATURE(mailertable, `hash -o /etc/mail/mailertable')
+FEATURE(relay_based_on_MX)
+FEATURE(virtusertable, `hash -o /etc/mail/virtusertable')
+
+define(`confCW_FILE', `-o /etc/mail/local-host-names')
+
+define(`confMAX_MIME_HEADER_LENGTH', `256/128')
+define(`confNO_RCPT_ACTION', `add-to-undisclosed')
+define(`confPRIVACY_FLAGS', `authwarnings,noexpn,novrfy')
+MAILER(local)
+MAILER(smtp)</pre></td>
+	</tr>
+</tbody></table>
+增加一行，改為：
+<table width="75%" border="0" bgcolor="#dddddd">
+	<tbody><tr>
+		<td><pre>divert(-1)
+divert(0)
+VERSIONID(`$FreeBSD: src/etc/sendmail/freebsd.mc,v 1.10.2.11 2001/07/14 18:07:27
+ gshapiro Exp $')
+OSTYPE(freebsd4)
+DOMAIN(generic)
+
+FEATURE(access_db, `hash -o /etc/mail/access')
+FEATURE(blacklist_recipients)
+FEATURE(local_lmtp)
+FEATURE(mailertable, `hash -o /etc/mail/mailertable')
+FEATURE(relay_based_on_MX)
+FEATURE(virtusertable, `hash -o /etc/mail/virtusertable')
+
+define(`confCW_FILE', `-o /etc/mail/local-host-names')
+
+define(`confMAX_MIME_HEADER_LENGTH', `256/128')
+define(`confNO_RCPT_ACTION', `add-to-undisclosed')
+define(`confPRIVACY_FLAGS', `authwarnings,noexpn,novrfy')
+<font color="red">FEATURE(local_procmail)</font>
+MAILER(local)
+MAILER(smtp)</pre></td>
+	</tr>
+</tbody></table>
+建立一個有支援procmail的sendmail.cf檔：
+<table width="75%" border="0" bgcolor="#eeeeee">
+	<tbody><tr>
+		<td>make all install</td>
+	</tr>
+</tbody></table>
+新的sendmail.cf主要變更如下：
+<table width="75%" border="0" bgcolor="#dddddd">
+	<tbody><tr>
+		<td>
+<pre>Mlocal,         P=/usr/local/bin/procmail, F=lsDFMAw5:/|@qSPfhn9, S=EnvFromL/HdrFromL, R=EnvToL/HdrToL,
+                T=DNS/RFC822/SMTP,
+                A=procmail -Y -a $h -d $u
+</pre>
+		</td>
+	</tr>
+</tbody></table>
+
+<p>
+
+</p><hr><h2>重新啟動sendmail：</h2>
+<table width="75%" border="0" bgcolor="#eeeeee">
+	<tbody><tr>
+		<td>killall sendmail<br>/usr/sbin/sendmail -bd -q30m</td>
+	</tr>
+</tbody></table>
+<p>
+
+</p><hr><h2>網路上的資源：</h2>
+<ul>
+   <li><a href="http://www.procmail.org/">http://www.procmail.org/</a>
+   </li><li><a href="http://www.uwasa.fi/%7Ets/info/proctips.html">http://www.uwasa.fi/~ts/info/proctips.html</a>
+   </li><li><a href="http://freebsd.sinica.edu.tw/%7Estatue/zh-tut/procmail.html">http://freebsd.sinica.edu.tw/~statue/zh-tut/procmail.html</a>
+   </li><li><a href="http://mir.ncnu.edu.tw/www.sendmail.org/m4/cf-readme.txt">http://mir.ncnu.edu.tw/www.sendmail.org/m4/cf-readme.txt</a>
+   </li><li><a href="http://hpds.ee.ncku.edu.tw/%7Eguard/work/mail/">http://hpds.ee.ncku.edu.tw/~guard/work/mail/</a>
+   </li><li><a href="http://weber.tn.edu.tw/chukk/tech/procmail.htm">http://weber.tn.edu.tw/chukk/tech/procmail.htm</a>
+</li></ul>
+</body></html>

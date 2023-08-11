@@ -1,0 +1,11 @@
+Q: what is plack?
+A:
+Plack is a Perl web application programming framework inspired by Rack for Ruby and WSGI for Python,[1][2] 
+and it is the project behind the PSGI specification used by other frameworks such as Catalyst and Dancer.[3] 
+Plack allows for testing of Perl web applications without a live web server.[4]
+
+Q: since plack can do web, why need ngnix?
+   cps note: this is original question.
+     I am trying to deploy my little Catalyst web app using Plack/Starman. All the documentation seems to suggest I want to use this in combination with nginx. What are the benefits of this? Why not use Starman straight up on port 80?
+A:
+One reason is that a lightweight frontend server (even Apache is OK) consumes much less memory per connection than a typical Starman process (a couple of MB vs. tens or more than 100 MB). Since a connection is open for some time, especially if you want to use keep-alive connections, you can support a large number of simultaneous connections with much less RAM. Only make sure that the buffer size of the proxying frontend server is large enough to load a typical HTTP response immediately from the backend. Then the backend is free to process the next request.

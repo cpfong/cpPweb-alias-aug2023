@@ -1,0 +1,24 @@
+terminal 
+--
+find		command + space / terminal
+launcher	misc / terminal
+
+resize terminal
+command +
+
+copy and paste
+--
+mouse	mark, copy(command+c), paste(command+v)
+
+@MINI-> ssh -p 8080 A111500301@www.ifong.org
+The authenticity of host '[www.ifong.org]:8080 ([207.148.89.120]:8080)' can't be established.
+ECDSA key fingerprint is SHA256:zJrxfzWa7F7dEpGf3gKJO1TIeRtHLSgquuWG0Y+2Iwc.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+
+Warning: Permanently added '[www.ifong.org]:8080,[207.148.89.120]:8080' (ECDSA) to the list of known hosts.
+Password for A111500301@ssh.local:
+
+Last login: Wed Feb 15 12:09:24 2023 from 218.187.135.55
+FreeBSD 13.0-RELEASE (GENERIC) #0 releng/13.0-n244733-ea31abc261f: Fri Apr  9 04:24:09 UTC 2021
+Welcome to FreeBSD!
+Release Notes, Errata: https://www.FreeBSD.org/releases/

@@ -1,0 +1,51 @@
+ <meta http-equiv='Content-Type' content='text/html; charset=big5'>
+<html>
+Q: 我要和外面連了. <br>
+A: <a href=http://www.blank.org/innfaq/part4.html> reader & feeder  </a><br>
+<br>
+Q: feeder 中的 hosts.nntp 和 reader 中的 nnrp.access 全不見了 <br>
+A: 那是古典音樂, 現代樂已改成 incoming.conf 和 readers.conf 了 <br>
+<br>
+Q: incoming.conf 和 innfeed.conf 有何不同 ?<br>
+A: Note that incoming.conf is of course located on the receiving end and <br>
+   newsfeeds/innfeed.conf is on the sending end. <br>
+
+<ol>
+<li> tt 不讓 news.fjtc 讀信 (reader) 也不讓 news.fjtc 餵信的 <a href=./nono> 例子 </a> -- 可以讀信的 <a href=./rok>例子 </a> -- 可以餵信的 <a href=./test1> 例子 </a>
+<br>
+<br>
+<li> 餵信 feeder 
+<ol type=disc>
+	<li> 把 news 設成可以餵我們 tt.fjtc.edu.tw 信的人 <a href=./incoming.1.conf> incoming.conf </a>
+	<li> 檢查 /usr/local/news/bin/inncheck
+	<li> 重 load 一次  <a href=./incoming.2.conf> Reload </a>
+</ol>
+<br>
+<li> 讀信 reader
+<ol type=disc>
+	<li>  news 可以讀 tt.fjtc.edu.tw 信的人 <a href=./reader.2.conf> reader.conf </a>
+</ol>
+<br>
+<li> 確定 client (news.fjtc) 可以在伺服器 (tt.fjtc) 上可以 post 文章.
+<ol type=disc>
+	<li> you may just use tin -g localhost (whatever)
+	<li> 利用 <a href=./where_is_inews>inews </a>, 且先在你的 home 下做一個 <a href=./sig>.signature</a>
+	<li> make cpfong as news <a href=./ng>group </a>
+	<li> 注意: 這個軟體十分的 picky (龜毛), 使用上要小心 (空白,字, ...etc) 
+	<li> <a href=./nhd>news -h -D</a> 只看一下你 post 的結果, 不真的在 server 上 post
+</ol>
+<br>
+<li> 控制出去 artice 行為的 newsfeeds (newsfeeds - determine where Usenet articles get sent  )
+<ol type=disc>
+<li> 注意: <a href=./sel1>選擇 </a> -- <a href=./excl> ! (驚嘆號) </a>
+<li> <a href=./me2>newsfeeds Manual </a> -- <a href=./newsfeeds.ORG> newsfeeds </a> -- <a href=./mecp.html> 心得 </a> --  再談這個東東<a href=./mechen>陳昌盛</a>
+</ol>
+<br>
+<li> 有了 newsfeeds 的 idea, 我們來看數種不同的實作的餵信方式
+<ol type=disc>
+<li> <a href=http://www.blank.org/innfaq/part4.html#4.20> 英文1 </a> -- <a href=./chen2> 中文  </a> --
+</ol>
+
+</ol>
+</html>
+

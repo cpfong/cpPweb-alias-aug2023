@@ -1,0 +1,282 @@
+<script type="text/javascript">
+   var _hinet=parent.document.getElementsByTagName("frameset");
+   for(var i=0;i<_hinet.length;i++){
+      if(_hinet[i].id.indexOf("MywebFrameSet")>=0){
+         _hinet[i].cols="*,0";
+      }
+   }
+   try{
+      ADPage.close();
+   }
+   catch(err){}
+   CheckADPage = function(){};
+</script>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+<style type="text/css">
+<!--
+	a		{ color:blue; text-decoration:none;}
+	a:hover		{ text-decoration:underline; color:orange}
+	a:active	{ color:#99cccc}
+
+//-->
+</style>
+
+<!--
+	a:visited	{ color:purple }
+	a{color:#0000ff; text-decoration:none;font-size:9pt}
+	a:hover		{ text-decoration:underline; color:red}
+-->
+
+<html>
+<head><title>CPFong 首頁</title><body bgcolor=white>
+
+<table border=0 cellspacing=0 cellpadding=2>
+<tr><th rowspan=2>
+<img width=250 height=59 align=left border=0 src=./ver7.gif usemap="#cplogo"  alt=CP_Home>
+<map name="cplogo">
+<area shape="rect" coords="0,1,20,56" href="http://cp.mis.fotech.edu.tw/class/ext/98_internet_basic" title="H">
+<area shape="rect" coords="24,1,59,27" href="http://30boxes.com/?themeUri=http://cp.mis.fotech.edu.tw/30b/cp" title="calendar">
+<area shape="rect" coords="24,28,59,56" href="http://www.google.com/calendar" title="calendar">
+<area shape="rect" coords="61,1,97,56" href=./personal_index.html title="personal">
+<area shape="rect" coords="99,1,132,56" href="./hidden/index.html" title="cp's Home">
+<area shape="rect" coords="133,1,164,57" href="https://chrome.google.com/webstore/detail/mosh/ooiklbnjmhbcgemelgfhaeaocllobloj" title="mOsh">
+<area shape="rect" coords="166,1,195,58"  href="http://www.ifong.org/music_index.html" title="music">
+<!--
+<area shape="rect" coords="166,39,195,58" href="http://mail.mis.fotech.edu.tw/cgi-bin/openwebmail/openwebmail.pl" title="cp.WebMail">
+<area shape="rect" coords="196,1,228,58" href="https://justpaste.it/cpnote" title="share">
+-->
+<area shape="rect" coords="196,1,228,58" href=./game.html title="game">
+<area shape="rect" coords="229,1,255,58" href="http://mail.mis.fotech.edu.tw/cgi-bin/openwebmail/openwebmail.pl" title="mail.MIS">
+<area shape="default" nohref>
+</map>
+
+<td nowrap align=left>
+<small>
+<a href="http://www.google.com.tw/"><img src=google-tw64.png></a>
+<a href=./yahoo-stock.html><img src=stock-64.jpg></a>
+<a href="https://www.google.com/?hl=en&gws_rd=cr,ssl&ei=PZJCV_TZLMS80gTshazABA&fg=1"><img src=./google-eng-64.jpg></a>
+<a href="http://www.yahoo.com.tw"><img src=yahoo-64.jpg></a>
+<a href="http://www.mail.com"><img src=mail.jpg></a>
+<!--
+<a href=https://name.com><img src=name-64.jpg></a>
+-->
+<a href=https://freedns.afraid.org><img src=freeDNS-3.jpg></a>
+<!--
+<a href="http://ermg.lib.ncku.edu.tw/cgi-bin/smartweaver/browse.cgi?o=der&p=/smartweaver/login.htm">成圖</a>-
+<a href="http://www.metacrawler.com/">Craw</a>-
+<a href="http://www.readability.com">`Readability</a>-
+<a href="./search_engine/other_search_engine.html">其它_other</a>
+-->
+</small>
+
+<tr><td>
+
+<small>
+
+<a href=./google_services.html><img src="./google_services_s.jpg"></a>
+
+<!-- zzz
+<a href=https://mail.google.com/mail/?ui=html&zy=h><img src="./gmail-64.jpg"></a>
+<a href=./aws.html><img src=./aws-logo-64.png></a>
+<a href=https://dropbox.com><img src=./dropbox-64.jpg></a>
+<a href=https://dropbox.com><img src=./dropbox6.png></a>
+-->
+<a href=./aws.html><img src=./a2z-nn.png></a>
+<a href=./tmpfiles.html><img src=ftp_icon.png></a>
+<a href=./ruten.html><img src=./ruten3.png></img></a>
+
+<!--
+<a href=./gdoc.html> google Doc </a> -
+<a href=https://www.dropbox.com/developers>dbx_dev</a>-
+<a href=./3c_index.html>Sale_買</a> - 
+<a href=http://instapaper.com>read later</a> -
+<a href=http://pastebin.com>Paste</a> - 
+<a href="http://www.filesearching.com"><img src=./search-64-2.jpg></a>
+<a href="https://map.google.com"><img src=./google-map-64.jpg></a>
+<a href="./post-it.html"><img src=./postit-64.jpg></a>
+<a href="http://www.ebay.com"><img src=./ebay-s.jpg></a>
+<a href=https://web.telegram.org><img src=./telegram-1.png></a>
+<a href="./scratch-not-last-long.html"><img src=./postit-60.jpg></a>
+-->
+<a href="https://www.ebay.com"><img src=./img/ebay64.png></a>
+<a href=./cpfong/tools/index.html><img src=./tools-48x48.png></a>
+<!--
+<a href=http://199.102.79.18:8080/~cpfong/tools/index.html><img src=./tools-48x48.png></a>
+<a href=https://www.learnthat.org/dictionary><img src=./wordnik3.png></a>
+<a href="http://www.slime.com.tw/">slime</a> - 
+<a href="http://www.simtel.net/">simtel</a> - 
+-->
+</small>
+</table>
+
+<table border=0 cellspacing=2 cellpadding=2 width="100%">
+<tr><td VALIGN=TOP WIDTH="28%">
+  <table BORDER=0 CELLSPACING=0 WIDTH="100%">
+    <tr><td>
+    <table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="100%" bgcolor="white">
+        <tr><th colspan=4 align=middle bgcolor="#ffcc00"><b> Company </b>
+	<tr><td><a href="./iphone4.html">ip4</a>
+	    <td><a href="./palm.html">麵包</a>
+	    <td><a href="./puppy.html">puppy</a>
+<!--
+	<tr><td><a href="http://www.thinkingtaiwan.com/">Ttwn</a>
+	<tr><td><a href="http://wlanac.hinet.net/no_cookie_loginpages/dns_post.shtml?">cht wifi</a>
+-->
+	<tr><td><a href="http://www.economist.com/printedition/covers">學人C</a>
+	    <td><a href=http://www.economist.com/>學人</a>
+	    <td><a href="./time.html">Magazine</a>
+
+        <tr><td><a href=./hinet_index.html>hinet</a>
+	    <td><a href=".fax_index.html">fax</a>
+	    <td><a href="http://www.dell.com">Dell</a>
+<!--
+	<tr><td><a href="http://hiedoc.fjtc.edu.tw/cgi-bin/openwebmail/openwebmail.pl">DocM</a>
+-->
+	<tr><td><a href="https://developers.google.com/apps-script/guides/sheets#reading">gdoc</a>
+	    <td><a href="ftp://cpfong@ms24.hinet.net">ms24</a>
+	    <td><a href=./mod-perl2.html>modperl2</a>
+    </table>         
+    <tr><td>
+    <table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="100%" BGCOLOR="white" >
+        <tr><th colspan=4 align=middle bgcolor="#ffcc00"><b> FreeStuff</b>
+	<tr>
+            <td><a href="http://blog.cp.mis.fotech.edu.tw/">blog</a> -
+            <td><a href="http://mail.yahoo.com">c@Y</a> -
+            <td><a href="./free/other.html">免費</a>
+        <tr><td><a href="">行事</a>
+            <td><a href="./ftp/lftp.html">Lftp</a>
+            <td><a href="./mountain">登山</a>
+        <tr><td><a href="http://www.flickr.com/">photo</a>
+            <td><a href="./tools">Tools</a>
+<!--	    <td><a href=./tmp/linklink.exe>連連看</a> -->
+    </table>         
+  </table>         
+
+<td VALIGN=TOP WIDTH="44%" bgcolor="#dddddd">
+
+  <table BORDER=0 CELLSPACING=0 >
+	<tr><td align=center valign=top>
+
+
+	<!-- This OneLook(R) search form may be added to your web page. -->
+	<!-- You may change the look and feel of the form, but be careful -->
+	<!-- not to change the parameter names, or your form might not work! -->
+
+<!--
+	<FORM method=get action=http://www.google.com/custom>
+	<p>
+	<INPUT TYPE=text name=q size=50>
+	<INPUT type=submit VALUE="開始搜尋">
+	</p>
+	<p><input type=radio name=sitesearch value="cp.mis.fotech.edu.tw" checked>
+	cpfong 站內搜尋</p>
+	<input type=radio name=sitesearch value="">
+	Google 徹底搜尋</p>
+	</FORM>
+-->
+	<form method="GET" action="http://www.onelook.com/">
+		<input type="hidden" name="loc" value="pub">
+		<b>Enter word or phrase</b>: <input name="w" value="">
+		<input type="submit" value="查字典">
+	</form>
+
+  </table>
+
+  <table border=0 cellspacing=2 cellpadding=2 width="100%">
+	<tr><td width="33%"> <small>
+
+
+	  <a href=http://www.ifong.org:8080/~cpfong/dsl/dsl.index.html>SM Linux</a><br>
+	  <a href="./chinese.html">C IME</a><br>
+	  <a href="./xwinManager.html">XWin Mgr</a><br>
+	  <a href="./zhuyin-kb.html">zhuyin</a><br>
+	  <a href=./hliu.html> wu sha mi</a><br>
+<!--	  <a href="./os/freebsd.html"> Others</a></td> -->
+	<td width="33%"> <small>
+	  <a href="http://www.livecdlist.com/">live</a></br>
+	  <a href=./tinycore.html>TinyCore</a><br> 
+<!--
+	  <a href="http://www.linux.org.tw">Linux@Twn</a><br> 
+	  <a href="http://linuxfab.cx/">LinuxFab</a><br>
+-->
+	  <a href=./os/android.html> android</a><br>
+	  <a href="./os/dos/index.html">DOS</a><br>
+	  <a href=./uu_index.html>Unix(BSD)</a><br>
+	  <a href="./puppy.html"> Puppy </a></td>
+	<td width="33%"> <small>
+	  <a href="./os/solaris.html"> Solaris </a><br>
+	  <a href="http://freeware.sgi.com">SGI</a><br>
+	  <a href="./edu/edu.html">TW 3W</a><br>
+	  <a href="./misc/misc.html">misc</a><br>
+	  <a href="./database/database.html">DataBase</a>
+  </table>
+
+<td VALIGN=TOP WIDTH="28%">
+<table BORDER=0 CELLSPACING=0 WIDTH="100%" >
+<small>
+<tr><th colspan=3 bgcolor="#99cccc"> Misc
+
+<!--
+<tr><td><a href="http://mtir.csie.ntu.edu.tw/mtir/mtir.html">翻譯</a> - 
+-->
+
+<tr><td><a href=./exam.html>翻譯_tran</a> --
+<!--
+    <td><a href=./phd_index.html>phd</a> --
+-->
+    <td><a href=./cpfong/docs/pingtung-class.html>pdn</a> --
+    <td><a href=./cpfong/docs>學習</a> --
+
+<!--
+    <td><a href=./firepad-browser-editor.html#-JutvPE2Gt-HZoovJZXv>share</a> --
+    <td><a href="https://shrib.com/cpnote">Share</a>
+    <td><a href="https://justpaste.it/cpnote">Share</a>
+    <td><a href="spam/procmail.html">spam</a>
+    <tr><td><a href="http://www.PLiG.org/xwinman/">XW</a>
+    <td><a href=http://www.radioswissclassic.ch/>SW</a> -
+<tr><td><a href="http://www.enlightenment.org">Enl</a> - 
+-->
+<tr><td><a href="http://www.inputfree.com/">網上輸入</a> --
+<!--
+<tr><td><a href="http://input.foruto.com/cjdict/Search_1.php">華通查_cj2</a> - 
+    <td><a href=./music_index.html>音樂_mu</a> - 
+    <td><a href=http://dict.tw/>倉頡線上</a> - 
+-->
+    <td><a href=http://www.chinesecj.com/ime/cj5.php>倉頡線上</a> - 
+    <td><a href=http://www.google.com/intl/zh-TW/inputtools/try/>g input</a> -
+<!--
+<tr><td><a href="http://www.ecj.hk/cjdict/cjdict.aspx">查易頡_fcj</a> --
+    <td><a href="http://www.ecj.hk/cjdict/cjdict.aspx">易頡_cj</a>
+<tr><td><a href=http://stroke-order.learningweb.moe.edu.tw/bopomofo.do>注音</a> --
+<tr><td><a href=./bpmf-kb3-utf8.html>注音</a> --
+-->
+<tr><td><a href=http://www.google.com/intl/zh-TW/inputtools/try/>g注音</a> --
+    <td><a href=http://input.foruto.com/cjdict/Search_1.php>查倉頡</a> -
+    <td><a href=http://ge.tt>get it</a> -
+<tr><td><a href=./1qaz-imgOnly.pdf>注KB</a>
+    <td><a href="http://www.ifong.org/~cpfong/class/ext/105_pdn_ext_linux_intro_using_TinyCore/tc-index.html">linux</a>
+    <td><a href=./quick_tools.index.html>快查_qu</a>
+<!--
+    <td><a href="./virus/index.html">病毒</a>
+
+<tr><td><a href="./firepad-browser-editor.html"> postIT </a> - 
+
+<tr><td><a href="http://n4jj.x.rootbsd.net:8080/~cpfong/docs/index-docs-utf8.html"> 學習 </a> - 
+<tr><td><a href="http://www.a.ifong.org/~cpfong/docs/index-docs-utf8.html"> 學習 </a> - 
+<tr><td><a href="./cpfong/docs/index-docs-utf8.html"> 學習 </a> - 
+-->
+<tr><td><a href="./1qaz.html">注音文字</a> - 
+    <td><a href="./ZoomIt.exe">Zoom</a> - 
+    <td><a href="./Pointofix.exe"> PFix</a>
+<tr><td><a href="https://www.cns11643.gov.tw/search.jsp?ID=1>全字庫</a>
+    <td><a href=./MobaXterm_Setup_7.7.msi>Mobaterm</a> 
+    <td><a href="http://misun2.fotech.edu.tw/~cpfong/class/index.html">資甲乙</a>
+<!-- <tr><td><a href="http://accounting.202.ddns.fjtc.edu.tw/FJA/"> 學校會計 </a> -->
+<tr><td><a href=./vnc_diff_os.html>vncviewer</a>
+    <td><a href=./fjtc_index.html>和春_fjtc</a> 
+    <td><a href="https://www.ifong.org/cpfong/docs/kmu.html">Zftp</a> - 
+<!--  test test <td><A HREF=http://www.livejournal.com/community/manage.bml>論壇</a> -->
+</small>
+</table>
+</table>         
+</body></html>

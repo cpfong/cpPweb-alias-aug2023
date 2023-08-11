@@ -1,0 +1,156 @@
+p120 
+exercise 1.  
+	while (<>){
+		if (/fred/){ 
+			print "has fred\n";
+		}
+	}
+
+	test.txt
+	fred flintstone
+
+exercise 2.
+	while (<>){
+		if (/[fF]red/){ 
+			print "has fred\n";
+		}
+	}
+
+exercise 3.
+	while (<>){
+		if (/\./){ 
+			print "has .\n";
+		}
+	}
+
+exercise 4.
+	while (<>){
+		if (/^[A-Z][a-z]/){ 
+			print "ok\n";
+		}
+	}
+
+exercise 5.
+	while (<>){
+		if (/(\S)\1/){ 
+			print "ok\n";
+		}
+	}
+
+chapter 8 以正規表示式進行比對
+
+8.1 以 m// 進行比對
+8.2 選項修飾符
+	8.2.1 以 /i 來進行不區分大小寫的樣式比對
+	8.2.2 以 /s 來比對任意字符
+	8.2.3 以 /x 加上留白
+	8.2.4 組合選項修飾符
+8.3 定位點
+	8.3.1 單字定位點
+8.4 繫結算符
+8.5 樣式內的安插
+8.6 比對變數
+	8.6.1 記憶的持續性
+	8.6.2 不具記憶功能的圓括號
+	8.6.3 具名比對變數
+	8.6.4 自動比對變數
+8.7 通用量詞
+8.8 優先順序
+8.9 樣式測試程式
+
+
+8.1 m/pattern/ 可以使用 m?pattern? 或 m%http://www.fotech.edu.tw% 來取代
+
+	while (<>){
+		if (m%http://www.hinet.net%) {
+			print "ok\n";
+		}
+	}
+
+	8.2.1.
+	while (<>){
+		if (/yes/i){
+			print "yes was keyin \n";
+		}
+	}
+
+	8.2.2 /s 可以跳過 \n 把下一行也列入比對
+        $_ = "abc\ndef\n";
+        print;
+        
+        if (/abc.*def/s){
+                printf "abcdef\n";
+        }
+
+	8.2.3 /x 為在比對中可以加入空白
+	/^-?\d+/ # 以上代表的是一開始可有一個 "可有可無" 的負號, 其後放一個或多個數字
+	-1 	--> ok
+	22 	--> ok
+
+	然而以上的 // 中間的字不易看懂, 所以可以加上 //x 改成如下: (還可以放入註解呢!)
+	/
+		^	# 開頭
+		-?	# 一個可有可無的減號
+		\d+	# 小數點前有一或多個數字
+		\.?	# 一個可有可無的小數點
+		\d*	# 小數點後可能會有若干個數字
+	/x 
+
+ 
+
+	if (	m{
+			barney
+			.*
+			fred
+		}six	# 注意,這個選項 s i x 即 skip, ignore, spaces 可跳行, 忽略大小寫, 可有空白
+	){
+		print "這個字串中先提到了 Barney 然後才提到 Fred!\n";
+	}
+
+	while (<>){
+		if (
+		/
+		^	# 開頭
+		-?	# 一個可有可無的減號
+		\d+	# 小數點前有一或多個數字
+		\.?	# 一個可有可無的小數點
+		\d*	小數點後可能會有若干個數字
+		/x 
+		){
+			print "ok\n";
+		}
+	}
+
+8.3 定位點
+	二個重要的定位點, 即 ^ 和 $ 前者為開始, 後者為結束
+	/^\s+$/ 表示開始為 tab space \n 而結束也是
+
+	8.3.1 單字定位點 \b
+	
+8.4 繫結符號
+	my $some_other = "I dream of betty rubble.";
+	if ($some_other =~ /\brub/){
+		print "there is RUB in $some_other\n";
+	}
+
+	以下範例中, $like_perl 不是 1 即為 undef
+	$like_perl = (<STDIN> =~ /\byes\b/i);
+
+8.5 樣式內的安插
+	$what = "larry";
+	while (<>){
+		if (/^$what/){
+			print "larry";
+		}
+	}
+
+	注意: $what 和課本之 ($what) 以有括號為佳, fred|barney 為例
+
+8.6 比對變數
+	小括號除了群組的功能外, 尚有記憶功能
+	$_ = "Hello there, neighbor";
+	if (/\s(\w+),/){
+		print $1;
+		print $';
+		print $`;
+	}

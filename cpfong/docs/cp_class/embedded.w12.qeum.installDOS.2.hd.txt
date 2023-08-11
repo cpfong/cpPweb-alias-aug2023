@@ -1,0 +1,12 @@
+# -boot
+#           Specify boot order drives as a string of drive letters. Valid drive
+#           letters depend on the target architecture. The x86 PC uses: a, b
+#           (floppy 1 and 2), c (first hard disk), d (first CD-ROM), n-p
+#           (Etherboot from network adapter 1-4), hard disk boot is the
+#           default. 
+#
+qemu-img create c.hd 10M
+qemu-system-i386 -hda c.hd -cdrom fdbootcd.iso -boot d
+
+then create partition table, make partition active, format c drive 
+install package then reboot with hda

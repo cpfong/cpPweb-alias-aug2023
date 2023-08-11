@@ -1,0 +1,16 @@
+<TABLE border=1>
+<TBODY>
+<TD>UserID</TD><TD>User Name</TD><TD>Password</TD><TD>E-mail Address</TD>
+<TD colspan=2>Action</TD>
+<?
+$fp = fopen("$homedir/user.txt","r");
+
+while($userinfo = fscanf($fp,"%s\t%s\t%s\t%s\n")){
+        list($id,$name,$pass,$email)=$userinfo;
+	echo "<TR>";
+	echo "<TD>$id</TD><TD>$name</TD><TD>$pass</TD><TD>$email</TD><TD><A href=index.php?menu=edit&uid=$id>Edit</A></TD><TD><A href=index.php?menu=del&name=$name>Delete</A></TD>";
+	echo "</TR>";
+                                }
+	echo "</TBODY>";
+	echo "</TABLE>";
+?>

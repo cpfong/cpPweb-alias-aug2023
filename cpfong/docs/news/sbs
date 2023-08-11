@@ -1,0 +1,33 @@
+su as news
+
+cd ~news/bin/filter
+mkdir cleanfeed
+fetch newest code in and untar it
+mkdir running;cd running
+
+cp ../cleanfeed-20020501/bad_* .
+cp ../cleanfeed-20020501/cleanfeed .
+cp ../cleanfeed-20020501/cleanfeed.local.sample ./cleanfeed.local
+
+vi cleanfeed
+$config_dir = '/usr/local/news/bin/filter/cleanfeed/running';
+chmod 775 cleanfeed
+
+cd /usr/local/news/bin/filter
+mv filter_innd.pl filter_innd.pl.ORG
+ln -s /usr/local/news/bin/filter/cleanfeed/running/cleanfeed ./filter_innd.pl
+
+news@hiedoc-> pwd
+/usr/local/news/src/cleanfeed/running
+vi cleanfeed.local
+active_file => '/usr/local/news/db/active
+statfile => '/usr/local/news/log/cleanfeed.stats'
+emp_dump_file => '/usr/local/news/tmp/empdump'
+debug_batch_directory => '/usr/local/news/spam'
+
+~news/bin/ctlinnd reload filter.perl memo
+
+tail ~news/log/news.notice
+Jan 13 22:08:35 hiedoc innd: SERVER reload filter.perl memo2
+
+NO ERROR!!

@@ -1,0 +1,5 @@
+1. add one user (with english)
+2. mobaxterm
+3. install rclone
+4. crontab
+5. script backup now

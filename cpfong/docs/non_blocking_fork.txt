@@ -1,0 +1,36 @@
+#obj: non blocking fork ex
+
+use POSIX ":sys_wait_h";
+
+$SIG{CHLD}=\&REAPER;
+sub REAPER {
+    my $child;
+    while(( $child = waitpid(-1, &WNOHANG)) > 0){
+        my $localtime = localtime;
+        print "Parent: Child $child was reaped - $localtime.\n";
+    }
+    $SIG{CHLD}=\&REAPER;# install *after* calling waitpid
+}
+
+# main start
+my @children_pids;
+print "Parent: my pid $$\n";
+
+for my $count (1..5){
+    die "$@" unless defined( my $child_pid = fork() );
+    if ($child_pid) {
+        push @children_pids, $child_pid;
+        print "children's PIDs: @children_pids\n";
+    } else { # I am the child
+        my $wait_time = int(rand(10));
+        sleep $wait_time;
+        my $localtime = localtime;
+        print "Child: Some child exited at $localtime\n";
+        exit 0; # Exit the child
+    }
+}
+
+# Keep parent alive to reap all children
+while (1) {
+    sleep;
+}

@@ -1,0 +1,37 @@
+ref
+--
+https://www.tldp.org/LDP/abs/html/parameter-substitution.html
+
+${parameter} same as $parameter; In certain contexts, only the less ambiguous ${parameter} form works.
+
+$a=100
+$ echo ${a}; echo $a
+100
+100
+
+id=${USER}-on-${HOSTNAME}
+echo $id
+
+${parameter-default}, ${parameter:-default}	# If parameter not set, use default. 
+
+var1=1
+var2=2
+# var3 is unset.
+
+echo ${var1-$var2}   # 1
+echo ${var3-$var2}   # 2
+
+$ default_weight=65
+$ john=70
+$ w=${john-$default_weight}	# 70
+$ w=${jack-$default_weight}	# 65
+
+${parameter-default} and ${parameter:-default} are almost equivalent. 
+variable=		# variable has been declared, but is set to null.
+
+echo "${variable-0}"    # (no output)
+echo "${variable:-1}"   # 1
+
+unset variable
+echo "${variable-2}"    # 2
+echo "${variable:-3}"   # 3

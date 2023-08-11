@@ -1,0 +1,20 @@
+[1] A. Kotov, L. Duan, P. Kolari, and Y. Chang, ���Temporal Query Log Profiling to Improve Web Search Ranking,��� Proceedings of the 19th ACM Conference on Information and Knowledge Management, pages 1149-1158, October 2010.
+[2] L. Wang, D. Metzler, and J. Lin, ���Ranking Under Temporal Constraints,��� Proceedings of the 19th ACM Conference on Information and Knowledge Management, pages 79-88, October 2010.
+[3] D. Wang, W. Chen, G. Wang, Y. Zhang, and B. Hu, ���Explore Click Models for Search Ranking,��� Proceedings of the 19th ACM Conference on Information and Knowledge Management, pages 1417-1420, October 2010.
+
+The ranking function of a web serach engine determines the order of documents[1] of the user's query result. Temporal analysis of query logs[1] can be used for improving search ranking. Besides query logs, click-through logs[2] also encode user preferences. Click models[2] of user search behavior can be used on improving search ranking. Generally speaking, ranking function should be able to generate some results within short period of time. But for certain users, time is not as important as high precision result[3]. A temporally constrained ranking function[3] can solve this kind of problem.
+
+���撠�撘����������摨���賢��瘙箏��雿輻�刻�����撠�蝯�������������甈∪��, ��亥岷��亥��������摨���������臭誑��其����寥�脫��摨���賢��. ��支����亥岷��亥��憭�, 暺������亥��銋�鞎臬�脣��鈭�雿輻�其犖������憟�, ���隞乩��鋡思蝙��冽�潭�寥�脫��摨���賢��, 銝���祈��閮�, ���摨���賢�������函�剜�������抒�Ｙ�����撠�蝯����, 雿����鈭�雿輻�其犖��箔�����頛���箇移蝣箇��蝯������臭誑蝑�銝�頛���瑚��������, ���隞交�������������嗥�����摨���賢����喳�臭����典��.
+-------
+One of the core components of a search engine is its ranking function: when a search engine receives a user query, this function determines the order of presentation of retrieved results (documents or URLs).[1]
+
+In this work, we propose a method that addresses these two important aspects of ranking of search results through temporal analysis of search logs.[1]
+-------
+Since click-through logs encode user preferences on search results, utilizing a user���s click-through behavior on search results to automatically estimate document relevance has attracted more and more research attention recently.[2]
+
+In this paper, we focus on learning a ranking function by taking the results from a click model into account.[2]
+-------
+First, users are diverse and have different tolerances to query execution times. Some are impatient and want results as soon as possible, even if the results may be of lower quality. For other users, waiting a bit longer may be acceptable if it means better results.[3]
+
+This paper introduces the notion of temporally constrained ranked retrieval, which, given a query and a time constraint, produces the best possible ranked list within the specified time limit.[3]
+--------

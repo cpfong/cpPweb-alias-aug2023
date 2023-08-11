@@ -1,0 +1,75 @@
+<html>
+<script language="JavaScript">
+<!--
+
+/*
+var Img = new Array(6);
+
+var Img[0] = new Image();
+var Img[1] = new Image();
+var Img[2] = new Image();
+var Img[3] = new Image();
+var Img[4] = new Image();
+var Img[5] = new Image();
+
+Img[0].src="./img/openfnd.gif";
+Img[1].src="./img/openfnd2.gif";
+Img[2].src="./img/ofbbs.gif";
+Img[3].src="./img/ofbbs2.gif";
+Img[4].src="./img/yam.gif";
+Img[5].src="./img/yam2.gif";
+*/
+
+var i01=new Image();
+var i02=new Image();
+var i03=new Image();
+var i11=new Image();
+var i12=new Image();
+var i13=new Image();
+
+i01.src="./img/openfnd.gif";
+i11.src="./img/openfnd2.gif";
+i02.src="./img/ofbbs.gif";
+i12.src="./img/ofbbs2.gif";
+i03.src="./img/yam.gif";
+i13.src="./img/yam2.gif";
+
+function ChangeImage(name, img)
+{
+ document.images[name].src=eval(img + ".src");
+ return true;
+}
+
+// -->
+</script>
+<body marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
+
+<table border=0 cellspacing=0 cellpadding=0>
+<td>
+<a href="http://www.openfind.com.tw"
+onmouseout ="return ChangeImage('n0', 'i01')"
+onmouseover="return ChangeImage('n0', 'i11')">
+<img border=0 name=n0 src="./img/openfnd.gif">
+</a>
+</td>
+
+
+<td>
+<a href="http://bbs.openfind.com.tw"
+onmouseout ="return ChangeImage('n1', 'i02')"
+onmouseover="return ChangeImage('n1', 'i12')">
+<img border=0 name=n1 src="./img/ofbbs.gif">
+</a>
+
+
+<td>
+<a href="http://www.yam.com.tw"
+onmouseout ="return ChangeImage('n2', 'i03')"
+onmouseover="return ChangeImage('n2', 'i13')">
+<img border=0 name=n2 src="./img/yam.gif">
+</a>
+</table>
+
+
+</body>
+</html>

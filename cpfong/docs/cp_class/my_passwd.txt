@@ -1,0 +1,28 @@
+at least 8 chars
+combine 3 category: digits + chars + special chars
+
+digits
+--
+year 1911 1997
+birth 0911 1010
+phone number 0928 0911
+
+chars
+--
+abcd
+ilovemycountry
+john
+tom
+love
+
+special chars
+--
+@TW 
+1+1=2 
+100% 
+#1 
+$100 
+9.99 
+2>1
+
+name=PinYinCP

@@ -1,0 +1,12 @@
+Q: compile kernel
+A: https://docs.freebsd.org/doc/6.1-RELEASE/usr/share/doc/handbook/kernelconfig-building.html
+
+Q: i386 vs amd64
+A: 
+ i386 refers to the 32-bit edition
+ amd64 (or x86_64) refers to the 64-bit edition for Intel and AMD processors.
+ Even if you have an intel CPU, you should use AMD64 to install 64-bit on your computer (it uses the same instruction sets).
+ AMD invented x86-64 bit instruction set processor so the name is just a tribute to AMD.
+
+Q: cannot work with VirtualBox
+A: https://forums.freebsd.org/threads/nanobsd-created-image-does-not-properly-work-in-virtualbox.44442/

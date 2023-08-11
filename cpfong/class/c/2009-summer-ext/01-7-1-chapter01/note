@@ -1,0 +1,11 @@
+1. burn a ubuntu 
+2. telnet
+3. vi
+4. hello.c 
+5. cc hello.c -o hello (without o then a.out out)
+6. how to run ? ./a.out ./hello
+
+c 是由 function 和 variable 所組成, 
+
+p1-8 variable need to declare 
+	int f,c,s;

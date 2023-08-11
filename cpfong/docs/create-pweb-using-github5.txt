@@ -1,0 +1,13 @@
+Q: 有了帳號應經由那些 steps 才能有個人網頁?
+A:
+
+1. create my 1st repository (生成第一個專案)
+2. name it as: gFooHub.github.io (note: must your account and append with github.io) (專案名稱一定要用你的帳號再加上 github.io 不可以用其它任何的名稱
+3. public (專案必需是公開給所有人觀看的）
+4. create (生成）
+
+Q: 我生成了但還是看不到我的網頁 (https://your_personal_name.github.io)
+A:
+ 是否有 index.html ?
+ 是否有 commit ? 每一個上傳的檔案都要 commit 才可以生效
+ 是否太快去觀看，它要一點時間 (3 分鐘，而不能一上傳 10 秒內即去看是否生效）

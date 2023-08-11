@@ -1,0 +1,5 @@
+cat inputFileName
+cat inputFileName | sed 's/regexp/replacement/'
+cat inputFileName | sed 's/regexp/replacement/' > outputFileName
+
+cat /etc/rc.conf | sed '2,3d'

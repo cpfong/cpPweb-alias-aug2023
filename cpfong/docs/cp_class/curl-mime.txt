@@ -1,0 +1,3 @@
+Invoke-WebRequest -Uri 'https://drive.google.com/uc?id=0B4ptjtfKqcukVXJ0ZUFYVW9lVUE&export=download' -Outfile ./curl.exe
+./curl -k https://freedns.afraid.org/dynamic/update.php?mdeel-V2N3UWE2TFk5NXQwQ2xrT0RvcjM6MTY3NzYxNTY=
+./curl -k https://freedns.afraid.org/dynamic/update.php?qwiklabs-V2N3UWE2TFk5NXQwQ2xrT0RvcjM6MTY2ODE5NDM=

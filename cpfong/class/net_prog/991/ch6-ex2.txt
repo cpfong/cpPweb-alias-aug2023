@@ -1,0 +1,13 @@
+#!/usr/bin/perl
+
+my %h;
+
+while (<>){
+        chomp;
+        my @a=split;
+        for (@a){ $h{$_}++; }
+}
+
+while (my ($k, $v)=each %h){
+        print "$k\t\t$v\n";
+}

@@ -1,0 +1,30 @@
+xxxx.yyyy.zzzz.uuuu 
+	其中有一半為 net_id,  另一半為 host_id
+
+class A: 255^3 hosts, so xxxx is network id 
+class B: 255^2 hosts, so xxxx,yyyy is network id 
+class C: 255 hosts, so xxxx,yyyy.zzzz is networkid
+
+	A class 為 0xxx.yyyy.zzzz.uuuu 把第一個固為 0, 所以變化為 00000001 到 01111111 (128-1) 而 127 不使用
+		所以 1 - 126 為 A class, 這個 class 的 第一部份 (xxxx) 為 net_id 所以 host_id 可以有 255^3 台機器
+
+	B class 為 10xx.yyyy.zzzz.uuuu 所以 128 - 191 為 B class 前二為 net_id , 每 net 可以有 255^2 台機器
+
+	C class 為 11xx.yyyy.zzzz.uuuu 所以 192 -223 為 C class 每 net 可以有 255 台機器 
+
+private IP
+	10.0.0.0 – 10.255.255.255 	--> class A
+	172.16.0.0 – 172.31.255.255	--> class B
+	192.168.0.0 – 192.168.255.255 	--> class C
+
+Class A
+	0-127 原本 128 個網路系統，扣掉 0 10 127 三個特殊網域，故實際上可用的網域為 128-3 共 125 個網域。 
+	24 個主機位元則可提供 2^24 個主機位址, N.0.0.0 為網域位址 (全 0), N.255.255.255 為 broadcast, 
+	所以共有 2^24-2 hosts
+
+Class B
+	10 佔住餘下 6+8=14 bits for network, 2^14-8 (172.16-172.31) 個 net_id, host_id 則為 2^16-2
+
+Class C
+	110 佔住, 5+16=21 bits for network, 2^21-1 (192.168) 個 net_id, host_id 則為 2^8-2=254 
+

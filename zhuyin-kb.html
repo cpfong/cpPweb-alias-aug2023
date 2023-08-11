@@ -1,0 +1,195 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<title> keyboard with ov2.1.js </title>
+
+	<script type="text/javascript" src="event.js"></script>
+	<script type="text/javascript" src="cin.js"></script>
+	<script type="text/javascript" src="ov2.1.js"></script>
+
+</head>
+
+<body onload="imeinit(); document.myform.textarea.focus(); ">
+
+<h1>Javascript keyboard with ov2.1.js </h1>
+
+<b> 目前只支援 Firefox </b>, 原作者為 <a href="http://blog.othree.net">o3</a>  
+
+<form name="myform" action="">
+<textarea name="textarea" id="" cols="55" rows="5"></textarea>
+按一下 Ctrl 便可啟動輸入法
+</form>
+
+<a href="javascript:prefFile='';void(z=document.body.appendChild(document.createElement('script')));void(z.language='javascript');void(z.type='text/javascript');void(z.src='http://http://people.linux.org.tw/~pofeng/ov-webime/init.js');void(z.id='ovinit');">bookmarklet</a> (把左邊的 link 拉到書籤內)
+
+
+
+
+<!-- SiteSearch Google -->
+<form method="get" action="http://www.google.com/custom" target="google_window">
+<table border="0" bgcolor="#ffffff">
+<tr><td nowrap="nowrap" valign="top" align="left" height="32">
+
+</td>
+<td nowrap="nowrap">
+<input type="hidden" name="domains" value="people.linux.org.tw"></input>
+<input type="text" name="q" size="31" maxlength="255" value=""></input>
+<input type="submit" name="sa" value="Google 搜尋"></input>
+</td></tr>
+<tr>
+<td>&nbsp;</td>
+<td nowrap="nowrap">
+<table>
+<tr>
+<td>
+<input type="radio" name="sitesearch" value="" checked="checked"></input>
+<font size="-1" color="#000000">Web</font>
+</td>
+<td>
+<input type="radio" name="sitesearch" value="people.linux.org.tw"></input>
+<font size="-1" color="#000000">people.linux.org.tw</font>
+</td>
+</tr>
+</table>
+<input type="hidden" name="client" value="pub-0630605683014141"></input>
+<input type="hidden" name="forid" value="1"></input>
+<input type="hidden" name="ie" value="UTF-8"></input>
+<input type="hidden" name="oe" value="UTF-8"></input>
+<input type="hidden" name="cof" value="GALT:#008000;GL:1;DIV:#336699;VLC:663399;AH:center;BGC:FFFFFF;LBGC:336699;ALC:0000FF;LC:0000FF;T:000000;GFNT:0000FF;GIMP:0000FF;FORID:1;"></input>
+<input type="hidden" name="hl" value="zh-TW"></input>
+</td></tr></table>
+</form>
+<!-- SiteSearch Google -->
+
+<table>
+<tr align="center">
+<td>
+<form name="keyboard1" action="">
+
+<input type="button" value="ㄅ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄉ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ˇ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ˋ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄓ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ˊ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="˙" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄚ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄞ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄢ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄦ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="-" onclick="ov3_kb_on_click(this.value)"></input>
+<br>
+
+<input type="button" value="ㄆ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄊ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄍ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄐ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄔ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄗ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄧ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄛ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄟ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄣ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="[" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="]" onclick="ov3_kb_on_click(this.value)"></input>
+<br>
+
+<input type="button" value="ㄇ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄋ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄎ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄑ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄕ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄘ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄨ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄜ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄠ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄤ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="'" onclick="ov3_kb_on_click(this.value)"></input>
+<br>
+
+<input type="button" value="ㄈ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄌ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄏ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄒ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄖ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄙ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄩ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄝ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄡ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="ㄥ" onclick="ov3_kb_on_click(this.value)"></input>
+<br>
+
+<input type="button" value="                                                                                    " onclick="ov3_kb_on_click(' ')"></input>
+<br>
+
+</form>
+</td>
+</tr>
+
+<tr align="center">
+<td>
+<form name="keyboard2" action="">
+<input type="button" value="！" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="＠" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="＃" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="＄" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="％" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="︿" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="＆" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="＊" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="（" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="）" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="﹍" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="＋" onclick="ov3_kb_on_click(this.value)"></input>
+<br>
+
+<input type="button" value="Ｑ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="Ｗ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="Ｅ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="Ｒ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="Ｔ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="Ｙ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="Ｕ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="Ｉ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="Ｏ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="Ｐ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="〔" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="〕" onclick="ov3_kb_on_click(this.value)"></input>
+<br>
+
+<input type="button" value="Ａ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="Ｓ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="Ｄ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="Ｆ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="Ｇ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="Ｈ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="Ｊ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="Ｋ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="Ｌ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="：" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="”" onclick="ov3_kb_on_click(this.value)"></input>
+<br>
+
+<input type="button" value="Ｚ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="Ｘ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="Ｃ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="Ｖ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="Ｂ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="Ｎ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="Ｍ" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="，" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="。" onclick="ov3_kb_on_click(this.value)"></input>
+<input type="button" value="？" onclick="ov3_kb_on_click(this.value)"></input>
+<br>
+
+<input type="button" value="                                                                                    " onclick="ov3_kb_on_click(' ')"></input>
+<br>
+
+</form>
+</td>
+</tr>
+</table>
+
+</body>
+</html>

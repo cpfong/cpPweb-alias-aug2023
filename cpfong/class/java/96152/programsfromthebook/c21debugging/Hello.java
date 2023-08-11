@@ -1,0 +1,23 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+// illustrates using an option pane
+// to display debugging information.
+
+public class Hello extends JFrame {
+
+    public static void main(String[] args) {
+        int x = 2;
+        int y = 3;
+        int diameter = 20;
+
+        JOptionPane.showMessageDialog(null, "Hello World!");
+        JOptionPane.showMessageDialog(null,
+                "x = " + x +
+                " y = " + y +
+                " diameter = " + diameter);
+
+        JOptionPane.showMessageDialog(null, "Goodbye");
+        System.exit(0);
+    }
+}

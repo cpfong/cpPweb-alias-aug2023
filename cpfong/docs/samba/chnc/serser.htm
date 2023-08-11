@@ -1,0 +1,507 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0040)http://www.tp.edu.tw/documents/samba.htm -->
+<html>
+
+<head>
+<title>FreeBSD下的Samba Server</title>
+<meta content="text/html; charset=big5" http-equiv="Content-Type">
+<meta content="Microsoft FrontPage 3.0" name="GENERATOR">
+<meta content="FrontPage.Editor.Document" name="ProgId">
+</head>
+
+<body>
+
+<h2 align="center"><img border="0" src="SETSER1.gif" width="448" height="51"></h2>
+
+<h2 align="left"><span style="background-color: #FFFF00">安裝Samba Server (SERVER 端)</span></h2>
+
+<p><font FACE="新細明體" LANG="ZH-TW">■<b>安裝/升級</b></font></p>
+
+<p style="line-height: 150%; text-indent: 10"><font FACE="新細明體" LANG="ZH-TW">◆</font><b><font
+size="4">自行編譯SAMBA</font></b><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 由http://samba.org/取得SAMBA最新版本.在系統管理員目錄下建立src資料夾,或在/usr/src資料夾中解開下載的SAMBA原始程式<font
+LANG="ZH-TW" SIZE="2">。</font><br>
+假設,系統管理員帳戶是admin.並由http://samba.org/網站上取得samba-2.0.0.tar.gz這一類原始程式壓縮檔,複製到/usr/home/admin/src這系統管理員帳戶資料夾中<font
+LANG="ZH-TW">。(目前所知最新版為samba-2.0.7)</font><br>
+要下載SAMBA原始檔案時,就可以試著練習使用fetch或wget這兩個下載工具.先取得原始檔案的位置,操作方法如下:</p>
+
+<p><font FACE="新細明體" LANG="ZH-TW">○</font><font size="3"><b>解壓縮</b></font></p>
+
+<p>將SAMBA原始檔案解壓縮並將工作路徑變更到SAMBA原始程式資料夾下的source資料夾.</p>
+
+<p>接著在SAMBA原始資料夾中執行下列指令:</p>
+
+<p>./configure&nbsp;&nbsp;&nbsp; 建立編輯設定檔</p>
+
+<p>make&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 編譯. 利用configure後產生的Markefile檔案(供編譯程式使用的&quot;編譯設定檔&quot;).</p>
+
+<p>make install&nbsp;&nbsp;&nbsp; 安裝Samba.</p>
+
+<p>最後編輯/usr/local/samba/smb.conf,及建立/usr/local/etc/rc.d/中的samba.sh,讓SAMBA程式在FreeBSD載入後自動啟動SAMBA伺服器<font
+FACE="新細明體" LANG="ZH-TW" SIZE="2">。</font></p>
+
+<p><b><font FACE="新細明體" LANG="ZH-TW">◆</font>使用pak_add指令進行安裝：</b></p>
+
+<p align="center"><font size="4"><b>&nbsp;* </b></font>pak_add&nbsp; /packages/All/ 
+samba-2.0.6.tar.gz</p>
+
+<p align="left">做完後讓系統重開機(reboot),載入SAMBA<font LANG="ZH-TW">。</font></p>
+
+<p>　</p>
+
+<p><font FACE="新細明體" LANG="ZH-TW">■</font><font size="4"><b>設定</b></font></p>
+
+<p style="text-indent: 10; line-height: 150%"><font LANG="ZH-TW">在安裝完</font> SAMBA 
+<font LANG="ZH-TW">後，它會放一份設定檔範例在</font> /usr/local/etc <font
+LANG="ZH-TW">下，先將範例複製一份來修改成我們要的設定。</font><font
+FACE="Verdana" SIZE="2"></p>
+
+<blockquote>
+  <blockquote>
+    </font><p><font LANG="ZH-TW"># irisity -root- [~] </font><font LANG="ZH-TW"
+    COLOR="#008000">cd /usr/local/etc/</font></p>
+    <p><font LANG="ZH-TW"># irisity -root- [/usr/local/etc] </font><font LANG="ZH-TW"
+    COLOR="#008000">cp smb.conf.default smb.conf</font></p>
+  </blockquote>
+</blockquote>
+
+<p style="text-indent: 10; line-height: 150%">sam.conf.default <font LANG="ZH-TW">是設定</font> 
+SAMBA <font LANG="ZH-TW">的範例檔，真正讀取的預設是</font> smb.conf<font
+LANG="ZH-TW">，為了保留原始的範例檔以供日後參考用，所以我們用</font> 
+cp <font LANG="ZH-TW">的方式複製出設定檔，而不用</font> mv <font LANG="ZH-TW">的方式。</font><font
+FACE="Verdana" SIZE="2"></p>
+</font>
+
+<p style="text-indent: 10; line-height: 150%"><font LANG="ZH-TW">開</font> SAMBA <font
+LANG="ZH-TW">的目地是為了方便存取管理</font> ftp <font LANG="ZH-TW">並使用該台</font> 
+FreeBSD <font LANG="ZH-TW">上的硬碟空間，所以等會設定檔的最終目地便是開出一個分享目錄</font> 
+ftp<font LANG="ZH-TW">，無須密碼，但只允許我的工作機器去存取它。</font></p>
+
+<p style="text-indent: 10; line-height: 150%"><br>
+<font FACE="新細明體" LANG="ZH-TW">☆ </font><i><font size="5"><b><u>smb.conf</u></b> 
+</font></i><font FACE="新細明體" LANG="ZH-TW">☆</font><br>
+<br>
+smb.conf 是SAMBA的主要設定檔,它會影響SAMBA的運作方式及分享那一些資源出來.初學可以參考smb.conf.default這範例檔案的設定,在配合自己的需求調整.<br>
+. smb.conf的結構<br>
+一個smb.conf設定檔主要可以分成四個部份如下:<br>
+<br>
+名稱 說明<br>
+-----------------------------------------------------<br>
+globalSAMBA系統設定<br>
+-----------------------------------------------------<br>
+printers 印表機資源分享設定<br>
+-----------------------------------------------------<br>
+homes 使用者目錄<br>
+-----------------------------------------------------<br>
+share 其它資源分享(名稱自定)<br>
+-----------------------------------------------------<br>
+<br>
+每一個部份的宣告利用[](中括號)包括著關鍵字來宣告<font
+FACE="新細明體" LANG="ZH-TW">。</font>如 [global] , [printers] , [homes] 是SAMBA預設使用三個宣告<font
+FACE="新細明體" LANG="ZH-TW">。</font>而其他資源分享我們可以使用使用自訂的資源名稱;如要建立一個office的資源分享可以用[office]來表示<font
+FACE="新細明體" LANG="ZH-TW">。</font>(在smb.conf中;(分號)及#(井字號)都可以當是註解<font
+FACE="新細明體" LANG="ZH-TW" SIZE="2">。</font></p>
+
+<p>　</p>
+
+<p><font FACE="新細明體" LANG="ZH-TW">在安裝完</font> <font FACE="Verdana">SAMBA </font><font
+FACE="新細明體" LANG="ZH-TW">後，它會放一份設定檔範例在</font> <font
+FACE="Verdana">/usr/local/etc </font><font FACE="新細明體" LANG="ZH-TW">下，先將範例複製一份來修改成我們要的設定。</font><font
+FACE="Verdana" SIZE="2"></p>
+
+<blockquote>
+  <blockquote>
+    </font><p><font FACE="細明體" LANG="ZH-TW"># irisity -root- [~] </font><font
+    FACE="細明體" LANG="ZH-TW" COLOR="#008000">cd /usr/local/etc/</font></p>
+    <p><font FACE="細明體" LANG="ZH-TW"># irisity -root- [/usr/local/etc] </font><font
+    FACE="細明體" LANG="ZH-TW" COLOR="#008000">cp smb.conf.default smb.conf</font></p>
+  </blockquote>
+</blockquote>
+
+<p><font FACE="Verdana">sam.conf.default </font><font FACE="新細明體" LANG="ZH-TW">是設定</font> 
+<font FACE="Verdana">SAMBA </font><font FACE="新細明體" LANG="ZH-TW">的範例檔，真正讀取的預設是</font> 
+<font FACE="Verdana">smb.conf</font><font FACE="新細明體" LANG="ZH-TW">，為了保留原始的範例檔以供日後參考用，所以我們不用</font> 
+<font FACE="Verdana">mv</font><font FACE="新細明體" LANG="ZH-TW">的方式，而用</font> 
+<font FACE="Verdana">cp </font><font FACE="新細明體" LANG="ZH-TW">的方式複製出設定檔</font> 
+<font FACE="新細明體" LANG="ZH-TW">。</font></p>
+
+<p>要使用Samba Server相當容易，在安裝好FreeBSD的Server套件後，只要設定好工作群組，啟動Samba 
+Server後就可以正常運作，您可以立即在 Windows 95/98/NT 
+下的『網路上的芳鄰』裡看到執行Samba服務的FreeBSD主機名稱。</p>
+
+<p>　</p>
+
+<p>.[global]</p>
+
+<p>SAMBA伺服器整個運作的方式會依[gobal]這一部份的設定決定</p>
+
+<p>在這一個部分我們決定要下面的事項: 
+
+<ul type="circle">
+  <li>SAMBA 伺服器名稱</li>
+  <li>存取控制(資源分享方式)</li>
+  <li>支援Windows NT 網域伺服器</li>
+  <li>支援WINS伺服器</li>
+</ul>
+
+<p>而這些設定與Windows作業系統中的[網路]組態是類似的。而且也有關聯。</p>
+
+<p><font FACE="新細明體" LANG="ZH-TW" size="1">●</font>[printer]</p>
+
+<p>這一項設定與[gobal]部份中的load printers設定有關聯.如果設定load 
+printers=YES, SAMBA 會依/etc/printcap 中對印表機的定義,載入印表服務.而只有load 
+printers=YES時,[printers]部分的設定才會作用<font LANG="ZH-TW">。</font></p>
+
+<p>　</p>
+
+<p><font FACE="新細明體" LANG="ZH-TW" size="1">●</font>[homes]</p>
+
+<p>這一項是用來定義使用者資料夾的,這一項資源在Windows作業系統上顯示出來的名稱不是homes而是登入的&quot;使用者名稱&quot;<font
+LANG="ZH-TW">。</font></p>
+
+<p>[homes]這一項設定不需要指定path,因為它會自動依FreeBSD帳號中的指定自動設定到帳號中的使用者資料夾中所以不同的帳戶登入SAMBA後這一項資源所提供出現的檔案資源也會不一樣除非再帳戶中的設定是多人共用一個資料夾<font
+LANG="ZH-TW">。</font></p>
+
+<p>　</p>
+
+<p><font FACE="新細明體" LANG="ZH-TW" size="1">●</font>[share]</p>
+
+<p>Ex.&nbsp;&nbsp;&nbsp;&nbsp;</p>
+
+<p style="margin-top: 0; margin-bottom: 0">[cdrom]</p>
+
+<p style="margin-top: 0; margin-bottom: 0">comment=CD-ROM</p>
+
+<p style="margin-top: 0; margin-bottom: 0">path=/cdrom</p>
+
+<p style="margin-top: 0; margin-bottom: 0">preexec=/sbin/mount /cdrom</p>
+
+<p style="margin-top: 0; margin-bottom: 0">postexec=/sbin/umount /cdrom</p>
+
+<p style="margin-top: 0; margin-bottom: 0">　</p>
+
+<p style="margin-top: 0; margin-bottom: 0">　</p>
+
+<p style="margin-top: 0; margin-bottom: 0">■ /etc/smbpasswd 檔案的修改, 透過 
+/usr/local/samba/bin/smbpasswd<br>
+touch /etc/smbpasswd # 只需作一次日後就不用再作了.<br>
+chmod 600 /etc/smbpasswd # 只需作一次日後就不用再作了.<br>
+smbpasswd -a user-account<br>
+New SMB password:<br>
+Retype new SMB password:<br>
+(注意: user-account 為欲增入到 samba 服務的使用者帳號名稱<br>
+必須已經存在於 /etc/passwd)<br>
+</p>
+
+<p style="margin-top: 0; margin-bottom: 0">　</p>
+
+<p style="margin-top: 0; margin-bottom: 0"><font FACE="新細明體" LANG="ZH-TW">■</font>我們的設定檔</p>
+
+<p><font FACE="新細明體" LANG="ZH-TW"># This is the main Samba configuration file. You 
+should read the<br>
+# smb.conf(5) manual page in order to understand the options listed<br>
+# here. Samba has a huge number of configurable options (perhaps too<br>
+# many!) most of which are not shown in this example<br>
+#<br>
+# Any line which starts with a ; (semi-colon) or a # (hash)&nbsp;<br>
+# is a comment and is ignored. In this example we will use a #<br>
+# for commentry and a ; for parts of the config file that you<br>
+# may wish to enable<br>
+#<br>
+# NOTE: Whenever you modify this file you should run the command &quot;testparm&quot;<br>
+# to check that you have not many any basic syntactic errors.&nbsp;<br>
+#<br>
+#======================= Global Settings =====================================<br>
+[global]<br>
+<br>
+# workgroup = NT-Domain-Name or Workgroup-Name, eg: REDHAT4<br>
+workgroup = MYGROUP<br>
+<br>
+netbios name = doniobsd_SMB<br>
+; netbios aliases =<br>
+<br>
+# server string is the equivalent of the NT Description field<br>
+server string = Samba Server<br>
+<br>
+security = user<br>
+<br>
+# This option is important for security. It allows you to restrict<br>
+# connections to machines which are on your local network. The<br>
+# following example restricts access to two C class networks and<br>
+# the &quot;loopback&quot; interface. For more examples of the syntax see<br>
+# the smb.conf man page<br>
+; hosts allow = 192.168.1. 192.168.2. 127.<br>
+<br>
+# If you want to automatically load your printer list rather<br>
+# than setting them up individually then you'll need this<br>
+load printers = yes<br>
+<br>
+# you may wish to override the location of the printcap file<br>
+; printcap name = /etc/printcap<br>
+<br>
+# on SystemV system setting printcap name to lpstat should allow<br>
+# you to automatically obtain a printer list from the SystemV spool<br>
+# system<br>
+; printcap name = lpstat<br>
+<br>
+# It should not be necessary to specify the print system type unless<br>
+# it is non-standard. Currently supported print systems include:<br>
+# bsd, sysv, plp, lprng, aix, hpux, qnx<br>
+; printing = bsd<br>
+<br>
+# Uncomment this if you want a guest account, you must add this to /etc/passwd<br>
+# otherwise the user &quot;nobody&quot; is used<br>
+; guest account = pcguest<br>
+<br>
+# this tells Samba to use a separate log file for each machine<br>
+# that connects<br>
+log file = /var/log/log.%m<br>
+<br>
+# Put a capping on the size of the log files (in Kb).<br>
+max log size = 50<br>
+<br>
+# Security mode. Most people will want user level security. See<br>
+# security_level.txt for details.<br>
+security = user<br>
+# Use password server option only with security = server<br>
+; password server = &lt;NT-Server-Name&gt;<br>
+<br>
+# You may wish to use password encryption. Please read<br>
+# ENCRYPTION.txt, Win95.txt and WinNT.txt in the Samba documentation.<br>
+# Do not enable this option unless you have read those documents<br>
+encrypt passwords = yes<br>
+<br>
+admin users=admin<br>
+<br>
+# Using the following line enables you to customise your configuration<br>
+# on a per machine basis. The %m gets replaced with the netbios name<br>
+# of the machine that is connecting<br>
+; include = /usr/local/etc/smb.conf.%m<br>
+<br>
+# Most people will find that this option gives better performance.<br>
+# See speed.txt and the manual pages for details<br>
+socket options = TCP_NODELAY&nbsp;<br>
+<br>
+# Configure Samba to use multiple interfaces<br>
+# If you have multiple network interfaces then you must list them<br>
+# here. See the man page for details.<br>
+; interfaces = 192.168.12.2/24 192.168.13.2/24&nbsp;<br>
+<br>
+# Browser Control Options:<br>
+# set local master to no if you don't want Samba to become a master<br>
+# browser on your network. Otherwise the normal election rules apply<br>
+local master = yes<br>
+<br>
+# OS Level determines the precedence of this server in master browser<br>
+# elections. The default value should be reasonable<br>
+os level = 33<br>
+<br>
+# Domain Master specifies Samba to be the Domain Master Browser. This<br>
+# allows Samba to collate browse lists between subnets. Don't use this<br>
+# if you already have a Windows NT domain controller doing this job<br>
+domain master = yes&nbsp;<br>
+<br>
+# Preferred Master causes Samba to force a local browser election on startup<br>
+# and gives it a slightly higher chance of winning the election<br>
+preferred master = yes<br>
+<br>
+# Use only if you have an NT server on your network that has been<br>
+# configured at install time to be a primary domain controller.<br>
+; domain controller = &lt;NT-Domain-Controller-SMBName&gt;<br>
+<br>
+# Enable this if you want Samba to be a domain logon server for&nbsp;<br>
+# Windows95 workstations.&nbsp;<br>
+domain logons = yes<br>
+<br>
+# if you enable domain logons then you may want a per-machine or<br>
+# per user logon script<br>
+# run a specific logon batch file per workstation (machine)<br>
+; logon script = %m.bat<br>
+# run a specific logon batch file per username<br>
+; logon script = %U.bat<br>
+<br>
+# Where to store roving profiles (only for Win95 and WinNT)<br>
+# %L substitutes for this servers netbios name, %U is username<br>
+# You must uncomment the [Profiles] share below<br>
+; logon path = \\%L\Profiles\%U<br>
+<br>
+# Windows Internet Name Serving Support Section:<br>
+# WINS Support - Tells the NMBD component of Samba to enable it's WINS Server<br>
+wins support = yes<br>
+<br>
+# WINS Server - Tells the NMBD components of Samba to be a WINS Client<br>
+# Note: Samba can be either a WINS Server, or a WINS Client, but NOT both<br>
+# wins server = 10.1.0.1<br>
+<br>
+# WINS Proxy - Tells Samba to answer name resolution queries on<br>
+# behalf of a non WINS capable client, for this to work there must be<br>
+# at least one WINS Server on the network. The default is NO.<br>
+; wins proxy = yes<br>
+<br>
+# DNS Proxy - tells Samba whether or not to try to resolve NetBIOS names<br>
+# via DNS nslookups. The built-in default for versions 1.9.17 is yes,<br>
+# this has been changed in version 1.9.18 to no.<br>
+dns proxy = no&nbsp;<br>
+<br>
+# Client codepage settings<br>
+<br>
+# for Greek users<br>
+; client code page=737<br>
+<br>
+# for European users (Latin 1)<br>
+; client code page=850<br>
+<br>
+# for European users (Latin 2)<br>
+; client code page=852<br>
+<br>
+# for Icelandic users<br>
+; client code page=861<br>
+<br>
+# for Cyrillic users<br>
+; client code page=866<br>
+<br>
+# for Japanese Users<br>
+; client code page=932<br>
+; coding system=cap<br>
+<br>
+# for Simplified Chinese Users<br>
+; client code page=936<br>
+; coding system=cap<br>
+<br>
+# for Korean Users<br>
+; client code page=949<br>
+; coding system=cap<br>
+<br>
+# for Traditional Chinese Users<br>
+; client code page=950<br>
+; coding system=cap<br>
+<br>
+#============================ Share Definitions ==============================<br>
+[homes]<br>
+comment = Home Directories<br>
+browseable = yes<br>
+writeable = yes<br>
+<br>
+[cdrom]<br>
+comment = FreeBSD_SMB CDROM<br>
+path = /cdrom<br>
+preexec = /sbin/mount /cdrom<br>
+postexec = /sbin/umount /cdrom<br>
+;browseable = yes<br>
+;writeable = no<br>
+<br>
+# Un-comment the following and create the netlogon directory for Domain Logons<br>
+[netlogon]<br>
+; comment = Network Logon Service<br>
+comment = For Windows User&nbsp;<br>
+; path = /usr/local/samba/lib/netlogon<br>
+path = /usr/local/netlogon<br>
+guest ok = yes<br>
+writeable = no<br>
+share modes = no<br>
+<br>
+<br>
+# Un-comment the following to provide a specific roving profile share<br>
+# the default is to use the user's home directory<br>
+;[Profiles]<br>
+; path = /usr/local/samba/profiles<br>
+; browseable = no<br>
+; guest ok = yes<br>
+<br>
+<br>
+# NOTE: If you have a BSD-style print system there is no need to&nbsp;<br>
+# specifically define each individual printer<br>
+[printers]<br>
+comment = All Printers<br>
+path = /var/spool/samba<br>
+browseable = no<br>
+# Set public = yes to allow user 'guest account' to print<br>
+guest ok = no<br>
+writeable = no<br>
+printable = yes<br>
+<br>
+# This one is useful for people to share files<br>
+;[tmp]<br>
+; comment = Temporary file space<br>
+; path = /tmp<br>
+; read only = no<br>
+; public = yes<br>
+<br>
+# A publicly accessible directory, but read only, except for people in<br>
+# the &quot;staff&quot; group<br>
+;[public]<br>
+; comment = Public Stuff<br>
+; path = /home/samba<br>
+; public = yes<br>
+; writeable = yes<br>
+; printable = no<br>
+; write list = @staff<br>
+<br>
+# Other examples.&nbsp;<br>
+#<br>
+# A private printer, usable only by fred. Spool data will be placed in fred's<br>
+# home directory. Note that fred must have write access to the spool directory,<br>
+# wherever it is.<br>
+;[fredsprn]<br>
+; comment = Fred's Printer<br>
+; valid users = fred<br>
+; path = /homes/fred<br>
+; printer = freds_printer<br>
+; public = no<br>
+; writeable = no<br>
+; printable = yes<br>
+<br>
+# A private directory, usable only by fred. Note that fred requires write<br>
+# access to the directory.<br>
+;[fredsdir]<br>
+; comment = Fred's Service<br>
+; path = /usr/somewhere/private<br>
+; valid users = fred<br>
+; public = no<br>
+; writeable = yes<br>
+; printable = no<br>
+<br>
+# a service which has a different directory for each machine that connects<br>
+# this allows you to tailor configurations to incoming machines. You could<br>
+# also use the %U option to tailor it by user name.<br>
+# The %m gets replaced with the machine name that is connecting.<br>
+;[pchome]<br>
+; comment = PC Directories<br>
+; path = /usr/pc/%m<br>
+; public = no<br>
+; writeable = yes<br>
+<br>
+# A publicly accessible directory, read/write to all users. Note that all files<br>
+# created in the directory by users will be owned by the default user, so<br>
+# any user with access can delete any other user's files. Obviously this<br>
+# directory must be writeable by the default user. Another user could of course<br>
+# be specified, in which case all files would be owned by that user instead.<br>
+;[public]<br>
+; path = /usr/somewhere/else/public<br>
+; public = yes<br>
+; only guest = yes<br>
+; writeable = yes<br>
+; printable = no<br>
+<br>
+# The following two entries demonstrate how to share a directory so that two<br>
+# users can place files there that will be owned by the specific users. In this<br>
+# setup, the directory should be writeable by both users and should have the<br>
+# sticky bit set on it to prevent abuse. Obviously this could be extended to<br>
+# as many users as required.<br>
+;[myshare]<br>
+; comment = Mary's and Fred's stuff<br>
+; path = /usr/somewhere/shared<br>
+; valid users = mary fred<br>
+; public = no<br>
+; writeable = yes<br>
+; printable = no<br>
+; create mask = 0765<br>
+</font><br>
+<span lang="EN-US"
+style="font-size:11.0pt;mso-bidi-font-size:10.0pt;mso-bidi-font-family: 
+&quot;Courier New&quot;"><br>
+</span></p>
+
+<hr width="100%">
+</body>
+</html>

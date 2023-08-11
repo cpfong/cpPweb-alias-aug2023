@@ -1,0 +1,10 @@
+s vi newsfeeds
+
+innfeed!\
+        :!*\
+        :Tc,Wnm*:/usr/local/news/bin/startinnfeed
+
+#給和春的 news, 給它 pub.post
+fjtc\
+        :pub*\
+        :Tm:innfeed!

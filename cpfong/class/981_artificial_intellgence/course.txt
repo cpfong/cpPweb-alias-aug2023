@@ -1,0 +1,10 @@
+if a course has final, no student will be happy
+if a course is  easy, some student will be happy
+----
+hasFinal(X)
+take(X,Y)
+isHappy(X)
+isEasy(X)
+
+Any student X, course Y take(X,Y) and hasFinal(Y)  -> not isHappy(X) 
+isEasy(X) -> exist student Y and happy(Y)

@@ -1,0 +1,3 @@
+和 Mysql 的伺服器溝通的方式:
+	1. 在系統提示符號下打: mysql -p 以進入 mysql> 的系統提示符號準備溝通,
+	接下來你應都打 mysql 看得懂的指令, 例如: show databases;

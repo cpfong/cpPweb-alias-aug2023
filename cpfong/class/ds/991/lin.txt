@@ -1,0 +1,25 @@
+    Dim n As Integer = 5
+    Dim data(n) As Integer
+
+    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        For i As Integer = 0 To n
+            data(i) = Int(Rnd() * 100) + 1
+            ListBox1.Items.Add(data(i))
+        Next
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Dim target As Integer = TextBox1.Text
+        Dim f As Boolean = False
+        For i As Integer = 0 To n
+            If (target = data(i)) Then
+                TextBox2.Text = "linsear search found " & target
+                ListBox1.SelectedIndex = i
+                f = True
+            End If
+        Next
+        If (f = False) Then
+            TextBox2.Text = "linsear search NOT found"
+        End If
+    End Sub
+

@@ -1,0 +1,150 @@
+#!/usr/bin/perl
+#
+# $Id: mail2news,v 1.1 1999/05/16 17:02:14 avatar Exp avatar $
+#
+# mail to news gateway, suitable for sendmail setting of
+# define(`USENET_MAILER_PATH', `/path/to/mail2news')
+# define(`USENET_MAILER_FLAGS', `lsDFMmn')
+# define(`USENET_MAILER_ARGS', `mail2news')
+# MAILER(usenet)
+#
+# Inspired by Steve Snodgrass <ssnodgra@fore.com>
+# Written by Amos A Gouaux <amos@utdallas.edu>
+# Updated for INN 2.1 by Albert K T Hui <avatar@deva.net>
+#
+
+$pathhost = "localhost";
+
+$inews = "/usr/local/news/bin/inews";
+$iopts = "-h -R -S -O";
+
+use Sys::Syslog;
+openlog('mail2news','cons,pid','mail');
+
+$SIG{'PIPE'} = "plumber";
+sub plumber {
+    syslog('err',"inews died prematurely");
+    exit(1);
+}
+
+if (!open(INEWS,"| $inews $iopts")) {
+    syslog('err',"unable to fork inews process: $!");
+    exit(1);
+}
+
+while (<STDIN>) {
+    # look for blank line between header and body
+    if (/^$/) {
+        # supply our own Subject: line if no subject supplied
+        if (! $has_subject) {
+            print INEWS "Subject: (no subject)\n";
+        }
+        last;
+    }
+
+    # Transform Received headers into something inews can handle.
+    if (/^Received:\s*(.*)$/) {
+        print INEWS "X-Received: $1\n";
+        while (<STDIN>) {
+            if (/^\t/) {
+                print INEWS;
+            }
+            elsif (/^Received:\s*(.*)$/) {
+                print INEWS "X-Received: $1\n";
+            }
+            else {
+                last;
+            }
+        }
+    }
+
+    # Comment out Path: line
+    s/^Path:\s/X-Path: /;
+
+    # Comment out Xref: line
+    s/^Xref:\s/X-Xref: /;
+
+    # Transform From_ line into Path: line
+    s/^From\s+(\S+)@(\S+).*/Path: $2!$1/ || s/^From\s+(\S+)[^@]*$/Path: $1\n/;
+
+    # Canonicalize From: line
+    if (/^From:\s/) {
+        if (! /\@/) {
+            s/^From:\s+(.*) <(.*)>/From: $2\@$pathhost/;
+        }
+    }
+
+    # Allow only one Content-Transfer-Encoding: line
+    if (/^Content-Transfer-Encoding:\s/i) {
+        if ($seen_content_transfer_encoding++) {
+            s/^Content-Transfer-Encoding/X-Content-Transfer-Encoding-$seen_content_transfer_encoding/i;
+        }
+    }
+
+    # Allow only one To: line
+    if (/^To:\s/i) {
+        if ($seen_to++) {
+            s/^To/X-To-$seen_to/i;
+        }
+    }
+
+    # Allow only one Cc: line
+    if (/^Cc:\s/i) {
+        if ($seen_cc++) {
+            s/^Cc/X-Cc-$seen_cc/i;
+        }
+    }
+
+    # Allow only one Mime-Version: line
+    if (/^Mime-Version:\s/i) {
+        if ($seen_mime_version++) {
+            s/^Mime-Version/X-Mime-Version-$seen_mime_version/i;
+        }
+    }
+
+    # Allow only one @ in Message-Id
+    if (/^Message-I.:\s/) {
+        if (s/\@/\@/g > 1) {
+            s/^Message/X-Invalid-Message/;
+        }
+    }
+
+    # If Message-Id has . as the last character, delete it
+    if (/^Message-I.:\s/) {
+        s/\.$//;
+    }
+
+    # Remember if it has a subject or not
+    if (/^Subject:\s/) {
+        $has_subject = 1;
+    }
+
+#    # Take these fields straight from the mail header
+#    print INEWS if (/^(Date|From|Subject|Message-I.):/);
+
+    # Let all headers pass through except these
+    print INEWS if not
+    	(/^(Newsgroups|NNTP-Posting-Host|NNTP-Posting-Date|X-Trace|X-Complaints-To):/i);
+
+    $frm = $1 if (/^From:\s*(.*)$/);
+    $msgid = $1 if (/^Message-I.:\s*(.*)$/);
+}
+
+$newsgrps = "";
+foreach $grp (@ARGV) {
+    $newsgrps .= $grp . ",";
+}
+chop $newsgrps;
+print INEWS "Newsgroups: $newsgrps\n";
+print INEWS "\n";
+print INEWS while (<STDIN>);
+close(INEWS);
+$extval = ($? >> 8);
+
+if ($extval == 0) {
+    syslog('info',"from=$frm, msgid=$msgid, groups=$newsgrps");
+} else {
+    syslog('err',"unable to post to $newsgrps; from=$frm, msgid=$msgid");
+}
+closelog();
+exit($extval);

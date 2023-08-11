@@ -1,0 +1,4 @@
+########### Ready to create a jail and we will create dns service first
+mkdir /home/j/ns
+mkdir -p /home/js/ns
+cpdup /home/j/skel /home/js/ns

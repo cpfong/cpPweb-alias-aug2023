@@ -1,0 +1,44 @@
+
+  ◇ recover history file
+
+------------------------------------------------------------------------
+From: skhuang@csie.nctu.edu.tw (Shih-Kun Huang)
+Newsgroups: csie.sysadmin.news
+Subject: recover history file
+Date: 29 Oct 1994 02:51:32 GMT
+Organization: Dep. Computer Sci. & Information Eng., Chiao Tung Univ., Taiwan, R.O.C
+
+history 的功用:
+1. do expire
+2. check duplicate message ID (收 article 時)
+3. find article to be cancelled
+
+因此 history 不小心誤殺, entry 有缺, 或毀損, 通常
+非必要不用重新 rebuild. 影響所及頂多:
+1. article 無法 expire 掉 (有不用停 server 的方法, 已 post 在前)
+2. 重複收到相同 article (不會太多)
+3. 無法 cancel (影響不大)
+
+若要重新 rebuild history, news server 必須 throttle 10 多個
+小時, 其間 user 不能 post, new article 進不來. 不太好. 若真
+的有此需要, man -M /net/home12/inn/man news-recovery
+
+
+在我們的環境, history 毀掉, 試下列方法:
+ctlinnd throttle 'history recover'
+zcat /net/ftphome/inn/news/history > /tmp/history.n
+mv /usr/lib/news/hisotory /usr/lib/news/history.o
+# makehistory -b -f /tmp/history.n
+makehistory -r -i -s `wc -l /tmp/history.n` -f /tmp/history.n
+mv /tmp/history.n /usr/lib/news/history
+mv /tmp/history.n.dir /usr/lib/news/history.dir
+mv /tmp/history.n.pag /usr/lib/news/history.pag
+ctlinnd go 'history recover'
+
+依此法, 有影響的是 /net/ftphome/inn/news/history 被備份
+的時間到 history 毀掉之前所收到的 article.
+用前面 post 的方法殺掉無法 expire 掉的 article 即可.
+------------------------------------------------------------------------
+Shih-Kun Huang
+EC638, CSIE, NCTU, Taiwan, R.O.C. Phone: 886-35-712121 (x3709)
+

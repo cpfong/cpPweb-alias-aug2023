@@ -1,0 +1,187 @@
+<HTML>
+  <HEAD>
+    <TITLE>
+      Setting Up Split DNS on FreeBSD 4.1
+    </TITLE>
+    <LINK REV="made" HREF="mailto:webmaster@cfcl.com">
+  </HEAD>
+  <BODY BGCOLOR="WHITE" LINK="BLUE"    TEXT="BLACK"
+        ALINK="MAROON"  VLINK="MAROON">
+    <H1>Setting Up Split DNS on FreeBSD 4.1</H1>
+
+    <TABLE><TBODY><TR><TD WIDTH="475" VALIGN="TOP">
+
+      Our home system (cfcl) has a firewall box
+      which filters packets, provides NAT,
+      maps our external address to internal addresses, etc.
+      Because the firewall cannot reflect local traffic
+      that is addressed to cfcl's external address
+      back to cfcl's internal address,
+      neither cfcl nor the other local machines
+      can use the "official" DNS results.
+    <P>
+      So, we have set up "split DNS".
+      In our case, this is implemented
+      as two (<TT>named(8)</TT>) DNS servers,
+      serving different user communities.
+      The firewall box maps external DNS requests
+      to one IP address,
+      the local machines use another.
+      Each community gets the answers it needs,
+      so there is no confusion.
+
+    <H2>Firewall Box</H2>
+
+      Our firewall box (a SonicWall 10)
+      is not a terribly sophisticated device.
+      It can filter packets, redirect IP addresses, etc.
+      By and large, this is exactly what we want.
+      In our opinion,
+      general purpose OSes have far too much going on
+      to be secure enough for use as firewalls.
+      In any case, this is why we don't use the standard
+      FreeBSD firewall software...
+    <P>
+      The SonicWall is configured
+      to redirect most incoming traffic
+      to cfcl's primary LAN address (<TT>...193</TT>).
+      The sole exception is made for DNS requests,
+      which are redirected to <TT>...199</TT>.
+
+    <H2>/etc/rc.conf</H2>
+
+      Because we want cfcl to listen on two IP addresses,
+      we added an "alias" setting
+      to the <TT>ifconfig(8)</TT> definitions
+      in <TT>/etc/rc.conf</TT>.
+      The first line defines our "internal" IP address.
+      The second line tells cfcl to answer <TT>...199</TT>, as well.
+
+    <PRE>
+   ifconfig_de0="       inet 192.168.168.193 netmask 255.255.255.0"
+   ifconfig_de0_alias0="inet 192.168.168.199 netmask 255.255.255.0"
+    </PRE>
+
+
+    <H2>/etc/rc.network</H2>
+
+      Because we want two instances of <TT>named(8)</TT> to run,
+      we added some code to <TT>/etc/rc.network</TT>.
+      The first entry sets up our external DNS server;
+      the second sets up our internal DNS server,
+      using its own <TT>named.conf</TT> file.
+
+    <PRE>
+   echo -n ' named'
+   ${named_program:-named} ${named_flags}
+
+   echo -n ' named(int)'
+   ${named_program:-named} ${named_flags} /etc/namedb/int/named.conf
+    </PRE>
+
+    <H2>/etc/namedb</H2>
+
+      This directory is primarily used
+      for the "external" instance of our DNS server.
+      It contains:
+
+    <PRE>
+   int/                 "internal" DNS files (see below)
+   localhost.rev        reverse DNS mapping information
+   named.conf           top-level DNS configuration
+   named.root           information about other servers
+   p/                   primary DNS files
+   s/                   secondary DNS files
+    </PRE>
+
+    <H2>/etc/namedb/namedb.conf</H2>
+
+      Because cfcl now answers two IP addresses,
+      we need to tell this <TT>named</TT>
+      which one to answer.
+      The code below tells the server
+      to "listen on" the IP address (<TT>...199</TT>)
+      that the SonicWall uses for our external DNS requests.
+
+
+    <PRE>
+   options {
+     ...
+     listen-on {
+       192.168.168.199;      // external DNS server address
+     };
+   }
+    </PRE>
+
+    <H2>/etc/namedb/p</H2>
+
+      The files in this directory
+      provide forward and reverse IP mapping
+      for cfcl's external address.
+
+    <H2>/etc/namedb/s</H2>
+
+      This directory is used
+      for secondary DNS information
+      and (possibly) dump files.
+
+    <H2>/etc/namedb/int</H2>
+
+      This directory subtree is used for the "internal" instance
+      of our DNS server.
+      It contains:
+
+    <PRE>
+   localhost.rev      symlink to /etc/namedb/localhost.rev
+   named.conf         top-level DNS configuration
+   named.root         symlink to /etc/namedb/named.root
+   p/                 primary DNS files
+   s/                 secondary DNS files (mostly empty)
+    </PRE>
+
+    <H2>/etc/namedb/int/named.conf</H2>
+
+      Because this instance of the DNS server is an "add-on",
+      it must make certain accomodations
+      (e.g., in <TT>/var/run</TT>)
+      to stay out of the way of the "standard" server.
+      The <TT>listen-on</TT> code below tells this server
+      to monitor both cfcl's standard IP address (<TT>...193</TT>)
+      and its loopback address (<TT>127.0.0.1</TT>)
+      for internal DNS requests.
+      The remaining code
+      tells <TT>named</TT> and <TT>ndc</TT>
+      to use distinctive file names in <TT>/var/run</TT>
+      for their "internal" process IDs.
+
+    <PRE>
+   options {
+     ...
+     listen-on {
+       192.168.168.193;    // internal address for cfcl.com
+       127.0.0.1;          // loopback address for cfcl.com
+     };
+
+     pid-file  "/var/run/named_int.pid";     // _PATH_PIDFILE
+   };
+
+   controls {
+     unix "/var/run/ndc_int" perm 0600 owner 0 group 0;
+   };
+    </PRE>
+
+    <H2>/etc/namedb/int/p</H2>
+
+      The files in this directory
+      provide forward and reverse IP mapping
+      for cfcl's internal address.
+
+    <H2>/etc/namedb/int/s</H2>
+
+      This directory is not used
+      for anything except (possibly) dump files.
+
+    </TD></TR></TBODY></TABLE>
+  </BODY>
+</HTML>
+

@@ -1,0 +1,8 @@
+mount -rw /
+# cd /usr && make pkgsrc-create
+
+pkg_search firefox
+pkg_search -v firefox-1.2.3p4
+
+pkg_radd xfce4
+cd /usr/pkgsrc/seurity/openssh && make install clean

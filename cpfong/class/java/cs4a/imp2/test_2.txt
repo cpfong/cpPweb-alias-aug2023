@@ -1,0 +1,43 @@
+// import necessary files
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.*;
+
+public class test_2 extends JFrame {
+   // constructor
+   public test_2()
+   {
+      super( "Using colors" );	// parent constructor
+      setSize( 400, 130 );	// its size
+      show();			// show now
+   } // end constructor
+
+   public void paint( Graphics g )
+   {
+	// 5x5 note: i start from 1 not 0
+	for (int i=1; i < 6; i++){
+		for (int j=1; j < 6; j++){
+			// change different color
+			if ( (i+j) % 2 == 0.0 ){ g.setColor(Color.black); }
+			else { g.setColor(Color.gray); }
+			// fill the rectangle here
+      			g.fillRect(25*i, 25*j, 25, 25 );
+		} // end for loop 
+	}
+   } // end paint
+
+   public static void main( String args[] )
+   {
+      test_2 app = new test_2();
+
+	// exit peacefully
+      app.addWindowListener(
+         new WindowAdapter() {
+            public void windowClosing( WindowEvent e )
+            {
+               System.exit( 0 );
+            }
+         }
+      );
+   }
+} // end class

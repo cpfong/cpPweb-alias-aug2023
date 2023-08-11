@@ -1,0 +1,24 @@
+#!/bin/sh
+
+cd ~/tmp/trash
+mkdir foo
+cd foo
+touch index.html #empty
+git init
+git add .  #staging
+git commit -m "v0 file created" #commit to local repo
+git branch -M main
+# finish init part
+
+# now branch part
+git branch hello #new branch: now has main and hello 2 branches
+git checkout hello #goto hello branch
+vi index.html #modify something
+touch xxx.gif # add gif to hello branch
+
+@gaia-> git add . #staging
+@gaia-> git commit -m '2nd hello' #commit
+@gaia-> ls #foo.gif index.html #2 files at hello branch
+
+@gaia-> git checkout main #goto main
+@gaia-> ls #index.html only one file, since main version has NO foo.gif

@@ -1,0 +1,522 @@
+海棠小品(DSL BV1AL)2005-07-29 修訂版
+
+下載位置
+ftp://cle.linux.org.tw/pub2/KNOPPIX/bv1al/
+或
+ftp://ftp3.tnc.edu.tw/KNOPPIX/bv1al/
+
+檔名
+DSL-BV1AL-20050729.iso
+DSL-BV1AL-20050729.iso.md5
+DSL-BV1AL-20050729.txt
+
+Firefox 1.0.6 tw 版本使用。
+另外改進字型讓 Firefox 畫面字體有大小變化，較美觀
+
+「備份/還原」的操作改為中文介面
+
+以 leafpad 做為圖型介面的文字編輯軟體(beaver仍保留)
+
+修改後，將「海棠小品」裝在 USB 隨身碟，plugin 查經、星際譯王可以正常掛載
+
+收集三個 .deb 檔案, 可以用 dpkg-fake 將它安裝進系統, 就能方便
+製作內含「海棠小品」的 USB 開機隨身碟.
+
+增加幾款 fluxbox 的視窗桌面「風格」
+
+簡化進入 Xwindow 的設定, 只要選擇「Xvesa、解析度、色彩」三樣
+
+新增 netatalk 及 samba mount, 前者用來與 MacOS 8/9 連線分享
+後者用來讀取 Windows 的分享(也就是相當於「網路芳鄰」)
+
+新增自由設定桌面背景圖，以及可以自動抓取中央氣象局雲圖做桌面
+
+移除不能使用中文的 siag 試算表
+
+光碟 ISO 雖然有大約 160MB, 但 DSL 系統仍控制在不到 84MB, 不致
+於太胖. 光碟上其他的東西包括另一個 Linux LiveCD "movix" 以及要
+用時才外掛的「聖經、星際譯王字典檔」，以及如果有人要重製 DSL 時
+有需要用到的 dpkg/apt 相關檔案.
+
+gimp 及 qemu 所需的 .deb 加入到光碟 plugin 目錄內，可以自行安裝
+(用 dpkg-fake -i gimp_xxxx………來安裝即可)
+
+以及一些 bug 的修正
+
+
+============
+關於將「海棠小品」安裝到 USB 隨身碟
+
+原本的 DSL 安裝到 USB 隨身碟後, 可能無法使用 toram 將系統整個丟
+進 RAM 裡執行, 而是依賴著隨身碟, 這樣 USB 隨身碟的 sda1 也會變
+成「唯讀」無法修改.
+DSL 只有使用 toram 開機完成後才能修改 sda1 裡的資料.
+
+以下是我個人試做 USB 隨身碟的步驟, 供有興趣的朋友參考.
+
+使用 syslinux 製作 USB 隨身碟開機所需的檔案放在光碟的 plugin/syslinux
+目錄下有三個檔案, 請執行 dpkg-fake 來安裝, 指令是
+
+dpkg -i dosfstools_2.11-2.1_i386.deb
+mtools_3.9.9-2.1_i386.deb syslinux_2.11-0.1_i386.deb
+(以上全打在一行執行)
+
+安裝時會出現一些錯誤訊息, 但是可以忽略.
+
+然後以 fdisk 或 cfdisk 把 sda1 割好, 並設成 FAT16 格
+式(也就是 fdisk 或 cfdisk 裡的 6 格式). 並且要把 sda1
+設成 boot (這個很重要)
+
+再來用 mkdosfs /dev/sda1
+接著用 syslinux /dev/sda1
+再來   mount /mnt/sda1
+接下去把光碟的 isolinux/下的
+boot.msg
+logo.16
+f2
+f3
+linux24
+minirt24.gz
+直接 copy 到 /mnt/sda1
+
+再來請執行 cp -R /cdrom/KNOPPIX /mnt/sda1/
+它會把光碟上的 KNOPPIX 目錄整個 copy 到 sda1
+
+然後 cp isolinux.bin 到 sda1/syslinux.bin
+(上面這行其實就是把它改個名字)
+再 cp syslinux.cfg 到 sda1/syslinux.cfg
+這個 syslinux.cfg 是針對 USB 隨身碟開機用的, 不適用於光碟開機.
+
+其它光碟上包括 plugin 或 movix mplayer 目錄就依你的需要看要不
+要 copy 到 sda1.
+
+用 USB 隨身碟開機, 完全不依賴硬碟、光碟機，開機完成, 隨身碟可
+以拔除, 整台電腦除了散熱風扇以外, 沒有任何機械動作, 據網友說,
+原本筆記型電腦充滿電只可以用一個半小時, 現在拆掉硬碟, 用 USB
+開機玩「海棠小品」可以撐上兩個小時.
+
+
+另外, 其實海棠小品裡有一些簡便的指令, 例如要掛載光
+碟的話只要下令 mtcd 四個字母就會把光碟掛進來, 並且
+簡單的列出光碟上有哪些東西給你看.
+
+如果你有第二台光碟機, 可以用 mtcd1(四個字母加一個
+數字 1)來掛載, 它也會自動列出光碟內容給你看.
+
+卸載光碟的話就是 umcd(或 umcd1) 它會自動退片.
+
+掛載 USB 隨身碟也有簡化指令
+mtsda1 (mtsda2, mtsdb1, mtsdb2)
+卸載就是
+umsda1 (umsda2, umsdb1, umsdb2)
+
+再例如
+dirt 是以時間排序的 dir
+dirs 是以檔案大小排序的 dir
+dird 是只列出目前所在地下面的目錄名稱(如果有的話)
+
+你可以打 alias 來看有哪些簡化指令可用
+
+
+============
+DSL BV1AL 常見問題說明(FAQ)
+
+Q:
+請問一下它可以讀NTFS的格式嗎
+我在它的mnt目錄下有發現hda ....(很多)
+可是看裡面都是空的?
+是還要手動掛載嗎?
+
+A:
+DSL 核心就是 Linux, 只要 Linux 有支援的, DSL 就有支援.
+NTFS 格式是微軟自家格式, 沒有完整的官方公開資料, 所以
+Linux 在處理 NTFS 格式就只能做到「讀取」, 就算 2.6.x
+核心有說可以「寫入」但是仍是「危險」的。
+
+DSL 開機會自動辨識你的硬碟格式, 因此你只要把它掛載進
+來就可以讀取, 掛載的方式建議用指令掛載最保險, 使用指
+令掛載前, 建議先看一下有哪些分割區, 指令是
+ls /mnt
+然後你就可以下令掛載某個分割區, 例如
+mount /mnt/hda3
+
+
+Q:
+某某輸入法用起來怪怪的.
+
+A:
+DSL BV1AL 裡面用的是新一代輸入法程式 gcin, 每一種輸入
+法都有它的特點, 請到 gcin 的網站尋找更豐富的解說.
+http://cle.linux.org.tw/gcin/
+
+
+Q:
+為什麼沒辦法看 java 網頁？
+
+A:
+DSL 最大的優點就是「小」, 系統才八十幾 MB, 但是一組 java
+runtime (java_vm)不是 300KB 不是 800KB, 是 16 MB !!!
+
+好像你開一輛 Juguar 跑車, 可是你想要能夠隨時有尚青的台灣
+生啤酒喝, 又隨時可以有鮮奶油蛋糕吃, 所以跑車的車頂上綁
+一台國際牌三門式大冰箱, 這樣就失去跑車的意義了！
+
+所以目前是不考慮把 java runtime 加到系統裡, 由使用者自
+行安裝好了.
+
+請依網頁上出現的 plugin 連過去.
+抓 jre(java runtime environment)時可以選一種 .bin 結尾的
+不要抓像是 .rpm 結尾的, 抓下來把它變可執行
+chmod 755 jre-xx-yy-zz.bin 然後
+./jre-xx-yy-zz.bin 它會解出一個 jre-xx-yy-zz 的目錄, 裡面
+有一個 plugins 目錄下還有一個 i386 目錄, 最主要的就是要把
+i386 之下的 libjavaplugin_oji.so 連結到 firefox 的 plugins
+目錄下.
+
+DSL 的 firefox plugins 目錄是轉向 /opt/.firefox_plugins/
+
+所以當你把 jre-xx-zz-zz.bin 解開後得到的目錄(目前抓回來解
+開的名稱是 jre1.5.0_04) 可以搬到任何地方, 例如也搬到 /opt
+mv jre1.5.0_04 /opt/ <Enter>
+
+那麼連結的指令就是
+ln -s /opt/jre1.5.0_04/plugin/i386/ns7/libjavaplugin_oji.so
+/opt/.firefox_plugins/ <Enter>
+(以上要打在同一行執行)
+
+不過不曉得 firefox 又在鬧什麼脾氣, 始終無法讓 java 顯示
+中文, 這方面我沒再進一步研究, 所以無法告訴你答案, 也請知道
+答案的朋友提供解答以惠大眾.
+
+
+Q:
+光碟裡沒有 skype 可以用, 但是我想用, 要怎麼裝？
+
+A:
+skype受限於它的版權宣告, 要包起來散佈有很多條件限制,
+所以不想找麻煩.
+但是我已經把它需要的 library 包進 DSL, 你可以自行下載
+skype, 簡單安裝, 例如裝到 $HOME/skype 然後你要
+cd $HOME/skype 再
+./skype <Enter> 就可以用了.
+
+
+Q:
+系統是唯讀的, 無法寫入, 為什麼不像 KNOPPIX 那樣可以寫入？
+
+A:
+像 DSL 這樣的輕巧系統, 應該沒有必要疊床架屋用 unionfs，
+DSL 裡原本就有 /etc/init.d/mkwriteable把系變成可寫入。
+
+請執行 /etc/init.d/mkwriteable 之後系統就變成可寫入了.
+如果你想用 dpkg 安裝 debian 軟體, 可以先執行一次
+dpkg-fake 然後就可以用 dpkg -i abc-123.deb 這樣來安裝
+Debian 軟體了.
+
+
+Q:
+開機進系統後, 我的身份是 dsl, 打 su - 又不知道 root 的
+密碼, 怎麼辦？
+
+A:
+root 沒有密碼所以不要用 su - 來變換身份.
+系統原本就允許 dsl 這個 user 有 root 的管理權, 你只要
+sudo /bin/bash 就擁有像 root 一樣的權限了.
+
+或者你從選單裡的「終端機」選用俱有 root 身份的終端, 一
+進去就俱有 root 的權限了.
+
+
+Q:
+為什麼我先前用 joe 編輯的文字檔, 用 beaver 或別的編輯
+軟體無法修改？
+
+A:
+有可能你用 joe 編輯時是以 root 身份存檔, 那麼用其他身
+份打開那個檔案時, 就不能寫入了, 所以可以改用 root 身
+份開啟, 或者由 root 身份把那個檔案 chmod 666 讓其他身
+份也可以修改.
+
+
+Q:
+要怎麼開機只進入文字模式？之後又怎麼才能進入 Xwindow ?
+
+A:
+開機時以 "2" 為參數, 例如
+boot: dsl 2 toram
+
+在文字模式下要進入 Xwindow, 請看執行
+su - dsl (也就是變換成 dsl 這個 user 的身份)
+接著電腦會問你幾個問題, 就會進入 Xwindow 了.
+
+退出 Xwindow 環境後, 要再次進入 Xwindow 只要打
+startx <Enter> 即可
+
+
+Q:
+我要把一些設定及 $HOME 底下的東西存到 USB 隨身碟, 要怎麼做？
+
+A:
+2005-07-17 版這部份操作還未中文化, 請打開主選單, 到「系統」
+選 Backup/Restore 然後輸入你的 USB 隨身碟的分割區, 一般來
+說如果沒有割成多個分割區, 它就是 sda1 (不要打成 /dev/sda1)
+
+Backup 是要把目前系統存到 USB 隨身碟, Restore 是要把先前
+存檔的還原到現在的系統裡.
+
+下次開機時可以加上 restore=sda1 這樣的參數, 系統就會恢復
+到前一次你儲存的狀態.
+
+
+Q:
+我用 apt-get 安裝軟體, 但是出現 xyy zz &@%$!&*#@$ 怎麼辦？
+
+A:
+關於 debian 的 apt-get 等等回應訊息、安裝動作等等無法一一
+幫你翻譯、解釋, 所以建議玩一玩 debian 或到 moto 網站讀一些
+有關 debian 的資料, 這樣對使用者比較有實質的幫助和收獲.
+
+因為 DSL 在要求「小」的前題下, 它的環境比 KNOPPIX 離「正規」
+debian 更遠, 像是我在安裝 package 時可能不會依 debian 裡的
+相依性安裝所有相依的 library, 因為有些 library 雖然標示相依
+, 但實際上可能在 DSL 完全用不到, 裝了只會把系統變肥, 因此在
+缺少官方package 宣稱的 library 情形下再用 apt-get 去安裝就
+會出現一些 error messages.
+
+建議方式, 一是不要用 apt-get 裝, 而用 dpkg 裝, 因為 dpkg 比
+較不會像 apt-get 那麼囉索, 二來就算有 error message 以致系
+統不幫你做 config, 還是可以自行找到方式手工把它 config 好,
+這樣系統依舊可以正常使用.
+
+簡單說, 有些 error message 是根本不必理它, 因為 DSL 不是正
+規 debian. 系統能用才是最高政策. 如果系統不能用, 就手工去
+找到是哪裡有問題, 然後手工修改讓它 work. 這方面可能要依靠
+使用者實務經驗, 包括 debian 或其他 linux 的實務經驗.
+
+系統特別設計一個 dpkg-fake 的指令, 是用來騙系統, 讓使用者可
+以安裝 .deb 的軟體. 如果你在使手 dpkg-fake (或 dpkg)安裝軟
+體時出現 error message, 基本上可以忽略它, 程式還是可以用.
+
+
+
+============================================================
+海棠修訂版 DSL BV1AL 2005-07-17
+
+颱風即將來臨前的修訂版(修訂「海棠小品」)
+firefox 可以直接閱讀 M$ Word, Excel 的功能, 這是移植自我改造
+KNOPPIX-BV1AL 版時創作的功能, 在「海棠小品」裡未完整。
+
+新增指令 dpkg-fake 用來直接安裝 .deb 的 debian 軟體包, 它可
+以讓你不必手動把 /var/lib/dpkg 解回到系統, 直接用「騙」的方
+式就能 dpkg -i abc-123-i386.deb
+
+增加 esound, 讓某些音效卡也能同時聽 MP3 又能讓別的有音效的軟
+體(如 gaim)也正常「同時」發出聲音。
+
+但是你必須手動啟用 esound, 指令是
+esd & <Enter>
+
+然後必需到 xmms 裡「按右鍵→Options→Preferences」然後在
+Output Plugin 選 eSound
+
+在 gaim 裡也要「偏好設定→音效→播放方式」選 ESD
+
+另外海棠小品的 cdrom/KNOPPIX/FILES.md5 有錯誤, 一併修正
+
+
+--- BV1AL
+
+
+海棠小品 DSL BV1AL 2005-07-16
+
+這一版放上網路與大家分享的時間，正好是海棠颱風來台的時候。
+
+主要更動說明:
+
+「海棠小品」是複合式 LiveCD, 裡面包含了 DSL 及 movix 兩款 LiveCD
+
+先簡單介紹 movix, 它是一個利用 mplayer 專供播放 VCD/DVD 的小型
+Linux, 系統整個載入 RAM 只佔大約 20Mega, 開機後光碟片可以抽出.
+
+官方網站在 http://movix.sourceforge.net/
+
+因此這一片光碟可以用
+
+boot: dsl toram (或者 dsl 2 toram 先進文字模式再打 su - dsl 進圖型模式)
+來啟用 damn small linux 並載入 RAM，也可以用
+(不加 toram 參數的話, 就是在光碟上執行）
+
+boot: movix
+進入 movix, 開機完成可以抽出光碟，然後放進 VCD/DVD 觀賞.
+
+
+DSL 的部份:
+
+主系統檔 /cdrom/KNOPPIX/KNOPPIX 還不到 83Mega, 可以把系統完全
+載入 RAM, 執行速度超快。
+
+(建議使用的電腦為 256M RAM 或者更多, RAM 較少的電腦仍可以使用
+DSL, 但只能在光碟上執行, 就是跟傳統 LiveCD 一樣, 開機不要加
+"toram" 的參數)
+
+第一次開啟 firefox 約 3 秒, 之後重新開啟 firefox 約 1.7 秒.
+
+讓你脫離對 LiveCD 速度慢的刻板印象！
+
+DSL 完全在 RAM 裡面執行, 甚至比安裝在硬碟上的 linux 更快！
+LiveCD 決對不是「只能用來展示」，而是真的實用！
+
+改造 DSL 的目標是以一般使用項目為收入主要範圍，包括「瀏覽器
+、即時通訊、聽音樂為主題，這一片光碟已經很夠用。
+
+
+這一版的一些更動：
+
+移除原版的 firefox 0.9.1 改用至 1.0.4-tw(可閱讀正體中文、簡
+體中文、日文)(其實 0.9.1 版有些優點是 1.x 版所沒有，但某些功
+能 1.x 版有的，0.9.x 沒有所以只好換用新版)
+
+gcin使用版本為1.0.1
+
+加入「麻將」的game，以便無聊時玩玩 :-D
+
+移植自 BV1AL KNOPPIX 原創的 Xword 用來轉 M$ Word 檔成為 HTML
+就算沒有 Open Office 一樣可以用 firefox 閱讀 Word 檔。
+
+使用有背景底圖的 rxvt，在視覺上比較不會疲勞
+
+星際譯王使用文字介面的 sdcv 並加上操作介面
+
+sylpheed 可以使用中文收發 E-Mail
+
+beaver 可以使用中文處理文字檔案
+
+查經介面也使用 beaver 閱讀經文
+
+加入網路工具 ntpdate, nmap, bing, ncftp, whois
+
+桌面管理的 fluxbox keys: Alt+F1 彈出主選單, Alt+F2 下一個工作區
+
+移除原 DSL 內的 flwriter, naim
+
+加入 libGL.so.1.2 以便使用者自行安裝 skype 時可以正常啟用。
+(適用 Stanic binary tar.bz2 with Qt 3.2 compiled in, 下載後的
+檔名為 skype_staticQT-1.1.0.20.tar.bz2
+tar jxvf skype_staticQT-1.1.0.20.tar.bz2 解開後確認可以正常使用.
+你可以把它安裝在任何地方, 例如 $HOME)
+
+/usr/share/doc 及 /usr/share/man 及部份幾乎不會用到的 /usr/share/locale/
+都 tar zcvf 放到  cdrom/PLUGIN/ 之下以減肥系統體積。
+
+以上只有在重製光碟才會用到。
+
+另外 /var/lib/dpkg 及 /var/lib/apt/lists/ 及 /var/cache/apt
+也一樣用 tar zcvf 移到 cdrom/PLUGIN
+
+基本上如果不啟用 /etc/init.d/mkwriteable 就不必將以上檔案解回
+到系統，只有在重製光碟時才有需要。
+
+如果啟用 /etc/init.d/mkwriteable 而只以 dpkg 安裝軟體的話，可
+以只解回 /var/lib/dpkg, 另外兩個是有用到 apt-get 才須要解回去。
+
+Xloginmode bug 修正
+
+
+--- by BV1AL 阿里巴巴
+
+
+============================
+以下為「夏至小品」 2005-06-22 說明
+
+由於網友 neteng 的分享
+http://knoppix.tnc.edu.tw/modules/newbb/viewtopic.php?topic_id=2273&forum=3
+得知 DSL 新版可以安裝 locales 因此進一步即可以安裝其他中文
+相關的程式。
+
+嚐試最新版 DSL 1.2.1 結果不能安裝 locales, 退回 1.2 版卻可
+以安裝, 因此這一版是以 1.2 版為基礎改造的
+
+DSL= Damn Small Linux
+
+大多數 LiveCD 都因為要裝載豐富的內容，因此體積龐大，電腦至
+少要有 1G RAM 才可能將整個光碟內容丟進 RAM 裡執行。
+
+DSL是少數體積小巧又便於改造的 LiveCD，原版大小只有約 50MB，
+經改造加入中文之後，體積大了將近一倍，接近 100MB。因此只要
+你的電腦有 256M RAM 就可以將整個系統載入 RAM 裡飛快的執行。
+
+這一片DSL LiveCD包含了中文顯示，中文輸入法(使用gcin)，可以
+瀏覽台灣、日本、中國簡體字等。足夠用來做一般上網活動，像是
+逛網站、與朋友通 MSN/ICQ/Yahoo/IRC 等等。
+
+但為了保持小，自然不能加入像是 Open Office之類的恐龍程式，
+也不能提供中文列印，也不包含 VCD、DVD 播放程式；不過可以用
+xmms 來收聽網路上的廣播(如 http://www.shoutcast.com)。
+
+小型的 LiveCD 有一項特點是大型 LiveCD 較難做到的，就是它可
+以把整個系統完全載入 RAM 裡執行，藉著 RAM 的速度讓程式的執
+行快到比任何安裝至硬碟的作業系統更快，甚至比號稱「執行最快
+」的 gentoo 還要快。
+
+系統整個載入 RAM 之後就不再佔用光碟機，因此光碟機可以正常
+使用。
+
+
+這一版加上了 gaim 1.3.0 及 gcin 0.9.7-1
+以及一些網路工具, 如 nast, tcpdump, snort, dsniff, iftop,
+bwm, iptables等，並收集一些 firewall scripts (在 /mnt/cdrom/Firewall),
+可以用來建構防火牆。
+
+新增 gvpe, 可以用來建構 SSL 式的 VPN
+
+中文字型使用 firefly(在瀏覽器)、taipei(其他)、JIS等字型。
+可以瀏覽器支援台灣、日本、中國簡體漢字。
+
+新增伺服器: dhcpd, nfsd
+新增編輯器: joe, qe
+新增螢幕抓圖，自動存成 png 格式
+新增 rxvt-unicode
+可以使用任何編輯軟體編寫 UTF 碼的檔案
+
+修正 DSL 古早以來無法正常掛載 USB 隨身碟的 bug
+
+新增了 xdialog 因此可以製作更多操作介面(based on KNOPPIX-BV1AL)
+
+
+整個系統大約 100M 可以在開機時以
+boot: dsl toram
+的方式將整個系統載入 RAM, 開機完成後可以取出光碟片
+此後系統完全在 RAM 裡運作, 所以非常快, 比號稱最快
+的 gentoo 還要快，空出的光碟機可以做其他用途。
+
+不過因為系統要耗掉大約 100M, 因此你最好有 256M 或
+更多的 RAM 才不會有問題.
+
+一般進入系統後會問你使用哪一種顯示驅動( xserver ),
+大多數硬體可以選 Xvesa, 它會再問使用哪一種老鼠,
+之後會再問解析度等等.
+
+以目前大多數硬體來說，至少可以支援到
+1024 x 768 x 16 bit
+如果無法顯示, 可以重新執行 xsetup.sh 然後選
+800 x 600 再選 16 bit
+
+
+如果開機只想進入純文字模式, 可以打
+boot: dsl 2 (或加 toram 整個載入 RAM)
+
+在上述開機後, 文字模式要進圖型模式, 請打指令
+su - dsl <再按 Enter>
+它會問你一些設定
+
+如果做過上述設定, 要由文字模式進入圖型模式, 可以直接打
+startx <按 Enter>
+
+也可以組合兩項參數來執行:
+boot: dsl 2 toram
+
+這一版的桌面維持原版的 fluxbox + xtdesk 所以沒有中文選
+單，但這不影響中文的操作。如果一定要中文，可能得換掉這
+兩者改用 icewm + dfm 這留待下次或有興趣的朋友自己 DIY
+吧！
+

@@ -1,0 +1,51 @@
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+
+class Boxes extends JFrame implements ChangeListener {
+
+    private JSlider slider;
+    private JPanel panel;
+
+    public static void main (String []  args) {
+        Boxes demo = new Boxes();
+        demo.setSize(400,300);
+        demo.createGUI();
+        demo.show();
+    }
+
+    private void createGUI() {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        Container win = getContentPane();
+        win.setLayout(new FlowLayout());
+
+               slider = new JSlider(0, 10, 1);
+        win.add(slider);
+        slider.addChangeListener(this);
+
+panel = new JPanel();
+        panel.setPreferredSize(new Dimension(180, 50));
+        panel.setBackground(Color.lightGray);
+        win.add(panel);
+
+    }
+
+
+    public void stateChanged(ChangeEvent e) {
+        Graphics paper = panel.getGraphics();
+    int x, numberOfBoxes, counter;
+       numberOfBoxes = slider.getValue();
+paper.setColor( Color.white);
+    paper.fillRect(0, 0, 180, 50);
+    x = 10;
+    counter = 1;
+paper.setColor( Color.black);
+    while (counter <= numberOfBoxes) {
+        paper.drawRect(x, 10, 10, 10);
+        x = x + 15;
+        counter++;
+    }
+    }
+}

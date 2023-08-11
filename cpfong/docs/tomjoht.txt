@@ -1,0 +1,19 @@
+basic 3 files: _config.yml, default.html, index.md
+
+_config.yml # settings jekyll use to process your site. None is fine, since it will use default one
+ name: My Jekyll Website
+
+default.html #under _layouts dir
+ <!DOCTYPE html>
+ <html>
+  <body>
+     {{ content }}
+  </body>
+ </html>
+
+index.md
+ --- #front matter tags
+ title: My page
+ layout: default
+ ---
+ # {{ page.title }}

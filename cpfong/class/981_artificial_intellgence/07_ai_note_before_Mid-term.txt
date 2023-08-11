@@ -1,0 +1,59 @@
+function general_search(problem, stragecy) returns solution or failure
+	initialize the seach tree using init state
+	do loop
+		if no candidate for expansion then return failure
+		chose a leaf node for expansion according stragecy
+		if leaf node is goal then return path solution
+		else expand the node and put resulting nodes into seach tree
+	end do
+end function
+
+pods
+
+parent node
+path cost
+operatot
+depth
+state
+
+evaluation criteria
+COST
+
+completeness
+optimal
+space
+time
+
+BFS
+completeness	yes
+optimal		yes
+time & space	o(branch_fac^d)
+
+UCS (modified BFS)
+not always from leftest, but epanding lowest cost first node
+completeness	yes
+optimal		yes
+
+DFS
+completeness	no
+optimal		no
+time		o(branch_fac^d)
+space		o(d)
+
+DLS (depth-limited search , which is modifed DFS)
+completeness	yes
+optimality	no
+time		o(branch_fac^limit)
+space		o(limit)
+
+Iterative deepening search
+completeness	yes
+optimality	yes
+time		o(branch_fac^diameter)
+space		o(diameter)
+
+		BFS	UFS	DFS	limited	interactive	bi-dir
+time		b^d	b^d	b^d	b^l	b^d		b^2/d
+space		b^d	b^d	bd	bl	bd		b2/d
+optimality	yes	yes	no	no	yes		yes
+completeness	yes	yes	no	yes,l>=dyes		yes

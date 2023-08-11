@@ -1,0 +1,18 @@
+front: 前端, 在此取件, 其值為第一元素 - 1
+rear: 後端, 由此進入, 其值為最後元素
+
+add: 
+	if not full {
+		由 rear 加入
+			rear++;
+			a[rear]=data;
+	}
+remove:
+	if not empty {
+		由 front 取出
+			front++;
+			data=a[front];
+	}
+
+empty: fornt == rear
+full: 

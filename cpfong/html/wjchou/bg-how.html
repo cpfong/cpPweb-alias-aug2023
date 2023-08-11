@@ -1,0 +1,103 @@
+<HTML>
+<HEAD>
+<TITLE>Document specific background and foreground control</TITLE>
+</HEAD>
+<BODY>
+<H1 align=center>How to control the document's background</H1>
+<H3>The <tt>BACKGROUND</tt> attribute</H3>
+<p>
+Recent versions of the proposed HTML 3.0 spec. have added a
+<tt>BACKGROUND</tt> attribute to the <tt>BODY</tt> tag.  The purpose
+of this attribute is to specify a URL pointing to an image which is
+to be used as a background for the document.  In Netscape 1.1 this
+background image is used to tile the full background of the document
+viewing area.  Thus specifying:<br>
+<center>
+<nobr><tt>&lt;BODY BACKGROUND="textures/arena.gif"&gt;</tt><wbr>Document here</wbr><tt>&lt;/BODY&gt;</tt></nobr><br>
+</center>
+Would cause whatever text, images, etc. appeared in that document
+to be placed on a background that would give you the look of the paper
+texture from the Arena Web browser.
+</p>
+<H3>The <tt>BGCOLOR</tt> attribute</H3>
+<p>
+This attribute to <tt>BODY</tt> is not currently in the proposed HTML 3.0
+spec, but we're working on it.  Basically, many people just want to change
+the color of the background without having to specify a separate image that
+requires another network access to load.  This attribute allows just that.
+The format that Netscape 1.1 understands is:<br>
+<center>
+<nobr><tt>&lt;BODY BGCOLOR="#rrggbb"&gt;</tt><wbr>Document here</wbr><tt>&lt;/BODY&gt;</tt></nobr><br>
+</center>
+Where <tt>"#rrggbb"</tt> is a hexadecimal red-green-blue triplet used to
+specify the background color.
+</p>
+<hr>
+<H1 align=center>How to control the document's foreground</H1>
+<p>
+Clearly, once you have control of the background, you are going to need
+to also control the foreground to establish the proper contrasts.  The following
+attributes are also recognized as part of the <tt>BODY</tt> tag by Netscape 1.1.
+</p>
+<H3>The <tt>TEXT</tt> attribute</H3>
+<p>
+This attribute is used to control the color of all the <i>normal</i> text
+in the document.  This basically consists of all text that is not specially
+colored to indicate a link.  The format of <tt>TEXT</tt> is the same as
+that of <tt>BGCOLOR</tt>.<br>
+<center>
+<nobr><tt>&lt;BODY TEXT="#rrggbb"&gt;</tt><wbr>Document here</wbr><tt>&lt;/BODY&gt;</tt></nobr><br>
+</center>
+</p>
+<H3>The <tt>LINK</tt>, <tt>VLINK</tt>, and <tt>ALINK</tt> attributes</H3>
+<p>
+These attributes let you control the coloring of link text.  <tt>VLINK</tt>
+stands for visited link, and <tt>ALINK</tt> stands for active link.  The
+default coloring of these is: <tt>LINK</tt>=blue, <tt>VLINK</tt>=purple, and
+<tt>ALINK</tt>=red.  Again the format for these attributes is the same as that
+for <tt>BGCOLOR</tt> and <tt>TEXT</tt>.<br>
+<center>
+<nobr><tt>&lt;BODY LINK="#rrggbb" VLINK="#rrggbb" ALINK="#rrggbb"&gt;</tt><wbr>Document here</wbr><tt>&lt;/BODY&gt;</tt></nobr><br>
+</center>
+</p>
+<hr>
+<H2 align=center>Complete Example</H2>
+<pre>
+&lt;HTML&gt;
+&lt;HEAD&gt;
+&lt;TITLE&gt;Color Control Example&lt;/TITLE&gt;
+&lt;/HEAD&gt;
+&lt;BODY BGCOLOR="#000000" TEXT="#F0F0F0"
+      LINK="#FFFF00" VLINK="#22AA22" ALINK="#0077FF"&gt;
+&lt;p&gt;
+This is an example document.  Text is light-gray on black, and
+&lt;a href="nowhere.html"&gt;anchors&lt;/a&gt; are yellow at first,
+flashing blue-green when activated, and pale green if already visited.
+&lt;/p&gt;
+&lt;/BODY&gt;
+&lt;/HTML&gt;
+</pre>
+<hr>
+<H2 align=center>Stuff and bother <i>(the details)</i></H2>
+<p>
+To state the obvious, since these color controls are all attributes of the
+<tt>BODY</tt> tag, you can only set the colors <b>once</b> for the entire
+document.  You cannot change coloring partially through a document.
+</p>
+<p>
+Since setting a background image requires the fetching of an image file
+from a second HTTP connection, it will <b>slow down</b> the perceived speed
+of your document load.  None of your document can be displayed until the image
+is loaded and decoded.  Needless to say, keep your background images small.
+</p>
+<p>
+If you have the <b>Auto Load Images</b> option off, background images will
+not be loaded.  If the background image is not loaded for any reason,
+and a <tt>BGCOLOR</tt> was not also specified, then any of the foreground
+controlling attributes (<tt>LINK</tt>, <tt>VLINK</tt>, and <tt>ALINK</tt>)
+will be ignored.  The idea behind this is that if you didn't get your requested
+background image, setting your requested text colors on top a the default
+gray background may well make your document unreadable.
+</p>
+</BODY>
+</HTML>

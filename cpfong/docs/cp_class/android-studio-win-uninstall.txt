@@ -1,0 +1,55 @@
+Step 1: Run the Android Studio uninstaller
+Step 2: Remove the Android Studio files
+ To delete any remains of Android Studio setting files, in File Explorer, go to your user folder (%USERPROFILE%), and delete .android, .AndroidStudio and any analogous directories with versions on the end, i.e. .AndroidStudio1.2, as well as .gradle and .m2 if they exist. Then go to %APPDATA% and delete the JetBrains directory. Finally, go to C:\Program Files and delete the Android directory.
+Step 3: Remove SDK ( rmdir sdk /s #remove subdirectory also)
+ To delete any remains of the SDK, go to %LOCALAPPDATA% and delete the Android directory. # /Users/user_or_whatever_login_name/appdata/local/sdk
+Step 4: Delete Android Studio projects
+ Android Studio creates projects in a folder %USERPROFILE%\AndroidStudioProjects, which you may want to delete.
+
+
+1- Uninstall old Android Studio completely (from Control Panel -> Programs).
+2- Delete this Android Studio folder located at C:\Users\<user_name>\AppData\Local\Google
+3- Delete this Android Studio folder located at C:\Users\<user_name>\AppData\Roaming\Google
+4- Delete these folders (.android ,.AndroidStudio*, .gradle) located at C:\Users\<user_name>
+
+Q: where is sdk ?
+A:
+MINI-> cd sdk/
+@MINI-> ls
+build-tools     emulator        fonts           licenses        patcher         platform-tools  platforms       skins           system-images   tools
+
+#now do install ....
+---------
+
+# ATTENTATION: keep internet ON!
+
+double click .dmg file, then use mouse hold drag icon to Applications  (note: air (mac NB) is M1 cpu, mini is intel cpu, do NOT mix it up)
+  @MINI-> ls /Applications/ |grep And
+  Android Studio.app #app installED ok
+  @MINI-> ls Library/ |grep An #NONE
+
+1st run
+  missing SDK
+  SDK component setup (also note: setup directory is /Users/cpfongsmacmini/Library/Android/sdk)
+   1 android sdk 368M
+   2 API 32 120M
+       Setup Type: Standard
+       SDK Folder: /Users/cpfongsmacmini/Library/Android/sdk
+       JDK Location: /Applications/Android Studio.app/Contents/jre/Contents/Home
+       Total Download Size: 588 MB
+	Android Emulator 299 MB
+        Android SDK Build-Tools 32 50.4 MB
+	Android SDK Build-Tools 32.1-rc1 56.7 MB
+	Android SDK Platform 32 63 MB
+	Android SDK Platform-Tools 18.5 MB
+	Android SDK Tools 98.2 MB
+	SDK Patch Applier v4 1.74 MB
+	  android-sdk-licences (accept)
+	  android-sdk-preview-licences (accept)
+
+1st proj
+   take lots of time download Gradle and java files
+
+check SDK manager: only Android API 32 is installed (only one is enough)
+
+goto device manager: select R (api level 30) X86 android 11 / download / start downloading ...

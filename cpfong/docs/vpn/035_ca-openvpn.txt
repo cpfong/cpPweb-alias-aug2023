@@ -1,0 +1,26 @@
+#!/usr/local/bin/perl
+
+print "mkdir public\nmkdir private\n";
+
+openssl req -days 3650 -nodes -new -keyout ./private/ca.key -subj "/C=TW/ST=Taiwan/L=KaoShiung/O=Fotune/CN=ca.fotech.edu.tw" -out ./public/ca.crt -x509
+
+# openssl.cnf is under 
+# [cpfong@mail ~/tmp/trash/easy-rsa/cp] ls /etc/ssl/openssl.cnf
+#[ server ]
+# JY ADDED -- Make a cert with nsCertType set to "server"
+#basicConstraints=CA:FALSE
+#nsCertType                      = server
+#nsComment                       = "OpenSSL Generated Server Certificate"
+#subjectKeyIdentifier=hash
+#authorityKeyIdentifier=keyid,issuer:always
+# check xxxxx/openvpn/easy-rsa/1.0/build-key-server
+
+openssl req -days 3650 -nodes -new -keyout ./private/server.key -subj "/C=TW/ST=Taiwan/L=KaoShiung/O=Fotune/CN=ns.mis.fotech.edu.tw" -extensions server  -out ./private/server.csr
+
+openssl x509 -req -days 3650 -in ./private/server.csr -out ./public/server.crt -CA ./public/ca.crt -CAkey ./private/ca.key -extensions server -CAcreateserial
+
+openssl dhparam -check -text -5 1024 -out private/dh1024.pem
+
+openssl req -days 3650 -nodes -new -keyout ./private/client.key -subj "/C=TW/ST=Taiwan/L=KaoShiung/O=Fotune/CN=misun2.fotech.edu.tw" -out ./private/client.csr
+
+openssl x509 -req -days 3650 -in ./private/client.csr -out ./public/client.crt -CA ./public/ca.crt -CAkey ./private/ca.key

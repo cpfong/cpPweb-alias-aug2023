@@ -1,0 +1,274 @@
+
+<head>
+<title> The NoCeM FAQ</title>
+</head>
+
+<BODY BGCOLOR="#CDCDCD" TEXT="#000000" LINK="#FF0000" VLINK="#FF00FF" ALINK="#FF00FF">
+<h1>The NoCeM FAQ. V0.93</h1>
+
+這份文件還是草稿，就像這個專案還正在發展一樣。
+請提出建議給 <a href="mailto:moose@cm.org">moose@cm.org</a>. <br>
+原文在 <a href=http://www.nocem.org/faq.html>http://www.nocem.org/faq.html</a>，
+有關中文版的建議請告訴 <a href="mailto:leeym@cae.ce.ntu.edu.tw">leeym@cae.ce.ntu.edu.tw</a>。
+<p>
+
+我規劃了這個網路共同發展的專案。
+我所寫的客戶端的程式當成標準的實際範例 -- 我希望人們可以改寫並做必要的修改。
+<hr>
+<h2>
+第一部份 -- 關於 NoCeM 的概念本身。
+</h2>
+
+Q: 什麼是 NoCeM？
+<p>
+A: NoCeM (發音 No See 'Em) 可能是:
+<ul>
+<li>一個廣告信 (spam) 的解決之道。
+<li>一個砍廣告信 (spam-cancel) 的解決之道。
+<li>一個 "編輯" (edit) 你所希望的網際論壇 (usenet) 的方法。
+<li>一個允許其他人按照你所希望來 "編輯" 網際論壇的方法。
+<li>一個不讓任何人改變你在網際論壇上看到文章的方法。(到這個程度是可能的。)
+</ul>
+  我提供了一個集中的標準，但實作時仍得靠網路作來定義許多標準。
+<hr>
+Q:  是怎麼運作的？
+<p>
+
+A: 對於什麼是應該被張貼在網際論壇上的，許多人有自己的意見，
+   有些有非常廣泛的支援，像是砍廣告信程式 (spam cancellers)。
+   另一方面，那些壓制某一種觀點言論的則不被支援。
+   有很多情況無法取得這兩者間的平衡。
+<p>
+   在 NoCeM 的模式下，網路上任何一個人看到了他們認為不應該出現在網際論壇
+   上的文章都可以發出 NoCeM notice。
+   然而，就像任何種類的網際論壇訊息，notice 的影響不會大於原作者的聲望。
+   如果人們認同簽發人 (issuer) 的標準而且認為這個人是一個好的裁判，
+   然後人們可以接受他/她的 notice。當然反之亦然。
+
+<p>
+   當 NoCeM notice 被一個使用者接受時會作一些預先說明的動作。
+   最可能的是會標記已讀在使用者的 newsrc 檔裡面。
+   然而，它也可以被設定成移除網際論壇伺服器上的文章，
+   標記成建議讀取 (如果你總是想讀到某個人的建議)，
+   或者亂數的顯示列表上的文章 (來檢查某個簽發人)。
+   當我想讓這些步驟建立在使用者端的基礎上，如果在你的機器上，這是你的決定。
+
+<hr>
+Q: 可不可能我用的/上游的餵信站會使用這種審查制度？
+<p>
+A: 很不幸的，可能。但那是事實，你的管理者和上游餵信站可以管制你所看到的。
+   我不鼓勵管理者應用 NoCeM notice 在他們的文章庫裡，
+   但那是他們的機器，他們有權選擇他們傳送的文章。
+   如果你覺得你用的/上游的轉信站對你看到的文章作了太多的管制，
+   你可以另找一個新的資訊來源。
+<hr>
+
+Q: 如何避免某人偽造 NoCeM notice？
+<p>
+A: NoCeM 規定要求所有的 notice 都須經過公開鑰匙 (public key) 簽發才可被接受。
+   你可使用特定的鑰匙環來控制誰將被你賦予存取權。
+<hr>
+
+Q: NoCeM 有哪些不同的應用方法？
+<p>
+A: 就我看到的，現在有 3 種主要的應用方法。
+<ol>
+<li>廣告信/重複張貼的可以被標記為 "hiding"。
+    這種 notice 應該有 "Action: hide" 的檔頭，標題中有 "@@NCM"，
+    而且交叉張貼到 alt.nocem.misc。
+
+<li> 大量張貼可以用一樣的方法 -- "Action: hide"。標題中有 "@@NCM"，
+     應該貼到 alt.nocem.misc 和原群組。這應該在 ncm 檔頭裡包含 "Newsgroup:"。
+
+<li> 一個人可以藉由發送某一個新聞群組的 notice，
+     使他/她自己成為該新聞群組的 "虛擬討論區管理員"，
+     如果你想要這麼做:
+      <ol>
+        <li> 你應該只處理這一個新聞群組的文章，
+        <li> 標題中應該有 "@@newsgroup" (注意: 不是 @@NCM)，
+        <li> 它應該被張貼到 alt.nocem.misc (還有原群組，如果讀者們希望如此)，
+        <li> 它應該有 "Newsgroup:" ncm 檔頭。
+     </ol>
+<br>
+      這些可以藉由兩種方式來達成 -- 一般的 "Action: hide" notices，
+      或者用 "Action: show" notices。
+      後者將會將特定群組中除了 notice 裡面列的以外的文章都標為已讀。
+      (目前，"show" 的方式有嚴格的限制。)
+      將來實作上會針對一些新聞閱覽程式的特殊功能，像是 nn 的 .nn/select 檔。
+</ol>
+<hr>
+
+<h2>
+第二部分 -- 你準備接收 NoCeM notices ？？？
+</h2>
+
+目前有兩種 (Leeym按: 不只兩種囉。) 客戶端程式來讀取 notices --
+Moose 的 perl NoCeM 客戶端程式，以及最新版的
+<a href="http://www.ifi.uio.no/~larsi/">GNUs</a>。
+
+<p>
+想取得並使用 Moose 的客戶端程式，你需要:
+<ul>
+<li> MIT PGP 2.6.* 或 PGP 2.6i。注意 2.6ui 將不能正常運作。
+<li> 取得 Cancelmoose 的公開鑰匙 (public key) (這在伺服器上)。
+<li> 能讀取 alt.nocem.misc (Leeym按: TANet 的為 tw.bbs.admin)。
+</ul>
+<br>
+再進一步，你必須在 unix 系統上裝好 perl4 或 perl5。
+你的系統必須允許直接檔案存取或者透過 NNTP 讀取。
+目前唯一支援的文章資料庫為 NOV。
+<p>
+目前，還沒有辦法加入 NoCeM 能力在非 unix 的新聞閱覽程式上。
+(雖然有為數不少的作者們表現出興趣。)
+如果你希望看到它，請聯絡你的新聞閱覽程式的作者。
+<hr>
+
+<h2>
+第三部分 -- 你想簽發 NoCeM notices？？？
+</h2>
+
+<ul>
+<li> 你必須取得並學習使用 PGP。
+
+<li> 你應該創造一對鑰匙，並把你的公開鑰匙放在鑰匙伺服器上。
+     所有的 notice 都必須經過簽證。
+
+<li> 你也許想要取得多組的鑰匙對，如果你將簽發:
+<ul>
+        <li> 高實驗性質種類的 notice。
+        <li> 數種完全不同功能的 notices
+          (虛擬管理一個新聞群組，然後 'hiding' 令人不快的文章。)
+        <li> 從一台多人主機上自動簽發 notices
+          (有較高暴露 secret key 的危險。)
+</ul>
+
+<li> 你應該張貼一篇敘述到 alt.nocem.misc，描述你的目標是什麼，還有你用來組成
+  notices 的標準。這應該交叉張貼到相關的新聞群組裡。
+  它應該加上了你的 PGP 鑰匙。這份敘述將成為 FAQ 的一部份。
+
+<li> 一篇 notices 應由 "@@BEGIN NCM HEADERS" 從新的一行。
+  任何在這一行以前的都將被客戶端程式所忽略。
+  任何由 # 開始的行也將被忽略。
+
+<li> 再來是檔頭。最少應該包括了:
+<ul>
+<li>    Version: &lt;目前的版本為 0.9&gt;
+<li>    Issuer: &lt;你的 e-mail 信箱&gt;
+<li>    Type: &lt;spam 或 spew 或 MMF 或 ???&gt;
+<li>    Action: &lt;hide 或 show&gt;
+<li>    Newsgroup: &lt;只有在 spew/pseudomoderation 時才需要這行&gt;
+<li>    Count: &lt;底下有多少篇 ID&gt;
+<li>    Notice-ID: &lt;一個獨一無二的字串&gt;
+</ul>
+</pre>
+
+<li> 接著是新的一行的 "@@BEGIN NCM BODY"。
+
+<li> 主體的每一行應該由 A) 一個 &lt;角括號&gt; 界定出的 message-id
+  B) 或一個或多個 TAB。
+  由 TAB 開始的行表示參考前一個 message-id。
+  在 TAB 之後一個是這篇文章所出現的，用空格隔開的新聞群組列表。
+  (這列表必須非常的準確 - 它應該從壞文章的檔頭裡取出。)
+
+<li> 主體必須由 "@@END NCM BODY" 結尾。任何在此以後的都將被忽略，除非是另一篇
+ notice。
+
+<li> 就像前面提到的，一篇 notice 應該經過公開鑰匙簽證。
+  測試時我要求人們用文字模式來除錯。
+
+<li> 經過簽證的 notice 現在可以被傳佈。
+  記得這是有時效性的資訊。試著避免交叉張貼到不是立即處理的 moderated 群組。
+  用 mailing list 或 web 應該是比較理想的。
+
+<li> 因為 NoCeM 忽略了界定符號以外的資料，這一篇 notice 也可以是人們可閱讀
+  的報告。如果你的 notice 想要..。
+
+<dl compact>
+<dt>隱藏廣告信</dt>
+<dd>張貼到 alt.nocem.misc (和其他 abuse groups) 並在標題中含 "@@NCM"。</dd>
+
+<dt>隱藏大量張貼</dt>
+<dd>張貼到 alt.nocem.misc (和其他 abuse groups)
+  張貼到 alt.nocem.misc (and other abuse groups) 和出問題的群組。
+  標題中含有 "@@NCM"。確定你的 notice 有一行 Newsgroup:</dd>
+
+<dt>虛擬管理一個新聞群組</dt>
+<dd>張貼到 alt.nocem.misc 和該群組 (如果讀者們想要的話)。
+  標題裡包含 "@@newsgroup"。 [我的觀點，用這個是早了一點.]</dd>
+</dl>
+
+<li> 張貼時，確定標題中包含了標記 (@@)。
+  另外，確定你的文章中沒有 "References:" 檔頭 --
+  用來檢查和避免 notice 的回應文章。
+  當然，當廣泛的交叉張貼時，請注意是否適合的設定了回應文章。
+
+<li> 另外，當張貼一份違反規定的文章時，請加上 > 或其他符號來引用，
+  以便消除他的左邊界。
+
+<li> 一個簽證過的 NoCeM notice <b>必須 必須 必須</b>有平衡的 NoCeM 界定符號
+  (兩個開始和一個結束)。如果你放著 "結尾" 的符號有可能使得較低信任或不被信任
+  的人在你的報告後面加入 message-ID。
+
+<li> 最後，請閱讀 alt.nocem.misc 以便隨著改變而更新。
+  我預料最可能 news.lists.nocem 的形成和許多網站或 mailing lists，加速散佈。
+
+</ul>
+<hr>
+<h3>
+更多檔頭的資訊...。
+</h3>
+
+<dl>
+
+<dt>Version:</dt>
+<dd><b>必備的</b> - 第三階段會檢查這個，以便在接下來的運作前，
+    確定它能掌握文章的格式。因此這應該是第一行出現在檔頭裡的。
+    (因此只有開始符號和版本檔頭需要回溯相容。)</dd>
+
+<dt>Issuer:</dt>
+<dd>一些可供識別的字串。</dd>
+
+<dt>Action:</dt>
+<dd>
+<dl compact>
+  <dt>hide</dt>
+    <dd>主體中包含了簽發人希望讀者們不要看到的 message-id。
+    管理者可能會想砍掉這些文章。</dd>
+
+  <dt>show</dt>
+    <dd>主體中包含了被建議閱讀得 message-id。</dd>
+</dl>
+</dd>
+
+<dt>Type:</dt>
+<dd>
+<dl compact>
+<dt>Spam(EMP)</dt>
+<dd>這會附帶其他檔頭說明檢測的方法，門檻，和交叉張貼的參數。</dd>
+
+<dt>MMF</dt>
+<dd>因為這種引起爭議的本質，所以我想它該擁有自己的分類。</dd>
+
+<dt>Spew</dt>
+<dd>如同 MMF/Spam。</dd>
+
+<dt>Content-Based</dt>
+<dd>由虛擬管理者們所使用。</dd>
+
+</dl>
+
+<dt>Notice-ID:</dt>
+<dd> 一些經過排列的獨一的字串以幫助最佳化。</dd>
+
+<dt>Newsgroup:</dt>
+<dd>notices 只對單一新聞群組發生影響的應該被標記。
+    目前，這個不會取代 notice 主體中的新聞群組列表。</dd>
+</dl>
+<hr>
+
+<h3>結束 (目前來說..)</h3>
+
+</body>
+<hr>
+ <address>Email: <a href="mailto:moose@cm.org">moose@cm.org </a></address>
+

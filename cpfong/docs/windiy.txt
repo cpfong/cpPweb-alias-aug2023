@@ -1,0 +1,7 @@
+Q: 無法進入 Win9x
+A: 1. control 進控制台來移除重覆或不要的 device
+   2. Registry Repair
+        2a. F8 進入 5 Command prompt only
+	2b. cd \windows
+	2c. scanreg.exe
+	2d. view backups (try each one)

@@ -1,0 +1,3 @@
+Q: Whom should I contact with questions about AWS Educate? 
+A:
+For questions about AWS Educate, please fill out the form at http://aws.amazon.com/education/awseducate/contact-us/, then fill out the form most appropriate for you as an educational institution administrator, educator, or student. For media, please contact us at press@awseducate.com. 

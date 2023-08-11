@@ -1,0 +1,12 @@
+[cpfong@ubuntu html]$ pwd
+/var/www/html
+
+[cpfong@ubuntu html]$ ls -Z ind*
+-rw-rw-r--  cpfong cpfong user_u:object_r:user_home_t      index2.html
+-rw-r--r--  root   root   user_u:object_r:httpd_sys_content_t index.html
+
+[cpfong@ubuntu ~]$ restorecon -R -v /var/www/html
+
+[cpfong@ubuntu html]$ ls -Z ind*
+-rw-rw-r--  cpfong cpfong system_u:object_r:httpd_sys_content_t index2.html
+-rw-r--r--  root   root   user_u:object_r:httpd_sys_content_t index.html

@@ -1,0 +1,19 @@
+-- what can be missed in kernel config (for qemu-i386.conf)
+
+@venus-> ls -l KERNEL.v* | tr -s ' ' | cut -d ' ' -f9
+
+KERNEL.v0.no.cardbus.no.parallelPort
+KERNEL.v1.no.ethernet.only.em0
+KERNEL.v2.no.soundDriver
+KERNEL.v3.no.soundDriver
+KERNEL.v4.no.hyperV
+KERNEL.v5.no.USB
+KERNEL.v6.no.MMC-SD.bus
+KERNEL.v7.no.RAID.controller
+KERNEL.v8.no.atkb.ps2
+KERNEL.v9.slim.heading.options.but.Keep.apic
+KERNEL.va.keep.acpi.4.em0.slim.ata
+KERNEL.vb.no.PCI_HP_IOV.option.no.SCSI.controller
+KERNEL.vc.no.NVM
+KERNEL.vd.trim.ATA.SCSI.peripherals
+KERNEL.ve.trim.ATA.peripperal.more.but.KEEP.agp.mount.ufs.err19.keep.GEOM_RAID

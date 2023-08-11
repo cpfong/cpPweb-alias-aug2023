@@ -1,0 +1,3 @@
+UEFI: unified extensive firmware interface
+
+check mars.ifong.org:~/home/cpfong/00bsd_my_doc/unix/cmd/install_windows_boot_uefi_bios.txt

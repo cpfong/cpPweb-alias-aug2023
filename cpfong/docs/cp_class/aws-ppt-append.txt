@@ -1,0 +1,13 @@
+-- set wget as a service (use NSSM) and finallly work!
+https://nssm.cc/
+run as admin in cmd line: nssm.exe install (will bring GUI)
+
+note: service cause lots of update?.....
+
+
+-- need to login to start this script
+shell:startup for ME
+shell:common startup for everyusers
+
+Windows binaries of GNU Wget (i use wget64.exe version 1.17.1)
+https://eternallybored.org/misc/wget/

@@ -1,0 +1,20 @@
+chap5B
+
+較為知名的 CPU: 
+	Intel, AMD, Motorolla, Freescale, IBM
+
+Intel 的 cpu:
+	Pentium, Celeron, Xeon 
+
+http://www.intel.com 可以看到 intel 的各種 cpu 包含:
+桌上型, 筆記型, 掌上型, 伺服器, 網路設備
+
+CISC: complex instruction set computing 複雜指令集計算
+RISC: reduced instruction set computing 精簡指令集計算
+
+5.8 
+ps2, usb, 平行埠, Serial port (check text book)
+
+SCSI 小型電腦系統介面
+
+USB, IEEE 1394, PCMCIA (筆電的擴充)

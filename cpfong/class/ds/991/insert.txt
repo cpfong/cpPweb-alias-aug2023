@@ -1,0 +1,28 @@
+    Dim a(10) As Integer
+    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        For i As Integer = 1 To a.GetUpperBound(0)
+            a(i) = Rnd() * 100 + 1
+            ListBox1.Items.Add(a(i))
+        Next
+
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+
+        Dim i, j, x As Integer
+        For i = 2 To a.GetUpperBound(0)
+            x = a(i)
+            j = i - 1
+
+            While (j >= 1 And a(j) < x)
+                a(j + 1) = a(j)
+                j -= 1
+            End While
+            a(j + 1) = x
+        Next
+
+        For i = 1 To a.GetUpperBound(0)
+            ListBox2.Items.Add(a(i))
+        Next
+
+    End Sub

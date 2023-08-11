@@ -1,0 +1,21 @@
+----
+[cpfong@ssh ~]$ cat p2-22ex3.py
+#!/usr/local/bin/python
+
+print ( "%d"  % 123   ,"\t", "%d"  %    45 )
+print ( "%d"  % 123456,"\t", "%d"  % 78901 )
+
+
+----
+[cpfong@ssh ~]$ cat p2-22ex4.py
+#!/usr/local/bin/python
+
+print ( "%6d" % 123   ,"\t", "%5d" %    45 )
+print ( "%d"  % 123456,"\t", "%d"  % 78901 )
+
+----
+[cpfong@ssh ~]$ cat p2-26-ex4.py
+#!/usr/local/bin/python
+
+print ( "%.2f"  % 123.46    ,"\t\t" , "%.2f"  %    45.68 )
+print ( "%.2f"  % 123456.79 ,"\t"   , "%.2f"  % 78901.23 )

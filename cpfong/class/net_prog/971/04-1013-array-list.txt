@@ -1,0 +1,57 @@
+chapter 3 list and array
+
+3.1 存取陣列中的元素
+3.2 特殊的陣列索引值
+3.3 串列字面值
+	3.3.1 qw 簡寫
+3.4 串列(list)的賦值
+	3.4.1 pop 和 push 算符
+	3.4.2 shift 和 unshift
+3.5 在字串內安插陣列	
+
+----
+3.0
+	list: 純量的集合
+	array: 貯存 list 的變數
+3.1
+	$fred[0] = "yabba";
+	print $fred[0];
+3.2
+	$#array 表示 list 最後一個元素的 index
+	index 為 -1 表示是最後一個
+
+	$rocks[0]='stone';
+	$rocks[99]='pebble';
+	$rocks[-1]='others';
+	print $#rocks;
+3.3
+	(1,2..5)
+	("string", 1.2)
+	qw / fred barney betty /;
+	qw { /usr/local/bin /home/perl };
+	1 加到 100 的總合
+3.4
+	($fred, $barney, $dino) = ('flintstone', 'rublle', undef); 
+	($wilma, $dino) = qw [ flintstone ];
+	@rocks = qw / bedrock slate lava /;
+	@tiny = ();
+	@giant = 1..1e5;
+	@stuff = (@giant, undef, @giant);
+	$dino = " granite ";
+3.4.1
+	@array = 5..9;
+	$barney = pop @array;
+	push @array, 8;
+
+	@quarry = (rocks, " crushed rock ", @tiny, $dino);
+
+3.5
+	@rocks = qw / bedrock flintstone lava /;
+	print "there are three rocks: @rock";
+
+	注意: 內定的分隔字元為空白, 它是 $" 所以若要把分隔改成逗點則:
+		可以把 $" 設定成逗點即可.
+
+	@rocks = qw / bedrock flintstone lava /;
+	$" = ',';
+	print "there are three rocks: @rock";

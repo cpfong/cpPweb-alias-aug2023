@@ -1,0 +1,40 @@
+chapter 11 建立資訊系統
+
+IS (Information System) 資訊系統為一種協助人們收集, 儲存, 組織和利用資訊的機制.
+IS 基本元件: 
+	1. 儲存資訊實體: 例如: 硬碟等實體存資料的設備
+	2. 保持資料完整性的程序: 消除重複, 驗証準確性
+	3. 資訊使用和傳播原則: 那些人可以存取那些資料
+
+IS 因應自動化, 有逐漸專業化的趨勢, 不同功能的 IS 有不同的名稱, 例如:
+	1. 辦公室自動化系統
+		利用電腦及網路執行各類工作, 例如: ms office
+	2. 交易處理系統
+		處理和追蹤交易的系統稱為交易處理系統
+	3. 管理資訊系統
+		讓管理者收集, 組識和評估有關一個群體的資訊
+	4. 決策支援系統
+		它專門收集資料, 以幫助管理者做更好的決策.
+	5. 專家系統
+		專家系統執行人類的工作, 例如: 醫療診斷或貸款認可
+
+資訊系統技術
+	intranets: 一個公司內部各個部門之間
+	extranets: 二個公司之間
+
+資訊系統硬體:
+	RAID (redundant array of independent disks) 是連結多顆硬碟的儲存系統,
+		其運作起來就像是一顆硬碟.
+	
+	raid 分成三個基本型態: stripping, mirroring, stripping-with-parity  
+	raid0: 分散資料在多顆硬碟以提供快速的存取, 但一個 hd 壞了即 data 無法再用 
+	raid1: 資料同時放在二個 hd
+	raid4: 同 raid0 但資料失敗可重建
+
+http://www.dropbox.com
+
+ms+skype
+
+voip: voice over internet protocol
+
+http://www.mky.com

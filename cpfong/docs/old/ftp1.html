@@ -1,0 +1,282 @@
+<title>
+如何使用 ftp
+</title>
+<pre>
+    ◎ ftp 使用說明(一) -- 簡介
+ 
+ -=- FTP 的簡介 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+ 
+  FTP ( File Transfer Protocol )的目的，是將檔案在主機間進行傳輸。這裡
+  指的主機可以是一般的 PC，也可以是 Workstation 等。
+
+  例如，最常見的情形是，您可用 PE、HE 等文書處理軟體，在 PC 上編輯檔案
+  並利用 ftp 傳上工作站使用； 反之，也可將工作站上的檔案傳到 PC 上處理
+  。這裡所謂的「處理」是說，只要是建立連結的兩台主機，ftp 可以讓我們進
+  行很多與檔案有關的指令，包括 delete 哦。
+
+   Internet 網路世界裡存在有上萬部的主機，其中很多機器都有提供所謂的「
+  匿名公用帳號檔案傳輸」( Anonymous FTP )服務，簡單地說，就是執行 ftp
+  進入後，以 anonymous 或 ftp 為 Username，而以 Email Address 為 pass-
+  word 簽入( 例如本校的 ftp.nccu.edu.tw 主機 )。這些機器提供了很多公用
+  、共享軟體或其他有用的文件供大家擷取使用。
+ 
+  FTP 的操作算是單純而容易的，但在使用之前，我們最好先了解所要傳輸檔案
+  的格式，是屬於純文字檔( ASCII )或二進位檔( binary )， 請記住一個原則
+  ，只要不是 ASCII 檔，一律使用 binary 格式來傳。 一般上，為了節省傳輸
+  時間及網路負荷，大部份的公用軟體都經過壓縮。壓縮格式有好多種( 一般可
+  由檔案的延伸檔名看出 )，分別需不同的解壓縮程式，詳細說明請參閱最後面
+  的附錄。
+
+ -=- 如何進入 FTP  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+ 
+  進入 ftp 有底下幾種方式:
+   ぇ 直接鍵入" ftp [ IP address ] "
+      如: J:\USER\PCxxx> ftp ftp.nccu.edu.tw  ( 由 PC 連上政大 FTP 站 )
+                         ^^^^^^^^^^^^^^^^^^^
+   え 只鍵入" ftp "，待" ftp> "提示符號出現後，再" open [ IP address ]"
+      如: ftp> open ftp.nccu
+               ^^^^^^^^^^^^^
+   ぉ 由政大 Gopher 系統轉入( 只用於到各 FTP 站抓檔案時 )
+      如: 台灣學術網路資源 或 絢麗的多媒體
+ 
+ ※ 其中 [ IP address ] 表示目的機器的地址，可為號碼或 Nodename。
+ 
+  連線成功後，機器會詢問 Username 及 password， 依要求鍵入後，即簽入成
+  功。如輸入錯誤以致簽入失敗，可用鍵入" user "指令重新輸入 username 及
+  password。簽入成功後，利用" ls "或" dir "可列出目錄內容。
+ 
+ ※ 記得所有指令須分大小寫，Unix 主機對大小寫要求非常嚴格。
+ 
+  接著，利用" cd [目錄名] "進入所需的目錄，並可利用" binary "或" ascii
+  " 切換檔案傳輸方式，而以" get <檔名> "抓取所要檔案或以" put <檔名> "
+  放入檔案。最後，鍵入" quit "離開 ftp 狀態。
+ 
+ -=- 附錄: 檔案格式介紹 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+ 
+ ※ 在使用 ftp時必須對文字檔和二進位檔加以區分，否則在傳輸時會發生錯誤
+  ，以致檔案不可使用。
+ 
+  簡單來說，「文字檔」就是可以直接閱讀且有意義的檔案，在 DOS狀態下可用
+  " type [檔名] "閱讀文字檔的內容。而「二進位檔」在使用 type來閱讀時，
+  會出現一大堆亂碼，甚至於發出" 嗶嗶 "聲。
+ 
+  一般而言，從" ls "或" dir " 列出來的延伸檔名，大略可以猜出檔案的格式
+  。通常以 txt、doc、asc、lst、ps、shar、tar等為延伸檔名或無延伸檔名者
+  皆為文字檔，而以 exe、com、zip、zoo、lzh、arc、arj、Z 等為延伸檔名者
+  皆為二進位檔。
+ 
+  為了節省傳輸時間，很多檔案都是經過壓縮。有些壓縮檔是一個檔壓縮而成，
+  有些檔案是多個檔壓縮而成，無論如何，這些都是二進位檔。以下介紹一些壓
+  縮檔的格式及其解壓方法:
+      ┌───┬───────┬───────────────┐
+      │ 檔名 │   解壓程式   │     說               明      │
+      ├───┼───────┼───────────────┤
+      │*.zip │pkunzip.exe   │                              │
+      ├───┼───────┤這些解壓程式可以利用 ftp 方式 │
+      │*.arj │arj.exe       │到各大 FTP 站擷取。           │
+      ├───┼───────┤                              │
+      │*.lzh │lha.exe       │                              │
+      ├───┼───────┤切記須使用二進位格式拮取各檔。│
+      │*.arc │pkxarc.exe    │使用時可直接鍵入執行檔名，或  │
+      ├───┼───────┤參閱各程式的用法。            │
+      │*.zoo │zoo.exe       │                              │
+      ├───┼───────┤                              │
+      │*.tar │tar4dos.zoo   │                              │
+      ├───┼───────┤                              │
+      │*.Z   │comp430.d.zip │                              │
+      └───┴───────┴───────────────┘
+
+    ◎ ftp 使用說明(二) -- 指令
+ 
+  在" ftp> "的提示符號下您可鍵入" help "，以列出所有 ftp 可使用的指令。
+ 
+		<<< FTP help menu >>
+┌────────────────────────────────────┐
+│ftp> help                                                               │
+│Commands may be abbreviated. Commands are:                              │
+│                                                                        │
+│?               !               account         ascii           bell    │
+│bget            binary          bput            bye             cd      │
+│close           delete          debug           dir             get     │
+│glob            hash            help            interactive     lcd     │
+│lls             ls              mdelete         mdir            mget    │
+│mkdir           mls             mode            more            mput    │
+│noninteractive  open            prompt          put             pwd     │
+│quit            quote           recv            remotehelp      rename  │
+│rm              rmdir           send            sendport        site    │
+│slashflip       status          struct          type            user    │
+│verbose                                                                 │
+│                                                                        │
+│ftp> help binary                                                        │
+│binary          set binary transfer type                                │
+│ftp>                                                                    │
+└────────────────────────────────────┘
+ 
+  茲就所有 ftp 指令，介紹其中較常用的指令，格式說明時，[ ]所括起的參數
+  表示可省略:                ^^^^^^^^^^^^
+ 
+  ?       列出 ftp 指令功能，即「線上輔助說明」。
+          格式為" ? [指令]"，如省略指令，則列出所有 ftp 指令。
+ 
+  !       暫時回到 DOS 狀態，在 DOS 下鍵入" exit "後回到 ftp狀態。您也
+          可以利用" ! "連著 DOS 指令在 ftp 狀態下執行 DOS 功能。
+          例如: " !dir "可列出 DOS 的目錄內容、" !type readme.txt " 可
+          顯示 readme.txt 的內容。
+ 
+  ascii   進入文字檔的傳輸方式。
+ 
+  binary  進入二進位檔的傳輸方式。
+ 
+ ※ 請勿利用文字檔的方式傳輸二進位檔，否則檔案會傳輸失敗。
+ 
+  bye     切線並離開 ftp 狀態。
+ 
+  close   切線但不離開 ftp 狀態。可鍵入" open "開啟另一連線。
+ 
+  dir     列出目錄內容。
+ 
+  get     拮取一個檔案。
+          格式為" get [對方機器的檔名] [自己機器的檔名]"，如自己機器的
+          檔名省略，則使用原來的檔名存檔。
+ 
+  help    和 ? 的功能一樣。
+ 
+  lls     列出自己機器的目錄內容。
+          格式為" lls [檔名或目錄名] "，可用萬用字元。如不可使用此指令
+          ，可鍵入" !dir "列出目錄。
+ 
+  ls      列出對方機器的目錄內容。
+          格式為" ls [檔名或目錄名] "，可用萬用字元。
+ 
+  mget    一次抓取多個檔案。
+          格式為" mget [檔名或目錄名]"，檔名可使用萬用字元。
+ 
+ ※ 在 Unix 上，如欲拮取所有檔案，請用" mget * "而非" mget *.* "。
+ 
+  more    一次顯示一個螢幕。對" ls "及" dir "的顯示非常有用。
+ 
+  mput    一次放入數個檔案。
+          格式為" mput [檔名或目錄名]"，檔名可使用萬用字元。如欲放入所
+          有檔案，請用" mput * "而非" mput *.* "。
+ 
+  open    開啟一個連線。
+          格式為" open [ IP address ]"。
+ 
+  put     一次放入一個檔案。
+          格式為" put < 自己機器的檔名 > < 對方機器的檔名 >"。
+ 
+  pwd     顯示連線機器目前所在目錄。
+ 
+  quit    和 bye 的功能一樣。
+ 
+  status  列出 ftp 目前狀態。
+ 
+  user    重新簽入。當第一次簽入失敗時可用此指令重新簽入。
+ 
+ ※ 指令可以「簡寫」，譬如 " binary "可以只打" bin "，只要「字母數」到
+    系統能夠辨認出指令即可，它很聰明的哦。
+
+    ◎ ftp 使用說明(三) -- 實例
+ 
+ ※ 這是從工作站到政大 FTP 站拮取 pkunzip.exe 檔的完整過程:
+ 
+kitty{u23070xx}1: ftp ftp.nccu.edu.tw   <--- 這就是 ftp 到政大的格式
+                  ^^^^^^^^^^^^^^^^^^^
+Connected to ftp.nccu.edu.tw.
+220- =-==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+220- =                                                                =
+220- =  Welcome to National Chen-Chi University ftp server.           =
+220- =  Please Enter "ftp" or "anonymouse" if you want to             =
+220- =  use the anonymous ftp server .Remember, please enter          =
+220- =  your real account as the password , but *NEVER* enter         =
+220- =  your real password of you account.                            =
+220- =                                                                =
+220- =  歡迎光臨 國立政治大學 的FTP server。如果你要用anonymous       =
+220- =  ftp ，請在"Name:"後輸入"ftp"或"anonymous"（記得是小寫）       =
+220- =  並且，請在"Password:"後輸入你真實的帳號。                     =
+220- =                                                                =
+220- =  再一次提醒您：千萬【不要】輸入你的帳號的真實密碼！            =
+220- =                                                                =
+220- =-==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+220-
+220 server2 FTP server (Version wu-2.4(1) Tue Nov 15 19:03:22 CST 1994) ready.
+Name (ftp.nccu.edu.tw:u23070xx): ftp   <--- 以公用帳號 ftp 進入
+                                 ^^^
+331 Guest login ok, send your complete e-mail address as password.
+Password: *********   <--- 這裡輸入完整的 E-mail Address，
+          ^^^^^^^^^        如 u23070xx@ccsun1.nccu.edu.tw
+230-
+230-    You come from ccsun1. Our system allowed 60 concurrent users.
+230-    You are user 1.
+230-    We will *LOG* all the command you enter,
+230-    if you don't like it, disconnect now.
+230-
+230-    你從ccsun1連線，我們最多接受60個使用者同時上線，你是第1個。
+230-    【我們將記錄你所下的每個指令，如果你不願意，請現在離線。】
+230-
+230-
+230 Guest login ok, access restrictions apply.
+ftp> ls   <--- 茫茫 FTP 大觀園裡，讓我們先看一下裡頭有些什麼...
+     ^^
+200 PORT command successful.
+150 Opening ASCII mode data connection for file list.
+bin
+dev
+etc
+pub
+.rhosts
+.forward
+usr
+lib
+Upload
+.mesg
+226 Transfer complete.
+64 bytes received in 0.0037 seconds (17 Kbytes/s)
+ftp> cd pub   <--- 嘻，這裡放了一些「公用程式」，我們進去吧，
+     ^^^^^^        不必跟它客氣...
+250 CWD command successful.
+ftp> ls   <--- 再瞧上一眼
+     ^^
+200 PORT command successful.
+150 Opening ASCII mode data connection for file list.
+www
+ncsa
+virus
+dial-up
+misc
+os
+security
+tools
+novell
+gnu
+mail
+226 Transfer complete.
+73 bytes received in 0.0043 seconds (16 Kbytes/s)
+ftp> cd tools  <--- 哇，開了門還有門，真有點煩...
+     ^^^^^^^^
+250 CWD command successful.
+ftp> ls   <--- 我發誓這是最後一次用 ls 了...
+     ^^
+200 PORT command successful.
+150 Opening ASCII mode data connection for file list.
+arj.exe
+pkunzip.exe
+pkzip.exe
+zoo.exe
+slice.com
+gzip124.zip
+226 Transfer complete.
+66 bytes received in 0.003 seconds (21 Kbytes/s)
+ftp> get pkunzip.exe   <--- 我抓你，不要跑...
+     ^^^^^^^^^^^^^^^
+200 PORT command successful.
+150 Opening ASCII mode data connection for pkunzip.exe (29378 bytes).
+226 Transfer complete.
+local: pkunzip.exe remote: pkunzip.exe
+29592 bytes received in 0.85 seconds (34 Kbytes/s)
+ftp> bye   <--- 大功告成，掰掰吧
+     ^^^
+221 Goodbye.
+ccsun1{u23070xx}2: ls   <--- 看一下，你就會發現 pkunzip.exe 的蹤跡
+                   ^^
+</pre>

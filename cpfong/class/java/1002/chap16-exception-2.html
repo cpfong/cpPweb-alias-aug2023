@@ -1,0 +1,426 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="zh-tw">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>◎9-4 自定例外</title>
+<style>
+<!--
+ p.MsoNormal
+	{mso-style-parent:"";
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	margin-left:0cm; margin-right:0cm; margin-top:0cm}
+table.MsoTableGrid
+	{border:1.0pt solid windowtext;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	}
+-->
+</style>
+</head>
+
+<body>
+
+<p class="MsoNormal" align="center"><font color="#800080"><b>
+<span style="font-size: 18.0pt; font-family: 新細明體">◎</span><span lang="EN-US" style="font-size: 18.0pt">9-4
+</span><span style="font-size: 18.0pt; font-family: 新細明體">自定例外</span></b></font></p>
+<table border="0" width="100%" id="table1" style="border-collapse: collapse">
+	<tr>
+		<td>
+		<p class="MsoNormal"><span style="font-family: 新細明體">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+		雖然</span><span lang="EN-US">Java</span><span style="font-family: 新細明體">語言已經提供了相當多的例外類別，但有時候，為了設計出更</span><span lang="EN-US">User 
+		Friendly</span><span style="font-family: 新細明體">的程式，我們可能需要自己設計例外處理的機制。在探討如何自定例外之前，我們要先了解</span><span lang="EN-US">throw</span><span style="font-family: 新細明體">關鍵字的使用。</span></td>
+	</tr>
+	<tr>
+		<td>
+		<p class="MsoNormal"><font color="#0000FF">
+		<span style="font-size: 12.0pt; font-family: 新細明體">◎</span><b><span style="font-size: 14.0pt; font-family: 新細明體">使用</span><span lang="EN-US" style="font-size:14.0pt">throw</span><span style="font-size: 14.0pt; font-family: 新細明體">關鍵字</span></b></font></p>
+		<p class="MsoNormal"><span style="font-family: 新細明體">　　「</span><span lang="EN-US">throw</span><span style="font-family: 新細明體">」關鍵字用在方法的內部，請不要和用於方法宣告時的「</span><span lang="EN-US">throws</span><span style="font-family: 新細明體">」關鍵字混為一談。如果在方法內部想要丟出例外的類別物件時，您要使用「</span><span lang="EN-US">throw</span><span style="font-family: 新細明體">」關鍵字。為了能夠自定例外類別，我們先了解</span><span lang="EN-US">Exception</span><span style="font-family: 新細明體">類別產生物件的方式。常用的</span><span lang="EN-US">Exception</span><span style="font-family: 新細明體">類別的建構子有：</span></p>
+		<table class="MsoTableGrid" border="1" cellspacing="0" cellpadding="0" style="border-collapse: collapse; border: medium none" id="table2">
+			<tr>
+				<td width="348" valign="top" style="width: 209.05pt; border: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm; background: #BFBFBF">
+				<p class="MsoNormal" align="center" style="text-align:center">
+				<span style="font-family: 新細明體">建構子</span></td>
+				<td width="355" valign="top" style="width: 212.8pt; border-left: medium none; border-right: 1.0pt solid windowtext; border-top: 1.0pt solid windowtext; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm; background: #BFBFBF">
+				<p class="MsoNormal" align="center" style="text-align:center">
+				<span style="font-family: 新細明體">作用</span></td>
+			</tr>
+			<tr>
+				<td width="348" style="width: 209.05pt; border-left: 1.0pt solid windowtext; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal" style="text-align:justify;text-justify:inter-ideograph">
+				<span lang="EN-US">Exception()</span></td>
+				<td width="355" valign="top" style="width: 212.8pt; border-left: medium none; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal"><span style="font-family: 新細明體">建立一個</span><span lang="EN-US">Exception</span></td>
+			</tr>
+			<tr>
+				<td width="348" style="width: 209.05pt; border-left: 1.0pt solid windowtext; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal" style="text-align:justify;text-justify:inter-ideograph">
+				<span lang="EN-US">Exception(String message)</span></td>
+				<td width="355" valign="top" style="width: 212.8pt; border-left: medium none; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal"><span style="font-family: 新細明體">建立一個</span><span lang="EN-US">Exception</span><span style="font-family: 新細明體">物件，並指定例外訊息為</span><span lang="EN-US">message</span></td>
+			</tr>
+			<tr style="height: 42.7pt">
+				<td width="348" style="width: 209.05pt; height: 42.7pt; border-left: 1.0pt solid windowtext; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal" style="text-align:justify;text-justify:inter-ideograph">
+				<span lang="EN-US">Exception</span></p>
+				<p class="MsoNormal" style="text-align:justify;text-justify:inter-ideograph">
+				<span lang="EN-US">(String message, Throwable cause)</span></td>
+				<td width="355" valign="top" style="width: 212.8pt; height: 42.7pt; border-left: medium none; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal"><span style="font-family: 新細明體">建立一個</span><span lang="EN-US">Exception</span><span style="font-family: 新細明體">物件，並指定例外訊息為</span><span lang="EN-US">message</span><span style="font-family: 新細明體">，同時將產生例外的原因</span><span lang="EN-US">cause</span><span style="font-family: 新細明體">傳入</span></td>
+			</tr>
+			<tr>
+				<td width="348" style="width: 209.05pt; border-left: 1.0pt solid windowtext; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal" style="text-align:justify;text-justify:inter-ideograph">
+				<span lang="EN-US">Exception(Throwable cause)</span></td>
+				<td width="355" valign="top" style="width: 212.8pt; border-left: medium none; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal"><span style="font-family: 新細明體">建立一個</span><span lang="EN-US">Exception</span><span style="font-family: 新細明體">物，同時將產生例外的原因</span><span lang="EN-US">cause</span><span style="font-family: 新細明體">傳入</span></td>
+			</tr>
+		</table>
+		<p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
+		<p class="MsoNormal"><span style="font-family: 新細明體">　　</span><span lang="EN-US">throw</span><span style="font-family: 新細明體">關鍵字可以用來丟出例外物件，它可以丟出</span><span lang="EN-US">Java</span><span style="font-family: 新細明體">內部的例外物件，也可以丟出自定的例外物件，</span><span lang="EN-US">throw</span><span style="font-family: 新細明體">的語法如下：</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">throw</span><span style="font-family: 新細明體; background: #D9D9D9">例外物件</span><span lang="EN-US" style="background: #D9D9D9">; 
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//</span><span style="font-family: 新細明體; background: #D9D9D9">丟出</span><span lang="EN-US" style="background: #D9D9D9">Java</span><span style="font-family: 新細明體; background: #D9D9D9">例外物件</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">throw new Exception (</span><span lang="EN-US" style="font-size: 9.0pt; color: black; background: #D9D9D9">&quot;</span><span style="font-family: 新細明體; color: black; background: #D9D9D9">自定的例外訊息</span><span lang="EN-US" style="font-size: 9.0pt; color: black; background: #D9D9D9">&quot;</span><span lang="EN-US" style="background: #D9D9D9">); 
+		&nbsp;&nbsp;//</span><span style="font-family: 新細明體; background: #D9D9D9">丟出匿名的例外物件</span></p>
+		<p class="MsoNormal"><span style="font-family: 新細明體">使用</span><span lang="EN-US">throw</span><span style="font-family: 新細明體">來丟出例外事件的方式請參考以下的範例程式：</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: silver"><b><u>
+		<span style="font-size: 13.0pt; font-family: 新細明體">程式</span><span lang="EN-US" style="font-size:13.0pt">9-6 
+		: Chap9\Throw1.java</span></u></b></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">01:&nbsp;&nbsp; public class 
+		Throw1{</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">02:&nbsp;&nbsp; public static void 
+		main(String[] args) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">03:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+		tryToCalculate(10, 0);</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">04:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+		tryToCalculate(10, 2);</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">05:&nbsp;&nbsp; }</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">06:&nbsp;&nbsp; </span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">07:&nbsp;&nbsp; public static void 
+		tryToCalculate(int x, int y){</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">08:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (y == 
+		0){</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">09:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+		try&nbsp;&nbsp; {</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">
+		10:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; throw new Exception(&quot;Divided by Zero!!!&quot;);</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">11:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+		}catch (Exception e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">
+		12:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; System.out.println(e.toString());</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">13:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">14:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">15:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+		System.out.println(&quot;The Result is : &quot; + x / y);</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">16:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">17:&nbsp;&nbsp; }</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">18: }</span></p>
+		<p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
+		<p class="MsoNormal"><span style="font-family: 新細明體">範例程式執行的結果為：</span></p>
+		<p><img border="0" src="image/image002.jpg" width="488" height="292"></p>
+		<p><span style="font-size: 12.0pt; font-family: 新細明體">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+		範例程式在符</span><span lang="EN-US" style="font-size: 12.0pt; font-family: Times New Roman">10</span><span style="font-size: 12.0pt; font-family: 新細明體">行使用了</span><span lang="EN-US" style="font-size: 12.0pt; font-family: Times New Roman">throw</span><span style="font-size: 12.0pt; font-family: 新細明體">來丟出一個自定的例外物件，因為</span><span lang="EN-US" style="font-size: 12.0pt; font-family: Times New Roman">throw</span><span style="font-size: 12.0pt; font-family: 新細明體">會產生例外物件，所以程式必需使用「</span><span lang="EN-US" style="font-size: 12.0pt; font-family: Times New Roman">try-catch</span><span style="font-size: 12.0pt; font-family: 新細明體">」來捕捉產生的例外。</span><span lang="EN-US" style="font-size: 12.0pt; font-family: Times New Roman">Exception</span><span style="font-size: 12.0pt; font-family: 新細明體">中的「除數不得為零</span><span lang="EN-US" style="font-size: 12.0pt; font-family: Times New Roman">!!!</span><span style="font-size: 12.0pt; font-family: 新細明體">」的訊息會在例外物件產生時傳入該物件中。您也可以不需要直接處理這個例外物件，但是要再將這個物件丟出來，例如改寫範例程式的第</span><span lang="EN-US" style="font-size: 12.0pt; font-family: Times New Roman">11~13</span><span style="font-size: 12.0pt; font-family: 新細明體">行為：</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">catch (Exception e){</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; throw e;</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">}</span></p>
+		<p><span style="font-size: 12.0pt; font-family: 新細明體">
+		如果您是用這樣的處理方式，則必需要有另一個程式來呼叫</span><span lang="EN-US" style="font-size: 12.0pt; font-family: Times New Roman">main</span><span style="font-size: 12.0pt; font-family: 新細明體">方法，並且在該程式中使用「</span><span lang="EN-US" style="font-size: 12.0pt; font-family: Times New Roman">try-catch</span><span style="font-size: 12.0pt; font-family: 新細明體">」來處理例外。</span></td>
+	</tr>
+	<tr>
+		<td>
+		<p class="MsoNormal"><font color="#0000FF"><b>
+		<span style="font-size: 14.0pt; font-family: 新細明體">◎自定例外類別</span></b></font></p>
+		<p class="MsoNormal" style="text-indent: 24.0pt">
+		<span style="font-family: 新細明體">如果您想要設定自己的例外類別來處理特殊的情況，您只要繼承</span><span lang="EN-US">Exception</span><span style="font-family: 新細明體">類別或是</span><span lang="EN-US">Exception</span><span style="font-family: 新細明體">的子類別的就可以了。例如：以下的繼承都是合法的：</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">class MyException1 
+		extends Exception {}&nbsp;&nbsp; //</span><span style="font-family: 新細明體; background: #D9D9D9">繼承自</span><span lang="EN-US" style="background: #D9D9D9">Exception</span><span style="font-family: 新細明體; background: #D9D9D9">類別</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">class MyException2 
+		extends</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">RuntimeException&nbsp; //</span><span style="font-family: 新細明體; background: #D9D9D9">繼承自</span><span lang="EN-US" style="background: #D9D9D9">RuntimeException</span><span style="font-family: 新細明體; background: #D9D9D9">類別</span></p>
+		<p class="MsoNormal"><span style="font-family: 新細明體">
+		　　繼承而來的子類別能夠產生的例外物件是和父類別相關連的。子類別可以丟出和父類別相同的</span><span lang="EN-US">Exception</span><span style="font-family: 新細明體">，或者是父類別的子類別。例如，上面範例中的</span><span lang="EN-US">MyException1</span><span style="font-family: 新細明體">類別可以丟出</span><span lang="EN-US">Exception</span><span style="font-family: 新細明體">、</span><span lang="EN-US">RuntimeException</span><span style="font-family: 新細明體">、或是</span><span lang="EN-US">InterruptedException</span><span style="font-family: 新細明體">。因為</span><span lang="EN-US">RuntimeException</span><span style="font-family: 新細明體">、或是</span><span lang="EN-US">InterruptedException</span><span style="font-family: 新細明體">都是</span><span lang="EN-US">Exception</span><span style="font-family: 新細明體">的子類別。但是</span><span lang="EN-US">MyException2</span><span style="font-family: 新細明體">只能丟出</span><span lang="EN-US">RuntimeException</span><span style="font-family: 新細明體">或是</span><span lang="EN-US">ArithmeticException</span><span style="font-family: 新細明體">。因為</span><span lang="EN-US">ArithmeticException</span><span style="font-family: 新細明體">是</span><span lang="EN-US">RuntimeException</span><span style="font-family: 新細明體">的子類別。但是</span><span lang="EN-US">MyException2</span><span style="font-family: 新細明體">就不能丟出</span><span lang="EN-US">InterruptedException</span><span style="font-family: 新細明體">了。</span></p>
+		<p class="MsoNormal"><span style="font-family: 新細明體">　　</span><span lang="EN-US">Exception</span><span style="font-family: 新細明體">類別並沒有自己的方法，它的方法都是由</span><span lang="EN-US">Throwable</span><span style="font-family: 新細明體">類別中繼承來的。所以，當您繼承</span><span lang="EN-US">Exception</span><span style="font-family: 新細明體">類別來定義自己的例外類別時，您可以不需要設計自己的方法，而是改寫</span><span lang="EN-US">Throwable</span><span style="font-family: 新細明體">類別中的方法就可以了。以下列出</span><span lang="EN-US">Throwable</span><span style="font-family: 新細明體">類別中常用的方法：</span></p>
+		<p class="MsoNormal"><span lang="EN-US" style="background: #D9D9D9">&nbsp;</span></p>
+		<table class="MsoTableGrid" border="1" cellspacing="0" cellpadding="0" style="border-collapse: collapse; border: medium none" id="table3">
+			<tr>
+				<td width="264" valign="top" style="width: 158.4pt; border: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm; background: silver">
+				<p class="MsoNormal" align="center" style="text-align:center">
+				<span style="font-family: 新細明體">方　　法</span></td>
+				<td width="449" valign="top" style="width: 269.6pt; border-left: medium none; border-right: 1.0pt solid windowtext; border-top: 1.0pt solid windowtext; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm; background: silver">
+				<p class="MsoNormal" align="center" style="text-align:center">
+				<span style="font-family: 新細明體">作　　用</span></td>
+			</tr>
+			<tr>
+				<td width="264" valign="top" style="width: 158.4pt; border-left: 1.0pt solid windowtext; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal"><span lang="EN-US">Throwable 
+				fillnStackTrace()</span></td>
+				<td width="449" valign="top" style="width: 269.6pt; border-left: medium none; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal"><span style="font-family: 新細明體">傳回包含完整堆疊追蹤的</span><span lang="EN-US">Thorwable</span><span style="font-family: 新細明體">的物件</span></td>
+			</tr>
+			<tr>
+				<td width="264" valign="top" style="width: 158.4pt; border-left: 1.0pt solid windowtext; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal"><span lang="EN-US">Throwable GetCause()</span></td>
+				<td width="449" valign="top" style="width: 269.6pt; border-left: medium none; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal"><span style="font-family: 新細明體">傳回造成例外原因的</span><span lang="EN-US">Throwable</span><span style="font-family: 新細明體">物件</span></td>
+			</tr>
+			<tr>
+				<td width="264" valign="top" style="width: 158.4pt; border-left: 1.0pt solid windowtext; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal"><span lang="EN-US">String 
+				GetLocalizedMessage()</span></td>
+				<td width="449" valign="top" style="width: 269.6pt; border-left: medium none; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal"><span style="font-family: 新細明體">
+				傳回本地語系的例外說明，但實際的執行的結果，傳用此方法傳回的例外說明和</span><span lang="EN-US">getMessage()</span><span style="font-family: 新細明體">相同</span></td>
+			</tr>
+			<tr>
+				<td width="264" valign="top" style="width: 158.4pt; border-left: 1.0pt solid windowtext; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal"><span lang="EN-US">String getMessage()</span></td>
+				<td width="449" valign="top" style="width: 269.6pt; border-left: medium none; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal"><span style="font-family: 新細明體">傳回例外說明</span></td>
+			</tr>
+			<tr>
+				<td width="264" valign="top" style="width: 158.4pt; border-left: 1.0pt solid windowtext; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal"><span lang="EN-US">StackTraceTlement[]</span></p>
+				<p class="MsoNormal"><span lang="EN-US">getStackTrace()</span></td>
+				<td width="449" style="width: 269.6pt; border-left: medium none; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal" style="text-align:justify;text-justify:inter-ideograph">
+				<span style="font-family: 新細明體">傳回包含堆疊追蹤的陣列</span></td>
+			</tr>
+			<tr>
+				<td width="264" valign="top" style="width: 158.4pt; border-left: 1.0pt solid windowtext; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal"><span lang="EN-US">Throwable initCause</span></p>
+				<p class="MsoNormal"><span lang="EN-US">(Throwable cause)</span></td>
+				<td width="449" style="width: 269.6pt; border-left: medium none; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal" style="text-align:justify;text-justify:inter-ideograph">
+				<span style="font-family: 新細明體">將</span><span lang="EN-US">cause</span><span style="font-family: 新細明體">當作是例外發生的原因</span></td>
+			</tr>
+			<tr>
+				<td width="264" valign="top" style="width: 158.4pt; border-left: 1.0pt solid windowtext; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal"><span lang="EN-US">void printStackTrace()</span></td>
+				<td width="449" valign="top" style="width: 269.6pt; border-left: medium none; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal"><span style="font-family: 新細明體">顯示追蹤堆疊</span></td>
+			</tr>
+			<tr>
+				<td width="264" valign="top" style="width: 158.4pt; border-left: 1.0pt solid windowtext; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal"><span lang="EN-US">void printStackTrace</span></p>
+				<p class="MsoNormal"><span lang="EN-US">(PrintStream s)</span></td>
+				<td width="449" valign="top" style="width: 269.6pt; border-left: medium none; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal"><span style="font-family: 新細明體">將追蹤堆疊顯示在</span><span lang="EN-US">PrintStream</span><span style="font-family: 新細明體">類別的串流物件之中</span></td>
+			</tr>
+			<tr>
+				<td width="264" valign="top" style="width: 158.4pt; border-left: 1.0pt solid windowtext; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal"><span lang="EN-US">void printStackTrace</span></p>
+				<p class="MsoNormal"><span lang="EN-US">(PrintWriter s)</span></td>
+				<td width="449" valign="top" style="width: 269.6pt; border-left: medium none; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal"><span style="font-family: 新細明體">將追蹤堆疊顯示在</span><span lang="EN-US">PrintWriter</span><span style="font-family: 新細明體">類別的串流物件之中</span></td>
+			</tr>
+			<tr>
+				<td width="264" valign="top" style="width: 158.4pt; border-left: 1.0pt solid windowtext; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal"><span lang="EN-US">String toString()</span></td>
+				<td width="449" valign="top" style="width: 269.6pt; border-left: medium none; border-right: 1.0pt solid windowtext; border-top: medium none; border-bottom: 1.0pt solid windowtext; padding-left: 5.4pt; padding-right: 5.4pt; padding-top: 0cm; padding-bottom: 0cm">
+				<p class="MsoNormal"><span style="font-family: 新細明體">傳回簡短的例外描述字串</span></td>
+			</tr>
+		</table>
+		<p class="MsoNormal"><span style="font-family: 新細明體">
+		　　我們將範例程式分成三個部份來加以說明，完整的程式可以參益依「</span><span lang="EN-US">Throw2.java</span><span style="font-family: 新細明體">」。以下先列出例外類別的定義方式：</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">01:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; class 
+		MyException extends Exception{</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">02:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; private 
+		int value;</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">03:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; 
+		MyException (int value){</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">04:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
+		this.value = value;</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">05:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; }</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">06:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; public 
+		String toString(){</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">07:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; String 
+		s =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;</span><span style="font-family: 新細明體; background: #D9D9D9">本程式執行無效</span><span lang="EN-US" style="background: #D9D9D9">\n&quot; 
+		+</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">
+		08:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;</span><span style="font-family: 新細明體; background: #D9D9D9">錯誤代碼為</span><span lang="EN-US" style="background: #D9D9D9"> 
+		&quot; + value + &quot; \n&quot; +</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">
+		09:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;</span><span style="font-family: 新細明體; background: #D9D9D9">請將此代碼告知管理人員</span><span lang="EN-US" style="background: #D9D9D9">\n&quot;;</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">10:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+		return s;</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">11:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; }</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">12:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</span></p>
+		<div style="background-color: #FFFFFF">
+			<p class="MsoNormal" style="text-indent: 24.0pt"><span lang="EN-US">
+			MyException</span><span style="font-family: 新細明體">類別繼承自</span><span lang="EN-US">Exception</span><span style="font-family: 新細明體">類別，第</span><span lang="EN-US">3</span><span style="font-family: 新細明體">行的建構子需要傳入一個整數值當作是自定的錯誤代碼。程式的第</span><span lang="EN-US">6~11</span><span style="font-family: 新細明體">行改寫了</span><span lang="EN-US">toString()</span><span style="font-family: 新細明體">方法，新的</span><span lang="EN-US">toString()</span><span style="font-family: 新細明體">方法會顯示出錯誤代碼及相關的訊息。</span></p>
+			<p class="MsoNormal" style="text-indent: 24.0pt">
+			<span style="font-family: 新細明體">再來，以下的程式碼示範如何丟出</span><span lang="EN-US">MyException</span><span style="font-family: 新細明體">類別的例外訊息：</span></div>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">01:&nbsp;&nbsp; public static void 
+		tryToCalculates (int x, int y){</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">02:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (y == 
+		0){</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">03:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; 
+		try{</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">
+		04:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; throw new MyException(0);</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">05:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; } 
+		catch&nbsp; (MyException e){</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">
+		06:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; System.out.println(e.toString());</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">07:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; }</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">08:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">09:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; 
+		System.out.println(&quot;</span><span style="font-family: 新細明體; background: #D9D9D9">結果為</span><span lang="EN-US" style="background: #D9D9D9">: 
+		&quot; + x / y);</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">10:&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; }</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">11:&nbsp;&nbsp; }</span></p>
+		<p class="MsoNormal"><span style="font-family: 新細明體">　</span><span lang="EN-US">&nbsp;&nbsp;&nbsp; 
+		tryToCalculates(int x, int y)</span><span style="font-family: 新細明體">方法會計算兩數相除的結果，但是除數</span><span lang="EN-US">y</span><span style="font-family: 新細明體">不可以為</span><span lang="EN-US">0</span><span style="font-family: 新細明體">，如果</span><span lang="EN-US">y</span><span style="font-family: 新細明體">的值為</span><span lang="EN-US">0</span><span style="font-family: 新細明體">，在程式的第</span><span lang="EN-US">4</span><span style="font-family: 新細明體">行會丟出</span><span lang="EN-US">MyException</span><span style="font-family: 新細明體">類別的例外，並指定錯誤代碼為</span><span lang="EN-US">0</span><span style="font-family: 新細明體">。程式的第</span><span lang="EN-US">5</span><span style="font-family: 新細明體">行會捕捉這個例外物件，並且在第</span><span lang="EN-US">6</span><span style="font-family: 新細明體">行利用</span><span lang="EN-US">toString()</span><span style="font-family: 新細明體">方法顯示錯誤訊息。</span></p>
+		<p class="MsoNormal"><span style="font-family: 新細明體">　　最後，我們列出</span><span lang="EN-US">main()</span><span style="font-family: 新細明體">成法的內容：</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: silver"><b><u>
+		<span style="font-size: 13.0pt; font-family: 新細明體">程式</span><span lang="EN-US" style="font-size:13.0pt">9-7:Chap9/Throws2.java</span></u></b></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">01:&nbsp;&nbsp; public class 
+		Throw2{</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">02:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public 
+		static void main (String[] args){</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">03:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; 
+		tryToCalculates(10, 0);</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">04:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; 
+		tryToCalculates(10, 2);</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">05:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</span></p>
+		<p class="MsoNormal"><span style="font-family: 新細明體">　　範例程式的執行結果為：</span></p>
+		<p><img border="0" src="image/image004.jpg" width="488" height="292"></p>
+		<p><span style="font-size: 12.0pt; font-family: 新細明體">第</span><span lang="EN-US" style="font-size: 12.0pt; font-family: Times New Roman">3</span><span style="font-size: 12.0pt; font-family: 新細明體">行的程式碼由於傳入的參數會導致除數為</span><span lang="EN-US" style="font-size: 12.0pt; font-family: Times New Roman">0</span><span style="font-size: 12.0pt; font-family: 新細明體">的情況，該行程式會引發們定的</span><span lang="EN-US" style="font-size: 12.0pt; font-family: Times New Roman">MyException</span><span style="font-size: 12.0pt; font-family: 新細明體">例蛉物件，並顯示自訂的錯誤訊息。</span></td>
+	</tr>
+	<tr>
+		<td>
+		<p class="MsoNormal"><font color="#0000FF"><b>
+		<span style="font-size: 14.0pt; font-family: 新細明體">◎巢狀的</span><span lang="EN-US" style="font-size:14.0pt">try</span><span style="font-size: 14.0pt; font-family: 新細明體">敘述</span></b></font></p>
+		<p class="MsoNormal"><span style="font-family: 新細明體">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+		最後，我們再使用一個範例來補充「</span><span lang="EN-US">try-catch</span><span style="font-family: 新細明體">」機制。</span><span lang="EN-US">Java</span><span style="font-family: 新細明體">語言中是使用「</span><span lang="EN-US">try-catch</span><span style="font-family: 新細明體">」機制來捕捉例外事件。我們會在「</span><span lang="EN-US">try</span><span style="font-family: 新細明體">」區段中放入可能產生例外的敘述。但是程式在執行其他的區段中也可能產生例外而需要使用另一組的「</span><span lang="EN-US">try-catch</span><span style="font-family: 新細明體">」再來捕捉例外物件。不論另一組的「</span><span lang="EN-US">try-catch</span><span style="font-family: 新細明體">」是放在那一個區段中，程式都是形成巢狀的「</span><span lang="EN-US">try-catch</span><span style="font-family: 新細明體">」敘述。在使用巢狀的「</span><span lang="EN-US">try-catch</span><span style="font-family: 新細明體">」時，您必需要能判斷任何「</span><span lang="EN-US">try-catch</span><span style="font-family: 新細明體">」區段中的每行程式碼是否會被執行到。</span></p>
+		<p class="MsoNormal"><span style="font-family: 新細明體">請參考以下的範例：</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: silver"><b><u>
+		<span style="font-size: 13.0pt; font-family: 新細明體">程式</span><span lang="EN-US" style="font-size:13.0pt">9-8:Chap9/TryCatch.java</span></u></b></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">01:&nbsp;&nbsp; public class 
+		TryCatch {</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">02:&nbsp;&nbsp; public static void 
+		main(String[] args){</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">03:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; try{</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">04:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+		System.out.println(&quot;</span><span style="font-family: 新細明體; background: #D9D9D9">嚐試開啟檔案</span><span lang="EN-US" style="background: #D9D9D9">...&quot;);</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">05:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+		throw new Exception(&quot;</span><span style="font-family: 新細明體; background: #D9D9D9">開檔成功，但檔案讀取失敗</span><span lang="EN-US" style="background: #D9D9D9">...&quot;);</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">06:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } catch 
+		(Exception e){</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">07:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+		System.out.println(e);</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">08:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } finally {</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">09:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+		try{</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">
+		10:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; System.out.println(&quot;</span><span style="font-family: 新細明體; background: #D9D9D9">準備關閉檔案</span><span lang="EN-US" style="background: #D9D9D9">...&quot;);</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">
+		11:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; throw new Exception(&quot;</span><span style="font-family: 新細明體; background: #D9D9D9">檔案關閉失敗</span><span lang="EN-US" style="background: #D9D9D9">...&quot;);</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">12:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } 
+		catch (Exception e){</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">
+		13:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; System.out.println(e);</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">14:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } 
+		finally {</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">
+		15:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; System.out.println(&quot;</span><span style="font-family: 新細明體; background: #D9D9D9">檔案關閉成功</span><span lang="EN-US" style="background: #D9D9D9">...&quot;);</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">16:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">17:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+		System.out.println(&quot;</span><span style="font-family: 新細明體; background: #D9D9D9">釋放相關資源</span><span lang="EN-US" style="background: #D9D9D9">...&quot;);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">18:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">19:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+		System.out.println(&quot;</span><span style="font-family: 新細明體; background: #D9D9D9">程式執行結束</span><span lang="EN-US" style="background: #D9D9D9">&quot;);</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">20:&nbsp;&nbsp; }</span></p>
+		<p class="MsoNormal" style="margin-bottom: 0; background: #D9D9D9">
+		<span lang="EN-US" style="background: #D9D9D9">21: }</span></p>
+		<p class="MsoNormal"><span style="font-family: 新細明體">範例程式的執行結果為：</span></p>
+		<p><img border="0" src="image/image006.jpg" width="528" height="292"></p>
+		<p class="MsoNormal"><span style="font-family: 新細明體">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+		您必需仔細的追蹤程式的執行結果，並徹底的了解程式的執行流程。範例程式是模擬「開檔</span><span lang="EN-US">-&gt;</span><span style="font-family: 新細明體">讀檔</span><span lang="EN-US">-&gt;</span><span style="font-family: 新細明體">關檔</span><span lang="EN-US">-&gt;</span><span style="font-family: 新細明體">釋放資源」等一連串的動作。在第</span><span lang="EN-US">3</span><span style="font-family: 新細明體">行的「</span><span lang="EN-US">try</span><span style="font-family: 新細明體">」區段中，程式故意在第</span><span lang="EN-US">5</span><span style="font-family: 新細明體">行丟出一個例外，這是假定失敗而產生的例外。該例外會在第</span><span lang="EN-US">6</span><span style="font-family: 新細明體">行的「</span><span lang="EN-US">catch</span><span style="font-family: 新細明體">」區段中被捕捉到，並在第</span><span lang="EN-US">7</span><span style="font-family: 新細明體">行顯示出例外訊息。</span></p>
+		<p class="MsoNormal"><span style="font-family: 新細明體">　　在第</span><span lang="EN-US">8</span><span style="font-family: 新細明體">行的「</span><span lang="EN-US">finally</span><span style="font-family: 新細明體">」區段中，我們模擬關檔並釋放資源的動作。第</span><span lang="EN-US">9</span><span style="font-family: 新細明體">行中的「</span><span lang="EN-US">try</span><span style="font-family: 新細明體">」區段是為了防止關閉檔案失敗而設計的。在第</span><span lang="EN-US">11</span><span style="font-family: 新細明體">行中，程式又故意丟出一個例外來模擬關檔失敗。該例外會被第</span><span lang="EN-US">12</span><span style="font-family: 新細明體">行的「</span><span lang="EN-US">catch</span><span style="font-family: 新細明體">」區段捕捉到，並在第</span><span lang="EN-US">13</span><span style="font-family: 新細明體">行顯示出例外的訊息。</span></p>
+		<p class="MsoNormal"><span style="font-family: 新細明體">　　問題在於第</span><span lang="EN-US">17</span><span style="font-family: 新細明體">行程式，除非遇到</span><span lang="EN-US">JVM</span><span style="font-family: 新細明體">關閉的情況，否則，「</span><span lang="EN-US">finally</span><span style="font-family: 新細明體">」區段會完整的執行完區段中的程式，即使是該區段中又產生了例外。所以，您在執行的結果中會看到「釋放相關資源</span><span lang="EN-US">…</span><span style="font-family: 新細明體">」的訊息。</span></p>
+		<span style="font-size: 12.0pt; font-family: 新細明體">
+		　　如果可以，請們行判斷在上述的範例程式中，如果不執行「</span><span lang="EN-US" style="font-size: 12.0pt; font-family: Times New Roman">throw</span><span style="font-size: 12.0pt; font-family: 新細明體">」的敘述，程式的執行結果會是如何？</span></td>
+	</tr>
+</table>
+
+</body>
+
+</html>

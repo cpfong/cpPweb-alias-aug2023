@@ -1,0 +1,142 @@
+
+  ◇ 可怕的 news
+
+------------------------------------------------------------------------
+From: chen@cc.nctu.edu.tw (C.S.Chen)
+Newsgroups: tw.bbs.netnews
+Subject: Re: 可怕的 news
+Date: 13 Oct 1995 13:40:29 GMT
+Organization: National Chiao-Tung University, Taiwan
+
+劍客 (qwe.bbs@bbs.ee.ntit.edu.tw),13 Oct 1995 07:19:25 GMT wrote:
+:         我剛發現 是我的 .overview 一直累積而沒有消掉
+:         但是為什麼 expire 時不會 expire .overview 的內容呢
+
+ 這是因為有許多 articles 是被 canceled, 不是被 expired.
+
+ - cancel 是由 innd 自己處理, 將某篇 article 從 News spool 中刪除,
+   從 history 中除去記錄, 但是 innd 並不會去修改 ".overview" 的 database.
+
+
+expire 事實上分兩個部份,
+  * 刪除過時 News spool articles  (  expire )
+  * 刪除對應的 News overview entries  ( expireover )
+
+ 當 news.daily 在作 expire 時, 從 history 中, 抓出準備刪除的東西, 但是
+ 有一部份 articles , 因為事先已被 innd 在處理 cancel 時去掉了. 因此,
+ expire 時就沒有它, 而偏偏 news.daily 中 的 expireover 卻又用到, expire
+ 所產生的 expire.list. 如此一來, 這些被 canceled 的記錄, 就變漏網之魚.
+
+ 補救的辦法, 就是另外單讀再 run 一個 &quotexpireover -s" 的程式. 它會比對
+ 各個 newsgroups 的 ".overview" 和 history 的內容, 把沒有的記錄去掉.
+
+ 加在 cron 中, 去執行. INN FAQ 2/5 建議, 至少每周一次.
+ 個人經驗, 每天 run 一次, 也許還是比較好.
+
+-----< Sample entry &gt--------------------------
+40 3 * * * /usr/local/news/bin/news.daily delayrm expireover
+30 21 * * * /usr/local/news/bin/expireover -s
+
+------------------------------------------------------------------------
+   C.S.Chen [ 陳昌盛 ]                  * E-mail:  chen@cc.nctu.edu.tw
+   Computer Center of National Chiao-Tung University, Hsinchu, Taiwan, R.O.C.
+
+> -------------------------------------------------------------------------- <
+
+From: yssu@CCCA.NCTU.edu.tw (蘇彥碩(Yen-Shuo Su.))
+Newsgroups: tw.bbs.netnews
+Subject: Re: 可怕的 news
+Date: 13 Oct 1995 12:50:32 +0800
+Organization: Campus Computer Communication Association
+
+Ken-ming Wang (kenming@skf.net.tw) 提到:
+: 劍客 (qwe.bbs@bbs.ee.ntit.edu.tw) 提到:
+: :         我的 INN News Server 又快爆了
+: :         不曉的是全世界的 news server 快速成長的原因
+: :         還是自己系統的問題
+: :         原本 用來收文章的 2 GB H.D. 又快爆了
+: :         我已只保留 4 天的文章
+: :         (I used &quotfind /usr/spool/news -mtime +4 -print|xargs rm -f ;)
+: :         但是整個 2 GB 的硬碟還是快爆了.
+: :         不曉的是什麼原因 .
+: :         請高手指點
+: :         (我用的系統是 SunOS 4.1.3_U1 之 INN News )
+: 請教一下您接了那幾區的 news 呢? ex. tw.bbs.* , comp.* , alt.*
+:  怎麼會那麼快爆呢?
+
+wait..wait..wait...你是怎麼殺文章的!!??
+不會是真的天天用find去殺吧!!??
+
+殺文章一定要用expire殺...
+至於那個快爆的東東..應該是/usr/local/news/history吧!!??
+你看一下是不是這個原因...
+如果是的話...
+1. 停掉innd
+2. 重新mkhistory
+3. 如果有用overchan(.overview)..重新建.overview
+4. 設好expire.ctl和news的crontab .. 每天找個時間跑expireover
+5. 重跑rc.news
+
+
+------------------------------------------------------------------------
+       Yen-Shuo Su. (蘇彥碩) of National Chiao Tung University, Taiwan
+       交通大學校園網路策進會   Campus Computer Communication Association
+       交通大學機械工程學系87   Mechanical Engineering Department 87
+       E-Mail : yssu@CCCA.nctu.edu.tw  &  shuo@bbs.me.nctu.edu.tw.
+
+> -------------------------------------------------------------------------- <
+
+From: chen@cc.nctu.edu.tw (C.S.Chen)
+Newsgroups: tw.bbs.netnews
+Subject: Re: 可怕的 news
+Date: 13 Oct 1995 14:14:17 GMT
+Organization: National Chiao-Tung University, Taiwan
+
+劍客 (qwe.bbs@bbs.ee.ntit.edu.tw),13 Oct 1995 06:15:40 GMT wrote:
+: ==> 在 ysu@CCCA.NCTU (蘇彥碩(Yen-Shuo Su.)) 的文章中提到:
+: : Ken-ming Wang (kenming@skf.net.tw) 提到:
+: : : 請教一下您接了那幾區的 news 呢? ex. tw.bbs.* , comp.* , alt.*
+: : :  怎麼會那麼快爆呢?
+:
+:         我接了全世界的文章  ( ME:*:: )
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+
+ NO ! NO ! NO ! 錯, 錯, 錯.
+
+ 攪錯了,  在 INN 上 ME 中除了 define 接收的 distribution 外, 對於系統上
+ 哪些 newsgroups 要不要接收, 沒有關係.
+
+ 你接哪些 newsgroups 完全取決於, 系統上的 active file 和上游的 newsfeeding.
+ -- newsfeeds 在 INN 是決定要丟哪些 newsgroups 出去. ( 從 innd 程式來看 )
+
+在 INN 的 newsfeeds 檔中, ME 是定義 pre-subscription list.
+是用來加在, 其它 feed 的前面用的.
+
+我想, 你可能是讀了, 某些中文介紹 INN installation 文章, 不正確的誤導.
+你應該再把 INN 中的 newsfeeds 的 manual page, 再讀清楚.
+
+BTW, 哪一個 site, 說它接了全世界的 news articles, 那是騙不懂的人的說法.
+根本, 就沒有這樣的 site .
+
+更別提, 只接 2-3 個 feeding site 了 .
+
+>        硬碟還是快爆了 .
+>        全世界的討論區愈來愈多, 2 GB 不夠用了
+
+臺灣目前, 從國外傳進來大概 250-350M 的 news articles. 受限於 network
+bandwidth, 接收情況, 變動情形不小.
+ ( 這是 serv.hinet.net, news.cc.nctu.edu.tw, ... 等站上的記錄. )
+
+這兩天, TANet 對外 upgrade 成 T1, 也許 國外 News 進來的量會大增.
+
+BTW, News 上有些 site 說, 他們已經接收到 1G/day (?) , 算一算, 要
+     "接收全世界的文章", 你的 HD, 可能, 不過只能撐一天多 :-) !
+
+------------------------------------------------------------------------
+ * Origin: ● 工技電機 BBS ● From: 140.118.107.95
+
+
+------------------------------------------------------------------------
+   C.S.Chen [ 陳昌盛 ]                  * E-mail:  chen@cc.nctu.edu.tw
+   Computer Center of National Chiao-Tung University, Hsinchu, Taiwan, R.O.C.
+

@@ -1,0 +1,31 @@
+server n4jj.ifong.org
+acc a0231306
+pwd www.ifong.org
+port 2222
+
+ex:
+ssh -p 2222 a0231306@n4jj.x.rootbsd.net
+
+Q: change password?
+A: passwd 
+
+Q: remote copy from pc to n4jj
+A: scp -P 2222 source.txt a0231306@n4jj.x.rootbsd.net:~
+
+Q: remote copy from n4jj to VM
+A: scp -i ./xxx.pem source.txt ec2-user@IP:~
+
+Q: batch run
+A:
+cat xxx.txt | sh
+
+Q: vi
+A:
+esc --> command mode
+i --> insert mode
+jhkl --> moving cursor
+:wq! --> write and quit
+x --> delete one character
+yy --> copy
+p --> paste
+

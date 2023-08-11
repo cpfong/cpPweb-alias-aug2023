@@ -1,0 +1,4 @@
+E:\java4book\java4codebychaps\c16exceps\C16Inserts.java:89: unreported exception java.io.IOException; must be caught or declared to be thrown
+            inFile.close();    //********************* no compile!!!!!
+                        ^
+1 error

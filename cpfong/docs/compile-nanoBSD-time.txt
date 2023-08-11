@@ -1,0 +1,42 @@
+note:
+if compile kernel only, take 40 mins to generate _.disk.image.qemu-i386.qcow2 then you can qemu to simulate
+obj/_.env
+obj/_.bw (build world
+obj/_.bk (build kernel)
+qemu-i386/_.iw (install world)
+image/xxx.qcow2
+
+# ls -l /usr/embedded/obj/_.env 				start time
+# ls -l /usr/embedded/image/_.disk.image.qemu-i386.qcow2	end (good enough for simulation)
+
+clean (build world, build kernel)
+--
+00:00 - 04:54 ~5.0 hrs  : world
+04:54 - 05:34 40 mins   : kernel (qcow2 done)
+05:34 - 05:41  7 mins   : xz image (qcow2.xz)
+
+00:00:00 # NanoBSD image qemu-i386 build starting
+04:54:13 ## build kernel (FOO)
+05:34:45 ## Clean and create world directory (/usr/embedded/qemu-i386/_.w)
+05:41:39 # NanoBSD image qemu-i386 completed
+
+if only build kernel (skip build world)
+00:00:00 ### log: /usr/embedded/obj/_.bk
+00:39:04 ## installworld
+00:39:04 ### log: /usr/embedded/qemu-i386/_.iw
+00:41:48 ### log: /usr/embedded/qemu-i386/_.etc
+00:42:22 ### log: /usr/embedded/qemu-i386/_.ik
+00:42:23 ### log: /usr/embedded/qemu-i386/_.cust.cust_allow_ssh_root
+00:42:23 ### log: /usr/embedded/qemu-i386/_.cust.add_etc_make_conf
+00:42:23 ### log: /usr/embedded/qemu-i386/_.cust.cust_install_files
+00:42:23 ### log: /usr/embedded/qemu-i386/_.cust.cust_install_machine_files
+00:42:23 ### log: /usr/embedded/qemu-i386/_.cust.typical_embedded
+00:42:23 ### log: /usr/embedded/qemu-i386/_.cust.fix_pkg
+00:42:23 ### log: /usr/embedded/qemu-i386/_.cust.save_build
+00:42:23 ### log: /usr/embedded/qemu-i386/_.cust.shrink_md_fbsize
+00:42:23 ### log: /usr/embedded/qemu-i386/_.cust.cust_comconsole
+00:42:23 ### log: /usr/embedded/qemu-i386/_.dl
+00:42:27 ### log: /usr/embedded/qemu-i386/_.late_cust.product_custom
+00:42:28 ### log: /usr/embedded/qemu-i386/_.di
+00:42:28 ### image in: /usr/embedded/images/_.disk.image.qemu-i386.qcow2
+00:48:13 # NanoBSD image qemu-i386 completed

@@ -1,0 +1,52 @@
+#!/bin/sh
+
+yum update -y
+yum install -y httpd24 php70 mysql56-server php70-mysqlnd
+service httpd start
+chkconfig httpd on
+groupadd www
+usermod -a -G www ec2-user
+
+chown -R root:www /var/www
+chmod 2775 /var/www
+find /var/www -type d -exec sudo chmod 2775 {} \;
+find /var/www -type f -exec sudo chmod 0664 {} \;
+
+service mysqld start
+chkconfig mysqld on
+
+cd ~ec2-user
+wget https://wordpress.org/latest.tar.gz
+tar xfvz latest.tar.gz
+cd wordpress
+cp wp-config-sample.php wp-config.php
+cat wp-config.php | sed 's/database_name_here/wordpress-db/' > t; mv t wp-config.php
+cat wp-config.php | sed 's/username_here/wordpress-user/'    > t; mv t wp-config.php
+cat wp-config.php | sed 's/password_here/wordpress-pass/'    > t; mv t wp-config.php
+mv * /var/www/html/
+
+#as root
+sudo su
+usermod -a -G www apache
+chown -R apache /var/www
+chgrp -R www /var/www
+chmod 2775 /var/www
+find /var/www -type d -exec sudo chmod 2775 {} \;
+find /var/www -type f -exec sudo chmod 0664 {} \;
+
+cd ~ec2-user
+
+cat << 'EOF' > ./script.txt
+create user 'wordpress-user'@'localhost' identified by 'wordpress-pass';
+create database `wordpress-db`;
+grant all privileges on `wordpress-db`.* to "wordpress-user"@"localhost";
+flush privileges;
+EOF
+
+mysql -u root < ./script.txt
+
+#mysql_secure_installation
+#service mysqld restart
+#vi /etc/httpd/conf/httpd.conf
+# modify /var/www/html --> All
+#service httpd restart

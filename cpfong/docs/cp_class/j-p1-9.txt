@@ -1,0 +1,20 @@
+in
+--
+[cpfong@ssh ~]$ python
+Python 3.7.10 (default, Jul  1 2021, 01:15:33)
+>>> print('learning python now')
+learning python now
+
+
+exit
+--
+>>> quit()
+[cpfong@ssh ~]$
+
+Q: what is prompt?
+A:
+shell prompt
+[cpfong@ssh ~]$	
+
+python prompt
+>>>

@@ -1,0 +1,17 @@
+Q: where to start
+A: since i have no repo locally, so get one from remote first
+
+ @gaia-> gh repo list
+ gfoohub/foo                testing  public  13h
+ gfoohub/gfoohub.github.io           public  1d
+
+ git clone ssh://git@github.com/gfoohub/foo #clone remote to local
+
+@gaia-> cd foo/
+@gaia-> git remote #now it show remote
+origin
+
+Q: Adding Remote Repositories?
+A:
+git remote
+git remote add 2ndrepo ssh:git@github.com/gfoohub/foorepo

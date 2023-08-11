@@ -1,0 +1,107 @@
+chap 15 智慧型比對與 given-when
+
+15.1 智慧型比對算符
+15.2 智慧型比對的優先順序
+15.3 given 陳述句
+	15.3.1 非智慧型比對
+15.4 當有多個目要測試時
+
+15.1 ~~ 會檢視二方的運算元, 且自行決定如何比對
+
+$n=  0; print "n is 0\n" if ($n ~~ 0); # ==
+$n="0"; print "n is 0 string \n" if ($n ~~ 0); # eq
+
+看看 ~~ 在 hash 上的應用
+
+%names = (
+	John,	Chen,
+	Mary,	Ho,
+	Fred,	Stone);
+
+my $flag = 0;
+foreach my $key (keys %names){
+	next unless $key =~ /Fred/;
+	$flag= $key;
+	last;
+}
+print $flag;
+
+以上的寫法十分的麻煩, 若使用 ~~ 則可以:
+print "I found a key matching 'Fred'.\n" if %names ~~ /Fred/;
+
+看看二個陣列的比較:
+傳統法 (慢些)
+@names1=qw /john mary/;
+@names2=@names1;
+
+my $equal=0;
+foreach my $index (0 .. $#names1){
+        last unless $names1[$index] eq $names2[$index];
+        $equal++;
+}
+
+print "the arrays have the same elements\n" if $equal == @names1;
+
+新的處理方式:
+print "same\n" if @names1 ~~ @names2;
+
+
+my @nums = qw / 1 2 3 27 42 / ;
+my $result = &max (@nums);
+
+my $flag=0;
+foreach my $num (@nums){
+	next unless $result == $num;
+	$flag=1;
+	last;
+}
+
+print "the result is one of the input values\n" if $flag;
+
+sub max{
+	my $max = shift @_;
+	foreach (@_){
+		$max=$_ if $max <= $_;
+	}
+	$max;
+}
+
+而使用 ~~ 則可以讓程式看起來簡單許多:
+print "the result is one of the input values\n" if @nums ~~ $num;
+print "the result is one of the input values\n" if $num ~~ @nums;
+注意: 可以交換位置而不影響, 真是 "智慧"
+
+15.3 given 陳述句 
+use 5.010;
+
+given ($ARGV[0]){
+        when ( /fred/ ) { print "fred\n"; }
+        when ( /^Fred/ ) { print "start with Fred\n"; }
+        default { print "no fred\n"; }
+}
+
+
+chapter 16 行程管理
+16.1 system 函式
+	16.1.1 避免使用 shell
+16.2 exec 函式
+16.3 環境變數
+16.4 用倒引號來擷取輸出結果
+	16.4.1 在串列語境下使用倒引號
+16.5 將行程程視為檔案代號
+
+16.1 使用 system 時, 提供給 system 的參數, 即是一般在 shell 所鍵入的命令
+	所以 perl 不該解釋
+	system 'ls -l $HOME'
+	system "ls -l $HOME"	# no good
+
+當 perl 叫子行程時, 控制權即到子行程, 若這個子行程要 run 上 37 秒, 則 perl
+也會等 37 秒, 但你可以使用 shell 的啟動背景行程
+system "long_running_command with parameters &";
+
+system --> 叫 shell --> shell 看到有 & 所以把 long_running_command 放到背景且返回給 perl 
+而 long_running_command 是 shell 所啟動的, perl 完全不知它的存在, 所以也無法直接控制它
+
+perl 的程式中使用 system 時是否會叫用 shell ? 不一定, 如果命令很簡單則不叫,
+perl 在這種情況下直接找到命令而去跑它, 但若是有奇怪的字串則會叫 shell
+(中介字符, 錢號, 分號, 豎線...) 

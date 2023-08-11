@@ -1,0 +1,16 @@
+printf "what is your name?"
+read n
+printf "hello %s" $n
+
+# unset IFS then read in line
+printf 'i love my country' | { IFS= read -r line; printf "$line"; }
+
+# sometime i would like to read several lines without specify those lines
+# <<OEF is called heredoc
+# NOTE!! cannot run using sh ./cmd.sh You have to run in shell prompt and keyin on the cmd line
+IFS= read var_input_from_stdin <<EOF # do it later (after heredoc finished), but only one line since read
+i love my country
+EOF
+printf $var_input_from_stdin
+
+

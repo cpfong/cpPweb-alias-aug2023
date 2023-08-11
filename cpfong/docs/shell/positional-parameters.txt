@@ -1,0 +1,8 @@
+positional parameters look like $0 .. $9 and $#. 
+--
+./script.sh 1 2 3 4 5 6 7 8 9 a b
+
+script.sh
+ echo "fileName is $0 and first parameter is  $1"
+ echo "filename is $0 and last parameter is ${11}"
+

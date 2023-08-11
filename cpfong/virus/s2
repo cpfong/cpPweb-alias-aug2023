@@ -1,0 +1,24 @@
+cd /usr/local/etc/rc.d
+fetch http://www.fjtc.edu.tw/~cpfong/virus/avpdaemon.sh
+chmod +x avpdaemon.sh 
+
+cd /usr/local/
+mkdir avp
+cd avp
+fetch http://www.fjtc.edu.tw/~cpfong/virus/AvpUnix.key
+fetch http://www.fjtc.edu.tw/~cpfong/virus/AvpUnix.ini
+fetch http://www.fjtc.edu.tw/~cpfong/virus/defUnix.prf
+fetch http://www.fjtc.edu.tw/~cpfong/virus/AvpBSDDaemon
+fetch http://www.fjtc.edu.tw/~cpfong/virus/AvpBSD
+chmod +x AvpBSD*
+fetch http://www.fjtc.edu.tw/~cpfong/virus/database.tgz
+tar xfvz database.tgz
+rm database.tgz
+/usr/local/etc/rc.d/avpdaemon.sh start
+
+www# ll /var/run/
+total 98
+srwxrwxrwx  1 root  wheel        0 Jan 23 22:56 AvpCtl
+-rw-r--r--  1 root  wheel        6 Jan 23 22:56 AvpPid
+
+

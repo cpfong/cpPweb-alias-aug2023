@@ -1,0 +1,10 @@
+<html>
+<head>
+<title>
+禁止copy
+</title>
+</head>
+<!--<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">-->
+<p>cannot copy</p>
+</body>
+</html>

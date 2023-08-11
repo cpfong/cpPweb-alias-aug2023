@@ -1,0 +1,16 @@
+Q: do I have apache?
+A: yum list|grep httpd
+
+Q: is it running?
+A: /etc/init.d/httpd status
+
+Q: where is config?
+A: [cpfong@ubuntu ~]$ ls /etc/httpd/conf/httpd.conf
+
+Q: how to start?
+A: service httpd start
+
+Q: Does it come up correctly?
+A: pgrep httpd, telnet localhost 80, firefox -> http://127.0.0.1
+
+

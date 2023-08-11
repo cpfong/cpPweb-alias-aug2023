@@ -1,0 +1,64 @@
+Public Class Form1
+    Dim a() As Integer = {11, 22, 66, 33, 44, 99, 88, 77, 55}
+    Dim b() As Integer = {11, 22, 66, 33, 44, 99, 88, 77, 55}
+
+    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        For i As Integer = 0 To a.Length - 1
+            RichTextBox1.AppendText(a(i) & " ")
+        Next
+    End Sub
+    Function linear_search(ByVal tar)
+        Dim b As Boolean = False
+        For i As Integer = 0 To a.Length - 1
+            If (a(i) = tar) Then
+                b = True
+                Return (i)
+            End If
+        Next
+        If b = False Then
+            Return (-1)
+        End If
+    End Function
+
+    Function binary_search(ByVal tar)
+        Dim found As Boolean = False
+
+        Array.Sort(b)
+        Dim mid As Integer = 0
+        Dim low As Integer = 0, upper As Integer = a.Length - 1
+        While (low <= upper)
+            mid = Int((low + upper) / 2)
+            If (tar = a(mid)) Then
+                found = True
+                Exit While
+            ElseIf (tar > a(mid)) Then
+                low = mid + 1
+            Else
+                upper = mid - 1
+            End If
+        End While
+        Return (found)
+    End Function
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Dim tar As Integer = InputBox("looking for ?")
+        Dim r = linear_search(tar)
+        If (r = -1) Then
+            RichTextBox2.AppendText("linear search fail on finding " & tar & Chr(10))
+        Else
+            RichTextBox2.AppendText("linear search find " & tar & Chr(10))
+        End If
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        Dim looking As Integer = InputBox("looking for ?")
+
+        Dim r As Boolean = binary_search(looking)
+        If (r = True) Then
+            RichTextBox2.AppendText("binary found" & looking & Chr(10))
+        Else
+            RichTextBox2.AppendText("binary fail on " & looking & Chr(10))
+        End If
+
+    End Sub
+End Class

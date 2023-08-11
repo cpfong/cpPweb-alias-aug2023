@@ -1,0 +1,7 @@
+A more basic tool is dd, which has existed as a Unix and later a Linux command line tool for decades
+
+Q: backup winOS part on mintLinux
+A:
+ /dev/sda2       49178212 24524316  24653896  50% /media/cpfong/Win7OS
+ mint bash -> sudo dd if=/sev/sda2 of=./sda2-winOS-using_dd.img bs=4M
+

@@ -1,0 +1,4 @@
+1. done with jail folder
+2. network
+
+1a. jls jexec can test it out

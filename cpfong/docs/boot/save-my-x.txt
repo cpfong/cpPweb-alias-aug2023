@@ -1,0 +1,29 @@
+-- new i modified 2020-mar10
+Q: when diaster happen, i cannot boot from my eee pc. what to do?
+A: 
+ 1. boot system using mintLinux usb
+ 2. find partition of mintlinux at eee HD (sda5: use fdisk -l to check)
+ 3. mount sda5 and run grun-install at sda5
+
+-- orig
+boot/grub is under mint Linux partition
+mount it and run grub-install 
+
+1. use usb mint linux boot system
+2. find linux partition
+3. restore
+
+fdisk -l
+--
+/dev/sda1            2048    206847    204800   100M  7 HPFS/NTFS/exFAT
+/dev/sda2  *       207104 140507567 140300464  66.9G  7 HPFS/NTFS/exFAT
+/dev/sda3       140509184 201948637  61439454  29.3G 83 Linux
+
+sudo mount /dev/sda3 /mnt
+$ sudo grub-install --root-directory=/mnt /dev/sda
+# note: destination is sda NOT sda3 !
+
+mint bash -> which grub-install
+/usr/sbin/grub-install
+
+also check ~/00bsd_my_doc/

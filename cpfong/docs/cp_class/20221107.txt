@@ -1,0 +1,26 @@
+i$_ = "yabba dabba doo";
+
+if (/abba/){
+ print "match 1 \n";
+}
+
+if (/ab ba/){
+ print "match 2 \n";
+}
+
+while (<STDIN>){
+ chomp;
+ if (/$ARGV[0]/){
+  print "\tmatch\n";
+ }
+ else {
+  print "\tUNmatch\n";
+ }
+}
+
+while (<>){
+ if (/fred/){
+   print "bingo\n";
+ }
+}
+

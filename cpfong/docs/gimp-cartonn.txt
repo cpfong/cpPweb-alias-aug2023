@@ -1,0 +1,13 @@
+Q: colored on black/white?
+A:
+1. duplicate Layer
+2. make new Layer to black/white
+3. add Layer Mask 
+4. edit at Layer Mask
+
+
+Q: by build-in cartoon tool
+A: Filters / Artistic / Cartoon 
+
+Q: Threshold tool to cartioonize
+A:

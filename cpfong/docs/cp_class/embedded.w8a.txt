@@ -1,0 +1,12 @@
+http://mally.stanford.edu/~sr/computing/basic-unix.html
+https://www.freebsddiary.org/untar.php
+
+
+ man tar
+ -t list file
+
+7z (pkg install)
+bz
+
+https://www.freebsd.org/doc/en/articles/nanobsd/article.html
+http://ftp-archive.freebsd.org/

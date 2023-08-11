@@ -1,0 +1,49 @@
+$ echo '{"b":2,"a":1,"c":3}' | jq -S
+$ echo '{"b":2,"a":1,"c":3}' | jq '.c'                  # get value of key 'c'
+$ echo '[{"b":2},{"a":1},{"c":3}]' | jq '.[1]'          # get array[1]
+$ echo '[{"b":2},{"a":1},{"c":3}]' | jq '.[1].a'        # get array[1] then .a value  ie | jq '.[1]' | jq '.a'
+$ echo '[{"b":2},{"a":1},{"c":3}]' | jq '.[].a'         # get ALL .a value
+
+# 1st tej get info 
+import tejapi
+tejapi.ApiConfig.api_key = "your-secret"
+info = tejapi.ApiConfig.info()
+print(info)
+
+# 2nd tej get stock 2330 (tsmc)
+import tejapi # must
+tejapi.ApiConfig.api_key = "your-secret"
+
+tsmc_data = tejapi.get('TRAIL/TAPRCD',
+        coid='2330',
+        mdate={'gte':'2020-01-01', 'lte':'2020-12-29'},
+        opts={'columns':['mdate','open_d','high_d','low_d','close_d']},
+        chinese_column_name=True,
+)
+
+file = './tsmc.csv'
+tsmc_data.to_csv(file, index=True)
+
+# convert csv into jason
+import tejapi # must
+import cptej # cp's secret code
+import csv,json
+
+c_file = './tsmc.csv'
+j_file = './tsmc.json'
+
+data={} #i am hash data structure
+
+with open (c_file) as c_handler:
+ cr = csv.DictReader(c_handler)
+ for rows in cr:
+  id = rows['index']
+  data[id]=rows
+
+with open (j_file, 'w') as j_handler:
+ j_handler.write(json.dumps(data, indent=4))
+
+# yahoo ticker example
+import yfinance as yf
+tr = yf.Ticker("2330.TW")
+print(tr.info)

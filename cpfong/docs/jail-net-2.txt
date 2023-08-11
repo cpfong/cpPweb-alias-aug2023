@@ -1,0 +1,16 @@
+Q: to solve loopback problem
+A: creating a lo1-device and then assigning each jail a loopback address of the form 127.0.1.$jailid on lo1
+
+# /etc/rc.conf
+cloned_interfaces="lo1"
+
+# jail.conf
+foo {
+ jid = 1;
+ ip4.addr =  "lo1|127.0.1.${jid}/32";
+ ip4.addr += "vtnet0|10.0.0.${jid}/32";
+}
+
+lo0: flags=8049<UP,LOOPBACK,RUNNING,MULTICAST> metric 0 mtu 16384
+# by service netif start lo1
+lo1: flags=8008<LOOPBACK,MULTICAST> metric 0 mtu 16384

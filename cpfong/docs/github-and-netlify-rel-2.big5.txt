@@ -1,0 +1,11 @@
+implement: 實作注意事項
+--
+1. cust domain 客製化網頁名 
+2. https 安全的連線 
+
+link my domain with ntlify:  (使用客製化名)
+ 1. edit CNAME (@ my ns server) 先在 ns 主機上更動
+ 2. netlify domain management / Add 再於 netlify 上改變
+
+ # note: no need for name.com since pdn.ifong.org ns is sun.ifong.org
+ # however netlify name db look like also keep tracking this domain (nf.pdn.ifong.org)

@@ -1,0 +1,33 @@
+open F, "<", "./data";
+
+while (<F>){
+ chomp;
+ if (/fred/){
+  print "match\n";
+ }
+}
+
+open F, "<", "./data";
+
+while (<F>){
+ chomp;
+ if (/[f|F]red/){
+  print "match: $_\n";
+ }
+}
+
+while (<STDIN>){
+ chomp;
+ if (/$ARGV[0]/){
+  print "\tmatch\n";
+ }
+ else {
+  print "\tUNmatch\n";
+ }
+}
+
+$_ = "aBba";
+
+if (/(.)\1/){
+ print "bingo\n";
+}

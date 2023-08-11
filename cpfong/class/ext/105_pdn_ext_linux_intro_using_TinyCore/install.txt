@@ -1,0 +1,5 @@
+local
+tce-load -i name.tcz
+
+remote
+tce-load -wi name.tcz

@@ -1,0 +1,19 @@
+I maintain a local mailing list for the graduate student house here at
+Harvard. We also have a usenet newsgroup setup in our local
+hierarchy. What I do now is everytime I approve a submission for the
+mailing list I also post it to the newsgroup by copy-paste into my
+newsreader. What I would like to do is have everything that is sent to
+the mailing list automagically posted to the newsgroup. I'm running
+the mailing list using MajorDomo 1.92 on a SparcStation1+ running
+4.1.3. I have access to an nntp host at the university. Is there
+anyway to do what I want?
+
+------------------------------------------------------------------
+   I'm looking to do that very thing quite soon. 
+
+   I was thinking of a low-tech solution:
+   - add a user or alias to the mailing list
+   - have that user or alias forward to a program that kicks off the
+      inews(?) netnews posting program.
+
+      -- joe

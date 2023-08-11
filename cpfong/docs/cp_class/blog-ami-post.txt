@@ -1,0 +1,2 @@
+* default open port is 22 (ssh), you need port 80 too
+* 1st login: ssh -i secret.pem ec2-user@1.2.3.4

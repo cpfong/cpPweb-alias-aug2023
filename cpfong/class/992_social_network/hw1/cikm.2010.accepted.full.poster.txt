@@ -1,0 +1,510 @@
+ 
+
+    * Participants <#>
+      Home <index.php> News <news.php> Themes <themes.php> Important
+      Dates <important_dates.php> Registration <registration.php> Call
+      for Participation <call_for_participation.php> Student Travel
+      <student_travel.php> Awards <awards.php> Photo Gallery <javascript:;>
+    * Program <#>
+      Schedule <schedule.php> Keynote Speakers <keynote_speakers.php>
+      Full Papers <papers.php> Posters <posters.php> Workshops
+      <workshops.php> Tutorials <tutorials.php> Demos <demos.php>
+      Industry Event <industry_event.php>
+    * Contributors <#>
+      Call for Papers <call_for_papers.php> Call for Tutorials
+      <call_for_tutorials.php> Call for Workshops
+      <call_for_workshops.php> Call for Demos <call_for_demo.php> Call
+      for Sponsorship <call_for_sponsorship.php> How to Submit
+      <how_to_submit.php>
+    * Locations <#>
+      Conference Site <conference_site.php> Places of Interest
+      <places_of_interest.php> Shopping <shopping.php> Accomodation
+      <accomodation.php>
+    * About Us <#>
+      Organizers <organizers.php> History <history.php> Program
+      Committee <program_committee.php> Contact Us <contact_us.php>
+    * Search <searchresults.php>
+
+
+    Poster Guidelines
+
+
+      Poster size:
+
+The size of the board space for each poster is 45" x 45". It is better
+to make your poster not exceed these dimensions.
+
+Alternatively, you can make your poster in A0 size (33.1" x 46.8"), but
+it must be in the *portrait* orientation. In this size your poster will
+extend beyond the bottom edge of the board by 1.8" inches, which is ok.
+
+
+      Mounting method:
+
+The poster boards are velcro receptive and push pin receptive. The
+mounting materials will be provided.
+
+
+      Poster set-up time:
+
+For the CIKM'10 main conference, posters will be displayed during lunch
+and reception on October 27 in the Imperial Room. The poster boards will
+be set up during 10:00am - 12:00 noon. The poster authors should mount
+their posters at 12:00 noon. Lunch will be provided in the room.
+
+For workshops, the set-up time depends on the workshop schedule. Boards
+will be set up in your workshop room right before the scheduled poster
+session.
+
+
+      Poster tear-down time:
+
+For the main conference, please take down your posters at 9:00 pm on
+October 27.
+
+
+    CIKM 2010 Accepted Short Papers
+
+DB Track: 	
+Paper ID 	Title 	Authors
+194 	Search-Log Anonymization and Advertisement: Are They Mutually
+Exclusive? 	Thorben Burghardt, Klemens Bohm, Achim Guttmann, Christopher
+Clifton
+236 	Automated Interaction in Social Networks with Datalog 	Royi Ronen,
+Oded Shmueli
+257 	A Data Lineage Model for Distributed Sub-image Processing 	Mwebaze
+Johnson, John McFarland, Danny Boxhoorn, Edwin Valentine
+298 	Open User Schema Guided Evaluation of Streaming RDF Queries
+Zhihong Chong, Qi Guilin, Weiwei Ni, Hu Shu, Zhou Aoying
+301 	SUMMA: Subgraph Matching in Massive Graphs 	Shijie Zhang, Shirong
+Li, Jiong Yang
+322 	Automatically Weighting Tags in XML Collection 	Dexi Liu, Changxuan
+Wan, Lei Chen, Xiping Liu
+432 	Skyline Query Processing for Uncertain Data 	Mohamed Khalefa,
+Mohamed Mokbel, Justin Levandoski
+438 	FD-Buffer: A Buffer Manager for Databases on Flash Disks 	Bingsheng
+He, sai tung on, Yinan Li, Ming Wu, Qiong Luo, Xu Jianliang
+492 	Efficiently Querying Archived Data using Hadoop 	rajeev gupta,
+Himanshu Gupta, Ullas Nambiar, Mukesh Mohania
+534 	Evaluation of Top-k queries in Peer-to-Peer Networks using
+Threshold Algorithms 	Ioannis Chrysakis, Constantinos Chalkidis,
+Dimitris Plexousakis
+544 	A Metamodel Approach to Flexible Semantic Web Service discovery
+Roberto De Virgilio, Devis Bianchini
+600 	On Efficient Top-k Social Web Search 	Peifeng Yin, Ken C.K. Lee,
+Wang-Chien Lee
+607 	Quantifying Uncertainty in Multi-Dimensional Cardinality
+Estimations 	Andranik Khachatryan, Klemens Boehm
+669 	An AML-based Method for Entity Matching by Exploiting SoftFDs
+Synonyms on the Web 	Zhixu Li, Laurianne Sitbon, Liwei Wang, Xiaofang
+Zhou, Xiaoyong Du
+765 	An Efficient Data-Centric Storage Scheme Considering Storage and
+Query Hot-Spots in Sensor Networks 	Yonghun Park, Dongmin Seo, Jonghyeon
+Yun, Christopher T. Ryu, Jaesoo Yoo
+773 	Formal Approach and Automated Tool for Constructing Ontology from
+Object-oriented Database Model 	Fu Zhang, Z. M.  Ma, Gaofeng Fan Fan, Yu
+Wang
+802 	(k, P)-anonymity: Towards Pattern-Preserving Anonymity of
+Time-Series Data 	Xuan Shang, Ke Chen, Lidan Shou, Gang Chen, Tianlei Hu
+821 	Concurrent Atomic Protocols for Making and Changing Decisions in
+Social Networks 	Royi Ronen, Oded Shmueli
+888 	Extending Dictionary-based Entity Recognition to Tolerate Errors
+Guoliang Li, Jianhua Feng
+1010 	Yet Another Write-Optimized DBMS Layer for Flash-Based Solid State
+Storage 	Hongchan Roh, Daewook Lee, Sanghyun Park
+1028 	PrInt: A Provenance Model to Support Integration Processes 	Bruno
+Tomazela, Carmem Satie Hara, Ricardo Rodrigues Ciferri, Cristina Ciferri
+1065 	OLAP-based Query Recommendation 	Carlos Garcia-Alvarado, Zhibo
+Chen, Carlos Ordonez
+1098 	Selective Data Acquisition for Probabilistic K-NN Query 	Yu-Chieh
+Lin, De-Nian Yang, Ming-Syan Chen
+1200 	Support Elements in Graph Structured Schema Reintegration 	Xun
+Sun, Pottinger Rachel, Michael Lawrence
+1212 	BP-tree: An Efficient Index for Similarity Search in 
+High-Dimensional Metric Spaces 	Jurandy Almeida, Ricardo da Silva
+Torres, Neucimar Leite
+1269 	Query Optimization for Ontology-Based Information Integration
+Yingjie Li, Jeff Heflin
+1290 	Aspect-Oriented Relations and Queries 	Curtis Dyreson
+1300 	A Hierarchical Approach to Reachability Query Answering  in Very
+Large Graph Databases 	Saikat Dey, Hasan Jamil
+1309 	Computing the Top-k Maximal Answers in a Join of Ranked Lists
+Yaron Kanza, Mirit Shalem
+1428 	PruSM: A prudent Schema Matching strategy for Web Forms 	Thanh
+Nguyen, Hoa Nguyen and Juliana Freire
+1458 	Anonymizing Data with Quasi-Sensitive Attribute Values 	Li Xiong
+		
+Industry Track: 	
+Paper ID 	Title 	Authors
+219 	BagBoo: A Scalable Hybrid Model Based on Bagging and Boosting
+Alexey Gorodilov, Cliff Brunk, Dmitry Pavlov
+293 	Exploiting Sequential Relationships for Familial Classification
+Lee Jensen, James Shanahan
+497 	Massive Structured Data Management Solution 	Ullas Nambiar,
+Himanshu Gupta, rajeev gupta, Mukesh Mohania
+770 	Ranking of Evolving Stories Through Meta-Aggregation 	Juozas
+Gordevicius, Francisco J.  Estrada, Hyun Chul Lee, Periklis Andritsos,
+Johann Gamper
+1015 	Injecting Domain Knowledge into a Granular Database Engine: A
+Position Paper 	Dominik Slezak, Graham Toppin
+1040 	Experiences with Using SVM-based Learning for Multi-Objective
+Ranking 	Linh Nguyen, Wai Gen Yee, Ophir Frieder
+1100 	Learning to Blend Rankings: a monotonic transformation to blend
+rankings from multiple domains 	Zhenzhen Kou, Yi Chang, Zhaohui Zheng,
+Hongyuan Zha
+		
+IR Track: 		
+Paper ID 	Title 	Authors
+109 	Exploiting Site-Level Information to Improve Web Search 	Andrei
+Broder, Evgeniy Gabrilovich, Vanja Josifovski, George Mavromatis, Donald
+Metzler, Jane Wang
+112 	Exploration-Exploitation Tradeoff in Interactive Relevance
+Feedback 	Maryam Karimzadehgan, ChengXiang Zhai
+134 	Ranking Social Bookmarks Using Topic Models 	Morgan Harvey, Mark
+Carman, Ian Ruthven
+158 	TABEX: Web-Scale Semi-Structured Table Census and Classification
+Eric Crestan, Patrick Pantel
+168 	Challenges in Personalized Authority Flow Based Ranking of Social
+Media 	Hassan  Sayyadi, John Edmond, Vagelis Hristidis, Louiqa Raschid
+243 	A new mathematics retrieval system 	Shahab Kamali, Frank Tompa
+259 	Explore Click Models for Search Ranking 	Dong Wang, Weizhu Chen
+328 	Generating Advertising Keywords from Video Content 	Michael Welch,
+Junghoo (John) Cho, Walter Chang
+331 	Finding web pages for children 	Carsten Eickhoff, Pavel Serdyukov,
+Arjen de Vries
+346 	Rough Sets Based Reasoning and Pattern Mining for a Two-Stage
+Information Filtering System 	Xujuan Zhou, Yuefeng Li, Peter Bruza, Yue
+Xu, Raymond Y.K. Lau
+373 	A Late Fusion Approach to Monolingual  & Cross-lingual Document
+Re-ranking 	Dong Zhou, Seamus Lawless, Jinming Min, Vincent Wade
+414 	Learning to Generate Summary as Structured Output 	Hiroya Takamura,
+Manabu Okumura
+416 	Group Ranking with Application to Image Retrieval 	Ou Wu
+419 	Co-Ranking: Unifying Explicit and Implicit Feedback for
+Collaborative Filtering 	Nathan Liu
+423 	Directly Optimizing Evaluation Measures in Learning to Rank based
+on the Clonal Selection Algorithm 	Qiang He, Jun Ma, Shuaiqiang Wang
+434 	Query Model Refinement Using Word Graphs 	Yunping Huang, Le Sun,
+Jian-Yun Nie
+477 	Building Recommendation Systems using Peer-to-Peer Shared Content
+Yuval Shavitt, Ela Weinsberg, Udi Weinsberg
+521 	Threshold Behavior of Incentives in Social Networks 	Nagaraj Kota,
+Y. Narahari
+546 	Image Retrieval at Memory? Edge: Known Image Search based on
+User-Drawn Sketches 	Michael Springmann, Ihab Al Kabary, Heiko Schuldt
+561 	Utilizing Refinding for Personalized Information Retrieval 	Sarah
+Tyler, Jian Wang, Yi Zhang
+601 	User Behavior Driven Ranking without Editorial Judgments 	Shihao
+Ji, Taesup Moon, Geroges Dupret, Ciya Liao, Zhaohui Zheng
+614 	Query Reformulation using Conditional Random Fields 	Jitendra
+Ajmera, Hema Swetha Koppula, Krishna P. Leela
+615 	A Feature-Word-Topic model for image annotation 	Cam-Tu Nguyen,
+Natsuda Kaothanthong, Xuan-Hieu Phan, Takeshi Tokuyama
+625 	Weighting Common Syntactic Structures for Natural Language based
+Information Retrieval 	Liu Chang, Chang Liu, Epaminondas Kapetanios
+631 	Ranking with Auxiliary Data 	Bo Long, Yi Chang, Zhaohui Zheng,
+Shuang-Hong Yang
+671 	Using Term Dependency According to Its Utility 	Lixin Shi, Jian-Yun
+Nie
+673 	Modeling Reformulation Using Query Distributions 	Xiaobing Xue,
+Bruce Croft, David Smith
+677 	Online learning for recency search ranking using real-time user
+feedback 	Taesup Moon, Lihong  Li, Wei  Chu, Ciya Liao, Zhaohui Zheng,
+Yi Chang
+741 	Expert Identification in Community Question Answering: Exploring
+Question Selection Bias 	Aditya Pal, Joseph Konstan
+757 	On the Relationship Between Novelty and Popularity of
+User-Generated Content 	David Carmel, Haggai Roitman, Elad Yom-Tov
+795 	Focused Crawling Using Navigational Rank 	Shicong Feng, Li Zhang,
+Yuhong Xiong and Conglei Yao
+805 	TAER: Time-Aware Entity Retrieval - Exploiting the Past to find 
+Relevant Entities in News Articles 	Gianluca Demartini, Malik Muhammad
+Saad Missen, Roi Blanco, Hugo Zaragoza
+823 	Demographich Information Flows - How web queries move between user
+segments 	Ingmar Weber, Alejandro Jaimes
+862 	Detecting Periodic Changes in Search Intentions in a Search
+Engine 	Masaya Murata, Hiroyuki Toda, Yumiko Matsuura, Ryoji Kataoka,
+Takayoshi Mochizuki
+878 	Recommendation Based On Object Typicality 	Yi Cai, Ho-fung Leung,
+Qing Li, Jie Tang, Juanzi Li
+908 	Selecting keywords for content based recommendation 	Christian
+Wartena, Wout Slakhorst, Martin Wibbels
+925 	Structural Annotation of Search Queries Using Pseudo-Relevance
+Feedback 	Michael Bendersky, Bruce Croft, David Smith
+932 	Search as if You were in Your Home Town: Geographic Search by
+Regional Context and Dynamic Feature 	Makoto Kato, Hiroaki Ohshima,
+Satoshi Oyama, Katsumi Tanaka
+951 	Topic Aspect Analysis for Multi-Document Summarization 	Dingding
+Wang, Shen Chao, Tao Li
+1057 	Finding Unusual Review Patterns Using Unexpected Rules   	Nitin
+Jindal, Bing Liu, Ee-Peng Lim
+1073 	Visual-Semantic Graphs: Using Queries to Reduce the Semantic Gap
+in Web Image Retrieval 	Barbara Poblete, Benjamin Bustos, Marcelo
+Mendoza, Juan Barrios
+1096 	Novel Local Features with Hybrid Sampling Technique for Image
+Retrieval 	Leszek Kaliciak, Dawei Song, Nirmalie Wiratunga, Jeff Pan
+1101 	Expected Browsing Utility for Web Search Evaluation 	Emine Yilmaz,
+Milad Shokouhi, Nick Craswell, Stephen Robertson
+1127 	Community-based Topic Modeling for Social Tagging 	Daifeng Li,
+Bing He, Ding Ying, Jie Tang, Juanzi Li, Zheng Qin, Tianxi Dong, Cassidy
+Sugimoto
+1139 	Discriminative Factored Prior Model for Personalized Content-Based
+Recommendation 	Lanbo Zhang, Yi Zhang
+1143 	Fast Query Expansion Using Approximations of Relevance Models
+Marc-Allen Cartright, James Allan, Victor  Lavrenko, Andrew McGregor
+1193 	Mining Rules to Explain Activities in Videos 	Florez Omar, Curtis
+Dyreson
+1198 	Online Stratified Sampling: Evaluating Classifiers at Web Scale
+Paul Bennett, Vitor  Carvalho
+1241 	Routing Questions to Appropriate Answerers in Community Question
+Answering Services 	Baichuan Li, Irwin King
+1263 	Learning to Rank with Groups 	Yuan Lin, Hongfei Lin, Zheng Ye,
+Song Jin, Xiaoling Sun
+1314 	Optimizing Unified Loss for Web Ranking Specialization 	Li Fan,
+Xin Li, Jiang Bian, Zhaohui Zheng
+1324 	Hypergraph-based Multilevel Matrix Approximation for Text
+Information Retrieval 	Haw-ren Fang, Yousef Saad
+1339 	A Peer-Selection Algorithm for Information Retrieval 	Yosi Mass,
+Yehoshua Sagiv, Michal  Shmueli-Scheuer
+1466 	Exploring Domain-specific Term Weight in Archived Question
+Search 	Zhao-Yan Ming, Tat-Seng Chua, Gao Cong
+1472 	Multi-Information Fusion for Uncertain Semantic Representations of
+Videos 	Bo Lu
+161 	A Topical Link Model for Community Discovery in Textual Interaction
+Graph 	Guoqing Zheng, Jinwen Guo, Lichun Yang, Shengliang Xu, Shenghua
+Bao, Zhong Su, Dingyi Han, Yong Yu
+		
+KM Track: 	
+Paper ID 	Title 	Authors
+174 	Taxonomic Clustering of Web Service for Efficient Discovery
+Sourish Dasgupta, Satish Bhat, Yugyung Lee
+176 	Active Learning in Parallel Universes 	Nicolas Cebron, Michael
+Berthold
+177 	TAGME: on-the-fly annotation of short text fragments (by Wikipedia
+entities) 	Paolo Ferragina, Ugo Scaiella
+184 	Outlier Ranking in Relevant Subspace Projections 	Emmanuel Müller,
+Matthias Schiffer, Thomas Seidl
+217 	Understanding Retweeting Behaviors in Social Networks 	Zi Yang,
+Jingyi Guo, Jie Tang, Keke Cai, Juanzi Li
+237 	Mapping Web Pages to Database Records via Link Paths 	Weninger Tim,
+Fabio Fumarola, Jiawei Han, Donato Malerba
+248 	Personalized Recommender System Based on Item Taxonomy and
+Folksonomy 	Huizhi Liang, Yue Xu, Yuefeng Li, Richi Nayak
+265 	Communication Motifs: A Tool to Characterize Social
+Communications 	Qiankun Zhao, Yuan Tian, Qi He, Nuria Oliver, Ruoming
+Jin, Wang-Chien Lee
+274 	Improving Taxonomies for Large-Scale Hierarchical Classifiers of
+Web Documents 	Kiyoshi Nitta
+281 	PTM: Probabilistic Topic Modeling for Mining Parallel Document
+Collections 	Duo Zhang, Jimeng Sun, ChengXiang Zhai
+315 	Hierarchical Auto-Tagging: Organizing Q&A Knowledge for Everyone
+Kyosuke Nishida, Ko Fujimura
+348 	Extracting Structured Information from Wikipedia Articles to
+Populate Infoboxes 	Dustin Lange, Christoph Böhm, Felix Naumann
+350 	Automatic Metadata Extraction from Multilingual Enterprise
+Content 	Melike Sah, Vincent Wade
+379 	Intelligent Sales Forecasting Engine using Genetic Algorithms
+Vijayalakshmi Murlidhar, Bernard Menezes, Aniket Divecha, Rohit  Menon,
+Kamal Mehta, Rajesh Ravindran
+411 	Identifying New Categories in Community Question Answering
+Archives: A Topic Modeling Approach 	Yajie Miao
+459 	An Effective Approach for Mining Mobile User Habits 	Happia Cao,
+Tengfei Bao, Qiang Yang, Enhong Chen, Jilei Tian
+460 	Mining Networks with Shared Items 	Jun Sese, Mio Seki, Mutsumi
+Fukuzaki
+464 	Learning Sentiment Classification Model from Labeled Features
+Yulan He
+468 	Embedding tolerance relations in formal concept analysis - An
+application in information fusion 	Mehdi Kaytoue, Zainab Assaghir,
+Sergei O. Kuznetsov, Amedeo Napoli
+495 	Online Learning for Multi-Task Feature Selection 	Haiqin Yang,
+Irwin King, Michael R. Lyu
+509 	Exploiting User Interests for Collaborative Filtering:Interests
+Expansion via Personalized Ranking 	Liu Qi, Enhong Chen, Hui Xiong,
+Chris Ding
+515 	K-Farthest-Neighbors-Based Concept Boundary Determination for
+Support Vector Data Description 	yanshan xiao, Bo Liu, Longbing Cao
+543 	Relational Feature Engineering of Natural Language Processing
+Hamidreza Kobdani, Hinrich Schütze, Andre Burkovski, Stefanie Wiltrud 
+Kessler, Gunther Heidemann
+558 	Transfer Incremental Learning for Pattern Classification 	Zhenfeng
+Zhu, Xingquan Zhu, Yue-Fei Guo, Xiangyang Xue
+578 	Learning Ontology Resolution for Document Representation and its
+Applications in Text Mining 	Lidong Bing, Bai Sun, Shan Jiang, Yan
+Zhang, Wai Lam
+609 	Supervised Identification and Linking of Concept Mentions to a
+Domain-Specific Ontology 	Gabor Melli, Martin Ester
+612 	Enriching Context in Contextual Advertising 	Pavan Kumar  GM,
+Krishna P. Leela, Mehul Parsana, Sachin Garg
+648 	CasJoin: A Cascade Chain for Text Similarity Joins 	Xiaoxun Zhang,
+Zhili Guo, Honglei Guo, Huijia Zhu, Zhong Su
+658 	Learning Naive Bayes Transfer Classifier through Class-wise Test
+Distribution Estimation 	Jeong-Woo Son, Seong-Bae Park and Hyun-Je Song
+660 	TOP-EYE: Top-k Evolving Trajectory Outlier Detection 	Yong Ge, Hui
+Xiong, Zhi-Hua Zhou
+672 	Multi Task Learning on Multiple Related Networks 	Prakash Mandayam
+Comar, Pang-Ning Tan, Anil Kumar Jain
+675 	Building and Evaluating a Semantic Representation for Personal
+Information 	Jinyoung Kim, Anton Bakalov, David Smith, Bruce Croft
+744 	Affinity-Driven Prediction and Ranking of Products in Online
+Product Review Sites 	Hui Li, Sourav S Bhowmick, Aixin Sun
+749 	Topic-Driven Web Search Result Organization by Leveraging Wikipedia
+Semantic Knowledge 	Xianpei Han, Jun Zhao
+754 	Fast Dimension Reduction for Document Classification Based on
+Imprecise Spectrum Analysis 	Guan Hu, Bin Xiao, Jingyu Zhou, Minyi Guo,
+Tao Yang
+782 	Manifold Ranking with Sink Points for Update Summarization 	Pan Du,
+Jiafeng Guo, Jin Zhang, Xueqi Cheng
+785 	Construction of a Sentimental Word Dictionary 	Eduard Dragut,
+Clement Yu, Prasad Sistla, Weiyi Meng
+835 	Exploiting Novelty, Coverage and Balance for Topic-Focused
+Multi-Document Summarization 	Xuan Li, Yi-dong Shen, Liang Du, Chenyan
+Xiong
+840 	Context Modeling for Ranking and Tagging Bursty Features in Text
+Streams 	Xin Zhao, Jing Jiang, Jing He, Xiaoming Li, Hongfei Yan, Shan
+Dongdong
+856 	Argumentation versus Aggregation of Trust Evidence: an Experimental
+Comparison 	Pierpaolo Dondio
+865 	Visualization and Clustering of Crowd Video Content in MPCA
+Subspace 	Haiping Lu, How-Lung Eng, Myo Thida, Konstantinos Plataniotis
+899 	ANITA: A Narrative Interpretation of Taxonomies for their
+Adaptation to Text Collections 	Mario Cataldi, K. Selcuk Candan, Maria
+Luisa  Sapino
+900 	Yes We Can - Simplex Volume Maximization for Descriptive Web-Scale
+Matrix Factorization 	Christian Thurau, Kristian Kersting, Christian
+Bauckhage
+917 	Incorporating Terminology Evolution for Query Translation in Text
+Retrieval with Association Rules 	Kaluarachchi Amal, Aparna Varde
+919 	Exploiting Co-Occurrence and Information Quality Metrics to
+Recommend Tags in Web 2.0 Applications 	Fabiano Belem, Eder Martins,
+Jussara Almeida, Marcos Andre Goncalves, Gisele Pappa
+946 	Elusive Vandalism Detection at Wikipedia: A Text Stability-based
+Approach 	Qinyi Wu, Danesh Irani, Calton Pu, Lakshmish  Ramaswamy 
+966 	Feature Subspace Transformations for Enhancing K-Means Clustering
+Anirban Chatterjee, Sanjukta Bhowmick, Padma Raghavan
+969 	On Bootstrapping Recommender Systems 	Yehuda Koren, Nadav 
+Golbandi, Ronny Lempel
+971 	Using Wikipedia Categories for Compact Representations of Chemical
+Documents 	Benjamin Köhncke, Wolf-Tilo Balke
+978 	Efficient Wikipedia-Based Semantic Interpreter by Exploiting Top-k
+Processing 	Jong Wook Kim, Ashwin Kashyap, Dekai Li, Sandilya Bhamidipati
+1025 	A study of rumor control strategies on social networks 	Rudra
+Tripathy, Amitabha Bagchi, Sameep Mehta
+1053 	Domain-Independent Entity Coreference in RDF Graphs 	Dezhao Song,
+Jeff Heflin
+1054 	Opinion Digger: An Unsupervised Opinion Miner from Unstructured
+Product Reviews 	Samaneh Moghaddam, Martin Ester
+1067 	Combining Link and Content for Collective Active Learning 	Lixin
+Shi, Yuhang Zhao, Jie Tang
+1079 	Classifying Sentiment in Microblogs: Is Brevity an Advantage?
+Bermingham Adam, Alan Smeaton
+1081 	Transient Crowd Discovery on the Real-Time Social Web 	Krishna
+Kamath, James Caverlee
+1085 	Discovery of Numerous Specific Topics via Term Co-Occurrence
+Analysis 	Omid Madani, Jiye Yu
+1147 	Digging for Knowledge with Information Extraction: A Case Study on
+Human Gene-Disease Associations 	Markus Bundschus, Anna Bauer-Mehren,
+Volker Tresp, Hans-Peter Kriegel
+1163 	Query Log based Personalization using Topic Models 	Mark Carman,
+Morgan Harvey, Mark Baillie, Fabio Crestani
+1187 	Choosing Your Own Adventure: Automatic Taxonomy Generation to
+Permit Many Paths 	Xiaoguang Qi, Dawei Yin, Zhenzhen Xue, Brian Davison
+1226 	Robust Prediction from Multiple Heterogeneous Data Sources with
+Partial Information 	Mohammad  Aziz, Chandan Reddy
+1233 	Collaboration Analytics: Mining Work Patterns from Collaboration
+Activities 	Qihua Wang, Hongxia Jin, Yan Liu
+1237 	Adapting Cost-sensitive Learning for Reject Option 	Jun Du, Eileen
+Ni, Charles Ling
+1247 	SKIF: A Data Imputation Framework for Concept Drifting Data
+Streams 	Zhang Peng, Xingquan Zhu, Jianlong Tan, Li Guo
+1285 	Detecting controversial events in Twitter 	Ana-Maria Popescu,
+Pennacchiotti Marco
+1322 	Topic Detection and Organization of Mobile Text Messages 	Ye Tian,
+Wendong Wang, Xueli Wang, Jinghai Rao, Canfeng Chen, Jian Ma
+1349 	Unsupervised Public Health Event Detection for Epidemic
+Intelligence 	Marco Fisichella, Avaré Stewart , Kerstin Denecke,
+Wolfgang Nejdl
+1366 	Pattern Based Keyword Extraction for Contextual Advertising
+Kushal Dave, Vasudeva  Varma
+1441 	Mixture Model Label Propagation 	Mingmin  Chi
+1452 	Regularization and Feature Selection for Networked Features
+Hongliang Fei, Brian Quanz, Luke Huan
+
+	
+
+Platinum Sponsors
+
+Microsoft Logo (Gold Sponsor) <http://research.microsoft.com/en-us/>
+
+ 
+
+Gold Sponsors
+
+Ebay Logo (Gold Sponsor) <http://www.ebay.com>
+
+ 
+
+Soso Logo (Gold Sponsor) <http://www.soso.com>
+
+ 
+
+<http://labs.yahoo.com/>
+
+ 
+
+<http://www.nokia.ca>
+
+ 
+
+<http://www.google.com>
+
+ 
+
+<http://www.infobright.com/>
+
+ 
+
+<http://www.ir-facility.org/>
+
+<http://www.mitacs.math.ca/>
+
+ 
+
+<http://www.yandex.com/>
+
+ 
+
+<http://www.umbc.edu/>
+
+ 
+
+<http://www.churchandduncan.com/>
+
+ 
+
+<http://www.research.ibm.com/>
+
+ 
+
+<http://www.dossierview.com/>
+
+<http://www.cambridge.org/>
+
+<http://www.cambridge.org/>
+
+ACM Logo (Sponsor) <http://www.acm.org/>
+
+Sig Web Logo (Sponsor) <http://www.sigweb.org:88/about/>
+
+Sigir Logo (Sponsor) <http://www.sigir.org/>
+
+SIGKDD Logo (Sponsor) <http://www.sigkdd.org/>
+
+York Univ. Logo (Sponsor) <http://www.yorku.ca/>
+
+CIKM 2010 Logo
+ACM CIKM 2010
+
+19th ACM International Conference on Information and Knowledge
+Management Photo Galleryclose <#>
+Ajax Loader

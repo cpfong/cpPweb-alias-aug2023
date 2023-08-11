@@ -1,0 +1,898 @@
+  <HTML>
+  <HEAD>
+  
+  <TITLE>MySQL Reference Manual for version 5.0.3-alpha - 4  Using MySQL Programs</TITLE>
+   <style> code {color:purple} tt {color:green} samp {color:navy} pre {color:maroon} </style>
+  </HEAD>
+  <BODY BGCOLOR=silver TEXT=#000000 LINK=#101090 VLINK=#7030B0>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_Tutorial.html">previous</A>, <A HREF="manual_MySQL_Database_Administration.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="Using_MySQL_Programs" HREF="manual_toc.html#Using_MySQL_Programs">4  Using MySQL Programs</A></H1>
+
+<P>
+This chapter provides a brief overview of the programs provided by MySQL AB
+and discusses how to specify options when you run these programs.
+Most programs have options that are specific to their own operation, but the
+syntax for specifying options is similar for all of them. Later chapters
+provide more detailed descriptions of individual programs, including which
+options they recognize.
+
+</P>
+
+
+
+<H2><A NAME="Program_Overview" HREF="manual_toc.html#Program_Overview">4.1  Overview of MySQL Programs</A></H2>
+
+<P>
+MySQL AB provides several types of programs:
+
+</P>
+<DL COMPACT>
+
+<DT>The MYSQL server and server startup scripts:
+<DD>
+
+<UL>
+<LI>
+
+<code>mysqld</code> is the MySQL server
+<LI>
+
+<code>mysqld_safe</code>, <code>mysql.server</code>, and <code>mysqld_multi</code> are server
+startup scripts
+<LI>
+
+<code>mysql_install_db</code> initializes the data directory and the initial
+databases
+</UL>
+
+These programs are discussed further in section <A HREF="manual_MySQL_Database_Administration.html#MySQL_Database_Administration">5  Database Administration</A>.
+
+<DT>Client programs that access the server:
+<DD>
+
+<UL>
+<LI>
+
+<code>mysql</code> is a command-line client for executing SQL statements interactively
+or in batch mode
+<LI>
+
+<code>mysqlcc</code> (MySQL Control Center) is an interactive graphical tool for
+executing SQL statements and administration
+<LI>
+
+<code>mysqladmin</code> is an administrative client
+<LI>
+
+<code>mysqlcheck</code> performs table maintenance operations
+<LI>
+
+<code>mysqldump</code> and <code>mysqlhotcopy</code> make database backups
+<LI>
+
+<code>mysqlimport</code> imports data files
+<LI>
+
+<code>mysqlshow</code> displays information about databases and tables
+</UL>
+
+These programs are discussed further in section <A HREF="manual_Client-Side_Scripts.html#Client-Side_Scripts">8  MySQL Client and Utility Programs</A>.
+
+<DT>Utility programs that operate independently of the server:
+<DD>
+
+<UL>
+<LI>
+
+<code>myisamchk</code> performs table maintenance operations
+<LI>
+
+<code>myisampack</code> produces compressed, read-only tables
+<LI>
+
+<code>mysqlbinlog</code> is a tool for processing binary log files
+<LI>
+
+<code>perror</code> displays error code meanings
+</UL>
+
+<code>myisamchk</code> is discussed further in section <A HREF="manual_MySQL_Database_Administration.html#MySQL_Database_Administration">5  Database Administration</A>.
+The other programs are further in section <A HREF="manual_Client-Side_Scripts.html#Client-Side_Scripts">8  MySQL Client and Utility Programs</A>.
+
+</DL>
+
+<P>
+Most MySQL distributions include all of these programs, except for those
+programs that are platform-specific. (For example, the server startup
+scripts are not used on Windows.) The exception is that RPM distributions
+are more specialized. There is one RPM for the server, another for the
+client programs, and so forth. If you appear to be missing one or more
+programs, see section <A HREF="manual_Installing.html#Installing">2  Installing MySQL</A> for information on types of distributions
+and what they contain.  It may be that you need to install something else.
+
+</P>
+
+
+<H2><A NAME="Invoking_Programs" HREF="manual_toc.html#Invoking_Programs">4.2  Invoking MySQL Programs</A></H2>
+
+<P>
+To invoke a MySQL program at the command line (that is, from your shell or
+command prompt), enter the program name followed by any options or other
+arguments needed to instruct the program what you want it to do. The following
+commands show some sample program invocations. ``<code>shell&#62;</code>'' represents
+the prompt for your command interpreter; it is not part of what you type.
+The particular prompt you will see depends on your command interpreter.
+Typical prompts are <code>$</code> for <code>sh</code> or <code>bash</code>, <code>%</code> for
+<code>csh</code> or <code>tcsh</code>, and <code>C:\&#62;</code> for Windows 
+<code>command.com</code> or <code>cmd.exe</code>.
+
+</P>
+
+<PRE>
+shell&#62; mysql test
+shell&#62; mysqladmin extended-status variables
+shell&#62; mysqlshow --help
+shell&#62; mysqldump --user=root personnel
+</PRE>
+
+<P>
+Arguments that begin with a dash are option arguments. They typically specify
+the type of connection a program should make to the server or affect its
+operational mode. Options have a syntax that is described in
+section <A HREF="manual_Using_MySQL_Programs.html#Program_Options">4.3  Specifying Program Options</A>.
+
+</P>
+<P>
+Non-option arguments (arguments with no leading dash) provide additional
+information to the program. For example, the <code>mysql</code> program interprets
+the first non-option argument as a database name, so the command
+<code>mysql test</code> indicates that you want to use the <code>test</code> database.
+
+</P>
+<P>
+Later sections that describe individual programs indicate which options a
+program understands and describe the meaning of any additional non-option
+arguments.
+
+</P>
+<P>
+Some options are common to a number of programs. The most common of these are
+the <code>--host</code>, <code>--user</code>, and <code>--password</code> options that specify
+connection parameters. They indicate the host where the MySQL server is
+running, and the username and password of your MySQL account. All MySQL client
+programs understand these options; they allow you to specify which server to
+connect to and the account to use on that server.
+
+</P>
+<P>
+<A NAME="IDX412"></A>
+<A NAME="IDX413"></A>
+
+</P>
+<P>
+You may find it necessary to invoke MySQL programs using the
+pathname to the <tt>`bin'</tt> directory in which they are installed. This is
+likely to be the case if you get a ``program not found'' error whenever
+you attempt to run a MySQL program from any directory other than the
+<tt>`bin'</tt> directory.  To make it more convenient to use MySQL, you
+can add the pathname of the <tt>`bin'</tt> directory to your <code>PATH</code>
+environment variable setting. Then to run a program you need only type
+its name, not its entire pathname.
+
+</P>
+<P>
+Consult the documentation for your command interpreter for instructions on
+setting your <code>PATH</code>. The syntax for setting environment variables is
+interpreter-specific.
+
+</P>
+
+
+
+<H2><A NAME="Program_Options" HREF="manual_toc.html#Program_Options">4.3  Specifying Program Options</A></H2>
+
+<P>
+You can provide options for MySQL programs in several ways:
+
+</P>
+
+<UL>
+
+<LI>
+
+On the command line following the program name. This is most common for
+options that apply to a specific invocation of the program.
+
+<LI>
+
+In an option file that the program reads when it starts. This is common for
+options that you want the program to use each time it runs.
+
+<LI>
+
+In environment variables. These are useful for options that you want to apply
+each time the program runs, although in practice option files are used more
+commonly for this purpose.
+(section <A HREF="manual_MySQL_Database_Administration.html#Multiple_Unix_servers">5.10.2  Running Multiple Servers on Unix</A> discusses one situation in which environment
+variables can be very helpful. It describes a handy technique that uses such
+variables to specify the TCP/IP port number and Unix socket file for both
+the server and client programs.)
+
+</UL>
+
+<P>
+MySQL programs determine which options are given first by examining environment
+variables, then option files, and then the command line.
+If an option is specified multiple times, the last occurrence takes
+precedence.
+This means that environment variables have the lowest precedence and
+command-line options the highest.
+
+</P>
+<P>
+You can take advantage of the way that MySQL programs process options by
+specifying the default values for a program's options in an option file. Then
+you need not type them each time you run the program, but can override the
+defaults if necessary by using command-line options.
+
+</P>
+
+
+
+<H3><A NAME="Command-line_options" HREF="manual_toc.html#Command-line_options">4.3.1  Using Options on the Command Line</A></H3>
+
+<P>
+Program options specified on the command line follow these rules:
+
+</P>
+
+<UL>
+
+<LI>
+
+Options are given after the command name.
+
+<LI>
+
+An option argument begins with one dash or two dashes, depending on whether
+it has a short name or a long name. Many options have both forms.
+For example, <code>-?</code> and <code>--help</code> are the short and long forms
+of the option that instructs a MySQL program to display a help message.
+
+<LI>
+
+Option names are case sensitive.  <code>-v</code> and <code>-V</code> are both legal and
+have different meanings. (They are the corresponding short forms of the
+<code>--verbose</code> and <code>--version</code> options.)
+
+<LI>
+
+Some options take a value following the option name.
+For example, <code>-h localhost</code> or <code>--host=localhost</code> indicate
+the MySQL server host to a client program.  The option value
+tells the program the name of the host where the MySQL server is running.
+
+<LI>
+
+For a long option that takes a value, separate the option name and the value by an <samp>`='</samp> sign.
+For a short option that takes a value, the option value can immediately follow the option letter,
+or there can be a space between.
+(<code>-hlocalhost</code> and <code>-h localhost</code> are equivalent.)
+An exception to this rule is the option for specifying your MySQL password.
+This option can be given in long form as <code>--password=pass_val</code> or as
+<code>--password</code>. In the latter case (with no password value given), the
+program will prompt you for the password.
+The password option also may be given in short form as <code>-ppass_val</code> or as
+<code>-p</code>. However, for the short form, if the password value is given, it
+must follow the option letter with <em>no intervening space</em>. The reason for
+this is that if a space follows the option letter, the program has no way to
+tell whether a following argument is supposed to be the password value or some
+other kind of argument.  Consequently, the following two commands have two
+completely different meanings:
+
+
+<PRE>
+shell&#62; mysql -ptest
+shell&#62; mysql -p test
+</PRE>
+
+The first command instructs <code>mysql</code> to use a password value of
+<code>test</code>, but specifies no default database.
+The second instructs <code>mysql</code> to prompt for the password value
+and to use <code>test</code> as the default database.
+
+</UL>
+
+<P>
+MySQL 4.0 introduced some additional flexibility in the way you specify
+options. These changes were made in MySQL 4.0.2. Some of them relate to the way
+you specify options that have ``enabled'' and ``disabled'' states, and to the
+use of options that might be present in one version of MySQL but not another.
+Those capabilities are discussed in this section.
+Another change pertains to the way you use options to set program variables.
+section <A HREF="manual_Using_MySQL_Programs.html#Program_variables">4.3.4  Using Options to Set Program Variables</A> discusses that topic further.
+
+</P>
+
+<P>
+Some options control behavior that can be turned on or off. For example,
+the <code>mysql</code> client supports a <code>--column-names</code> option that
+determines whether or not to display a row of column names at the beginning
+of query results. By default, this option is enabled. However, you may
+want to disable it in some instances, such as when sending the output
+of <code>mysql</code> into another program that expects to see only data and
+not an initial header line.
+
+</P>
+<P>
+To disable column names, you can specify the option using any of these forms:
+
+</P>
+
+<PRE>
+--disable-column-names
+--skip-column-names
+--column-names=0
+</PRE>
+
+<P>
+The <code>--disable</code> and <code>--skip</code> prefixes and the <code>=0</code> suffix
+all have the same effect: They turn the option off.
+
+</P>
+<P>
+The ``enabled'' form of the option may be specified in any of these ways:
+
+</P>
+
+<PRE>
+--column-names
+--enable-column-names
+--column-names=1
+</PRE>
+
+<P>
+Another change to option processing introduced in MySQL 4.0 is that you
+can use the <code>--loose</code> prefix for command-line options. If an option
+is prefixed by <code>--loose</code>, the program will not exit with
+an error if it does not recognize the option, but instead will issue
+only a warning:
+
+</P>
+
+<PRE>
+shell&#62; mysql --loose-no-such-option
+mysql: WARNING: unknown option '--no-such-option'
+</PRE>
+
+<P>
+The <code>--loose</code> prefix can be useful when you run programs from
+multiple installations of MySQL on the same machine, at least if all the
+versions are as recent as 4.0.2.  This prefix is particularly useful when you
+list options in an option file.  An option that may not be recognized by all
+versions of a program can be given using the <code>--loose</code>
+prefix (or <code>loose</code> in an option file). Versions of the program that do
+not recognize the option will issue a warning and ignore it. This
+strategy requires that versions involved be 4.0.2 or later, because
+earlier versions know nothing of the <code>--loose</code> convention.
+
+</P>
+
+
+
+<H3><A NAME="Option_files" HREF="manual_toc.html#Option_files">4.3.2  Using Option Files</A></H3>
+
+<P>
+<A NAME="IDX414"></A>
+<A NAME="IDX415"></A>
+<A NAME="IDX416"></A>
+<A NAME="IDX417"></A>
+
+</P>
+<P>
+MySQL programs can read startup options from option
+files (also sometimes called configuration files).
+Option files provide a convenient way to specify commonly used options so that
+they need not be entered on the command line each time you run a program.
+Option file capability is available from MySQL 3.22 on.
+
+</P>
+<P>
+The following programs support option files:
+<code>myisamchk</code>,
+<code>myisampack</code>,
+<code>mysql</code>,
+<code>mysql.server</code>,
+<code>mysqladmin</code>,
+<code>mysqlbinlog</code>,
+<code>mysqlcc</code>,
+<code>mysqlcheck</code>,
+<code>mysqld_safe</code>,
+<code>mysqldump</code>,
+<code>mysqld</code>,
+<code>mysqlhotcopy</code>,
+<code>mysqlimport</code>, and
+<code>mysqlshow</code>.
+
+</P>
+<P>
+On Windows, MySQL programs read startup options from the following files:
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Filename</strong> </TD><TD> <strong>Purpose</strong>
+</TD></TR>
+<TR><TD><code><var>WINDIR</var>\my.ini</code> </TD><TD> Global options
+</TD></TR>
+<TR><TD><code>C:\my.cnf</code> </TD><TD> Global options
+</TD></TR>
+</TABLE>
+
+<P>
+<var>WINDIR</var> represents the location of your Windows directory.  This is
+commonly <tt>`C:\Windows'</tt> or <tt>`C:\WinNT'</tt>.  You can determine its
+exact location from the value of the <code>WINDIR</code> environment variable
+using the following command:
+
+</P>
+
+<PRE>
+C:\&#62; echo %WINDIR%
+</PRE>
+
+<P>
+On Unix, MySQL programs read startup options from the following files:
+
+</P>
+<P>
+<A NAME="IDX418"></A>
+<TABLE BORDER>
+<TR><TD><strong>Filename</strong> </TD><TD> <strong>Purpose</strong>
+</TD></TR>
+<TR><TD><code>/etc/my.cnf</code> </TD><TD> Global options
+</TD></TR>
+<TR><TD><code><var>DATADIR</var>/my.cnf</code> </TD><TD> Server-specific options
+</TD></TR>
+<TR><TD><code>defaults-extra-file</code> </TD><TD> The file specified with <code>--defaults-extra-file=<var>path</var></code>, if any
+</TD></TR>
+<TR><TD><code>~/.my.cnf</code> </TD><TD> User-specific options
+</TD></TR>
+</TABLE>
+
+</P>
+<P>
+<var>DATADIR</var> represents the location of the MySQL data directory. Typically
+this is <tt>`/usr/local/mysql/data'</tt> for a binary installation or
+<tt>`/usr/local/var'</tt> for a source installation.  Note that this is the data
+directory location that was specified at configuration time, not the
+one specified with <code>--datadir</code> when <code>mysqld</code> starts.
+Use of <code>--datadir</code> at runtime has no effect on where the server
+looks for option files, because it looks for them before processing any
+command-line arguments.
+
+</P>
+<P>
+MySQL looks for option files in the order just described and reads any that
+exist. If an option file that you want to use does not exist, create it
+with a plain text editor.
+If multiple option files exist, an option specified in a file read later takes
+precedence over the same option specified in a file read earlier.
+
+</P>
+<P>
+Any long option that may be given on the command line when running a
+MySQL program can be given in an option file as well.  To get the list
+of available options for a program, run it with the <code>--help</code> option.
+
+</P>
+<P>
+The syntax for
+specifying options in an option file is similar to command-line syntax, except
+that you omit the leading two dashes. For example, <code>--quick</code> or
+<code>--host=localhost</code> on the command line should be specified as
+<code>quick</code> or <code>host=localhost</code> in an option file.
+To specify an option of the form <code>--loose-opt_name</code>
+in an option file, write it as <code>loose-opt_name</code>.
+
+</P>
+<P>
+Empty lines in option files are ignored. Non-empty lines can take any
+of the following forms:
+
+</P>
+<DL COMPACT>
+
+<DT><code>#<var>comment</var></code>
+<DD>
+<DT><code>;<var>comment</var></code>
+<DD>
+Comment lines start with <samp>`#'</samp> or <samp>`;'</samp>. As of MySQL 4.0.14, 
+a <samp>`#'</samp>-comment can start in the middle of a line as well.
+
+<DT><code>[<var>group</var>]</code>
+<DD>
+<var>group</var> is the name of the program or group for which you want to set
+options.  After a group line, any <var>opt_name</var> or <code>set-variable</code> lines
+apply to the named group until the end of the option file or another group
+line is given.
+
+<DT><code><var>opt_name</var></code>
+<DD>
+This is equivalent to <code>--<var>opt_name</var></code> on the command line.
+
+<DT><code><var>opt_name</var>=<var>value</var></code>
+<DD>
+This is equivalent to <code>--<var>opt_name</var>=<var>value</var></code> on the command line.
+In an option file, you can have spaces around the <samp>`='</samp> character,
+something that is not true on the command line.
+As of
+MySQL 4.0.16, you can quote the value with double quotes or single quotes.
+This is useful if the value contains a <samp>`#'</samp> comment character or whitespace.
+
+<DT><code>set-variable = <var>var_name</var>=<var>value</var></code>
+<DD>
+Set the program variable <var>var_name</var> to the given value.
+This is equivalent to <code>--set-variable=<var>var_name</var>=<var>value</var></code> on the
+command line.
+Spaces are allowed around the first <samp>`='</samp> character but not around
+the second.
+This syntax is deprecated as of MySQL 4.0.
+See section <A HREF="manual_Using_MySQL_Programs.html#Program_variables">4.3.4  Using Options to Set Program Variables</A> for more information on setting program variables.
+</DL>
+
+<P>
+Leading and trailing blanks are automatically deleted from option names and
+values.  You may use the escape sequences <samp>`\b'</samp>, <samp>`\t'</samp>, <samp>`\n'</samp>,
+<samp>`\r'</samp>, <samp>`\\'</samp>, and <samp>`\s'</samp> in option values to represent the
+backspace, tab, newline, carriage return, and space characters.
+
+</P>
+<P>
+On Windows, if an option value represents a pathname, you should specify the
+value using <samp>`/'</samp> rather than <samp>`\'</samp> as the pathname separator. If you
+use <samp>`\'</samp>, you must double it as <samp>`\\'</samp>,
+because <samp>`\'</samp> is the escape character in MySQL.
+
+</P>
+<P>
+If an option group name is the same as a program name, options in the group
+apply specifically to that program.
+
+</P>
+<P>
+The <code>[client]</code> option group is read by all client programs (but not
+by <code>mysqld</code>). This allows you to specify options that apply to every
+client. For example, <code>[client]</code> is the perfect group to use to specify
+the password that you use to connect to the server.  (But make sure that
+the option file is readable and writable only by yourself, so that other
+people cannot find out your password.) Be sure not to put an option in the
+<code>[client]</code> group unless it is recognized by <em>all</em> client programs
+that you use. Programs that do not understand the option will quit after
+displaying an error message if you try to run them.
+
+</P>
+<P>
+As of MySQL 4.0.14, if you want to create option groups that should be
+read only by one specific <code>mysqld</code> server release series, you can do this by
+using groups with names of <code>[mysqld-4.0]</code>, <code>[mysqld-4.1]</code>, and so
+forth. The following group indicates that the <code>--new</code> option should be
+used only by MySQL servers with 4.0.x version numbers:
+
+</P>
+
+<PRE>
+[mysqld-4.0]
+new
+</PRE>
+
+<P>
+Here is a typical global option file:
+
+</P>
+
+<PRE>
+[client]
+port=3306
+socket=/tmp/mysql.sock
+
+[mysqld]
+port=3306
+socket=/tmp/mysql.sock
+key_buffer_size=16M
+max_allowed_packet=8M
+
+[mysqldump]
+quick
+</PRE>
+
+<P>
+The preceding option file uses <code><var>var_name</var>=<var>value</var></code> syntax for the
+lines that set the <code>key_buffer_size</code> and <code>max_allowed_packet</code>
+variables. Prior to MySQL 4.0.2, you would need to use <code>set-variable</code>
+syntax instead (described earlier in this section).
+
+</P>
+<P>
+Here is a typical user option file:
+
+</P>
+
+<PRE>
+[client]
+# The following password will be sent to all standard MySQL clients
+password="my_password"
+
+[mysql]
+no-auto-rehash
+set-variable = connect_timeout=2
+
+[mysqlhotcopy]
+interactive-timeout
+
+</PRE>
+
+<P>
+This option file uses <code>set-variable</code> syntax to set the
+<code>connect_timeout</code> variable. For MySQL 4.0.2 and up, you can also set
+the variable using just <code>connect_timeout=2</code>.
+
+</P>
+<P>
+<A NAME="IDX419"></A>
+If you have a source distribution, you will find sample option
+files named <tt>`my-<var>xxxx</var>.cnf'</tt> in the <tt>`support-files'</tt> directory.
+If you have a binary distribution, look in the <tt>`support-files'</tt>
+directory under your MySQL installation directory (typically <tt>`C:\mysql'</tt>
+on Windows or <tt>`/usr/local/mysql'</tt> on Unix).  On Windows the sample option files
+may also be located in the MySQL installation directory. Currently
+there are sample option files for small, medium, large, and very
+large systems. To experiment with one of these files, copy it to
+<tt>`C:\my.cnf'</tt> on Windows or to <tt>`.my.cnf'</tt> in your home directory on
+Unix.
+
+</P>
+<P>
+<strong>Note</strong>: On Windows, the <tt>`.cnf'</tt> option file extension might not
+be displayed.
+
+</P>
+<P>
+All MySQL programs that support option files handle the
+following command-line options:
+
+</P>
+<DL COMPACT>
+
+<DT><code>--no-defaults</code>
+<DD>
+Don't read any option files.
+
+<DT><code>--print-defaults</code>
+<DD>
+Print the program name and all options that it will get from option files.
+
+<DT><code>--defaults-file=<var>path_name</var></code>
+<DD>
+Use only the given option file. <var>path_name</var> is the full pathname
+to the file.
+
+<DT><code>--defaults-extra-file=<var>path_name</var></code>
+<DD>
+Read this option file after the global option file but before the user
+option file. <var>path_name</var> is the full pathname to the file.
+
+</DL>
+
+<P>
+To work properly, each of these options must immediately
+follow the command name on the command line, with the exception
+that <code>--print-defaults</code> may be used immediately after
+<code>--defaults-file</code> or <code>--defaults-extra-file</code>.
+
+</P>
+
+<P>
+In shell scripts, you can use the <code>my_print_defaults</code> program to parse
+option files. The following example shows the output that
+<code>my_print_defaults</code> might produce when asked to show the options found in
+the <code>[client]</code> and <code>[mysql]</code> groups:
+
+</P>
+
+<PRE>
+shell&#62; my_print_defaults client mysql
+--port=3306
+--socket=/tmp/mysql.sock
+--no-auto-rehash
+</PRE>
+
+<P>
+Note for developers:  Option file handling is implemented in the C client
+library simply by
+processing all matching options (that is, options in the appropriate group)
+before any command-line arguments. This works nicely for programs that use
+the last instance of an option that is specified multiple times. If you have
+a C or C++ program that handles multiply specified options this way but doesn't
+read option files, you need add only two lines to give it that capability.
+Check the source code of any of the standard MySQL clients to see
+how to do this.
+
+</P>
+<P>
+Several other language interfaces to MySQL are based on the C client library,
+and some of them provide a way to access option file contents. These include
+Perl and Python. See the documentation for your preferred interface for
+details.
+
+</P>
+
+
+
+<H3><A NAME="Environment_variable_options" HREF="manual_toc.html#Environment_variable_options">4.3.3  Using Environment Variables to Specify Options</A></H3>
+
+<P>
+<A NAME="IDX420"></A>
+
+</P>
+<P>
+To specify an option using an environment variable, set the variable using the
+syntax appropriate for your comment processor. For example, on Windows or
+NetWare,
+you can set the <code>USER</code> variable to specify your MySQL account name.
+To do so, use this syntax:
+
+</P>
+
+<PRE>
+SET USER=<var>your_name</var>
+</PRE>
+
+<P>
+The syntax on Unix depends on your shell. Suppose that you want to specify the
+TCP/IP port number using the <code>MYSQL_TCP_PORT</code> variable. The syntax for
+Bourne shell and variants (<code>sh</code>, <code>bash</code>, <code>zsh</code>, etc.) is:
+
+</P>
+
+<PRE>
+MYSQL_TCP_PORT=3306
+</PRE>
+
+<P>
+For <code>csh</code> and <code>tcsh</code>, use this syntax:
+
+</P>
+
+<PRE>
+setenv MYSQL_TCP_PORT 3306
+</PRE>
+
+<P>
+The commands to set environment variables can be executed at your command
+prompt to take effect immediately. These settings persist until you log out.
+To have the settings take effect each time you log in,
+place the appropriate command or commands in a startup file that your
+command interpreter reads each time it starts. Typical startup files are
+<tt>`AUTOEXEC.BAT'</tt> for Windows, <tt>`.bash_profile'</tt> for <code>bash</code>, or
+<tt>`.tcshrc'</tt> for <code>tcsh</code>. Consult the documentation for your command
+interpreter for specific details.
+
+</P>
+<P>
+section <A HREF="manual_Environment_variables.html#Environment_variables">F  Environment Variables</A> lists all environment variables that affect MySQL
+program operation.
+
+</P>
+
+
+
+<H3><A NAME="Program_variables" HREF="manual_toc.html#Program_variables">4.3.4  Using Options to Set Program Variables</A></H3>
+
+<P>
+<A NAME="IDX421"></A>
+<A NAME="IDX422"></A>
+
+</P>
+
+<P>
+Many MySQL programs have internal variables that can be set at runtime.
+As of MySQL 4.0.2, program
+variables are set the same way as any other long option that takes a value.
+For example, <code>mysql</code> has a <code>max_allowed_packet</code> variable that
+controls the maximum size of its communication buffer.
+To set the <code>max_allowed_packet</code> variable for <code>mysql</code> to a value of
+16MB, use either of the following commands:
+
+</P>
+
+<PRE>
+shell&#62; mysql --max_allowed_packet=16777216
+shell&#62; mysql --max_allowed_packet=16M
+</PRE>
+
+<P>
+The first command specifies the value in bytes. The second specifies the value
+in megabytes. Variable values can have a suffix of <code>K</code>, <code>M</code>, or
+<code>G</code> (either uppercase or lowercase) to indicate units of kilobytes,
+megabytes, or gigabytes.
+
+</P>
+<P>
+In an option file, the variable setting is given without the leading dashes:
+
+</P>
+
+<PRE>
+[mysql]
+max_allowed_packet=16777216
+</PRE>
+
+<P>
+Or:
+
+</P>
+
+<PRE>
+[mysql]
+max_allowed_packet=16M
+</PRE>
+
+<P>
+If you like, underscores in a variable name can be specified as dashes.
+
+</P>
+<P>
+Prior to MySQL 4.0.2, program variable names are not recognized as option
+names.
+Instead, use the <code>--set-variable</code> option to assign a value to a variable:
+
+</P>
+
+<PRE>
+shell&#62; mysql --set-variable=max_allowed_packet=16777216
+shell&#62; mysql --set-variable=max_allowed_packet=16M
+</PRE>
+
+<P>
+In an option file, omit the leading dashes:
+
+</P>
+
+<PRE>
+[mysql]
+set-variable = max_allowed_packet=16777216
+</PRE>
+
+<P>
+Or:
+
+</P>
+
+<PRE>
+[mysql]
+set-variable = max_allowed_packet=16M
+</PRE>
+
+<P>
+With <code>--set-variable</code>, underscores in variable names cannot be given as
+dashes for versions of MySQL older than 4.0.2.
+
+</P>
+<P>
+The <code>--set-variable</code> option is still recognized in MySQL 4.0.2 and up,
+but is deprecated.
+
+</P>
+<P>
+Some server variables can be set at runtime. For details, see
+section <A HREF="manual_MySQL_Database_Administration.html#Dynamic_System_Variables">5.2.3.1  Dynamic System Variables</A>.
+
+</P>
+
+<P><HR><P>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_Tutorial.html">previous</A>, <A HREF="manual_MySQL_Database_Administration.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+ </BODY>
+ </HTML>

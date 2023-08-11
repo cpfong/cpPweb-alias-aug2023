@@ -1,0 +1,1238 @@
+Index: sendmail/devtools/OS/FreeBSD.4.x
+diff -u /dev/null sendmail/devtools/OS/FreeBSD.4.x:1.1.2.1
+--- /dev/null	Sat Apr 21 17:57:41 2001
++++ sendmail/devtools/OS/FreeBSD.4.x	Sat Apr 21 17:54:56 2001
+@@ -0,0 +1,35 @@
++#	$Id$
++define(`confMAPDEF', `-DNEWDB -DNIS -DMAP_REGEX')
++define(`confLIBS', `-lutil')
++define(`confSTDIO_TYPE', `torek')
++
++define(`confLD', `cc')
++define(`confMTLDOPTS', `-pthread')
++define(`confLDOPTS_SO', `-shared')
++define(`confCCOPTS_SO', `-fPIC')
++define(`confSONAME', `-soname')	
++
++define(`confPERL_CONFIGURE_ARGS', `-Dlddlflags=-shared -Dccdlflags="-export-dynamic"')
++
++define(`confMBINDIR', `/usr/libexec/sendmail')
++define(`confLINKS', `${DESTDIR}${UBINDIR}/hoststat ${DESTDIR}${UBINDIR}/purgestat')
++
++ifelse(confBLDVARIANT, `DEBUG',
++dnl Debug build
++`
++	define(`confOPTIMIZE',`-g -Wall')
++',
++dnl Optimized build
++confBLDVARIANT, `OPTIMIZED',
++`
++	define(`confOPTIMIZE',`-O')
++',
++dnl Purify build
++confBLDVARIANT, `PURIFY',
++`
++	define(`confOPTIMIZE',`-g -Wall')
++',
++dnl default
++`
++	define(`confOPTIMIZE',`-O')
++')
+Index: sendmail/sendmail/collect.c
+diff -u sendmail/sendmail/collect.c:1.1.1.4 sendmail/sendmail/collect.c:1.1.2.5
+--- sendmail/sendmail/collect.c:1.1.1.4	Sun Apr  8 13:58:45 2001
++++ sendmail/sendmail/collect.c	Sun Apr  8 14:35:15 2001
+@@ -22,6 +22,10 @@
+ static void	dferror __P((FILE *volatile, char *, ENVELOPE *));
+ static void	eatfrom __P((char *volatile, ENVELOPE *));
+ 
++#if CHECK_VIRUS
++static void	sanitize_mime_multipart(FILE *, ENVELOPE *);
++#endif /* CHECK_VIRUS */
++
+ /*
+ **  COLLECT -- read & parse message header & make temp file.
+ **
+@@ -443,6 +447,25 @@
+ 			rstat = rscheck("check_eoh", hnum, hsize, e, FALSE,
+ 					TRUE, 4, NULL);
+ 
++#if CHECK_VIRUS
++			/* sanitize mime headers */
++			if ((bp = hvalue("Content-Type", e->e_header)) != NULL)
++			{
++				char pbuf[20];
++				(void) strlcpy(pbuf, bp, sizeof pbuf);
++				bp = strtok(pbuf, ";");
++				if (strncasecmp(bp, "multipart/", 10) != 0
++					&& strcasecmp(bp, "text/plain") != 0)
++				{
++					struct stat stbuf;
++
++					sanitize_mime_multipart(df, e);
++					if (fstat(dfd, &stbuf) == 0)
++						e->e_msgsize = stbuf.st_size;
++				}
++			}
++#endif /* CHECK_VIRUS */
++
+ 			bp = buf;
+ 
+ 			/* toss blank line */
+@@ -466,6 +489,16 @@
+ 	}
+ 
+ readerr:
++#if CHECK_VIRUS
++	if (df != NULL && e->e_msgboundary != NULL)
++	{
++		e->e_msgsize += strlen(e->e_msgboundary) + 4;
++		fprintf(df, "\n--%s--\n", e->e_msgboundary);
++		free(e->e_msgboundary);
++		e->e_msgboundary = NULL;
++	}
++#endif /* CHECK_VIRUS */
++
+ 	if ((feof(fp) && smtpmode) || ferror(fp))
+ 	{
+ 		const char *errmsg = errstring(errno);
+@@ -896,3 +929,57 @@
+ 	}
+ }
+ #endif /* ! NOTUNIX */
++
++/*
++** SANITIZE_MIME_MULTIPART -- Content-Type must by multipart for check_virus
++*/
++
++#if CHECK_VIRUS
++static void
++sanitize_mime_multipart(df, e)
++	FILE *df;
++	register ENVELOPE *e;
++{
++	HDR *h;
++	register HDR **hp;
++	char buf[MAXNAME + 1];
++
++	if (tTd(49, 10))
++		dprintf("----- sanitize mime multipart -----\n");
++	else if (tTd(49, 2))
++		dprintf("sanitize mime multipart: Content-Type: %s\n",
++			hvalue("Content-Type", e->e_header));
++
++	/* Create MIME parts boundary */
++	(void) snprintf(buf, sizeof buf, "%s.%ld/%.100s",
++		e->e_id, curtime(), MyHostName);
++	e->e_msgboundary = newstr(buf);
++	fprintf(df, "This is a MIME-encapsulated message.\n\n");
++	fprintf(df, "--%s\n", e->e_msgboundary);
++
++	/* Move Content-* from header to body */
++	hp = &e->e_header;
++	while (*hp != NULL)
++	{
++		if (strncasecmp((*hp)->h_field, "Content-", 8) != 0)
++		{
++			hp = &(*hp)->h_link;
++			continue;
++		}
++		if (tTd(49, 10))
++			dprintf("%s: %s\n", (*hp)->h_field, (*hp)->h_value);
++		fprintf(df, "%s: %s\n", (*hp)->h_field, (*hp)->h_value);
++		h = *hp; *hp = (*hp)->h_link;
++		free(h);
++	}
++	fprintf(df, "\n");
++
++	/* Add Content-Type: multipart/mixed to header */
++	(void) snprintf(buf, sizeof buf, "multipart/mixed;\n\tboundary=\"%s\"",
++		e->e_msgboundary);
++	addheader("Content-Type", buf, 0, &e->e_header);
++
++	if (tTd(49, 10))
++		dprintf("-----------------------------------\n");
++}
++#endif /* CHECK_VIRUS */
+Index: sendmail/sendmail/conf.c
+diff -u sendmail/sendmail/conf.c:1.1.1.4 sendmail/sendmail/conf.c:1.1.2.8
+--- sendmail/sendmail/conf.c:1.1.1.4	Sun Apr  8 13:58:46 2001
++++ sendmail/sendmail/conf.c	Sun Apr  8 15:28:13 2001
+@@ -5,6 +5,9 @@
+  * Copyright (c) 1988, 1993
+  *	The Regents of the University of California.  All rights reserved.
+  *
++ * Copyright (c) 1999-2000 Petr.Rehor@Decros.CZ, All rights reserved.
++ *     check_virus
++ *
+  * By using this file, you agree to the terms and conditions set
+  * forth in the LICENSE file which can be found at the top level of
+  * the sendmail distribution.
+@@ -29,10 +32,18 @@
+ # include <ulimit.h>
+ #endif /* HASULIMIT && defined(HPUX11) */
+ 
++#if CHECK_VIRUS
++#ifdef MAP_REGEX
++# include <regex.h>
++#endif /* MAP_REGEX */
++#endif /* CHECK_VIRUS */
+ 
+ static void	setupmaps __P((void));
+ static void	setupmailers __P((void));
+ static int	get_num_procs_online __P((void));
++#if CHECK_VIRUS
++	bool	pruneroute __P((char *));
++#endif /* CHECK_VIRUS */
+ 
+ 
+ /*
+@@ -1170,6 +1181,609 @@
+ 	return pathn;
+ }
+ /*
++**  CHECK_VIRUS -- e-mail antivirus protection
++*/
++
++#if CHECK_VIRUS
++
++/*
++** check_virus_address_in_pattern - test address in pattern
++*/
++
++static int
++check_virus_address_in_pattern(to, addr_list)
++	register ADDRESS *to;
++	register ADDRESS_LIST *addr_list;
++{
++	while (addr_list != NULL)
++	{
++#ifdef MAP_REGEX
++		if (regexec((regex_t *) addr_list->q_paddr,
++		    to->q_user, 0, NULL, 0) == 0)
++			break;
++#else
++		register char *addr, *pattern;
++
++		addr = to->q_user;
++		pattern = addr_list->q_paddr;
++		if (strncmp(pattern, ".*@", 3) == 0)
++		{
++			pattern += 3;
++			while (*addr != '\0' && *addr++ != '@') ;
++		}
++		while(*addr != '\0' && *pattern != '\0' &&
++			tolower(*addr) == tolower(*pattern))
++		{
++			addr++;
++			pattern++;
++		}
++		if (*addr == '\0' && *pattern == '\0')
++			break;
++#endif /* MAP_REGEX */
++		addr_list = addr_list->q_next;
++	}
++
++	return (addr_list != NULL);
++}
++
++/*
++** check_virus_read_socket - read N bytes from socket
++**	read(2) guarantees to read the number of bytes
++**	requested only if the descriptor references
++**	a normal file.
++*/
++
++# if NETUNIX
++static ssize_t
++check_virus_read_socket(sock, buffer, nbytes)
++	int sock;
++	void *buffer;
++	ssize_t nbytes;
++{
++	ssize_t n = 0;
++	ssize_t m = 0;
++	char *b = (char *)buffer;
++
++	while (n < nbytes)
++	{
++		m = read(sock, b, (size_t)(nbytes - n));
++		if (m == -1)
++			/* read(2) error */
++			nbytes = -1;
++		else if (m == 0)
++			/* end of file */
++			nbytes = n;
++		else {
++			/* read data */
++			n += m;
++			b += m;
++		}
++	}
++
++	return nbytes;
++}
++# endif /* NETUNIX */
++
++/*
++** avp_exit_code - process AVP exit codes
++*/
++
++#define AVP_OK			0  /* No viruses were found */
++#define AVP_SCANINCOMPLETE	1  /* Virus scan was not complete */
++#define AVP_SUSPICIOUS		3  /* Suspicious objects were found */
++#define AVP_VIRUSDETECT		4  /* Known viruses were detected */
++#define AVP_VIRUSDESINFECT	5  /* All viruses have been desinfected */
++#define AVP_VIRUSDELETE		6  /* All viruses have been deleted */
++#define AVP_FILECORRUPTED	7  /* File Avp is corrupted */
++#define AVP_OBJECTCORRUPTED	8  /* Corrupted objects were found */
++
++static int
++avp_exit_code(to, e, ret_code, command)
++	ADDRESS *to;
++	ENVELOPE *e;
++	register int ret_code;
++	char *command;
++{
++	switch (ret_code)
++	{
++		case AVP_OK:
++			if (tTd(49, 1))
++			  dprintf("viruses not found\n");
++			return EX_OK;
++		case AVP_SCANINCOMPLETE:
++			if (tTd(49, 1))
++			  dprintf("virus scan was not complete");
++			sm_syslog(LOG_CRIT, e->e_id,
++			  "ruleset=check_virus, scanner=%s, Virus scan was "
++			  "not complete", command);
++			return EX_SOFTWARE;
++		case AVP_SUSPICIOUS:
++			if (check_virus_address_in_pattern(to,
++				AntivirusPassSuspiciousMail))
++			{
++			  if (tTd(49, 1))
++			    dprintf("pass suspicious objects\n");
++			  e->e_flags |= EF_VIRUS_ALERT;
++			  return EX_OK;
++			}
++			if (tTd(49, 1))
++			  dprintf("suspicious objects were found\n");
++			return EX_DATAERR;
++		case AVP_VIRUSDETECT:
++			if (tTd(49, 1))
++			  dprintf("known viruses were detected\n");
++			return EX_DATAERR;
++		case AVP_VIRUSDESINFECT:
++			if (tTd(49, 1))
++			  dprintf("all detected viruses have been "
++				 "desinfected\n");
++			return EX_OK;
++		case AVP_VIRUSDELETE:
++			if (tTd(49, 1))
++			  dprintf("all detected viruses have been deleted\n");
++			return EX_OK;
++		case AVP_FILECORRUPTED:
++			if (tTd(49, 1))
++			  dprintf("scanner file is corrupted\n");
++			sm_syslog(LOG_CRIT, e->e_id,
++			  "ruleset=check_virus, scanner=%s, Scanner file is "
++			  "corrupted", command);
++			return EX_SOFTWARE;
++		case AVP_OBJECTCORRUPTED:
++			if (tTd(49, 1))
++			  dprintf("corrupted objects were found\n");
++			if (check_virus_address_in_pattern(to,
++				AntivirusIgnoreCorruptedMail))
++			{
++			  if (tTd(49, 1))
++			    dprintf("ignore corrupted objects\n");
++			  return EX_OK;
++			}
++			if (check_virus_address_in_pattern(to,
++				AntivirusPassSuspiciousMail))
++			{
++			  if (tTd(49, 1))
++			    dprintf("pass corrupted objects\n");
++			  e->e_flags |= EF_VIRUS_ALERT;
++			  return EX_OK;
++			}
++			return EX_DATAERR;
++		default:
++			if (tTd(49, 1))
++			  dprintf("unknown exit code %d\n", ret_code);
++			sm_syslog(LOG_CRIT, e->e_id,
++			  "ruleset=check_virus, scanner=%s, Unknown exit code "
++			  "%d", command, ret_code);
++			return EX_SOFTWARE;
++	}
++}
++
++/*
++** check_virus_exit_code - process antivirus exit codes
++*/
++
++static int
++check_virus_exit_code(to, e, ret_code, command)
++	ADDRESS *to;
++	register ENVELOPE *e;
++	register int ret_code;
++	register char *command;
++{
++	char *c;
++
++	/* Strip scanner name from command */
++	c = command;
++	while (*c != '\0' && ! isspace(*c))
++	{
++		if (*c++ == '/')
++			command = c;
++	}
++	if (*c != '\0')
++		*c = '\0';
++
++	/* AVP compatible result code */
++	if (AntivirusAvpCompatible)
++		return avp_exit_code(to, e, ret_code, command);
++
++	/* Generic result code */
++	switch (ret_code)
++	{
++		case 0:
++			if (tTd(49, 1))
++			  dprintf("viruses not found\n");
++			return EX_OK;
++		default:
++			if (tTd(49, 1))
++			  dprintf("known viruses were detected\n");
++			return EX_DATAERR;
++	}
++}
++
++/*
++** check_virus_scanner - run external antivirus tool via pipe
++**	support all tools, that returns 0 if OK and nonzero if virus found
++*/
++
++static int
++check_virus_scanner(to, e, message, msg_size)
++	ADDRESS *to;
++	register ENVELOPE *e;
++	register char *message;
++	int msg_size;
++{
++	char *l, *m, command[VIRUS_MAX_COMMAND];
++	struct stat rstat;
++	int c, ret_code;
++	FILE *f;
++
++	/* Check antivirus hammer executable */
++	m = command;
++	l = AntivirusScanner;
++	while (*l != '\0' && ! isspace(*l) && m - command < sizeof(command) - 1)
++		*m++ = *l++;
++	*m = '\0';
++	if (stat(command, &rstat) < 0)
++	{
++		/* Be worry. Antivirus hammer not found. */
++		sm_syslog(LOG_CRIT, e->e_id,
++		  "ruleset=check_virus, scanner=%s, "
++		  "Antivirus scanner not found: %s", command, errstring(errno));
++		return EX_SOFTWARE;
++	}
++
++	/* Get antivirus hammer command */
++	if (snprintf(command, sizeof(command) - 1,
++		"%s %s/%s", AntivirusScanner, QueueDir,
++		queuename(e, 'd')) >= sizeof(command))
++	{
++		/* Be worry. Antivirus command too long. */
++		sm_syslog(LOG_CRIT, e->e_id,
++		  "ruleset=check_virus, scanner=%s, "
++		  "Command too long: '%s %s/%s'",
++		  command, AntivirusScanner, QueueDir, queuename(e, 'd'));
++		return EX_SOFTWARE;
++	}
++	if (tTd(49, 2))
++		dprintf("antivirus scanner command: '%s'\n", command);
++
++	/* Run antivirus hammer */
++	l = m = message;
++	f = popen(command, "r");
++	while ((c = fgetc(f)) != EOF )
++	{
++		if (m - message < msg_size - 1)
++		{
++			*m++ = c;
++			if (c == '\n')
++				if (AntivirusAvpCompatible && *l != '/')
++					m = l;
++				else
++					l = m;
++			else if (c == '\r')
++				m = l;
++		}
++	}
++	*m  = '\0';
++	ret_code = pclose(f);
++
++	/* Check antivirus scanner exit status */
++	if (! WIFEXITED(ret_code))
++	{
++		/* Be worry. Antivirus hammer failed. */
++		sm_syslog(LOG_CRIT, e->e_id,
++		  "ruleset=check_virus, scanner=%s, "
++		  "Abnormal exit status %x", command, c);
++		return EX_SOFTWARE;
++	}
++
++	/* Process exit code  */
++	return check_virus_exit_code(to, e, WEXITSTATUS(ret_code), command);
++}
++
++/*
++** check_virus_daemon - send request to antivrus daemon via socket
++**	now support only AvpDaemon (http://www.avp.ru)
++*/
++
++# if NETUNIX
++static int
++check_virus_daemon(to, e, message, msg_size)
++	ADDRESS *to;
++	register ENVELOPE *e;
++	register char *message;
++	ssize_t msg_size;
++{
++	char command[VIRUS_MAX_COMMAND];
++	time_t now;
++	int ret_code, msg_flag, sock;
++	struct sockaddr_un unix_addr;
++	struct stat rstat;
++	ssize_t msg_len;
++	long sff = SFF_SAFEDIRPATH|SFF_OPENASROOT|SFF_NOLINK|SFF_ROOTOK|SFF_EXECOK;
++
++	/* Build antivirus daemon command */
++	(void) time(&now);
++	if (snprintf(command, sizeof(command), "<0>%.15s:%s/%s",
++		ctime(&now) + 4, QueueDir, queuename(e, 'd'))
++		>= sizeof(command))
++	{
++		/* Be worry. Antivirus daemon command too long. */
++		sm_syslog(LOG_CRIT, e->e_id,
++		  "ruleset=check_virus, scanner=AvpDaemon, "
++		  "Command too long: <0>%.15s:%s%s",
++		  ctime(&now) + 4, QueueDir, queuename(e,'d'));
++		return EX_SOFTWARE;
++	}
++	if (tTd(49, 2))
++		dprintf("antivirus daemon command: '%s'\n", command);
++
++	/* Check antivirus daemon domain socket name */
++	if (strlen(AntivirusDaemon) >= sizeof(unix_addr.sun_path))
++	{
++		/* Be worry. Domain socket name too long. */
++		sm_syslog(LOG_CRIT, e->e_id,
++		  "ruleset=check_virus, scanner=AvpDaemon, "
++		  "Domain socket name too long: %s", AntivirusDaemon);
++		return EX_SOFTWARE;
++	}
++
++	/* If not safe, don't connect (see daemon.c) */
++	if (stat(AntivirusDaemon, &rstat) == 0
++		&& safefile(AntivirusDaemon, RunAsUid, RunAsGid,
++		RunAsUserName, sff, S_IRUSR|S_IWUSR, NULL) != 0)
++	{
++		/* Be worry. Unsafe domain socket */
++		sm_syslog(LOG_CRIT, e->e_id,
++		  "ruleset=check_virus, scanner=AvpDaemon, "
++		  "error=Unsafe domain socket %s", AntivirusDaemon);
++		return EX_SOFTWARE;
++	}
++
++	/* Initialize domain socket */
++	memset(&unix_addr, '\0', sizeof(unix_addr));
++	unix_addr.sun_family = AF_UNIX;
++	(void) strlcpy(unix_addr.sun_path, AntivirusDaemon,
++		sizeof(unix_addr.sun_path));
++	if ((sock = socket(AF_UNIX, SOCK_STREAM, 0)) == -1)
++	{
++		/* Be worry. Could not create socket. */
++		sm_syslog(LOG_CRIT, e->e_id,
++		  "ruleset=check_virus, scanner=AvpDaemon, "
++		  "Could not create socket: %s", errstring(errno));
++		return EX_SOFTWARE;
++	}
++
++	/* Connect to antivirus daemon */
++	if (connect(sock, (struct sockaddr *) &unix_addr,
++		sizeof(unix_addr)) == -1)
++	{
++		/* Be worry. Could not connect to socket. */
++		sm_syslog(LOG_CRIT, e->e_id,
++		  "ruleset=check_virus, scanner=AvpDaemon, "
++		  "Could not connect to socket: %s", errstring(errno));
++		(void) close(sock);
++		return EX_SOFTWARE;
++	}
++	
++	/* Send request to antivirus daemon */
++	if (write(sock, command, strlen(command) + 1) < 0)
++	{
++		/* Be worry. Could not create to socket */
++		sm_syslog(LOG_CRIT, e->e_id,
++		  "ruleset=check_virus, scanner=AvpDaemon, "
++		  "Could not write to socket: %s", errstring(errno));
++		(void) close(sock);
++		return EX_SOFTWARE;
++	}
++
++	/* Read exit code from antivirus daemon */
++	ret_code = 0;
++	if (check_virus_read_socket(sock, (char *) &ret_code, 1) < 1)
++	{
++		/* Be worry. Could not read from socket. */
++		sm_syslog(LOG_CRIT, e->e_id,
++		  "ruleset=check_virus, scanner=AvpDaemon, "
++		  "Could not read exit code: %s", errstring(errno));
++		(void) close(sock);
++		return EX_SOFTWARE;
++	}
++	ret_code -= 0x30;	/* ASCII to number */
++
++	/* Read message flag from antivirus daemon */
++	msg_flag = 0;
++	if (check_virus_read_socket(sock, (char *) &msg_flag, 1) < 1)
++	{
++		/* Be worry. Could not read from socket. */
++		sm_syslog(LOG_CRIT, e->e_id,
++		  "ruleset=check_virus, scanner=AvpDaemon, "
++		  "Could not read message flag: %s", errstring(errno));
++		(void) close(sock);
++		return EX_SOFTWARE;
++	}
++
++	/* Message not appended to output */
++	if (msg_flag == 0)
++		return avp_exit_code(to, e, ret_code, "AvpDaemon");
++
++	/* Read message length from antivirus daemon */
++	msg_len = 0;
++	if (check_virus_read_socket(sock, (char *) &msg_len, 4) < 4)
++	{
++		/* Be worry. Could not read from socket. */
++		sm_syslog(LOG_CRIT, e->e_id,
++		  "ruleset=check_virus, scanner=AvpDaemon, "
++		  "Could not read message length: %s", errstring(errno));
++		(void) close(sock);
++		return EX_SOFTWARE;
++	}
++
++	/* Read message from antivirus daemon */
++	msg_len = msg_len < msg_size ? msg_len : msg_size - 1;
++	message[0] = message[msg_len] = '\0';
++	if (check_virus_read_socket(sock, message, msg_len) < msg_len)
++	{
++		/* Be worry. Could not read from socket. */
++		sm_syslog(LOG_CRIT, e->e_id,
++		  "ruleset=check_virus, scanner=AvpDaemon, "
++		  "Could not read message: %s", errstring(errno));
++		(void) close(sock);
++		return EX_SOFTWARE;
++	}
++	(void) close(sock);
++
++	return avp_exit_code(to, e, ret_code, "AvpDaemon");
++}
++# endif /* NETUNIX */
++
++/*
++** check_virus - perform antivirus check, cache check result
++*/
++
++static int
++check_virus(to, e)
++	ADDRESS *to;
++	register ENVELOPE *e;
++{
++	int rcode, rcode2;
++	char message[VIRUS_MAX_MESSAGE];
++	message[0] = '\0';
++
++	/* Check if antivirus is configured */
++	if (AntivirusScanner == NULL && AntivirusDaemon == NULL)
++		return EX_OK;
++
++	if (tTd(49, 1))
++		dprintf("virus scan:\n");
++
++	/* Don't check return-to-sender type of mail */
++	if (bitset(EF_RESPONSE, e->e_flags))
++	{
++		if (tTd(49, 1))
++		  dprintf("don't check error response mail\n");
++		return EX_OK;
++	}
++
++	/* Get result of previous check */
++	if (bitset(EF_VIRUS_OK, e->e_flags))
++	{
++		if (tTd(49, 1))
++		  dprintf("cached virus status: virus not found\n");
++		return EX_OK;
++	}
++	if (bitset(EF_VIRUS_ALERT, e->e_flags))
++	{
++		if (tTd(49, 1))
++		  dprintf("cached virus status: virus were detected\n");
++		return EX_DATAERR;
++	}
++
++	/* Run antivirus daemon */
++	rcode = EX_OK;
++# if NETUNIX
++	if (AntivirusDaemon != NULL)
++	{
++		rcode = check_virus_daemon(to, e, &message, sizeof(message));
++		if (rcode == EX_OK)
++		{
++			/* Be happy. Virus not found. */
++			e->e_flags |= EF_VIRUS_OK;
++			return EX_OK;
++		}
++	}
++# endif /* NETUNIX */
++	
++	/* Run antivirus scanner */
++	rcode2 = EX_OK;
++	if (AntivirusScanner != NULL && rcode != EX_DATAERR)
++	{
++		rcode2 = check_virus_scanner(to, e, &message, sizeof(message));
++		if (rcode == EX_OK && rcode2 == EX_OK)
++		{
++			/* Be happy. Virus not found. */
++			e->e_flags |= EF_VIRUS_OK;
++			return EX_OK;
++		}
++	}
++
++	/* Be worry. Virus alert. */
++	if (rcode == EX_DATAERR || rcode2 == EX_DATAERR)
++	{
++		/* Create virus report */
++		if (e->e_xfp != NULL)
++		{
++			register FILE *hf;
++			register char *b, *p;
++			int len;
++			char file[VIRUS_MAX_COMMAND];
++			long sff = SFF_OPENASROOT|SFF_REGONLY;
++
++			fprintf(e->e_xfp, "\nANTIVIRUS SYSTEM FOUND VIRUSES\n");
++			fprintf(e->e_xfp, "\nFrom: %s",
++				hvalue("From", e->e_header));
++			fprintf(e->e_xfp, "\nSubject: %s\n\n",
++				hvalue("Subject", e->e_header));
++
++			/* Print antivirus message */
++			(void) strlcpy(file, QueueDir, sizeof(file));
++			(void) strlcat(file, "/./", sizeof(file));
++			message[VIRUS_MAX_MESSAGE-2]='\n';
++			message[VIRUS_MAX_MESSAGE-1]='\0';
++			len = strlen(file);
++			b = message;
++			while (*b)
++			{
++				if (strncmp(b, file, len) == 0)
++					b += len;
++				if ((p = strchr(b, '\n')) != NULL)
++					*p++ = '\0';
++				fprintf(e->e_xfp, "%s\n", b);
++				if (p != NULL)
++					b = p;
++			}
++
++			/* Print help information (see srvrsmtp.c) */
++			if (DontLockReadFiles)
++				sff |= SFF_NOLOCK;
++			if (!bitnset(DBS_HELPFILEINUNSAFEDIRPATH,
++				DontBlameSendmail))
++				sff |= SFF_SAFEDIRPATH;
++			if (HelpFile && (hf = safefopen(HelpFile,
++				 O_RDONLY, 0444, sff)))
++			{
++				fprintf(e->e_xfp, "\n");
++				while (fgets(message, MAXLINE - 1, hf) != NULL)
++				{
++					if (strncmp(message, "virus", 5) != 0)
++						continue;
++					p = message + 5;
++					while (*p && isspace(*p))
++						p++;
++					fixcrlf(p, FALSE);
++					fprintf(e->e_xfp, p);
++				}
++				fprintf(e->e_xfp, "\n");
++				(void) fclose(hf);
++			}
++		}
++
++		/* Log virus alert */
++		sm_syslog(LOG_NOTICE, e->e_id,
++		  "ruleset=check_virus, arg1=%s, reject=%s", e->e_from.q_paddr,
++		  "554 Viruses were detected");
++		e->e_flags |= EF_VIRUS_ALERT;
++		return EX_DATAERR;
++	}
++
++	/* Be worry. Antivirus system malfunction. */
++	if (rcode == EX_OK)
++		rcode = rcode2;
++
++	return rcode;
++}
++
++#endif /* CHECK_VIRUS */
++
++/*
+ **  CHECKCOMPAT -- check for From and To person compatible.
+ **
+ **	This routine can be supplied on a per-installation basis
+@@ -1202,9 +1816,128 @@
+ 	register ADDRESS *to;
+ 	register ENVELOPE *e;
+ {
++#if CHECK_VIRUS
++	static char xstart_id[10];
++	static time_t xstart;
++	ADDRESS_LIST *addr_list;
++#endif /* CHECK_VIRUS */
++
+ 	if (tTd(49, 1))
+ 		dprintf("checkcompat(to=%s, from=%s)\n",
+ 			to->q_paddr, e->e_from.q_paddr);
++
++#if CHECK_VIRUS
++
++	/* delivery start time */
++	if (strcmp(&xstart_id[0], e->e_id))
++	{
++		(void) strlcpy(&xstart_id[0], e->e_id, sizeof xstart_id);
++		xstart = curtime();
++	}
++
++	/* check for viruses */
++	switch (check_virus(to, e))
++	{
++	case EX_OK:				/* Be happy. Virus not found. */
++		if (bitset(EF_VIRUS_ALERT, e->e_flags))
++		{				/* Pass suspicious mail */
++			ADDRESS *save_q_next;
++
++			if (tTd(49, 1))
++				dprintf("pass suspicious mail to=%s\n",
++				  to->q_paddr);
++			
++			/* pass as error message */
++			save_q_next = to->q_next;
++			to->q_next = NULL;
++			usrerrenh("5.6.0", "554 Viruses were detected "
++				"- pass suspicious mail");
++			giveresponse(EX_DATAERR, "5.6.0", to->q_mailer,
++				NULL, NULL, xstart, e);
++			(void) returntosender("Pass suspicious mail", to,
++				RTSF_SEND_BODY, e);
++
++			/* discard normal delivery */
++			to->q_next = save_q_next;
++			to->q_state |= QS_DONTSEND;
++			to->q_status = "5.6.0";
++
++			/* postmaster notify */
++			e->e_flags |= EF_PM_NOTIFY | EF_NO_BODY_RETN;
++			e->e_status = "5.6.0";
++			return EX_OK;
++		}
++		break;
++	case EX_DATAERR:			/* Be worry. Virus found. */
++		/* Pass infected mail */
++		if (check_virus_address_in_pattern(to,
++			AntivirusPassInfectedMail))
++		{
++			ADDRESS *save_q_next;
++
++			if (tTd(49, 1))
++				dprintf("pass infected mail to=%s\n",
++				  to->q_paddr);
++			
++			/* pass as error message */
++			save_q_next = to->q_next;
++			to->q_next = NULL;
++			usrerrenh("5.6.0", "554 Viruses were detected "
++				"- pass infected mail");
++			giveresponse(EX_DATAERR, "5.6.0", to->q_mailer,
++				NULL, NULL, xstart, e);
++			(void) returntosender("Pass infected mail", to,
++				RTSF_SEND_BODY, e);
++
++			/* discard normal delivery */
++			to->q_next = save_q_next;
++			to->q_state |= QS_DONTSEND;
++			to->q_status = "5.6.0";
++
++			/* postmaster notify */
++			e->e_flags |= EF_PM_NOTIFY | EF_NO_BODY_RETN;
++			e->e_status = "5.6.0";
++			return EX_OK;
++		}
++
++		/* Reject infected mail */
++		if (e->e_class < 0)		/* Always send notification */
++			e->e_class = 0;		/* to postmaster (envelope.c) */
++		e->e_flags |= EF_PM_NOTIFY | EF_NO_BODY_RETN;
++		to->q_status = "5.6.0";		/* RFC1893 undef. media error */
++		usrerrenh(to->q_status, "554 Viruses were detected");
++
++		/* Also notify recipient */
++		if (check_virus_address_in_pattern(to, AntivirusAlert2RCPT))
++		{
++			char addr[TOBUFSIZE];
++
++			/* Prune RFC822 source route (savemail.c) */
++			(void) strlcpy(addr, to->q_paddr, sizeof addr);
++			if (!DontPruneRoutes && pruneroute(addr))
++			{
++				ADDRESS *a;
++				for (a = e->e_errorqueue; a != NULL;
++				     a = a->q_next)
++				{
++					if (sameaddr(a, to))
++						a->q_state |= QS_DUPLICATE;
++				}
++			}
++			(void) sendtolist(addr, NULLADDR,
++				&e->e_errorqueue, 0, e);
++		}
++		return EX_DATAERR;
++	case EX_SOFTWARE:			/* Be worry. Software error */
++	default:				/* Unknown error */
++		if (e->e_class < 0)		/* Always send notification */
++			e->e_class = 0;		/* to postmaster (envelope.c) */
++		e->e_flags |= EF_PM_NOTIFY | EF_NO_BODY_RETN;
++		to->q_status = "4.6.0";		/* RFC1893 undef. media error */
++		usrerrenh(to->q_status, "451 Antivirus system malfunction");
++		return EX_TEMPFAIL;
++	}
++#endif /* CHECK_VIRUS */
+ 
+ #ifdef EXAMPLE_CODE
+ 	/* this code is intended as an example only */
+Index: sendmail/sendmail/conf.h
+diff -u sendmail/sendmail/conf.h:1.1.1.4 sendmail/sendmail/conf.h:1.1.2.4
+--- sendmail/sendmail/conf.h:1.1.1.4	Sun Apr  8 13:58:46 2001
++++ sendmail/sendmail/conf.h	Sun Apr  8 14:35:17 2001
+@@ -171,6 +171,10 @@
+ # define MIME7TO8	1	/* 7->8 bit MIME conversions */
+ #endif /* ! MIME7TO8 */
+ 
++#ifndef CHECK_VIRUS
++# define CHECK_VIRUS	1	/* enable antivirus check */
++#endif
++
+ /**********************************************************************
+ **  "Hard" compilation options.
+ **	#define these if they are available; comment them out otherwise.
+@@ -2829,5 +2833,14 @@
+ #ifndef SFIO_STDIO_COMPAT
+ # define SFIO_STDIO_COMPAT	0
+ #endif /* ! SFIO_STDIO_COMPAT */
++
++/*
++** check_virus configuration
++*/
++
++#if CHECK_VIRUS
++# define VIRUS_MAX_MESSAGE	4096	/* max length of message */
++# define VIRUS_MAX_COMMAND	256	/* max length of command */
++#endif	/* CHECK_VIRUS */
+ 
+ #endif /* CONF_H */
+Index: sendmail/sendmail/envelope.c
+diff -u sendmail/sendmail/envelope.c:1.1.1.3 sendmail/sendmail/envelope.c:1.1.2.3
+--- sendmail/sendmail/envelope.c:1.1.1.3	Thu Jan  4 23:02:22 2001
++++ sendmail/sendmail/envelope.c	Sun Apr  8 15:30:49 2001
+@@ -967,6 +967,10 @@
+ 	{ "HAS_DF",		EF_HAS_DF	},
+ 	{ "IS_MIME",		EF_IS_MIME	},
+ 	{ "DONT_MIME",		EF_DONT_MIME	},
++#ifdef CHECK_VIRUS
++	{ "VIRUS_OK",		EF_VIRUS_OK	},
++	{ "VIRUS_ALERT",	EF_VIRUS_ALERT	},
++#endif /* CHECK_VIRUS */
+ 	{ NULL,			0		}
+ };
+ 
+Index: sendmail/sendmail/helpfile
+diff -u sendmail/sendmail/helpfile:1.1.1.2 sendmail/sendmail/helpfile:1.1.2.2
+--- sendmail/sendmail/helpfile:1.1.1.2	Thu Jan  4 22:36:30 2001
++++ sendmail/sendmail/helpfile	Thu Jan  4 22:41:57 2001
+@@ -134,3 +134,6 @@
+ control	restart		Restart sendmail.
+ control	shutdown	Shutdown sendmail.
+ control	status		Show sendmail status.
++virus	This message contain viruses. You may detect it and clean
++virus	with Antiviral Toolkit Pro from http://www.avp.ru or with
++virus	your preferred antivirus software.
+Index: sendmail/sendmail/queue.c
+diff -u sendmail/sendmail/queue.c:1.1.1.4 sendmail/sendmail/queue.c:1.1.2.4
+--- sendmail/sendmail/queue.c:1.1.1.4	Sun Apr  8 13:58:48 2001
++++ sendmail/sendmail/queue.c	Sun Apr  8 15:36:27 2001
+@@ -340,6 +340,10 @@
+ 		*p++ = 'd';
+ 	if (bitset(EF_NO_BODY_RETN, e->e_flags))
+ 		*p++ = 'n';
++#ifdef CHECK_VIRUS
++	if (bitset(EF_VIRUS_OK, e->e_flags))
++		*p++ = 'v';
++#endif /* CHECK_VIRUS */
+ 	*p++ = '\0';
+ 	if (buf[0] != '\0')
+ 		fprintf(tfp, "F%s\n", buf);
+@@ -2185,6 +2189,11 @@
+ 				  case 'n':	/* don't return body */
+ 					e->e_flags |= EF_NO_BODY_RETN;
+ 					break;
++#ifdef CHECK_VIRUS
++				  case 'v':    /* already scanned for viruses */
++					e->e_flags |= EF_VIRUS_OK;
++					break;
++#endif /* CHECK_VIRUS */
+ 				}
+ 			}
+ 			break;
+Index: sendmail/sendmail/readcf.c
+diff -u sendmail/sendmail/readcf.c:1.1.1.4 sendmail/sendmail/readcf.c:1.1.2.5
+--- sendmail/sendmail/readcf.c:1.1.1.4	Sun Apr  8 13:58:48 2001
++++ sendmail/sendmail/readcf.c	Sun Apr  8 14:35:31 2001
+@@ -22,6 +22,12 @@
+ # include <arpa/inet.h>
+ #endif /* NETINET || NETINET6 */
+ 
++#if CHECK_VIRUS
++#ifdef MAP_REGEX
++# include <regex.h>
++#endif /* MAP_REGEX */
++#endif /* CHECK_VIRUS */
++
+ #define SECONDS
+ #define MINUTES	* 60
+ #define HOUR	* 3600
+@@ -1741,9 +1747,80 @@
+ # endif /* _FFR_TLS_1 */
+ # define O_RANDFILE	0xc1
+ 	{ "RandFile",			O_RANDFILE,	OI_NONE	},
++#if CHECK_VIRUS
++# define O_ANTIVIRUS	0xc2
++	{ "Antivirus",			O_ANTIVIRUS,	OI_SUBOPT	},
++#endif /* CHECK_VIRUS */
+ 	{ NULL,				'\0',		OI_NONE	}
+ };
+ 
++
++/*
++** check_virus_pattern_list - create address pattern list
++*/
++
++#if CHECK_VIRUS
++ADDRESS_LIST *
++check_virus_pattern_list(val)
++	register char *val;
++{
++	ADDRESS_LIST *pattern_list = NULL;
++	ADDRESS_LIST *addr;
++#ifdef MAP_REGEX
++	char *pattern;
++	int err;
++#endif /* MAP_REGEX */
++
++	while (*val != '\0')
++	{
++		char *c;
++
++		while (*val != '\0' && isspace(*val))
++			val++;
++		c = val;
++		while (*val != '\0' && !isspace(*val))
++			val++;
++		if ( val != c )
++		{
++			if (*val != '\0')
++				*val++ = '\0';
++			addr = (ADDRESS_LIST *)xalloc(sizeof *addr);
++#ifdef MAP_REGEX
++			if (strcmp(c, ".*@") == 0)
++				c = "[a-z0-9_\\+\\-\\.]*";
++			pattern = xalloc(strlen(c) + 3);
++			strcpy(pattern, "^");
++			strcat(pattern, c);
++			strcat(pattern, "$");
++			addr->q_paddr = (char *)xalloc(sizeof(regex_t));
++			if ((err = regcomp((regex_t *)addr->q_paddr,
++				pattern, REG_ICASE | REG_EXTENDED | REG_NOSUB))
++				!= 0)
++			{
++				char errbuf[80];
++
++				regerror(err, (regex_t *)addr->q_paddr,
++					errbuf, sizeof errbuf);
++				syserr("pattern-compile-error: %s\n", errbuf);
++				free(addr->q_paddr);
++				free(addr);
++			} else {
++				addr->q_next = pattern_list;
++				pattern_list = addr;
++			}
++			free(pattern);
++#else
++			addr->q_paddr = newstr(c);
++			addr->q_next  = pattern_list;
++			pattern_list  = addr;
++#endif /* MAP_REGEX */
++		}
++	}
++
++	return pattern_list;
++}
++#endif	/* CHECK_VIRUS */
++
+ void
+ setoption(opt, val, safe, sticky, e)
+ 	int opt;
+@@ -3005,6 +3082,32 @@
+ 		QueueFileMode = atooct(val) & 0777;
+ 		break;
+ #endif /* _FFR_QUEUE_FILE_MODE */
++
++#if CHECK_VIRUS
++	  case O_ANTIVIRUS:
++		if (subopt == NULL)
++			syserr("invalid antivirus option");
++		else if (strcasecmp(subopt, "scanner") == 0)
++			AntivirusScanner = newstr(val);
++		else if (strcasecmp(subopt, "daemon") == 0)
++			AntivirusDaemon = newstr(val);
++		else if (strcasecmp(subopt, "avpcompatible") == 0)
++			AntivirusAvpCompatible = atobool(val);
++		else if (strcasecmp(subopt, "alerttorecipients") == 0)
++			AntivirusAlert2RCPT = check_virus_pattern_list(val);
++		else if (strcasecmp(subopt, "ignorecorruptedmail") == 0)
++			AntivirusIgnoreCorruptedMail
++				= check_virus_pattern_list(val);
++		else if (strcasecmp(subopt, "passsuspiciousmail") == 0)
++			AntivirusPassSuspiciousMail
++				= check_virus_pattern_list(val);
++		else if (strcasecmp(subopt, "passinfectedmail") == 0)
++			AntivirusPassInfectedMail
++				= check_virus_pattern_list(val);
++		else
++			syserr("invalid antivirus option %s", subopt);
++		break;
++#endif /* CHECK_VIRUS */
+ 
+ 	  default:
+ 		if (tTd(37, 1))
+Index: sendmail/sendmail/savemail.c
+diff -u sendmail/sendmail/savemail.c:1.1.1.4 sendmail/sendmail/savemail.c:1.1.2.4
+--- sendmail/sendmail/savemail.c:1.1.1.4	Sun Apr  8 13:58:49 2001
++++ sendmail/sendmail/savemail.c	Sun Apr  8 14:35:34 2001
+@@ -19,7 +19,11 @@
+ 
+ 
+ static void	errbody __P((MCI *, ENVELOPE *, char *));
++#if CHECK_VIRUS
++       bool	pruneroute __P((char *));
++#else
+ static bool	pruneroute __P((char *));
++#endif /* CHECK_VIRUS */
+ 
+ /*
+ **  SAVEMAIL -- Save mail on error
+@@ -649,6 +653,18 @@
+ 		addheader("Subject", msg, 0, &ee->e_header);
+ 		p = "return-receipt";
+ 	}
++#if CHECK_VIRUS
++	else if (strcmp(msg, "Pass suspicious mail") == 0)
++	{
++		addheader("Subject", msg, 0, &ee->e_header);
++		p = "pass-suspicious-mail";
++	}
++	else if (strcmp(msg, "Pass infected mail") == 0)
++	{
++		addheader("Subject", msg, 0, &ee->e_header);
++		p = "pass-infected-mail";
++	}
++#endif /* CHECK_VIRUS */
+ 	else if (bitset(RTSF_PM_BOUNCE, flags))
+ 	{
+ 		snprintf(buf, sizeof buf,
+@@ -1571,7 +1587,11 @@
+ **		modifies addr in-place
+ */
+ 
++#if CHECK_VIRUS
++bool
++#else
+ static bool
++#endif /* CHECK_VIRUS */
+ pruneroute(addr)
+ 	char *addr;
+ {
+Index: sendmail/sendmail/sendmail.h
+diff -u sendmail/sendmail/sendmail.h:1.1.1.4 sendmail/sendmail/sendmail.h:1.1.2.5
+--- sendmail/sendmail/sendmail.h:1.1.1.4	Sun Apr  8 13:58:49 2001
++++ sendmail/sendmail/sendmail.h	Sun Apr  8 14:35:35 2001
+@@ -669,6 +669,10 @@
+ #define EF_DONT_MIME	0x0800000L	/* never MIME this message */
+ #define EF_DISCARD	0x1000000L	/* discard the message */
+ #define EF_TOOBIG	0x2000000L	/* message is too big */
++# if CHECK_VIRUS
++#define EF_VIRUS_OK	0x4000000L	/* Antivirus check OK */
++#define EF_VIRUS_ALERT	0x8000000L	/* Antivirus check alert */
++# endif /* CHECK_VIRUS */
+ 
+ /* values for e_if_macros */
+ #define EIF_ADDR	0		/* ${if_addr} */
+@@ -1856,6 +1860,33 @@
+ EXTERN SOCKADDR RealHostAddr;	/* address of host we are talking to */
+ EXTERN jmp_buf	TopFrame;	/* branch-to-top-of-loop-on-error frame */
+ EXTERN TIMERS	Timers;
++
++/*
++** Declarations of check_virus variables
++*/
++
++#if CHECK_VIRUS
++struct address_list
++{
++	char *q_paddr;
++	struct address_list *q_next;
++};
++
++typedef struct address_list ADDRESS_LIST;
++
++EXTERN char	*AntivirusScanner;	/* filename and options */
++EXTERN char	*AntivirusDaemon;	/* socket filename */
++EXTERN bool	AntivirusAvpCompatible;	/* result codes are Avp compatible */
++EXTERN ADDRESS_LIST	*AntivirusAlert2RCPT;
++					/* send virus alert to recipients */
++EXTERN ADDRESS_LIST	*AntivirusIgnoreCorruptedMail;
++					/* ignore corrupted mail */
++EXTERN ADDRESS_LIST	*AntivirusPassSuspiciousMail;
++					/* pass suspicious mail */
++EXTERN ADDRESS_LIST	*AntivirusPassInfectedMail;
++					/* recipients without virus check */
++#endif /* CHECK_VIRUS */
++
+ 
+ /*
+ **  Declarations of useful functions

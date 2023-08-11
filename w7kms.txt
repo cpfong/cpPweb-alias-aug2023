@@ -1,0 +1,25 @@
+as administrator run cmd
+---
+C:\>slmgr.vbs -skms kms-svr.fotech.edu.tw
+C:\>slmgr.vbs -ato
+
+if this fail (note: for win7 professional)
+C:\>slmgr.vbs /ipk FJ82H-XT6CR-J8D7P-XQJJ2-GPDD4
+
+Detail:
+--
+google 4 KMS Client Setup Keys
+http://technet.microsoft.com/en-us/library/ff793421.aspx
+
+@echo off
+echo 台北市政府教育局 Windows 7 啟動認證
+echo 此證程式只有在台北市教育局所授權範圍使用有效
+echo 正在指定KMS主機...........
+%SystemRoot%\system32\slmgr.vbs -skms kms.tp.edu.tw:1688
+echo 啟用產品中...
+echo 如果顯示0xC004F038 表示 KMS Server認證未達25台，只要滿25台後，認證就會通過
+%SystemRoot%\system32\slmgr.vbs -ato
+echo 查詢本機啟用狀態...
+%SystemRoot%\system32\slmgr.vbs -dlv
+echo.
+

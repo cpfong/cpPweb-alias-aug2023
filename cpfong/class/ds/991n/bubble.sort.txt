@@ -1,0 +1,31 @@
+    Sub Main()
+        Dim a(20) As Integer
+
+        For i As Integer = 0 To a.GetUpperBound(0)
+            a(i) = Rnd() * 100
+        Next
+
+        b_s(a, a.GetUpperBound(0) + 1)
+
+        For i As Integer = 0 To a.GetUpperBound(0)
+            Console.Write(a(i) & " ")
+        Next
+
+        Console.ReadKey()
+
+    End Sub
+
+    Sub b_s(ByVal a() As Integer, ByVal num As Integer)
+        Dim i, j As Integer
+
+        For i = 0 To num - 2
+            For j = 0 To num - i - 2
+                If (a(j) > a(j + 1)) Then
+                    Dim t As Integer
+                    t = a(j)
+                    a(j) = a(j + 1)
+                    a(j + 1) = t
+                End If
+            Next
+        Next
+    End Sub

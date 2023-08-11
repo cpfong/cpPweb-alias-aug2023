@@ -1,0 +1,90 @@
+3/30 
+suppose we want to know whther weight vs height in this class is normal distrituted?
+1. use regression analysis to see y=ax+b is ok 
+	put all random daat (x,y)  into y=ax+b to get coefficent a and b
+	check whether this line is ok (error samll or not)
+
+2. if y=ax+b cannot be fitted then try y=ax^2+bx+c ...
+
+there are only two variable in N.D. f(x)=1/... exp[..(x-u)^2] 
+which are sd and mean
+
+
+4 common models in distribution: bi-model (two peaks), norm dist, 
+positive skew(right skew), negative skew(left skew)
+if more data located in right side than it is a right skew(positive)
+
+
+mean, median ,mode (most freq)
+
+left skew (negative)	--> from left to right: mean, median, mode
+right skew (positive)	--> from left to right: mode, median, mean
+norm dist		--> mean, mode, median are located in the same place (middle)
+
+how to calculate norm dist?
+there are 70 students 
+
+interval,midian,observed,fixi (expected value), fi*xi^2(second moment), expected freq, relative error
+
+fixi: first moment
+midiam^2 * freq: second moment
+
+SS(varience) = first moment xxx second moment 
+use 1st moment and 2nd moment you can calculate the SS
+check text P379 find Z=2.32 --> 0.0102 upper tail
+
+
+Z transform to normalized the norm dist,
+Z=(X-u)/sd 
+this will make u=0 and sd=1
+
+p394
+DF: degree of freedom
+
+P395
+(12,0.05) -> 21.02
+check whether N.D. 
+archvie square to whck the whole data is norm distributed
+Text Book chap6 dn chap7 to examine the N.D. data distributed 
+
+the norm dist map is smooth in perfect condition
+real data dist won't be that smooth
+
+type one error: arfa=0.05 (two tail, one tail)
+if arfa=0.05 for two tails than left and right side has 0.025
+
+(u-1.96sd , u+1.96sd) --> 95%
+(u-2.576sd, u+2.576sd) -> 99%
+
+null-hypothesis 接受否 ?
+time-square 計算出之值若落在黑色( > 理論值) 則不是 N.D. 如在白色表示小於理論值則為 N.D.
+
+type one error arfa = 0.01 (mean+2.576 sd) 信賴區間 99%
+
+Z = (X-u)/sd (Z transform)
+另一寫法為 N(0,1) 以下二者都是示 norm dist
+mean=0, sd=1
+
+example 7.1b 計算 sd of sucorse
+mean=65 sd=25 則 65+25=90 應佔有 68%
+100-68=32 把 32/2=16 所以求出來的數應 > 16%
+
+P(Z>0.8)=0.2119 或 21.19% 
+p378 0.8 時比大使用 upper tail 找到 0.2119
+
+85 對稱於 45 因為 norm dist 所以 45 的也為 21.19%
+
+第三小題則為  1-2*21.19%=0.5762
+
+sample data 和 mother group 的 mean 應相同, 而
+sd 則為差了根號n, sd=12/(9)^1/2=4.0
+( 43, 47, 51 ) 應佔 68% 所以值 50 應 > 16%
+
+p380 
+2.9 	2.95
+0.0019	0.0016
+
+求 2.92 應為 0.0019 - (0.0019-0.0016) * 2/5 則為 0.00178
+此為內插法
+
+

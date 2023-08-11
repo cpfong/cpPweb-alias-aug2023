@@ -1,0 +1,35 @@
+-- working version
+google fireflysung.ttf (or fetch ~/fireflysung.ttf)
+or ftp from misun2/fireflysung.ttf
+
+cp into /usr/share/X11/fonts/TTF
+this work
+
+cp into /usr/share/fonts/default/TTF
+that's it!! go to browser
+
+--
+xxx no need: mkfontscale
+xxx no need: mkfontdir
+--
+# ls fireflysung.ttf 
+fireflysung.ttf
+# pwd
+/usr/share/fonts/default/TTF
+
+go to IE, now has chinese font...
+
+following as ref only, don't take it too serious
+--
+For viewing Chinese characters in Firefox, Seamonkey etc, 
+download wqy-bitmapfont-pcf-0.9.9-0.tar.gz from 
+http://downloads.sourceforge.net/wqy/ and install to 
+/usr/share/fonts.
+
+--
+mkfontscale
+mkfontdir
+fc-cache -vf
+--
+
+then restart X

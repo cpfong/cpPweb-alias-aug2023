@@ -1,0 +1,22 @@
+convert img into vmdk (oracle vmware) or vhd (microsoft pc2007)
+--
+ref: https://docs.openstack.org/image-guide/convert-images.html
+pkg search qemu
+qemu: QEMU CPU Emulator
+pkg install qemu
+
+qemu-img convert -f vmdk -O raw image.vmdk _.disk.full
+qemu-img convert -f vpc -O raw image.vhd _.disk.full
+
+http://markelov.org/wiki/index.php?title=Testing_nanoBSD_image_using_VMWare
+https://www.freebsd.org/doc/handbook/kernelconfig.html
+
+simulator
+--
+microsoft pc2007 (old windows)
+VirtualBox
+qemu
+
+cd /usr/src/tools/tools/nanobsd/embedded
+cat README
+sh ../nanobsd.sh -c i386.conf

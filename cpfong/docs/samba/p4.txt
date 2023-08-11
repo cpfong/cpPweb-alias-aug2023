@@ -1,0 +1,11 @@
+4. To make a Win98 box and a Samba talk to each other, there are 2 options:
+  (1)Switch the the samba box (and all the rest of the network) to encrypted
+     passwords (see ENCRYPTION.TXT).
+  (2)Switch the Win98 box to plain-text passwords.
+     To do so, open the Win98 explorer, doubleclick on
+     Win95_PlainPassword.reg (part of the Samba distribution). The NT
+     registry keys don't work for Win9x (yet).
+  I recommend option (2) for now and use the "update encrypted" switch in
+  smb.conf to build the password database. This should ease a later switch
+  to option (1) (Szekely's box will not remain the only Win98 box at his
+  LAN ;-).

@@ -1,0 +1,63 @@
+<meta http-equiv='Content-Type' content='text/html; charset=big5'>
+<html>
+楔子: 在所有我弄過的伺服器之中, 個人認為 news server 是最不好搞定的 <br>
+之所以用 "魔戒現身" 如此的標題, 有二個用意, 一為彰顯 news 弄起來不是 <br>
+一次即動, 而是要好多 steps, 另外也因當下魔戒一片正在流行 --cp@2002 X'Mas <br>
+<br>
+Q. 如何安裝及重新安裝? <br>
+A. 用 root 和 port 安, <a href=./inst>詳細過程</a>, <a href=./reinst>重安</a>時把 /var/log/news (note: log will default on /usr/local/news/log v2.2.3.0)
+給刪了<br> 
+Tip: 讓安裝者  (cpfong)  成為 news 的 <a href=./ng>group</a> 會方便許多 <br>
+install inn-2.3.3 <a href=./inn-v2.2.3-install-guide>short note</a><br>
+<br>
+<br>
+
+Q. 如何先弄成功一個只有 local group 沒有任何外面 server 的 news server ? <br>
+A. <a href=http://www.eyrie.org/~eagle/faqs/inn.html#S6.1> 按我有原文可以參考 </a><br> 
+
+<ol>
+<li> 把 Server 啟動再說 --  up and running 
+<ol type=disc>
+<li> /etc/syslog.conf 先弄好 <a href=./syslog> file</a> 別忘了 reload syslog 
+<li>cd /usr/local/news/db/; ../bin/makedbz -i -o; chown news history*
+<a href=http://turtle.ee.ncku.edu.tw/~nmra/news/netnews/5/2/1.html> more </a>
+<li>用 default 的 <a href=./newsfeeds> newsfeeds </a>
+<li>用 default 的 <a href=./incoming.conf>incoming.conf </a>
+<li>最簡的 (也是內定的) <a href=./active> active </a>
+<li>/usr/local/news/bin/inncheck 來檢查你的各種設定檔 <a href=./inncheck.err> 我的 error </a>
+<li>run server (/usr/local/etc/innd.sh start) <a href=./err1>Error</a> -- <a href=./sol1> Sol </a>
+<li> 再 <a href=./run2>run</a> 一次, 看看 log <a href=./err2> news.err </a>
+<li> ls /usr/local/news/run <a href=./run1> run </a>
+</ol>
+<br>
+<li> 加一個新的群組 -- after running
+<ol type=disc>
+<li> <a href=http://turtle.ee.ncku.edu.tw/~nmra/news/netnews/5/2/2.html>它山之石 </a>
+<li> <a href=./newgroup> 新的 </a>group 
+</ol>
+<br>
+<li> 文章存入的方式 -- I use cnfs
+<ol type=disc>
+<li> vi ~news/etc/<a href=./storage.conf>storage.conf</a>
+<li> down innd; rerun innd <a href=./news.notice2> error </a>
+<li> vi ~news/etc/<a href=./cycbuff.conf>cycbuff.conf.ORG </a>
+<li> create a directory for <a href=./cnfs.txt> cnfs </a>
+<li> <a href=./cnfs-new.txt> cycbuff.conf.NEW </a>
+<li> <a href=./downup1> shutdown and up once </a>
+</ol>
+<br>
+<li> 設定網域或主機的讀寫權限
+<ol type=disc>
+<li> vi ~news/etc/<a href=./readers.conf>readers.conf</a>
+</ol><br>
+
+<li> 使用 news client 軟體連線上 localhost 來 post
+<ol type=disc>
+<li> cd /usr/ports/chinese/tin/; make install
+<li> tin -g localhost
+</ol>
+<br>
+<li> 到此應該在 localhost 上可以 post 文章了, 但其它的機器應不能在此 post
+</ol>
+<html>
+

@@ -1,0 +1,1 @@
+Q:\STAFF\MikeParr\japafiles\redir -eo "S:\jdk142\bin\javac.exe" -classpath "S:\jdk142\lib\classes.zip;Q:\STAFF\MikeParr\japafiles;E:\java4book\java4codebychaps\c16exceps;.;"  "E:\java4book\java4codebychaps\c16exceps\C16Inserts.java" > E:\java4book\java4codebychaps\c16exceps\comperrs.txt

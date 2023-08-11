@@ -1,0 +1,54 @@
+https://koofr.eu
+https://rclone.org/docs/
+
+# cat ~/.config/rclone/rclone.conf 
+rclone config
+
+different ways to access data
+--
+web (ie)
+web at localhost (ie http://127.0.0.1:8080)
+cmd line
+mount
+
+w1 (ie)
+--
+login
+
+w2 (127.0.0.1:8080)
+--
+rclone serve # ENTER to find help
+ifong->rclone serve http koofr:
+2020/10/31 13:03:29 NOTICE: koofr:fe23c619-40a7-4783-bcae-0d85bc2a3ac2:: Serving on http://127.0.0.1:8080/
+
+w3
+--
+rclose lsd koofr:
+rclose lsl koofr:
+rclone mkdir koofr:
+rclone delete koofr:
+
+rclone purge koofrcn:foo/ --dry-run
+rclone sync source: dest: --dry-run
+
+@venus-> rclone sync . koofrcn:foo/ -P
+@venus-> echo x>xx
+
+https://rclone.org/mount
+rclone mount
+
+rclone cmd
+--
+rclone command server:directory/subdir
+
+kldload
+kldstat
+kldunoad
+
+chunker
+--
+https://rclone.org/chunker/
+
+rclone copy 5M chunker:
+local	remote
+5M	5M, 5M.rclone_chunk.001 5M.rclone_chunk.002 ...

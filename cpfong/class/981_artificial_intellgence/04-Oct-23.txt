@@ -1,0 +1,61 @@
+p26 predecessor
+	predecessor(X,Y)
+	recursive will make thing easy, if not using recursive then 
+	it is hard to write a program, idea is simpler but slower
+	easy to write but looping more
+
+	ex:
+	n!=n*(n-1)*(n-2)*...*1 = n*(n-1)!
+
+	predecessor is like a recursive since we don't need to know
+	which generation
+
+	best case:
+	predecessor(X,Y) :- parent(X,Y).   ->p1
+	then
+	predecessor(X,Y) :- parent(X,Z),predecessor(Z,Y).  -->p2
+
+p29
+	predecessor(tom,pam)		
+	phase 1
+	parent(tom,pam) fail! (p1 fail since tom is jim parent only)
+	prolog will try p2 (all fail can prolog say NO)
+	p2 
+		parent(tom,Z) predecessor(Z,pam)
+		is tom anybody (Z)'s parent? yes (so Z is jim)
+		is jim pam's predecessor(jim,pam) ?
+
+	phase 2
+		all new era predecessor(jim,pam) ?
+		by rule p1 parent(jim,pam) yes!
+		then it return YES (success)
+
+		so predecessor(jim,pam) --> yes
+
+	finall go back phase 1 say YES since p2 successfully
+
+p32	clauses should be all executed fail than it can say NO!
+	goals from left to right
+
+	simplest clauses should put first
+	simplest goals should put on the left
+
+	you put the most frequently use tool on the desk , so you can get
+	it easy
+
+p33
+	predecessor(X,Y):- predecessor(Z,Y) 
+	endless loop
+
+	when it come in should examine first not call itself first	
+	or it will be endless loop
+
+p34
+	?-consule('myprog.pl').
+	?-resonsult('myprog.pl'). (flush all thing in the database)
+	it will clear all varialbes
+
+p35
+	phase 2
+		predecessor(jim,pat)
+		now goto p29 case

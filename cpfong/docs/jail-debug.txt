@@ -1,0 +1,8 @@
+1. ipfw -internal logging
+ /var/log/security
+ rc.conf firewall_logging="YES"
+ and ipfw.rules NEED log keyword
+
+2.
+ # sysrc firewall_logif="YES"
+ # tcpdump -t -n -i vtnet0 ( vtnet0 is VM nic )

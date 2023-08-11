@@ -1,0 +1,20 @@
+<html>
+題一: <br>
+取回 file (注意: [vnc] [/usr/home/cpfong/tmp/trash] 為系統提示符號 ) <br>
+	<font color=red>fetch http://center.fjtc.edu.tw/~cpfong/class/mysql/2t/rule/quiz2.txt </font> <br>
+以上的那個 fetch 也可以用叫出 mozilla 後再用 copy + paste 來完成 <br>
+<br>
+接下來利用 t.pl 來生成 sql (注意: <a href=./t.pl>t.pl</a> 已放在網路上)<br> 
+<font color=red>cat quiz2.txt |perl ./t.pl |mysql </font><br><br>
+
+[vnc] [/usr/home/cpfong/tmp/trash] <font color=red>mysql tta_quiz</font><br>
+mysql><font color=red> select t1.na, t2.m from cpfong_1 t1, cpfong_2 t2 where t1.i=t2.i order by m desc limit 10; </font><br>
+mysql><font color=red> select t1.na, (t2.m+t2.s1+t2.s2+t2.s3+t2.s4) as s from cpfong_1 t1, cpfong_2 t2 where t1.i=t2.i  order by s desc;</font>
+<br><br>
+題二: <br>
+mysql> <font color=red>alter table cpfong_1 add balance int default 0;</font><br>
+mysql> <font color=red>start transaction;</font><br>
+mysql> <font color=red>update cpfong_1 set balance=balance+1000 where i='932136101';</font><br>
+mysql> <font color=red>commit;</font><br>
+mysql> <font color=red>select na,balance from cpfong_1 order by balance desc limit 2;</font><br>
+</html>

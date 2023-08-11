@@ -1,0 +1,49 @@
+2021.10.19
+--
+own 13.0R cannot go to installer, you need to use system 13R then at setting using own ISO
+fetch FreeBSD-13.0-RELEASE-amd64-bootonly.iso.xz play on VMWare at mac first
+
+2021.07.26
+--
+must use own ISO!
+system provided ISO, you will install directly. Only own ISO, you can use ZFS (install manually)
+
+2021.01.16
+--
+upload ISO to vultr (from freebsd.org)
+click Instance use +Deploy new server to add in
+control console add ec2 using new iso (select correct price plan here)
+  Deploy New Instance / Server Location / Server Type / Server Size / Additional Features / ...
+Deploy now (press button on the bottom)
+enter console and continue installing
+  status (installing) - until status change to Running - you can login to console now
+  now go like CD install procedure ...
+  this part you better to use qemu to simulate first to get to know this version installation
+done and reboot BUT will enter cd iso
+  let it reboot then shutdown power
+  console to stop this server
+  goto Settings (top menu bar there is settings) / Customer ISO / Remove ISO
+  restart this instance 
+  
+detach ISO from this new instance (removed, note: upload ISO still in db-ISOs, only not link to THIS instance)
+reboot then goto new installed system
+
+qemu simulate
+--
+qemu-img.exe create c.hd 5G
+qemu-system-x86_64 -cdrom FreeBSD-12.2-RELEASE-amd64-bootonly.iso -hda 5G -boot d
+MutiUser mode (do NOT use single user mode)
+
+new way (FreeBSD 12.2 2021.01.16)
+--
+partition choose Guided ZFS 
+ swap will be 2g for default
+
+old way
+--
+partition choose manually
+ freebsd-boot 256KB (sys default) note: NO mount point!!
+ freebsd-ufs 4G mount as /
+ freebsd-swap no mount point
+ ref
+ partition Manually eg. /boot=64K, /=4G, zfs=14G, swap=2G

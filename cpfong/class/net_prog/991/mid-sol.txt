@@ -1,0 +1,36 @@
+#!/usr/bin/perl
+
+foreach $i (0..4){
+	foreach (1..5-$i){
+		print (5-$i);
+	}
+	print "\n";
+}
+
+#!/usr/bin/perl
+
+foreach $i (0..4){
+	foreach (1..5-$i){
+		print (5-$i);
+	}
+	print "\n";
+}
+
+
+foreach (0..99){
+	$r = int(rand()*100)+1;
+	if ($r % 3 == 0){
+		$c++;
+	}
+	print $r, " ";
+}
+print "\nnum =", $c, "\n";
+
+
+$c=0;
+foreach (50..150){
+	if ($_ % 11 == 2){
+		$c++;
+	}
+}
+print "num =", $c, "\n";

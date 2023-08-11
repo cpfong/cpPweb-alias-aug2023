@@ -1,0 +1,119 @@
+
+  ◇ [usenet] SPAM filtering - Clean Feed 的使用介紹
+
+        在clean-feed 0.95版推出之後, 作者jeremy這次推出的是
+
+        clean-feed 0.95.2, 這個板本與0.95有幾個不同的地方:
+
+        1. 加入對文章內容作md5 的檢查
+        2. 凡是已經被reject的文章, 如果下次碰到有cancel message
+           要來cancel那篇文章, 那麼這個cancel message也會被
+           drop掉 
+
+        從幾台news server上來看, md5 的檢查方式有滿不錯的效果
+
+        以下簡介相關的安裝方式
+
+        作者: Jeremy Nixon &ltjeremy@exit109.com>
+        取得: http://www.exit109.com/~jeremy/news/antispam.html 
+        需求: inn-1.7.2(建議inn-1.7.2-insync.1.1d)
+              perl5.004_04
+
+        1. clean-feed總共提供了兩個部份的patch, 和一個當做filter
+           的perl script.
+
+        2. 使用inn-1.7.2者, 必須將filter.patch加入source中,
+           如果要使用md5 則必須將dynamic-load.patch加上去
+
+        3. 使用insync-1.1d的就不用擔心了, 這個板本已經將上面所講
+           到的patch(filter.patch dynamic-load.patch)都加入source中了
+
+        4. 如果使用的是insync-1.1d之前的(尤其是1.1b), 可能得要手動加上去
+           詳情請見clean-feed所附的README, 不過, 既然都已經裝了insync
+           那就乾脆換到insync-1.1d吧!
+
+        5. 假如要使用md5 的話, 請先替perl裝上md5 module, 如果不想用
+           md5的功能話, 就可以跳過了
+
+        6. 裝上MD5 perl module
+
+           a. 已安裝perl5.004_04
+
+           b. 取得MD5 perl module
+
+ftp://NCTUCCCA.edu.tw/computing-languages/perl/CPAN/modules/by-module/MD5/
+
+           c. 將source解開並放到perl source目錄底下(perl5.004_04/ext)
+
+           d. cd perl5.004_04/ext/MD5-1.7
+
+           e. perl Makefile.PL
+
+           f. make;make test
+
+           g. make install
+
+           h. 詳細的說明請參考MD5 perl module所附的說明文件
+
+        7. 如果使用inn-1.7.2的話, 就要裝上patch
+
+           a. cp filter.patch inn-1.7.2/innd
+
+           b. cp dynamic-load.patch inn-1.7.2/lib
+
+        8. 如果有用md5的話, 請一定要做這一步, 否則compile時會有問題
+
+           a. 執行 perl -MExtUtils::Embed -e ldopts
+
+           b. 將上面輸出的結果放到inn-1.7.2/config/config.data中
+              PERL_LIB這個選項, 結果應該類似這個樣子
+
+#### =()&ltPERL_LIB       @&ltPERL_LIB>@>()=
+PERL_LIB        -L/usr/local/lib/usr/local/lib/perl5/sun4-solaris/5.00404/
+auto/DynaLoader/DynaLoader.a -L/usr/local/lib/perl5/sun4-solaris/5.00404/CORE
+-lperl -lsocket -lnsl -ldl -lm -lc -lcrypt
+
+        9. 重新compile
+
+           a. make clean;make
+
+           b. 將innd shutdown
+
+           c. 可用make update重新安裝, 或是只將innd copy過去也可以
+
+           d. 重新啟動innd
+
+        10.將filter_innd.pl放到/usr/news/bin/control/下
+
+        11.perl -cw filter_innd.pl檢查語法看是否有誤
+
+        12.ctlinnd reload filter.perl &quotupgrade"
+
+        13.tail -f /var/log/news/news.notice可以觀查你的成果
+
+        14.這個板本的clean-feed又增加了一些新的變數設定, 之前的0.95的設定
+           仍然可以沿用, 因此, 現在只對新加入的設定選項做介紹
+
+        $md5maxmultiposts  設定用md5檢查時, multipost文章的上限
+        $MD5History        設定要在history留下多少entry來作md5比較
+        $EMPMaxLife        設定EMP history保存的時間, 單位是小時
+        $MD5MaxLife        同上, 不過是給MD5用的
+        $EMPstarttrimming  當在memory的entry超過這個設定值後就開始將多餘的
+                           刪除
+        $trimcycles        filter每跑過這個設定值之後就會刪掉多餘的EMP entry
+        $MIDmaxlife        filter會將被reject的文章的message-id記起來, 下次
+                          要是遇到有cancelmessage是要砍這個message-id時,
+                          這個cancel message就會被drop掉,這是設定那些
+                          message-id要記住多久時間
+        $block_late_cancels 就是讓上述的功能打開, 當然, 打開的話就可能造成
+                            大量的cancel被reject
+
+        $md5exclude        這是一個regular expression, 設定有那些group不受
+                           md5的檢查
+
+        $statfile          如果設定為一個檔名的話, filter將會在每次reload
+                           後記錄history的相關資料
+
+
+--
+Chung-Liang Cheng                               clcheng@CCCA.NCTU.edu.tw

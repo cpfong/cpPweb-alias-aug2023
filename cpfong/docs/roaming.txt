@@ -1,0 +1,162 @@
+[FreeBSD] 漫遊中心服務建置 FreeBSD版
+
+　●　前言
+ 本手冊是參考國立宜蘭大學圖書資訊館無線漫遊中心的說明而來
+ 宜蘭大學無線漫遊中心的作業系統是採用CentOS-5.5為例
+ 因本人利用該手冊建置後
+ 卻無法利用freeradius來作驗證
+ 還麻煩了宜蘭大學無線漫遊中心的高手吳玉華技術員來幫忙解決
+ 最後因為花了整整兩天Debug還一直找不到原因
+ 就放棄使用了CentOS了
+ 由於本人對於 FreeBSD 的使用較為熟悉
+ 因此決定改使用 FreeBSD-9.0-amd64 作為驗證伺服器的作業系統
+
+最後要感謝宜蘭大學無線漫遊中心吳玉華技術員的鼎力相助
+ 透過她不厭其煩地指導與協助
+ 才有本教學文的分享
+
+　●　正文
+ 環境
+ 作業系統: FreeBSD-9.0-amd64
+ OpenVPN: openvpn-2.2.1_1
+ FreeRadius: freeradius-2.1.12
+
+OpenVPN
+
+1. 安裝 OpenVPN
+ # pkg_add -r ftp://ftp.twaren.net/BSD/FreeBSD/ports/amd64/packages-9.0-release/All/openvpn-2.2.1_1.tbz
+
+2. 建立資料夾 openvpn
+ # mkdir -p /usr/local/etc/openvpn
+ # cd /etc
+ # ln -s /usr/local/etc/openvpn openvpn
+
+3. 將漫遊中心取得之檔案解壓縮後放置於 “/etc/openvpn" 內
+ # cd /etc/openvpn
+ # tar zxf clt_006_niutest.tar.gz
+
+4. 更改 client.conf 檔名為 openvpn.conf
+ # mv client.conf openvpn.conf
+ # cd /etc
+ # ln -s /usr/local/etc/rc.d init.d
+
+5. 設定系統開機時自動啟動OpenVPN服務
+ # vi /etc/rc.conf
+ 加入一行
+ openvpn_enable="YES"
+
+6. 啟動 openvpn 服務
+ # /etc/init.d/openvpn start
+ Starting openvpn
+ # ifconfig tun0
+ 順利取得IP代表OpenVPN連線建立成功
+
+FreeRadius
+
+1. 安裝Freeradius
+ # pkg_add -r ftp://ftp.twaren.net/BSD/FreeBSD/ports/amd64/packages-9.0-release/All/freeradius-2.1.12.tbz
+ # cd /etc
+ # ln -s /usr/local/etc/raddb raddb
+
+2. 設定users
+ # cd /etc/raddb
+ # vi /etc/raddb/users最後一行加入
+ DEFAULT Auth-Type = System
+
+3. 設定radiusd.conf
+ # vim /etc/raddb/radiusd.conf修改以下兩行
+ - user = freeradius
+ - group = freeradius
+ + user = root
+ + group = root
+
+3. 設定proxy.conf
+ # vim /etc/raddb/proxy.conf
+ 於檔案最後出加入以下內容
+?
+View Code CONF1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14	realm DEFAULT {
+      type = radius
+      authhost = 10.1.0.7:1812
+      accthost = 10.1.0.7:1813
+      secret = niucltcc
+      nostrip
+}
+ 
+realm aaa.xxxx.xxx.edu.tw {
+        type = radius
+        authhost = LOCAL
+        accthost = LOCAL
+        secret = 校園內部密碼
+}
+
+
+4. 設定clients.conf
+ # vim /etc/raddb/clients.conf
+ 找到 client localhost 修改校園內部密碼, 預設為testing123
+ client 127.0.0.1 {
+ secret = 校園內部密碼
+ }
+
+在最後加入以下
+?
+View Code CONF1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14	client 10.1.0.7 {
+       secret = niucltcc
+       shortname = niu
+}
+ 
+client 10.1.0.11 {
+       secret = niucltcc
+       shortname = niu_moritor
+}
+ 
+client 192.168.240.0/24 {
+       secret = 校園內部密碼
+       shortname = xxxx
+}
+
+
+5. 開啟最上層防火牆的 Freeradius 預設通訊埠 UDP 1812, 1813, 1814
+ LAN > WAN: 1812(UDP), 1813(UDP), 1814(UDP)
+ WAN > LAN: 1812(UDP), 1813(UDP), 1814(UDP)
+
+6. 進入偵錯模式
+ # rehash
+ # radiusd -X
+ …
+ Ready to process requests. <- 按 Ctrl+c結束執行
+
+7. 設定系統開機時自動啟動OpenVPN服務
+ # vi /etc/rc.conf
+ 加入一行
+ radiusd_enable="YES"
+
+8. 啟動radiusd與利用radtest測試
+ # /etc/init.d/radiusd start
+ Starting radiusd
+ # radtest testuser@niu testpass 10.1.0.7 0 niucltcc

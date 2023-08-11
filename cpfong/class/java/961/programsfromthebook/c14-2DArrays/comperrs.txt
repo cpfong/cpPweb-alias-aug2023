@@ -1,0 +1,6 @@
+F:\DOUGS\books\Java\Java5\programsfromthebook\2DArrays\Rainfall.java:108: incompatible types
+found   : int[]
+required: int
+            for (int rainfall : rainData) {
+                                ^
+1 error

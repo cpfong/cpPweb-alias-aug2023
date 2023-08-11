@@ -1,0 +1,7 @@
+hd --> 
+	主要磁區 (primary)	最多 4 個, (也可 3 個 primary + 1 extended)
+	延伸磁區 (extended)	都使用 1 個
+	邏輯磁區 (logic)	在 extended 下的稱為 logic
+
+	檔案系統: fat, fat32, ntfs, ext2, ext3 ...
+

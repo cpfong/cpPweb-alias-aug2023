@@ -1,0 +1,20 @@
+default
+--
+flwm
+
+Examples of window managers include:
+--
+flwm
+fluxbox
+icewm
+openbox
+jwm
+jwm-snapshot (v)
+wmaker
+Xfce4base
+
+Q: how to change wm?
+/etc/sysconfig/desktop
+/usr/local/tce.installed
+
+http://gr8idea.info/os/tutorials/tiny-core/window-manager.html

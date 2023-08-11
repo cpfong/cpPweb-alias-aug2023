@@ -1,0 +1,61 @@
+Q: what to install?
+A: sudo yum install openldap-servers.i386
+sudo yum install  openldap-clients.i386
+
+Q: related files.
+A: /etc/init.d/ldap (注意這些些個字很像, 但拼法有點小小的不同, 其實這個大寫會好一些)
+/usr/sbin/slapd (這個叫 daemon, 但不是用 dap 而是用 lap ...)
+/etc/openldap/slapd.conf (這個 openldap 的目錄放著 slapd 的設定檔)
+/usr/sbin/slapadd (這些個全以 slap 開頭, 所以大的範總名為 LDAP, 它下頭的全叫 slapxxxx)
+/usr/sbin/slappasswd (只有 root 才可以看所有的東西以保護 db)
+[cpfong@ubuntu ~]$ slapcat
+could not open config file "/etc/openldap/slapd.conf": Permission denied (13)
+
+q: how to create a crypt password ? 下列的方式會把結果印在 screen 上, user 再 copy & paste 
+[cpfong@ubuntu trash]$ slappasswd 
+New password: 
+Re-enter new password: 
+{SSHA}ida14yMYZh2NQRWJgYCR/N87R5Hzrdf4
+
+另一方式為把東西存成檔案:
+/usr/sbin/slappasswd > ldap.pwd
+
+Q: where is the config file
+A: [cpfong@ubuntu ~]$ sudo vi /etc/openldap/slapd.conf
+uffix          "dc=uu,dc=mis,dc=fotech,dc=edu,dc=tw"
+rootdn          "cn=root,dc=uu,dc=mis,dc=fotech,dc=edu,dc=tw"
+rootpw          {SSHA}ida14yMYZh2NQRWJgYCR/N87R5Hzrdf4
+
+Q: db config file
+A: 
+1260  sudo cp /etc/openldap/DB_CONFIG.example /var/lib/ldap/DB_CONFIG
+
+Q: to start
+A: sudo /etc/init.d/ldap start
+
+Q: add an new entry.
+A: vi my_1st_record.ldif
+	dn: dc=uu,dc=mis,dc=fotech,dc=edu,dc=tw
+	dc: uu
+	objectClass: dcObject
+	objectClass: organizationalUnit
+	ou: uu Dot mis Dot fotech Dot edu Dot tw
+
+dn: Distinguish Name
+dc: Domain Component
+cn: Common Name
+ou: Organizational Unit
+
+# 注意: -x 表用簡單的 pwd 認証方式, -D 表示 domain -W 表密碼用問的, -f 表由這個檔案讀入 ldif 
+# 加入 record 時要 LDAP 的密碼, 任何人都可以加, 只要知密碼即可
+
+[cpfong@ubuntu trash]$ ldapadd -x -D "cn=root,dc=uu,dc=mis,dc=fotech,dc=edu,dc=tw" -W -f ./my_1st_record.ldif 
+Enter LDAP Password: 
+adding new entry "dc=uu,dc=mis,dc=fotech,dc=edu,dc=tw"
+
+# query 不必密碼, 所有人都可以
+Q: does it really add to the database?
+A: ldapsearch -x -b "dc=uu,dc=mis,dc=fotech,dc=edu,dc=tw"
+
+-x : simple authoziation
+-b : search base

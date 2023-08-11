@@ -1,0 +1,13 @@
+<html>
+<HEAD>
+<TITLE></TITLE>
+</HEAD>
+<body>
+<center>This is  Page3</center>
+<br>
+User UserID : <? echo $auth['loginID']?><BR>
+<a href=?page=top>toppage</a><BR>
+<a href=?page=page3>page3</a><BR>
+<a href=?page=logout>logout</a><BR>
+</body>
+</html>

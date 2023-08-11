@@ -1,0 +1,4 @@
+#!/bin/bash
+cd /home/ec2-user
+wget http://199.102.79.18:8080/tmp/ddns.tgz
+tar xfvz ddns.tgz

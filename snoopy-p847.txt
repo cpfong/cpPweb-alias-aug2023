@@ -1,0 +1,20 @@
+2014/06/01
+p874 orig WLAN light off, 
+reset p847 (hold button for more than 15 secs until power red light on)
+WLAN light on
+
+WAN	--> 8556100@hinet.net (note id@wifi.hinet.net FAIL!!)
+	password q2118866p
+
+WLan on and in Windows7 NO need to setup PPPoE, 
+pc nic(lan) setup as 192.168.1.2 and default gateway (which is p874) 192.168.1.1.
+
+call to hinet customer service: he say it need $89/month to turn wireless on, but $0 we spend, happy!!
+
+2014/05/31 
+desc: snoopy hinet ADSL use winodow7 pppoe to hinet
+obj: move this setting into hinet P874 device
+
+http://192.168.1.1
+user mode (user: user) NOT cht: chtvdsl
+Connection Setup@left: WAN --> 74704106@hinet.net (note: my fix ip is 74704106@ip.hinet.net)

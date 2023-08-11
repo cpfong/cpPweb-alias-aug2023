@@ -1,0 +1,68 @@
+p23
+rule: 	rule 是用來把 query 簡化的, 也就是說, 本 rule 可以達到的 goal, 也可以用其它的方式達到
+	例如: 如果找到 X 是 Y 的父母, 而且 X 是女性, 則我們定義一個 rule 為母親,
+	這個母親的關連是找到的, 不一定要 mother 才可以定義, 使用 parent + female 二個 facts
+	也可以定義, 所以 rule 不是 facts, 而是想要問是否有這樣的 facts 存在.
+
+	在此 - (底線) 是 imply 的意思. 看 rule 時要由右到左來看, 我們如果可以找到右, 則可以說左是 fact 
+
+	makes query simplier (we can use other methods to solve)
+	how:  (note - means imply)
+	mother(X,Y):- parent(X,Y), female(X).
+	head(goal)	body, (sub goal)
+	if we can find  X is parent Y and X is a female
+	then we conclude X is Y's mother
+
+	you give an iterpretation 
+
+p3
+clauses: 句子是用來說明物件和關連的. rule 包含 head (左) 和 body (右) 二個部份
+	
+	relation(obj a, obj b)
+	rules, head and body
+	A,B,C  , is and  A v B, v is or
+	A,B,C -> D (if A=B=C is true then D is true)
+	we interpreate the other way, is D true ? that depend on A B C
+
+	rule: head and boey
+	facts: no body is needed because it is facts. female(Mary)
+	question: only body no head for example ?- parent(ann,john)
+
+p5
+variables in clauses: if variable across head and body then we call it as a global variable
+	ex: mohter(X,Y) :- parent(X,Y), female(X)
+	var show only at body: then it is a local var 
+	var show only at head: impossible!
+
+	parent is a procedure - set of clauses prent, parent , ....
+	female is a proceduer - because lots of it
+
+p6
+	facts : entities and their relationship
+	rules : you can deduce from facts (deduction, can you imply to ?)
+		we can say rules is just a simpler query way
+	
+p7 
+	obj or entity use lower case
+
+p9
+	query is asking for goal. Is pam pat's parent ? then we can write prolog as
+	?- parent(pam, pat).
+	goal: yes or no
+
+p11
+	syntax
+	atoms	:	cannot be separated ex liz ann (lower case)
+	variable:	Upper case , or _ (underline start)
+	structure:	atoms to combine to a structure
+
+	'Tom Jones' 	is a atom
+	_	: 	don't care which show usually at body part
+			parent(_,_) different parent(X,X)
+
+p14
+	functor(arg1,arg2,...)
+	date(2,october,1964)
+	Name Arity eg date/3 (this means date is a functor has 3 args)
+	note: when writing  in the program you cannot write date/3
+

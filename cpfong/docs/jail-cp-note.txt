@@ -1,0 +1,27 @@
+1. bsdinstall jail is good but each one need a jail dir
+2. ezjail can share all but not the original
+3. VIMAGE (vnet) & jail look like a good way
+4. however it may cause cpu high (livejournal 2017june)
+5. finally i decide to use original j ipfw/nat and buildworld myself and no vnet
+
+Q: why jail?
+A: jail each BSD at some place, and it won't affect main system
+
+Q: why ezjail
+A:
+install jail is easy (bsdinstall) but manage it is another story
+different jail can share same resource, however it is not that powerful like original j
+
+Q: what is nat
+A: network address translate
+IP封包通過路由器或防火牆時重寫來源IP地址或目的IP位址的技術
+
+Q: jails network ?
+A: alias public nic interface, NOT using vnet (epair)
+
+steps
+--
+build world first (handbook Chapter 24.5)
+create jail template for all jails use (handbook Chapter 15.5)
+create a jail 
+find out best ipfw/nat rules

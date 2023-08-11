@@ -1,0 +1,4 @@
+1. Please consider that Win98 uses encrypted passwords - Win95 used
+   plain-text passwords.there is a patch to be made in the win98 registry 
+   that looks something like "encrypted passwords = 1" -> "encrypted passwords = 0" 
+   or something like that.

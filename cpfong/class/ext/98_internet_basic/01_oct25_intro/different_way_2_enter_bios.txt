@@ -1,0 +1,66 @@
+Acer
+Aspire:
+Enter the BIOS: Press the CTRL + ALT + ESC keys during the Acer Boot-up screen.
+
+AST:
+Enter the BIOS: Press CTRL + ALT + ESC for setup.
+
+Compaq
+Presario:
+Method 1
+Enter the BIOS: Press F1 or F10 during the Compaq boot-up screen for setup.
+
+Dell
+1610: F10
+F1 Dimension 4400
+Del for Dimension XPST 800R, XPS B1000
+F2 for Inspiron 8200, Optiplex DHM
+
+Gateway
+Enter the BIOS: Press F1 for setup.
+
+HP
+Pavilion:
+Enter the BIOS: Press F1 during the blue HP screen for setup.
+ZE5170: F2
+Vectra:
+Enter the BIOS: Press the F2 during the HP boot-up screen for setup.
+
+IBM
+Aptiva:
+Enter the BIOS: Press F1 during the IBM boot-up screen for setup.
+ThinkPad:
+Double-click the "IBM ThinkPad" on the desktop. Select ThinkPad Features and click on the icon of the printer. 
+
+NEC
+Ready:
+Enter the BIOS: Press F2 during the NEC boot-up screen for setup.
+
+Packard Bell:
+Method 1
+Enter the BIOS: Press F1 for setup.
+Method 2
+Enter the BIOS: Press DEL for setup.
+
+Sony
+VAIO:
+Enter the BIOS: Press and hold down F2 or F3 during VAIO screen for menu. Press F1 for setup.
+
+Toshiba
+Infinia:
+Enter the BIOS: Press F1 for setup.
+
+Satellite:
+Change boot order: F2 for setup
+Press ESC to enter BIOS
+
+
+acer	f1, f2, ctrl+alt+esc
+ast	ctrl+alt+esc, ctrl+alt+del
+compaq	f10
+dell400	f1, f10
+dell	f2, del, fn+f1, 
+gateway	f1, f2
+hp	f1, f2
+ibm	f1, f2
+toshiba	f1, esc

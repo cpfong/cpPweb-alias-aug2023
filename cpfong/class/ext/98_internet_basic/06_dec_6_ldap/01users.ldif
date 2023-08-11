@@ -1,0 +1,23 @@
+## [cpfong@ubuntu]$ ldapadd -w my_pass_word -x -v -D cn=Manager,dc=plainjoe,dc=org -f ./01users.ldif
+## add new user: "Gerald W. Carter" into the db 
+## inetOrgPerson rfc2798: http://www.faqs.org/rfcs/rfc2798.html
+dn: cn=Gerald W. Carter,ou=people,dc=plainjoe,dc=org
+cn: Gerald W. Carter
+sn: Carter
+mail: jerry@plainjoe.org
+mail: gcarter@valinux.com
+labeledURI: http://www.plainjoe.org/
+roomNumber: 1234 Dudley Hall
+departmentNumber: Engineering
+telephoneNumber: 222-555-2345
+pager: 222-555-6789
+mobile: 222-555-1011
+objectclass: inetOrgPerson
+
+## add 2nd new user "jerry Carter" into the db
+dn: cn=Jerry Carter, ou=people,dc=plainjoe,dc=org
+cn: Jerry Carter
+sn: Carter
+mail: carter@nowhere.net
+telephoneNumber: 555-123-1234
+objectclass: inetOrgPerson

@@ -1,0 +1,1064 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:x="urn:schemas-microsoft-com:office:excel"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=big5">
+<meta name=ProgId content=Excel.Sheet>
+<meta name=Generator content="Microsoft Excel 11">
+<link id=Main-File rel=Main-File href="../phone.htm">
+<link rel=File-List href=filelist.xml>
+<link rel=Edit-Time-Data href=editdata.mso>
+<link rel=Stylesheet href=stylesheet.css>
+<style>
+<!--table
+	{mso-displayed-decimal-separator:"\.";
+	mso-displayed-thousand-separator:"\,";}
+@page
+	{margin:.59in .2in .2in .2in;
+	mso-header-margin:.51in;
+	mso-footer-margin:.51in;}
+ruby
+	{ruby-align:left;}
+rt
+	{color:windowtext;
+	font-size:9.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:新細明體, serif;
+	mso-font-charset:136;
+	mso-char-type:none;
+	display:none;}
+-->
+</style>
+<![if !supportTabStrip]><script language="JavaScript">
+<!--
+function fnUpdateTabs()
+ {
+  if (parent.window.g_iIEVer>=4) {
+   if (parent.document.readyState=="complete"
+    && parent.frames['frTabs'].document.readyState=="complete")
+   parent.fnSetActiveSheet(1);
+  else
+   window.setTimeout("fnUpdateTabs();",150);
+ }
+}
+
+if (window.name!="frSheet")
+ window.location.replace("../phone.htm");
+else
+ fnUpdateTabs();
+//-->
+</script>
+<![endif]><!--[if gte mso 9]><xml>
+ <x:WorksheetOptions>
+  <x:DefaultRowHeight>225</x:DefaultRowHeight>
+  <x:Print>
+   <x:ValidPrinterInfo/>
+   <x:PaperSizeIndex>9</x:PaperSizeIndex>
+   <x:Scale>80</x:Scale>
+   <x:HorizontalResolution>1200</x:HorizontalResolution>
+   <x:VerticalResolution>1200</x:VerticalResolution>
+  </x:Print>
+  <x:Selected/>
+  <x:TopRowVisible>51</x:TopRowVisible>
+  <x:Panes>
+   <x:Pane>
+    <x:Number>3</x:Number>
+    <x:ActiveRow>52</x:ActiveRow>
+    <x:ActiveCol>16</x:ActiveCol>
+   </x:Pane>
+  </x:Panes>
+  <x:ProtectContents>False</x:ProtectContents>
+  <x:ProtectObjects>False</x:ProtectObjects>
+  <x:ProtectScenarios>False</x:ProtectScenarios>
+ </x:WorksheetOptions>
+</xml><![endif]-->
+</head>
+
+<body link=blue vlink=purple class=xl200>
+
+<table x:str border=0 cellpadding=0 cellspacing=0 width=3183 style='border-collapse:
+ collapse;table-layout:fixed;width:2389pt'>
+ <col class=xl200 width=83 style='mso-width-source:userset;mso-width-alt:2656;
+ width:62pt'>
+ <col class=xl200 width=79 style='mso-width-source:userset;mso-width-alt:2528;
+ width:59pt'>
+ <col class=xl200 width=53 style='mso-width-source:userset;mso-width-alt:1696;
+ width:40pt'>
+ <col class=xl200 width=16 style='mso-width-source:userset;mso-width-alt:512;
+ width:12pt'>
+ <col class=xl200 width=81 style='mso-width-source:userset;mso-width-alt:2592;
+ width:61pt'>
+ <col class=xl200 width=101 style='mso-width-source:userset;mso-width-alt:3232;
+ width:76pt'>
+ <col class=xl200 width=33 style='mso-width-source:userset;mso-width-alt:1056;
+ width:25pt'>
+ <col class=xl200 width=11 style='mso-width-source:userset;mso-width-alt:352;
+ width:8pt'>
+ <col class=xl200 width=103 style='mso-width-source:userset;mso-width-alt:3296;
+ width:77pt'>
+ <col class=xl200 width=91 style='mso-width-source:userset;mso-width-alt:2912;
+ width:68pt'>
+ <col class=xl200 width=50 style='mso-width-source:userset;mso-width-alt:1600;
+ width:38pt'>
+ <col class=xl200 width=13 style='mso-width-source:userset;mso-width-alt:416;
+ width:10pt'>
+ <col class=xl281 width=81 style='mso-width-source:userset;mso-width-alt:2592;
+ width:61pt'>
+ <col class=xl200 width=80 style='mso-width-source:userset;mso-width-alt:2560;
+ width:60pt'>
+ <col class=xl200 width=69 style='mso-width-source:userset;mso-width-alt:2208;
+ width:52pt'>
+ <col class=xl200 width=0 style='display:none;mso-width-source:userset;
+ mso-width-alt:96'>
+ <col class=xl200 width=83 style='mso-width-source:userset;mso-width-alt:2656;
+ width:62pt'>
+ <col class=xl200 width=86 style='mso-width-source:userset;mso-width-alt:2752;
+ width:65pt'>
+ <col class=xl200 width=33 style='mso-width-source:userset;mso-width-alt:1056;
+ width:25pt'>
+ <col class=xl200 width=6 style='mso-width-source:userset;mso-width-alt:192;
+ width:5pt'>
+ <col class=xl200 width=71 style='mso-width-source:userset;mso-width-alt:2272;
+ width:53pt'>
+ <col class=xl200 width=115 style='mso-width-source:userset;mso-width-alt:3680;
+ width:86pt'>
+ <col class=xl200 width=33 style='mso-width-source:userset;mso-width-alt:1056;
+ width:25pt'>
+ <col class=xl200 width=7 style='mso-width-source:userset;mso-width-alt:224;
+ width:5pt'>
+ <col class=xl200 width=134 style='mso-width-source:userset;mso-width-alt:4288;
+ width:101pt'>
+ <col class=xl200 width=80 style='mso-width-source:userset;mso-width-alt:2560;
+ width:60pt'>
+ <col class=xl200 width=51 style='mso-width-source:userset;mso-width-alt:1632;
+ width:38pt'>
+ <col class=xl200 width=7 style='mso-width-source:userset;mso-width-alt:224;
+ width:5pt'>
+ <col class=xl200 width=101 style='mso-width-source:userset;mso-width-alt:3232;
+ width:76pt'>
+ <col class=xl200 width=100 style='mso-width-source:userset;mso-width-alt:3200;
+ width:75pt'>
+ <col class=xl200 width=36 style='mso-width-source:userset;mso-width-alt:1152;
+ width:27pt'>
+ <col class=xl200 width=72 span=18 style='width:54pt'>
+ <tr height=21 style='height:15.75pt'>
+  <td colspan=16 height=21 class=xl375 width=944 style='height:15.75pt;
+  width:709pt'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>和春技術學院<span style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>大發校區教學單位校內分機表</td>
+  <td colspan=15 class=xl201 width=943 style='width:708pt'></td>
+  <td class=xl200 width=72 style='width:54pt'></td>
+  <td class=xl200 width=72 style='width:54pt'></td>
+  <td class=xl200 width=72 style='width:54pt'></td>
+  <td class=xl200 width=72 style='width:54pt'></td>
+  <td class=xl200 width=72 style='width:54pt'></td>
+  <td class=xl200 width=72 style='width:54pt'></td>
+  <td class=xl200 width=72 style='width:54pt'></td>
+  <td class=xl200 width=72 style='width:54pt'></td>
+  <td class=xl200 width=72 style='width:54pt'></td>
+  <td class=xl200 width=72 style='width:54pt'></td>
+  <td class=xl200 width=72 style='width:54pt'></td>
+  <td class=xl200 width=72 style='width:54pt'></td>
+  <td class=xl200 width=72 style='width:54pt'></td>
+  <td class=xl200 width=72 style='width:54pt'></td>
+  <td class=xl200 width=72 style='width:54pt'></td>
+  <td class=xl200 width=72 style='width:54pt'></td>
+  <td class=xl200 width=72 style='width:54pt'></td>
+  <td class=xl200 width=72 style='width:54pt'></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td colspan=16 height=22 class=xl375 style='height:16.5pt'><span
+  style='mso-spacerun:yes'>&nbsp;</span>代表號：(07)788-9888<span
+  style='mso-spacerun:yes'>&nbsp; </span>傳真：(07)788-9777<span
+  style='mso-spacerun:yes'>&nbsp; </span>地址：83160高雄縣大寮鄉琉球村農場路1之10號</td>
+  <td colspan=15 class=xl201></td>
+  <td colspan=18 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=23 style='height:17.25pt'>
+  <td colspan=3 height=23 class=xl507 style='border-right:2.0pt double black;
+  height:17.25pt'>行銷與流通管理系(系辦H棟-1F)</td>
+  <td class=xl200></td>
+  <td colspan=3 class=xl510 style='border-right:2.0pt double black'>觀光休閒事業管理系(系辦H棟-3F)</td>
+  <td class=xl200></td>
+  <td colspan=3 class=xl504 style='border-right:2.0pt double black'>資管系(系辦H棟-6F)</td>
+  <td class=xl200></td>
+  <td colspan=3 class=xl504 style='border-right:2.0pt double black'>通識中心(系辦I棟-2F)</td>
+  <td class=xl201></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+  <td colspan=3 class=xl202 style='mso-ignore:colspan'></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl203 style='height:22.5pt;border-top:none'
+  x:str="主任            ">主任<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl373 width=79 style='width:59pt' x:str="胡育嘉          ">胡育嘉<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl205 x:num>6160</td>
+  <td class=xl200></td>
+  <td class=xl203 style='border-top:none'>主任　</td>
+  <td class=xl370 width=101 style='border-top:none;width:76pt'>李建興</td>
+  <td class=xl206 align=right style='border-top:none' x:num>6140</td>
+  <td class=xl200></td>
+  <td class=xl203 style='border-top:none' x:str="主任             ">主任<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl370 width=91 style='border-top:none;width:68pt' x:str="李    駿 ">李<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>駿<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl206 align=right style='border-top:none' x:num>6120</td>
+  <td class=xl200></td>
+  <td class=xl207 style='border-top:none' x:str="主任             ">主任<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl370 width=80 style='border-top:none;width:60pt' x:str="黃進南 ">黃進南<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl387 align=right width=69 style='border-top:none;width:52pt' x:num>2220</td>
+  <td class=xl200></td>
+  <td colspan=16 class=xl200 style='mso-ignore:colspan'></td>
+  <td class=xl208></td>
+  <td class=xl209></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl210 style='height:22.5pt;border-top:none' x:str="技士   ">技士<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl211 width=79 style='border-top:none;width:59pt'
+  x:str="謝俊銘        ">謝俊銘<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl212 style='border-top:none' x:num>6162</td>
+  <td class=xl200></td>
+  <td class=xl210 style='border-top:none'>助理　</td>
+  <td class=xl211 width=101 style='border-top:none;width:76pt'
+  x:str="王秀綺                    ">王秀綺<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl213 align=right style='border-top:none' x:num>6142</td>
+  <td class=xl200></td>
+  <td class=xl210 style='border-top:none' x:str="助理             ">助理<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl214 width=91 style='border-top:none;width:68pt'
+  x:str="許琪琳             ">許琪琳<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl213 align=right style='border-top:none' x:num>6122</td>
+  <td class=xl200></td>
+  <td class=xl237 width=81 style='border-top:none;width:61pt'>助理</td>
+  <td class=xl214 width=80 style='border-top:none;width:60pt'
+  x:str="林芃萱              ">林芃萱<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl234 align=right width=69 style='border-top:none;width:52pt' x:num>2221</td>
+  <td class=xl200></td>
+  <td colspan=16 class=xl200 style='mso-ignore:colspan'></td>
+  <td class=xl215></td>
+  <td class=xl209></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl216 style='height:22.5pt' x:str="業師              ">業師<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl211 width=79 style='border-top:none;width:59pt'
+  x:str="陳姿薰                     ">陳姿薰<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl213 align=right style='border-top:none' x:num>6161</td>
+  <td class=xl200></td>
+  <td class=xl210 style='border-top:none'>傳真機</td>
+  <td class=xl217 style='border-top:none'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>6143</td>
+  <td class=xl200></td>
+  <td class=xl210 style='border-top:none'>業師</td>
+  <td class=xl222 style='border-top:none'>黃信宏</td>
+  <td class=xl213 align=right style='border-top:none' x:num>6121</td>
+  <td class=xl200></td>
+  <td class=xl237 width=81 style='border-top:none;width:61pt'>教學助理</td>
+  <td class=xl214 width=80 style='border-top:none;width:60pt'>黃郁婷</td>
+  <td class=xl234 align=right width=69 style='border-top:none;width:52pt' x:num>2222</td>
+  <td class=xl200></td>
+  <td colspan=16 class=xl200 style='mso-ignore:colspan'></td>
+  <td class=xl219></td>
+  <td class=xl209></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl466 style='height:22.5pt;border-top:none'>職涯輔導專案管理</td>
+  <td class=xl460 width=79 style='border-top:none;width:59pt'
+  x:str="黃竫容          ">黃竫容<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl200 align=right x:num>6161</td>
+  <td class=xl220>　</td>
+  <td class=xl221 width=81 style='border-top:none;border-left:none;width:61pt'
+  x:str="業師             ">業師<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl211 width=101 style='border-top:none;width:76pt'
+  x:str="   施珮君                                      "><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp; </span>施珮君<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl213 align=right style='border-top:none' x:num>6145</td>
+  <td class=xl220 style='border-left:none'>　</td>
+  <td class=xl237 width=103 style='border-top:none;border-left:none;width:77pt'>教學助理</td>
+  <td class=xl214 width=91 style='border-top:none;width:68pt'>李泰茗</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8710</td>
+  <td class=xl200></td>
+  <td class=xl406>傳真機</td>
+  <td class=xl319>　</td>
+  <td class=xl407 width=69 style='width:52pt'>788-7881</td>
+  <td class=xl200></td>
+  <td colspan=16 class=xl200 style='mso-ignore:colspan'></td>
+  <td class=xl219></td>
+  <td class=xl209></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl210 style='height:22.5pt;border-top:none'>傳真機</td>
+  <td class=xl217 style='border-top:none'>　</td>
+  <td class=xl212>788-7767</td>
+  <td class=xl200></td>
+  <td class=xl216>教學助理</td>
+  <td class=xl215 width=101 style='width:76pt' x:str="潘嘉彥                    ">潘嘉彥<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl225 align=right x:num>6145</td>
+  <td class=xl200></td>
+  <td class=xl210 style='border-top:none'>業師</td>
+  <td class=xl222 style='border-top:none'>郭勝煌</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8710</td>
+  <td class=xl200></td>
+  <td class=xl223 width=81 style='border-top:none;width:61pt'
+  x:str="王靜風          ">王靜風<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl224 width=80 style='border-top:none;width:60pt'
+  x:str=" 黃珮瑛           "><span style='mso-spacerun:yes'>&nbsp;</span>黃珮瑛<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl213 align=right style='border-top:none' x:num>8003</td>
+  <td class=xl200></td>
+  <td colspan=16 class=xl200 style='mso-ignore:colspan'></td>
+  <td class=xl228></td>
+  <td class=xl209></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl229 style='height:22.5pt;border-top:none'>江丕華</td>
+  <td class=xl230 style='border-top:none'>　</td>
+  <td class=xl212 style='border-top:none' x:num>8001</td>
+  <td class=xl200></td>
+  <td class=xl231 style='border-top:none' x:str="陳正奇 ">陳正奇<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl232>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8009</td>
+  <td class=xl200></td>
+  <td class=xl210 style='border-top:none'>傳真機</td>
+  <td class=xl222 style='border-top:none'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>6124</td>
+  <td class=xl200></td>
+  <td class=xl223 width=81 style='border-top:none;width:61pt'
+  x:str="傅楠梓        ">傅楠梓<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl204 width=80 style='border-top:none;width:60pt'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8005</td>
+  <td class=xl200></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+  <td class=xl235></td>
+  <td class=xl236></td>
+  <td colspan=16 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl229 style='height:22.5pt;border-top:none' x:str="陳益昌 ">陳益昌<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl230 style='border-top:none'>　</td>
+  <td class=xl212 style='border-top:none' x:num>8747</td>
+  <td class=xl200></td>
+  <td class=xl231 style='border-top:none' x:str="黃宏榮      ">黃宏榮<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl232 style='border-top:none'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8011</td>
+  <td class=xl200></td>
+  <td class=xl226 width=103 style='border-top:none;width:77pt'
+  x:str="孫冠宏                       ">孫冠宏<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl227 width=91 style='border-top:none;width:68pt' x:str=" 陳建良   "><span
+  style='mso-spacerun:yes'>&nbsp;</span>陳建良<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl213 align=right style='border-top:none' x:num>8708</td>
+  <td class=xl200></td>
+  <td class=xl223 width=81 style='border-top:none;width:61pt' x:str="柯淑芬     ">柯淑芬<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl233 width=80 style='border-top:none;width:60pt'
+  x:str=" 黃彩勤                    "><span
+  style='mso-spacerun:yes'>&nbsp;</span>黃彩勤<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl234 align=right width=69 style='border-top:none;width:52pt' x:num>8006</td>
+  <td class=xl200></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+  <td class=xl235></td>
+  <td class=xl236></td>
+  <td colspan=16 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl229 style='height:22.5pt;border-top:none' x:str="黃進南 ">黃進南<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl230 style='border-top:none'>　</td>
+  <td class=xl212 style='border-top:none' x:num>8835</td>
+  <td class=xl200></td>
+  <td class=xl231 style='border-top:none' x:str="李坤城 ">李坤城<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl232 style='border-top:none'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8703</td>
+  <td class=xl200></td>
+  <td class=xl226 width=103 style='border-top:none;width:77pt'
+  x:str="蘇東士            ">蘇東士<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl227 width=91 style='border-top:none;width:68pt'
+  x:str=" 許明壽         "><span style='mso-spacerun:yes'>&nbsp;</span>許明壽<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl213 align=right style='border-top:none' x:num>8710</td>
+  <td class=xl200></td>
+  <td class=xl237 width=81 style='border-top:none;width:61pt'
+  x:str="蔡熙銘                            ">蔡熙銘<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl200></td>
+  <td class=xl213 align=right style='border-top:none' x:num>8833</td>
+  <td class=xl200></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+  <td class=xl235></td>
+  <td class=xl236></td>
+  <td colspan=16 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl231 style='height:22.5pt;border-top:none'>陳俊銘</td>
+  <td class=xl238></td>
+  <td class=xl213 align=right style='border-top:none' x:num>8837</td>
+  <td class=xl200></td>
+  <td class=xl231 style='border-top:none' x:str="張彥輝 ">張彥輝<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl232 style='border-top:none'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8745</td>
+  <td class=xl200></td>
+  <td class=xl226 width=103 style='border-top:none;width:77pt'
+  x:str="陳建廷                            ">陳建廷<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl227 width=91 style='border-top:none;width:68pt' x:str=" 馮治平    "><span
+  style='mso-spacerun:yes'>&nbsp;</span>馮治平<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl213 align=right style='border-top:none' x:num>8712</td>
+  <td class=xl200></td>
+  <td class=xl231 style='border-top:none' x:str="廖連和  ">廖連和<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;</span></td>
+  <td class=xl240 width=80 style='width:60pt'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8012</td>
+  <td class=xl200></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+  <td class=xl235></td>
+  <td class=xl228></td>
+  <td colspan=16 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl229 style='height:22.5pt;border-top:none' x:str="胡育嘉 ">胡育嘉<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl241>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8918</td>
+  <td class=xl200></td>
+  <td class=xl239 style='border-top:none' x:str="余玉智     ">余玉智<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl232 style='border-top:none'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8748</td>
+  <td class=xl200></td>
+  <td class=xl229 style='border-top:none' x:str="吳秀蘭  ">吳秀蘭<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;</span></td>
+  <td class=xl230 style='border-top:none'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8714</td>
+  <td class=xl200></td>
+  <td class=xl223 width=81 style='border-top:none;width:61pt'
+  x:str="邱秀玲               ">邱秀玲<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl218 style='border-top:none'>劉鶯玲</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8013</td>
+  <td class=xl200></td>
+  <td colspan=33 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl226 width=83 style='height:22.5pt;border-top:none;
+  width:62pt' x:str="黃梓銘 ">黃梓銘<span style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl227 width=79 style='border-top:none;width:59pt'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>5919</td>
+  <td class=xl200></td>
+  <td class=xl242 style='border-top:none' x:str="劉怡伶 ">劉怡伶<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl232 style='border-top:none'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8749</td>
+  <td class=xl200></td>
+  <td class=xl226 width=103 style='border-top:none;width:77pt' x:str="林子嵐 ">林子嵐<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl227 width=91 style='border-top:none;width:68pt' x:str=" 何樹垚 "><span
+  style='mso-spacerun:yes'>&nbsp;</span>何樹垚<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl213 align=right style='border-top:none' x:num>8716</td>
+  <td class=xl383>　</td>
+  <td class=xl223 width=81 style='border-top:none;border-left:none;width:61pt'
+  x:str="林詮紹 ">林詮紹<span style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl232 style='border-top:none'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8818</td>
+  <td class=xl200></td>
+  <td colspan=33 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl226 width=83 style='height:22.5pt;border-top:none;
+  width:62pt' x:str="鄭永忠          ">鄭永忠<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl227 width=79 style='border-top:none;width:59pt'
+  x:str=" 林正修          "><span style='mso-spacerun:yes'>&nbsp;</span>林正修<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl213 align=right style='border-top:none' x:num>5920</td>
+  <td class=xl251 style='border-left:none'>　</td>
+  <td class=xl242 style='border-top:none' x:str="李建興 ">李建興<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl232 style='border-top:none'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8901</td>
+  <td class=xl220 style='border-left:none'>　</td>
+  <td class=xl244 style='border-top:none;border-left:none' x:str="張鵬佐 ">張鵬佐<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl245 style='border-top:none'>　</td>
+  <td class=xl246 align=right style='border-top:none' x:num>8717</td>
+  <td class=xl200></td>
+  <td class=xl223 width=81 style='border-top:none;width:61pt'
+  x:str="鍾鳳招            ">鍾鳳招<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl238></td>
+  <td class=xl213 align=right style='border-top:none' x:num>8819</td>
+  <td class=xl200></td>
+  <td colspan=33 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl253 width=83 style='height:22.5pt;border-top:none;
+  width:62pt' x:str="郭燕琪     ">郭燕琪<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl233 width=79 style='border-top:none;width:59pt' x:str=" 陳慧姮 "><span
+  style='mso-spacerun:yes'>&nbsp;</span>陳慧姮<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl200 align=right x:num>5922</td>
+  <td class=xl251>　</td>
+  <td class=xl242 style='border-top:none' x:str="李慈慧 ">李慈慧<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl232 style='border-top:none'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8902</td>
+  <td class=xl200></td>
+  <td class=xl248 width=103 style='width:77pt' x:str="林淑瑜 ">林淑瑜<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl249 width=91 style='width:68pt' x:str=" 蘇溢芳 "><span
+  style='mso-spacerun:yes'>&nbsp;</span>蘇溢芳<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl250 width=50 style='width:38pt' x:num>8718</td>
+  <td class=xl200></td>
+  <td class=xl223 width=81 style='border-top:none;width:61pt' x:str="徐櫻芳 ">徐櫻芳<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl217>　</td>
+  <td class=xl234 align=right width=69 style='border-top:none;width:52pt' x:num>8821</td>
+  <td class=xl200></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+  <td colspan=3 class=xl201></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl229 style='height:22.5pt'>賀賢麟</td>
+  <td class=xl241 style='border-top:none'>　</td>
+  <td class=xl213 align=right x:num>8924</td>
+  <td class=xl200></td>
+  <td class=xl251>林淑容</td>
+  <td class=xl254 style='border-top:none'>　</td>
+  <td class=xl255 align=right style='border-top:none' x:num>8713</td>
+  <td class=xl258>　</td>
+  <td class=xl252 style='border-left:none' x:str="劉佳霖 ">劉佳霖<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl247>　</td>
+  <td class=xl213 align=right x:num>8719</td>
+  <td class=xl200></td>
+  <td class=xl223 width=81 style='border-top:none;width:61pt' x:str="陳神祐      ">陳神祐<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl259 width=80 style='border-top:none;width:60pt'>　</td>
+  <td class=xl234 align=right width=69 style='border-top:none;width:52pt' x:num>8823</td>
+  <td class=xl200></td>
+  <td colspan=16 class=xl200 style='mso-ignore:colspan'></td>
+  <td class=xl260></td>
+  <td class=xl209></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl229 style='height:22.5pt;border-top:none'>田益政</td>
+  <td class=xl241 style='border-top:none'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8962</td>
+  <td class=xl200></td>
+  <td class=xl257>　</td>
+  <td colspan=3 class=xl200 style='mso-ignore:colspan'></td>
+  <td class=xl256 width=103 style='border-top:none;width:77pt' x:str="陳立山 ">陳立山<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl230 style='border-top:none'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8720</td>
+  <td class=xl200></td>
+  <td class=xl223 width=81 style='border-top:none;width:61pt'>劉琪華</td>
+  <td class=xl232 style='border-top:none'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8825</td>
+  <td class=xl200></td>
+  <td colspan=16 class=xl200 style='mso-ignore:colspan'></td>
+  <td class=xl238></td>
+  <td class=xl209></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl244 style='height:22.5pt;border-top:none' x:str="李豐義 ">李豐義<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl262 style='border-top:none'>　</td>
+  <td class=xl246 align=right style='border-top:none' x:num>5926</td>
+  <td class=xl200></td>
+  <td colspan=3 class=xl504 style='border-right:2.0pt double black'>企管系(系辦H棟-4F)</td>
+  <td class=xl220 style='border-left:none'>　</td>
+  <td class=xl200 x:str="李    駿 ">李<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>駿<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl238></td>
+  <td class=xl213 align=right style='border-top:none' x:num>8721</td>
+  <td class=xl263></td>
+  <td class=xl223 width=81 style='border-top:none;width:61pt' x:str="高雅文     ">高雅文<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl240 width=80 style='border-top:none;width:60pt'
+  x:str=" 高靜文         "><span style='mso-spacerun:yes'>&nbsp;</span>高靜文<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl213 align=right style='border-top:none' x:num>8827</td>
+  <td class=xl200></td>
+  <td colspan=16 class=xl200 style='mso-ignore:colspan'></td>
+  <td class=xl264></td>
+  <td class=xl209></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=32 style='mso-height-source:userset;height:24.0pt'>
+  <td height=32 class=xl426 width=83 style='height:24.0pt;width:62pt'>就業學程助理陳宏梅</td>
+  <td class=xl265 width=79 style='width:59pt'>　</td>
+  <td class=xl255 align=right x:num>8929</td>
+  <td class=xl200></td>
+  <td class=xl203 style='border-top:none' x:str="主任             ">主任<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl370 width=101 style='border-top:none;width:76pt'
+  x:str="詹惠君                ">詹惠君<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl206 align=right style='border-top:none' x:num>6110</td>
+  <td class=xl200></td>
+  <td class=xl261 width=103 style='width:77pt' x:str="王昭文 ">王昭文<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl233 width=91 style='width:68pt' x:str="  楊恭娟 "><span
+  style='mso-spacerun:yes'>&nbsp; </span>楊恭娟<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl213 align=right style='border-top:none' x:num>8722</td>
+  <td class=xl263></td>
+  <td class=xl223 width=81 style='border-top:none;width:61pt' x:str="賴新喜  ">賴新喜<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;</span></td>
+  <td class=xl240 width=80 style='border-top:none;width:60pt'
+  x:str=" 舒俊豪        "><span style='mso-spacerun:yes'>&nbsp;</span>舒俊豪<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl213 align=right style='border-top:none' x:num>8829</td>
+  <td class=xl200></td>
+  <td colspan=17 class=xl200 style='mso-ignore:colspan'></td>
+  <td class=xl209></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 colspan=4 class=xl200 style='height:22.5pt;mso-ignore:colspan'></td>
+  <td class=xl210 style='border-top:none' x:str="助理             ">助理<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl214 width=101 style='border-top:none;width:76pt'
+  x:str=" 陳曉玲             "><span
+  style='mso-spacerun:yes'>&nbsp;</span>陳曉玲<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl213 align=right style='border-top:none' x:num>6111</td>
+  <td class=xl200></td>
+  <td class=xl229 style='border-top:none' x:str="覃民德 ">覃民德<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl247 style='border-top:none'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8723</td>
+  <td class=xl263></td>
+  <td class=xl223 width=81 style='border-top:none;width:61pt' x:str="黃志洲 ">黃志洲<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl259 width=80 style='border-top:none;width:60pt'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8830</td>
+  <td class=xl220 style='border-left:none'>　</td>
+  <td colspan=33 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td colspan=3 height=30 class=xl504 style='border-right:2.0pt double black;
+  height:22.5pt'>財金系(系辦H棟-2F)</td>
+  <td class=xl200></td>
+  <td class=xl231 style='border-top:none'>系圖/傳真機</td>
+  <td class=xl218 style='border-top:none'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>6112</td>
+  <td class=xl200></td>
+  <td class=xl229 style='border-top:none' x:str="佘步雲 ">佘步雲<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl247 style='border-top:none'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8725</td>
+  <td class=xl200></td>
+  <td class=xl223 width=81 style='border-top:none;width:61pt' x:str="黃清裕 ">黃清裕<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl232 style='border-top:none'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8831</td>
+  <td class=xl200></td>
+  <td colspan=33 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl203 style='height:22.5pt;border-top:none'
+  x:str="主任              ">主任<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl370 width=79 style='border-top:none;width:59pt'
+  x:str="林信豪         ">林信豪<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl206 align=right style='border-top:none' x:num>6130</td>
+  <td class=xl220 style='border-left:none'>　</td>
+  <td class=xl210 style='border-top:none;border-left:none'>教學助理</td>
+  <td class=xl266 width=101 style='width:76pt' x:str="劉怡瑩           ">劉怡瑩<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl213 align=right style='border-top:none' x:num>6113</td>
+  <td class=xl258>　</td>
+  <td class=xl229 style='border-top:none;border-left:none' x:str="吳宗賢 ">吳宗賢<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl247 style='border-top:none'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>5903</td>
+  <td class=xl200></td>
+  <td class=xl223 width=81 style='border-top:none;width:61pt' x:str="柴俊薪     ">柴俊薪<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl240 width=80 style='border-top:none;width:60pt' x:str="   "><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl213 align=right style='border-top:none' x:num>8839</td>
+  <td class=xl200></td>
+  <td colspan=33 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl210 style='height:22.5pt;border-top:none'
+  x:str="助理              ">助理<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl211 width=79 style='border-top:none;width:59pt'>歐陽湘琍</td>
+  <td class=xl213 align=right style='border-top:none' x:num>6131</td>
+  <td class=xl200></td>
+  <td class=xl216>業師</td>
+  <td class=xl211 width=101 style='border-top:none;width:76pt'
+  x:str="林佳慧            ">林佳慧<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl213 align=right style='border-top:none' x:num>6115</td>
+  <td class=xl220 style='border-left:none'>　</td>
+  <td class=xl226 width=103 style='border-top:none;border-left:none;width:77pt'
+  x:str="鍾春英                  ">鍾春英<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl227 width=91 style='border-top:none;width:68pt'><span
+  style='mso-spacerun:yes'>&nbsp; </span>楊淑英</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8904</td>
+  <td class=xl200></td>
+  <td class=xl223 width=81 style='border-top:none;width:61pt'
+  x:str="李宣慈               ">李宣慈<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl259 width=80 style='border-top:none;width:60pt'>留停</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8840</td>
+  <td class=xl200></td>
+  <td colspan=33 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl210 style='height:22.5pt;border-top:none'>教學助理</td>
+  <td class=xl214 width=79 style='border-top:none;width:59pt'
+  x:str="陳彥如            ">陳彥如<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl213 align=right style='border-top:none' x:num>6132</td>
+  <td class=xl220 style='border-left:none'>　</td>
+  <td class=xl210 style='border-top:none;border-left:none'>人力資源室</td>
+  <td class=xl200></td>
+  <td class=xl225 align=right x:num>6116</td>
+  <td class=xl200></td>
+  <td class=xl229 style='border-top:none' x:str="王光弘 ">王光弘<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl247 style='border-top:none'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8905</td>
+  <td class=xl200></td>
+  <td class=xl223 width=81 style='border-top:none;width:61pt'
+  x:str=" 石兆振              "><span
+  style='mso-spacerun:yes'>&nbsp;</span>石兆振<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl200></td>
+  <td class=xl213 align=right style='border-top:none' x:num>8841</td>
+  <td class=xl200></td>
+  <td colspan=16 class=xl200 style='mso-ignore:colspan'></td>
+  <td class=xl208></td>
+  <td class=xl209></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl210 style='height:22.5pt;border-top:none'>業師</td>
+  <td class=xl215 width=79 style='width:59pt' x:str="謝東福       ">謝東福<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl213 align=right style='border-top:none' x:num>8906</td>
+  <td class=xl200></td>
+  <td class=xl229 style='border-top:none' x:str="林惠蓮  ">林惠蓮<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;</span></td>
+  <td class=xl381>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8731</td>
+  <td class=xl200></td>
+  <td class=xl229 style='border-top:none'>王老師實驗室</td>
+  <td class=xl267 style='border-top:none'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8907</td>
+  <td class=xl200></td>
+  <td class=xl223 width=81 style='border-top:none;width:61pt' x:str="王家元     ">王家元<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl240 width=80 style='width:60pt' x:str=" 謝孟錫              "><span
+  style='mso-spacerun:yes'>&nbsp;</span>謝孟錫<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl213 align=right style='border-top:none' x:num>8842</td>
+  <td class=xl200></td>
+  <td colspan=16 class=xl200 style='mso-ignore:colspan'></td>
+  <td colspan=2 class=xl209 style='mso-ignore:colspan'></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl231 style='height:22.5pt;border-top:none'>許慧琳 進修</td>
+  <td class=xl232>　</td>
+  <td class=xl258 align=right x:num>8724</td>
+  <td class=xl200></td>
+  <td class=xl229 style='border-top:none' x:str="許怡萍 ">許怡萍<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl247 style='border-top:none'>　</td>
+  <td class=xl246 align=right style='border-top:none' x:num>8732</td>
+  <td class=xl200></td>
+  <td class=xl229 style='border-top:none'>高老師實驗室</td>
+  <td class=xl267 style='border-top:none'>　</td>
+  <td class=xl268 width=50 style='border-top:none;width:38pt'>8910<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>8911</td>
+  <td class=xl200></td>
+  <td class=xl223 width=81 style='border-top:none;width:61pt' x:str="侯志堅 ">侯志堅<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl240 width=80 style='border-top:none;width:60pt' x:str="孫善保  ">孫善保<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;</span></td>
+  <td class=xl213 align=right style='border-top:none' x:num>8843</td>
+  <td class=xl200></td>
+  <td colspan=16 class=xl200 style='mso-ignore:colspan'></td>
+  <td class=xl272></td>
+  <td class=xl209></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl226 width=83 style='height:22.5pt;border-top:none;
+  width:62pt' x:str="李世峰      ">李世峰<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl273 width=79 style='border-top:none;width:59pt'
+  x:str="  李參福           "><span style='mso-spacerun:yes'>&nbsp;
+  </span>李參福<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl213 align=right x:num>8726</td>
+  <td class=xl220 style='border-left:none'>　</td>
+  <td class=xl229 style='border-top:none;border-left:none' x:str="詹惠君 ">詹惠君<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl247 style='border-top:none'>　</td>
+  <td class=xl269 align=right x:num>8734</td>
+  <td class=xl200></td>
+  <td class=xl229 style='border-top:none' x:str="高志中 ">高志中<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl247 style='border-top:none'>　</td>
+  <td class=xl213 align=right x:num>8913</td>
+  <td class=xl200></td>
+  <td class=xl223 width=81 style='border-top:none;width:61pt' x:str="賴敏鳳     ">賴敏鳳<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl240 width=80 style='border-top:none;width:60pt'
+  x:str=" 江鉅海            "><span style='mso-spacerun:yes'>&nbsp;</span>江鉅海<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl213 align=right style='border-top:none' x:num>8844</td>
+  <td class=xl200></td>
+  <td colspan=16 class=xl200 style='mso-ignore:colspan'></td>
+  <td class=xl276></td>
+  <td class=xl209></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl390 width=83 style='height:22.5pt;border-top:none;
+  width:62pt' x:str="林信宏 ">林信宏<span style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl247 style='border-top:none'>　</td>
+  <td class=xl391 width=53 style='border-top:none;width:40pt' x:num>8727</td>
+  <td class=xl258>　</td>
+  <td class=xl210 style='border-top:none;border-left:none' x:str="劉新芝   ">劉新芝<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl463 width=101 style='width:76pt'>　</td>
+  <td class=xl275 align=right style='border-top:none' x:num>8735</td>
+  <td class=xl200></td>
+  <td class=xl270 width=103 style='border-top:none;width:77pt' x:str="李賢達 ">李賢達<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl271 width=91 style='border-top:none;width:68pt' x:str="  張維漢 "><span
+  style='mso-spacerun:yes'>&nbsp; </span>張維漢<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl255 align=right style='border-top:none' x:num>8917</td>
+  <td class=xl200></td>
+  <td class=xl223 width=81 style='border-top:none;width:61pt' x:str="吳文智 ">吳文智<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl278 width=80 style='border-top:none;width:60pt'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8953</td>
+  <td class=xl200></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+  <td class=xl279></td>
+  <td class=xl228></td>
+  <td class=xl209></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl388 style='height:22.5pt' x:str="陳建華 ">陳建華<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl389>　</td>
+  <td class=xl225 align=right x:num>8728</td>
+  <td class=xl258>　</td>
+  <td class=xl226 width=81 style='border-top:none;border-left:none;width:61pt'
+  x:str="陳建中     ">陳建中<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl233 width=101 style='border-top:none;width:76pt' x:str="  劉俊明   "><span
+  style='mso-spacerun:yes'>&nbsp; </span>劉俊明<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl277 align=right style='border-top:none' x:num>8736</td>
+  <td colspan=3 class=xl200 style='mso-ignore:colspan'></td>
+  <td class=xl257 style='border-top:none'>　</td>
+  <td class=xl258>　</td>
+  <td class=xl231 style='border-top:none;border-left:none' x:str="胡琇瓔 ">胡琇瓔<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl227 width=80 style='border-top:none;width:60pt'>　</td>
+  <td class=xl234 align=right width=69 style='border-top:none;width:52pt' x:num>8931</td>
+  <td class=xl200></td>
+  <td colspan=16 class=xl200 style='mso-ignore:colspan'></td>
+  <td class=xl282></td>
+  <td class=xl209></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl237 width=83 style='height:22.5pt;border-top:none;
+  width:62pt' x:str="王俊雄             ">王俊雄<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl232 style='border-top:none'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8729</td>
+  <td class=xl220 style='border-left:none'>　</td>
+  <td class=xl229 style='border-top:none;border-left:none' x:str="張其高 ">張其高<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl247 style='border-top:none'>　</td>
+  <td class=xl269 align=right x:num>8737</td>
+  <td class=xl200></td>
+  <td colspan=3 class=xl507 style='border-right:2.0pt double black'>工業工程與管理系(系辦H棟-5F)</td>
+  <td class=xl200></td>
+  <td class=xl231 style='border-top:none' x:str="羅雅慧        ">羅雅慧<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl238></td>
+  <td class=xl234 align=right width=69 style='border-top:none;width:52pt' x:num>8936</td>
+  <td class=xl200></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+  <td class=xl283></td>
+  <td class=xl236></td>
+  <td colspan=16 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl231 style='height:22.5pt;border-top:none' x:str="林玉珠 ">林玉珠<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl232 style='border-top:none'>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8730</td>
+  <td class=xl200></td>
+  <td class=xl229 style='border-top:none' x:str="林啟煌 ">林啟煌<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl241 style='border-top:none'>　</td>
+  <td class=xl269 align=right style='border-top:none' x:num>8738</td>
+  <td class=xl200></td>
+  <td class=xl203 style='border-top:none' x:str="主任            ">主任<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl372 width=91 style='border-top:none;width:68pt' x:str=" 楊名元 "><span
+  style='mso-spacerun:yes'>&nbsp;</span>楊名元<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl206 align=right style='border-top:none' x:num>3130</td>
+  <td class=xl220 style='border-left:none'>　</td>
+  <td class=xl286 width=81 style='border-top:none;width:61pt'
+  x:str="何素月                ">何素月<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl287 width=80 style='width:60pt'>　</td>
+  <td class=xl234 align=right width=69 style='border-top:none;width:52pt' x:num>8940</td>
+  <td class=xl200></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+  <td class=xl283></td>
+  <td class=xl236></td>
+  <td colspan=16 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl289 style='height:22.5pt;border-top:none' x:str="許介文  ">許介文<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;</span></td>
+  <td class=xl290 width=79 style='border-top:none;width:59pt'>　</td>
+  <td class=xl255 align=right style='border-top:none' x:num>8909</td>
+  <td class=xl200></td>
+  <td class=xl229 style='border-top:none' x:str="侯文田 ">侯文田<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl247 style='border-top:none'>　</td>
+  <td class=xl269 align=right style='border-top:none' x:num>8739</td>
+  <td class=xl258>　</td>
+  <td class=xl284 style='border-top:none;border-left:none'>行政助理</td>
+  <td class=xl215 width=91 style='width:68pt' x:str="張簡琇如            ">張簡琇如<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl213 align=right style='border-top:none' x:num>3132</td>
+  <td class=xl220 style='border-left:none'>　</td>
+  <td class=xl292 style='border-top:none'>林惠玲</td>
+  <td class=xl238></td>
+  <td class=xl234 align=right width=69 style='border-top:none;width:52pt' x:num>8943</td>
+  <td class=xl200></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+  <td class=xl283></td>
+  <td class=xl236></td>
+  <td colspan=16 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 colspan=4 class=xl200 style='height:22.5pt;mso-ignore:colspan'></td>
+  <td class=xl210 style='border-top:none' x:str="江俊雄    ">江俊雄<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl274 width=101 style='border-top:none;width:76pt'>　</td>
+  <td class=xl291 align=right x:num>8742</td>
+  <td class=xl200></td>
+  <td class=xl221 width=103 style='width:77pt'>業界師資</td>
+  <td class=xl285 width=91 style='width:68pt' x:str="林義雄                 ">林義雄<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl246 align=right style='border-top:none' x:num>3133</td>
+  <td class=xl220 style='border-left:none'>　</td>
+  <td class=xl296 width=81 style='border-top:none;width:61pt' x:str="張瀛健     ">張瀛健<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl297>留帶</td>
+  <td class=xl234 align=right width=69 style='border-top:none;width:52pt' x:num>8944</td>
+  <td class=xl200></td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+  <td class=xl283></td>
+  <td class=xl236></td>
+  <td colspan=16 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td colspan=3 height=30 class=xl375 style='height:22.5pt'></td>
+  <td class=xl200></td>
+  <td class=xl210 style='border-top:none' x:str="邱紹智 ">邱紹智<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl286 width=101 style='border-top:none;width:76pt'>　</td>
+  <td class=xl293 align=right x:num>8743</td>
+  <td class=xl200></td>
+  <td class=xl210 style='border-top:none'>傳真機</td>
+  <td class=xl218>　</td>
+  <td class=xl213 align=right x:num>3134</td>
+  <td class=xl220 style='border-left:none'>　</td>
+  <td class=xl298 style='border-top:none'>鄭柳碧</td>
+  <td class=xl298>　</td>
+  <td class=xl213 align=right style='border-top:none' x:num>8951</td>
+  <td class=xl299 style='border-left:none'>　</td>
+  <td colspan=15 class=xl200 style='mso-ignore:colspan'></td>
+  <td class=xl283></td>
+  <td class=xl236></td>
+  <td colspan=16 class=xl200 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td colspan=3 height=30 class=xl504 style='border-right:2.0pt double black;
+  height:22.5pt'>會資系(系辦H棟-2F)</td>
+  <td class=xl200></td>
+  <td class=xl221 width=81 style='border-top:none;width:61pt'
+  x:str="鄧昇謨        ">鄧昇謨<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl204 width=101 style='border-top:none;width:76pt'>　</td>
+  <td class=xl293 align=right x:num>8746</td>
+  <td class=xl200></td>
+  <td class=xl294 style='border-top:none'>許育華 進修</td>
+  <td class=xl243 style='border-top:none'>　</td>
+  <td class=xl295 align=right style='border-top:none' x:num>8703</td>
+  <td class=xl220 style='border-left:none'>　</td>
+  <td class=xl226 width=81 style='border-top:none;border-left:none;width:61pt'
+  x:str="林虹伶                  ">林虹伶<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl227 width=80 style='border-top:none;width:60pt'
+  x:str=" 孫

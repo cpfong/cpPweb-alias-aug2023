@@ -1,0 +1,23 @@
+news-> ./bin/inews -D -h 
+Subject: This is a test
+Newsgroups: test.pub
+
+Body start here now
+Second line
+Ctrl-D
+now can exit^D
+Path: news.fjtc.edu.tw!not-for-mail
+From: cpfong@news.fjtc.edu.tw (cpfong)
+Newsgroups: test.pub
+Subject: This is a test
+Date: Thu, 26 Dec 2002 01:54:59 +0000 (UTC)
+Organization: College Of Fortune InterNetNews site
+Lines: 6
+Message-ID: <audnhj$1nll$1@news.fjtc.edu.tw>
+
+Body start here now
+Second line
+Ctrl-D
+now can exit
+--
+-cp's signature cpfong@news.fjtc/~/.signature          

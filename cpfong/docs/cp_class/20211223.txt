@@ -1,0 +1,39 @@
+#__init__() : will be called when class create a new instance
+
+#__init__ 3 parameter: selft is a must and should be located at 1st, every methonds will be passed in automatically 
+
+
+#p182-ex9-1.py
+class Rest:
+ def __init__(self, name, type):
+  self.restaurant_name = name
+  self.cuisine_type = type
+
+ def describe_r(self):
+  print(f"name is {self.restaurant_name.title()}")
+  print(f"type is {self.cuisine_type.title()}")
+
+ def open_restaurant(self):
+  print(self.restaurant_name.title() + " we are a no smoking restaurant")
+
+r1 = Rest('w', 'formal')
+r2 = Rest('m', 'high price')
+
+r1.describe_r()
+r2.describe_r()
+
+#p183-ex
+
+class Car:
+ def __init__(self, ma, mo, y):
+  self.make = ma
+  self.model = mo
+  self.year = y
+
+ def get_de_name(self):
+  long_name = f"{self.year} {self.make} {self.model}"
+  return long_name.title()
+
+my_new_car = Car('audi', 'a4', 2019)
+
+print(my_new_car.get_de_name())

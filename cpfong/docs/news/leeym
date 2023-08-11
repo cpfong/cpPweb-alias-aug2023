@@ -1,0 +1,145 @@
+       sendmail 本身就支援 MAILER(`usenet'), 一樣呼叫 mailpost / inews 來用,
+        cf/README 裡面有說明, cf/mailer/usenet.m4 裡面有範例,
+        裝好以後收件人信箱就是 groupname.usenet@news.server
+
+        這樣有好有壞, 優點是轉的 group 很多的時候不用一個一個寫 alias
+        缺點是所有的 group 通通可以透過 inews 貼文章, 有點不安全.
+
+        因為用 mailpost / inews 來當 mail2news 時, 本身沒有存取控制機制,
+        使用以前, 最好加個 filter 在 inews 之前,
+        把一些意圖用 mail2news 亂貼文章的擋掉, 以免變成 spam 來源.
+
+
+下面是我的設定﹐用的是 sendmail-8.9.1a + inn-2.1 + procmail-3.11pre7。
+
+首先設定 sendmail usenet mailer﹙supposedly 可以直接用 inews﹐可是新版的
+inn 的 inews 太多 sanity check﹐固須加上 filter﹚：
+
+define(`USENET_MAILER_PATH', `/usr/local/news/bin/gateway/mail2news')dnl
+define(`USENET_MAILER_FLAGS', `lsDFMmn')dnl
+define(`USENET_MAILER_ARGS', `mail2news')dnl
+MAILER(usenet)dnl
+
+以後寄去 usenet.newsgroup@your.host 的信就會 post 上 newsgroup。
+
+要自動將 mailing list 信件 post 上 newsgroup﹐先安裝 procmail﹐然後在收
+信 account 的 .procmailrc 寫入如下面的 rules
+
+:0 * ^From owner-freebsd-stable@FreeBSD\.ORG
+| /usr/local/news/bin/gateway/mail2news MYISP.lists.freebsd.stable
+
+下面是適用於 inn 2.1 的 mail2news：
+
+#!/usr/local/bin/perl
+#
+# mail2news - mail to news gateway, suitable for sendmail setting of
+#
+# define(`USENET_MAILER_PATH', `/usr/local/news/bin/gateway/mail2news')dnl
+# define(`USENET_MAILER_FLAGS', `lsDFMmn')dnl
+# define(`USENET_MAILER_ARGS', `mail2news')dnl
+# MAILER(usenet)dnl
+#
+# Inspired by Steve Snodgrass <ssnodgra@fore.com>
+# Modified by Albert K T Hui <avatar@deva.net>
+#
+
+$pathhost = "MAILHUB.MYISP.COM";
+
+$inews = "/usr/local/news/bin/inews";
+$iopts = "-h -R -S -O";
+
+use Sys::Syslog;
+openlog('mail2news','cons,pid','mail');
+
+$SIG{'PIPE'} = "plumber";
+sub plumber {
+    syslog('err',"inews died prematurely");
+    exit(1);
+}
+
+if (!open(INEWS,"| $inews $iopts")) {
+    syslog('err',"unable to fork inews process: $!");
+    exit(1);
+}
+
+while (<STDIN>) {
+    last if (/^$/);    # look for blank line between header and body
+    # Transform Received headers into something inews can handle.
+    if (/^Received:\s*(.*)$/) {
+        print INEWS "X-Received: $1\n";
+        while (<STDIN>) {
+            if (/^\t/) {
+                print INEWS;
+            }
+            elsif (/^Received:\s*(.*)$/) {
+                print INEWS "X-Received: $1\n";
+            }
+            else {
+                last;
+            }
+        }
+    }
+
+    # Transform From_ line into Path: line
+    s/^From\s+(\S+)@(\S+).*/Path: $2!$1/ || s/^From\s+(\S+)[^@]*$/Path: $1\n/;
+
+    # Canonicalize From: line
+    if (/^From: /) {
+        if (! /\@/) {
+            s/^From:\s+(.*) <(.*)>/From: $2\@$pathhost/;
+        }
+    }
+
+    # Allow only one Content-Transfer-Encoding: line
+    if (/^Content-Transfer-Encoding:\s/i) {
+        if ($seen_content_transfer_encoding++) {
+            s/^Content-Transfer-Encoding/^X-Content-Transfer-Encoding-$seen_content_transfer_encoding/i;
+        }
+    }
+
+    # Allow only one Cc: line
+    if (/^Cc:\s/) {
+        if ($seen_cc++) {
+            s/^Cc/^X-Cc-$seen_cc/;
+        }
+    }
+
+    # Allow only one @ in Message-Id
+    if (/^Message-I.:\s/) {
+        if (s/\@/\@/ > 1) {
+            s/^Message/^X-Invalid-Message/;
+        }
+    }
+
+    # Let all headers pass through except these
+    print INEWS if not
+    	(/^(Newsgroups|NNTP-Posting-Host|X-Trace|X-Complaints-To):/i);
+
+    $frm = $1 if (/^From:\s*(.*)$/);
+    $msgid = $1 if (/^Message-I.:\s*(.*)$/);
+}
+
+$newsgrps = "";
+foreach $grp (@ARGV) {
+    $newsgrps .= $grp . ",";
+}
+chop $newsgrps;
+print INEWS "Newsgroups: $newsgrps\n";
+print INEWS "\n";
+print INEWS while (<STDIN>);
+close(INEWS);
+$extval = ($? >> 8);
+
+if ($extval == 0) {
+    syslog('info',"from=$frm, msgid=$msgid, groups=$newsgrps");
+} else { syslog('err',"unable to post to $newsgrps; from=$frm, msgid=$msgid");
+}
+closelog();
+exit($extval);
+
+警告：這個 filter 並非百份百安全﹐某些 malformed 的信件會導致 posting 失
+敗﹐建議對所有信件自動造備份。
+
+**********
+DISCLAIMER: 本人不負責任何因此文件做成直接或間接的損失。
+**********

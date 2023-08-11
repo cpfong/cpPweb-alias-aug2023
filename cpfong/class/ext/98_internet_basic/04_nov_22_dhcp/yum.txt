@@ -1,0 +1,8 @@
+rpm, yum, pirut can be used for installing packages.
+note: before rhel you can use up2date to update packages, after 5 you use yum
+
+sudo yum list | grep bind --> list both installed and can be installed)
+sudo yum search bind --> find string all related bind ex kdebingings.i386 ...
+sudo yum update --> update the packages
+
+rpm -qa | grep bind

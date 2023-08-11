@@ -1,0 +1,75 @@
+目錄的操作
+13.1 在目錄樹中移動
+13.2 Glob 操作
+13.3 Glob 操作的另一種表示法
+13.4 目錄代號
+13.5 以遞迴方式列出目錄
+13.6 操作檔案與目錄
+13.7 移除檔案
+13.8 將檔案更名
+13.9 連結與檔案
+13.10 建立及移除目錄
+
+13.2
+	$echo xx
+	$echo *.pl
+
+	平時 echo 命令是把其後的東西直接印出, 但遇 * 時 , shell 會加以解釋
+	也就是 shell 會把它展開, 在 perl 中也是如此, 此一動作稱為 glob 操作
+	glob 有 globe (全體,展開) 的意味, 即這個動作會展開相關的檔案 
+
+	以下的命令 shell 會把 *.pl 當成 perl 的 @ARGV
+	perl ./test.pl *.pl
+
+	上法為把東西當成引數傳入, 注意這是 shell 做的, 另外也可以在 perl 中做 
+	@all_but_no_hidden = glob "*";
+	@all = glob "* .*";
+
+13.3	<> 也可以達到 glob 相同的效果
+	@same_with_glob = <*>;
+
+	<> 同時可以表示 1.檔案內容讀取 2.glob 操作 那應如何區別 ?
+	看 <> 中是否為一個識別字, 如果是一個識別字則為檔案讀取 
+
+	my @files =<FRED/*> # glob
+	my @lines =<FRED> # 檔案讀取
+
+13.4	檔案的內容可以讀取, 目錄的內容 (即檔案名) 也可以讀取
+	open    FH, "<file.txt" or die "cannot read file1.txt";
+	opendir DH, "directory" or die "cannot read directory";
+
+	注意下個例子: 使用 readdir 來把 access 每個目錄下的檔名 
+	$_ 不可以少, 因為不是內定的.
+
+	opendir DH, "dir";
+	while ($_ = readdir DH){
+       	 print ;
+	}
+
+	next if $name=~ /^\./; # 不想看隱藏檔
+	next if $name eq "." or eq ".."; # 排除點和雙點 
+
+	readdir 所傳回的檔名不包括路徑名, 這會造成迷惑, 因為若你想試某一目錄
+	下的檔案是有讀寫的權限則要如此寫才可以
+
+	$dir = "xxx";
+	opendir DH, $dir or die "cannot open dir";
+	while ($_ = readdir DH){
+		next if /^\./;
+		$_ = "$dir/$_";
+		next unless -f and -r _;
+		print;
+	}
+
+
+13.5  recursive find in subdirectory
+	perldoc File::Find
+	注意以下三個所代表的意義
+	$File::Find::dir  $_ $File::Find::name
+	
+       	另外一個好用的 find 程式為 find2perl 也可以用 man find2perl
+	來看它的 manual, 這個 perl 的程式把 find 指令的東西譯成 perl
+	後可以送給 perl 來處理, 速度比  find 還要快
+
+	find2perl -name fil.txt | perl
+	find2perl . -mtime -10 |perl

@@ -1,0 +1,44 @@
+五資五甲計算機網路(2)畢業考
+注意: 
+所有答案放在 523-01-quiz 目錄下
+以題目命名你的 .pl 檔, 第一題用 f1.pl 第二題則用 f2.pl 第三題用 f3.txt
+
+1. 使用 glob 操作找你的 "家目錄" 下的所有的可見非隱藏檔
+回報這些檔案是否: 可讀, 可執行
+
+#!/usr/bin/perl
+while (<*>){
+        print "file $_ ";
+        print " readable\n" if (-r);
+        print " executable\n" if (-x);
+}
+
+2. 使用太空船符號 即 <=> 來把本學期 perl 的平均成績排序後印出
+前三高的人名
+while (<>){
+	chomp;
+	my @a=split;
+	$h{$a[2]} = ($a[3]+$a[4]+$a[5])/3;
+}
+
+@a = sort {$h{$b} <=> $h{a}} keys %h;
+print "$a[0] $h{$a[0]} \n", "$a[1] $h{$a[1]} \n", "$a[2] $h{$a[2]} \n";
+
+3. 使用 `who` 來檢查目前登入主機的帳號, 請問在這些帳號中有多少男同學?
+#!/usr/bin/perl
+@a = `who`;
+
+foreach (@a){
+        my @b=split;
+	$h{$b[0]}++;
+}
+
+my $count;
+foreach (keys %h){
+	if (/s961/){
+		$count++;
+		print "$_ ";
+	}
+}
+print "\n";
+print "total boy is $count\n";

@@ -1,0 +1,15 @@
+cloned_interfaces="lo1"
+ifconfig_lo1="inet 127.0.1.254/32 netmask 255.255.255.0"
+ifconfig_vtnet0_alias0="inet 10.0.0.254/32 netmask 0xffffff00"
+
+firewall_enable="YES"
+firewall_script="/etc/ipfw.rules"
+
+# using in-kernel nat ipfw need next 3 lines
+gateway_enable="YES"
+firewall_nat_enable="YES"
+firewall_nat_interface="vtnet0"
+
+firewall_logging="YES"
+
+jail_enable="YES"

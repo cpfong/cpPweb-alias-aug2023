@@ -1,0 +1,17 @@
+obj: install FreeBSD dns jail on nsysu VM
+ver: 2015/05/28 file created by cp@ifong.org
+
+文件網址:
+http://goo.gl/kZuksr
+
+中山安裝首頁:
+https://wupsrv.kpprc.edu.tw:9443                                                                                                     
+
+安裝注意事項:
+	1. 請先安裝登入頁面下方VMware-ClientIntegrationPlugin-5.5.0工具程式
+	2. login:	kpprc@vsphere.local
+	3. passwd:	what_ever_you_received
+	4. ip:		163.28.129.137 (later)
+	5. 使用 chrome 且把 npapi 選項打開 chrome://flags/#enable-npapi
+	6. 虛擬機器 - 摘要 - CD - 本機磁碟 iso (注意: 如果沒看到本機則表示 1 或 5 沒做好)
+	7. 

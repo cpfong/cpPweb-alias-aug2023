@@ -1,0 +1,7 @@
+Q: sometime token just not right
+2020/10/29 15:28:37 Failed to create file system for "koofr:": Invalid response status! Got 401, expected [200]; headers: map[Content-Length:[0] Date:[Thu, 29 Oct 2020 07:28:35 GMT] Www-Authenticate:[Token] X-Request-Id:[9c56744b-521a-4238-475d-09f8e1e8b19a]], content:
+A:
+rclone config (do NOT write password into rclone.conf, instead write app password to it)
+goto web koofr.eu: account/Preferences/Password/App Passwords/Generate
+
+fetch https://downloads.rclone.org/v1.53.2/rclone-v1.53.2-freebsd-amd64.zip

@@ -1,0 +1,59 @@
+老師的首頁
+---
+http://www.ored.me/~cpfong
+
+注意: 網路設定請小心, 且把原先設定先予照相備查為佳, 錯的設定會導至網路不通!
+控制台 -> 網路 -> 有線網路 -> 自動取得 (dhcp) 及 固定 ip
+
+工具: winddows cmd
+叫出 cmd 的一些方式:
+1	@W + r -> cmd -> ipconfig 
+2	開始 -> 執行 -> cmd -> ipconfig
+
+hw: 重設你的 ip: 固定 和 dhcp (請小心設定且把原先設定先予照相備查為佳)
+
+原理: 
+pc -> 集線器(Hub) -> 中華電信閘道器(Gateway) -> 外界(Wan 廣網域)
+pc -> Hub + GateWay -> Wan
+
+Q: 如何設定中華電信設備(即外界俗稱的小烏龜)
+A: 務必小心為之, 因為可能導至無法對外連線(不過只有把所有設定照相, 一定可以回一原先狀態)
+小烏龜有二個內定帳號: 一般使用者及超級使用者, 二個帳密如下:
+user	user		(這個可以試一試)
+cht	chtsvdsl	(少用)
+
+網路不通如何偵錯?
+--
+step1. 是否取到 ip? ipconfig /all (使用 cmd 叫出 dos)
+step2. 是否可以連到閘道器 ? ping 192.168.1.1
+step3. 是否可以連到雅虎 ? ping www.yahoo.com.tw
+  
+1. 瞭解問題：因為之前我做了什麼動作而導致無法連線？
+2. 確認 IP： 先看看自己的網卡有無驅動 (控制台)？ 正確的 IP 來連線？
+3. 確認區網連線：利用 ping 來溝通內部兩部主機
+4. 確認對外連線：以 ping 的方法確定對外連線是可以成功的；
+5. 確認 DNS 查詢：利用 nslookup 或 host 或 dig 檢查 www.google.com 看看；
+
+6. 確認對方伺服器正常服務：是否對方伺服器忙線中？或他的機器掛了？
+7. 確認我方伺服器：是否某些服務沒有正確啟動？可利用 netstat 檢查， 是否某些安全機制的套件沒有開放，例如 SELinux 這項機制；
+8. 防火牆或權限的問題：是否由於權限設定錯誤所致？ 是否由於您的機器有防火牆忘記啟用可連線的埠口所致？這個可以透過 tcpdump 來處理！ 
+
+ip: 身份 id
+mask: 網路遮罩
+gateway: 閘道器
+dns: 名稱伺服
+
+Q:how to use ping
+A:  
+ping -?
+ping -t 192.168.1.1
+note: stop use Ctrol+c
+
+Q:how to use ipconfig
+A:
+ipconfig /all
+ipconfig /all >x
+notepad x
+explain more about ipconfig
+
+telnet

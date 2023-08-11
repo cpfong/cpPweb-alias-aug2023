@@ -1,0 +1,5 @@
+Q: remove repo?
+A: goto repo using web / Settings / last red characters / Delete this repository
+
+Q: yourname.github.io alias to www2.ifong.org ?
+A: goto yourname.github.io repo / Settings / left Pages / Custom domain / add www2.ifong.org DONE

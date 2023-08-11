@@ -1,0 +1,23 @@
+鍵盤:  標準的鍵盤應有 100 個按鍵
+
+幾個特殊按鍵: 
+Tab: 跳格 
+Caps Lock: 鎖住大寫
+Backspace: 後退
+Enter: 確認 
+
+修飾鍵: Shift, Alt, Ctrl
+
+課本 p111 開始鍵
+
+~Win + d : 視窗縮小 
+~Win + e : 檔案總管 (explorer)
+~Win + f : 找檔案 (find)
+~Win + l : 簽出 (logout)
+~Win + m : 最小化所有視窗 (minimize)
+~Win + r : 執行 (run)
+
+p121 快速鍵
+Shift+Left-Arrow to 選定
+Ctrl+C : 拷貝
+Ctrl+V : 貼上

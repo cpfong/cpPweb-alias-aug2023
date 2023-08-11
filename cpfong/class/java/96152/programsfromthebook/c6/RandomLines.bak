@@ -1,0 +1,57 @@
+//-------------STARTEXTRACT=randomlines.xtr
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+//--------------STARTEXTRACT=randomimport.xtr
+import java.util.*;
+//----------------ENDEXTRACT=randomimport.xtr
+
+public class RandomLines extends JFrame 
+    implements ActionListener {
+
+//---------------STARTEXTRACT=randomdecinit.xtr
+    private Random randomPositions = new Random();
+//---------------ENDEXTRACT=randomdecinit.xtr
+    private JButton button;
+    private JPanel panel;
+
+    public static void main(String[] args) {
+        RandomLines frame = new RandomLines();
+        frame.setSize(150, 200);
+        frame.createGUI();
+        frame.setVisible(true);
+    }
+
+    private void createGUI() {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        Container window = getContentPane();
+        window.setLayout(new FlowLayout() );
+
+        panel = new JPanel();
+        panel.setPreferredSize(new Dimension(100,100));
+        panel.setBackground(Color.white);
+        window.add(panel);
+
+        button = new JButton("Press me");
+        window.add(button);
+        button.addActionListener(this);
+    }
+    
+    public void actionPerformed(ActionEvent event) {
+        int xEnd, yEnd;
+        Graphics paper = panel.getGraphics();
+
+        paper.setColor(Color.white);
+        paper.fillRect(0, 0, 100, 100);
+        paper.setColor(Color.black);
+
+//--------------------------------STARTEXTRACT=showrandom.xtr
+        xEnd = randomPositions.nextInt(100);
+        yEnd = randomPositions.nextInt(100);
+//---------------------------------ENDEXTRACT=showrandom.xtr
+        paper.drawLine(0, 0, xEnd, yEnd);
+ 
+    }
+}
+//--------------------ENDEXTRACT=randomlines.xtr
+

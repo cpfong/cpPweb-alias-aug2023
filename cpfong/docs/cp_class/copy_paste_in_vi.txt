@@ -1,0 +1,6 @@
+vi hello.c
+i
+---[COPY]
+---[PASTE](Press Right Key)
+---[Esc]
+:wq

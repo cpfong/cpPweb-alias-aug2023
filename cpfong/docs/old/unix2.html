@@ -1,0 +1,564 @@
+<HTML>
+<HEAD>
+<TITLE>UNIX 的基本指令</TITLE>
+<HEAD>
+<BODY BACKGROUND="NYPI2.JPG">
+<PRE>
+<H1>UNIX 的基本指令</H1>
+
+<H2>壹、前言</H2>
+        UNIX和網路的關係非常密切，雖然使用網路不一定要用UNIX，不過他卻
+    是一個相當好的選擇。UNIX作業系統可以讓多個使用者同時連線使用，也可
+    以透過網路共享檔案資源，也可以和其他在網路上的使用者互通有無，或者
+    和同在網路上的友人互通訊息聯絡情感。
+        SUN OS是SUN 所使用的UNIX作業系統，目前本中心所使用的便是SUN OS 
+    4.1.3_U1的版本，透過學習SUN OS的使用指令，使用者將可更得心應手的使
+    用電腦資源。
+
+<H2>貳、環境說明</H2>
+    本文範例之操作基台為 <A HREF="telnet://140.130.1.8">sparc( 140.130.1.8 )</A>，自586電腦教室，電腦連線
+    操作。
+
+<H2>參、操作內容</H2>
+
+<H3>一、進出系統及密碼設定</H3>
+
+<H4>1. 進入UNIX系統</H4>
+
+    要進入系統時，首先輸入正確的使用者名稱(USER ID)及密碼(PASSWORD) ，
+    即可進入sparc:/home1/axxxxxx>的提示符號。
+        如第一次進入你的UNIX帳號，則不用輸入密碼，等進入系統後，自行設
+    定。
+
+    以下以進入sparc (140.130.1.8) 工作站為例：
+
+     BBS Users login : bbs
+     -----------------------------------------------------------------
+
+
+
+     SunOS UNIX (sparc)
+
+     login: a207105            <----- 請輸入你的帳號
+     Password:                 <----- 請輸入你的密碼（第一次使用，不需
+                                      輸入）
+     Last login: Wed Nov 13 12:06:21 from 140.130.3.5
+     SunOS Release 4.1.3_U1 (GENERIC) #1: Tue May 14 13:49:34 CST 1996
+                               <----- 以上兩行為系統資訊
+     sparc:/home1/a207105>     <----- Sun 的系統符號
+     若輸入錯誤則會出現下列訊息：
+     Login incorrect
+     login:
+
+    請再重覆輸入帳號及密碼。若輸入正確但卻不能進入，則請與機房管理者諮
+    詢。
+
+ 　 說明：UNIX將大寫與小寫視為不同的字，所以輸入時請小心。
+
+
+<H4>2. passwd 設定密碼與更改密碼</H4>
+　      密碼須以英文字母為開頭，長度必須介於6至8個字。為安全起見，請至
+    少一個月更改一次密碼。
+
+<H5>    (1) 設定密碼</H5>
+
+    第一次使用請務必設定密碼，設定密碼的方法如下。
+ 　　sparc:/home1/a207105>passwd     <----- 輸入指令
+     Changing password for a207105 on sparc.
+     New password:                   <----- 輸入密碼，為了保密，所以不會顯視
+     Retype new password:            <----- 為了確認，所以再輸入一次密碼
+     如果兩次所輸入的密碼不同，則會出現....
+     Mismatch - password unchanged.
+     sparc:/home1/a207105>
+     請再請再重新設定密碼方可。
+<H5>    (2) 更改密碼</H5>
+
+     更改密碼時，請先輸入舊密碼、再輸入二次新的密碼。
+     sparc:/home1/a207105>passwd     <----- 輸入指令
+     Changing password for a207105 on sparc.
+     Old password:                   <----- 輸入舊密碼
+     New password:                   <----- 輸入新密碼
+     Retype new password:            <----- 為了確認，所以再輸入一次新密碼
+     sparc:/home1/a207105>           <----- 更改密碼完成
+
+<H4>3. logout 離開系統</H4>
+     sparc:/home1/a207105>logout
+
+<H3>二、與目錄檔案相關之指令</H3>
+        UNIX的作業系統，和DOS 最大的不同，就是UNIX為一多人多工式的作業
+　　系統，而 DOS儘是一單人單工的作業系統，所以在檔案處理方面有很大的不
+    同。但儘管如此，DOS 作業系統基本上是參考UNIX作業系統而來的，兩者相
+　　似之處甚多也不會令人覺得奇怪。
+         
+<H4>1. pwd 顯示目前工作目錄</H4>
+
+     sparc:/home1/a207105>pwd
+     /home/a207105      <---- 目前目錄所在
+
+<H4>2. ls 列出目錄下的檔案名稱</H4>
+
+    格式：ls [參數] [檔案或目錄名]
+            參數可為：
+              -a 印出全部檔案
+              -l 列出檔案目錄的相關資訊
+              -g 列出檔案所屬的 group 名稱
+              -F 列出個種不同類型的檔案（ / 為目錄 , * 為可執行檔 ）
+　　　　　　　-s 在檔案前顯示其block大小，一般是以Kbyte為單位
+              -R 遞回列出檔案及子目錄其下的所以子目錄和檔案
+
+   例：
+sparc:/home1/a207105>ls
+DEADVE  unix    unix2   ve      vii
+
+sparc:/home1/a207105>ls -a
+.       ..      .login  DEADVE  unix    unix2   ve      vii
+sparc:/home1/a207105>ls -F
+DEADVE     arj.exe    mbox       slip1.bat  unix       unix~      
+ar         joyen      mywork/    test*      unix2      ve@        
+
+sparc:/home1/a207105>ls -al
+total 85
+drwxr-xr-x  2 a207105       512 Nov 13 12:07 .
+drwxr-xr-x1736 root        28160 Nov 13 11:57 ..
+-rw-r--r--  1 a207105      2627 Nov 13 11:59 .login
+-rw-r--r--  1 a207105       184 Nov 13 12:08 DEADVE
+-rw-r--r--  1 a207105      6987 Nov 13 12:03 unix
+-rw-r--r--  1 a207105     41259 Nov 13 02:17 unix2
+lrwxrwxrwx  1 a207105        17 Nov 13 12:07 ve -> /usr/local/bin/ve
+-rw-r--r--  1 a207105      2949 Nov 13  1996 vii
+drw-r--r--  1 a207105        51 Mar  2 18:44 test
+
+sparc:/home1/a207105>ls -gl
+total 69
+-rw-r--r--  1 a207105  student       364 Nov 13 20:02 DEADVE
+-rw-r--r--  1 a207105  student        70 Nov 13 13:22 joyen
+-rw-------  1 a207105  student      6574 Nov 13 21:19 mbox
+drwxr-xr-x  2 a207105  student       512 Nov 14 00:22 mywork
+-rwx--xr--  1 a207105  student       145 Nov 13 13:18 test
+-rw-r--r--  1 a207105  daemon      12458 Nov 14 01:06 unix
+-rw-r--r--  1 a207105  student     41259 Nov 13 02:17 unix2
+lrwxrwxrwx  1 a207105  student        17 Nov 13 12:07 ve -> /usr/local/bin/ve
+-rw-r--r--  1 a207105  student      2624 Nov 13 20:05 vii
+^^^^^^^^^^  ^ ^^^^^^^       │      ^^^^^ ^^^^^^^^^^^^ ^^^^^^^^
+     │    │ └ 檔案的     │      │           │      └ 檔案名稱
+     │    │    owner      │      │           └ 上次修改時間
+     │    │               │      └ 檔案大小，以 byte 為單位
+     │    └ 檔案鏈結之數目└ 檔案所屬的 group
+     │
+     └  第一個字表檔案類別("d"表示目錄，"-"表示檔案，"l"表示連結")
+         第 2-8 字表檔案使用權限（請參閱(3)使用權限）
+
+sparc:/home1/a207105>ls -F
+DEADVE     arj.exe    mbox       slip1.bat  unix       unix~
+ar         joyen      mywork/    test*      unix2      ve@
+
+sparc:/home1/a207105>ls -s
+total 69
+   1 DEADVE     7 mbox       1 test      41 unix2      3 vii
+   1 joyen      1 mywork    13 unix       1 ve
+
+sparc:/home1/a207105>ls -R
+DEADVE  hw      joyen   mbox    mywork  test    unix    unix2   ve      vii
+
+hw:
+hw1
+
+mywork:
+work1
+
+<H4>3. chmod 更改使用權限</H4>
+        前面說過，UNIX是一個多人多工式得作業系統，所以在檔案處理方面和
+    DOS 有很大的不同點，在UNIX上，每一個檔案或目錄都有一個使用者，和一
+    個GROUP ，還有OWNER 和GROUP 以外的人，這些人對該檔案的讀寫權限，都
+　　經由該檔案的模式所控制，以下就來介紹更改檔案模式的指令 -- chmod 。
+
+    格式：chmod 權限 檔案名稱或目錄名稱
+
+    使用權限分為三類：讀(r)、寫(w)、執行(x)。
+    rwx rwx rwx
+    ^^^ ^^^ ^^^
+    │   │  └ other
+    │   └ group
+    └ user
+    如上圖所示，以三個字元為一組，分別代表自己 (user)、所屬群組(group)
+    及其他人(other)的權限。
+
+
+    使用者類別以u、g、及a 表示
+         u：user 表檔案的擁有者
+         g：group 同一個 group 者
+         o：others 不同 group 的其他人
+         a：all  上述三項 u,g,o 之總合
+
+    更改使用權限時可以以=、-、+ 來更改
+         =：設定權限
+         -：除去某項權限
+         +：加上某項權限
+
+    舉例如下：
+     sparc:/home1/a207105>chmod a=rwx test    ----> 將所有人的使用權限
+                                                    設為 rwx
+     sparc:/home1/a207105>ls -l tess
+     -rwxrwxrwx  1 a207105         5 Nov 13 12:42 test
+
+     sparc:/home1/a207105>chmod g-rwx,o-rwx test 
+     sparc:/home1/a207105>ls -l test
+     -rwx------  1 a207105         5 Nov 13 12:42 test
+
+     sparc:/home1/a207105>chmod g+x,o+r test
+     sparc:/home1/a207105>ls -l test
+     -rwx--xr--  1 a207105         5 Nov 13 12:42 test
+
+    另外一種表視方法為使用權限代號去代表owner、group、other的限
+        例：
+    檔案屬性:      －　ｒｗ－　－ｗ－　ｒ－ｘ
+    二進位表示法:      1 1 0   0 1 0   1 0 1    
+    八進位表示法:        ６　　　２　　　５
+                       owner   group   other
+    
+      sparc:/home1/a207105>chmod 750 test
+      sparc:/home1/a207105>ls -l test
+      -rwxr-x---  1 a207105       145 Nov 13 13:18 test
+       111101000
+        7  5  0 ----> 所以檔案模式是使用750
+       
+      sparc:/home1/a207105>    
+
+<H4>4. cat, more, head, tail 列出檔案內容</H4>
+
+     cat filename      <----可列出全部檔案內容
+     more filename     <----可列出全部檔案內容，但會自動分頁，可按
+                            "space bar"繼續。
+     head -n filename  <----可列出前 n 行。
+     tail -n filename  <----可列出後 n 行。
+
+    舉例如下：
+sparc:/home1/a207105>cat test
+English: The golden willow by the river is the bride in the seeting sun.
+Chinese: 那河畔的金柳是夕陽中的新娘
+                                                 joyen (無敵夢幻小笨球)
+sparc:/home1/a207105>head -1 test
+English: The golden willow by the river is the bride in the seeting sun.
+
+
+sparc:/home1/a207105>tail -1 test
+                                                 joyen (無敵夢幻小笨球)
+
+
+<H4>5. 建檔（cat > filename）</H4>
+
+        以cat 建檔時，不能修改上一行的資料。結束編輯時，請在新的一行行
+    首打入^D（ 表 "ctrl" + "d" 兩鍵）
+　  另 SunOs 提供一編輯器 vi，操作說明請見　vi 操作說明。
+     sparc:/home1/a207105>cat > joyen
+     This is a test for file creation with cat.
+     You can try yourself.
+     ^D   
+     sparc%
+
+<H4>6. 刪除檔案（rm filename）</H4>
+
+     sparc:/home1/a207105> rm grace
+     rm: remove grace?y          <----請回答'y'或'n'
+     sparc:/home1/a207105>
+
+<H4>7. 拷貝檔案（cp source-file object-file）</H4>
+
+     sparc:/home1/a207105> cp test test1     <----將test複製一份，取檔
+                                                  名為test1。
+     
+
+<H4>8. 更改（搬移）檔名或目錄（mv oldname newname）</H4>
+
+     sparc:/home1/a207105> mv alices grace   <----將alices改名為grace
+     
+
+<H4>9. 建立子目錄（mkdir dirname）</H4>
+
+     sparc:/home1/a207105> mkdir mywork      <----建造一個子目錄，且其
+                                                　目錄名稱為mywork
+     
+
+<H4>10. 變換工作目錄（cd dirname）</H4>
+
+     sparc:/home1/a207105> cd mywork
+     sparc:/home1/a207105> cd ..         <---- 代表回到上一層目錄
+     sparc:/home1/a207105> cd            <---- 可回到自己的目錄
+     sparc:/home1/a207105> cd ~          <---- 可回到自己的目錄(用法同
+                                               上)
+     sparc:/home1/a207105> cd ~a207105   <---- 可到使用者 a207105 的目
+                                               錄
+
+<H4>11. 刪除子目錄（rmdir dirname）</H4>
+
+     sparc:/home1/a207105> rmdir mywork
+
+
+<H3>三、其他指令</H3>
+
+<H4>1. 查詢指令用法(使用 man command-name 即可得到線上指令說明)</H4>
+
+     sparc% man cd
+
+<H4>2. 使用alias給命令定別稱(alias commandname aliasname)</H4>
+
+     sparc:/home1/a207105>alias dir ls    <---- 將 ls 指令另定名為 dir
+     sparc:/home1/a207105>dir                   則使用 dir 如同使用 ls
+     
+     如果只輸入..
+     sparc:/home1/a207105>aliias          <---- 顯視目前所定義的指令
+     cd      cd !*; set prompt = `hostname`":$cwd>"
+     dir     ls
+
+
+<H4>3. 系統時間(date)</H4>
+    sparc:/home1/a207105>date
+    Wed Nov 13 18:52:23 CST 1996
+
+
+<H4>4. 查看有那些人正在使用系統(who)</H4>
+     sparc:/home1/a207105>who
+     lby      ttyp3   Nov 13 18:36   (140.125.251.114)
+     a207128  ttyp9   Nov 13 18:47   (140.130.20.33)
+     b408345  ttyq0   Nov 13 18:48   (140.130.3.44)
+     a207105  ttyq1   Nov 13 18:37   (140.130.3.91)
+     gopher   ttyq2   Nov 13 18:06   (140.130.16.103)
+     a201218  ttyq4   Nov 13 18:41   (140.130.3.84)
+     a207115  ttyq7   Nov 13 16:31   (140.130.3.15)
+     t011     ttyr6   Nov 13 18:39   (140.130.2.161)
+     a405245  ttyr8   Nov 13 18:50   (140.130.3.75)
+     a405214  ttyra   Nov 13 18:23   (140.130.3.74)
+     a405214  ttyrb   Nov 13 18:23   (140.130.3.74)
+     a405214  ttyre   Nov 13 18:33   (140.130.3.74)
+     a407133  ttys2   Nov 13 18:46   (140.130.20.13)
+     a207105  ttys7   Nov 13 18:45   (140.130.3.91)
+     a304231  ttys8   Nov 13 18:52   (140.130.3.39)
+     a102141  ttysa   Nov 13 18:52   (140.130.16.115)
+
+<H4>12. 顯視目前線上使用者之狀況 (finger)</H4>
+        基本上finger有兩種用法，一種是查詢所有線上使用者的狀況，另外一
+    種就是查尋INTERNET上任何一台主機上，任何一個使用者的狀況。
+<H5>　　(1) 查尋線上所有使用者知狀況</H5>
+    
+sparc:/home1/a207105> finger
+Login       Name              TTY Idle    When    Where
+a405214  電機科李坤松          p1      Fri 09:25  140.130.3.4
+a207105  自動化張嘉淵         *p3      Fri 08:58  140.130.3.7
+a405214  電機科李坤松          p6   10 Fri 09:25  140.130.3.4
+a405214  電機科李坤松          p8    1 Fri 09:26  140.130.3.4
+bill     AE teacher           *p9      Fri 09:48  140.130.24.103
+
+<H5>    (2) 查尋INTETRNET上任何一台主機上，任何一個使用者的狀況</H5>
+sparc:/home1/a207105>finger manager@gopher.nypi.edu.tw
+[nypi52.nypi.edu.tw]
+Login name: manager                     In real life: manager
+Directory: /usr/users/manager           Shell: /bin/csh
+Last login Thu Nov 14 18:28 on ttyp1 from 140.130.3.14
+No Plan.
+
+
+<H4>6. 我是誰? (whoami)</H4>
+     sparc:/home1/a207105>whoami
+     a207105
+<H4>7. 送訊息給線上使用者 (write user-id)</H4>
+     例：     
+sparc:/home1/a207105>write a207106        <---- 發訊息給a207106這位使用者
+How are you??
+^D                                        <---- 按Ctrl - d  結束
+
+則對方的螢幕將會出現...
+sparc:/home1/a207106>
+Message from a207105@sparc on ttypf at 11:27 ...
+How are you??
+
+<H4>8. 設定是否接收訊息 (mesg y|n)</H4>
+         這個指令的功用是為了設定是否要接收其它使用者，用write指令所發
+     送給你的訊習
+
+     例：
+<H5>　　(1) 顯示目前收訊息的狀況</H5>
+    sparc:/home1/a207105>mesg
+    y                                     <---- 如顯示"y" 代表目前可以
+                                                接收所有人的訊息，如出
+　　                                            現"n" 表示目前一般使用
+                                                者無法發送訊息給你
+<H5>    (2) 設定是否接收訊息</H5>
+    sparc:/home1/a207105>mesg n           <---- 設定為不接收別人的訊息
+    sparc:/home1/a207105>mesg             <---- 顯示訊息的接收狀況
+    is n                                  <---- 目前別人不可以送訊息進
+                                                來了
+<H4>9. 轉向輸出 (>、>>)</H4>
+        我想如果你對DOS 作業系統很熟的話，對於這個指令一定一點也不陌生
+    這個指令的目的，就是為了把某些指令所執行出來的結果，儲存成一個檔案
+    或把某個檔案輸入
+    。
+    例：<H5>(1) 轉向輸出PART 1</H5>
+sparc:/home1/a207105>ls -al >filelist     <---- 列出檔案，並且將結果儲
+                                                存到filelist的檔案裡
+sparc:/home1/a207105>cat filelist         <---- 觀看filelist的內容
+total 120
+drwxr-xr-x  4 a207105       512 Nov 15 14:06 .
+drwxr-xr-x1736 root        28160 Nov 13 11:57 ..
+-rw-r--r--  1 a207105      2627 Nov 13 11:59 .login
+-rw-------  1 a207105       136 Nov 13 21:09 .netrc
+-rw-r--r--  1 a207105       364 Nov 13 20:02 DEADVE
+-rw-r--r--  1 a207105         0 Nov 15 14:06 filelist
+drwxr-xr-x  2 a207105       512 Nov 15 10:27 hw
+-rw-r--r--  1 a207105        70 Nov 13 13:22 joyen
+-rw-------  1 a207105      6574 Nov 13 21:19 mbox
+drwxr-xr-x  2 a207105       512 Nov 15 10:27 mywork
+-rwxr-x---  1 a207105       145 Nov 13 13:18 test
+-rw-r--r--  1 a207105     16377 Nov 15 11:48 unix
+-rw-r--r--  1 a207105     41259 Nov 13 02:17 unix2
+-rw-r--r--  1 a207105     14252 Nov 15 11:48 unix~
+lrwxrwxrwx  1 a207105        17 Nov 13 12:07 ve -> /usr/local/bin/ve
+-rw-r--r--  1 a207105      2624 Nov 13 20:05 vii
+
+<H5>        (2) 轉向輸出PART 2</H5>
+sparc:/home1/a207105>ls -F test >> filelist   <---- 將test這個檔案的檔
+                                                    名和屬性列出，並且
+                                                    附加在filelist的後
+                                                    面
+                                                        
+sparc:/home1/a207105>cat filelist             <---- 觀看filelist的內容
+total 120
+drwxr-xr-x  4 a207105       512 Nov 15 14:06 .
+drwxr-xr-x1736 root        28160 Nov 13 11:57 ..
+-rw-r--r--  1 a207105      2627 Nov 13 11:59 .login
+-rw-------  1 a207105       136 Nov 13 21:09 .netrc
+-rw-r--r--  1 a207105       364 Nov 13 20:02 DEADVE
+-rw-r--r--  1 a207105         0 Nov 15 14:18 filelist
+drwxr-xr-x  2 a207105       512 Nov 15 10:27 hw
+-rw-r--r--  1 a207105        70 Nov 13 13:22 joyen
+-rw-------  1 a207105      6574 Nov 13 21:19 mbox
+drwxr-xr-x  2 a207105       512 Nov 15 10:27 mywork
+-rwxr-x---  1 a207105       145 Nov 13 13:18 test
+-rw-r--r--  1 a207105     16377 Nov 15 11:48 unix
+-rw-r--r--  1 a207105     41259 Nov 13 02:17 unix2
+-rw-r--r--  1 a207105     14252 Nov 15 11:48 unix~
+lrwxrwxrwx  1 a207105        17 Nov 13 12:07 ve -> /usr/local/bin/ve
+-rw-r--r--  1 a207105      2624 Nov 13 20:05 vii
+test*
+
+        由以上結果，各位可以很容易的看出，">" 這個轉向輸出指令是直接把
+    結果儲存成一個檔案，如果檔案已經存在，則原來資料會消失，只存入最新
+    的結果；但是">>"這個轉向輸出指令，會把所執行的結果，附加在檔案後面
+　　既使那個檔案已經存在，原先的資料還是不會消失。
+
+<H4>10.轉向輸入 (<)</H4>
+        有轉向輸出，理所當然要有轉向輸入，這個指令的功能，就是把你想要
+　　輸入的東西，編成一個檔案，然後轉向輸入，常和write 或mail等指令配合
+    應用。
+    例：
+      sparc:/home1/a207105>cat mymesg               <---- 先看一下要送
+                                                          出的檔案內容
+                                                          以免送錯，產
+                                                　　    　生誤會
+      hi....how are you???                          
+      sparc:/home1/a207105>write joyen < mymesg     <---- 送訊息給joyen
+                                                          並且以轉向輸
+                                                          出的方法，將
+                                                        　檔案送出
+    
+<H4>11.查詢某個程式的所在目錄 (which)</H4>
+     例： 
+       sparc:/home1/a207105>which pine
+       /usr/local/bin/pine
+
+  
+<H4>12.與線上使用者交談(talk username@hostname)</H4>
+
+     sparc:/home1/a207105>talk a207128
+     則對方的螢幕會出現下列訊息：
+     Message from Talk_Daemon@sparc at 19:57 ...
+     talk: connection requested by a207105@sparc.nypi.edu.tw
+     talk: respond with:  talk a207105@sparc.nypi.edu.tw
+
+     而你的螢幕則會進入 talk 的視窗，在左上角會出現下列訊息：
+
+     [Ringing your party again]
+     [Ringing your party again]
+
+     對方只要輸入...
+     sparc:/home1/a207105>talk a207105@sparc.nypi.edu.tw
+     就可以和你talk啦!!
+
+     若連線成功則會出現下列訊息：
+
+     [Connection established]
+
+    如要結束 talk 則可按 "Ctrl" + "c" 跳出。
+
+    說明：如果使用 talk 指令的兩人均在同一主機上 (例如均在sparc上)，則
+          hostname 可省略不打。
+     
+
+<H4>13. 萬年曆(cal month year 或 cal year)</H4>
+
+     sparc:/home1/a207105>cal 12 1991
+     December 1991
+      S  M Tu  W Th  F  S
+      1  2  3  4  5  6  7
+      8  9 10 11 12 13 14
+     15 16 17 18 19 20 21
+     22 23 24 25 26 27 28
+     29 30 31
+
+    說明：可利用前面所介紹的轉向輸出，將結果存成檔案。
+
+<H4>14.列出你曾鍵入的指令 (history)</H4>
+
+     sparc:/home1/a207105>history
+          1  0:19    ls -f
+          2  0:21    ls -F
+          3  0:22    mkdir mywork
+          4  0:22    ls -F
+          5  0:28    stty -a
+          6  0:35    history
+
+<H4>15. 呼叫你所用過的指令 (!)</H4>
+       格式：![指令序號]
+       例：
+     sparc:/home1/a207105>!1
+     ls -f
+     .          unix       DEADVE     joyen      slip1.bat  mywork
+     ..         unix2      ve         unix~      arj.exe    ar
+     .login     vii        test       vii~       .netrc     mbox
+   
+<H4>16.顯視你目前所執行的程序代號 (ps)</H4>
+     例：
+     sparc:/home1/a207105>ps
+       PID TT STAT  TIME COMMAND
+     14028 p4 S     0:00 -tcsh (tcsh)
+     14289 p4 R     0:00 ps
+     14003 p5 IW    0:00 -tcsh (tcsh)
+     14023 p5 S     0:02 ve unix
+     14018 p9 IW    0:00 -tcsh (tcsh)
+     14024 p9 IW    0:00 ve unix2
+     14151 pc IW    0:00 -tcsh (tcsh)
+     14161 pc IW    0:00 ve unix
+
+<H4>17. 刪除一個你所執行的程序 (kill)</H4>
+       格式：kill [指令序號]
+
+　　　例：kill 14161
+     說明：程序代號可用ps指令去查詢。
+
+
+<H4>18. 清除螢幕 (clear)</H4>
+        我想，這個指令在你頭昏眼花時，最為有用，把眼前的潦亂，一掃而光
+　　。
+    例：sparc:/home1/a207105>clear
+
+
+<H3>四：結論</H3>
+        我想，前面所提到的指令，對一個初學者而言，已經足夠，這些指令雖
+　　然是最基本的，但卻十分的重要，也時常會用到，雖然我學UNIX的時間，只
+　　有很短的時間，但卻也找出不少的訣竅，UNIX的指令遠多於DOS 並且，參數
+　　更多，只要秉持著循序漸進的原則，一定可以讓你的基礎更踏實，如果想要
+　　對UNIX有更多的了解，UNIX方面的書，可以在一般的書店很容易的找到，我
+　　想這些書一定能讓你對UNIX更上一層樓的。
+
+</PRE>
+</BODY>
+</HTML>

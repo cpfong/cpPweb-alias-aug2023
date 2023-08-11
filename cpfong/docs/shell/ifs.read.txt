@@ -1,0 +1,17 @@
+https://unix.stackexchange.com/questions/209123/understanding-ifs-read-r-line
+
+two categories for IFS  and there are differences between space and others
+ A: IFS default white spaces char 
+ B: others
+
+VAR=value command --> means "modify the environment of command so that VAR will have the value value". 
+Basically, the command command will see VAR as having the value value, but any command executed 
+after that will still see VAR as having its previous value. In other words, that variable will be modified only for that statement.
+
+# default IFS (white spaces), and reset(clear) IFS
+printf '   a b    c  ' | {       read -r line ; printf "[$line]\n"; }# [a b    c] note: get rid of spaces
+printf '   a b    c  ' | { IFS=  read -r line ; printf "[$line]\n"; }# [   a b    c  ] keep the spaces
+
+printf ':a:b :c:::'    | { IFS=: read -r n i j; printf "n=%s,i=%s,j=%s" "$n" "$i" "$j"; } # n=,i=a,j=b :c:::
+
+echo ' where are my spaces? ' | { read -r line; printf %s\\n "$line"; }

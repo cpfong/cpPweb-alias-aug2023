@@ -1,0 +1,13 @@
+## cpfong> ldapadd -x -W -D "cn=Manager,dc=plainjoe,dc=org" -f ./00root.ldif
+## cpfong> ldapsearch -x -b "dc=plainjoe,dc=org" "objectclass=*"
+## 建立根節點
+dn: dc=plainjoe,dc=org
+dc: plainjoe
+objectClass: dcObject
+objectClass: organizationalUnit
+ou: PlainJoe Dot Org
+
+## 建立 people ou
+dn: ou=people,dc=plainjoe,dc=org
+ou: people
+objectClass: organizationalUnit

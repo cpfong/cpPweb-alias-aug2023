@@ -1,0 +1,9 @@
+1. partition usb flash disk (90% W95, 10% Linux)
+2. dd if=/dev/zero of=/dev/sdc bs=512 count=1 
+3. fdisk create 1 partition for Window
+4. fomat in Windows system
+5. fdisk create 2nd partition for Linux
+6. tc install to install existing partition
+7. modify /opt/tcemirror
+8. tce-load Xprogs Xlibs Xvesa flwm wbar tc-install
+9. startx 

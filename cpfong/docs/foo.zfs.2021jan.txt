@@ -1,0 +1,29 @@
+o:~ % df
+Filesystem         1K-blocks   Used    Avail Capacity  Mounted on
+zroot/ROOT/default  53327508 927892 52399616     2%    /
+devfs                      1      1        0   100%    /dev
+zroot/var/audit     52399712     96 52399616     0%    /var/audit
+zroot/usr/ports     52399712     96 52399616     0%    /usr/ports
+zroot/var/crash     52399712     96 52399616     0%    /var/crash
+zroot/tmp           52399712     96 52399616     0%    /tmp
+zroot               52399712     96 52399616     0%    /zroot
+zroot/var/tmp       52399712     96 52399616     0%    /var/tmp
+zroot/usr/src       52399712     96 52399616     0%    /usr/src
+zroot/var/log       52399760    144 52399616     0%    /var/log
+zroot/usr/home      52399748    132 52399616     0%    /usr/home
+zroot/var/mail      52399712     96 52399616     0%    /var/mail
+
+
+cpfong@foo:~ % mount
+zroot/ROOT/default on / (zfs, local, noatime, nfsv4acls)
+devfs on /dev (devfs, local, multilabel)
+zroot/var/audit on /var/audit (zfs, local, noatime, noexec, nosuid, nfsv4acls)
+zroot/usr/ports on /usr/ports (zfs, local, noatime, nosuid, nfsv4acls)
+zroot/var/crash on /var/crash (zfs, local, noatime, noexec, nosuid, nfsv4acls)
+zroot/tmp on /tmp (zfs, local, noatime, nosuid, nfsv4acls)
+zroot on /zroot (zfs, local, noatime, nfsv4acls)
+zroot/var/tmp on /var/tmp (zfs, local, noatime, nosuid, nfsv4acls)
+zroot/usr/src on /usr/src (zfs, local, noatime, nfsv4acls)
+zroot/var/log on /var/log (zfs, local, noatime, noexec, nosuid, nfsv4acls)
+zroot/usr/home on /usr/home (zfs, local, noatime, nfsv4acls)
+zroot/var/mail on /var/mail (zfs, local, nfsv4acls)

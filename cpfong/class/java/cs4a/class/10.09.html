@@ -1,0 +1,27 @@
+<html>
+ftp 回 demo.tgz (在貴班 home page 之上)  --> tar xfvz demo.tgz --> 在 demo 的目錄之下 <br>
+appletviewer (這個在 j2sdk1.4.2_01/bin 之下) example1.html 即可 <br><br>
+<ol>
+自已做一個 applet
+<li> vi test.java
+<li> vi test.html
+<li> appletviewer test.html
+</ol>
+
+<ol type=disc> test.java
+	<li>import javax.swing.JApplet;
+	<li>import java.awt.Graphics;
+	<li>public class test extends JApplet {
+	<li>public void paint( Grahpics g ) {
+	<li> g.drawString("Welcome");
+	<li> }}
+</ol>
+
+<ol type=disc> test.html
+	<li> <html>
+	<li> <applet code="test.class" width=300 heigth=300>
+	<li> </applet>
+	<li> </html>
+</ol>
+
+</html>

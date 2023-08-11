@@ -1,0 +1,55 @@
+https://www.freebsd.org/doc/handbook/disk-organization.html
+
+disk organization
+--
+file: filename is case sensitive readme.txt README.txt differ
+dir: directory can be empty
+file under dir: foo/bar/read.txt (where / mean under)
+root: directory top level directory /
+
+partiton: 
+ diff than MSDOS, each partition is identified by a letter from a to h
+ each partition can contain only one file system
+
+partiton name:
+ a root fs
+ b swap
+
+slice: disk divided into slices (like windows partiton) from 1 to 4
+extented slice: number from 5 (logical slice under physical slice)
+ da0s1 :the first slice on the first SCSI disk
+ ada0s5 :the first extended slice on the first SATA disk
+ da0a :a partition on the first da drive
+ ada1s3e :fifth partition in the third slice of the second SATA disk
+
+file system
+--
+https://www.freebsd.org/doc/handbook/filesystems-linux.html
+
+create memory disk (md) and format it to msdos or other file system
+--
+
+how to check file system i am using?
+--
+/dev/ufs/rootfs on / (ufs, local, journaled soft-updates) # so i am using UFS
+
+freebsd support format sys utility
+--
+which newfs
+
+@venus-> ls /sbin/| grep newfs
+newfs
+newfs_msdos
+
+mount
+--
+which mount
+ls /sbin | grep mount
+
+partition table
+--
+sade (sade is menu driven like gpart, man sade)
+
+dd if=/dev/zero of=./30M.img bs=1M count=30
+mdconfig -a -f ./30M.img 
+sade

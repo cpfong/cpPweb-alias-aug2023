@@ -1,0 +1,35 @@
+11 9x1A361順x05 陳z吉 40 try to work hard 3rd sendmail write some
+12 9x1A361至x02 王z麒 80 ok
+13 9x2A361捷x50 游z芳 40 ok later
+14 9x2A361昱x33 吳z漩 60 ok
+15 9x2A361幸x15 蔡z珊 90 ok
+16 9x14361亞x16 林z駿 40
+17 9x1A361冠x16 黃z翔 90 ok
+18 9x1A361安x28 許z竣 60 no apache 1st sendmail just copying
+19 9x1A361時x08 秦z棟 50 nslookup ok	 
+21 9x1A361泓x32 李z慶 80 ok
+22 9x1A361柄x04 郭z宏 20 no usb
+23 9x1A361仁x14 蘇z德 20 cheating
+24 9x1A361成x30 黃z鴻 20 cheating
+25 9x1A362貴x41 梁z賢  0 off 
+26 9x1A361永x01 黃z宏 90 try hard
+27 9x1A362維x02 洪z楷 30 ok later
+28 9x1A361建x35 周黃z 30 ok
+29 9x1A361麥x66 袁z家 10 no usb
+31 9x1A361介x03 謝z銘 10 nousb 2nd sendmail write a little
+32 9x14361奕x31 林z成 10 no usb
+33 9x1A361佑x53 張z禎  0 off
+34 9x1A361佳x26 李z鴻 30 later ok
+35 9x1A361盟x19 王z慶 30 later ok 
+36 9x1A361元x60 張z銘  0 off
+37 9x2A361孟x33 楊z蓓 10 nousb
+38 9x2A361米x06 張z婷 10 nousb
+39 9x14361奕x30 錢z和 40 
+41 9x2A361貞x25 王z方 30 try hard
+42 9x1A361朝x29 傅z延 60 ok sendmail ok
+43 9x14361哲x15 胡z銘 30 ok
+44 9x2A361夌x22 李z軒 60 ok
+45 9x1A361進x39 黃z祿 30 hard
+46 9x2A361貞x23 王z云 20 try
+47 9x1A361晏x18 郭z昇 30 ok later
+48 9x1A361文x42 林z程 20 try hard

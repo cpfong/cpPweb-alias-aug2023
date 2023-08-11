@@ -1,0 +1,9 @@
+        Dim a() As Integer = {-7, 6, -5, 4, -3, 2}
+        Dim fx As Integer = 0
+        Dim x As Integer = TextBox1.Text()
+
+        For i As Integer = 0 To a.GetUpperBound(0)
+            fx += a(i) * x ^ i
+        Next
+
+        TextBox2.Text = fx

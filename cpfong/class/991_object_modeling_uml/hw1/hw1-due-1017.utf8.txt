@@ -1,0 +1,54 @@
+工科所 馮治平 學號: N98971124
+hw1 due Oct 18
+
+Please complete the description of other use cases
+Due date : one week later
+
+Use Cases Diagram
+成績處理		註冊組職員
+處裡選課		課務組職員	
+選課			學生		
+製作繳款通知單		出納人員
+製作及維護系上課程	系上職員
+打成績 			老師
+
+處理成績
+---------------
+登錄(成績)登錄簿
+畢業審核
+處理註冊
+印成績通知單
+印班上前五名
+計算個人成績及排名次
+
+Use case name: 處理成績
+註冊組職員			System
+1.Choose 處理成績		2.Display 6 subfunctions for choosing
+3.Choose one subfunction	4.Process the corresponding subfunction 
+
+Use case name:登錄(成績)登錄簿
+註冊組職員			System
+1.Choose登錄(成績)登錄簿	2.把成績由各科成績登錄簿轉到個人成績登錄簿
+
+Use case name: 畢業審核
+註冊組職員			System
+1.Choose畢業審核subfunction	2.檢查學生是否已修完必修選修及畢業最低學分數的課程後 display
+3.依系統display而核定畢業否	4.登錄學生可畢業否.
+
+Use case name: 處理註冊
+註冊組職員			System
+1.Choose處理註冊		2.匯入會計系統中已繳費的學生及課務組選課簿中已修課學生
+3.通知未完成註冊者補完註冊續	4.已註冊者則檢查所修課程是否有衝堂及不符合規定
+5.己註冊不合規定通知補選課
+
+Use case name: 印成績通知單
+註冊組職員			System
+1.Choose印成績通知單		2.至個人成績登錄簿印出本學期成績通知單
+
+Use case name: 印班上前五名
+註冊組職員			System
+1.Choose印班上前五名		2.至個人成績登錄簿計算所則同學成績、排名次、印出班上前五名
+
+Use case name: 計算個人成績及排名次
+註冊組職員			System
+1.Choose計算個人成績及排名次	2.至個人成績登錄簿計算個人成績後排名次

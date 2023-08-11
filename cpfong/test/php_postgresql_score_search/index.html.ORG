@@ -1,0 +1,18 @@
+<html>
+<head>
+<title>PHTML</title>
+</head>
+<body bgcolor="#008080">
+<p>
+<a href="FJTCst2.htm"><font size="7">sql</font>
+<p>
+<a href="score_main.html"><font size="7">score</font>
+<p>
+<a href="main.html"><font size="7">CP's Test Site goto main.html</font>
+<p>
+<a href="maintest.html"><font size="7">bubble's Test Site goto main.html</font>
+<p>
+</body>
+</html>
+
+

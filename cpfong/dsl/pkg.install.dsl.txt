@@ -1,0 +1,27 @@
+dsl@box:~$ cat /opt/.dslrc 
+Mirror: www.ibiblio.org/pub/Linux/distributions/damnsmall/
+Protocol: http
+
+# or just Run this
+dslMirror.lua
+
+--
+/usr/sbin/dpkg-restore
+dsl@box:~$ ls /KNOPPIX/usr/bin/dslrc.lua
+--
+
+sudo apt-get install ncftp
+
+wget http://distro.ibiblio.org/damnsmall/mydsl/system/dsl-dpkg.dsl
+sudo /tmp/mydsl/MyDSL
+
+sudo apt-get update
+sudo apt-get install syslinux
+
+sudo vi /usr/sbin/dpkg-restore
+#MIRROR=$(dslrc.lua Mirror) 
+# dirty way to solve this problem
+MIRROR=distro.ibiblio.org/damnsmall/
+
+dillo
+http://teki.jpn.ph/pc/software/index-e.shtml#dillo-i18n

@@ -1,0 +1,381 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta name="generator" content=
+"HTML Tidy for FreeBSD (vers 1 September 2005), see www.w3.org">
+<title>QND guide to jails in FreeBSD</title>
+
+<style type="text/css">
+
+{
+
+        font-size : small;
+
+        font-family : Arial;
+
+        font-weight : normal;
+
+        font-style : normal;
+
+        color : #000000;
+
+}
+
+
+
+        A { color:blue; text-decoration:none; }
+
+        A:hover { color:teal; }
+
+
+
+
+
+</style>
+</head>
+<body>
+<center><img src="qnd.jpg"></center>
+<center>
+<h4><i><a href="index-cc.html">Back to main page</a></i></h4>
+</center>
+<center>
+<h2>The Quick-N-Dirty Guide to Jails in FreeBSD</h2>
+</center>
+Please note.  Lately, I have begun using the ezjail program to manage
+jails.  I'm leaving this page intact, as I hope people may find it
+useful, but recommend that the reader wishing to run jails on FreeBSD
+use our <a href="qnd-ezjail.html">ezjail guide</a> instead.  
+<p>Recently, I had to set up an apache server within a jail.
+Although the jail man page is quite good, there were a few tricks
+here and there that cost me some googling time. Remember, the qnd
+in our name stands for Quick 'N' Dirty so this is not going to be
+an exhaustive treatise on jails.</p>
+<h4>1.) Do you have jail?</h4>
+At a command prompt type
+<table border="0" bgcolor="#E8E8E8">
+<tr>
+<td>
+<pre>
+which jail
+</pre></td>
+</tr>
+</table>
+<p>You should get back the answer /usr/sbin/jail. If not, something
+is probably seriously wrong with your system. The jail program is a
+part of the basic FreeBSD system.</p>
+<h4>2.) Installing, Configuring and Testing Your Jail</h4>
+In my case, I decided to put my jail in /usr. For purposes of
+example, we'll say I have a machine called host.mydomain.net. On my
+home network, it has an IP address of 192.168.7.50. The interface
+is fxp0. I'm going create a jail in /usr/jail, give it hostname of
+jail.mydomain.net and an IP address of 192.168.7.60.
+<p>So, first I look at the jail manpage which gives
+instructions.</p>
+<table border="0" bgcolor="#E8E8E8">
+<tr>
+<td>
+<pre>
+man jail
+</pre></td>
+</tr>
+</table>
+<p>I suggest that you do the same. After reading the instructions,
+I do the following.</p>
+<table border="0" bgcolor="#E8E8E8">
+<tr>
+<td>
+<pre>
+D=/usr/jail
+cd /usr/src
+mkdir -p $D
+make world DESTDIR=$D
+make distribution DESTDIR=$D
+mount_devfs devfs $D/dev
+</pre></td>
+</tr>
+</table>
+<p>As you can imagine, it takes a bit of time to do the make world.
+However, eventually this finishes and I have a virtual server in
+/usr/jail.</p>
+<p>The man page then suggests adding various things to
+/etc/rc.conf. Following a page on <a href=
+"http://www.freebsddiary.org">the FreeBSDdiary site</a> I didn't do
+this. There are various issues which I'll deal with shortly.</p>
+<p>The next thing I wanted to do was a bit of configuration with
+the jail. So, still going with the man page I started a shell in
+the jail. At this point I haven't yet configured the jail's rc.conf
+however, using the made up hostname and IP address are necessary
+for the next step.</p>
+<table border="0" bgcolor="#E8E8E8">
+<tr>
+<td>
+<pre>
+jail /usr/jail jail.mydomain.net 192.168.7.60 /bin/sh
+</pre></td>
+</tr>
+</table>
+<p>This puts me in the jail with a sh shell. (It will also temporarily
+set the jail's hostname to jail.mydomain.net). There are several
+steps recommended by the man page. First, I create an empty fstab.
+I just type</p>
+<table border="0" bgcolor="#E8E8E8">
+<tr>
+<td>
+<pre>
+vi /etc/fstab
+</pre></td>
+</tr>
+</table>
+<p>That opens up a file with nothing in it. Then I save the file
+with :x or :wq, or whatever I wish to use to close vi. Next, I edit
+the jail's rc.conf. I use vi, you can use ee or whatever. You have
+a fully functional FreeBSD system in this jail, so both are
+available. Actually</p>
+<table border="0" bgcolor="#E8E8E8">
+<tr>
+<td>
+<pre>
+touch /etc/fstab
+</pre></td>
+</tr>
+</table>
+<p>would have done the same thing and been more efficient. I add
+the following to jail's /etc/rc.conf</p>
+<table border="0" bgcolor="#E8E8E8">
+<tr>
+<td>
+<pre>
+rpcbind_enable="NO"
+network_interfaces=""
+</pre></td>
+</tr>
+</table>
+<p>The man page says to then run newaliases. If you do, you get an
+error message but I do it anyway. :) I then copy over
+host.mydomain.net's /etc/resolv conf to the jail. (I can do this
+from the host machine, not from within the jail) So, while logged
+on to host.mydomain.net</p>
+<table border="0" bgcolor="#E8E8E8">
+<tr>
+<td>
+<pre>
+cp /etc/resolv.conf /usr/jail/etc/
+</pre></td>
+</tr>
+</table>
+<p>Then, back in the jail, I set a root password, different than
+the password on host.mydomain.net, configure the timezone and add
+any users. In my case, I want to add a user called john, who will
+belong to the wheel group, so that he can perform any maintainance
+necessary. I might have user john on host.mydomain.net, and again,
+I'll use a different password on jail.mydomain.net. One can, while
+in the jail, run /usr/sbin/sysinstall and go to the post install
+configuration menu to do the timezone (and other aspects of
+configuration).</p>
+<p>The whole purpose of this jail is to run a webserver. So, while
+within in the jail, I add apache. I can install the ports
+collection, (which is not in the jail by default) but in this case,
+I'm just going to use pkg_add. I'm also going to add bash, as I
+prefer a Bourne style shell, and the installed sh doesn't have tab
+completion. I'll also add sudo, so that john can do everything
+without having to su to root while in the jail.</p>
+<table border="0" bgcolor="#E8E8E8">
+<tr>
+<td>
+<pre>
+pkg_add -r apache21 sudo bash
+</pre></td>
+</tr>
+</table>
+<p>Next I configure apache. This is about jails, not apache, but I
+do add a line to start it in jail's /etc/rc.conf. I move my web
+pages to /usr/jail/usr/local/www/docs, edit my
+/usr/jail/usr/local/etc/apache21/httpd.conf and I'm basically set.
+I add the jail.mydomain.net entry to /etc/hosts. I keep it as
+simple as possible, and as this works, all I do is add the line</p>
+<table border="0" bgcolor="#E8E8E8">
+<tr>
+<td>
+<pre>
+127.0.0.1       jail.mydomain.net       jail
+</pre></td>
+</tr>
+</table>
+<p>to jail's /etc/hosts.</p>
+With recent changes to the way rc.d scripts work, one may also have to
+add the following to the jail's /etc/rc.conf
+<table border="0" bgcolor="#E8E8E8">
+<tr>
+<td>
+<pre>
+early_late_divider="NETWORKING"
+</pre>
+</td>
+</tr>
+</table>
+<p>
+If that line isn't in the jail's rc.conf then some programs that run
+from the jail's /usr/local/etc/rc.d may not start properly at boot.
+<p>Now, I exit out of the jail. I'm ready to restart it. I have a
+few things to do, as you'll see. We have to set the alias on
+interface fxp0, mount procfs on jail's /proc and then we begin.
+Note that I am back in host.mydomain.net, not in the jail, as I do
+the following.</p>
+<table border="0" bgcolor="#E8E8E8">
+<tr>
+<td>
+<pre>
+ifconfig fxp0 inet alias 192.168.7.60/24
+mount -t procfs proc /usr/jail/proc
+jail /usr/jail jail.mydomain.net 192.168.7.60 /bin/sh /etc/rc
+</pre></td>
+</tr>
+</table>
+<p>We also want to edit host's /etc/ssh/sshd_config. You'll find a
+line</p>
+<table border="0" bgcolor="#E8E8E8">
+<tr>
+<td>
+<pre>
+#ListenAddress 0.0.0.0
+</pre></td>
+</tr>
+</table>
+<p>That means it's listening on all interfaces. If, even after
+setting an alias for the jail, you then try to ssh into the jail,
+you'll wind up in host.mydomain.net. So, we want to change this.
+Remember host is 192.168.7.50 and jail 192.168.7.60. So, we want
+host's ssh daemon to only listen on 192.168.7.50. Edit the line to
+read (and don't forget to remove the # from the front of it)</p>
+<table border="0" bgcolor="#E8E8E8">
+<tr>
+<td>
+<pre>
+ListenAddress 192.168.7.50
+</pre></td>
+</tr>
+</table>
+<p>Restart the sshd daemon, with a kill -SIGHUP or using
+/etc/rc.d/sshd restart or whatever you prefer. I should now be able
+to open a web browser to 192.168.7.60 on my home network and be
+able to browse the website I've created in
+/usr/jail/usr/local/www/doc.</p>
+<p>One can check the jail and its Jail ID with the command</p>
+<table border="0" bgcolor="#E8E8E8">
+<tr>
+<td>
+<pre>
+jls
+</pre></td>
+</tr>
+</table>
+<p>The ordinary shutdown commands don't work within a jail. To kill
+it you can while in the jail use</p>
+<table border="0" bgcolor="#E8E8E8">
+<tr>
+<td>
+<pre>
+kill -KILL -1
+</pre></td>
+</tr>
+</table>
+<p>or</p>
+<table border="0" bgcolor="#E8E8E8">
+<tr>
+<td>
+<pre>
+kill -TERM -1
+</pre></td>
+</tr>
+</table>
+<p>To kill the jail from host.mydomain.com you can use the jexec
+command. First run jls to see the Jail ID. You might get something
+back like</p>
+<table border="0" bgcolor="#E8E8E8">
+<tr>
+<td>
+<pre>
+JID   IP Address       Hostname             Path
+2     192.168.7.60    jail.mydomain.net     /usr/jail
+</pre></td>
+</tr>
+</table>
+<p>Now, you use jexec with the the JID</p>
+<table border="0" bgcolor="#E8E8E8">
+<tr>
+<td>
+<pre>
+jexec 2 kill -TERM -1
+</pre></td>
+</tr>
+</table>
+<p>You can then run jls again, which should show you that nothing
+is running.</p>
+<p>While testing, I simply use a script to start jail. If all you
+wish to do is run apache, you don't have to mount devfs on
+/usr/jail/dev. The problem is that if you don't, you won't be able
+to ssh into the jail. However, as the jail manpage points out, you
+don't wish to mount the entire devfs on /dev because it opens up
+various vulnerabilites, possibly giving someone access to, for
+example, your hard drives. The jail man page sends you to the devfs
+manpage which has a few examples. While testing and using the
+script, I mount only enough so that I can ssh into it. I simply
+apply rules on the fly in the script</p>
+<table border="0" bgcolor="#E8E8E8">
+<tr>
+<td>
+<pre>
+sudo ifconfig fxp0 inet alias 192.168.7.60/24
+sudo mount -t procfs proc /usr/jail/proc
+sudo jail /usr/jail jail.mydomain.net 192.168.7.60 /bin/sh /etc/rc
+sudo devfs -m /usr/jail/dev rule apply hide
+sudo devfs -m /usr/jail/dev rule apply path null unhide
+sudo devfs -m /usr/jail/dev rule apply path random unhide
+</pre></td>
+</tr>
+</table>
+<p>Once everything is working, I add various lines to /etc/rc.conf
+so that the jail will work upon reboot. There is already a default
+set of jail rules for devfs in /etc/defaults. It's part of the file
+/etc/defaults/devfs.rules. There is also a jail_list mentioned in
+man rc.conf that we can use for conveniently naming our jail. In
+this case I'm going to call it ujail, but I could name it Frank if
+I felt like it. There are some defaults that one can view in
+/etc/defaults/rc.conf. I'm going to set this jail so that root in
+the jail can't change the hostname. I'm going to add a devfs entry
+as well, so that I can ssh into the jail.</p>
+<p>I'm also going to set the alias for the fxp0 interface, so that
+is running at startup as well. I will add all this to
+/etc/rc.conf</p>
+<table border="0" bgcolor="#E8E8E8">
+<tr>
+<td>
+<pre>
+ifconfig_fxp0_alias0="inet 192.168.7.60 netmask 0xffffffff"
+jail_enable="YES"
+jail_list="ujail"
+jail_ujail_hostname="jail.mydomain.net"
+jail_ujail_ip="192.168.7.60"
+jail_ujail_rootdir="/usr/jail"
+jail_ujail_devfs_enable="YES"
+jail_ujail_devfs_ruleset="devfsrules_jail"
+</pre></td>
+</tr>
+</table>
+<p>Congratulations, you're done.</p>
+<h4>References</h4>
+man jail, man devfs, man rc.conf
+<center>
+<h4><i><a href="index-cc.html">Back to main page</a></i></h4>
+</center>
+<center><script language="JavaScript" type="text/javascript">
+
+if (Date.parse(document.lastModified) > 0) {
+
+document.write ('<b>last modified: <\/b>' + document.lastModified +'<p>');
+
+document.write('<b> url:<\/b>' + document.location.href +
+'<\/font><p>');<\/center>
+</script></center>
+</body>
+</html>

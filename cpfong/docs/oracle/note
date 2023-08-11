@@ -1,0 +1,237 @@
+otn.oracle.com
+
+modify password:
+Enterprize Manger Console --> Launch standalone -->
+Databases --> DLCP --> Username system Password system SYSDBA
+--> Security --> Users --> HR
+
+sqlplus /nolog
+connect /hr/hr
+
+clear screen;
+cl screen;
+help index;
+
+select table_name from user_tables;
+
+sqlplusw /nolog
+
+desc departments;
+select department_id, location_id from departments;
+select last_name, salary, salary+300 from employees;
+select last_name "Name", salary, salary*12 "Annual" from employees;
+; as Name
+select last_name Name, salary, salary*12 from employees;
+; as NAME
+select last_name || ' job is ' || job_id from employees;
+select last_name || ' job is ' || job_id as "Employess Detail" from employees;
+
+select distinct depament_id from empolyees;
+
+iSQL Plus
+p --> OrcleHome92 --> Oracle HTTP server --> start apache
+http://localhost:80/isqlplus
+or No port number
+http://localhost/isqlplus
+hr : hr --> login
+
+you can press save script  button to save the commmand as a file
+then later you can brose url to load it in --> browse --> load in
+
+select lower ('SQL') from dual;
+
+character-manipulation
+initcap --> capital first letter
+instr --> first at #
+lpad --> left padding (put padding in)
+round, trunc, mod
+
+nvl --> convert a null to actual value
+nvl2 --> convert a null to actual value and not null another val
+nullif --> if (equal) true then null
+
+select nvl(null, 0) from dual;
+select nvl(1, 0) from dual;
+
+select nvl2(null, 1, 0) from dual;
+select nvl2(1, 11, 0) from dual;
+
+select nullif(1,1,4) from dual;
+select nullif(1,2,4) from dual;
+
+select coalesce(null, null, 4) from dual;
+select coalesce(1, null, 4) from dual;
+select coalesce(null, 2, 4) from dual;
+
+select decode (trunc(2000/2000, 0), 0, 0.00, 1, 0.09, 0.45) as tax_rate from dual;
+
+join on
+Table1	field11 fc1 fc2 field13
+Table2	field21 fc1 fc2 field23
+
+select t1.fc1, t2.field21 from Table1 as t1 join Table2 t2 using(fc1)
+
+outer join: join if even does not exist
+
+& can be used in temp variable
+&& 
+undefine var
+define var
+
+define job_title='IT_PROG';
+select last_name from employees where job_id='&job_title';
+
+
+connect scott/scott 	scott.employees
+select table_name from user_tables;
+
+connect hr/hr		hr.employees
+select table_name from user_tables;
+
+connect syste/system
+select * from hr.employees
+
+connect system/system
+select table_name from dictionary where lower(table_name) like 'user_in_%';
+
+DBA Fundemental
+instance (one SID)
+user process --> connection established --> server process --> section created
+--> 
+
+PMON	Process monitor
+SMON	server monitor
+DBWR	Database writer
+LGWR	Log writer
+CKPT	Check point
+
+when data in --> online redo log files (buffer) --> full --> data files
+archived log files --> put all transaction files
+when data files crash we can use archived log files to put it back
+
+
+data files --> data read out --> data dict cache, database buffer cache
+
+library cache : 1. shared SQL area 2 shared PL/SQL area
+
+RAC real application cluster
+
+conn / as sysdba
+select * from v$inst
+
+shutdown immediate
+startup nomount ; open the instance
+alter database SID mount; alter database database_name mount, cannot do anything 4 maintain
+alter database dlcp open; alter database database_name open
+
+
+pfile is a text file:
+vi d:/oracle/admin/SID/pfile/init.ora.xxxxxxx
+vi linux_server/$ORACLE_HOME/dbs/initSID.ora
+
+don't use shutdown abort 
+
+RAID type
+* software raid
+* controller card raid -- scsi/raid --> 1st channel --> several HD
+				    --> 2nd channel --> several HD
+* controller card only scsi/NO raid --> hot swappable (with 2 controllers) 
+  --> several HD (treat as one HD though)
+
+* raid0 --> 1 to 1HD and 2 to 2HD (one HD gone, total data gone)
+  raid1 --> 1 to 1HD and 1 to 2HD --> 2 to 1HD and 2 to 2HD (falf can be used)
+  raid5 --> 1 to 1HD and 2 to 2HD and parity to 3HD --
+	    one HD as parity check (so 10 HD then 1 as parity)
+	    take lots of time to write but fast to read
+
+command>
+set ORACLE_SID=db01
+
+sql>
+select instance_name from v$instance;
+
+conn /@db01 as sysdba
+conn /@dlcp as sysdba
+
+cd d:\oracle\ora92\
+
+d:\oracle\oradata\dlcp
+d:\oracle\oradata\db01
+d:\oracle\oradata\db02
+
+shutdown immediate (db02 up and db01 is a news database !!)
+startup nomount pfile=d:\oracle\admin\db01\pfile\init.ora (cp from db02)
+create database db01;
+
+catalog.sql has to be run if you want to create database manual
+
+create spfile from pfile; when error (spfile has error)
+
+;cannot open --> cp $ORACLE_BASE\admin\<SID>\pfile\
+;init.ora $ORACLE_BASE\ora92\database\init<SID>.ora (note ONEWORD)
+
+connect / as sysdba
+create spfile from pfile;
+startup
+
+3 control files (
+d:\oracle\oradata\dlcp\control01.ctl
+d:\oracle\oradata\dlcp\control02.ctl
+d:\oracle\oradata\dlcp\control03.ctl
+
+alter system set control_files = "d:\oracle\oradata\dlcp\control01.ctl"," d:\oracle\oradata\dlcp\control02.ctl","d:\oracle\oradata\dlcp\control03.ctl", "c:\CONTROL04.ctl" scope =spfile;
+
+select * from v$controlfile;
+
+cd oracle\admin\dlcp\pfile;
+vi init.ora
+
+sqlplus /nolog
+shutdown 
+
+select * from v$parameter;
+select * from v$controlfile_record_section
+
+force to log switch
+sql> select * from v$log;
+alter system switch logfile;
+
+alter database add logfile group 4 ('c:\log4a.rdo', 'd:\log4b.rdo') size 1M;
+
+group 1 (a11file --> c:) (a12file --> d:)
+group 2 (a21file --> c:) (a22file --> d:)
+group 3 (a31file --> c:) (a32file --> d:)
+
+sql> select * from v$logfile;
+
+alter database add logfile member 'c:\xxx ' to group 1;
+alter database drop logfile member 'c:\xxx ';
+
+forever in pfile
+now 
+
+startup /nomount
+alter database archivelog;
+archive database open;
+achive log list;
+log @d:\oracle\ora92\rdbms\
+alter system switch logfile;
+OEM --> system/system/sysdba --> 
+
+alter system set log_archive_max_processes = 3;
+in the init.ora  add one line 
+log_archive_start=true
+log_archive_max_processes = 3;
+
+shutdown immediate
+startup pfile=d:\oracle\admin\dlcp\pfile\mini.ora.02xxx
+select * from v$archived_log;
+
+alter system archvie log start;
+
+startup mount pfile=d:\oracle\admin\dlcp\pfile\mini.ora.02xxx
+alter database archivelog;
+alter database open;
+archive log list;
+
+

@@ -1,0 +1,2 @@
+Q: sequence (list)
+A: seq 1 10

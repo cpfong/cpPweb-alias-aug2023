@@ -1,0 +1,34 @@
+dhcpd.conf 為設定 dhcpd 的最重要設定檔
+/etc/dhcpd.conf
+
+想要多瞭解它可以使用 man dhcpd.conf 
+
+* keywords in the file are case-insensitive 
+* comments will start with #
+
+network 的拓樸有二種: shared-network 和 subnet
+ip 若為動態的則 range 一定要使用在 subnet 之中
+ip 若為固家的則 每一個 client  要有一個 host 的宣告
+group 可以幫忙把一些參數 binding 在一起
+
+shared-network: 有 global 的味道, 即所有的這個 net 中
+	shared-network zone_205_dhcp_name {
+		option routers 163.15.205.254;
+		...
+		subnet 163.15.205.0 netmask 255.255.255.0 {
+			range 163.15.205.1 163.15.205.31;
+		}
+		subnet 163.15.205.32 netmask 255.255.255.0 {
+			range 163.15.205.33 163.15.205.63;
+		}
+	}
+
+[cpfong@ubuntu ~]$ ls -l /var/lib/dhcpd/dhcpd.leases 
+-rw-r--r-- 1 root root 0  9月  4 01:23 /var/lib/dhcpd/dhcpd.leases
+
+ddns-update-style none ( 不自動向 dns server 註冊及更新 )
+ddns-update-style ad-hoc ( 過時，不建議使用)
+ddns-update-style interim ( dns 需配合設定才能自動向 dns 註冊及更新 )
+
+default-lease-time
+max-lease-time

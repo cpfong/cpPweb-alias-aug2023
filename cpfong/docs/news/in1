@@ -1,0 +1,8 @@
+在和春端把該開放的要開放
+
+news-> s vi incoming.conf
+
+peer cpfong {
+  hostname:     "cpfong.fjtc.edu.tw, hiedoc.fjtc.edu.tw, 163.15.196.110, 61.222.240.74"
+}
+

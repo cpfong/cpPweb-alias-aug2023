@@ -1,0 +1,9 @@
+cpong-1018P:~$ sudo dd if=./download/linuxmint-19.1-xfce-32bit.iso of=/dev/sdb5 bs=1M conv=sync
+
+# from mint19.iso/boot/grub/grub.cfg
+#root=(hd0,5) FAIL
+menuentry 'Mint19 xfe 32b' {
+ search --no-floppy --set=root --fs-uuid 2018-12-17-18-41-59-00
+ linux   /casper/vmlinuz  file=/cdrom/preseed/linuxmint.seed boot=casper xforcevesa iso-scan/filename=${iso_path} ramdisk_size=1048576 root=/dev/ram rw noapic noacpi nosplash irqpoll --
+ initrd  /casper/initrd.lz
+}

@@ -1,0 +1,16 @@
+windows svr ec2 at aliyun to FreeBSD
+
+mobaexterm
+-- ssh
+-- scp
+-- vi
+
+ssh root@ip
+change root passwd
+sudo 
+vi /usr/local/etc/sudoers
+
+homework:
+--
+add account: 2 user: s3121 (s+last 4 digits)
+add cpfong as wheel: pwd fvti1234

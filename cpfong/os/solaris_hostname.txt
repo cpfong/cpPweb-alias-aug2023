@@ -1,0 +1,24 @@
+3.51) How do I change my hostname? 
+
+The supported way to change your hostname is: 
+
+
+# /usr/sbin/sys-unconfig
+
+The system will halt and on subsequent boot will ask for its name and other networking parameters again. 
+
+You may wish to save a copy of /etc/nsswitch.conf beforehand as that file is overwritten by the configuration process. 
+
+Note that sys-unconfig is not supported on diskless or dataless workstations. On those, you'll need to edit files by hand. See the sys-unconfig(1M) for a list of the files that need changing.
+
+
+or
+------------------------------
+the following files need to be modified
+/etc/hosts
+/etc/nodename
+/etc/hostname.xxx (xxx is the ethernet card name)
+/etc/net/ticlts/hosts
+/etc/net/ticots/hosts
+/etc/net/ticotsord/hosts
+¡@

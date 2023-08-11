@@ -1,0 +1,19 @@
+<html>
+<ol type=disc>
+	<li> 進入 CMOS 改成用 cd-rom 開機
+	<li> 放入光碟
+	<li> 出現 boot: 鍵入 root dma nolcd ttf2ram 
+	<li> 在上頭有紅色鈕可關機
+	<li> 把行動碟放入
+	<li> mount /dev/sda1 來掛上
+	<li> umount /dev/sda1 才可以移除
+	<li> mount /dev/sda1 只要一次即可, 然後可以 ls /mnt/sda1 看內容
+	<li> cp /mnt/sda1/j2sdk-1_4_2_01-linux-i586.bin ~ 
+	<li> cd (到你簽入的地方, 也可以打 cd ~)
+	<li> ./j2sdk-1_4_2_01-linux-i586.bin 
+	<li> export PATH=/home/root/j2sdk1.4.2_01:$PATH
+	<li> vi /mnt/sda1/welcome1.java
+	<li> 課本內容打入 
+	<li> javac welcome1.java
+</ol>
+</html>

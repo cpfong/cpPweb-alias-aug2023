@@ -1,0 +1,354 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE></TITLE>
+<META NAME="generator" CONTENT="txt2html v1.25">
+</HEAD>
+<BODY>
+<P>
+Test 18<BR>
+p697
+
+<P>
+General
+<HR>
+<PRE>
+3 jars in one packages                          get 3
+g, o, s, p, q are flavors                       g o s p q
+</PRE>
+
+<P>
+Rules
+<HR>
+<PRE>
+cannot be same flavor                           ggg ooo sss ppp qqq (x)
+o must with g                                   o -&gt; g
+g must with o                                   g -&gt; o
+p,q cannot same                                 p &lt;x&gt; q
+s must with q                                   s -&gt; q
+</PRE>
+
+<OL>
+  <LI> which is ok
+<P>
+        p s o                                   just put all thing in
+  <UL>
+    <LI> s g
+        s s q
+        p p p
+    <LI> o o
+
+  </UL>
+  <LI> which is NO good                             use only one condition
+<P>
+        g p
+        p q
+  <UL>
+    <LI> p
+    <LI> g
+        s q
+
+  </UL>
+  <LI> which is ok with s                           write whole thing out
+<P>
+        p o                                     p o s
+        g o                                     g o s
+        q q                                     q q s
+  <UL>
+    <LI> o                                     o o s
+        g g                                     g g s
+<P>
+                                                BUT IT USE ONLY 1 COND (s -&gt; q)
+  </UL>
+  <LI> which should with o and p                    2 cond (o &lt;-&gt; g)
+<P>
+        g
+        o
+        s
+        p
+        q
+
+  <LI> which is ok with o                           2 cond (o &lt;-&gt; g)
+  <UL>
+    <LI> s
+        g s
+    <LI> o
+        g g
+        s s
+
+  </UL>
+  <LI> not ok                                       2 cond (s -&gt; q) (p &lt;x&gt; q)
+<P>
+        s p
+        g o
+  <UL>
+    <LI> o
+        g g
+        s s
+
+  </UL>
+  <LI> not ok                                       all cond
+  <UL>
+    <LI> o
+        g g
+        q q
+        s s
+        p p
+
+  </UL>
+</OL>
+<P>
+P699<BR>
+General
+<HR>
+3 Women r s t<BR>
+2 Man u v<BR>
+4 Children w x y z
+
+<P>
+Rule
+<HR>
+<PRE>
+no Adult (same sex) can in same group                   r
+w cannot with r         ---     w&lt;x&gt;r                   s
+x must with s or u      ---     xs xu                   t
+
+1. r is the only adult, then who else                   w&lt;x&gt;r
+        w x                                             xs xu
+        w y
+        x y
+        x z
+        y z
+
+2. r u in one group, then other 2 group?                do it LAST
+        s t w, v y z                            x
+        s w z, t v x                            x
+        s x y, t w z
+        t v w, s y z
+        w x y, s v z                            x
+
+3. who can with w                                       w&lt;x&gt;r
+        r y                                     x       xs
+        s u                                     (x)
+        s v
+        u v                                     x
+        x z                                     x
+</PRE>
+
+<P>
+4. which is true
+<PRE>
+        one women will with 2 kids
+        on of two man is in group w
+        t's group with only one kid
+        one of the groups with no kid
+
+5. who can NOT with x                                   only one cond
+        r u
+        s t
+        s u
+        s w
+        t u
+</PRE>
+
+<P>
+6. if t y z in one group, which is ok
+<PRE>
+        r s v
+        r u w
+        s u w
+        s v w
+        u v x
+</PRE>
+
+
+<P>
+p700<BR>
+General
+<HR>
+5 week plan, each week for 2 plays<BR>
+4R + 2S + 2T + 1U + 1V
+
+<P>
+Rules
+<HR>
+<PRE>
+no 2 play can in same day       1       2       3       4       5
+3 --&gt; R R                                       R               V
+5 --&gt; V                                         R
+</PRE>
+<P>
+S &lt;x&gt; R
+
+
+<OL>
+  <LI> which is ok for week 1
+<P>
+        R R                             x
+        S S                             x
+        R S
+        R U
+        U V                             x
+
+  <LI> if R is in 2 3 4             1       2       3       4       5
+<P>
+        S -&gt; in 2                       R       R       R       V
+        S -&gt; in 5                               R
+        T -&gt; in 2
+        T -&gt; in 4
+        U -&gt; in 1
+
+  <LI> if S in 1 2                  1       2       3       4       5
+<P>
+        R 4                     S       S       R               V
+        T 1                                     R
+        T 4
+        T 5
+        U 4
+
+  <LI> NOT together                                 R               V
+<P>
+        R T                                     R
+        R U
+        S T
+        S U
+        T U
+
+</OL>
+<PRE>
+21 if S with U, which is true   S       ?       R       ?       V
+        R T same                U       ?       R       ?       ?
+        S T
+        U 2
+        S 4
+        T 5
+
+22 if T consecutive             T       T       R               V
+        S 1,2                                   R
+        S 2,5
+        S 4,5
+        T 1,2
+        T 4,5
+</PRE>
+
+<P>
+section 5<BR>
+p714<BR>
+General
+<HR>
+6 people answer g h i j k l<BR>
+2 color blue and red
+
+<P>
+Rule
+<HR>
+<PRE>
+Red to g or h                           R -&gt; g i
+Blue to g, j, i                         R -&gt; h
+R g --&gt; i, B g --&gt; j                    B -&gt; g j
+h --&gt; g or h --&gt; i                      B -&gt; j
+R i --&gt; j, B i --&gt; k                    B -&gt; i
+</PRE>
+<P>
+j --&gt; i, j --&gt; k<BR>
+k -&gt; l (L can answer anything)
+
+<OL>
+  <LI> NOT true
+<P>
+        R to g i
+        R to h g
+        R to h i
+        R to i k
+        R to j i
+
+  <LI> Blue reach L from
+<P>
+        g h k
+        g i j
+        g j k
+        i h j
+        i g j k
+
+  <LI> any letter go to L must from
+<P>
+        g
+        h
+        i
+        j
+        k
+
+  <LI> which of following colud give to 6 member
+<P>
+        R to h
+        R to g
+        B to g
+        B to i
+        B to j
+
+  <LI> before reach L must at least through
+<P>
+        1
+        2
+        3
+        4
+        5
+
+  <LI> if a member is given a leeter that he had
+   previsously given to, the person who is
+   given the letter a second time could be
+<P>
+        g
+        h
+        j
+        k
+        l
+
+</OL>
+<P>
+p716<BR>
+General
+<HR>
+six classes: f g h j k l<BR>
+starting time: 9 10 11 2 4
+
+<P>
+Rule
+<HR>
+f &lt;x&gt; g<BR>
+h before f<BR>
+j afternoon<BR>
+k alone
+
+<PRE>
+10 who canNOT at 4                              Single Cond (h f)
+        f
+        g
+        h
+        j
+        k
+                                                                afternoon
+11. j k (j then k) which is true        x       x       x       x       x
+        j f                                                     j       k
+        g at 4
+        k at 2
+        l at 2
+        k l
+
+12. if f at 10, none at 4               9       10      11      2       4
+        h l                             h       f       k       j       x
+        h k
+        k g
+        l g same time
+        l with j same time
+
+13. if h at 2                           9       10      11      2       4
+        l f                                                     h       f
+        g at 2
+        g in the morning
+        j at 2
+        k in the morning
+</PRE>
+
+</BODY>
+</HTML>

@@ -1,0 +1,54 @@
+
+  ◇ 請問為何不會砍舊信??
+
+------------------------------------------------------------------------
+※ 引述《shuo@BBS.me.nctu.edu.tw (小碩碩)》之銘言：
+: 牽線人 (SoC.bbs@bbs.cs.nthu.edu.tw) 提到:
+: : ?? 不太懂耶 ...
+: : 如 expire.ctl 中某個 entry (e.g. twbbs.*) 設定成 120 天以後 expire,
+: : 則 /remember/:X , X 就要大於 120 才能正常 expire ??  不會吧 ??!!
+: Yap .. inn 的做法是跑 newsdaily 的時候將 history 檔挑出該砍掉文章
+: 的entry ...寫進一個batch file...然候跑expireover來砍文章...
+: 當然如果 history 沒有這篇文章的 entry .. 再新的文章也砍不掉..
+呵呵...您講的 expire 的運作方式是沒錯 :)
+
+可是 /remember/: 的用途不是這樣吧 ??
+
+引一段 expire.ctl 的 manpage 的內容
+===================================
+     The first format specifies how long  to  keep  a  record  of
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     fully-expired  articles.   This  is  useful  when a newsfeed
+     ^^^^^^^^^^^^^^^^^^^^^^^
+     intermittently offers older news that  is  not  kept  around
+     very  long.   (The  case  of very old news is handled by the
+     ``-c'' flag of innd(8).) There should only be  one  line  in
+     this format, which looks like this:
+          /remember/:days
+     Where days is a floating-point  number  that  specifies  the
+     upper  limit  to  remember a Message-ID, even if the article
+     has already expired.  (It does not  affect  article  expira-
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     tions.)
+     ^^^^^^
+
+再引其中的 expire.ctl 範例
+==========================
+     For example,
+          ##  How long to keep expired history
+          /remember/:5
+          ##  Most things stay for two weeks
+          *:A:14:14:14
+          ##  Believe expiration dates in moderated groups, up to six weeks
+          *:M:1:30:42
+          ##  Keep local stuff for a long time
+          foo.*:A:30:30:30
+
+這不會是個典型的 "錯誤範例" 吧 ??
+------------------------------------------------------------------------
+※ Origin: 楓橋驛站(bbs.cs.nthu.edu.tw) ◆ From: alpha4
+
+------------------------------------------------------------------------
+廣華電子BBS  UL.HiNet.Net, Modem:886-4-311-2347,-2446,-2449,-2749,
+
+

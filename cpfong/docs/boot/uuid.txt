@@ -1,0 +1,2 @@
+$ ls -lha /dev/disk/by-uuid
+# blkid /dev/sda1

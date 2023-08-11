@@ -1,0 +1,8 @@
+as root in cmd
+--
+netsh advfirewall firewall add rule name="FTP non-SSL myRule" action=allow protocol=TCP dir=in localport=21
+client:
+ftp> passive
+then ls OK (using cmd ftp, but gftp, filezilla still cannot list dir)
+
+netsh advfirewall set global StatefulFtp enable

@@ -1,0 +1,54 @@
+1. 請使用 print 寫一程式印出你帳號的最後一個字, 例如學號為 952136102
+的同學則你的答案要印出一個 2 字型, 以此類推 (20%) (註: 要印出如下)
+222222
+     2
+     2
+222222
+2
+222222
+sol: 見小考一
+
+2. 由鍵盤讀入一個數, 計算由 1 開始累加到本數的總合, 例如:
+輸入 10 則輸出為 55 (1+2+...+9+10=55)
+sol: 見小考一 
+
+3. 某校五專五甲學生修網路程式設計共有五人, 分別為 張三(Chuang Three)
+李四(Lee Four) 王五(Wong Five) 陳六(Chen Six) 林七(Lin Seven) 而號碼
+分別為 3 4 5 6 7 號 (即張三為 3 號 ...) 請寫一程式若輸入為 1 3 5 7
+則輸出 nobody, 張三, 王五, 林七 如果你的程式無法輸出中文則輸出 
+nobody, Chuang Three, Wong Five, Lin Seven 也可以 
+
+sol:
+#!/usr/bin/perl
+@n = qw /xx nobody nobody 張三 李四 王五 陳六 林七/;
+while (<STDIN>){
+        chomp;
+        push @i, $_;
+}
+foreach (@i){
+        print $n[$_] . ",";
+}
+
+4. 第二章習題第 4 題 
+#!/usr/bin/perl
+
+chomp($a = <STDIN>);
+chomp($b = <STDIN>);
+print "$a * $b = ", $a * $b;
+
+5. 任意輸入數字, 把所有輸入的數字中的最大的數輸出
+#!/usr/bin/perl
+sub max{
+        my $m = shift @_;
+        foreach (@_){
+                $m =  ($_ > $m) ?  $_ : $m;
+        }
+        $m;
+}       
+
+while (<STDIN>){
+        chomp;
+        push @a, $_;
+}
+print "max number is " . max(@a);
+

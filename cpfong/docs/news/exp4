@@ -1,0 +1,59 @@
+
+  ◇ 如何清掉 spool 裡的孤兒信
+
+------------------------------------------------------------------------
+Chih-Yuan Cheng (cycheng@syslab.csie.ntu.edu.tw),11 Mar 1996 05:38:13 GMT wrote:
+: 請教一個 innd 的問題.
+: 我們的 news server 執行一段長時間後,
+: 在 spool 裡常會出現一些 孤兒信.
+: 這些信依 expire.ctl 的設定應該是過期的, 但是卻沒被殺掉.
+: 是不是 history.* 裡沒有記錄的信就會變成孤兒呢 ?
+
+expire 是從 history database 中找出哪些 list 的 articles, 已經過了保留期限.
+所以, 有些 news articles 在 history 中已經看不到, 如果你們沒有特別處理,
+就一定會, 繼續存在系統中擺下去.
+
+: 有沒有什麼好方法處理這些過期卻不會被殺掉的信呢 ?
+
+至少有 3 種方法:
+
+  1. 將 Spool 的 articles 的資料, 補回 history 中.
+     % su - news
+     % /usr/local/news/bin/makehistory -bunv
+
+     如此一來, 下回 news.daily 進行時, 就會將這些 message ID 挑出來,
+     expire 掉.
+
+     Note:
+       這個過程, 可能會很久, 假如你們的 Spool Size 很大的話.
+
+ 2. 透過一個 perl 程式, 叫 findmissing.pl ( find missing articles )
+    找出這一些在 history database 中沒有, 但卻存於 News Spool 中的
+    article paths. 然後, 再透過 fastrm 等程式, 直接刪掉.
+
+    perl findmissing.pl | /usr/local/news/bin/fastrm -e -u -s /var/spool/news
+
+    Note:
+
+    1) 使用 findmissing.pl 前, 你必須要 稍為修改一下, 一兩個變數設定.
+    2) 如果你們的 News spool 有分好幾個 Disk, 那麼就可能必須改成
+       fastrm -e -s /var/spool/news
+
+    * 這個過程, 通常較 1) 節省很多時間.
+    * 這個程式, 可以在 NCTUCCCA 的 FTP server (及相關的 AFS client site)取得.
+
+     Ftp://nctuccca.edu.tw/packages/news/inn-unoff/contrib/findmissing.pl.gz
+
+  3) 暴力法.
+      %  find /var/spool/news  -mtime +30 -print | xargs rm
+
+      將 所有超過 30 天的 articles, 一律刪除.
+
+      缺點:
+      對於有些 newsgroups 想保留久一點, 用這個方法, 就不容易兼顧.
+
+
+------------------------------------------------------------------------
+   C.S.Chen [ 陳昌盛 ]                  * E-mail:  chen@cc.nctu.edu.tw
+   Computer Center of National Chiao-Tung University, Hsinchu, Taiwan, R.O.C.
+

@@ -1,0 +1,64 @@
+cycbuff:TwoGiga:/usr/local/news/spool/cycbuffs/2g:2048000
+#
+cycbuff:OneGiga:/usr/local/news/spool/cycbuffs/1g:1024000
+#
+cycbuff:FiveHM1:/usr/local/news/spool/cycbuffs/500m1:512000
+cycbuff:FiveHM2:/usr/local/news/spool/cycbuffs/500m2:512000
+cycbuff:FiveHM3:/usr/local/news/spool/cycbuffs/500m3:512000
+cycbuff:FiveHM4:/usr/local/news/spool/cycbuffs/500m4:512000
+#
+cycbuff:Six4M1:/usr/local/news/spool/cycbuffs/64m1:64000
+cycbuff:Six4M2:/usr/local/news/spool/cycbuffs/64m2:64000
+cycbuff:Six4M3:/usr/local/news/spool/cycbuffs/64m3:64000
+cycbuff:Six4M4:/usr/local/news/spool/cycbuffs/64m4:64000
+#
+cycbuff:Thi2M1:/usr/local/news/spool/cycbuffs/32m1:32000
+cycbuff:Thi2M2:/usr/local/news/spool/cycbuffs/32m2:32000
+cycbuff:Thi2M3:/usr/local/news/spool/cycbuffs/32m3:32000
+cycbuff:Thi2M4:/usr/local/news/spool/cycbuffs/32m4:32000
+#
+cycbuff:One6M1:/usr/local/news/spool/cycbuffs/16m1:16000
+cycbuff:One6M2:/usr/local/news/spool/cycbuffs/16m2:16000
+cycbuff:One6M3:/usr/local/news/spool/cycbuffs/16m3:16000
+cycbuff:One6M4:/usr/local/news/spool/cycbuffs/16m4:16000
+#
+cycbuff:EigM1:/usr/local/news/spool/cycbuffs/8m1:8000
+cycbuff:EigM2:/usr/local/news/spool/cycbuffs/8m2:8000
+cycbuff:EigM3:/usr/local/news/spool/cycbuffs/8m3:8000
+cycbuff:EigM4:/usr/local/news/spool/cycbuffs/8m4:8000
+
+# Huage for 2G x 1
+metacycbuff:HUGE:TwoGiga
+
+# XLarge for 1G x 1
+metacycbuff:XLARGE:OneGiga
+
+# Large for 500M x 4
+metacycbuff:LARGE1:FiveHM1
+metacycbuff:LARGE2:FiveHM2
+metacycbuff:LARGE3:FiveHM3
+metacycbuff:LARGE4:FiveHM4
+
+# Medium for 64M x 4
+metacycbuff:MED1:Six4M1
+metacycbuff:MED2:Six4M2
+metacycbuff:MED3:Six4M3
+metacycbuff:MED4:Six4M4
+
+# Small for 32M x 4
+metacycbuff:SM1:Thi2M1
+metacycbuff:SM2:Thi2M2
+metacycbuff:SM3:Thi2M3
+metacycbuff:SM4:Thi2M4
+
+# XSmall for 16M x 4
+metacycbuff:XS1:One6M1
+metacycbuff:XS2:One6M2
+metacycbuff:XS3:One6M3
+metacycbuff:XS4:One6M4
+
+# Tiny for 8M x 4
+metacycbuff:TI1:EigM1
+metacycbuff:TI2:EigM2
+metacycbuff:TI3:EigM3
+metacycbuff:TI4:EigM4

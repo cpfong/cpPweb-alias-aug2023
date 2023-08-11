@@ -1,0 +1,11 @@
+vigor 2910 default LAN ip is 192.168.1.1 
+one can reset (long press small button at the back) to  DEFAULT 192.168.1.1 and EMPTY:EMPTY
+
+since hinet zyxel is 192.168.1.  i move vigor to 192.168.2.1
+
+and i want to use mac+imbx31+soekris in this HUB (note: use it as hub, without dhcpd 
+becase ibm x31 is pxe dhcpd and let soekris to boot from x31)
+
+hard set mac to 192.168.2.11
+x31 192.168.2.100
+

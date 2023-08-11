@@ -1,0 +1,191 @@
+<html><head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Configuring slurpd and a slave slapd instance</title>
+</head><body topmargin="0" style="margin-top: 0pt;" marginheight="0"><!-- Begin DocView navigation toolbar -->
+<!--htdig_noindex-->
+<table class="dvtb" style="padding: 0pt;" width="100%" border="0" cellpadding="0" cellspacing="0">
+<tbody><tr class="dvtb" valign="top">
+<td class="dvdb">
+<table class="dvtb" width="611" bgcolor="#ffffff" border="0" cellpadding="3" cellspacing="1">
+<tbody><tr class="dvtb">
+<td class="dvtb" style="background: rgb(32, 89, 166) none repeat scroll 0% 0%; -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;" align="center">
+<a href="http://uw713doc.sco.com/en/index.html" class="dvtb" style="background: rgb(32, 89, 166) none repeat scroll 0% 0%; font-size: 10pt; font-family: verdana,helvetica,arial; font-weight: bold; color: rgb(255, 255, 255); -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;">
+DOC HOME
+</a></td>
+<td class="dvtb" style="background: rgb(32, 89, 166) none repeat scroll 0% 0%; -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;" align="center">
+<a href="http://uw713doc.sco.com/en/Navpages/sitemap.html" class="dvtb" style="background: rgb(32, 89, 166) none repeat scroll 0% 0%; font-size: 10pt; font-family: verdana,helvetica,arial; font-weight: bold; color: rgb(255, 255, 255); -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;">
+SITE MAP
+</a></td>
+<td class="dvtb" style="background: rgb(32, 89, 166) none repeat scroll 0% 0%; -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;" align="center">
+<a href="http://uw713doc.sco.com/cgi-bin/manform?lang=en" class="dvtb" style="background: rgb(32, 89, 166) none repeat scroll 0% 0%; font-size: 10pt; font-family: verdana,helvetica,arial; font-weight: bold; color: rgb(255, 255, 255); -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;">
+MAN PAGES
+</a></td>
+<td class="dvtb" style="background: rgb(32, 89, 166) none repeat scroll 0% 0%; -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;" align="center">
+<a href="http://uw713doc.sco.com/cgi-bin/infocat?lang=en" class="dvtb" style="background: rgb(32, 89, 166) none repeat scroll 0% 0%; font-size: 10pt; font-family: verdana,helvetica,arial; font-weight: bold; color: rgb(255, 255, 255); -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;">
+GNU INFO
+</a></td>
+<td class="dvtb" style="background: rgb(32, 89, 166) none repeat scroll 0% 0%; -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;" align="center">
+<a href="http://uw713doc.sco.com/cgi-bin/search?lang=en" class="dvtb" style="background: rgb(32, 89, 166) none repeat scroll 0% 0%; font-size: 10pt; font-family: verdana,helvetica,arial; font-weight: bold; color: rgb(255, 255, 255); -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;">
+SEARCH
+</a></td>
+<td class="dvtb" style="background: rgb(32, 89, 166) none repeat scroll 0% 0%; -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;" align="center">
+<a href="http://uw713doc.sco.com/en/Navpages/printmap.html" class="dvtb" style="background: rgb(32, 89, 166) none repeat scroll 0% 0%; font-size: 10pt; font-family: verdana,helvetica,arial; font-weight: bold; color: rgb(255, 255, 255); -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;">
+PRINT BOOK
+</a></td>
+</tr>
+</tbody></table>
+</td>
+<td class="dvtb" width="100%" align="left">
+<table class="dvtb" width="100%" bgcolor="#ffffff" border="0" cellpadding="3" cellspacing="1">
+<tbody><tr class="dvtb" valign="top">
+<td class="dvtb" style="background: rgb(32, 89, 166) none repeat scroll 0% 0%; -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;" width="100%" align="center">
+<a name="null" class="dvtb" style="background: rgb(32, 89, 166) none repeat scroll 0% 0%; font-size: 10pt; font-family: verdana,helvetica,arial; font-weight: bold; color: rgb(255, 255, 255); -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;">
+&nbsp;
+</a>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+<!--/htdig_noindex-->
+<!-- End DocView navigation toolbar -->
+
+<div align="RIGHT"><i><a href="http://uw713doc.sco.com/en/NET_ldap/CONTENTS.html" onclick="">LDAP replication</a></i></div>
+<h1>Configuring slurpd and a slave slapd instance</h1><p>
+To bring up a replica <b>slapd</b> instance, you must configure the
+master and slave <b>slapd</b> instances for replication, then shut down
+the master <b>slapd</b> so you can copy the database. Finally, you bring
+up the master <b>slapd</b> instance, the slave <b>slapd</b> instance,
+and the <b>slurpd</b> instance. These steps are as follows (you can set
+up as many slave <b>slapd</b> instances as you wish):
+</p><ol>
+<p>
+</p><li>
+Set up the master <b>slapd</b>. Be sure that the <b>slapd</b>
+instance is working properly before proceeding. Be sure to do the
+following in the master <b>slapd</b> configuration file:
+<ol type="a">
+<p>
+</p><li>
+Add a <b>replica</b> directive for each replica. The <b>binddn</b>
+parameter should match the <b>updatedn</b> option in the corresponding
+slave <b>slapd</b> configuration file, and should name an entry with
+write permission to the slave database (for example, an entry listed as
+<b>rootdn</b>, or allowed access via <b>access</b> directives in the
+slave <b>slapd</b> configuration file).
+<p>
+</p></li><li>
+Add a <b>replogfile</b> directive, which tells <b>slapd</b> where to
+log changes. This file will be read by <b>slurpd</b>.
+</li></ol>
+<p>
+</p></li><li>
+Set up the slave <b>slapd</b>
+<p>
+Install the <b>slapd</b> software on the host which is to be the slave
+<b>slapd</b> server. The configuration of the slave server should be
+identical to that of the master, with the following exceptions:
+</p><ul>
+<p>
+</p><li>
+Do not include a <b>replica</b> directive. While it is possible to
+create ``chains'' of replicas, in most cases this is inappropriate.
+<p>
+</p></li><li>
+Do not include a <b>replogfile</b> directive.
+<p>
+</p></li><li>
+Do include an <b>updatedn</b> line. The DN given should match
+the DN given in the <b>binddn</b> parameter of the
+corresponding <b>replica</b> directive in the master <b>slapd</b>
+configuration file.
+<p>
+</p></li><li>
+Make sure the DN given in the <b>updatedn</b> directive has
+permission to write the database (for example, it is listed as
+<b>rootdn</b> or is allowed access by one or more <b>access</b>
+directives).
+</li></ul>
+<p>
+</p></li><li>
+Shut down the master <b>slapd</b>
+<p>
+In order to ensure that the slave starts with an exact copy of the master's
+data, you must shut down the master <b>slapd</b>. Do this by sending
+the master <b>slapd</b> process an interrupt signal with
+<b>kill -TERM</b> <b><i>pid</i></b>, where <b><i>pid</i></b> is the process
+ID of the master <b>slapd</b> process.
+</p><p>
+If you like, you may restart the master <b>slapd</b> in read-only mode
+while you are replicating the database. During this time, the master
+<b>slapd</b> will return an <code>unwilling to perform</code> error to
+clients that attempt to modify data.
+</p><p>
+</p></li><li>
+Copy the master <b>slapd</b>'s database to the slave
+<p>
+Copy the master's database(s) to the slave. For an LDBM-based
+database, you must copy all index files as well as the <i>NEXTID</i>
+file. Index files will have a different suffix depending on the underlying
+database package used. The current possibilities are as follows:
+</p><dl compact="compact">
+<dt><br><b>dbb</b></dt><dd>
+Berkeley DB B-tree backend
+</dd><dt><br><b>dbh</b></dt><dd>
+Berkeley DB hash backend
+</dd></dl>
+<p>
+You should copy all files with such a suffix that are located in the
+index directory specified in your <b>slapd</b> configuration file.
+</p><p>
+</p></li><li>
+Configure the master <b>slapd</b> for replication
+<p>
+To configure <b>slapd</b> to generate a replication logfile, you add
+a <b>replica</b> configuration option to the master <b>slapd</b>'s
+configuration file. For example, if we wish to propagate changes to the
+<b>slapd</b> instance running on host <i>caymen.rs.itd.antbear.com</i>:
+</p><pre>   replica    host=cayman.rs.itd.antbear.com:389
+              binddn="cn=Replicator, o=Antbear, Lucid &amp; Popp, c=US"
+              bindmethod=simple credentials=secret
+</pre>
+In this example, changes will be sent to port 389 (the standard
+LDAP port) on host <i>cayman</i>. The <b>slurpd</b>
+process will bind to the slave <b>slapd</b> as ``cn=Replicator,
+o=Antbear, Lucid &amp; Popp, c=US'', using simple authentication with
+password <b>secret</b>. Note that the entry given by the <b>binddn</b>
+directive must exist in the slave <b>slapd</b>'s database (or be the
+<b>rootdn</b> specified in the <b>slapd</b> configuration file) in
+order for the bind operation to succeed.
+<p>
+</p></li><li>
+Restart the master <b>slapd</b> and start the slave <b>slapd</b>
+<p>
+Restart the master <b>slapd</b> process. To check that it is generating
+replication logs, perform a modification of any entry in the database, and
+check that data has been written to the log file.
+</p><p>
+</p></li><li>
+Start <b>slurpd</b>
+<p>
+Start the <b>slurpd</b> process. <b>slurpd</b> should immediately
+send the test modification you made to the slave <b>slapd</b>. Watch
+the slave <b>slapd</b>'s logfile to be sure that the modification was
+sent.
+</p><pre>   slurpd -f <b><i>masterslapdconfigfile</i></b>
+</pre>
+</li></ol>
+<!-- NAVBEGIN -->
+<hr>
+<i>
+<small>
+<a href="http://uw713doc.sco.com/en/NET_ldap/COPYRIGHT.html">© 2002 Caldera International, Inc.  All rights reserved.</a>
+<br>
+UnixWare 7 Release 7.1.3 - 30 October 2002
+<br>
+</small>
+</i>
+<!-- NAVEND -->
+</body></html>

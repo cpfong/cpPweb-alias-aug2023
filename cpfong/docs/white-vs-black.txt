@@ -1,0 +1,2 @@
+black:	no color, no anything, easy to come through
+white:  every color, all components, can NOT through

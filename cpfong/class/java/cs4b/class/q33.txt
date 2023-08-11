@@ -1,0 +1,4 @@
+<html>
+	<Applet code=q_33.class width=300 height=30>
+	</Applet>
+</html>

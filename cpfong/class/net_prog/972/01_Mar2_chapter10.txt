@@ -1,0 +1,170 @@
+9.5.1 貪多的量詞 vs 不貪多的量詞
+	* + ? {} 都是貪多的量詞, *? +? ?? {}? 則為不貪多的量詞, 即每一個貪都有一個不貪和它對應.
+
+	$_ = fred and barney went bowling last night;
+	/fred.+barney/ ==> 注意 .+ 一開始會吃掉 and barney went bowling last night
+	後來才因為後有 barney 慢慢吐出其它
+
+	/fred.+?barney/ ==> 注意 .+? 是不貪的量詞, 由前面開始比對
+
+	如果 fred 和 barney 離很遠則用 greedy   的 .+  為佳
+	如果 fred 和 barney 離很近則用 ungreedy 的 .+? 為佳 
+
+	$_ = "/usr/home/cpfong/hw1.doc";
+	s%.*/%%;
+	print;
+	
+
+chapter 10 other control structure
+
+10.1 unless 控制結構
+	10.0.1 伴隨 unless 的 else 子句
+10.2 until 控制結構
+10.3 運算式修飾符
+10.4 未修飾的區塊控制結構
+10.5 elsif 子包句
+10.6 自動遞增興與自動遞減
+	10.6.1 自動遞增的值
+10.7 for 控制結構
+	10.7.1 foreach 和 for 之間的祕密關聯
+10.8 迴圈控制
+	10.8.1 last 算符
+	10.8.2 next 算符
+	10.8.3 redo 算符
+	10.8.4 帶有標籤的區塊
+10.9 三元算符 ?:
+10.10 邏輯算符
+	10.10.1 短路算符的值
+	10.10.2 defined-or 算符
+	10.10.3 使用局部執行算符的控制結構 
+p153
+10.1 unless 為和 if 正好相反的命令
+	if (二月){
+	}
+	else {
+		print "本月至少有 30 天";
+	}
+
+	unless (二月){
+		print "本月至少有 30 天";
+	}
+	-----
+	print "input month: "; chomp($m=<STDIN>);
+	if ($m == 2){
+	}
+	else {
+		print "at least 30 days in this month\n";
+	}
+
+	unless ($m == 2){
+		print "at least 30 days in this month\n";
+	}
+
+10.2 和 while 相反的運算則為 until
+	while ($a <= 10){
+		累加;
+	}
+	until ($a > 10){
+		累加;
+	}
+
+	$c=$sum=0;
+	while ($c <= 10){
+		$sum += $c;
+		$c++;
+	}
+	print "total = $sum\n";
+
+	$c=$sum=0;
+	until ($c > 10){
+		$sum += $c;
+		$c++;
+	}
+	print "total = $sum\n";
+
+10.3 perl 編譯時要把陳述句全部讀完成有辦法判斷它的真意, 所以i即使 if 放在
+	後也會先執行
+	if ($n < 0) {
+		print "$n is negative\n";
+	}	
+	--
+	print "$n is negative\n" if ($n < 0)
+	用倒裝句的方式撰寫程式, 可以把陳述句中重要的部份放在前.
+	此外修飾符的左邊也不能放多個陳述句
+
+10.4 何謂未修飾的區塊: while ($n<0) { ; } while 為一個修飾符, 所以只有 {} 沒有 while , 為何要一個這種區塊 ? 因為提供了一個臨時的變數, 原先 my 的範圍在本程式中
+	{
+		my $n=1;
+		print "n = $n\n";
+	}
+	print "n = $n\n";
+	--
+	sub xxx{
+		my $a; # 這個 $a 只存在這個副程式之中而已
+	}
+10.6 ++ 為自動遞增
+	my @people=qw{ fred barney fred wilma };
+	my %count;
+	$count{$_}++ foreach @people;
+	print "$k $v\n" while (($k,$v)= each %count);
+
+10.7.1 事實上 for 和 foreach 在 perl 的剖析器中是相同的, 但是 for 存在一些
+潛在的問題, 所以 foreach 才是迴圈的王道. 因為 for 才 3 個字 (比 foreach 7 個字少), 
+所以如果 for 好則 perl 愛省字的特性應會使用才是.
+
+	for ($i=1; $i<10; $i++){
+		print $i, "\n";
+	}
+
+10.8 三個圈控制算符: last next redo 圈: foreach while until {} 未修飾區塊
+	while (<>){
+		if (/__END__/){
+			last;
+		}
+	}
+
+	while(<>){
+		foreach (split){
+			next if /\W/;
+			$valid++;
+			$count{$_}++;
+		}
+	}
+	print "total = $valid\n";
+	foreach $w (sort keys %count){
+		print "$w show up $count{$w} times\n";
+	}
+
+10.9 三元算符
+	print "input a number: ";
+	chomp($width=<>);	
+
+	my $size=
+	($width < 10) ? " 小" :
+	($width < 20) ? " 中" :
+	($width < 50) ? " 大" :
+			" 超大"; #default
+
+	print $size, "\n";
+
+10.10 邏輯算符 && ||
+	pls check p168
+	10.10.1 短路算符的值
+	my $last_name=$last_name{$someone} || '(No last name)';
+	|| 和 or 有何不同: 沒有
+	10.10.2 defined-or 為了能區分 0 和 undefined 所以多了一個 // 名為 define-or 的算符
+
+%last_name = (
+	'三' => '張',
+	'四' => '李',
+	'五' => '王');
+
+%last_name = (
+	'John'   => 'Chen',
+	'Jack'   => 'Chou',
+	'Daniel' => 'Eng');
+
+print "input name: "; chomp($n=<>);
+$last_name=$last_name{$n} || "no last name";
+
+print $last_name, "\n";

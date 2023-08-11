@@ -1,0 +1,121 @@
+#!/bin/bash
+
+PXEDSL=pxedsl-2.2b.tbz
+SERVERDIR="http://cdprojekte.mattiasschlenker.de/Public/DSL-frominitrd/2.2b-0.0/script/"
+
+# Please adjust the paths for original kernel, initrd if you are not
+# booting from the normal CD ROM (e.g. Frugal install on USB)
+
+bootfiles='/cdrom/boot/isolinux'
+kernel="${bootfiles}/linux24"
+oldinitrd="${bootfiles}/minirt24.gz"
+knoppix="/cdrom/KNOPPIX/KNOPPIX"
+
+# You won't need to adjust anything below here...
+
+if dialog --title "DamnSmall Terminalserver" --yesno "This script will create a terminal server setup for DamnSmallLinux. You need at least 192 Megabyte of RAM to run it. Continue?" 9 60
+then
+	echo "continuing..."
+else
+	exit 1
+fi
+
+# Create softlink
+mkdir /opt
+mkdir -p /tmp/opt/pxedsl
+ln -s /tmp/opt/pxedsl /opt/pxedsl
+
+if test -f /tmp/${PXEDSL}
+then
+	(cd /tmp ; tar xvjf /tmp/${PXEDSL})
+elif test -f /cdrom/${PXEDSL}
+then
+	(cd /tmp ; tar xvjf /cdrom/${PXEDSL})
+else
+	(cd /tmp; wget -O - ${SERVERDIR}/${PXEDSL} | tar xvjf - ) 
+fi
+
+dialog --title "Creating Ramdisk" --msgbox "Creating the modified ramdisk will take a while, please be patient." 10 60
+
+# Unpack initrd
+echo 'Creating container...'
+dd if=/dev/zero of=/tmp/initrd.img bs=1024 count=57500
+echo 'Formatting container...'
+echo 'y' | mkfs.ext2 -L 'DslInitrd' /tmp/initrd.img
+echo 'Unpacking old initrd...'
+gunzip -c "$oldinitrd" > /tmp/oldinitrd.img
+mkdir /tmp/initrd.tmp
+mkdir /tmp/oldinitrd.tmp
+# Mount initrd
+mount -o loop /tmp/initrd.img /tmp/initrd.tmp
+mount -o loop /tmp/oldinitrd.img /tmp/oldinitrd.tmp
+echo 'Copying content of the old initrd...'
+( cd /tmp/oldinitrd.tmp ; tar -cf - . | tar -C /tmp/initrd.tmp -xvpf - )
+mkdir -p /tmp/initrd.tmp/cdrom/KNOPPIX
+echo 'Copying KNOPPIX image...'
+cp -f "$knoppix" /tmp/initrd.tmp/cdrom/KNOPPIX/KNOPPIX
+echo 'Copying modified linuxrc...'
+cp -f /opt/pxedsl/misc/linuxrc /tmp/initrd.tmp/linuxrc
+
+# Umount initrd
+umount /tmp/initrd.tmp
+umount /tmp/oldinitrd.tmp
+
+# Pack the initrd again:
+echo 'Packing initrd...'
+gzip -c /tmp/initrd.img > /opt/pxedsl/tftpboot/minirt24.gz
+
+# Remove the initrd
+echo 'Removing temporary copy of initrd...'
+rm /tmp/initrd.img
+# Remove the old original initrd
+echo 'Removing temporary copy of original initrd...'
+rm /tmp/oldinitrd.img
+
+# Copy the linux kernel
+cp "$kernel" /opt/pxedsl/tftpboot/
+
+# Ask for Network interface:
+netif=$( dialog --title "Network interface" --inputbox "Network interface to listen on?"  8 60 eth0 3>&1 1>&2 2>&3 )
+
+# Try to find out IP address on that interface
+ipaddr=$( ifconfig $netif | grep "inet addr:" | awk '{print $2}' | awk -F ':' '{print $2}' )
+ipaddr=$( dialog --title "IP address" --inputbox "IP address of this box?"  8 60 $ipaddr 3>&1 1>&2 2>&3 )
+
+# Try to find out netmask
+netmask=$( ifconfig $netif | grep "Mask:" | awk '{print $4}' | awk -F ':' '{print $2}' )
+netmask=$( dialog --title "Netmask" --inputbox "Netmask of this box?"  8 60 $netmask 3>&1 1>&2 2>&3 )
+
+# Try to find nameserver
+dns=$( grep nameserver /etc/resolv.conf | head -n 1 | awk '{print $2}' )
+dns=$( dialog --title "Nameserver" --inputbox "Nameserver used?" 8 60 $dns 3>&1 1>&2 2>&3 )
+
+# Gateway to use
+gateway=$( dialog --title "Gateway" --inputbox "Gateway to be used?" 8 60 $ipaddr 3>&1 1>&2 2>&3 )
+
+# Start of IP range
+ipstart=$( dialog --title "IP range start" --inputbox "First IP address assigned by DHCP server?" 8 60  3>&1 1>&2 2>&3 )
+
+# End of IP range
+ipend=$( dialog --title "IP range end" --inputbox "Last IP address assigned by DHCP server?" 8 60  3>&1 1>&2 2>&3 )
+
+# Boot file
+bootfile=$( dialog --title "Boot file" --inputbox "Boot file to send to the clients? The default fits PXE clients." 10 60 "pxelinux.0" 3>&1 1>&2 2>&3 )
+
+# Write udhcpd.conf configuration file 
+cat /opt/pxedsl/etc/udhcpd.conf.templ | \
+    sed /INTERFACE/s//$netif/ | \
+    sed /STARTRANGE/s//$ipstart/ | \
+    sed /ENDRANGE/s//$ipend/ | \
+    sed /SUBNET/s//$netmask/ | \
+    sed /GATEWAY/s//$gateway/ | \
+    sed /SIADDR/s//$ipaddr/ | \
+    sed /NAMESERVER/s//$dns/ | \
+    sed /BOOTFILE/s//$bootfile/ > /etc/udhcpd.conf
+
+# Configuration finished
+
+dialog --title "Configuration finished" --msgbox "Configuration finished. You might want to adjust /etc/udhcpd.conf before pressing the OK button. Now start up PXE bootable clients with at least 128MB RAM and have fun." 10 60
+
+/opt/pxedsl/rc.d/in.tftpd.sh restart
+/opt/pxedsl/rc.d/udhcpd.sh restart

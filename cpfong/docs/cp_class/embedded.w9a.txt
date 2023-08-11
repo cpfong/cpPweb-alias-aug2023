@@ -1,0 +1,79 @@
+swap
+--
+-- method A
+dd if=/dev/zero of=./100M.img bs=1M count=100
+
+mdconfig -a ./100M.img # if return /dev/md0
+swapon /dev/md0
+swapinfo
+swapoff /dev/md0
+mdconfig -d -u 0
+
+-- method B
+dd if=/dev/zero of=/tmp/swap bs=1m count=512
+chmod 0600 /tmp/swap
+echo "md99 none swap sw,file=/tmp/swap,late 0 0" >> /etc/fstab
+swapon -aL
+Confirm that it has worked:
+vultr [~]# swapinfo
+
+1. fetch FreeBSD-11.2-RELEASE-i386-mini-memstick.img.xz to your VM server
+2. rclone to koofr:
+3. IE get this file back
+4. unzip
+5. mobaxterm dd install to usb
+
+extrac
+--
+cat FreeBSD-11.2-RELEASE-i386-mini-memstick.img.xz | xz -d >  FreeBSD-11.2-RELEASE-i386-mini-memstick.img
+
+make a bootable FreeBSD usb stick (using mobaxterm)
+--
+[cpfong.cpfong-PC] ➤ cat /proc/partitions
+major minor  #blocks  name   win-mounts
+    8     0 976762584 sda
+    8     1 104859648 sda1   C:\
+    8     2 436209664 sda2   D:\
+    8     3 435686523 sda3
+    8    16   1007615 sdb
+    8    17    305096 sdb1   E:\		# cp comment, this is new
+
+[cpfong.cpfong-PC] ➤ ls /dev/sd*
+/dev/sda   /dev/sda1  /dev/sda2  /dev/sda3  /dev/sdb   /dev/sdb1
+
+[cpfong.cpfong-PC] ➤ dd if=./FreeBSD-11.2-RELEASE-i386-mini-memstick.img of=/dev/sdb bs=4M conv=sync
+74+1 records in
+75+0 records out
+314572800 bytes (300.0MB) copied, 98.022000 seconds, 3.1MB/s
+
+where to get iso or img?
+http://ftp-archive.freebsd.org/pub/FreeBSD-Archive/old-releases/ISO-IMAGES/9.3/
+
+cat FreeBSD-9.3-RELEASE-amd64-disc1.iso.xz | xz -d > bsd-amd64-disc1.iso
+@venus-> fstyp ./foo.iso 
+cd9660
+
+@venus-> cat FreeBSD-9.3-RELEASE-amd64-mini-memstick.img.xz  | xz -d > foo.img
+@venus-> fstyp ./foo.img 
+ufs
+
+wget https://www.freedos.org/download/download/FD12FLOPPY.zip
+man unzip
+unzip -l FD12FLOPPY.zip	#list first
+@venus-> fstyp FLOPPY.img
+msdosfs
+
+@venus-> wget http://mirror.slitaz.org/iso/rolling/slitaz-rolling-core.iso
+@venus-> fstyp ./slitaz-rolling-core.iso
+cd9660
+
+mount
+--
+cd9660
+msdosfs
+
+file _.disk.full
+
+101/usr/obj/nanobsd.full->sudo mdconfig -t vnode -f ./_.disk.full -u 1
+101/usr/obj/nanobsd.full->ls /dev/md*
+/dev/md0 /dev/md1 /dev/md1s1 /dev/md1s1a /dev/md1s2 /dev/md1s3

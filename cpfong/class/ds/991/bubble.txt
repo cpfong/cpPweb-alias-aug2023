@@ -1,0 +1,29 @@
+    Sub Main()
+        Dim a(10) As Integer
+
+        For i As Integer = 0 To a.GetUpperBound(0)
+            a(i) = Rnd() * 100 + 1
+            Console.Write(a(i) & " ")
+        Next
+        Console.WriteLine()
+
+        bubble(a)
+        Console.ReadKey()
+    End Sub
+
+    Sub bubble(ByVal b() As Integer)
+        For i As Integer = 0 To b.GetUpperBound(0) - 1
+            For j As Integer = 0 To b.GetUpperBound(0) - 1 - i
+                If (b(j) > b(j + 1)) Then
+                    Dim t As Integer
+                    t = b(j)
+                    b(j) = b(j + 1)
+                    b(j + 1) = t
+                End If
+            Next
+        Next
+
+        For i As Integer = 0 To b.GetUpperBound(0)
+            Console.Write(b(i) & " ")
+        Next
+    End Sub

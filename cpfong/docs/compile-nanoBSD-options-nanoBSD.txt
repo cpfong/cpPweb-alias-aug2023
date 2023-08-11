@@ -1,0 +1,18 @@
+reeBSD venus.ifong.org 12.1-RELEASE FreeBSD 12.1-RELEASE MYKERNEL  amd64
+--
+cd /usr/src/tools/tools/nanobsd/embedded/
+sh ../nanobsd.sh -c ./qemu-i386.cfg
+# default will clean all (under obj)
+# then buildworld (take 5 hrs at vultr)
+# then buildkernel
+
+detail
+--
+less nanobsd.sh or nanobsd.sh -h
+nanobsd.sh 	-w      #suppress buildworld (comment: no buildworld, but do compile kernel)
+        	-b      #suppress builds (both kernel and world) (comment: no kernel, no world)
+
+default.sh can change kernel config
+ cat default.sh | grep GENERIC
+ @venus-> cat /usr/src/tools/tools/nanobsd/defaults.sh | grep NANO_KERNEL=
+

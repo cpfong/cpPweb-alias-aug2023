@@ -1,0 +1,61 @@
+Software: # android studio app
+/Applications/Android Studio.app
+  Finder / Applications / select app / Command + Delete ( windows key + Backspace ) / Trash Can / Empty Trash
+   after del in Finder:  (removed successfully, it take no time, very very FAST)
+   @MINI-> ls -l /Applications/Android*	# ls: No match.
+
+SDK: #software development kit
+/Users/cpfongsmacmini/Library/Android/sdk
+   after del in Finder # MINI-> ls Library/Android/ # sdk still exists, so need to remove manually
+   @MINI-> pwd
+   @MINI-> rm -fr Android/
+
+MISC:
+/Users/cpfongsmacmini/.gradle  #makefile
+/Users/cpfongsmacmini/.android #virtual devices
+/Users/cpfongsmacmini/Library/Preferences/com.google.android.studio.plist
+/Users/cpfongsmacmini/Library/Caches/Android Open Source Project
+   after del in Finder # still exists these, i need to remove them all
+   @MINI-> pwd # /Users/cpfongsmacmini
+   @MINI-> rm -fr .gradle/; rm -fr ./.android/; 
+   rm -fr Library/Preferences/com.google.android.studio.plist 
+   rm -fr './Library/Caches/Android Open Source Project/'
+
+personal Project:
+/Users/cpfongsmacmini/AndroidStudioProjects #personal project
+   after del in Finder # still exists these, i need to remove them all
+   @MINI-> rm -fr AndroidStudioProjects/
+
+#now do install ....
+---------
+
+double click .dmg file, then use mouse hold drag icon to Applications  (note: air (mac NB) is M1 cpu, mini is intel cpu, do NOT mix it up)
+  @MINI-> ls /Applications/ |grep And
+  Android Studio.app #app installED ok
+  @MINI-> ls Library/ |grep An #NONE
+
+1st run
+  missing SDK
+  SDK component setup (also note: setup directory is /Users/cpfongsmacmini/Library/Android/sdk)
+   1 android sdk 368M
+   2 API 32 120M
+       Setup Type: Standard
+       SDK Folder: /Users/cpfongsmacmini/Library/Android/sdk
+       JDK Location: /Applications/Android Studio.app/Contents/jre/Contents/Home
+       Total Download Size: 588 MB
+	Android Emulator 299 MB
+        Android SDK Build-Tools 32 50.4 MB
+	Android SDK Build-Tools 32.1-rc1 56.7 MB
+	Android SDK Platform 32 63 MB
+	Android SDK Platform-Tools 18.5 MB
+	Android SDK Tools 98.2 MB
+	SDK Patch Applier v4 1.74 MB
+	  android-sdk-licences (accept)
+	  android-sdk-preview-licences (accept)
+
+1st proj
+   take lots of time download Gradle and java files
+
+check SDK manager: only Android API 32 is installed (only one is enough)
+
+goto device manager: select R (api level 30) X86 android 11 / download / start downloading ...

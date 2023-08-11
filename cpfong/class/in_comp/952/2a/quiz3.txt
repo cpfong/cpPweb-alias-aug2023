@@ -1,0 +1,18 @@
+解釋名詞: (任選 5 題回答)
+hot-swapping
+mirroring
+raid
+IS
+spam
+web bug
+cookies
+ddos
+hacker
+K&R
+
+問答題: (每題回答)
+資訊系統的三個基本元件為 ?
+資料探勘的目的是什麼 ?
+舉出三種垃圾郵件寄送者獲得 e-mail 位址的方法.
+交易是什麼 ?
+為何需要 ups ?

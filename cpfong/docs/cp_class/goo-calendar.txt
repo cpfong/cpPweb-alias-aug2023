@@ -1,0 +1,11 @@
+Q: how to show weather?
+A: calendar - setting - general calendar - location: KaoHsiung ShinSin District
+ empty location --> no weather (note: remember to set oC or oF, default is none)
+
+Q: import csv into google calendar
+A:
+    Open Google Calendar
+    calendars Settings 
+    Click Import calendar between the "My calendars" and "Other Calendars"
+    The file format is "ics" or "csv"
+    Click Import.

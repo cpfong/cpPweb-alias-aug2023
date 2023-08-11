@@ -1,0 +1,17 @@
+http://www.unix.com/man-page/posix/1posix/eval/
+
+eval - construct command by concatenating arguments
+eval - it takes a string as its argument, and evaluates it as if you'd typed that string on a command line.                 
+eval - utility shall  construct a command by concatenating arguments together, separating each with a <space>. 
+       The constructed command shall be read and executed by the shell.
+
+a='abc'
+b=a
+eval y=\$$b
+printf "%s" $y
+
+$(cmd)                  # note: when cmd was braced with $() it just like you enter cmd under prompt $
+n=1; $($n)              # this you enter 1 under prompt $, and nothing happen
+                        $ n=1; $($n)
+                        sh: 1: not found
+n=1; eval echo \${$n}   # equivalent echo $1

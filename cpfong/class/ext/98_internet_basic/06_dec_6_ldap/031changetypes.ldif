@@ -1,0 +1,6 @@
+## add new record PeaBody in
+dn: cn=Peabody Soup,ou=people,dc=plainjoe,dc=org
+changetype: add
+cn: Peabody Soup
+sn: Soup
+objectclass: inetOrgPerson

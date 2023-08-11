@@ -1,0 +1,154 @@
+
+CKAGES / SETUP ===========================================================
+use warnings;
+use strict;
+
+BEGIN {
+  $ENV{ENV} = '';
+  $ENV{PATH} = "/bin:/usr/bin:/sbin:/usr/sbin";
+  @INC = (".", @INC);
+}
+
+use POSIX;
+use Socket;
+
+use lib qw(.);
+
+#= CONSTANTS      =============================================================
+
+#= GLOB VARIABLES =============================================================
+## set defaults
+our $g_port=12345;
+my $g_maxbuf = 512 ;    ## need to get eventu. from config
+
+#= SUBROUTINES ================================================================
+
+###############################################################################
+# SUB:
+# PURPOSE:
+#
+# ARGS:
+#
+# NOTES:
+# RETURNS:
+###############################################################################
+sub REAPER
+{
+  my ($childpid,$ex);
+  while (($childpid = waitpid(-1,WNOHANG) ) > 0 ) {
+    $ex = $?;
+    if( $ex ) {
+      $ex = $ex/256;
+    }
+    if( $childpid == -1 ) {
+      printf( "reaped a child's system command\n" );
+    }
+    else {
+      printf( "PID $childpid: " . ($ex ? " (exit $ex)." : '.')."\n" );
+    }
+  }
+  $SIG{CHLD} = \&REAPER;
+  return;
+}
+
+###############################################################################
+# SUB:   SysWrite
+# PURPOSE: systemwrite
+#
+# ARGS:
+#
+# NOTES:
+# RETURNS:
+###############################################################################
+sub SysWrite
+{
+  my $res=$_[0] ;
+  my $buf="" ;
+  my $nr = 0 ;
+
+  syswrite( Client, $res, $g_maxbuf) ;
+  $res = 0 ;
+  eval {
+      local $SIG{ALRM} = sub { die "alarm\n" };       # NB \n required
+      alarm 120 ;
+      $nr = sysread( Client, $buf, $g_maxbuf );
+      alarm 0 ;
+     };
+  die if $@ && $@ ne "alarm\n";       # propagate errors
+    if ($@) {
+      alarm 0;
+      printf( "sysread time out , will be closed\n" );
+      $res=6 ;
+    }
+  if( $nr <= 0 ) {
+    if($res != 6 ) {
+      $res = 5 ;
+    }
+  }
+  else {
+    if(!($buf eq "act" )) {
+      $res = 1 ;
+    }
+  }
+  return($res) ;
+}
+
+#= MAIN Section begins ========================================================
+
+my( $proto, $pid, $paddr, $port, $iaddr, $name );
+
+$proto = getprotobyname( 'tcp' );
+socket( Server, PF_INET, SOCK_STREAM, $proto ) or printf( "socket: $!\n" );
+setsockopt( Server, SOL_SOCKET, SO_REUSEADDR, pack("l", 1) ) or printf( "setsockopt: $!\n" );
+bind( Server, sockaddr_in($g_port, INADDR_ANY) ) or printf( "bind: $!\n" );
+listen( Server, SOMAXCONN ) or printf( "listen: $!\n" );
+
+# set flushing
+$| = 1;
+
+$SIG{CHLD} = \&REAPER;
+
+while( 1 ) {
+  printf( "Ready to accept connection from client\n" );
+  if ( -f "/tmp/stoptest" ) {
+    last;
+  }
+  $paddr = accept( Client, Server );
+  if( defined($paddr) ) {
+    ($port,$iaddr) = sockaddr_in( $paddr );
+    $name = gethostbyaddr( $iaddr, AF_INET );
+    printf( "Connection from $name [".inet_ntoa($iaddr)."] at port $port\n" );
+    $pid = getpid();
+    syswrite( Client, "I'm main process $pid,I've got you connected, how are you! \n", $g_maxbuf) ;
+    if( !defined($pid = fork) ) {
+      printf( "Cannot fork: $!\n" );
+    }
+    elsif( $pid ) {
+      printf( "New server started with PID: $pid, will be recycled after it's reap\n" );
+      $pid = getpid();
+      syswrite( Client, "parent feedback PID $pid,I've passed your connection to a child worker process, I'm closing connection.. bye bye!\n", $g_maxbuf) ;
+      close Client ;
+      sleep(0.1);
+    }
+    else {    # else I'm the worker child
+      $pid = getpid();
+      printf( "I'm child worker $pid, I'm trying to do something here for client!, please wait !\n" ) ;
+      syswrite( Client, "I'm child worker $pid, trying to do something here for you, please wait !\n", $g_maxbuf) ;
+      sleep 5;
+      # do real stuff here
+      syswrite( Client, "child worker $pid feedback, I'm closing connection.. bye bye!\n", $g_maxbuf) ;
+      close Client ;
+      exit 44;
+    }
+  }
+  else {
+     printf("message from pid $pid,see you !\n");
+  }
+  printf("here is after child,after sleep secs\n");
+  my $current_pid = getpid();
+  printf( "tracking main process $pid,$current_pid\n" ) ;
+}
+printf( "NOTE! daemon stopped! \n" ) ;
+exit ( 0 ) ;
+
+__END__

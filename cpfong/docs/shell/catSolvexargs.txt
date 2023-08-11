@@ -1,0 +1,12 @@
+$ find . -name "*.c" -type f | sh ~/tmp/trash/test.sh | head -n1
+rm './foo.c'
+
+$ cat test.sh
+#!/bin/sh
+
+cat "$@" |
+while IFS= read -r line
+do
+ printf "rm \'$line\'\n"	# file name can have space (ex 'file nmae.c'
+done
+$

@@ -1,0 +1,21 @@
+#/usr/bin/xargs
+
+$ xargs
+a b
+c
+^D (done with input)
+
+now xargs have 3 parameters: a b and c
+default cmd (if not input) is /bin/echo
+
+echo a b c
+
+it can take the 1st arg as cmd
+$ xargs cat file1
+file2
+^D
+it will cat file1 and cat file2
+
+
+
+find . -name "*.bak" -type f -print | xargs echo /bin/rm -f

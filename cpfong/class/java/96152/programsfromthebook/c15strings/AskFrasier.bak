@@ -1,0 +1,57 @@
+//--------------STARTEXTRACT=frasier.xtr
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class AskFrasier extends JFrame 
+    implements ActionListener {
+
+    private JTextField questionField, replyField;
+    private JLabel psychiatristLabel, questionLabel;
+    private Psychiatrist frasier;
+
+    public static void main(String[] args) {
+        AskFrasier frame = new AskFrasier();
+        frame.setSize(400, 150);
+        frame.createGUI();
+        frame.setVisible(true);
+    }
+
+    private void createGUI() {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        Container window = getContentPane();
+        window.setLayout(new FlowLayout());
+
+        questionLabel = new JLabel("Type here.... ");
+        window.add(questionLabel);
+
+        questionField = new JTextField(30);
+        window. add(questionField);
+        questionField.addActionListener(this);
+
+        psychiatristLabel = new JLabel("Frasier says: ");
+        window.add(psychiatristLabel);
+
+        replyField = new JTextField(
+            "Go ahead please...  I'm listening.", 30);
+        replyField.setEditable(false);
+        window.add(replyField);
+
+        frasier = new Psychiatrist();
+    }
+
+
+
+    public void actionPerformed(ActionEvent event) {
+        //--------------STARTEXTRACT=askquestion.xtr
+        if (event.getSource() == questionField) {
+            String itsValue = questionField.getText();
+            frasier.putQuestion(itsValue);
+            replyField.setText(frasier.getReply() );
+        }
+        //----------ENDEXTRACT=askquestion.xtr
+    }
+}
+//-----------------ENDEXTRACT=frasier.xtr
+
+

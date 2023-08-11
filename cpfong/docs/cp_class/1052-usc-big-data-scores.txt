@@ -1,0 +1,28 @@
+n:night u:unknown  v:day_shown aAB:scores 1:quiz 2:quiz 3:mid -:absent
+ix ssid nam 1 2   3 4
+--------------------
+01 --02 婉  n A v
+02 --05 嘒  u u u u -
+03 1-06 紫  A a v 72 v
+04 --08 志  n A -
+05 --13 育  n a v
+06 --14 大  u u -
+07 --22 亭  n A v
+08 --23 義  n A v 98 v
+09 --36 品  n A v
+10 --43 婕  n A v
+11 --47 昶  u u -
+12 --49 文  A a v 62 v
+13 --59 庭  n A -
+14 --62 秋  A A v 98 v
+15 --63 世  u u u u -
+16 --66 澄  n a -
+17 --86 士  n a -
+18 --01 羽  n A v
+19 --38 琦  A A v 82 -
+20 --43 木  A A v 99 v
+21 --47 維  v B v 62 v
+22 1-74 庭  A A v 99 v
+23 --79 于  A A v 82 -
+24 --91 智  v B v 78 -
+25 --99 珮  v B v 60 v

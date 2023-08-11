@@ -1,0 +1,7 @@
+https://www.mybank.com.tw/mybank
+	--> pid, pwd, user
+left top 
+	Bank Service
+	unknow trasfer account
+	input xxxx
+	then will ask secret code

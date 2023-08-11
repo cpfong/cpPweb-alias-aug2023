@@ -1,0 +1,15 @@
+check /home/cpfong/00bsd_my_doc/mysql-on-newVM-for-perl.txt
+
+$dbh=DBI->connect("dbi:mysql:$db", $username, $auth) or die "Error opening database: $DBI::errstr\n";
+DEBUG and warn "Connect mysql db successfully\n";
+
+my $statement="select * from $table"; # sql query string
+my $sth = $dbh->prepare($statement); # statement handler
+$sth->execute() or die $DBI::errstr;
+
+while (my @row = $sth->fetchrow_array() ){
+ DEBUG and print join(',', @row) . "\n";
+}
+
+$sth->finish();
+$dbh->disconnect or die "Failed to disconnect\n";

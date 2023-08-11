@@ -1,0 +1,8 @@
+ch2.ex2
+select continent,code,name,population from Country where continent = 'Asia' or continent='Europe' or continent='Africa' limit 10;
+
+ch2.ex3
+select code,name,population from Country where region = 'Middle East' order by population  limit 3;
+
+ch3.ex2
+select ename,job,salary, case when job='PRESIDENT' then salary*2 when job='MANAGER' then salary*1.5 when job='ANALYST' then salary*1 else 0 end bonus from cmdev.emp;

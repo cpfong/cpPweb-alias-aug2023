@@ -1,0 +1,33 @@
+ dn: cn=John Doe,dc=example,dc=com
+ cn: John Doe
+ givenName: John
+ sn: Doe
+ telephoneNumber: +1 888 555 6789
+ telephoneNumber: +1 888 555 1232
+ mail: john@example.com
+ manager: cn=Barbara Doe,dc=example,dc=com
+ objectClass: inetOrgPerson
+ objectClass: organizationalPerson
+ objectClass: person
+ objectClass: top
+--------------
+dn ->distinguish name
+cn ->common name
+dc ->domain coponent
+ou ->orgination utit 
+
+註:  
+第一行表示這筆資料的 dn 為後面的這些元素所組成, 有點把後頭所有東西串起來的味道 
+dn 為一個 unique 的資料, 是視為一個 key, 第一行不是資料的一部份!
+
+第二行以後為資料的本身, 即所有的 attribute
+
+dn is the name of the entry; it's not an attribute nor part of the entry. 
+"cn=John Doe" is the entry's RDN (Relative Distinguished Name), 
+"dc=example,dc=com" is the DN of the parent entry. 
+
+The other lines show the attributes in the entry. 
+
+A server holds a subtree starting from a specific entry, e.g. "dc=example,dc=com" and its children. Servers may also hold references to other servers, so an attempt to access "ou=department,dc=example,dc=com" could return a referral or continuation reference to a server which holds that part of the directory tree. The client can then contact the other server. Some servers also support chaining, which means the server contacts the other server and returns the results to the client.
+
+LDAP rarely defines any ordering: The server may return the values of an attribute, the attributes in an entry, and the entries found by a search operation in any order. This follows from the formal definitions - an entry is defined as a set of attributes, and an attribute is a set of values, and sets need not be ordered.

@@ -1,0 +1,4 @@
+system: C Drive
+data: D Drive
+C+D < 80G
+C > 20G

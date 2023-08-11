@@ -1,0 +1,6 @@
+網路概論期中考 2014/04/28
+--
+1. 安裝 wireshark 軟體
+2. 生成一個廣播 ( broadcast ) 封包且使用 wireshark 去找到這筆封包將圖照相
+3. 使用 wireshark 找出任一筆 udp 通訊協定的封包
+4. tcp 封包及 udp 的封包有何不同?

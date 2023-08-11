@@ -1,0 +1,35 @@
+dn: cn=黃國倫,ou=電子系,dc=fotech,dc=edu
+cn: 黃國倫
+sn: 黃
+givenName: 國倫
+mail: huang@fotech.edu
+mail: hu@yahoo.com
+labeledURI: http://www.fotech.edu/~huang
+pager: 222-555-789
+mobile: 222-555-1011
+objectclass: inetOrgPerson
+
+dn: cn=王棟材,ou=電子系,dc=fotech,dc=edu
+cn: 王棟材
+sn: 王
+givenName: 棟材
+mail: wong@fotech.edu
+labeledURI: http://wong.yahoo.com
+objectclass: inetOrgPerson
+
+dn: cn=黃國倫,ou=資管系,dc=fotech,dc=edu
+cn: 黃國倫
+sn: 黃
+givenName: 國倫
+mail: huang_cis@fotech.edu
+mail: huang@yahoo.com
+labeledURI: http://www.fotech.edu/~huang_cis
+objectclass: inetOrgPerson
+
+dn: cn=馮治平,ou=資管系,dc=fotech,dc=edu
+cn: 馮治平
+sn: 馮
+givenName: 治平
+mail: cpfong@yahoo.com
+labeledURI: http://mct.tw/~cpfong
+objectclass: inetOrgPerson

@@ -1,0 +1,19 @@
+sendmail_enable="NONE"
+
+firewall_enable="YES"
+firewall_script="/etc/ipfw.rules"
+firewall_logging="YES"
+
+# these for jail
+gateway_enable="YES"
+
+natd_enable="YES"
+natd_interface="xn0"
+natd_flags="-f /etc/natd.conf -dynamic"
+
+syslogd_flags="-ss"
+
+# for ntpd, boot up once tiem sync, suggested by handbook
+ntpdate_enable="YES"
+ntpdate_flags="-u -b"
+ntpdate_hosts="211.79.171.1"

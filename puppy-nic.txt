@@ -1,0 +1,49 @@
+-- eth0
+ifconfig eth0 down	# this will stop default gw too
+kill -TERM `cat /var/run/dhcpcd-eth0.pid`	# get rid of dhcp client
+dhcpcd eth0	# dhcpclient up now
+netstat -nr	# check default gw
+                                                                              
+ifconfig eth0 192.168.1.2 netmask 255.255.255.0                               
+route add default gw 192.168.1.1                                           
+ 
+-- wlan0
+ifconfig wlan0 down
+iwconfig
+
+# ls /var/run/
+dhcpcd-eth0.pid
+dhcpcd-wlan0.pid  wpa_supplicant
+
+# wpa_passphrase myssid secret
+# cat /root/wpa_cpfong.conf 
+ap_scan=1
+network={
+	ssid="myssid"
+	 key_mgmt=WPA-PSK
+	#psk="secret"
+	psk=109f4ef079fdeff677b1d50ebe7e45ffea0f50e4532437a0c01e635fa230244d7
+}
+
+wpa_supplicant -B -Dwext -iwlan0 -c/root/wpa_cpfong.conf
+dhcpcd wlan0
+ping 8.8.8.8
+
+rm /var/run/wpa_supplicant/*
+# you will know how system do wireless
+ps aux |grep wpa_sup
+
+#!/usr/bin/perl
+die "pls pass in wpa_config" unless (@ARGV == 1);
+
+$_ = $ARGV[0];
+chomp;
+if (/eth0/){
+	print "/sbin/ifconfig wlan0 down\n";
+	print "/usr/sbin/dhcpcd eth0\n";
+}
+else {
+	print "/sbin/ifconfig eth0 down\n";
+	print "/usr/sbin/wpa_supplicant -Dwext -iwlan0 -c$_ &\n";
+	print "/usr/sbin/dhcpcd wlan0\n";
+}

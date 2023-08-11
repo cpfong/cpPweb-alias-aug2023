@@ -1,0 +1,30 @@
+#!/usr/local/bin/python
+
+#p3-26ex9
+
+#!/usr/local/bin/python
+
+s=input("input 5 numbers sep with space: ")
+
+#n1, n2, n3, n4, n5=s.split(',')
+n1, n2, n3, n4, n5=s.split()
+
+sum=eval(n1) + eval(n2) + eval(n3) + eval(n4) + eval(n5)
+avg=sum/5
+print ("sum = %s" % sum, "avg = %s" % avg)
+
+
+#!/usr/local/bin/python
+from random import random
+
+tar=int(random() * 100 % 3)
+
+i=int(eval(input('number: ')))
+
+if (i == tar) :
+ print("bingo\n")
+else :
+ print("miss\n")
+ print("tar=%d" % tar)
+~
+~

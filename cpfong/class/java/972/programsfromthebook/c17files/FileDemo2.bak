@@ -1,0 +1,70 @@
+//-----------STARTEXTRACT=filedemo2.xtr
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import java.util.*; 
+import java.io.*;
+
+class FileDemo2 extends JFrame
+implements  ActionListener {
+
+    private JTextArea inputTextArea;
+    private JButton loadButton;
+//---------------------STARTEXTRACT=decbuffreader.xtr
+    private BufferedReader inFile;
+//---------------------ENDEXTRACT=decbuffreader.xtr
+    private JTextField nameField;
+    public static void main (String [] args) {
+        FileDemo2 frame = new FileDemo2();
+
+        frame.setSize(400, 300);
+        frame.createGUI();
+        frame.show();
+    }
+
+    private void createGUI() {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        Container window = getContentPane();
+        window.setLayout(new FlowLayout());
+        loadButton = new JButton("load");
+        window.add(loadButton);
+        loadButton.addActionListener(this);
+
+        nameField = new JTextField(20);
+        window.add(nameField);
+        nameField.addActionListener(this);
+
+        inputTextArea = new JTextArea("",10,30);
+        window.add("Center", inputTextArea);
+    }
+
+    public void actionPerformed(ActionEvent event) {
+        if (event.getSource() == loadButton) {
+            String fileName;
+            fileName = nameField.getText();
+            try {
+// ----------------------STARTEXTRACT=doinfile.xtr
+               inFile = new BufferedReader(
+                new FileReader(fileName));
+//----------------------ENDEXTRACT=doinfile.xtr
+                inputTextArea.setText( "");    // clear the input area
+                String line;
+//---------------STARTEXTRACT=readloop.xtr
+                while( ( line = inFile.readLine() ) != null) {
+                    inputTextArea.append(line+"\n");
+                }
+                inFile.close();
+//---------------ENDEXTRACT=readloop.xtr
+            }
+            catch (IOException e) {
+                System.err.println("Error in file "
+                    + fileName + ": " + e.toString() );
+                System.exit(1);
+            }
+        }
+    }
+}
+//-----------ENDEXTRACT=filedemo2.xtr
+
+
+

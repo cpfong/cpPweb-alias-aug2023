@@ -1,0 +1,21 @@
+# jail addr created on host and patch to jail. jail canNOT add, modify or delete addresse
+
+@SaTurn-> sudo jexec foo
+root@foo:/ # ifconfig
+vtnet0: flags=8843<UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> metric 0 mtu 1500
+lo0: flags=8049<UP,LOOPBACK,RUNNING,MULTICAST> metric 0 mtu 16384
+root@foo:/ #  #note: inside jail foo
+
+# /etc/jail.conf
+foo{
+ ip4.addr = "vtnet0|10.10.0.1/32";
+}
+
+@SaTurn-> sudo service jail stop foo
+Stopping jails: foo.
+@SaTurn-> s vi /etc/jail.conf
+@SaTurn-> sudo service jail start foo
+
+root@foo:/ # ifconfig
+vtnet0: flags=8843<UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> metric 0 mtu 1500
+        inet 10.10.0.1 netmask 0xffffffff broadcast 10.10.0.1

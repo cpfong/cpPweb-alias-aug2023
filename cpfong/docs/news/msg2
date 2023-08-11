@@ -1,0 +1,14 @@
+Comaq-> s /usr/local/etc/rc.d/innd.sh start
+Password:
+Starting innd.
+Scheduled start of /usr/local/news/bin/innwatch.
+ inn
+
+Comaq-> tail news.notice 
+Dec 28 10:54:08 hiedoc innfeed[33531]: ME starting innfeed 2.3.4 (20021126 prerelease) at Sat Dec 28 10:54:08 2002
+Dec 28 10:54:08 hiedoc innfeed[33531]: loading /usr/local/news/etc/innfeed.conf
+Dec 28 10:54:10 hiedoc innfeed[33531]: fjtc:0 cxnsleep no permission to talk: 502 You have no permission to talk.  Goodbye.
+Dec 28 10:54:10 hiedoc innfeed[33531]: fjtc spooling no active connections
+Dec 28 10:54:40 hiedoc innfeed[33531]: fjtc:0 cxnsleep no permission to talk: 502 You have no permission to talk.  Goodbye.
+
+-- 和我們說再見, 因為對方沒開權限.

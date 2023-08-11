@@ -1,0 +1,36 @@
+<meta http-equiv='Content-Type' content='text/html; charset=big5'>
+<html>
+chap 8 Object-based Programming <br>
+<ol> Fig 8.1 二個物件
+	<li> Time1 class + TimeTest1 class (前為副程式, 後為主程式, 所以 TimeTest1 有 main)
+
+	<ol> 先完成主程式 TimeTest1
+		<li> 利用 System.out.println 來做即可
+		<li> 先把大的架構完成
+	</ol>
+
+	<ol> Time1
+		<li> public class Time1 extends Object {}
+		<li> private int hour;
+		<li> constructor (建構子) 用來初始化這個 class, 所以和 class 有相同的名, 但為 method
+		<li> ... class Time1 ... {		publict Time1() {set Time(0,0,0);}		}
+		<li> Time1 class 中有四個 method 分別為 Time1(), setTime(), toUniversalString(), toStandardString()
+	</ol>
+
+	<ol> this 的使用
+		<li> 在一個 application file 之中有二個 class (一個為 main) 注意它們各自有 scope
+		<li> public class test{} public class sTime{}
+	</ol>
+
+	<ol> 初始化 obj --> 建構子 constructor
+		<li> 利用二個不同的檔案來做
+		<li> 在生成建構子時可以把不同數量的參數全放入
+		<li> 
+	</ol>
+	<ol> 例子 
+		<li> 分開 <a href=test2_1.java> 1  </a>  -- <a href=test2_2.java> 2  </a> 
+		<li> <a href=./test2_3.java>合成 </a>
+	</ol>
+
+</ol>
+</html>

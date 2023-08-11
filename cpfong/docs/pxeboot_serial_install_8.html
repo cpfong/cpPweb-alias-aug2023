@@ -1,0 +1,748 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <title>Installing FreeBSD 8.x via serial console and PXE</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="docbook.css" />
+  </style>
+</head>
+
+<body>
+<h1>Installing FreeBSD 8.x via serial console and PXE</h1>
+<p>&mdash; by Jeremy Chadwick &lt;freebsd@jdc.parodius.com&gt;</p>
+
+
+<h2>Table of Contents</h2>
+<dl>
+<dt>1 <a href="#REQUIREMENTS">Requirements</a></dt>
+<dt>2 <a href="#COMMON-TERMS">Common Paths/Terms Used</a></dt>
+<dt>3 <a href="#INSTALLATION">Installation</a></dt>
+<dd>
+<dl>
+<dt>3.1 <a href="#CONFIGURING-DHCP">Configuring DHCP</a></dt>
+<dt>3.2 <a href="#CONFIGURING-TFTP">Configuring TFTP</a></dt>
+<dt>3.3 <a href="#CONFIGURING-NFS">Configuring NFS</a></dt>
+<dt>3.4 <a href="#EXTRACTING-FREEBSD">Extracting the FreeBSD CD contents for use via NFS</a></dt>
+<dt>3.5 <a href="#REBUILDING-PXEBOOT">Rebuilding pxeboot for exclusive serial access</a></dt>
+<dt>3.6 <a href="#CONFIGURING-LOADER-CONF">Configuring <tt class="FILENAME">loader.conf</tt></a></dt>
+<dt>3.7 <a href="#FIXING-FILE-PERMISSIONS">Fixing file permissions to work with TFTP and NFS</a></dt>
+<dt>3.8 <a href="#ATTEMPTING-BOOT">Step 8: Attempting your first PXE boot</a></dt>
+<dt>3.9 <a href="#CHOOSE-INSTALL-MEDIUM">Step 9: Choosing an installation medium</a></dt>
+</dl>
+</dd>
+<dt>4 <a href="#BOOT-CONFIG">Creating <tt class="FILENAME">/boot.config</tt> for high-speed serial</a></dt>
+<dt>5 <a href="#NETWORKING-OPTIONS">Important Networking options</a></dt>
+<dt>6 <a href="#POST-INSTALL-OPTIONS">Post-installation Configuration options</a></dt>
+</dl>
+
+
+
+<h2><a id="REQUIREMENTS">Chapter 1 Requirements</a></h2>
+
+<p>These are the things you are absolutely going to need, no questions asked.
+If you don't have any of these, you should stop here.</p>
+
+<ul>
+<li>Above boxes' MAC address on its NIC (needed for DHCP configuration)</li>
+<li>DHCP server</li>
+<li>TFTP server</li>
+<li>NFS server</li>
+<li>FreeBSD 8.x "disc1" installation CD (either the ISO or physical CD)</li>
+<li>Confirmed working serial console on the box you wish to install on.  Make
+    sure it does in fact work at speeds higher than 9600bps.  Connect it with
+    a null modem cable to another machine, use
+    <tt class="COMMAND">cu -l ttyu0 -s 115200</tt>
+    and make sure it works</li>
+<li>A FreeBSD box where you can rebuild pieces of the base system (read: boot
+    blocks) on (that means a full
+    <tt class="FILENAME">/usr/src</tt>
+    tree)</li>
+<li>Ability to reboot the machine you plan on installing FreeBSD on.  This is NOT
+    a requirement, but highly recommended regardless.  There are numerous places
+    during the remote installation procedure where you may not end up with a
+    prompt to log in, thus having remote reboot capability is needed.</li>
+</ul>
+
+<div class="NOTE">
+<blockquote class="NOTE">
+<p><b>Note:</b> This procedure works for i386 and amd64.  There's no need to change
+any of the below pathnames for amd64.  It also doesn't matter if you build
+the
+<a href="http://www.freebsd.org/cgi/man.cgi?query=pxeboot&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">pxeboot</span>(8)</span></a>
+binary on an amd64 box while the machine that plans on using it
+is i386; the bootstraps are purely i386.</p>
+</blockquote>
+</div>
+
+
+
+<h2><a id="COMMON-TERMS">Chapter 2 Common Paths/Terms Used</a></h2>
+<p>Below are a list of terms, paths, directories, and filenames which are commonly
+used throughout this document.</p>
+
+<div class="INFORMALTABLE">
+<table border="0" frame="void" width="100%" class="CALSTABLE">
+<col />
+<col />
+<thead>
+<tr>
+  <th width="25%">Term</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody valign="TOP">
+<tr>
+  <td><tt class="LITERAL">192.168.1.88</tt></td>
+  <td>The IP of the DHCP, TFTP, and NFS server</td>
+</tr>
+<tr>
+  <td><tt class="LITERAL">192.168.1.100</tt></td>
+  <td>The IP of the box which we're doing the PXE boot on/from</td>
+</tr>
+<tr>
+  <td><tt class="LITERAL">nfsserver.home.lan</tt></td>
+  <td>FQDN of 192.168.1.88</td>
+</tr>
+<tr>
+  <td><tt class="LITERAL">newbox.home.lan</tt></td>
+  <td>FQDN of 192.168.1.100</td>
+</tr>
+<tr>
+  <td><tt class="LITERAL">/usr/local/freebsd8</tt></td>
+  <td>Directory containing contents of the FreeBSD 8.x "disc1" CD; you will be modifying
+  some files in this directory, so it cannot be a mounted CD (e.g. read-only)</td>
+</tr>
+<tr>
+  <td><tt class="LITERAL">boot0</tt><br />
+      <tt class="LITERAL">boot2</tt><br />
+      <tt class="LITERAL">loader</tt></td>
+  <td>All of these are the different stages of the FreeBSD bootstraps.  All are
+  used when physical media is used for installation (e.g. floppies, CDROM, hard
+  disk, USB thumb drive, etc.), but aren't used when PXE booting.
+  <a href="http://www.freebsd.org/cgi/man.cgi?query=loader&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">loader</span>(8)</span></a>
+  is technically used, but it's actually called
+  <a href="http://www.freebsd.org/cgi/man.cgi?query=pxeboot&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">pxeboot</span>(8)</span></a>.
+  See below for details on that</td>
+</tr>
+<tr>
+  <td><tt class="LITERAL">pxeboot</tt><br />
+      <tt class="LITERAL">pxeldr</tt></td>
+  <td>This is the sole binary that gets fetched via TFTP after the Intel PXE boot ROM gets
+  an IP via DHCP.  The binary itself is actually a modified version of
+  <a href="http://www.freebsd.org/cgi/man.cgi?query=loader&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">loader</span>(8)</span></a>,
+  and includes some extra features (which we'll use)</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<h2><a id="INSTALLATION">Chapter 3 Installation</a></h2>
+
+
+<h3><a id="CONFIGURING-DHCP">3.1 Configuring DHCP</a></h3>
+
+<p>I'm familiar with ISC's DHCP server, available as
+<a href="http://www.freebsd.org/cgi/url.cgi?ports/net/isc-dhcp41-server/pkg-descr"><tt class="FILENAME">net/isc-dhcp41-server</tt></a>.
+The important pieces you need to add to your
+<tt class="FILENAME">/usr/local/etc/dhcpd.conf</tt>
+are here:</p>
+
+<pre class="PROGRAMLISTING">
+host newbox.home.lan {
+	  hardware ethernet 00:11:22:33:44:55;
+	  fixed-address newbox.home.lan;
+	  next-server 192.168.1.88;
+	  filename "freebsd8/boot/pxeboot";
+	  option root-path "/usr/local/freebsd8";
+}
+</pre>
+
+<p>Since not a single other document on the Web has described what the important
+options do, I'll describe their purpose:</p>
+
+<pre class="PROGRAMLISTING">
+next-server 192.168.1.88;
+</pre>
+
+<p>This line isn't necessary if the NFS server and the DHCP server are on the
+same machine.  Including it doesn't hurt.</p>
+
+<pre class="PROGRAMLISTING">
+filename "freebsd8/boot/pxeboot";
+</pre>
+
+<p>When a DHCP request is made from the Intel PXE boot ROM on the NIC, there are
+additional parameters you can tell it besides just an IP number.  This argument
+tells the PXE boot ROM what filename to do a TFTP request for now that it has
+an IP address.  It's the first piece of code which gets run after the initial
+DHCP IP negotiation is completed.</p>
+
+<pre class="PROGRAMLISTING">
+option root-path "/usr/local/freebsd8";
+</pre>
+
+<p>This is for FreeBSD.  It tells
+<a href="http://www.freebsd.org/cgi/man.cgi?query=pxeboot&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">pxeboot</span>(8)</span></a>
+where the root filesystem should be mounted from, NFS-wise.  Thus, the kernel
+will do the equivalent of the following, in an attempt to get a working root
+filesystem, and then start
+<a href="http://www.freebsd.org/cgi/man.cgi?query=init&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">init</span>(8)</span></a>:</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> <kbd class="USERINPUT">mount -t nfs 192.168.1.88:/usr/local/freebsd8 /</tt>
+</pre>
+
+<p>At this point, you should enable the ISC DHCP server in
+<tt class="FILENAME">/etc/rc.conf</tt>,
+and start the daemon using the appropriate rc.d script in
+<tt class="FILENAME">/usr/local/etc/rc.d</tt>.</p>
+
+
+
+<h3><a id="CONFIGURING-TFTP">3.2 Configuring TFTP</a></h3>
+
+<p>Uncomment the following line in
+<tt class="FILENAME">/etc/inetd.conf</tt>,
+and modify it so that the
+<code class="OPTION">-s</code>
+flag points to
+<tt class="FILENAME">/usr/local</tt>
+(that's where
+<a href="http://www.freebsd.org/cgi/man.cgi?query=tftpd&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">tftpd</span>(8)</span></a>
+will
+<a href="http://www.freebsd.org/cgi/man.cgi?query=chroot&amp;sektion=2"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">chroot</span>(2)</span></a>
+before serving content):</p>
+
+<pre class="PROGRAMLISTING">
+tftp    dgram   udp     wait    root    /usr/libexec/tftpd      tftpd -l -s /usr/local
+</pre>
+
+<p>Add the following to
+<tt class="FILENAME">/etc/rc.conf</tt>
+(assuming it's not already there):</p>
+
+<pre class="PROGRAMLISTING">
+inetd_enable="yes"
+</pre>
+
+<p>Now start the inetd service, thus starting
+<a href="http://www.freebsd.org/cgi/man.cgi?query=tftpd&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">tftpd</span>(8)</span></a>:</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> <kbd class="USERINPUT">/etc/rc.d/inetd start</kbd>
+</pre>
+
+<p>If you already had inetd running prior to modifying
+<tt class="FILENAME">/etc/inetd.conf</tt>,
+all you need to do is send a SIGHUP to it:</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> <kbd class="USERINPUT">/etc/rc.d/inetd reload</kbd>
+</pre>
+
+
+
+<h3><a id="CONFIGURING-NFS">3.3 Configuring NFS</a></h3>
+
+<p>Add the following to
+<tt class="FILENAME">/etc/rc.conf</tt>,
+again assuming they're not already there:</p>
+
+<pre class="PROGRAMLISTING">
+rpcbind_enable="yes"
+mountd_enable="yes"
+nfs_server_enable="yes"
+</pre>
+
+<p>Now we need to add an NFS export.  Edit
+<tt class="FILENAME">/etc/exports</tt>
+and add the following lines to it:</p>
+
+<pre class="PROGRAMLISTING">
+/usr/local/freebsd8    -network 192.168.1 -mask 255.255.255.0
+</pre>
+
+<p>This example assumes your network is 192.168.1.0/24; if it's something
+else, you'll need to make appropriate changes.</p>
+
+<p>Next, don't forget to make the exported directory.  Don't worry about the
+ownership or permissions, we'll fix those later:</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> <kbd class="USERINPUT">mkdir /usr/local/freebsd8</kbd>
+</pre>
+
+<p>Now start all of the above services:</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> <kbd class="USERINPUT">/etc/rc.d/rpcbind start</kbd>
+<samp class="PROMPT">#</samp> <kbd class="USERINPUT">/etc/rc.d/mountd start</kbd>
+<samp class="PROMPT">#</samp> <kbd class="USERINPUT">/etc/rc.d/nfsd start</kbd>
+</pre>
+
+<p>If these were running beforehand and you simply edited <tt class="FILENAME">/etc/exports</tt>,
+all you need to do is send a SIGHUP to
+<a href="http://www.freebsd.org/cgi/man.cgi?query=mountd&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">mountd</span>(8)</span></a>:
+to get it to re-read the exports:</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> <kbd class="USERINPUT">/etc/rc.d/mountd reload</kbd>
+</pre>
+
+<p>You should verify the NFS mount which was added is being exported:</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> <kbd class="USERINPUT">showmount -e</kbd>
+Exports list on localhost:
+/usr/local/freebsd8		192.168.1.0
+</pre>
+
+
+
+<h3><a id="EXTRACTING-FREEBSD">3.4 Extracting the FreeBSD CD contents for use via NFS</a></h3>
+
+<p>We're going to need to copy all the contents off the FreeBSD 8.x "disc1" CD
+to
+<tt class="FILENAME">/usr/local/freebsd8</tt>
+before continuing.  In this example, the NFS server has the ISO file for 8.0-STABLE
+"disc1" on it, and we're going to extract the contents.</p>
+
+<p>FreeBSD tar is linked to a library called libarchive, which understands the
+ISO9660 format and Joliet extensions.  Simply put, this means you can extract
+the contents of an .iso file using tar:</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> <kbd class="USERINPUT">tar -C /usr/local/freebsd8 -pxvf 8.0-RELEASE-amd64-disc1.iso</kbd>
+</pre>
+
+
+
+<h3><a id="REBUILDING-PXEBOOT">3.5 Rebuilding pxeboot for exclusive serial access</a></h3>
+
+<p>FreeBSD's bootloader/bootstraps, by default, are intended to be used
+and viewed via a VGA console.  When it comes to utilising a serial port,
+things get a little hairy:
+</p>
+
+<p>First, serial access is limited to 9600bps tops, and requires that the
+bootloader be rebuilt to support higher speeds.  Sure, you can override
+this using
+<tt class="FILENAME">loader.conf</tt>,
+but that's for
+<a href="http://www.freebsd.org/cgi/man.cgi?query=loader&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">loader</span>(8)</span></a>
+and not for
+<a href="http://www.freebsd.org/cgi/man.cgi?query=boot&amp;sektion=2"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">boot</span>(2)</span></a>
+or earlier stages.</p>
+
+<p>Most people work around this by creating a file in their root filesystem
+called
+<tt class="FILENAME">/boot.config</tt>
+that contains the argument
+<code class="OPTION">-S115200</code>
+as well as
+<code class="OPTION">-Dh</code>
+(see the
+<a href="http://www.freebsd.org/doc/handbook/">FreeBSD Handbook</a>
+for details).  This allows for serial output during the
+boot2 stage, as well as subsequent stages such as loader.</p>
+
+<p>However, when PXE booting, there's only one piece of the bootstrap used:
+<a href="http://www.freebsd.org/cgi/man.cgi?query=pxeboot&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">pxeboot</span>(8)</span></a>.
+This means the only solution is to rebuild the boot blocks with a serial
+port speed that has the speed you want (in this case, 115200bps).
+But first, let's clear something up:
+<a href="http://www.freebsd.org/cgi/man.cgi?query=pxeboot&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">pxeboot</span>(8)</span></a>
+is actually nothing more than
+<a href="http://www.freebsd.org/cgi/man.cgi?query=loader&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">loader</span>(8)</span></a>
+with some extra code (see
+<tt class="FILENAME">src/sys/boot/i386/pxeldr.S</tt>)
+in it.
+<a href="http://www.freebsd.org/cgi/man.cgi?query=loader&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">loader</span>(8)</span></a>
+uses a library called libi386, which is a library used by the bootstraps only
+(it's it's not something you'll find in
+<tt class="FILENAME">/usr/lib</tt>
+or
+<tt class="FILENAME">/usr/libexec</tt>).
+libi386 is what actually controls what the serial port speed is set to, thus,
+anything using libi386 should have support for higher serial console speeds.
+The
+<tt class="LITERAL">BOOT_COMCONSOLE_SPEED</tt>
+and
+<tt class="LITERAL">BOOT_COMCONSOLE_PORT</tt>
+variables are used in libi386.</p>
+
+<p>Secondly,
+<a href="http://www.freebsd.org/cgi/man.cgi?query=pxeboot&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">pxeboot</span>(8)</span></a>
+reads
+<tt class="FILENAME">loader.conf</tt>
+"too late" during the boot procedure, so if you have issues that require commands
+to be typed into the loader ("OK") prompt, you're out of luck.  Rebuilding
+<a href="http://www.freebsd.org/cgi/man.cgi?query=pxeboot&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">pxeboot</span>(8)</span></a>
+to use the serial port exclusively solves this.</p>
+
+<p>On the NFS server, do the following:</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> <kbd class="USERINPUT">rm -fr /usr/obj/*</kbd>
+<samp class="PROMPT">#</samp> <kbd class="USERINPUT">cd /sys/boot</kbd>
+<samp class="PROMPT">#</samp> <kbd class="USERINPUT">make BOOT_PXELDR_ALWAYS_SERIAL=1 BOOT_COMCONSOLE_SPEED=115200</kbd>
+</pre>
+
+<div class="WARNING">
+<blockquote class="WARNING">
+<p><b>Note:</b> Do not type
+<tt class="COMMAND">make install</tt>
+after this step!  We don't want to modify the bootstraps on the NFS server itself, we
+just want a 115200bps-capable
+<a href="http://www.freebsd.org/cgi/man.cgi?query=pxeboot&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">pxeboot</span>(8)</span></a>
+binary that uses the serial port exclusively!</p>
+</blockquote>
+</div>
+
+<p>The removal of all contents within
+<tt class="FILENAME">/usr/obj</tt>
+may seem crazy, but it's actually required for some of the below steps to work
+properly.  If
+<tt class="FILENAME">/usr/obj</tt>
+is populated from an old
+<tt class="MAKETARGET">buildworld</tt>
+or
+<tt class="MAKETARGET">buildkernel</tt>,
+the
+<tt class="COMMAND">make</tt>
+will end up storing files there rather than in the current working directory.</p>
+
+<p>The first parameter,
+<tt class="LITERAL">BOOT_PXELDR_ALWAYS_SERIAL=1</tt>,
+explicitly
+causes all output to go to the serial port instead of the VGA console.  This
+means that you'll get serial output early on (before
+<tt class="FILENAME">loader.conf</tt>
+is read), which can really come in handy if things go awry.  This option
+doesn't appear to be documented anywhere besides in the source code.</p>
+
+<p>The second parameter,
+<tt class="LITERAL">BOOT_COMCONSOLE_SPEED=115200</tt>,
+causes
+the serial port to be initialised at 115200bps.  If you honestly prefer to use
+9600bps, you don't have to specify this at all.  This option is documented.
+For those somewhat familiar with serial consoles on FreeBSD: by specifying this
+parameter you won't need
+<tt class="LITERAL">comconsole_speed</tt>
+in
+<tt class="FILENAME">loader.conf</tt>.</p>
+
+<p>Finally, there's another undocumented option specific to
+<a href="http://www.freebsd.org/cgi/man.cgi?query=pxeboot&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">pxeboot</span>(8)</span></a>
+(and isn't part of libi386):
+<tt class="LITERAL">BOOT_PXELDR_PROBE_KEYBOARD=1</tt>.
+This causes
+<a href="http://www.freebsd.org/cgi/man.cgi?query=pxeboot&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">pxeboot</span>(8)</span></a>
+to to look for an attached PS/2 or AT keyboard, and if there is one, use
+the VGA console and local keyboard as the console device.  Otherwise, it
+defaults to serial console.</p>
+
+<p>Now that we have a 115200bps-capable
+<a href="http://www.freebsd.org/cgi/man.cgi?query=pxeboot&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">pxeboot</span>(8)</span></a>
+binary, let's use it instead of the one originally on the CD image:</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> <kbd class="USERINPUT">cd /sys/boot/i386/pxeldr</kbd>
+<samp class="PROMPT">#</samp> <kbd class="USERINPUT">cp pxeboot /usr/local/freebsd8/boot</kbd>
+</pre>
+
+<p>At this point, a PXE booting client should now have the capability to set the
+serial port speed to 115200bps, and should provide output early on during the
+booting process.</p>
+
+<p>Finally, don't forget to clean up your <tt class="FILENAME">/sys/boot</tt>
+directory; we don't want cruft laying around in there:</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> <kbd class="USERINPUT">cd /sys/boot</kbd>
+<samp class="PROMPT">#</samp> <kbd class="USERINPUT">make clean</kbd>
+</pre>
+
+
+
+<h3><a id="CONFIGURING-LOADER-CONF">3.6 Configuring <tt class="FILENAME">loader.conf</tt></a></h3>
+
+<p>Now we have to update <tt class="FILENAME">/usr/local/freebsd8/boot/loader.conf</tt>
+to tell it to utilise serial console, and more importantly, point to where the
+root filesystem (for booting) will be.  The lines <b>in bold</b> are the ones
+you want to add; the others shown should already be there (don't mess with
+them!):</p>
+
+<pre class="PROGRAMLISTING">
+mfsroot_load="YES"
+mfsroot_type="mfs_root"
+mfsroot_name="/boot/mfsroot"
+<b>vfs.root.mountfrom="ufs:/dev/md0"</b>
+</pre>
+
+<p><tt class="LITERAL">vfs.root.mountfrom</tt>
+tells the kernel that after it's done booting, to try to load the root
+filesystem from
+<tt class="LITERAL">ufs:<tt class="DEVICENAME">/dev/md0</tt></tt>
+before starting
+<a href="http://www.freebsd.org/cgi/man.cgi?query=init&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">init</span>(8)</span></a>.
+It's important to note that the device parameter is
+<tt class="DEVICENAME">/dev/md0</tt>
+and <b>not</b>
+<tt class="DEVICENAME">/dev/md0c</tt>
+like on FreeBSD 7.x.  This is normal; there have been GEOM and libdisk improvements
+which no longer require the "c" slice to exist (you'll find this to be true when
+creating slices during
+<a href="http://www.freebsd.org/cgi/man.cgi?query=sysinstall&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">sysinstall</span>(8)</span></a>
+too).</p>
+
+<p class="note">If you specify the wrong device, the root filesystem won't
+mount.  If the root filesystem mounting procedure fails, FreeBSD will continue
+on and attempt to mount the root filesystem via NFS, which is not what we want.
+If you want to know more about this part of the booting procedure, you should
+look at the related Forth files, as well as
+<tt class="FILENAME">loader.rc</tt>
+in the same directory.</p>
+
+<p>The
+<tt class="LITERAL">mfs_root</tt>
+loading mechanism is programmed to support gzip decompression automatically, so
+it will also look for the
+<tt class="FILENAME">/boot/mfsroot.gz</tt>
+file.
+In FreeBSD 8.x this actually works, while in FreeBSD 7.x and earlier the gzip
+decompression would randomly fail.</p>
+
+
+
+<h3><a id="FIXING-FILE-PERMISSIONS">3.7 Fixing file permissions to work with TFTP and NFS</a></h3>
+
+<p>We now need to fix the permissions on all the files we've extracted, as well
+as the permissions on the
+<a href="http://www.freebsd.org/cgi/man.cgi?query=pxeboot&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">pxeboot</span>(8)</span></a>
+binary we copied.  <b>This is important</b> for two reasons:</p>
+
+<ol>
+<li>
+<a href="http://www.freebsd.org/cgi/man.cgi?query=tftpd&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">tftpd</span>(8)</span></a>,
+for some reason, requires that all files it reads (or writes) have their
+global read (or write) bit set.  This is despite the fact that use of the
+<code class="OPTION">-s</code>
+or
+<code class="OPTION">-u</code>
+flags to
+<a href="http://www.freebsd.org/cgi/man.cgi?query=tftpd&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">tftpd</span>(8)</span></a>
+results in credentials being changed.  I've verified this
+by looking at the
+<a href="http://www.freebsd.org/cgi/man.cgi?query=tftpd&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">tftpd</span>(8)</span></a>
+source code.  In this situation,
+<a href="http://www.freebsd.org/cgi/man.cgi?query=tftpd&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">tftpd</span>(8)</span></a>
+will need to be able to read
+<tt class="FILENAME">/usr/local/freebsd8/boot/pxeboot</tt></li>
+<li>
+<a href="http://www.freebsd.org/cgi/man.cgi?query=nfsd&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">nfsd</span>(8)</span></a>,
+for some reason, isn't mapping requests to user/group
+<tt class="LITERAL">nobody:nobody</tt>.
+The only workaround I found was to fix the permissions on all files/directories
+to be globally readable.  I've
+<a href="http://lists.freebsd.org/pipermail/freebsd-stable/2010-February/055313.html">posted to freebsd-stable</a>
+asking what the deal is</li>
+</ol>
+
+<p>So here's what you have to do:</p>
+
+<pre class="SCREEN">
+<samp class="PROMPT">#</samp> <kbd class="USERINPUT">find /usr/local/freebsd8 -type d -print0 | xargs -0 chmod 0755</kbd>
+<samp class="PROMPT">#</samp> <kbd class="USERINPUT">find /usr/local/freebsd8 -type f -print0 | xargs -0 chmod 0644</kbd>
+</pre>
+
+
+
+<h3><a id="ATTEMPTING-BOOT">3.8 Attempting your first PXE boot</a></h3>
+
+<p>Alright, it's time to give it a try and see if it breaks!  Be patient, since
+most of the TFTP loading is slow (it's UDP-based, and uses small UDP packets).
+If all goes well, you should see something like this appear:</p>
+
+<pre class="SCREEN">
+Consoles: serial port
+BIOS drive A: is disk0
+BIOS drive C: is disk1
+
+PXE version 2.1, real mode entry point @9cb6:0106
+BIOS 638kB/1047488kB available memory
+
+FreeBSD/i386 bootstrap loader, Revision 1.1
+(root@nfsserver.home.lan, Thu Feb 18 21:03:14 PST 2010)
+pxe_open: server addr: 192.168.1.88
+pxe_open: server path: /usr/local/freebsd8
+pxe_open: gateway ip:  192.168.1.1
+Loading /boot/defaults/loader.conf
+/boot/kernel/kernel text=0x88d680 data=0xdb0f4+0xa3104 syms=[0x4+0x95110+0x4+0xcc64f]
+/
+
+ +-----------------------------------------+
+ |                                         |
+ |                                         |      ______
+ |                                         |     |  ____| __ ___  ___
+ |          Welcome to FreeBSD!            |     | |__ | '__/ _ \/ _ \
+ |                                         |     |  __|| | |  __/  __/
+ |                                         |     | |   | | |    |    |
+ |  1. Boot FreeBSD [default]              |     |_|   |_|  \___|\___|
+ |  2. Boot FreeBSD with ACPI disabled     |      ____   _____ _____
+ |  3. Boot FreeBSD in Safe Mode           |     |  _ \ / ____|  __ \
+ |  4. Boot FreeBSD in single user mode    |     | |_) | (___ | |  | |
+ |  5. Boot FreeBSD with verbose logging   |     |  _ &lt; \___ \| |  | |
+ |  6. Escape to loader prompt             |     | |_) |____) | |__| |
+ |  7. Reboot                              |     |     |      |      |
+ |                                         |     |____/|_____/|_____/
+ |                                         |
+ |                                         |
+ |                                         |
+ |  Select option, [Enter] for default     |
+ |  or [Space] to pause timer  10          |
+ +-----------------------------------------+
+</pre>
+
+
+<p>Hit Enter here, and let things boot normally.  If all goes well, you should
+begin to see standard kernel output.  Notible lines are shown here:</p>
+
+<pre class="SCREEN">
+uart0: &lt;16550 or compatible&gt; port 0x3f8-0x3ff irq 4 flags 0x10 on acpi0
+uart0: [FILTER]
+uart0: console (115200,n,8,1)
+...
+md0: Preloaded image &lt;/boot/mfsroot&gt; 4423680 bytes at 0xc0f6dfe0
+...
+Trying to mount root from ufs:/dev/md0
+/stand/sysinstall running as init on serial console
+
+These are the predefined terminal types available to
+sysinstall when running stand-alone.  Please choose the
+closest match for your particular terminal.
+
+1 ...................... Standard ANSI terminal.
+2 ...................... VT100 or compatible terminal.
+3 ...................... FreeBSD system console (color).
+4 ...................... FreeBSD system console (monochrome).
+
+5 ...................... xterm terminal emulator.
+
+Your choice: (1-5)
+</pre>
+
+<p>Pick a terminal type, and the rest should be obvious: the standard
+<a href="http://www.freebsd.org/cgi/man.cgi?query=sysinstall&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">sysinstall</span>(8)</span></a>
+selection menu, and all that jazz.</p>
+
+
+
+<h3><a id="CHOOSE-INSTALL-MEDIUM">3.9 Choosing an installation medium</a></h3>
+
+<p>When prompted what installation medium you want to install from, you
+can pick <b>Install over NFS</b> and enter the name of the share path
+manually, e.g.:</p>
+
+<pre class="PROGRAMLISTING">
+192.168.1.88:/usr/local/freebsd8
+</pre>
+
+<p>Or, if you want to install from a public FreeBSD server via HTTP or
+FTP or some other method, you can choose that.  It's up to you.</p>
+
+<p>From there, the installation should go smoothly.  But there are some
+pending things you should remember to configure after the installation
+but before rebooting...</p>
+
+
+
+<h2><a id="BOOT-CONFIG">Chapter 4 Creating <tt class="FILENAME">/boot.config</tt> for high-speed serial</a></h2>
+
+<div class="NOTE">
+<blockquote class="NOTE">
+<p><b>Note:</b> This section is under development.</p>
+</blockquote>
+</div>
+
+<div class="WARNING">
+<blockquote class="WARNING">
+<p><b>This item is incredibly important</b>.  Yes, I realise I haven't written this
+section of the document yet, but it's still important!  Failure to set this up
+will result in FreeBSD's serial ports operating at a maximum speed of 9600bps.
+Remember the rigmarole we went through in
+<a href="#REBUILDING-PXEBOOT">Chapter 3.5</a>?
+You get to deal with that again, but this time for the standard non-PXE
+bootstraps.</p>
+<p>I often forget this step when deploying a new server.  The workaround is to
+set your terminal/serial connection's speed to 9600bps after rebooting the
+new system post-installation, then create <tt class="FILENAME">/boot.config</tt>
+after-the-fact.  This is hoky, and may result in some garbage on your screen
+briefly, but it works and is a one-time deal.  The command
+<kbd class="USERINPUT">echo "-S115200 -Dh" &gt; /boot.config</kbd> 
+is all that's needed, followed by a reboot.<p>
+This nonsense could be avoided if
+<a href="http://www.freebsd.org/cgi/man.cgi?query=sysinstall&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">sysinstall</span>(8)</span></a>
+offered the ability to edit an arbitrary file on the filesystem post-install but
+pre-reboot; you know, like what's offered when it comes to editing
+<tt class="FILENAME">/etc/ttys</tt> in
+<a href="#POST-INSTALL-OPTIONS">Chapter 6</a>?</p>
+</blockquote>
+</div>
+
+
+
+<h2><a id="NETWORKING-OPTIONS">Chapter 5 Important Networking options</a></h2>
+
+<div class="NOTE">
+<blockquote class="NOTE">
+<p><b>Note:</b> This section is under development.</p>
+</blockquote>
+</div>
+
+<p>
+When configuring your network interface, remember to set a DNS server!
+Otherwise, things like
+<a href="http://www.freebsd.org/cgi/man.cgi?query=sshd&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">sshd</span>(8)</span></a>
+(see below) won't start.
+</p>
+
+
+
+<h2><a id="POST-INSTALL-OPTIONS">Chapter 6 Post-installation Configuration options</a></h2>
+
+<div class="NOTE">
+<blockquote class="NOTE">
+<p><b>Note:</b> This section is under development.</p>
+</blockquote>
+</div>
+
+<p>Things I strongly recommend setting when given the chance to "set any
+last configuration options" prior to the machine rebooting:</p>
+<ul>
+<li>Root Password</li>
+<li>Time Zone</li>
+<li>Networking &mdash; Enable
+    <a href="http://www.freebsd.org/cgi/man.cgi?query=sshd&amp;sektion=8"><span class="CITEREFENTRY"><span class="REFENTRYTITLE">sshd</span>(8)</span></a></li>
+<li>TTYs &mdash; Turn on
+    <tt class="DEVICENAME">ttyu0</tt>,
+    with a getty type of
+    <tt class="LITERAL">std.115200</tt>
+    (for 115200bps)</li>
+</ul>
+
+<div class="WARNING">
+<blockquote class="WARNING">
+<p><b>The last item is incredibly important</b>.  Without it, your machine will
+boot as normal, but you'll never see a
+<tt class="LITERAL">login:</tt>
+prompt on the serial port.  You'll very likely have to go to the physical console
+and reboot the machine manually to fix this mistake.</p>
+</blockquote>
+</div>
+
+</body>
+</html>

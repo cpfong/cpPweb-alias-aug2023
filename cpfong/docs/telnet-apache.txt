@@ -1,0 +1,38 @@
+% telnet www.ifong.org 80
+
+Now type in a GET command[2] for the document root:
+GET / HTTP/1.0	# cmd(method) file /index.html (default is index.html) protocol
+Press enter TWICE # To end the header section, the client sends a blank line.
+
+When the document is finished, your shell prompt should return. The server has closed the connection.
+
+
+example: get from search.html (note: on server side you need to make search.html ready before hand)
+--
+% telnet www.ifong.org 80
+GET /cpfong/docs/telnet-search.html HTTP/1.0
+Connection: Keep-Alive
+User-Agent: Mozilla/3.0Gold (WinNT; I)
+Host: www.ifong.org
+Accept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, */* (ENTER)
+ONE more enter here
+
+-- replay from apache server
+HTTP/1.1 200 OK
+...
+<title>Library Search</title>
+<FORM ACTION="http://hypothetical.ora.com/cgi-bin/query" METHOD=POST>
+...
+</FORM>
+STOP here, then in a few seconds go next
+Connection closed by foreign host.
+
+-- client(browser) then press form button and use POST to send to server
+POST /cgi-bin/query HTTP/1.0
+Referer: http://hypothetical.ora.com/search.html
+...
+querytype=subject&queryconst=numerical+analysis
+
+# if you're just requesting a document, you don't have to tell the server anything else. 
+# But in this instance we have to tell the server what the user typed into the form, 
+# we have to use a "body" portion of the message to convey that information. 

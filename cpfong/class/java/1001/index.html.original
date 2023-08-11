@@ -1,0 +1,23 @@
+<html>
+<a href=http://java.sun.com/> java 昇陽 </a> -- 
+<a href=http://download.oracle.com/javase/7/docs/api/> java 7 api </a> --
+<a href=./score.txt>成績</a> --
+<a href=./abs.txt>出席 </a> --
+<a href=./jdk-7-windows-i586.exe>jdk</a> --
+<br>
+<a href=./01_Sep_20/chap2_lesson_101/Greeting_0.java> 9/20 - greeting.java </a> --
+<a href=./01_Sep_20/chap2_lesson_101/Greeting_1.java> 9/20 - g1 </a> --
+<a href=./01_Sep_20/chap2_lesson_101/Greeting_2.java> 9/20 - g2 </a> --
+<a href=./01_Sep_20/chap2_lesson_101/Greeting_3.java> 9/20 - g3 </a> --
+<a href=./01_Sep_20/chap2_lesson_101/Greeting_4.java> 9/20 - g4 </a> --
+<a href=./04_Oct_11/chap3_event/DrawExample4.java>房子, 并號 </a> --
+<a href=./04_Oct_11/chap4_var_cal/Read_From_STD_IO_Sub.java> 鍵盤讀入 </a> --
+<a href=./04_Oct_11/chap4_var_cal/AreaDialogs.java> area </a> --
+<a href=./04_Oct_11/chap4_var_cal/Circle.java> circle stdio</a> --
+<a href=./04_Oct_11/chap4_var_cal/CircleDialogs.java> circle GUI</a> --
+<a href=./05_Oct_18/chap4-exercise/Vending_Machine.java> chap4 ex vending machine</a> --
+<a href=./05_Oct_18/chap5-method-parameter/LogoMethod.java> logo</a> --
+<a href=./05_Oct_18/chap5-method-parameter/TriangleMethod.java> Triangle </a> --
+<a href=./seat.mid.txt> 期中座位 </a>
+</html>
+

@@ -1,0 +1,15 @@
+Q: after installed, how to start ?
+A: /etc/init.d/vsftpd start
+
+Q: Is anamonyous ok ?
+A: yes by default.
+
+Q: how to disable anamonous user ?
+A: vi /etc/vsftpd/vsftpd.conf,
+
+Q: what is /etc/vsftpd/ftpusers
+A: account that cannot ftp to vsftpd
+
+Q: client ftp cannot ls
+A: setsebool -P ftp_home_dir=1
+

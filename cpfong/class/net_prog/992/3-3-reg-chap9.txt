@@ -1,0 +1,89 @@
+chap 9  以正規表示處理文字
+
+9.1 以 s/// 進行置換
+	9.1.1 以 /g 進行全域代換
+	9.1.2 不同的界定符號
+	9.1.3 選項修飾符
+	9.1.4 繫結算符
+	9.1.5 大小寫轉換
+9.2 split 算符
+9.3 join 函式
+9.4 串列言境下的 m//
+9.5 更強悍的正規表示式
+	9.5.1 不貪多的量詞
+	9.5.2 跨列的樣式比對
+	9.5.3 一次修改多個檔案
+	9.5.4 只用命令列來修改檔案
+
+9.1
+	$_ = "He's out bowling with Barney tonight.";
+	s/Barney/Fred/;
+	print;
+
+	s/with (\w+)/against $1's team/;
+	print;
+
+	要針對本行的其它也修則請使用 /g
+	否則只會修第 "一" 個遇到的
+
+	s/\s+/ /	; #縮減連續的空格但只換一個而己
+	s/\s+/ /g	; #縮減連續的空格成只有一個空格
+	s/^\s+//	; 
+	s/\s+$//	;
+
+9.1.2
+	s/// 可以用 s%%% 來代替, 但是有左右分的符號 ex {} 則有點小不同
+	s{fred}{barney} 和 s/fred/barney/ 相同
+	s<fred>#barney# 也是同一個意思 (注意: 前後符號可以不同)
+
+9.1.4
+	$file_name = "/home/perl/s1506101/file.txt";
+	$file_name =~ s#^.*/##s;
+	print $file_name;
+
+9.1.5
+	s/(fred|barney)/\U$1/gi; # \U 把後頭所有的字換成大寫
+	\L 則是小寫
+	\E 可以關掉此一功能
+	\l 則是只影響到一個 word
+
+	$xxx = "Fred and Barney are good friends";
+	$xxx =~ s/(fred|barney)/\U$1/gi;
+	print $xxx, "\n";
+
+9.2 split
+	$_ = "  this    is a test  ";
+	@a = split	;print "@a\n";
+	@b = split /\s+/;print "@b\n"
+
+9.3 join
+	分解字串, 再用不同的 separator 連起
+	$_ = " this is a test";
+	print join ',', split;
+
+9.4 有時用 split 不錯, 但有時用 reg exp 則較佳
+	本例中, 每回比對成功時即傳回一份記憶
+	my $text = "Fred dropped a 5 ton granite block on Mr. Slate";
+	my @word = ($text =~ /([a-z]+)/ig);
+
+	使用二個小括號可以配合 hash
+        my $data = "Barney Rublle Fred Flintstone Wilma Flinstone";
+        my %last_name = ($data =~ /(\w+)\s+(\w+)/g);
+
+        while (($k, $v) = each %last_name){
+                print $k, " -> ", $v, "\n";
+        }
+
+9.5.1 貪多的量詞 vs 不貪多的量詞
+	* + ? {} 都是貪多的量詞, *? =? ?? {}? 則為不貪多的量詞, 即每一個貪都有一個不貪和它對應.
+
+	$_ = fred and barney went bowling last night;
+	/fred.+barney/ ==> 注意 .+ 一開始會吃掉 and barney went bowling last night
+	後來才因為後有 barney 慢慢吐出其它
+
+	/fred.+?barney/ ==> 注意 .+? 是不貪的量詞, 由前面開始比對
+
+	如果 fred 和 barney 離很遠則用 greedy   的 .+  為佳
+	如果 fred 和 barney 離很近則用 ungreedy 的 .+? 為佳 
+
+9.

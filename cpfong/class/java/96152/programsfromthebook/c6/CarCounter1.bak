@@ -1,0 +1,40 @@
+//--------------STARTEXTRACT=allcarcounter1.xtr
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+//------------carcounter1top
+class CarCounter1 extends JFrame implements ActionListener {
+
+    private int carCount = 0;
+
+//-----------carcounter1top.xtr
+    private JButton button;
+    private JTextField countText;
+
+    public static void main(String[] args) {
+        CarCounter1 frame = new CarCounter1();
+        frame.setSize(400,300);
+        frame.createGUI();
+        frame.show();
+    }
+    private void createGUI() {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        Container window = getContentPane();
+        window.setLayout(new FlowLayout());
+
+        countText = new JTextField("Cars:0", 10);   //  lllll explan ???????
+        window.add(countText);
+
+        button = new JButton("Car Entering");
+        window.add(button);
+        button.addActionListener(this);
+    }
+//---------------STARTEXTRACT=carcounter1bot.xtr
+    
+    public void actionPerformed(ActionEvent event) {
+        carCount = carCount + 1;
+        countText.setText("Cars:" + carCount);
+    }
+}
+//-------------ENDEXTRACT=carcounter1bot.xtr
+//---------------------ENDEXTRACT=allcarcounter1.xtr

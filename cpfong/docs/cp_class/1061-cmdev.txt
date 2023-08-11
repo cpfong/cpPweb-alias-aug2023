@@ -1,0 +1,25 @@
+mysql> show tables;
++-----------------+
+| Tables_in_cmdev |
++-----------------+
+| binarytable     |
+| bittable        |
+| debug           |
+| dept            | -- department: deptno| dname| location 
+| deptlog         |
+| dttable         |
+| emp             | -- employee: empno| ename| job| manager| hiredate| salary| comm| deptno 
+| emplog          |
+| enumtable       |
+| estable         |
+| floatingable    |
+| integertable    |
+| nonbinarytable  |
+| nonbinarytable2 |
+| nonbinarytable3 |
+| numerictable    |
+| numerictable2   |
+| numerictable3   |
+| settable        |
+| travel          |
++-----------------+

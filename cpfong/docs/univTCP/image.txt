@@ -1,0 +1,44 @@
+         fd700000.zip     (~95kb)  Floppy image ~700mb
+         fd700000_iso.zip (~115kb) BootCd image with a virtual floppy in drive A: ~700Mb (Screenshot)
+         fd650000.zip     (~95kb)  Floppy image ~650mb
+         fd300000.zip     (~95kb)  Floppy image ~300mb
+         fd100000.zip     (~95kb)  Floppy image ~100mb (Zip100)
+         fd050000.zip     (~95kb)  Floppy image ~50mb
+         fd011520.zip     (~95kb)  Floppy image 11.52mb (8x1.44mb)
+         fd005760.zip     (~95kb)  Floppy image 5.76mb (4x1.44mb)
+         fd002880.zip     (~95kb)  Floppy image 2.88mb (2x1.44mb)
+         fd001720.zip     (~95kb)  Floppy image 1.72mb
+         fd001680.zip     (~95kb)  Floppy image 1.68mb
+         fd001440.zip     (~95kb)  Floppy image 1.44mb
+         fd001200.zip     (~95kb)  Floppy image 1.2mb
+         fd000820.zip     (~95kb)  Floppy image 820kb
+         fd000720.zip     (~95kb)  Floppy image 720kb
+         fd000360.zip     (~95kb)  Floppy image 360kb
+         fd000320.zip     (~95kb)  Floppy image 320kb
+         fd000180.zip     (~95kb)  Floppy image 180kb
+         fd000160.zip     (~95kb)  Floppy image 160kb
+         fd000090.zip     (~1kb)   Floppy image 90kb
+         fd000045.zip     (~1kb)   Floppy image 45kb
+         fd000000.zip     (~1kb)   Floppy image 0.5kb
+
+
+         hdd_cdef.zip     (~95kb)  Harddisk image with 4 partitions
+         hdd_cdef_iso.zip (~115kb) Bootable CD image with virtual drives C:, D:, E: and F: Screenshot
+         hdd_c.zip        (~95kb)  Harddisk image with one partition
+
+                                                    Notes
+    1. All images on this page use components of the FreeDOS operating system (FreeDOS Kernel and FreeCOM),
+       taht are distibuted under the GPL-license (license text, source code: FreeDOS Kernel, FreeCOM).
+    2. The disk images can be editing using WinImage.
+    3. If you want to replace FreeDOS with MS-DOS 7.10 (recommended) do the following:
+          + Load the disk image in WinImage;
+          + Replace the FreeDOS bootsector with the bootsector
+            Windows 9x (choose "Boot sector properties..." from menu "Image");
+            [images1.gif]
+          + Remove all files from the image;
+          + Drag all the files of a Microsoft Windows 98SE rescue disk to the WinImage window;
+          + Save the chamges (choose "Save" from menu "File").
+
+
+                          Copyright (c)2004 by reanimatolog. http://bootcd.narod.ru
+                                  English translation by Wolfgang Brinkmann

@@ -1,0 +1,30 @@
+﻿
+
+•按一下 [開始] 按鈕  ，在搜尋欄位輸入cmd。
+在搜尋結果的  cmd.exe按右鍵，選擇「以系統管理員身分執行」。
+
+•◦64 位元 Windows 安裝 64位元 Office 2010： 
+C:\Program Files\Microsoft Office\Office14>cscript ospp.vbs /sethst:kms-svr.fote
+ch.edu.tw
+Microsoft (R) Windows Script Host Version 5.8
+Copyright (C) Microsoft Corporation 1996-2001. All rights reserved.
+
+---Processing--------------------------
+---------------------------------------
+Successfully applied setting.
+
+•cscript ospp.vbs /act 到按右鍵貼上，按下[Enter] 
+
+C:\Program Files\Microsoft Office\Office14>cscript ospp.vbs /act
+Microsoft (R) Windows Script Host Version 5.8
+Copyright (C) Microsoft Corporation 1996-2001. All rights reserved.
+
+---Processing--------------------------
+---------------------------------------
+Installed product key detected - attempting to activate the following product:
+SKU ID: 6f327760-8c5c-417c-9b61-836a98287e0c
+LICENSE NAME: Office 14, OfficeProPlus-KMS_Client edition
+LICENSE DESCRIPTION: Office 14, VOLUME_KMSCLIENT channel
+Last 5 characters of installed product key: H3GVB
+<Product activation successful>
+---------------------------------------

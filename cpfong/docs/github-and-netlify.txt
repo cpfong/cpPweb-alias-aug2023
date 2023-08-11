@@ -1,0 +1,21 @@
+github vs netlify
+--
+github: spaces to save data ie hard disk
+netlify: control platform
+
+login
+--
+netlify use github account to login: no need to apply another netlify account
+netlify logout does NOT mean logout, github has to logout first!
+
+implement:
+--
+1. cust domain
+2. https
+
+link my domain with ntlify: 
+ 1. edit CNAME (@ my ns server): change at dns
+ 2. netlify domain management / Add then change at netlify 
+
+ # note: no need for name.com since pdn.ifong.org ns is sun.ifong.org
+ # however netlify name db look like also keep tracking this domain (nf.pdn.ifong.org)

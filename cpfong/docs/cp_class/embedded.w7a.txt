@@ -1,0 +1,71 @@
+hw5
+
+Q: what is bash-completion-2.10 
+A: subcommand completion for utility
+
+pkg install -y bash-completion
+
+$sudo mkdir /etc/bash_completion.d	#user must create using su
+$sudo rclone genautocomplete bash
+
+cat ~/.bashrc
+#start
+[[ $PS1 && -f /usr/local/share/bash-completion/bash_completion.sh ]] && source /usr/local/share/bash-completion/bash_completion.sh
+
+. /etc/bash_completion.d/rclone
+# end of .bashrc
+
+$echo $SHELL # csh
+$bash
+$echo $SHELL # now bash
+
+rclone TAB (using csh)
+rclone TAB (using bash and installed bash-completion)
+
+Q: why restic (2nd backup tool)
+A: incremental backup is better and secure
+
+Q: install
+A: pkg install -y restic
+
+Q: auto completion for restic
+A:
+restic generate --bash-completion /etc/bash_completion.d/restic
+
+@venus-> ls /etc/bash_completion.d/
+rclone  restic
+
+Q: ref web site
+A: https://restic.readthedocs.io/
+
+Q: term
+repository		database, knowledge base, remote site
+init repository		init it
+snapshot		one copy of backup, photograph taken quickly
+
+command line arguments
+
+--repository-file	# db file location
+--password-file		# whereis password
+--repo			# repo to where
+
+prepare a repository 
+Local #save locally, it may save to other cloud
+--
+restic --re<TAB>./foo init
+restic --re<TAB>rclone:foo/bar init	#note: rclone be the 1st
+
+--hw5 2018-2
+echo $SHELL
+ps -p $$		# show current shell
+https://www.tutorialspoint.com/unix/unix-special-variables.htm
+
+1st backup
+--
+restic --repo=./foo/ --password-file=./trash/pwd init
+restic --repo=./foo/ --password-file=./trash/pwd backup ./trash/
+
+exclude
+--
+--exclude=.cache/ --exclude=.cpan/ --exclude=/bin
+restic -r /srv/restic-repo backup ~/work --exclude="*.c" 

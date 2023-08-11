@@ -1,0 +1,6 @@
+1. system should be integrated together
+2. generate a whole functional system and 3 of us can design a subsystem 
+according to our preference to add more features to the system
+3. data exchange and commnication should be discussed
+4. define the boundary for example: student score transciption should get
+from other system

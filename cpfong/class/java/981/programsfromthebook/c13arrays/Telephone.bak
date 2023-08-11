@@ -1,0 +1,70 @@
+//latest template  30 oct
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+class Telephone extends JFrame implements ActionListener {
+
+    private JButton button;
+    private JTextField name, number;
+
+    private String[] names = new string[20];
+    private String[] numbers = new string[20];
+
+
+    public static void main (String[] args) {
+        Telephone frame = new Telephone();
+        frame.setSize(400,300);
+        frame.createGUI();
+        frame.show();
+    }
+
+    private void createGUI() {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        Container window = getContentPane();
+        window.setLayout(new FlowLayout() );
+
+
+        button = new JButton("find");
+        window.add(button);
+        button.addActionListener(this);
+
+        name = new JTextField(6);
+        window.add(name);
+
+        number = new JTextField(5);
+        window.add(number);
+
+        names[0] = "Alex";
+        numbers[0] = "2720774";
+
+        names[1] = "Megan";
+        numbers[1] = "5678554";
+
+        names[2] = "END";
+
+    }
+
+    public void actionPerformed(ActionEvent event) {
+        find();
+    }
+
+    private void find() {
+        int index;
+        String wanted;
+
+        wanted = name.getText();
+        index = 0;
+        for (index = 0;
+          names[index] != wanted && names[index] != "END";
+          index++) {
+        }
+        if (names[index] == wanted) {
+            number.setText("number is " + Integer.toString(numbers[index]));
+        }
+        else {
+            number.setText("name not found");
+        }
+    }
+
+}

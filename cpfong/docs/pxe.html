@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>The PXE Page</title>
+  <meta content="Steve Quinn" name="author">
+  <meta content="The PXE Page" name="description">
+</head>
+<body>
+<div style="text-align: center;"><big><big>The PXE Page</big></big><br>
+</div>
+<br>
+<span style="font-weight: bold;">1.&nbsp; What is PXE?</span><br>
+PXE is an acronym for Pre-Boot Execution Environment.<br>
+The PXE vision is to "Make the network interface a standard,
+industry-accepted PC boot device",&nbsp; adding the NIC to the
+traditional list of standard boot devices.<br>
+This allows the client PC to "network boot.", opening up a vast array
+of management and support features.<br>
+Rather than booting from Floppy, CDROM Hard Disk ...you can boot over
+the network<br>
+It really cool and really fast<br>
+<br>
+<span style="font-weight: bold;">2.&nbsp; What can PXE mean to me?</span><br>
+In our lab, we use Ghost a lot for our x86 servers and workstations<br>
+Making a Dos boot disk with networking, TCP/IP and SMB for this
+Ghosting is more pain than a trip to the dentist<br>
+PXE offers a much easier way&nbsp; to boot x86 based PC's giving us
+access to network shares<br>
+From there, Ghosting is a snap<br>
+<br>
+<span style="font-weight: bold;">3.&nbsp; Why did you create this page?</span><br>
+I had to move our PXE server from an older Fedora Core release 1 box to
+a newer PC.<br>
+I wanted to do it all under FreeBSD of course.<br>
+The old PXE server was originally implemented by people who often
+blindly stumbled through things without any regard to common sence,
+manuals or even man pages (eek)<br>
+The final product worked but what a god awfull mess they left behind.<br>
+I like to understand what I do so I learned it from the ground up.<br>
+This page is thus a collection of notes from my PXE on FreeBSD
+experience<br>
+I hope you find it helpfull<br>
+<br>
+<span style="font-weight: bold;">4.&nbsp; Where can I get more PXE
+information?</span><br>
+You can find the Intel PXE SDK <a
+ href="http://www.intel.com/support/network/adapter/pro100/bootagent/sb/cs-000090.htm">here</a><br>
+The PXE Daemon I used under FreeBSD is <a
+ href="http://www.kano.org.uk/projects/pxe/">here</a><br>
+I used PXELinux for booting from <a
+ href="http://syslinux.zytor.com/pxe.php">here</a><br>
+<br>
+<span style="font-weight: bold;">5.&nbsp; Our PXE implementation (the
+old way)</span><br>
+Fedora Core Release 1 (2.4.22-1) with Intel PXE daemon, PXE-2.0 Beta-1
+(build 001)<br>
+With this PXE implementation, the PXE Daemon could act as a proxyDHCP<br>
+The DHCPD could be on another box with its configuration file tailored
+to see the PXE server<br>
+Our old PXE.conf is in the fc1 directory <a href="../files/pxe.tar.gz">here</a><br>
+This old method used the Intel PXE SDK disk images that were modified
+for our needs<br>
+I didnt create it so I don't know much more about it.<br>
+I do know that it often puked during our aggressive Ghosting methods
+with silly Dos errors.<br>
+<br>
+<span style="font-weight: bold;">6.&nbsp; Our PXE implementation (the
+new way)</span><br>
+FreeBSD 4.11 (I like the 4.x branch, so shoot me)<br>
+PXE 1.4.2&nbsp; (It's a port)<br>
+PXELINUX (http://syslinux.zytor.com/pxe.php)<br>
+tftp-hpa (It's a port, also <font face="trebuchet,times">PXELINUX
+currently requires that the boot server has a TFTP server
+which supports the "tsize" TFTP option</font><br>
+isc-dhcp3-server (It's a port)<br>
+From what I have infered, this implementation of PXE daemon requires
+the DHCPD to be on the same machine<br>
+<br>
+Now, for this machine I wanted two choices.<br>
+1.&nbsp; Use some Bart Boot disk images I created.&nbsp; This method
+does not require a PXE daemon to work<br>
+2.&nbsp; Continue to use the Intel PXE SDK disk images for our older
+gear.&nbsp; This method disk requires a PXE daemon to work<br>
+<br>
+The Barts boot disks had the advantages of supporting more hardware and
+no silly Dos errors.<br>
+Lets cover the Barts boot disk method first<br>
+<br>
+<br>
+<span style="font-weight: bold;">7.&nbsp; Using a PXE enabled client PC
+to boot a Barts network boot disk floppy
+image using FreeBSD with DHCPD, TFTPD and PXELINUX</span><br
+ style="font-weight: bold;">
+Here, I'm going to explain how I setup a FreeBSD server to provide a
+Bart's boot disk floppy image to PXE enabled clients<br>
+Please note that a PXE Daemon is not required since we are only sending
+the boot disk image to the client.<br>
+I'm using <a href="http://www.nu2.nu/bootdisk/network/">Bart's</a>
+Network floppy boot disk in this case.&nbsp; Whatever floppy disk you
+choose, make sure it's functioning before trying to boot it using the
+PXE client<br>
+<br>
+1.&nbsp; Install FreeBSD 4.11 minimal install with ports source and docs<br>
+2.&nbsp; Install the cvsup-whithout-gui package<br>
+3.&nbsp; cvsup the ports and source tree<br>
+4.&nbsp; Install&nbsp; isc-dhcp3-server<br>
+<br>
+5.&nbsp; Edit /usr/local/etc/dhcpd.conf accordingly<br>
+Here's mine<br>
+<br>
+allow
+booting;<br>
+allow bootp;<br>
+ddns-update-style none;<br>
+option
+broadcast-address 192.168.10.255;<br>
+option domain-name
+"your.domain";<br>
+option subnet-mask 255.255.255.0;<br>
+server-name
+"pxe-gw";<br>
+server-identifier 192.168.10.15;<br>
+next-server
+192.168.10.15;<br>
+default-lease-time 6000;<br>
+max-lease-time 72000;<br>
+subnet
+192.168.10.0 netmask 255.255.255.0 {<br>
+range 192.168.10.132
+192.168.10.252;<br>
+option root-path "/tftpboot";<br>
+filename
+"/tftpboot/pxelinux.0";<span style=""><br>
+}<br>
+</span>
+<br>
+6.&nbsp; Obtain pxelinux.0 and memdisk from <a
+ href="http://syslinux.zytor.com/pxe.php">http://syslinux.zytor.com/pxe.php</a><br>
+7.&nbsp; Create /tftpboot<br>
+8.&nbsp; Put pxelinux.0 and memdisk in /tftpboot<br>
+9.&nbsp; Create /tftpboot/pxelinux.cfg/default<br>
+Here's mine<br>
+<p class="MsoPlainText"></p>
+<p class="MsoPlainText"><span style="">PROMPT
+1<br>
+DEFAULT ghost<br>
+DISPLAY messages<br>
+TIMEOUT 100<br>
+label
+local<br>
+<span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>LOCALBOOT
+0<br>
+<br>
+label
+ghost<br>
+<span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>KERNEL
+memdisk
+keeppxe<br>
+<span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>APPEND
+initrd=bart.img<br>
+</span></p>
+<span style="">10.&nbsp; Create a image of your network book floppy
+you want to boot from<br>
+I had already created a boot disk so all I needed to do was create a
+boot disk image using this on my FreeBSD box<br>
+#dd if=/dev/fd0 of=/tftpboot/bart.img<br>
+<br>
+11.&nbsp; Create /tftpboot/messages to show a message on the screen at
+boot time<br>
+<br>
+12..&nbsp; Start your dhcpd and start a pxe enabled client<br>
+<br>
+Hopefully your clients will get an IP,&nbsp; get and boot pxelinux.0,
+show messages, boot the default or selected image<br>
+<br>
+</span><span style="font-weight: bold;">8.&nbsp; Using a PXE enabled
+client PC to boot a Intel PXE network boot disk floppy
+image using FreeBSD with PXED DHCPD, TFTPD and PXELINUX<br>
+</span>Same as above but also install the following ports<br>
+PXE<br>
+tftp-hpa<br>
+<br>
+You'll need to adjust a few files<br>
+<br>
+<span style="color: rgb(0, 0, 0);">/usr/local/etc/pxe.conf</span><br
+ style="color: rgb(0, 0, 0);">
+<span style="color: rgb(0, 0, 0);">/usr/local/etc/dhcpd.conf</span><br
+ style="color: rgb(0, 0, 0);">
+<span style="color: rgb(255, 0, 0);"><span style="color: rgb(0, 0, 0);">/etc/inetd.conf<br>
+/etc/services<br>
+/tftpboot<br>
+<br>
+Feel free to have a look at my files under the FreeBSD directory <a
+ href="../files/pxe.tar.gz">here</a><br>
+<br>
+</span></span><br>
+</body>
+</html>

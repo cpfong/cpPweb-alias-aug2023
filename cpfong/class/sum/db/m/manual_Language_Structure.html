@@ -1,0 +1,1800 @@
+  <HTML>
+  <HEAD>
+  
+  <TITLE>MySQL Reference Manual for version 5.0.3-alpha - 9  Language Structure</TITLE>
+   <style> code {color:purple} tt {color:green} samp {color:navy} pre {color:maroon} </style>
+  </HEAD>
+  <BODY BGCOLOR=silver TEXT=#000000 LINK=#101090 VLINK=#7030B0>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_Client-Side_Scripts.html">previous</A>, <A HREF="manual_Charset.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="Language_Structure" HREF="manual_toc.html#Language_Structure">9  Language Structure</A></H1>
+
+<P>
+This chapter discusses the rules for writing the following elements of SQL
+statements when using MySQL:
+
+</P>
+
+<UL>
+
+<LI>
+
+Literal values such as strings and numbers
+
+<LI>
+
+Identifiers such as table and column names
+
+<LI>
+
+User and system variables
+
+<LI>
+
+Comments
+
+<LI>
+
+Reserved words
+
+</UL>
+
+
+
+<H2><A NAME="Literals" HREF="manual_toc.html#Literals">9.1  Literal Values</A></H2>
+
+<P>
+<A NAME="IDX997"></A>
+<A NAME="IDX998"></A>
+<A NAME="IDX999"></A>
+<A NAME="IDX1000"></A>
+<A NAME="IDX1001"></A>
+
+</P>
+
+<P>
+This section describes how to write literal values in MySQL. These include
+strings, numbers, hexadecimal values, boolean values, and <code>NULL</code>. The section also
+covers the various nuances and ``gotchas'' that
+you may run into when dealing with these basic types in MySQL.
+
+</P>
+
+
+
+<H3><A NAME="String_syntax" HREF="manual_toc.html#String_syntax">9.1.1  Strings</A></H3>
+
+<P>
+A string is a sequence of characters, surrounded by either single quote
+(<samp>`''</samp>) or double quote (<samp>`"'</samp>) characters.  Examples:
+
+</P>
+
+<PRE>
+'a string'
+"another string"
+</PRE>
+
+<P>
+If the server SQL mode has <code>ANSI_QUOTES</code> enabled, string literals can be
+quoted only with single quotes. A string quoted with double quotes will be
+interpreted as an identifier.
+
+</P>
+<P>
+As of MySQL 4.1.1, string literals may have an optional character set
+introducer and <code>COLLATE</code> clause:
+
+</P>
+<P>
+<A NAME="IDX1002"></A>
+<A NAME="IDX1003"></A>
+
+</P>
+
+<PRE>
+[_<var>charset_name</var>]'<var>string</var>' [COLLATE <var>collation_name</var>]
+</PRE>
+
+<P>
+Examples:
+
+<PRE>
+SELECT _latin1'<var>string</var>';
+SELECT _latin1'<var>string</var>' COLLATE latin1_danish_ci;
+</PRE>
+
+<P>
+For more information about these forms of string syntax, see
+section <A HREF="manual_Charset.html#Charset-literal">10.3.7  Character String Literal Character Set and Collation</A>.
+
+</P>
+<P>
+Within a string, certain sequences have special meaning.  Each of these
+sequences begins with a backslash (<samp>`\'</samp>), known as the <em>escape
+character</em>.  MySQL recognizes the following escape sequences:
+
+</P>
+
+<TABLE BORDER>
+<TR><TD><code>\0</code>
+ </TD><TD> An ASCII 0 (<code>NUL</code>) character.
+
+</TD></TR>
+<TR><TD><code>\'</code>
+<A NAME="IDX1004"></A>
+ <A NAME="IDX1005"></A>
+ 
+ </TD><TD> A single quote (<samp>`''</samp>) character.
+
+</TD></TR>
+<TR><TD><code>\"</code>
+<A NAME="IDX1006"></A>
+ <A NAME="IDX1007"></A>
+ 
+ </TD><TD> A double quote (<samp>`"'</samp>) character.
+
+</TD></TR>
+<TR><TD><code>\b</code>
+<A NAME="IDX1008"></A>
+ <A NAME="IDX1009"></A>
+ 
+ </TD><TD> A backspace character.
+
+</TD></TR>
+<TR><TD><code>\n</code>
+<A NAME="IDX1010"></A>
+ <A NAME="IDX1011"></A>
+ 
+ </TD><TD> A newline (linefeed) character.
+
+</TD></TR>
+<TR><TD><code>\r</code>
+<A NAME="IDX1012"></A>
+ <A NAME="IDX1013"></A>
+ <A NAME="IDX1014"></A>
+ <A NAME="IDX1015"></A>
+ 
+ </TD><TD> A carriage return character.
+
+</TD></TR>
+<TR><TD><code>\t</code>
+<A NAME="IDX1016"></A>
+ <A NAME="IDX1017"></A>
+ <A NAME="IDX1018"></A>
+ 
+ </TD><TD> A tab character.
+
+</TD></TR>
+<TR><TD><code>\Z</code>
+<A NAME="IDX1019"></A>
+ <A NAME="IDX1020"></A>
+ 
+ </TD><TD> ASCII 26 (Control-Z).  This character can be encoded as <samp>`\Z'</samp>
+to allow you to
+work around the problem that ASCII 26 stands for END-OF-FILE on Windows.
+(ASCII 26 will cause problems if you try to use
+<code>mysql <var>db_name</var> &#60; <var>file_name</var></code>.)
+
+</TD></TR>
+<TR><TD><code>\\</code>
+<A NAME="IDX1021"></A>
+ <A NAME="IDX1022"></A>
+ 
+ </TD><TD> A backslash (<samp>`\'</samp>) character.
+
+</TD></TR>
+<TR><TD><code>\%</code>
+<A NAME="IDX1023"></A>
+ <A NAME="IDX1024"></A>
+ 
+ </TD><TD> A <samp>`%'</samp> character. See note following table.
+
+</TD></TR>
+<TR><TD><code>\_</code>
+<A NAME="IDX1025"></A>
+ <A NAME="IDX1026"></A>
+ 
+ </TD><TD> A <samp>`_'</samp> character. See note following table.
+
+</TD></TR>
+</TABLE>
+
+<P>
+These sequences are case sensitive. For example, <samp>`\b'</samp> is interpreted as
+a backspace, but <samp>`\B'</samp> is interpreted as <samp>`B'</samp>.
+
+</P>
+<P>
+The <samp>`\%'</samp> and <samp>`\_'</samp> sequences are used to search for literal
+instances of <samp>`%'</samp> and <samp>`_'</samp> in pattern-matching contexts where
+they would otherwise be interpreted as wildcard characters. See section <A HREF="manual_Functions.html#String_comparison_functions">12.3.1  String Comparison Functions</A>.
+Note that if you use <samp>`\%'</samp> or <samp>`\_'</samp> in other contexts, they
+return the strings <samp>`\%'</samp> and <samp>`\_'</samp> and not <samp>`%'</samp> and
+<samp>`_'</samp>.
+
+</P>
+<P>
+In all other escape sequences, backslash is ignored.  That is,
+the escaped character is interpreted as if it was not escaped.
+
+</P>
+<P>
+<A NAME="IDX1029"></A>
+There are several ways to include quotes within a string:
+
+</P>
+
+<UL>
+<LI>
+
+<A NAME="IDX1027"></A>
+ <A NAME="IDX1028"></A>
+ 
+A <samp>`''</samp> inside a string quoted with <samp>`''</samp> may be written as <samp>`'''</samp>.
+
+<LI>
+
+A <samp>`"'</samp> inside a string quoted with <samp>`"'</samp> may be written as <samp>`""'</samp>.
+
+<LI>
+
+You can precede the quote character with an escape character (<samp>`\'</samp>).
+
+<LI>
+
+A <samp>`''</samp> inside a string quoted with <samp>`"'</samp> needs no special treatment
+and need not be doubled or escaped.  In the same way, <samp>`"'</samp> inside a
+string quoted with <samp>`''</samp> needs no special treatment.
+</UL>
+
+<P>
+The following <code>SELECT</code> statements demonstrate how quoting and
+escaping work:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT 'hello', '"hello"', '""hello""', 'hel''lo', '\'hello';
++-------+---------+-----------+--------+--------+
+| hello | "hello" | ""hello"" | hel'lo | 'hello |
++-------+---------+-----------+--------+--------+
+
+mysql&#62; SELECT "hello", "'hello'", "''hello''", "hel""lo", "\"hello";
++-------+---------+-----------+--------+--------+
+| hello | 'hello' | ''hello'' | hel"lo | "hello |
++-------+---------+-----------+--------+--------+
+
+mysql&#62; SELECT 'This\nIs\nFour\nLines';
++--------------------+
+| This
+Is
+Four
+Lines |
++--------------------+
+
+mysql&#62; SELECT 'disappearing\ backslash';
++------------------------+
+| disappearing backslash |
++------------------------+
+</PRE>
+
+<P>
+<A NAME="IDX1030"></A>
+
+</P>
+<P>
+If you want to insert binary data into a string column (such as a
+<code>BLOB</code>), the following characters must be represented by escape
+sequences:
+
+</P>
+<TABLE BORDER>
+
+<TR><TD><code>NUL</code>
+ </TD><TD> <code>NUL</code> byte (ASCII 0).
+Represent this character by <samp>`\0'</samp> (a backslash followed by an ASCII <samp>`0'</samp> character).
+
+</TD></TR>
+<TR><TD><code>\</code>
+ </TD><TD> Backslash (ASCII 92).  Represent this character by <samp>`\\'</samp>.
+
+</TD></TR>
+<TR><TD><code>'</code>
+ </TD><TD> Single quote (ASCII 39).  Represent this character by <samp>`\''</samp>.
+
+</TD></TR>
+<TR><TD><code>"</code>
+ </TD><TD> Double quote (ASCII 34).  Represent this character by <samp>`\"'</samp>.
+
+</TD></TR>
+</TABLE>
+
+<P>
+<A NAME="IDX1031"></A>
+<A NAME="IDX1032"></A>
+<A NAME="IDX1033"></A>
+<A NAME="IDX1034"></A>
+When writing application programs, any string that might contain any of these
+special characters
+must be properly escaped before the string is used as a data value in an SQL
+statement that is sent to the MySQL server.
+You can do this in two ways:
+
+</P>
+
+<UL>
+<LI>
+
+Process the string with a function that escapes the special characters.  For
+example, in a C program, you can use the <code>mysql_real_escape_string()</code>
+C API function to escape characters.
+See section <A HREF="manual_MySQL_APIs.html#mysql_real_escape_string">21.2.3.45  <code>mysql_real_escape_string()</code></A>.
+The Perl DBI interface provides a
+<code>quote</code> method to convert special characters to the proper escape
+sequences.  See section <A HREF="manual_MySQL_APIs.html#Perl">21.4  MySQL Perl API</A>.
+
+<LI>
+
+As an alternative to explicitly escaping special characters,
+many MySQL APIs provide a placeholder capability
+that allows you to insert special markers into a query string, and then bind
+data values to them when you issue the query.  In this case, the API takes
+care of escaping special characters in the values for you.
+
+</UL>
+
+
+
+<H3><A NAME="Number_syntax" HREF="manual_toc.html#Number_syntax">9.1.2  Numbers</A></H3>
+
+<P>
+<A NAME="IDX1035"></A>
+<A NAME="IDX1036"></A>
+<A NAME="IDX1037"></A>
+<A NAME="IDX1038"></A>
+<A NAME="IDX1039"></A>
+<A NAME="IDX1040"></A>
+<A NAME="IDX1041"></A>
+
+</P>
+<P>
+Integers are represented as a sequence of digits. Floats use <samp>`.'</samp> as a
+decimal separator.  Either type of number may be preceded by <samp>`-'</samp> to
+indicate a negative value.
+
+</P>
+<P>
+Examples of valid integers:
+
+</P>
+
+<PRE>
+1221
+0
+-32
+</PRE>
+
+<P>
+Examples of valid floating-point numbers:
+
+</P>
+
+<PRE>
+294.42
+-32032.6809e+10
+148.00
+</PRE>
+
+<P>
+An integer may be used in a floating-point context; it is interpreted
+as the equivalent floating-point number.
+
+</P>
+
+
+
+<H3><A NAME="Hexadecimal_values" HREF="manual_toc.html#Hexadecimal_values">9.1.3  Hexadecimal Values</A></H3>
+
+<P>
+<A NAME="IDX1042"></A>
+
+</P>
+<P>
+MySQL supports hexadecimal values.  In numeric contexts, these act
+like integers (64-bit precision). In string contexts, these act like binary
+strings, where each pair of hex digits is converted to a character:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT x'4D7953514C';
+        -&#62; 'MySQL'
+mysql&#62; SELECT 0xa+0;
+        -&#62; 10
+mysql&#62; SELECT 0x5061756c;
+        -&#62; 'Paul'
+</PRE>
+
+<P>
+In MySQL 4.1 (and in MySQL 4.0 when using the <code>--new</code> option), the default
+type of a hexadecimal value is a string.  If you want to ensure that
+the value is treated as a number, you can use <code>CAST(... AS UNSIGNED)</code>:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT 0x41, CAST(0x41 AS UNSIGNED);
+        -&#62; 'A', 65
+</PRE>
+
+<P>
+The <code>0x</code> syntax is based on ODBC.  Hexadecimal strings are often used by
+ODBC to supply values for <code>BLOB</code> columns.
+The <code>x'hexstring'</code> syntax is new in 4.0 and is based on standard SQL.
+
+</P>
+<P>
+Beginning with MySQL 4.0.1, you can convert a string or a number to a string
+in hexadecimal format with the <code>HEX()</code> function:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT HEX('cat');
+        -&#62; '636174'
+mysql&#62; SELECT 0x636174;
+        -&#62; 'cat'
+</PRE>
+
+
+
+<H3><A NAME="Boolean_values" HREF="manual_toc.html#Boolean_values">9.1.4  Boolean Values</A></H3>
+
+<P>
+Beginning with MySQL 4.1, the constant <code>TRUE</code> evaluates to <code>1</code> and
+the constant <code>FALSE</code> evaluates to <code>0</code>. The constant names can be
+written in any lettercase.
+
+</P>
+
+<PRE>
+mysql&#62; SELECT TRUE, true, FALSE, false;
+        -&#62; 1, 1, 0, 0
+</PRE>
+
+
+
+<H3><A NAME="NULL_values" HREF="manual_toc.html#NULL_values">9.1.5  <code>NULL</code> Values</A></H3>
+
+<P>
+<A NAME="IDX1043"></A>
+
+</P>
+<P>
+The <code>NULL</code> value means ``no data.''
+<code>NULL</code> can be written in any lettercase.
+
+</P>
+<P>
+Be aware that the <code>NULL</code> value is different from values such
+as <code>0</code> for numeric types or the empty string for string types.
+See section <A HREF="manual_Problems.html#Problems_with_NULL">A.5.3  Problems with <code>NULL</code> Values</A>.
+
+</P>
+<P>
+For text file import or export operations performed with <code>LOAD DATA
+INFILE</code> or <code>SELECT ... INTO OUTFILE</code>, <code>NULL</code> is represented by
+the <code>\N</code> sequence.
+See section <A HREF="manual_SQL_Syntax.html#LOAD_DATA">13.1.5  <code>LOAD DATA INFILE</code> Syntax</A>.
+
+</P>
+
+
+
+<H2><A NAME="Legal_names" HREF="manual_toc.html#Legal_names">9.2  Database, Table, Index, Column, and Alias Names</A></H2>
+
+<P>
+<A NAME="IDX1044"></A>
+<A NAME="IDX1045"></A>
+<A NAME="IDX1046"></A>
+<A NAME="IDX1047"></A>
+<A NAME="IDX1048"></A>
+<A NAME="IDX1049"></A>
+<A NAME="IDX1050"></A>
+<A NAME="IDX1051"></A>
+
+</P>
+<P>
+Database, table, index, column, and alias names are identifiers.
+This section describes the allowable syntax for identifiers in MySQL.
+
+</P>
+<P>
+The following table describes the maximum length and allowable characters for
+each type of identifier.
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Identifier</strong> </TD><TD> <strong>Maximum Length (bytes)</strong> </TD><TD> <strong>Allowed Characters</strong>
+</TD></TR>
+<TR><TD>Database </TD><TD> 64 </TD><TD> Any character that is allowed in a directory name, except <samp>`/'</samp>, <samp>`\'</samp>, or <samp>`.'</samp>
+</TD></TR>
+<TR><TD>Table </TD><TD> 64 </TD><TD> Any character that is allowed in a filename, except <samp>`/'</samp>, <samp>`\'</samp>, or <samp>`.'</samp>
+</TD></TR>
+<TR><TD>Column </TD><TD> 64 </TD><TD> All characters
+</TD></TR>
+<TR><TD>Index </TD><TD> 64 </TD><TD> All characters
+</TD></TR>
+<TR><TD>Alias </TD><TD> 255 </TD><TD> All characters
+</TD></TR>
+</TABLE>
+
+<P>
+In addition to the restrictions noted in the table, no identifier can
+contain ASCII 0 or a byte with a value of 255.  Database, table, and
+column names should not end with space characters.  Before MySQL 4.1,
+identifier quote characters should not be used in identifiers.
+
+</P>
+<P>
+Beginning with MySQL 4.1, identifiers are stored using Unicode (UTF8).
+This applies to identifiers in table definitions that stored in <tt>`.frm'</tt>
+files and to identifiers stored in the grant tables in the <code>mysql</code>
+database. Although Unicode identifiers can include multi-byte characters, note
+that the maximum lengths shown in the table are byte counts. If an identifier
+does contain multi-byte characters, the number of <em>characters</em> allowed in
+the identifier is less than the value shown in the table.
+
+</P>
+<P>
+<A NAME="IDX1052"></A>
+<A NAME="IDX1053"></A>
+<A NAME="IDX1054"></A>
+<A NAME="IDX1055"></A>
+
+</P>
+<P>
+An identifier may be quoted or unquoted.  If an identifier is a reserved
+word or contains special characters, you <em>must</em> quote it whenever you
+refer to it.  For a list of reserved words, see section <A HREF="manual_Language_Structure.html#Reserved_words">9.6  Treatment of Reserved Words in MySQL</A>.
+Special characters are those outside the set of alphanumeric characters from
+the current character set, <samp>`_'</samp>, and <samp>`$'</samp>.
+
+</P>
+<P>
+The identifier quote character is the backtick (<samp>``'</samp>):
+
+</P>
+
+<PRE>
+mysql&#62; SELECT * FROM `select` WHERE `select`.id &#62; 100;
+</PRE>
+
+<P>
+If the server SQL mode includes the <code>ANSI_QUOTES</code> mode option,
+it is also allowable to quote identifiers with double quotes:
+
+</P>
+
+<PRE>
+mysql&#62; CREATE TABLE "test" (col INT);
+ERROR 1064: You have an error in your SQL syntax. (...)
+mysql&#62; SET sql_mode='ANSI_QUOTES';
+mysql&#62; CREATE TABLE "test" (col INT);
+Query OK, 0 rows affected (0.00 sec)
+</PRE>
+
+<P>
+See section <A HREF="manual_MySQL_Database_Administration.html#Server_SQL_mode">5.2.2  The Server SQL Mode</A>.
+
+</P>
+<P>
+As of MySQL 4.1, identifier quote characters can be included within an
+identifier if you quote the identifier. If the character to be included within
+the identifier is the same as that used to quote the identifier itself,
+double the character. The following statement creates a table named <code>a`b</code>
+that contains a column named <code>c"d</code>:
+
+</P>
+
+<PRE>
+mysql&#62; CREATE TABLE `a``b` (`c"d` INT);
+</PRE>
+
+<P>
+Identifier quoting was introduced in MySQL 3.23.6 to allow use of
+identifiers that are reserved words or that contain special characters.
+Before 3.23.6, you cannot use identifiers that require quotes, so the rules for
+legal identifiers are more restrictive:
+
+</P>
+
+<UL>
+<LI>
+
+A name may consist of alphanumeric characters from the current character set,
+<samp>`_'</samp>, and <samp>`$'</samp>. The default character set is ISO-8859-1
+(Latin1). This may be changed with the <code>--default-character-set</code> option
+to <code>mysqld</code>.
+See section <A HREF="manual_MySQL_Database_Administration.html#Character_sets">5.8.1  The Character Set Used for Data and Sorting</A>.
+
+<LI>
+
+A name may start with any character that is legal in a name.  In particular,
+a name may start with a digit; this differs from many other database
+systems!  However, an unquoted name cannot consist <em>only</em> of digits.
+
+<LI>
+
+You cannot use the <samp>`.'</samp> character in names because it is used to extend the
+format by which you can refer to columns (see section <A HREF="manual_Language_Structure.html#Identifier_qualifiers">9.2.1  Identifier Qualifiers</A>).
+</UL>
+
+<P>
+It is recommended that you do not use names like <code>1e</code>, because
+an expression like <code>1e+1</code> is ambiguous. It might be interpreted as the
+expression <code>1e + 1</code> or as the number <code>1e+1</code>, depending on context.
+
+</P>
+
+
+
+<H3><A NAME="Identifier_qualifiers" HREF="manual_toc.html#Identifier_qualifiers">9.2.1  Identifier Qualifiers</A></H3>
+
+<P>
+MySQL allows names that consist of a single identifier or
+multiple identifiers. The components of a multiple-part name should be
+separated by period (<samp>`.'</samp>) characters. The initial parts of a
+multiple-part name act as qualifiers that affect the context within which
+the final identifier is interpreted.
+
+</P>
+<P>
+In MySQL you can refer to a column using any of the following forms:
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Column Reference</strong> </TD><TD> <strong>Meaning</strong>
+</TD></TR>
+<TR><TD><var>col_name</var> </TD><TD> The column <var>col_name</var>
+from whichever table used in the query contains a column of that name.
+</TD></TR>
+<TR><TD><var>tbl_name.col_name</var> </TD><TD> The column <var>col_name</var> from table
+<var>tbl_name</var> of the default database.
+</TD></TR>
+<TR><TD><var>db_name.tbl_name.col_name</var> </TD><TD> The column <var>col_name</var> from table
+<var>tbl_name</var> of the database <var>db_name</var>.  This syntax is unavailable
+before MySQL 3.22.
+</TD></TR>
+</TABLE>
+
+<P>
+If any components of a multiple-part name require quoting, quote them
+individually rather than quoting the name as a whole. For example,
+<code>`my-table`.`my-column`</code> is legal, whereas <code>`my-table.my-column`</code> is
+not.
+
+</P>
+<P>
+You need not specify a <var>tbl_name</var> or <var>db_name.tbl_name</var> prefix for
+a column reference in a statement unless the reference would be ambiguous.
+Suppose that tables <code>t1</code> and <code>t2</code> each contain a column
+<code>c</code>, and you retrieve <code>c</code> in a <code>SELECT</code> statement that uses
+both <code>t1</code> and <code>t2</code>.  In this case, <code>c</code> is ambiguous because it
+is not unique among the tables used in the statement. You must qualify it
+with a table name as <code>t1.c</code> or <code>t2.c</code> to indicate which table you
+mean.  Similarly, to retrieve from a table <code>t</code> in database <code>db1</code>
+and from a table <code>t</code> in database <code>db2</code> in the same statement,
+you must refer to columns in those tables as <code>db1.t.col_name</code>
+and <code>db2.t.col_name</code>.
+
+</P>
+<P>
+<A NAME="IDX1056"></A>
+<A NAME="IDX1057"></A>
+The syntax <var>.tbl_name</var> means the table <var>tbl_name</var> in the current
+database.  This syntax is accepted for ODBC compatibility because some ODBC
+programs prefix table names with a <samp>`.'</samp> character.
+
+</P>
+
+
+
+<H3><A NAME="Name_case_sensitivity" HREF="manual_toc.html#Name_case_sensitivity">9.2.2  Identifier Case Sensitivity</A></H3>
+
+<P>
+<A NAME="IDX1058"></A>
+<A NAME="IDX1059"></A>
+<A NAME="IDX1060"></A>
+<A NAME="IDX1061"></A>
+<A NAME="IDX1062"></A>
+<A NAME="IDX1063"></A>
+<A NAME="IDX1064"></A>
+<A NAME="IDX1065"></A>
+
+</P>
+<P>
+In MySQL, databases correspond to directories within the data directory.
+Tables within a database correspond to at least one file within the database
+directory (and possibly more, depending on the storage engine).
+Consequently, the case sensitivity of the
+underlying operating system determines the case sensitivity of database and
+table names.  This means database and table names are not case sensitive in
+Windows, and case sensitive in most varieties of Unix. One notable
+exception is Mac OS X, which is Unix-based but uses a default filesystem type
+(HFS+) that is not
+case sensitive.  However, Mac OS X also supports UFS volumes, which are case
+sensitive just as on any Unix.
+See section <A HREF="manual_Introduction.html#Extensions_to_ANSI">1.5.4  MySQL Extensions to Standard SQL</A>.
+
+</P>
+<P>
+<strong>Note</strong>: Although database and table names are not case sensitive on
+some platforms, you should not refer to a given database or table using
+different
+cases within the same query.  The following query would not work because it
+refers to a table both as <code>my_table</code> and as <code>MY_TABLE</code>:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT * FROM my_table WHERE MY_TABLE.col=1;
+</PRE>
+
+<P>
+Column names, index names,
+and column aliases are not case sensitive on any platform.
+
+</P>
+<P>
+Table aliases are case sensitive before MySQL 4.1.1.  The following
+query would not work because it refers to the alias both as <code>a</code> and
+as <code>A</code>:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT <var>col_name</var> FROM <var>tbl_name</var> AS a
+    -&#62; WHERE a.<var>col_name</var> = 1 OR A.<var>col_name</var> = 2;
+</PRE>
+
+<P>
+If you have trouble remembering the allowable lettercase for database
+and table names, adopt a consistent convention, such as always creating
+databases and tables using lowercase names.
+
+</P>
+<P>
+How table and database names are stored on disk and used in MySQL is defined by the
+<code>lower_case_table_names</code> system variable, which you can set when
+starting <code>mysqld</code>.  <code>lower_case_table_names</code> can take one of
+the following values:
+
+</P>
+<TABLE BORDER>
+
+<TR><TD><strong>Value</strong> </TD><TD> <strong>Meaning</strong>
+</TD></TR>
+<TR><TD><code>0</code> </TD><TD> Table and database names are stored on disk using the lettercase specified in the <code>CREATE TABLE</code> or <code>CREATE DATABASE</code> statement. Name comparisons are case sensitive.  This is the default on Unix systems. Note that if you force this to 0 with <code>--lower-case-table-names=0</code> on a case-insensitive filesystem and access <code>MyISAM</code> tablenames using different lettercases, this may lead to index corruption.
+
+</TD></TR>
+<TR><TD><code>1</code> </TD><TD> Table names are stored in lowercase on disk and name comparisons are not case sensitive. MySQL converts all table names to lowercase on storage and lookup.  This behavior also applies to database names as of MySQL 4.0.2, and to table aliases as of 4.1.1. This value is the default on Windows and Mac OS X systems.
+
+</TD></TR>
+<TR><TD><code>2</code> </TD><TD> Table and database names are stored on disk using the lettercase specified in the <code>CREATE TABLE</code> or <code>CREATE DATABASE</code> statement, but MySQL converts them to lowercase on lookup.  Name comparisons are not case sensitive.  <strong>Note</strong>: This works <em>only</em> on filesystems that are not case sensitive! <code>InnoDB</code> table names are stored in lowercase, as for <code>lower_case_table_names=1</code>. Setting <code>lower_case_table_names</code> to <code>2</code> can be done as of MySQL 4.0.18.
+
+</TD></TR>
+</TABLE>
+
+<P>
+If you are using MySQL on only one platform, you don't normally have to
+change the <code>lower_case_table_names</code> variable. However, you may
+encounter difficulties if you want to transfer tables between platforms
+that differ in filesystem case sensitivity. For example, on Unix, you
+can have two different tables named <code>my_table</code> and <code>MY_TABLE</code>,
+but on Windows those names are considered the same.  To avoid data
+transfer problems stemming from database or table name lettercase, you
+have two options:
+
+</P>
+
+<UL>
+<LI>
+
+Use <code>lower_case_table_names=1</code> on all systems. The main disadvantage
+with this is that when you use <code>SHOW TABLES</code> or <code>SHOW DATABASES</code>,
+you don't see the names in their original lettercase.
+
+<LI>
+
+Use <code>lower_case_table_names=0</code> on Unix and <code>lower_case_table_names=2</code>
+on Windows. This preserves the lettercase of database and table names.
+The disadvantage of this is that you must ensure that your queries always refer
+to your database and table names with the correct lettercase on Windows. If
+you transfer your queries to Unix, where lettercase is significant, they will
+not work if the lettercase is incorrect.
+</UL>
+
+<P>
+Note that before setting <code>lower_case_table_names</code> to 1 on Unix, you must
+first convert your old database and table names to lowercase before restarting
+<code>mysqld</code>.
+
+</P>
+
+
+<H2><A NAME="Variables" HREF="manual_toc.html#Variables">9.3  User Variables</A></H2>
+
+<P>
+<A NAME="IDX1066"></A>
+<A NAME="IDX1067"></A>
+<A NAME="IDX1068"></A>
+
+</P>
+<P>
+MySQL supports user variables as of version 3.23.6. You can store a value in
+a user variable and refer to it later, which allows you to pass values from
+one statement to another. User variables are connection-specific. That is,
+a variable defined by one client cannot be seen or used by other clients.
+All variables for a client connection are automatically freed when the
+client exits.
+
+</P>
+<P>
+User variables are written as <code>@<var>var_name</var></code>, where the variable name
+<var>var_name</var> may consist of alphanumeric characters from the current
+character set, <samp>`.'</samp>, <samp>`_'</samp>, and <samp>`$'</samp>. The default character set
+is ISO-8859-1 (Latin1). This may be changed with the
+<code>--default-character-set</code> option to <code>mysqld</code>. See section <A HREF="manual_MySQL_Database_Administration.html#Character_sets">5.8.1  The Character Set Used for Data and Sorting</A>. User variable names are not case sensitive beginning with MySQL 5.0.
+Before that, they are case sensitive.
+
+</P>
+<P>
+One way to set a user variable is by issuing a <code>SET</code> statement:
+
+</P>
+
+<PRE>
+SET @<var>var_name</var> = <var>expr</var> [, @<var>var_name</var> = <var>expr</var>] ...
+</PRE>
+
+<P>
+For <code>SET</code>, either <code>=</code> or <code>:=</code> can be used as the assignment
+operator.  The <var>expr</var> assigned to each variable can evaluate
+to an integer, real, string, or <code>NULL</code> value.
+
+</P>
+<P>
+You can also assign a value to a user variable in statements other than
+<code>SET</code>.  In this case, the assignment operator must be <code>:=</code> and not
+<code>=</code> because <code>=</code> is treated as a comparison operator
+in non-<code>SET</code> statements:
+
+</P>
+
+<PRE>
+mysql&#62; SET @t1=0, @t2=0, @t3=0;
+mysql&#62; SELECT @t1:=(@t2:=1)+@t3:=4,@t1,@t2,@t3;
++----------------------+------+------+------+
+| @t1:=(@t2:=1)+@t3:=4 | @t1  | @t2  | @t3  |
++----------------------+------+------+------+
+|                    5 |    5 |    1 |    4 |
++----------------------+------+------+------+
+</PRE>
+
+<P>
+User variables may be used where expressions are allowed.  This
+does not currently include contexts that explicitly require a number, such
+as in the <code>LIMIT</code> clause of a <code>SELECT</code> statement, or the
+<code>IGNORE number LINES</code> clause of a <code>LOAD DATA</code> statement.
+
+</P>
+<P>
+If you refer to a variable that has not been initialized, its value
+is <code>NULL</code>.
+
+</P>
+<P>
+<strong>Note</strong>: In a <code>SELECT</code> statement, each expression is evaluated
+only when sent to the client.  This means that in a <code>HAVING</code>,
+<code>GROUP BY</code>, or <code>ORDER BY</code> clause, you cannot refer to an expression
+that involves variables that are set in the <code>SELECT</code> list. For example,
+the following statement will <em>not</em> work as expected:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT (@aa:=id) AS a, (@aa+3) AS b FROM <var>tbl_name</var> HAVING b=5;
+</PRE>
+
+<P>
+The reference to <code>b</code> in the <code>HAVING</code> clause refers to an alias
+for an expression in the <code>SELECT</code> list that uses <code>@aa</code>. This
+does not work as expected: <code>@aa</code> will not contain the value of the
+current row, but the value of <code>id</code> from the previous selected row.
+
+</P>
+<P>
+The general rule is to never assign <em>and</em> use the same variable in
+the same statement.
+
+</P>
+<P>
+Another issue with setting a variable and using it in the same statement
+is that the default result type of a variable is based on the type of
+the variable at the start of the statement.  The following example
+illustrates this:
+
+</P>
+
+<PRE>
+mysql&#62; SET @a='test';
+mysql&#62; SELECT @a,(@a:=20) FROM <var>tbl_name</var>;
+</PRE>
+
+<P>
+For this <code>SELECT</code> statement, MySQL will report to the client that
+column one is a string and convert all accesses of <code>@a</code> to strings,
+even though @a is set to a number for the second row.  After the
+<code>SELECT</code> statement executes, <code>@a</code> will be regarded as a
+number for the next statement.
+
+</P>
+<P>
+To avoid problems with this behavior, either do not set and use the same
+variable within a single statement, or else set the variable to <code>0</code>,
+<code>0.0</code>, or <code>''</code> to define its type before you use it.
+
+</P>
+<P>
+An unassigned variable has a value of <code>NULL</code> with a type of string.
+
+</P>
+
+
+
+<H2><A NAME="System_Variables" HREF="manual_toc.html#System_Variables">9.4  System Variables</A></H2>
+
+<P>
+<A NAME="IDX1069"></A>
+<A NAME="IDX1070"></A>
+<A NAME="IDX1071"></A>
+
+</P>
+
+<P>
+Starting from MySQL 4.0.3, we provide better access to a lot of system
+and connection variables. Many variables can be changed dynamically while
+the server is running. This allows you to modify server operation without
+having to stop and restart it.
+
+</P>
+
+<P>
+The <code>mysqld</code> server maintains two kinds of variables.
+Global variables affect the overall operation of the server.
+Session variables affect its operation for individual client connections.
+
+</P>
+<P>
+When the server starts, it initializes all global variables to their default
+values. These defaults may be changed by options specified in option files
+or on the command line.  After the server starts, those global variables
+that are dynamic can be changed by connecting to the server and issuing
+a <code>SET GLOBAL <var>var_name</var></code> statement. To change a global variable,
+you must have the <code>SUPER</code> privilege.
+
+</P>
+<P>
+The server also maintains a set of session variables for each client
+that connects. The client's session variables are initialized at connect
+time using the current values of the corresponding global variables. For
+those session variables that are dynamic, the client can change them
+by issuing a <code>SET SESSION <var>var_name</var></code> statement. Setting a session
+variable requires no special privilege, but a client can change only its
+own session variables, not those of any other client.
+
+</P>
+<P>
+A change to a global variable is visible to any client that accesses that
+global variable. However, it affects the corresponding session variable
+that is intialized from the global variable only for clients that connect
+after the change.  It does not affect the session variable for any client
+that is already connected (not even that of the client that issues the
+<code>SET GLOBAL</code> statement).
+
+</P>
+<P>
+Global or session variables may be set or retrieved using several syntax
+forms.  The following examples use <code>sort_buffer_size</code> as a sample variable
+name.
+
+</P>
+<P>
+To set the value of a <code>GLOBAL</code> variable, use one
+of the following syntaxes:
+
+</P>
+
+<PRE>
+mysql&#62; SET GLOBAL sort_buffer_size=<var>value</var>;
+mysql&#62; SET @@global.sort_buffer_size=<var>value</var>;
+</PRE>
+
+<P>
+To set the value of a <code>SESSION</code> variable, use one of the
+following syntaxes:
+
+</P>
+
+<PRE>
+mysql&#62; SET SESSION sort_buffer_size=<var>value</var>;
+mysql&#62; SET @@session.sort_buffer_size=<var>value</var>;
+mysql&#62; SET sort_buffer_size=<var>value</var>;
+</PRE>
+
+<P>
+<code>LOCAL</code> is a synonym for <code>SESSION</code>.
+
+</P>
+<P>
+If you don't specify <code>GLOBAL</code>, <code>SESSION</code>, or <code>LOCAL</code> when
+setting a variable, <code>SESSION</code> is the default.
+See section <A HREF="manual_SQL_Syntax.html#SET_OPTION">13.5.3  <code>SET</code> Syntax</A>.
+
+</P>
+<P>
+To retrieve the value of a <code>GLOBAL</code> variable, use one of the
+following statements:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT @@global.sort_buffer_size;
+mysql&#62; SHOW GLOBAL VARIABLES like 'sort_buffer_size';
+</PRE>
+
+<P>
+To retrieve the value of a <code>SESSION</code> variable, use one of the
+following statements:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT @@sort_buffer_size;
+mysql&#62; SELECT @@session.sort_buffer_size;
+mysql&#62; SHOW SESSION VARIABLES like 'sort_buffer_size';
+</PRE>
+
+<P>
+Here, too, <code>LOCAL</code> is a synonym for <code>SESSION</code>.
+
+</P>
+<P>
+When you retrieve a variable with <code>SELECT @@<var>var_name</var></code> (that is, you
+do not specify <code>global.</code>, <code>session.</code>, or <code>local.</code>, MySQL returns
+the <code>SESSION</code> value if it exists and the <code>GLOBAL</code> value otherwise.
+
+</P>
+<P>
+For <code>SHOW VARIABLES</code>, if you do not specify <code>GLOBAL</code>,
+<code>SESSION</code>, or <code>LOCAL</code>, MySQL returns the <code>SESSION</code> value.
+
+</P>
+<P>
+The reason for requiring the <code>GLOBAL</code> keyword when setting
+<code>GLOBAL</code>-only variables but not when retrieving them is to prevent
+problems in the future.  If we remove a <code>SESSION</code>
+variable with the same name as a <code>GLOBAL</code> variable, a client with the
+<code>SUPER</code> privilege might accidentally change the <code>GLOBAL</code> variable
+rather than just the <code>SESSION</code> variable for its own connection.  If we
+add a <code>SESSION</code> variable with the same name as a <code>GLOBAL</code>
+variable, a client that intends to change the <code>GLOBAL</code> variable might
+find only its own <code>SESSION</code> variable changed.
+
+</P>
+<P>
+Further information about system startup options and system
+variables can be found in section <A HREF="manual_MySQL_Database_Administration.html#Server_options">5.2.1  <code>mysqld</code> Command-Line Options</A> and
+section <A HREF="manual_MySQL_Database_Administration.html#Server_system_variables">5.2.3  Server System Variables</A>.
+A list of the variables that can be set at runtime is given in
+section <A HREF="manual_MySQL_Database_Administration.html#Dynamic_System_Variables">5.2.3.1  Dynamic System Variables</A>.
+
+</P>
+
+
+
+<H3><A NAME="Structured_System_Variables" HREF="manual_toc.html#Structured_System_Variables">9.4.1  Structured System Variables</A></H3>
+
+<P>
+Structured system variables are supported beginning with MySQL 4.1.1.
+A structured variable differs from a regular system variable in two
+respects:
+
+</P>
+
+<UL>
+<LI>
+
+Its value is a structure with components that specify
+server parameters considered to be closely related.
+<LI>
+
+There might be several instances of a given type of structured variable.
+Each one has a different name and refers to a different resource
+maintained by the server.
+</UL>
+
+<P>
+Currently, MySQL supports one structured variable type. It specifies
+parameters that govern the operation of key caches. A key cache structured
+variable has these components:
+
+</P>
+
+<UL>
+<LI>
+
+<code>key_buffer_size</code>
+<LI>
+
+<code>key_cache_block_size</code>
+<LI>
+
+<code>key_cache_division_limit</code>
+<LI>
+
+<code>key_cache_age_threshold</code>
+</UL>
+
+<P>
+The purpose of this section is to describe the syntax for referring to
+structured variables. Key cache variables are used for syntax examples,
+but specific details about how key caches operate are found elsewhere, in
+section <A HREF="manual_MySQL_Optimization.html#MyISAM_key_cache">7.4.6  The <code>MyISAM</code> Key Cache</A>.
+
+</P>
+<P>
+To refer to a component of a structured variable instance, you can use a
+compound name in <code>instance_name.component_name</code> format. Examples:
+
+</P>
+
+<PRE>
+hot_cache.key_buffer_size
+hot_cache.key_cache_block_size
+cold_cache.key_cache_block_size
+</PRE>
+
+<P>
+For each structured system variable, an instance with the name of
+<code>default</code> is always predefined.  If you refer to a component of a
+structured variable without any instance name, the <code>default</code> instance
+is used.  Thus, <code>default.key_buffer_size</code> and <code>key_buffer_size</code>
+both refer to the same system variable.
+
+</P>
+<P>
+The naming rules for structured variable instances and components are as
+follows:
+
+</P>
+
+<UL>
+<LI>
+
+For a given type of structured variable, each instance must have a name
+that is unique <em>within</em> variables of that type. However, instance names
+need not be unique <em>across</em> structured variable types. For example,
+each structured variable will have an instance named <code>default</code>,
+so <code>default</code> is not unique across variable types.
+
+<LI>
+
+The names of the components of each structured variable type must be
+unique across all system variable names.  If this were not true (that is, if
+two different types of structured variables could share component
+member names), it would not be clear which default structured variable
+to use for references to member names that are not qualified by an
+instance name.
+
+<LI>
+
+If a structured variable instance name is not legal as an unquoted identifier,
+refer to it as a quoted identifier using backticks. For example,
+<code>hot-cache</code> is not legal, but <code>`hot-cache`</code> is.
+
+<LI>
+
+<code>global</code>, <code>session</code>, and <code>local</code> are not legal instance
+names. This avoids a conflict with notation such as <code>@@global.<var>var_name</var></code>
+for referring to non-structured system variables.
+
+</UL>
+
+<P>
+At the moment, the first two rules have no possibility of being violated
+because the only structured variable type is the one for key caches.
+These rules will assume greater significance if some other type of structured
+variable is created in the future.
+
+</P>
+<P>
+With one exception, it is allowable to refer to structured variable
+components using compound names in any context where simple variable
+names can occur.  For example, you can assign a value to a structured
+variable using a command-line option:
+
+</P>
+
+<PRE>
+shell&#62; mysqld --hot_cache.key_buffer_size=64K
+</PRE>
+
+<P>
+In an option file, do this:
+
+</P>
+
+<PRE>
+[mysqld]
+hot_cache.key_buffer_size=64K
+</PRE>
+
+<P>
+If you start the server with such an option, it creates a key cache
+named <code>hot_cache</code> with a size of 64KB in addition to the default
+key cache that has a default size of 8MB.
+
+</P>
+<P>
+Suppose that you start the server as follows:
+
+</P>
+
+<PRE>
+shell&#62; mysqld --key_buffer_size=256K \
+         --extra_cache.key_buffer_size=128K \
+         --extra_cache.key_cache_block_size=2048
+</PRE>
+
+<P>
+In this case, the server sets the size of the default key cache to 256KB.
+(You could also have written <code>--default.key_buffer_size=256K</code>.)
+In addition, the server creates a second key cache named <code>extra_cache</code>
+that has a size of 128KB, with the size of block buffers for caching
+table index blocks set to 2048 bytes.
+
+</P>
+<P>
+The following example starts the server with three different key caches
+having sizes in a 3:1:1 ratio:
+
+</P>
+
+<PRE>
+shell&#62; mysqld --key_buffer_size=6M \
+         --hot_cache.key_buffer_size=2M \
+         --cold_cache.key_buffer_size=2M
+</PRE>
+
+<P>
+Structured variable values may be set and retrieved at runtime as well.
+For example, to set a key cache named <code>hot_cache</code> to a size of 10MB,
+use either of these statements:
+
+</P>
+
+<PRE>
+mysql&#62; SET GLOBAL hot_cache.key_buffer_size = 10*1024*1024;
+mysql&#62; SET @@global.hot_cache.key_buffer_size = 10*1024*1024;
+</PRE>
+
+<P>
+To retrieve the cache size, do this:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT @@global.hot_cache.key_buffer_size;
+</PRE>
+
+<P>
+However, the following statement does not work. The variable is not
+interpreted as a compound name, but as a simple string for a <code>LIKE</code>
+pattern-matching operation:
+
+</P>
+
+<PRE>
+mysql&#62; SHOW GLOBAL VARIABLES LIKE 'hot_cache.key_buffer_size';
+</PRE>
+
+<P>
+This is the exception to being able to use structured variable names anywhere
+a simple variable name may occur.
+
+</P>
+
+
+
+<H2><A NAME="Comments" HREF="manual_toc.html#Comments">9.5  Comment Syntax</A></H2>
+
+<P>
+<A NAME="IDX1072"></A>
+
+</P>
+<P>
+<A NAME="IDX1073"></A>
+
+</P>
+
+<P>
+The MySQL server supports three comment styles:
+
+</P>
+
+<UL>
+<LI>
+
+From a <samp>`#'</samp> character to the end of the line.
+
+<LI>
+
+From a <samp>`-- '</samp> sequence to the end of the line.
+This style is supported as of MySQL 3.23.3.
+Note that the <samp>`-- '</samp> (double-dash) comment style requires the second dash
+to be followed by at least one space (or by a control character such as a
+newline). This syntax differs slightly from standard SQL comment syntax, as discussed in
+section <A HREF="manual_Introduction.html#ANSI_diff_comments">1.5.5.7  <samp>`--'</samp> as the Start of a Comment</A>.
+
+<LI>
+
+From a <samp>`/*'</samp> sequence to the following <samp>`*/'</samp> sequence.
+The closing sequence need not be on the same line, so this
+syntax allows a comment to extend over multiple lines.
+
+</UL>
+
+<P>
+The following example demonstrates all three comment styles:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT 1+1;     # This comment continues to the end of line
+mysql&#62; SELECT 1+1;     -- This comment continues to the end of line
+mysql&#62; SELECT 1 /* this is an in-line comment */ + 1;
+mysql&#62; SELECT 1+
+/*
+this is a
+multiple-line comment
+*/
+1;
+</PRE>
+
+<P>
+The comment syntax just described applies to how the <code>mysqld</code> server
+parses SQL statements. The <code>mysql</code> client program also performs some
+parsing of statements before sending them to the server. (For example, it
+does this to determine statement boundaries within a multiple-statement input
+line.) However, there are some limitations on the way that <code>mysql</code>
+parses <code>/* ... */</code> comments:
+
+</P>
+
+<UL>
+
+<LI>
+
+A semicolon within the comment is taken to indicate the end of the current
+SQL statement and anything following it to indicate the beginning of the
+next statement.  This problem was fixed in MySQL 4.0.13.
+
+<LI>
+
+A single quote, double quote, or backtick character is taken to indicate the beginning
+of a quoted string or identifier, even within a comment.  If the quote is not matched by a
+second quote within the comment, the parser doesn't realize the comment has
+ended.  If you are running <code>mysql</code> interactively, you can tell that it
+has gotten confused like this because the prompt changes from <code>mysql&#62;</code>
+to <code>'&#62;</code>, <code>"&#62;</code>, or <code>`&#62;</code>.
+This problem was fixed in MySQL 4.1.1.
+
+<LI>
+
+An exclamation point used with this style of comment delimiter (such as 
+<code>/*! ... */</code>) marks portions of SQL statements for conditional 
+execution. For more information and examples, see section <A HREF="manual_Introduction.html#Extensions_to_ANSI">1.5.4  MySQL Extensions to Standard SQL</A>.
+
+</UL>
+
+<P>
+For affected versions of MySQL,
+these limitations apply both when you run <code>mysql</code> interactively
+and when you put commands in a file and use <code>mysql</code> in batch mode to
+process the file with <code>mysql &#60; <var>file_name</var></code>.
+
+</P>
+
+
+
+<H2><A NAME="Reserved_words" HREF="manual_toc.html#Reserved_words">9.6  Treatment of Reserved Words in MySQL</A></H2>
+
+<P>
+<A NAME="IDX1074"></A>
+<A NAME="IDX1075"></A>
+
+</P>
+<P>
+A common problem stems from trying to use an identifier such as a table or
+column name that is the name of a built-in MySQL data type or function,
+such as <code>TIMESTAMP</code> or <code>GROUP</code>.  You're allowed
+to do this (for example, <code>ABS</code> is allowed as a column name). However,
+by default, no whitespace is allowed in function invocations between the
+function name and the following <samp>`('</samp> character. This requirement allows
+a function call to be distinguished from a reference to a column name.
+
+</P>
+<P>
+A side effect of this behavior is that omitting a space in some contexts
+causes an identifier to be interpreted as a function name. For example, this
+statement is legal:
+
+</P>
+
+<PRE>
+mysql&#62; CREATE TABLE abs (val INT);
+</PRE>
+
+<P>
+But omitting the space after <code>abs</code> causes a syntax error because the
+statement then appears to invoke the <code>ABS()</code> function:
+
+</P>
+
+<PRE>
+mysql&#62; CREATE TABLE abs(val INT);
+</PRE>
+
+<P>
+If the server SQL mode includes the <code>IGNORE_SPACE</code> mode value, the
+server allows function invocations to have whitespace between a function
+name and the following <samp>`('</samp> character. This causes function names to be
+treated as reserved words. As a result, identifiers that are the same as
+function names must be quoted as described in section <A HREF="manual_Language_Structure.html#Legal_names">9.2  Database, Table, Index, Column, and Alias Names</A>.  The server
+SQL mode is controlled as described in section <A HREF="manual_MySQL_Database_Administration.html#Server_SQL_mode">5.2.2  The Server SQL Mode</A>.
+
+</P>
+<P>
+The words in the following table are explicitly reserved in MySQL. Most of
+them are forbidden by standard SQL as column and/or table names (for example,
+<code>GROUP</code>).  A few are reserved because MySQL needs them and (currently)
+uses a <code>yacc</code> parser.  A reserved word can be used as an identifier if
+you quote it.
+
+</P>
+
+<TABLE BORDER>
+<TR><TD><strong>Word</strong>
+ </TD><TD> <strong>Word</strong>
+ </TD><TD> <strong>Word</strong>
+</TD></TR>
+<TR><TD><code>ADD</code>
+ </TD><TD> <code>ALL</code>
+ </TD><TD> <code>ALTER</code>
+</TD></TR>
+<TR><TD><code>ANALYZE</code>
+ </TD><TD> <code>AND</code>
+ </TD><TD> <code>AS</code>
+</TD></TR>
+<TR><TD><code>ASC</code>
+ </TD><TD> <code>ASENSITIVE</code>
+ </TD><TD> <code>BEFORE</code>
+</TD></TR>
+<TR><TD><code>BETWEEN</code>
+ </TD><TD> <code>BIGINT</code>
+ </TD><TD> <code>BINARY</code>
+</TD></TR>
+<TR><TD><code>BLOB</code>
+ </TD><TD> <code>BOTH</code>
+ </TD><TD> <code>BY</code>
+</TD></TR>
+<TR><TD><code>CALL</code>
+ </TD><TD> <code>CASCADE</code>
+ </TD><TD> <code>CASE</code>
+</TD></TR>
+<TR><TD><code>CHANGE</code>
+ </TD><TD> <code>CHAR</code>
+ </TD><TD> <code>CHARACTER</code>
+</TD></TR>
+<TR><TD><code>CHECK</code>
+ </TD><TD> <code>COLLATE</code>
+ </TD><TD> <code>COLUMN</code>
+</TD></TR>
+<TR><TD><code>CONDITION</code>
+ </TD><TD> <code>CONNECTION</code>
+ </TD><TD> <code>CONSTRAINT</code>
+</TD></TR>
+<TR><TD><code>CONTINUE</code>
+ </TD><TD> <code>CONVERT</code>
+ </TD><TD> <code>CREATE</code>
+</TD></TR>
+<TR><TD><code>CROSS</code>
+ </TD><TD> <code>CURRENT_DATE</code>
+ </TD><TD> <code>CURRENT_TIME</code>
+</TD></TR>
+<TR><TD><code>CURRENT_TIMESTAMP</code>
+ </TD><TD> <code>CURRENT_USER</code>
+ </TD><TD> <code>CURSOR</code>
+</TD></TR>
+<TR><TD><code>DATABASE</code>
+ </TD><TD> <code>DATABASES</code>
+ </TD><TD> <code>DAY_HOUR</code>
+</TD></TR>
+<TR><TD><code>DAY_MICROSECOND</code>
+ </TD><TD> <code>DAY_MINUTE</code>
+ </TD><TD> <code>DAY_SECOND</code>
+</TD></TR>
+<TR><TD><code>DEC</code>
+ </TD><TD> <code>DECIMAL</code>
+ </TD><TD> <code>DECLARE</code>
+</TD></TR>
+<TR><TD><code>DEFAULT</code>
+ </TD><TD> <code>DELAYED</code>
+ </TD><TD> <code>DELETE</code>
+</TD></TR>
+<TR><TD><code>DESC</code>
+ </TD><TD> <code>DESCRIBE</code>
+ </TD><TD> <code>DETERMINISTIC</code>
+</TD></TR>
+<TR><TD><code>DISTINCT</code>
+ </TD><TD> <code>DISTINCTROW</code>
+ </TD><TD> <code>DIV</code>
+</TD></TR>
+<TR><TD><code>DOUBLE</code>
+ </TD><TD> <code>DROP</code>
+ </TD><TD> <code>DUAL</code>
+</TD></TR>
+<TR><TD><code>EACH</code>
+ </TD><TD> <code>ELSE</code>
+ </TD><TD> <code>ELSEIF</code>
+</TD></TR>
+<TR><TD><code>ENCLOSED</code>
+ </TD><TD> <code>ESCAPED</code>
+ </TD><TD> <code>EXISTS</code>
+</TD></TR>
+<TR><TD><code>EXIT</code>
+ </TD><TD> <code>EXPLAIN</code>
+ </TD><TD> <code>FALSE</code>
+</TD></TR>
+<TR><TD><code>FETCH</code>
+ </TD><TD> <code>FLOAT</code>
+ </TD><TD> <code>FOR</code>
+</TD></TR>
+<TR><TD><code>FORCE</code>
+ </TD><TD> <code>FOREIGN</code>
+ </TD><TD> <code>FROM</code>
+</TD></TR>
+<TR><TD><code>FULLTEXT</code>
+ </TD><TD> <code>GOTO</code>
+ </TD><TD> <code>GRANT</code>
+</TD></TR>
+<TR><TD><code>GROUP</code>
+ </TD><TD> <code>HAVING</code>
+ </TD><TD> <code>HIGH_PRIORITY</code>
+</TD></TR>
+<TR><TD><code>HOUR_MICROSECOND</code>
+ </TD><TD> <code>HOUR_MINUTE</code>
+ </TD><TD> <code>HOUR_SECOND</code>
+</TD></TR>
+<TR><TD><code>IF</code>
+ </TD><TD> <code>IGNORE</code>
+ </TD><TD> <code>IN</code>
+</TD></TR>
+<TR><TD><code>INDEX</code>
+ </TD><TD> <code>INFILE</code>
+ </TD><TD> <code>INNER</code>
+</TD></TR>
+<TR><TD><code>INOUT</code>
+ </TD><TD> <code>INSENSITIVE</code>
+ </TD><TD> <code>INSERT</code>
+</TD></TR>
+<TR><TD><code>INT</code>
+ </TD><TD> <code>INTEGER</code>
+ </TD><TD> <code>INTERVAL</code>
+</TD></TR>
+<TR><TD><code>INTO</code>
+ </TD><TD> <code>IS</code>
+ </TD><TD> <code>ITERATE</code>
+</TD></TR>
+<TR><TD><code>JOIN</code>
+ </TD><TD> <code>KEY</code>
+ </TD><TD> <code>KEYS</code>
+</TD></TR>
+<TR><TD><code>KILL</code>
+ </TD><TD> <code>LEADING</code>
+ </TD><TD> <code>LEAVE</code>
+</TD></TR>
+<TR><TD><code>LEFT</code>
+ </TD><TD> <code>LIKE</code>
+ </TD><TD> <code>LIMIT</code>
+</TD></TR>
+<TR><TD><code>LINES</code>
+ </TD><TD> <code>LOAD</code>
+ </TD><TD> <code>LOCALTIME</code>
+</TD></TR>
+<TR><TD><code>LOCALTIMESTAMP</code>
+ </TD><TD> <code>LOCK</code>
+ </TD><TD> <code>LONG</code>
+</TD></TR>
+<TR><TD><code>LONGBLOB</code>
+ </TD><TD> <code>LONGTEXT</code>
+ </TD><TD> <code>LOOP</code>
+</TD></TR>
+<TR><TD><code>LOW_PRIORITY</code>
+ </TD><TD> <code>MATCH</code>
+ </TD><TD> <code>MEDIUMBLOB</code>
+</TD></TR>
+<TR><TD><code>MEDIUMINT</code>
+ </TD><TD> <code>MEDIUMTEXT</code>
+ </TD><TD> <code>MIDDLEINT</code>
+</TD></TR>
+<TR><TD><code>MINUTE_MICROSECOND</code>
+ </TD><TD> <code>MINUTE_SECOND</code>
+ </TD><TD> <code>MOD</code>
+</TD></TR>
+<TR><TD><code>MODIFIES</code>
+ </TD><TD> <code>NATURAL</code>
+ </TD><TD> <code>NOT</code>
+</TD></TR>
+<TR><TD><code>NO_WRITE_TO_BINLOG</code>
+ </TD><TD> <code>NULL</code>
+ </TD><TD> <code>NUMERIC</code>
+</TD></TR>
+<TR><TD><code>ON</code>
+ </TD><TD> <code>OPTIMIZE</code>
+ </TD><TD> <code>OPTION</code>
+</TD></TR>
+<TR><TD><code>OPTIONALLY</code>
+ </TD><TD> <code>OR</code>
+ </TD><TD> <code>ORDER</code>
+</TD></TR>
+<TR><TD><code>OUT</code>
+ </TD><TD> <code>OUTER</code>
+ </TD><TD> <code>OUTFILE</code>
+</TD></TR>
+<TR><TD><code>PRECISION</code>
+ </TD><TD> <code>PRIMARY</code>
+ </TD><TD> <code>PROCEDURE</code>
+</TD></TR>
+<TR><TD><code>PURGE</code>
+ </TD><TD> <code>READ</code>
+ </TD><TD> <code>READS</code>
+</TD></TR>
+<TR><TD><code>REAL</code>
+ </TD><TD> <code>REFERENCES</code>
+ </TD><TD> <code>REGEXP</code>
+</TD></TR>
+<TR><TD><code>RENAME</code>
+ </TD><TD> <code>REPEAT</code>
+ </TD><TD> <code>REPLACE</code>
+</TD></TR>
+<TR><TD><code>REQUIRE</code>
+ </TD><TD> <code>RESTRICT</code>
+ </TD><TD> <code>RETURN</code>
+</TD></TR>
+<TR><TD><code>REVOKE</code>
+ </TD><TD> <code>RIGHT</code>
+ </TD><TD> <code>RLIKE</code>
+</TD></TR>
+<TR><TD><code>SCHEMA</code>
+ </TD><TD> <code>SCHEMAS</code>
+ </TD><TD> <code>SECOND_MICROSECOND</code>
+</TD></TR>
+<TR><TD><code>SELECT</code>
+ </TD><TD> <code>SENSITIVE</code>
+ </TD><TD> <code>SEPARATOR</code>
+</TD></TR>
+<TR><TD><code>SET</code>
+ </TD><TD> <code>SHOW</code>
+ </TD><TD> <code>SMALLINT</code>
+</TD></TR>
+<TR><TD><code>SONAME</code>
+ </TD><TD> <code>SPATIAL</code>
+ </TD><TD> <code>SPECIFIC</code>
+</TD></TR>
+<TR><TD><code>SQL</code>
+ </TD><TD> <code>SQLEXCEPTION</code>
+ </TD><TD> <code>SQLSTATE</code>
+</TD></TR>
+<TR><TD><code>SQLWARNING</code>
+ </TD><TD> <code>SQL_BIG_RESULT</code>
+ </TD><TD> <code>SQL_CALC_FOUND_ROWS</code>
+</TD></TR>
+<TR><TD><code>SQL_SMALL_RESULT</code>
+ </TD><TD> <code>SSL</code>
+ </TD><TD> <code>STARTING</code>
+</TD></TR>
+<TR><TD><code>STRAIGHT_JOIN</code>
+ </TD><TD> <code>TABLE</code>
+ </TD><TD> <code>TERMINATED</code>
+</TD></TR>
+<TR><TD><code>THEN</code>
+ </TD><TD> <code>TINYBLOB</code>
+ </TD><TD> <code>TINYINT</code>
+</TD></TR>
+<TR><TD><code>TINYTEXT</code>
+ </TD><TD> <code>TO</code>
+ </TD><TD> <code>TRAILING</code>
+</TD></TR>
+<TR><TD><code>TRIGGER</code>
+ </TD><TD> <code>TRUE</code>
+ </TD><TD> <code>UNDO</code>
+</TD></TR>
+<TR><TD><code>UNION</code>
+ </TD><TD> <code>UNIQUE</code>
+ </TD><TD> <code>UNLOCK</code>
+</TD></TR>
+<TR><TD><code>UNSIGNED</code>
+ </TD><TD> <code>UPDATE</code>
+ </TD><TD> <code>USAGE</code>
+</TD></TR>
+<TR><TD><code>USE</code>
+ </TD><TD> <code>USING</code>
+ </TD><TD> <code>UTC_DATE</code>
+</TD></TR>
+<TR><TD><code>UTC_TIME</code>
+ </TD><TD> <code>UTC_TIMESTAMP</code>
+ </TD><TD> <code>VALUES</code>
+</TD></TR>
+<TR><TD><code>VARBINARY</code>
+ </TD><TD> <code>VARCHAR</code>
+ </TD><TD> <code>VARCHARACTER</code>
+</TD></TR>
+<TR><TD><code>VARYING</code>
+ </TD><TD> <code>WHEN</code>
+ </TD><TD> <code>WHERE</code>
+</TD></TR>
+<TR><TD><code>WHILE</code>
+ </TD><TD> <code>WITH</code>
+ </TD><TD> <code>WRITE</code>
+</TD></TR>
+<TR><TD><code>XOR</code>
+ </TD><TD> <code>YEAR_MONTH</code>
+ </TD><TD> <code>ZEROFILL</code>
+</TD></TR>
+</TABLE>
+
+<P>
+MySQL allows some keywords to be used as unquoted identifiers because many
+people have already used them.  Examples are those in the following list:
+
+</P>
+
+<UL>
+<LI><code>ACTION</code>
+
+<LI><code>BIT</code>
+
+<LI><code>DATE</code>
+
+<LI><code>ENUM</code>
+
+<LI><code>NO</code>
+
+<LI><code>TEXT</code>
+
+<LI><code>TIME</code>
+
+<LI><code>TIMESTAMP</code>
+
+</UL>
+
+<P><HR><P>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_Client-Side_Scripts.html">previous</A>, <A HREF="manual_Charset.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+ </BODY>
+ </HTML>

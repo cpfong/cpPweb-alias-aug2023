@@ -1,0 +1,41 @@
+<html>
+	<ol type=disc> 在 subclass (circle) 中叫用 superclass (point) 中的方法 (即把 superclass assign 給 subclass)
+		<li> String s1= p.method_same();
+                <li> String s2= c.method_same();
+                <li> point pp = c; // 把 c 這個變數給 pp (但 pp 是一個 point)
+                <li> String s3= pp.method_same();
+		<li> s3 為 circle (因為要用 superclass 的方法)
+	</ol>
+
+	<ol> type=disc> 要把 subclass assign 給 superclass (x)
+		<li> circle c = p; --> error
+	</ol>
+
+	<ol> crossover 是可以的, 但必需二個 class 皆存在這個 method
+		<li> pp.method_same() --> ok
+		<li> pp.method_circle() --> x
+	</ol>
+
+	<ol> abstract class (為其它 class 提供一個 superclass 可以 inherit)
+		<li> TwoDimensionalShape --> Square, Circle, Triangle
+		<li> ThreeDimensionalShape --> Cube, Sphere, Cylinder
+		<li> Shape -> Point -> Circle -> Cylinder
+	</ol>
+
+	<table border=1>
+		<tr><td>	<td>getArea <td>getVolume<td>getName
+		<tr><td>shape	<td>0.0<td>0.0<td>abstract
+		<tr><td>point	<td>0.0<td>0.0<td>"Point"
+		<tr><td>circle	<td>PI*r*r<td>0.0<td>"Circle"
+		<tr><td>cylinder<td>2*PI*r*r+2*PI*r*h<td>PI*r*r*h<td>"Cylinder"
+	</table>
+
+	<ol> shape
+		<li>public abstract class shape extends Ojbect{
+		<li> public souble getArea() { return 0.0; }
+		<li> public double getV() { return 0.0; }
+		<li> publice abstract String getName(); }
+	</ol>
+
+</html>
+<meta http-equiv='Content-Type' content='text/html; charset=big5'>

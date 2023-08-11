@@ -1,0 +1,11 @@
+googling: 'AM Life Office 2013 2016'
+
+01 Office installed dir (ie c:\Program Files\Microsoft Office\Office15)
+02 cscript ospp.vbs /dstatus
+	LICENSE DESCRIPTION: Office 15, VOLUME_KMSCLIENT channel # VOL version OK
+	LICENSE DESCRIPTION: Office 15, RETAIL(Grace) channel # Retail version no good, you need to find VOL
+03 get Microsoft Toolkit # Microsoft Toolkit is counted in popular tools which are highly essential for activation.
+	Activation / Install / EZ-Activator
+03.5	Product activation successful
+04 cscript ospp.vbs /dstatus
+04.5 	show the 179 days

@@ -1,0 +1,10 @@
+irssi -c cpfong -n power_user
+
+©R•O:
+/exit
+/bye
+/join #∏Í§T•“
+/nick
+/help
+Ctrl+n (you can jump between window ∏ı≈D) -- Alt+1 -- /window 1
+/window close

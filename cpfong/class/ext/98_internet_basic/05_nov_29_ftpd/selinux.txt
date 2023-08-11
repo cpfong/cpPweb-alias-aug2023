@@ -1,0 +1,26 @@
+Q: What is seLinux
+A: security enhance Linux
+
+Q: How to see its status
+A: [cpfong@ubuntu ~]$ sestatus 
+SELinux status:                 enabled
+
+Q: whereis the config file?
+A: [cpfong@ubuntu ~]$ ls /etc/selinux/config 
+/etc/selinux/config
+
+Q: total disable ?
+A: vi /etc/setlinux/config or 
+[root@ubuntu cpfong]# system-config-securitylevel
+
+Q: how to see it on/off
+A: [cpfong@ubuntu ~]$ getsebool -a|grep ftp
+
+[cpfong@ubuntu ~]$ sudo setenforce Permissive
+[cpfong@ubuntu ~]$ sestatus 
+SELinux status:                 enabled
+Current mode:                   permissive
+
+Q: make ftp work
+A: 
+setsebool -P ftp_home_dir=1

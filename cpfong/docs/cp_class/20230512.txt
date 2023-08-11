@@ -1,0 +1,11 @@
+#!/usr/bin/env python
+
+numbers = {1: "One", 2: "Two", 3: "Three"}
+print(numbers)
+
+print(numbers[1])
+
+lastName = {'john': 'chen', 'jack': 'Chue', 'daniel': 'eng'}
+print("daniel last name is: " + lastName['daniel'])
+
+########

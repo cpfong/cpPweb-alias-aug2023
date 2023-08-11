@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+ <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.9">
+ <TITLE>Mail2News Mini-Howto: The local mailer daemon</TITLE>
+ <LINK HREF="Mail2News-7.html" REL=next>
+ <LINK HREF="Mail2News-5.html" REL=previous>
+ <LINK HREF="Mail2News.html#toc6" REL=contents>
+</HEAD>
+<BODY>
+<A HREF="Mail2News-7.html">Next</A>
+<A HREF="Mail2News-5.html">Previous</A>
+<A HREF="Mail2News.html#toc6">Contents</A>
+<HR>
+<H2><A NAME="s6">6. The local mailer daemon</A></H2>
+
+<H2><A NAME="ss6.1">6.1 Overview</A>
+</H2>
+
+<P>We need to create a local e-mail address for the remailer to mail to.
+This address will be configured to 
+run a program (to post the newsgroup) every time an e-mail arrives.  
+Unfortunately, (for us)
+this feature (called "pipe to program") is not usually enabled
+for security reasons.
+<P>
+<P>This HOWTO only describes modifying sendmail.  <CODE>qmail</CODE> is
+another excellent option, but not yet covered here. 
+<P>
+<H2><A NAME="ss6.2">6.2 Creating a mail alias</A>
+</H2>
+
+<P>Instead of creating a new user account, we will only create an alias.
+For sendmail these are kept in <CODE>/etc/aliases</CODE>.  The
+syntax is defined in the man page...
+<BLOCKQUOTE><CODE>
+<PRE>
+man aliases
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>
+<P>In our example the username of the mail address is
+<CODE>confctrl</CODE> which posts to the local newsgroup 
+<CODE>ietf.confctrl</CODE>, so we add a line like ...
+<BLOCKQUOTE><CODE>
+<PRE>
+confctrl:   |" /usr/local/bin/mail2news.pl ietf.confctrl "
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>
+<P>The double quotes are required.
+There cannot be a space between the
+first double quotes and the | (pipe) character, or
+sendmail will complain  "User unknown".  Huh?
+<P>
+<P>Whenever you modify the <CODE>/etc/aliases</CODE> file you need to
+notify sendmail.
+<BLOCKQUOTE><CODE>
+<PRE>
+sendmail -bi
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>
+<H2><A NAME="ss6.3">6.3 Did it work?</A>
+</H2>
+
+<P>After you send an e-mail, check the /var/log/maillog to 
+see if it worked.  The log may contain a useful error
+message.  I found it convenient to open up another terminal 
+window to follow the log with
+<BLOCKQUOTE><CODE>
+<PRE>
+tail -f /var/log/maillog
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>
+<H2><A NAME="ss6.4">6.4 Enabling "pipe to program"</A>
+</H2>
+
+<P>"Pipe to program" is the CGI of mail.  When an e-mail
+arrives, instead of appending
+to a file, sendmail runs a program (or script) and feeds the mail 
+to its standard input.
+<P>
+<P>Actually, with RedHat-6.0 sendmail comes with "pipe to program" enabled,
+but essentially only a limited number of programs are runnable.  User 
+security was not an issue on my machine, so I found it easiest
+to enable running of everything. 
+Besides, there was no man
+page for smrsh.
+<P>
+<P>To liberalize "pipe to program" we 
+need to modify <CODE>sendmail.cf</CODE> (by modifying <CODE> sendmail.mc</CODE>) so that the restricted shell is not used.  
+Strangely, uncommenting the smrsh feature didn't
+work, I needed to change the shell from <CODE>/usr/sbin/smrsh</CODE>
+to <CODE>/bin/bash</CODE>.  
+Without this change I kept getting a <CODE>"Service unavailable"</CODE> error
+message in the <CODE>/var/log/maillog</CODE> file.
+<P>
+<P>The header of <CODE>/etc/senmail.mc</CODE> of RedHat-6 has a bug.  The proper
+command line is...
+<BLOCKQUOTE><CODE>
+<PRE>
+m4 /etc/sendmail.mc >/etc/sendmail.cf
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>You need to do this when you change <CODE>sendmail.mc</CODE>.  Hopefully,
+RedHat will extend the super cool Makefile idea in <CODE>/etc/mail</CODE>
+so you only have to type <CODE>make</CODE>.
+You will need to install <CODE>sendmail-cf.</CODE>something<CODE>.rpm</CODE> first.
+e.g. ...
+<BLOCKQUOTE><CODE>
+<PRE>
+rpm -i sendmail-cf-8.9.3-10.i386.rpm
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>
+<P>Whenever you modify the sendmail.cf file, you should restart sendmail...
+<BLOCKQUOTE><CODE>
+<PRE>
+/etc/rc.d/init.d/sendmail restart
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>
+<P>From: Jeppe Sorensen of maxiom.se ...<BR>
+One can solve the security issue by simply putting the
+<CODE>mail2news.pl</CODE> script in the <CODE>/etc/smrsh</CODE> 
+directory and chown and chmod the file accordingly.
+<P>
+<H2><A NAME="ss6.5">6.5 Documentation</A>
+</H2>
+
+<P>With RedHat, sendmail documentation does not install by default.  
+I comes in a separate RPM with a name like sendmail-doc-8.9.3-10.i386.rpm.
+This will create <CODE>/usr/doc/sendmail</CODE>
+<BLOCKQUOTE><CODE>
+<PRE>
+rpm -i sendmail-doc-*
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>
+<P>http://www.sendmail.org/&nbsp;ca/email/doc/op-sh-5.html
+describes the syntax of sendmail.cf. I hope you don't have
+to use it.
+<P>
+<P>This is a description of the features you are modifying in sendmail.mc
+http://www.sendmail.org/m4/features.html
+<P>
+<P>Sendmail has a man page...
+<BLOCKQUOTE><CODE>
+<PRE>
+man sendmail
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>
+<H2><A NAME="ss6.6">6.6 Unprivledged</A>
+</H2>
+
+<P>If you are having trouble, and create an e-mail alias with a
+different (simpler) target script to test it, remember that sendmail
+runs the program as an unprivledged user, who probably doesn't
+have privledges to write anywhere except globally writable directories
+such as <CODE>/tmp</CODE>.
+<P>
+<HR>
+<A HREF="Mail2News-7.html">Next</A>
+<A HREF="Mail2News-5.html">Previous</A>
+<A HREF="Mail2News.html#toc6">Contents</A>
+</BODY>
+</HTML>

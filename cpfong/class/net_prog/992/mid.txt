@@ -1,0 +1,85 @@
+五資五甲計算機網路(2)期中考式
+注意: 
+所有答案放在 421-mid 目錄下
+以題目命名你的 .pl 檔, 第一題用 m1.pl 第二題則用 m2.pl 第三題用 m3.txt
+
+1. 課本第十章習題一請以三元算符來完成(使用 if else 不計分)
+
+#!/usr/bin/perl
+
+my $secret = int(1+rand 10);
+while (1){
+        print "1 to 100 guessing ";
+        chomp(my $guess=<>);
+        if ($guess =~ /quit|exit|^s*$/i){
+                print "sorry you giveup the number is $secret\n";
+                last;
+        }
+
+        my $res = ($guess <  $secret) ? 'too small'     :
+                 ($guess == $secret) ? 'bingo'          :
+                'too big';
+        print $res, "\n";
+        if ($res eq 'bingo') {last;}
+        
+}
+
+2. 使用 glob 操作找當下目錄下的所有的 pl 檔案 (例如: a2.pl b3.pl ...)
+回報這些檔案是否: 可讀, 可寫, 可執行, 存在
+
+my @a = <./*.pl>;
+
+foreach (@a){
+        print "$_ ";
+        print "exists " if -e;
+        print "executable " if -x;
+        print "readable " if -r;
+        print "writeable " if -w;
+        print "\n";
+}
+
+3. 簡答題:如何測試系統是否安裝了特定的模組, 請舉例說明.
+
+
+
+五資五甲計算機網路(2)期中考式
+注意: 
+所有答案放在 421-mid 目錄下
+以題目命名你的 .pl 檔, 第一題用 m1.pl 第二題則用 m2.pl 第三題用 m3.txt
+1. 在系統提示符號下輸入 who 可以知那個帳號正在使用伺服器. 
+請由 keyboard 輸入一帳號, 試利用 split
+來查出目前這個人是否有線上? 如有重複上線則只要查到一次
+不必再往下, 立即印出 xxx 在線上且離開, 否則印出不在線上.
+例如: who | perl ./q1.pl xxx
+
+$target = shift @ARGV;
+while (<>){
+        chomp;
+        $t = (split)[0];
+        if ($t eq $target){
+                print "bingo $target in\n";
+                $found=1;
+                last;
+        }
+}
+
+print "$target NOT online!\n" unless defined($found);
+
+2. while 和 unless 有十分相近的功能,  請用 while 和 until 來寫
+一程式可以把 STDIN  之輸入數字加總之結果顯示出來. 
+
+while (<>){
+        chomp;
+        $sum += $_;
+}
+print "total = $sum\n";
+
+$sum=0;
+until (!defined($_=<>)){
+        chomp;
+        $sum += $_;
+}
+
+print "total = $sum\n";
+
+3. 簡答題:如何測試系統是否安裝了特定的模組, 請舉例說明.

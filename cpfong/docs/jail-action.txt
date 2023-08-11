@@ -1,0 +1,6 @@
+@SaTurn-> sudo service jail start
+Starting jails: foo.
+
+@SaTurn-> jls
+   JID  IP Address      Hostname                      Path
+     2                  foo.local                     /srv/jails/foo

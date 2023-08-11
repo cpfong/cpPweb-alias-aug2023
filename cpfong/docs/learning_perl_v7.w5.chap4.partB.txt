@@ -1,0 +1,92 @@
+p76
+local (private) variable in sub
+
+sub max{
+ my ($m, $n)=@_;
+ if ($m > $n){
+  $m;
+ }
+ else {
+  $n;
+ }
+}
+
+sub max{
+ my ($m,$n)=@_;
+ if ($m > $n) { $m } else { $n };
+}
+
+p77
+--
+others : define parameters type and number
+perl: does NOT define how many parameters
+
+my @a = (1,2,3,4);
+print scalar @a;
+my $n = shift @a;
+print scalar @a;
+
+sub max{
+ my $max_so_far = shift @_;
+ foreach (@a){
+  if ($_ > $max_so_far){
+   $max_so_far=$_;
+  }
+ }
+}
+
+p86
+-- 
+experimental!!
+
+sub maxe v5.20;
+use feature qw(signatures);
+no warnings qw(experimental::signatures);
+
+sub max ($m, $n){
+ if ($m > $n) { $m } else { $n }
+}
+
+my $r=max 1,3;
+
+version 2
+sub max($max_so_far, @rest){
+ foreach (@rest){
+  if ($_ > $max_so_far){
+   $max_so_far=$_;
+  }
+ }
+ $max_so_far;
+}
+
+p87
+--
+save as default if not input
+
+sub list_from_fred_to_barney($fred=0, $barney=7){
+}
+
+list_from_fred_to_barney();  #fred=0 barney=7
+list_from_fred_to_barney(17); #fred=17 barney=7
+
+p88
+-- 
+sub one_or_two_args($first, $=){}
+sub PI(){3.1515926};
+
+p88 exercises
+--
+sub total{
+ my @a=@_;
+ my $s=0;
+
+ while (my $v=pop @a){
+  $s += $v;
+ }
+ $s;
+}
+
+my @fred=qw /1 3 5 7 9/;
+my $r=total(<>);
+print $r
+

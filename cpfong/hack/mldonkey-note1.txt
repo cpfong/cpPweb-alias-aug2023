@@ -1,0 +1,13 @@
+HiEdoc-> telnet localhost 4000
+Trying ::1...
+telnet: connect to address ::1: Connection refused
+Trying 127.0.0.1...
+Connected to localhost.
+Escape character is '^]'.
+Welcome to MLdonkey
+Welcome on mldonkey command-line
+
+Use ? for help
+
+q
+Connection closed by foreign host.

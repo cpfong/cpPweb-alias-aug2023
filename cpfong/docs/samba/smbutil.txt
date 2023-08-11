@@ -1,0 +1,2 @@
+Q: smbutil: smb_lib_init: can't find kernel module
+A: kldload smbfs

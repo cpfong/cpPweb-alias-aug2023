@@ -1,0 +1,190 @@
+#include "stdio.h"
+
+#define N 10 
+
+int main(){
+ char array[N]={"abcd"};
+ int i;
+
+ for (i=0; i<N; i++){
+  printf("%c ", array[i]);
+ }
+
+// printf("last=%ceee",array[N-1]);
+ return 0;
+}
+
+// 2 dimension array
+#include "stdio.h"
+
+#define N 10
+#define P 3
+
+int main(){
+ char array[P][N]={"john", "mary", "jack"};
+ int i;
+
+ for (i=0; i<P; i++){
+  printf("%s ", array[i]);
+ }
+
+ printf("\n");
+ return 0;
+}
+
+
+// read file in
+#include "stdio.h"
+#include "stdlib.h"
+
+#define N 3
+
+int main(){
+ FILE *fh;
+ int i;
+ int arr[N];
+
+ fh = fopen("foo.txt", "r");
+ if (fh == NULL){
+  printf("Error Reading File\n");
+  exit (0);
+ }
+
+ for (i=0; i<N; i++){ fscanf(fh, "%d,", &arr[i]); }
+ for (i=0; i<N; i++){ printf(    "%d ",  arr[i]); }
+
+ return 0;
+}
+
+
+/*
+foo.txt
+--
+john 80
+mary 90
+tom 70
+*/
+// find max 
+#include "stdio.h"
+#include "stdlib.h"
+
+#define P 3
+#define N 9
+
+int main(){
+ FILE *fh;
+ int i;
+ char acc[P][N];
+ int score[P];
+ int max, max_i;
+
+ fh = fopen("foo.txt", "r");
+ if (fh == NULL){
+  printf("Error Reading File\n");
+  exit (0);
+ }
+
+ for (i=0; i<P; i++){
+  fscanf(fh, "%s %d", acc[i], &score[i]);
+ }
+ max = score[0];
+ max_i=0;
+
+ for (i=0; i<P; i++){
+   if (score[i] > max){
+    max=score[i];
+    max_i=i;
+   }
+ }
+
+ printf("index=%d name=%s score=%d\n", max_i, acc[max_i], max);
+ return 0;
+}
+
+
+// pointer
+#include "stdio.h"
+#include "stdlib.h"
+
+int main(){
+ int x = 1, y = 2, z[10];
+
+ int *ip;       // ip is a pointer to int
+ ip = &x;       // ip now points to x
+ y = *ip;       // y is now 1
+ *ip = 0;       // x is now 0
+ ip = &z[0];    // ip now points to z[0]
+
+ return 0;
+}
+
+//swap
+#include "stdio.h"
+#include "stdlib.h"
+#define N 2
+
+void swap(int *,int *);
+
+int main(){
+ int arr[N]={1,2};
+
+ printf("%d %d\n", arr[0], arr[1]);
+ swap(&arr[0], &arr[1]);
+ printf("%d %d\n", arr[0], arr[1]);
+
+ return 0;
+}
+
+void swap(int *px, int *py) {
+ int temp;
+
+ temp = *px;
+ *px = *py;
+ *py = temp;
+}
+
+//length
+#include "stdio.h"
+#include "stdlib.h"
+
+int my_strlen(char *);
+
+int main(){
+ char arr[]="john";
+
+ printf("size of arr = %d\n", my_strlen(arr));
+ return 0;
+}
+
+int my_strlen(char *s){
+ int n;
+
+ for (n = 0; *s != '\0'; s++){
+  n++;
+ }
+
+ return n;
+}
+
+// strlen version2
+#include "stdio.h"
+#include "stdlib.h"
+
+int my_strlen(char *);
+
+int main(){
+ char arr[]="john";
+
+ printf("size of arr = %d\n", my_strlen(arr));
+ return 0;
+}
+
+int my_strlen(char *s){
+ char *p=s;
+
+ while (*p != '\0'){
+  p++;
+ }
+
+ return p-s;
+}

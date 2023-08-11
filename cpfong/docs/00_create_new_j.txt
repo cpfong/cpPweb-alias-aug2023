@@ -1,0 +1,75 @@
+#!/bin/sh
+
+#obj: make a new jail (output only text file for safty)
+#usage: ./00_create_new_j.sh www > s6_jid6_www.txt
+#version: 2015/03/31 working
+#note: 4 parts for make a jail, there are home, mount, network, jail service
+
+has_jail_name(){
+case "$in" in   # number change to string
+    ""      )   echo "Usage: `basename $0` jail-name-to-create"; # note: basename is a valid cmd
+                exit 1;;
+    *       )   jn=$in;; # number then lines = 1st arg
+esac
+} #end has_jail_name
+
+create_j_dir(){
+echo mkdir $jb/$jn
+echo mkdir -p $jsb/$jn
+echo cpdup $jb/skel $jsb/$jn
+} #end create_j_dir
+
+mount_fs(){
+echo mount -t nullfs -r /home/j/mroot /home/j/$jn
+echo mount -t nullfs /home/js/$jn /home/j/$jn/s
+echo mount -t devfs   devfs   /home/j/$jn/dev
+echo mount -t fdescfs fdescfs /home/j/$jn/dev/fd
+echo mount -t procfs  procfs  /home/j/$jn/proc
+## mount -t nullfs /usr/ports /home/j/$jn/usr/ports
+} #end mount_fs
+
+network_related(){
+echo ifconfig epair create
+local lastjID=$(/usr/sbin/jls | tail -1 | awk '{print $1}')
+
+local j=$(($lastjID+1))
+local i=$lastjID
+local b=$((4*$i+2))
+local a=$((4*$i+1))
+
+local eb='epair'$i'b'
+local ea='epair'$i'a'
+
+echo ifconfig $eb 192.168.0.$b/30 up
+echo ifconfig bridge0 addm $eb
+echo jail -c vnet name=$jn host.hostname=$jn.myVM.kpprc path=/home/j/$jn persist
+echo ifconfig $ea vnet $j
+
+echo jexec $j ifconfig $ea 192.168.0.$a/30 up
+echo jexec $j route add default 192.168.0.$b
+
+echo jexec $j /etc/rc.d/ipfw restart
+} #end network_related
+
+set_config(){
+echo "echo hostname=$jn >> $jsb/$jn/etc/rc.conf"
+echo "echo firewall_enable=\"YES\"  >> $jsb/$jn/etc/rc.conf"
+echo "echo firewall_type=\"open\"   >> $jsb/$jn/etc/rc.conf"
+echo "echo sendmail_enable=\"NONE\" >> $jsb/$jn/etc/rc.conf"
+echo "echo nameserver 192.168.0.1 >> $jsb/$jn/etc/resolv.conf"
+echo "echo ipfw -q add 2000 allow ip from any to any >> $jsb/$jn/etc/ipfw.rules"
+} # end set_config
+
+####  main
+
+in=$1
+jb='/home/j'
+jsb='/home/js'
+
+has_jail_name
+create_j_dir
+set_config
+mount_fs
+network_related
+# put other own stuff here (post jail part which is jail service)
+# end main

@@ -1,0 +1,22 @@
+POSIX shell does NOT have array types. However, with a bit of inefficiency, you can get array-like semantics
+The trick is that you do have one (and only one) array — the positional parameters $1 $2
+
+Replacing the contents of the $@ array is easy:
+--
+set -- a1 b2 c3
+printf "%s" $@
+
+Or, perhaps more usefully:
+set -- *	# list current directory file names
+printf "%s" $@
+
+another test. usage: ./cmd a b c d
+--
+orig_array=$@
+echo $1
+
+set -- foo bar baz boo
+echo $1
+
+eval "set -- $orig_array" # http://www.unix.com/man-page/posix/1posix/eval/
+echo $2

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# wget http://mail.mis.fotech.edu.tw/~cpfong/dsl/scim-tables-0.5.10.tcz
+# install this tcz (using apps --> Apps --> Load App Locally --> 0.5.10
+
+cd /usr/lib/scim-1.0/1.4.0/IMEngine/
+ln -s /tmp/tcloop/scim-tables-0.5.10/usr/local/lib/scim-1.0/1.4.0/IMEngine/table.* .
+
+mkdir /usr/share/scim/tables
+cd /usr/share/scim/tables
+
+# get all cangjei  in
+ln -s /tmp/tcloop/scim-tables-0.5.10/usr/local/share/scim/tables/CangJie* .
+
+# scim-setup choose whatever you like

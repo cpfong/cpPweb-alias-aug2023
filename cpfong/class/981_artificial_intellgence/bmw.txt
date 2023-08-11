@@ -1,0 +1,21 @@
+anyone ride harley is tough
+every bikes ride either Harley or bmw
+anyone ride bmw is yuppie
+every yuppie is lawer
+any nice girl does not date tough guy
+mary is nice girl, john is a biker
+------------------
+ride(X,Y)
+date(X,Y)
+isHarley(X)
+isBmw(X) 
+isTough(X)
+isYuppie(X)
+isLawer(X0 
+isNiceGirl(X)
+isRider(X)
+
+ride(X,Y) and isHaryley(Y) -> isTough(X)
+isRider(X) -> ride(X,harley) or irder(X,bmw)
+rider(X,bmw) -> isYuppie(X)
+isYuppie(X) -> isLawer(X) 

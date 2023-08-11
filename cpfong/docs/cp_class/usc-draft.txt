@@ -1,0 +1,7 @@
+apply aws account
+FreeDNS afraid account apply
+ec2 - 
+ windows 2008 server installed
+ post config 
+ec2 - Linux
+s3 -

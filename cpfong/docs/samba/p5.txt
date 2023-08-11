@@ -1,0 +1,60 @@
+Check out the tools\mtsutil folder on the cd.....
+
+===============================================================
+PTXT_ON.INF - SENDS PLAIN-TEXT PASSWORDS TO YOUR NETWORK SERVER
+===============================================================
+
+For security reasons, Windows 98 will not allow you to send plain-
+text passwords. The password is encrypted by default. However,
+Samba servers require plain-text passwords, so you will not be able
+to connect to Samba servers unless you change a Registry entry to
+enable plain-text passwords.
+
+   Caution: Enabling plain-text passwords could compromise security.
+
+To enable plain-text passwords, add the Registry entry for
+EnablePlainTextPassword (as a Dword) and set the value to 1 in the
+following Registry location:
+
+ HKEY_LOCAL_MACHINE\System
+    \CurrentControlSet\Services\VxD\Vnetsup
+
+--------------------------------------------------
+To set the value for EnablePlainTextPassword to 1:
+--------------------------------------------------
+
+1. Select PTXT_ON.INF found in the \Tools\MTSutil folder on the
+   Windows 98 CD.
+
+2. Right-Click PTXT_ON.INF.
+ -or-
+   Hold down the SHIFT key and press the function key, F10.
+
+3. Choose INSTALL to add the EnablePlainTextPassword entry and set
+   its value to 1.
+
+
+===============================================================
+PTXT_OFF.INF - SENDS ENCRYPTED PASSWORDS TO YOUR NETWORK SERVER
+===============================================================
+
+To re-enable the sending of encrypted passwords to your network
+server, add the Registry entry EnablePlainTextPassword (as a Dword)
+and set the value to 0 in the following Registry location:
+
+ HKEY_LOCAL_MACHINE\System
+    \CurrentControlSet\Services\VxD\Vnetsup
+
+--------------------------------------------------
+To set the value for EnablePlainTextPassword to 0:
+--------------------------------------------------
+
+1. Select PTXT_OFF.INF found in the \Tools\MTSutil folder on the
+   Windows 98 CD.
+
+2. Right-Click PTXT_OFF.INF.
+ -or-
+   Hold down the SHIFT key and press the function key, F10.
+
+3. Choose INSTALL to add the EnablePlainTextPassword entry and set
+   its value to 0.

@@ -1,0 +1,8 @@
+public (external) ip :  whatismyip
+private (internal) ip : 10.0.0.1 192.168.0.1 172.16.1.1
+
+Q:  ip ? ず场の场?
+A:
+–筿福常璶 ip, 毙Τ40玥璶Τ 40  ips そノ⊿Τ? ┮╬Τず场璶锣Θそノ
+
+Q:

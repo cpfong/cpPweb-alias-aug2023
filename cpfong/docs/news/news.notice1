@@ -1,0 +1,11 @@
+Dec 25 09:09:33 bbs innd: tradindexed: could not create /usr/local/news/spool/overview/group.index: Permission denied
+Dec 25 09:09:33 bbs innd: SERVER cant open overview method
+Dec 25 09:31:14 bbs innd: SERVER descriptors 5000
+Dec 25 09:31:14 bbs innd: SERVER outgoing 4987
+Dec 25 09:31:14 bbs innd: SERVER ccsetup control:12
+Dec 25 09:31:14 bbs innd: SERVER lcsetup localconn:14
+Dec 25 09:31:14 bbs innd: SERVER rcsetup remconn:4
+Dec 25 09:31:14 bbs innd: SERVER bad_newsfeeds no feeding sites
+Dec 25 09:31:14 bbs innd: SERVER perl filtering enabled
+Dec 25 09:31:14 bbs innd: SERVER starting
+

@@ -1,0 +1,29 @@
+Win32 Disk Imager
+
+cp/x
+--
+dhclient fxp0
+echo search ored.me >> /etc/resolv.conf
+echo machine mail login cpfong password kh1nNfrogs > ~/.netrc; chmod 600 ~/.netrc
+startx
+
+cd /tmp
+fetch http://ftp.twaren.net/BSD/DragonFlyBSD/packages/i386/DragonFly-3.2.0/stable/All/tightvncviewer-1.3.10nb2.tgz
+rdesktop-1.7.1.tgz
+mount -w /
+pkg_add tightvncviewer-1.3.10nb2.tgz
+
+pMagic boot CD
+--
+s2 as swap partition
+
+localhost# cat swap.txt 
+# disklabel64 -B -w -r da8s2 auto
+# disklabel64 -e /dev/da8s2
+b:           3900m       *    swap
+localhost# swapon /dev/da8s2b
+localhost# swapctl -l
+
+#!/bin/sh
+mdconfig -a -t swap -f /swap -s 90m
+swapon -a /dev/md9

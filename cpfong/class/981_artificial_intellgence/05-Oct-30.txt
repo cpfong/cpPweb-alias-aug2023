@@ -1,0 +1,117 @@
+p14
+	blind searching in this chapter
+
+p15
+	map of romania: drive car one way from arad to bucharest
+	from arad: you can go 3 direction, to sibiu you will omit the arad_to_sibiu automatically (sinice you are from there)
+	path is the rough way, may be we can use mileiage to do it best
+
+	ex: tainan --> taipei (or other country)
+		thing to think about: rest which place, eating , gas stations, church to pray ?
+		to solve a real problem, more things to think about before hand
+
+p16
+	abstraction: delete those info that don't 
+	you should solve your problem with as few info as possible 
+
+p17
+	toy problems are lots of different with real-world problems.
+	use toy problem to evaule the your pefromance and algorighms. You certainly can put it in real proble, but it take lots of time and effors. For benchmark reason, toy problem is better
+
+p18
+	8-puzzle problem. (3x3) or 15-puzzle (4x4)
+	no fixed initial state for this puzzle
+	
+	think space as operation instead of 8 puzzle will simplify the problem
+
+p19	
+	8-queens
+	after serveral runs, 2 will be the same (incremental, complete-state)
+	queue can move only hozizantal (column)
+	they cannot see each other on every row, so the last one
+
+p21
+	eehn simplify is reasonable 
+
+p25
+	side east condition (missionarries, cannibals, ship_location)
+	(3,3,1) --> (0,0,0)
+
+p26
+	route finding (package delivery)
+	bridge crossing (7 bridges only once)
+	city visied exactly onces
+
+	pc board drilling (connect between two lier) drilling holes in shortest time
+
+	VLSI: 
+		where to put the cell
+
+	Robot navigation
+
+p27
+	after define state space
+
+	generate action sequences
+	expanding a state 
+	action will limit operator (ex: 1m 1c -> then only 1m can go back )
+	action --> possible new operator --> new state
+
+	arad -> zerind
+		sibiu		-->	arad
+		timisoara		fagaras
+					oradea
+					rimnicu vilcea
+
+	state -> operator -> expand to several new states -> put these nodes into tree 
+
+p29
+	before you expand, check whether it is a goal state
+
+	search tree: can go back , so will be infinite loop
+
+p30
+	state
+	node (parent node, sibiu --> arad have to go back to sibiu , since route do it beofre)
+	
+p31
+	leaf node (no child node) can be expand only from these nodes
+	call it fringe or frontier, put it in queue
+
+	make-queue (elements)
+	empty (queue)
+	remove-front(queue)
+	queuing-fn(elemensts, queue)	queuing function
+
+p32
+	
+p33
+	evaluation criteria
+	completeness: no matter how long
+	time efficiency 
+	space efficiency:
+
+p34
+	state 6,1 are the same (we usually record the sate we have use, so delete state 6)
+	state 9,1 are the same
+
+p35
+	breadth-first search (FIFO 廣度優先)
+	root
+	root->left,right (queued, because leaf node)
+		left->left,right (
+		right->left.right (queued)
+
+	when find a solution , there is no parent solution (since this parent has been visited)
+
+	branching factor b (一個 node 平均生成多少 nodes)
+	每個 game 可以生成 10 步 
+
+p39
+	greeding search 
+	每次皆找最小的 cost 來 expand
+
+p41
+	Depth-first search (
+			
+

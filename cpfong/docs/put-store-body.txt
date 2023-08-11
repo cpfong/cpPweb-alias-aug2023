@@ -1,0 +1,4 @@
+check:
+https://www.oreilly.com/openbook/webclient/ch03.html
+
+search for 'Store the Entity-Body at the URL'

@@ -1,0 +1,12 @@
+default input arguments of for are $*  (positional variables)
+
+#!/bin/sh
+for i		#nothing after in, this means $*
+do
+ printf "$i\n"
+done
+
+pluto@Oregon % sh ./test.sh 1 2 3
+1
+2
+3

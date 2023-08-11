@@ -1,0 +1,25 @@
+tcp server basic idea
+--
+server have a socket open for connection from client
+Accept connection from client
+Fork a child process (at server side)
+Handle the connection to child, then close parent process.
+Child process can do whatever need to do with client While parent process can deal with new connections.
+
+-- simple code for parent and child
+# After fork, two identical processes created. 
+# parent process can continue process upcoming client connections, 
+# while child process deal with each request.
+
+if( !defined($child_pid = fork) ) {
+   printf( "Cannot fork: $!\n" );
+}
+elsif( $child_pid ) { # parent process. If I have a child PID, then I must be the parent
+   printf( "New server started with PID: $child_pid, will be recycled after it's reap\n" );
+}
+else { # else I'm the worker child. I am the child
+   #
+   # do real stuff here
+   #
+   exit;
+}

@@ -1,0 +1,43 @@
+<HTML><HEAD>
+<SCRIPT language=JavaScript>
+	<!--
+
+	var ver = ""
+	bName = navigator.appName;
+	bVer = parseInt(navigator.appVersion);
+	
+	if	(bName == "Netscape" && bVer >= 3) ver = "n3";
+	else if (bName == "Netscape" && bVer == 2) ver = "n2"; 
+	else if (bName == "Microsoft Internet Explorer" && bVer >= 4) ver = "e4";
+
+	var on   = new Image();
+	var off  = new Image();
+	var msg  = new Image();
+	var nomsg = new Image();
+
+	on.src   =  "on.gif" ;
+	off.src  = "off.gif" ;
+	msg.src = "msg.gif";
+	nomsg.src="nomsg.gif";
+
+	function changeImage(imgName1,newImg1,imgName2,newImg2) {
+	 if(ver == "n3" || ver == "e4") 
+	           document.images[imgName1].src = eval(newImg1 + ".src");
+	 document.images[imgName2].src = eval(newImg2 + ".src");
+	 return true;
+	}
+	       
+	// -->
+	</SCRIPT>
+
+<TABLE>
+  <TR>
+   <td><img src="nomsg.gif" name=nav>
+  <tr>
+
+    <TD><A href="http://www.hinet.net/" 
+      onmouseout = "return changeImage('pro', 'off', 'nav', 'nomsg')"
+      onmouseover="return changeImage('pro', 'on', 'nav', 'msg')">
+    <IMG name=pro src="off.gif"></A> 
+</TABLE>
+</HTML>

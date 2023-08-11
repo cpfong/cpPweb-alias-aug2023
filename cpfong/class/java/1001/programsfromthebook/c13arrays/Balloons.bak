@@ -1,0 +1,78 @@
+//latest template  30 oct
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+class Balloons extends JFrame implements ActionListener {
+
+    private JButton button;
+    private JPanel panel;
+
+private Balloon[] party = new Balloon[10];
+
+    public static void main (String[] args) {
+        Balloons frame = new Balloons();
+        frame.setSize(400,300);
+        frame.createGUI();
+        frame.show();
+    }
+
+    private void createGUI() {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        Container window = getContentPane();
+        window.setLayout(new FlowLayout() );
+
+        panel = new JPanel();
+        panel.setPreferredSize(new Dimension(300, 200));
+        panel.setBackground(Color.white);
+        window.add(panel);
+
+        button = new JButton("Press me");
+        window.add(button);
+        button.addActionListener(this);
+
+party[0] = new Balloon(10, 10, 50);
+party[1] = new Balloon(50, 50, 100);
+party[2] = new Balloon(100, 100, 200);
+
+    }
+
+    public void actionPerformed(ActionEvent event) {
+        Graphics paper = panel.getGraphics();
+        displayBalloons(paper);
+    }
+
+public class Balloon {
+
+    private int x; 
+    private int y; 
+    private int diameter; 
+    
+    public Balloon(int initialX, int initialY, int initialDiameter) {
+        x = initialX;
+        y = initialY;
+        diameter = initialDiameter;
+    }
+    
+    public void changeSize(int change) {
+        diameter = diameter + change;
+    }
+    
+    public void display(Graphics paper) {
+        paper.drawOval(x, y, diameter, diameter);
+    }
+    
+}
+
+private void displayBalloons(Graphics paper) {
+        for (int b = 0; b <= 2; b++) {
+        party[b].display(paper);
+    }   
+}
+
+private void changeSize() {
+for (int b = 0; b <= 2; b++) {
+    party[b].changeSize(20);
+}
+}
+}

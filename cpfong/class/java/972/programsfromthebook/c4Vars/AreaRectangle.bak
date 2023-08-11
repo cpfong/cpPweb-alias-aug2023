@@ -1,0 +1,18 @@
+//-----------------STARTEXTRACT=prog1.xtr
+import java.awt.*; 
+import java.awt.event.*;
+import javax.swing.*;   
+
+//-------------STARTEXTRACT=classname.xtr
+public class Hello extends JFrame {
+//---------------ENDEXTRACT=classname.xtr
+
+    public static void main(String[] args) {
+//-----------------STARTEXTRACT=optionpanedemo.xtr
+        JOptionPane.showMessageDialog(null, "Hello World!");
+//-----------------ENDEXTRACT=optionpanedemo.xtr
+        JOptionPane.showMessageDialog(null, "Goodbye");
+        System.exit(0);
+    }
+}
+//-----------------ENDEXTRACT=prog1.xtr

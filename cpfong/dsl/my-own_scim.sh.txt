@@ -1,0 +1,53 @@
+#!/bin/sh
+# obj: using on TinyCoreLinux os, trying to create my own tcz of scim with changjei im
+
+# wiki suggested environment
+CFLAGS="-march=i486 -mtune=i686 -Os -pipe"
+CXXFLAGS="-march=i486 -mtune=i686 -Os -pipe"
+LDFLAGS="-Wl,-O1"
+
+# prepare for copiler
+tce-load -wi compiletc perl5 intltool squashfs-tools-4.x
+
+# scim base
+wget http://mail.mis.fotech.edu.tw/~cpfong/dsl/scim-1.4.11.tar.gz
+tar xfvz scim-1.4.11.tar.gz
+cd scim-1.4.11/
+./configure --prefix=/usr/local
+make -j3
+make DESTDIR=/tmp/scim install
+#
+cd /tmp
+mksquashfs scim scim-1.4.11.tcz
+cd /tmp/scim
+find usr -not -type d > scim-1.4.11.tcz.list
+rm -fr usr
+#
+cp scim-1.4.11.tcz.list /mnt/sdb1/tce/optional
+cp ../scim-1.4.11.tcz /mnt/sdb1/tce/optional
+tce-load -wi /mnt/sdb1/tce/optional/scim-1.4.11.tcz
+
+# need to reboot then load scim manually !!
+#
+# scim tables
+wget http://mail.mis.fotech.edu.tw/~cpfong/dsl/scim-tables-0.5.10.tar.gz
+tar xfvz scim-tables-0.5.10.tar.gz
+cd scim-tables-0.5.10
+./configure --prefix=/usr/local
+make -j3
+make DESTDIR=/tmp/scim-tables install
+cd /tmp
+mksquashfs scim-tables scim-tables-0.5.10.tcz
+cd /tmp/scim-tables
+find usr -not -type d > scim-tables-0.5.10.tcz.list
+rm -fr usr
+
+cp scim-tables-0.5.10.tcz.list /mnt/sdb1/tce/optional
+cp ../scim-tables-0.5.10.tcz /mnt/sdb1/tce/optional
+
+tce-load -wi /mnt/sdb1/tce/optional/scim-tables-0.5.10.tcz
+
+cat >> /mnt/sdb1/tce/optional/onboot.lst <<EOF
+scim-1.4.11.tcz
+scim-tables-0.5.10.tcz
+OEF

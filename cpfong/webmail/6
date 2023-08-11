@@ -1,0 +1,101 @@
+From cpfong.bbs@bbs.civil.ncku.edu.tw Tue Feb 29 13:59:31 2000
+Return-Path: <cpfong.bbs@bbs.civil.ncku.edu.tw>
+Received: from ms24.hinet.net (root@ms24.hinet.net [168.95.4.24])
+	by bb.cc.fjtc.edu.tw (8.9.3/8.9.3) with ESMTP id NAA00481
+	for <cpfong@bb.cc.fjtc.edu.tw>; Tue, 29 Feb 2000 13:59:18 +0800 (CST)
+	(envelope-from cpfong.bbs@bbs.civil.ncku.edu.tw)
+From: cpfong.bbs@bbs.civil.ncku.edu.tw
+Received: from uranus.civil.ncku.edu.tw (uranus.civil.ncku.edu.tw [140.116.36.40])
+	by ms24.hinet.net (8.8.8/8.8.8) with ESMTP id NAA21551
+	for <cpfong@ms24.hinet.net>; Tue, 29 Feb 2000 13:58:43 +0800 (CST)
+Received: from bbs.civil.ncku.edu.tw (IDENT:bbs@bbs.civil.ncku.edu.tw [140.116.36.100])
+	by uranus.civil.ncku.edu.tw (8.9.3/8.9.2) with ESMTP id NAA11666
+	for <cpfong@ms24.hinet.net>; Tue, 29 Feb 2000 13:58:44 +0800 (CST)
+	(envelope-from cpfong.bbs@bbs.civil.ncku.edu.tw)
+Received: (from bbs@localhost)
+	by bbs.civil.ncku.edu.tw (8.9.1/8.9.0) id NAA25080
+	for cpfong@ms24.hinet.net; Tue, 29 Feb 2000 13:58:44 +0800 (CST)
+Date: Tue, 29 Feb 2000 13:58:44 +0800 (CST)
+Message-Id: <200002290558.NAA25080@bbs.civil.ncku.edu.tw>
+Reply-To: cpfong.bbs@bbs.civil.ncku.edu.tw
+To: cpfong@ms24.hinet.net
+Subject: [HOW TO] horde imp
+X-Disclaimer: 成大土木大地雕塑家對本信內容恕不負責。
+Content-Length: 3070
+Lines: 74
+
+發信人: gogo.bbs@cis.nctu.edu.tw (gogo), 看板: bsd
+標  題: [HOW TO] horde imp
+發信站: 交大資科_BBS (Tue Jan 11 13:55:15 2000)
+轉信站: CivilEngineer!news.civil.ncku!news.ccna.nanya!news.cs.nthu!news.cis.nc
+來源站: 210.243.216.18
+
+first to get source
+
+step 1. get  horde source
+        cd /usr/local/share/apache/htdocs
+        cvs -d :pserver:cvsread@cvs.horde.org:/cvs/horde login
+        When it asks you for a password enter: horde
+        cvs -z3 -d :pserver:cvsread@cvs.horde.org:/cvs/horde co -r STABLE
+horde
+
+step 2. get imp source
+        cvs -z3 -d :pserver:cvsread@cvs.horde.org:/cvs/horde co -r STABLE
+imp
+        mv imp into whatever/horde
+
+step 3. get phplib
+        fetch http://phplib.de/stable/phplib-7.tar.gz
+
+
+step 4. install phplib
+  (1) Create a "phplib" directory (e.g."/usr/local/share/apache/htdocs/phplib")
+  (2) Copy the contents of the PHPLib distributions "php" directory
+           into the "phplib" directory you created in your DocumentRoot.
+  (3) Copy the contents of the <horde>/phplib/ directory to your
+                new "php" directory next to your DocumentRoot
+  (4) Rename the file "horde_phplib.inc" to "local.inc". (NOTE: if you
+                already have PHPLib applications, append the contents of
+                the horde_phplib file to the local.inc file or
+                you will lose your old PHPLib application settings)
+  (5) Edit the new "local.inc" file, and follow its directions.
+                The gist of it is that you will have to uncomment the
+                section of the file that applies to your PHP storage
+                system, with databases being standard, and shared memory
+                (SHM) as well as LDAP needing testing.
+  (6) Add the new "php" directory to your "include_path" in your php3.ini
+            a. include_path    =.:/usr/local/share/apache/htdocs/phplib
+            b. auto_prepend_file       =       prepend.php3
+            if you build apache+php by port, it should be the default
+            (so maybe you should't modify php3.ini)
+  (7) Add "index.php3" to your "DirectoryIndex" line  (apache.conf)
+
+
+step 5. install horde ( I use postgres )
+  (1) as a pgsql user and run the following command:
+        psql template1 < [horde]/scripts/database/pgsql_create.sql
+  (2) go into horde/lib/src and run the following command:
+          ./build.pl --database=postgres
+step 6. install imp
+  (1) as a pgsql user and run the following command:
+        psql template1 < [horde]/imp/config/scripts/pgsql_create.sql
+  (2) go to [horde]/imp/lib/src and run the following command:
+          ./build.pl --database=postgres
+
+step 7. go to [horde] and run the following command:
+          ./install.sh
+
+step 8. use brower http://your.domain.name/horde/setup.php3
+         then follower the step ..
+
+
+step 9. go to [horde] and run the following command:
+          ./secure.sh
+
+step 10. done .. go to brower http://your.domain.name/horde
+
+
+                                                                gogo
+--
+ * Origin: ★ 交通大學資訊科學系 BBS ★ <bbs.cis.nctu.edu.tw: 140.113.23.3>
+

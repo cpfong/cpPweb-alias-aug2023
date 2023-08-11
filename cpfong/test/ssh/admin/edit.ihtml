@@ -1,0 +1,49 @@
+<?
+$fp = fopen("$homedir/user.txt","r");
+flock($fp,2);
+while($userinfo = fscanf($fp,"%s\t%s\t%s\t%s\n")){
+	list($id,$name,$pass,$email)=$userinfo;
+	if($uid == $id){
+		$this_id=$id;
+		$this_name=$name;
+		$this_pass=$pass;
+		$this_email=$email;
+	}
+}
+if($this_name == admin){
+	echo "Sorry, an administrator's infomation can't be changed.";
+	exit;
+}
+?>
+<form  method="post" action="?menu=action&type=edit">
+<TABLE>
+  <TBODY>
+    <TR>
+      <TD align="right">LoginID</TD>
+      <TD>
+      <INPUT size="20" type="text" name="alterloginID" value=<? echo $this_name ?>>
+      </TD>
+    </TR>
+    <TR>
+      <TD align="right">Password</TD>
+      <TD>
+      <INPUT size="20" type="password" name="alterpass" value=<? echo $this_pass ?>>
+      </TD>
+    </TR>
+    <TR>
+      <TD align="right">E-Mail Address</TD>
+      <TD>
+      <INPUT size="40" type="text" name="alteremail" value=<? echo $this_email ?>>
+      </TD>
+    </TR>
+    <TR>
+      <TD colspan="2" align="center">
+      <INPUT type="submit" name="Add User" value="Modify User">
+      </TD>
+    </TR>
+  </TBODY>
+</TABLE>
+<INPUT type="hidden" name=oldloginID value=<? echo $this_name ?>>
+<INPUT type="hidden" name=oldpass value=<? echo $this_pass ?>>
+<INPUT type="hidden" name=oldemail value=<? echo $this_email ?>>
+</FORM>

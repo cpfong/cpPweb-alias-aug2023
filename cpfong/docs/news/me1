@@ -1,0 +1,28 @@
+this is from /usr/local/news/etc/newsfeeds
+--------------------------------------------------
+# Empty default subscription list, reject all incoming articles with a
+# distribution of "local" or "collabra-internal," accept all others.
+ME:!*/!local,!collabra-internal::
+
+# The same as the above, but would reject all posts that have
+# news.example.com in the path (posts passing through that site).
+#ME/news.example.com:!*/!local,!collabra-internal::     
+--------------------------------------------------
+
+OLD FAQ (but pretty confuse.... -cpf)
+Here are some examples:
+
+ME:!*:::
+foo:!junk:... --send no newsgroups
+
+ME:*:::
+foo:!junk:... --send all newsgroups except junk
+
+ME:!*:::
+foo:*,!junk:... --send all newsgroups except junk
+
+By the way, generally you do not want to send "junk" 
+or "control*" to your neighbors.
+
+In unoff2 (and later unoffs) the ME line also can be 
+used to reject articles which have certain sites in their path header

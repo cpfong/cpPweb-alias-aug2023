@@ -1,0 +1,9 @@
+import yfinance as yf
+
+tsmc_df = yf.download('2330.TW',
+        start='2021-01-01',
+        end='2021-01-12',
+        progress=False,)
+
+r=tsmc_df.head()
+print(r)

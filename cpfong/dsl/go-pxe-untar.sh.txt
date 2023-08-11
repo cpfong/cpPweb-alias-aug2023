@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# non root user install this first!!
+tce-load -wi dnsmasq
+
+cd /
+sudo tar xfvz /mnt/sdb1/keep-me/tftpboot.tgz
+sudo cp /mnt/sdb1/keep-me/dnsmasq-AT-etc-ok.conf /etc/dnsmasq.conf
+sudo usr/local/sbin/dnsmasq start

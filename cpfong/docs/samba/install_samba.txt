@@ -1,0 +1,379 @@
+安裝samba系統安裝samba系統
+      (c)2000 張文杰 (email : windex@teacher.fyjh.tpc.edu.tw) 
+
+安裝samba系統
+　　Samba是一個可以取代NT『網路上的芳鄰』檔案及印表機分享功能的Server程式，Samba Server也可以完全取代NT PDC（Primary 
+Domain Controler）成為NT網域主控者管理NT網域；若是在同一台Server架設Samba及Apache 
+，則在辦公室或校園環境內，使用者可用自己的帳號及密碼從Windows登入網域，在由『網路上的芳鄰』可進入使用者個人帳號下放置網頁的目錄，進行編輯個人網頁（傳統的方式是先在個人電腦上編輯網頁，再使用ftp上傳）。除此之外，虛擬光碟也可以在Samba 
+Server上使用。
+Samba Server的建置方式
+　　一、如果您的伺服器及學生用的工作站都是使用核發的IP，那就架設一台伺服器提供apache、mail及samba(當PDC) 
+，可再架設另一台samba當印表機分享；如果要使用虛擬光碟，架設另一台samba當光碟櫃。
+　　二、如果您是使用NAT(伺服器使用核發的IP，學生用的工作站使用私有的IP)，那就架設一台伺服器插上兩片網卡，第一片網卡使用核發的IP，提供網際網路服務apache及mail；第二片網卡使用私有IP192.168.1.1，建置samba當網域主控站 
+(PDC)，在私有class c上可再架設另一台samba當印表機分享；如果要使用虛擬光碟，架設另一台samba當光碟櫃。
+安裝Samba Server
+1.所需檔案：samba-2.0.6.tgz(可在國內大學的ftp站台下載或FreeBSD 4.0的光碟上)
+2.安裝samba-2.0.6.tgz：
+　#pkg_add samba-2.0.6.tgz
+3.修改smb.conf設定檔
+　安裝完samba-2.0.6.tgz後，在/usr/local/etc下會有一個smb.conf.default，先執行下列命令：
+　#cp smb.conf.default smb.conf
+　再來請使用ee來編輯smb.conf(使用/usr/local/bin/testparm命令可以檢查smb.conf是否有設定錯誤)， 
+底下列出smb.conf的內容做說明：
+
+[global]
+
+# workgroup = NT-Domain-Name or Workgroup-Name, eg: REDHAT4
+#網域名稱，自行更改
+   workgroup = fyjh
+
+#出現在『網路上的芳鄰』Samba伺服器的名稱，如果不加入這行則使用FreeBSD的主機名稱
+   netbios name = ntserver1
+
+# server string is the equivalent of the NT Description field
+#伺服器註解
+   server string = Samba Server
+
+# This option is important for security. It allows you to restrict
+# connections to machines which are on your local network. The
+# following example restricts access to two C class networks and
+# the "loopback" interface. For more examples of the syntax see
+# the smb.conf man page
+#設定允許登入網域的區域網路，如果使用核發的IP，則將192.168.1.改為您的class c
+   hosts allow = 192.168.1. 127.
+
+# If you want to automatically load your printer list rather
+# than setting them up individually then you'll need this
+;   load printers = yes
+
+# you may wish to override the location of the printcap file
+;   printcap name = /etc/printcap
+
+# on SystemV system setting printcap name to lpstat should allow
+# you to automatically obtain a printer list from the SystemV spool
+# system
+;   printcap name = lpstat
+
+# It should not be necessary to specify the print system type unless
+# it is non-standard. Currently supported print systems include:
+# bsd, sysv, plp, lprng, aix, hpux, qnx
+;   printing = bsd
+
+# Uncomment this if you want a guest account, you must add this to /etc/passwd
+# otherwise the user "nobody" is used
+;  guest account = pcguest
+
+# this tells Samba to use a separate log file for each machine
+# that connects
+   log file = /var/log/log.%m
+
+# Put a capping on the size of the log files (in Kb).
+   max log size = 50
+
+# Security mode. Most people will want user level security. See
+# security_level.txt for details.
+#設定存取資源分享的控制方式，有share、user、server及domain
+#如果這台Samba Server當PDC則使用user，當使用者登入時會從/usr/local/private/smbpasswd檔檢驗帳號及密碼
+#如果這台Samba Server不是當PDC而是做資源分享則使用domain或share，當使用者由PDC登入後，就可使用分享的資源
+   security = user
+
+# Use password server option only with security = server
+;   password server = 
+
+# You may wish to use password encryption. Please read
+# ENCRYPTION.txt, Win95.txt and WinNT.txt in the Samba documentation.
+# Do not enable this option unless you have read those documents
+#windows 95 OSR以後的版本登入時再傳送密碼時是採用加密傳送，因此要設定yes
+  encrypt passwords = yes
+
+# Using the following line enables you to customise your configuration
+# on a per machine basis. The %m gets replaced with the netbios name
+# of the machine that is connecting
+;   include = /usr/local/etc/smb.conf.%m
+
+# Most people will find that this option gives better performance.
+# See speed.txt and the manual pages for details
+   socket options = TCP_NODELAY 
+
+# Configure Samba to use multiple interfaces
+# If you have multiple network interfaces then you must list them
+# here. See the man page for details.
+#如果Samba Server使用多片網卡，則將下一行的分號去掉並自行修改IP位置
+#例如Samba Server是採取上面所說的建置方式二，則需設為interfaces = 192.168.1.1/24
+;   interfaces = 192.168.1.1/24 192.168.2.1/24 
+
+# Browser Control Options:
+# set local master to no if you don't want Samba to become a master
+# browser on your network. Otherwise the normal election rules apply
+#當PDC則設為yes，其它則設為no
+   local master = yes
+
+# OS Level determines the precedence of this server in master browser
+# elections. The default value should be reasonable
+   os level = 33
+
+# Domain Master specifies Samba to be the Domain Master Browser. This
+# allows Samba to collate browse lists between subnets. Don't use this
+# if you already have a Windows NT domain controller doing this job
+#當PDC則設為yes，其它則設為no
+   domain master = yes 
+
+# Preferred Master causes Samba to force a local browser election on startup
+# and gives it a slightly higher chance of winning the election
+#當PDC則設為yes，其它則設為no
+   preferred master = yes
+
+# Use only if you have an NT server on your network that has been
+# configured at install time to be a primary domain controller.
+;   domain controller = 
+
+# Enable this if you want Samba to be a domain logon server for 
+# Windows95 workstations. 
+#當PDC則設為yes，其它則設為no
+   domain logons = yes
+
+# if you enable domain logons then you may want a per-machine or
+# per user logon script
+# run a specific logon batch file per workstation (machine)
+;   logon script = %m.bat
+# run a specific logon batch file per username
+;   logon script = %U.bat
+
+# Where to store roving profiles (only for Win95 and WinNT)
+#        %L substitutes for this servers netbios name, %U is username
+#        You must uncomment the [Profiles] share below
+;   logon path = \\%L\Profiles\%U
+
+# Windows Internet Name Serving Support Section:
+# WINS Support - Tells the NMBD component of Samba to enable it's WINS Server
+;   wins support = yes
+
+# WINS Server - Tells the NMBD components of Samba to be a WINS Client
+#	Note: Samba can be either a WINS Server, or a WINS Client, but NOT both
+;   wins server = w.x.y.z
+
+# WINS Proxy - Tells Samba to answer name resolution queries on
+# behalf of a non WINS capable client, for this to work there must be
+# at least one	WINS Server on the network. The default is NO.
+;   wins proxy = yes
+
+# DNS Proxy - tells Samba whether or not to try to resolve NetBIOS names
+# via DNS nslookups. The built-in default for versions 1.9.17 is yes,
+# this has been changed in version 1.9.18 to no.
+   dns proxy = no 
+
+# Client codepage settings
+
+# for Traditional Chinese Users
+#如果分享的資源要使用中文長檔名則要設定下列兩項
+ client code page=950
+ coding system=cap
+
+#============================ Share Definitions ==============================
+#使用者的目錄，在『網路上的芳鄰』Samba Server底下會看到自己的家目錄(目錄名稱是使用者自己的帳號)
+[homes]
+   comment = Home Directories
+   browseable = no  ;在『網路上的芳鄰』只有自己看得到
+   writeable = yes  ;允許寫入檔案
+
+# Un-comment the following and create the netlogon directory for Domain Logons
+; [netlogon]
+;   comment = Network Logon Service
+;   path = /usr/local/samba/lib/netlogon
+;   guest ok = yes
+;   writeable = no
+;   share modes = no
+
+# Un-comment the following to provide a specific roving profile share
+# the default is to use the user's home directory
+;[Profiles]
+;    path = /usr/local/samba/profiles
+;    browseable = no
+;    guest ok = yes
+
+
+# NOTE: If you have a BSD-style print system there is no need to 
+# specifically define each individual printer
+;[printers]
+;   comment = All Printers
+;   path = /var/spool/samba
+;   browseable = no
+# Set public = yes to allow user 'guest account' to print
+;   guest ok = no
+;   writeable = no
+;   printable = yes
+
+# This one is useful for people to share files
+;[tmp]
+;   comment = Temporary file space
+;   path = /tmp
+;   read only = no
+;   public = yes
+
+# A publicly accessible directory, but read only, except for people in
+# the "staff" group
+;[public]
+;   comment = Public Stuff
+;   path = /home/samba
+;   public = yes
+;   writeable = yes
+;   printable = no
+;   write list = @staff
+
+# Other examples. 
+#
+# A private printer, usable only by fred. Spool data will be placed in fred's
+# home directory. Note that fred must have write access to the spool directory,
+# wherever it is.
+;[fredsprn]
+;   comment = Fred's Printer
+;   valid users = fred
+;   path = /homes/fred
+;   printer = freds_printer
+;   public = no
+;   writeable = no
+;   printable = yes
+
+# A private directory, usable only by fred. Note that fred requires write
+# access to the directory.
+;[fredsdir]
+;   comment = Fred's Service
+;   path = /usr/somewhere/private
+;   valid users = fred
+;   public = no
+;   writeable = yes
+;   printable = no
+
+# a service which has a different directory for each machine that connects
+# this allows you to tailor configurations to incoming machines. You could
+# also use the %U option to tailor it by user name.
+# The %m gets replaced with the machine name that is connecting.
+;[pchome]
+;  comment = PC Directories
+;  path = /usr/pc/%m
+;  public = no
+;  writeable = yes
+
+# A publicly accessible directory, read/write to all users. Note that all files
+# created in the directory by users will be owned by the default user, so
+# any user with access can delete any other user's files. Obviously this
+# directory must be writeable by the default user. Another user could of course
+# be specified, in which case all files would be owned by that user instead.
+;[public]
+;   path = /usr/somewhere/else/public
+;   public = yes
+;   only guest = yes
+;   writeable = yes
+;   printable = no
+
+# The following two entries demonstrate how to share a directory so that two
+# users can place files there that will be owned by the specific users. In this
+# setup, the directory should be writeable by both users and should have the
+# sticky bit set on it to prevent abuse. Obviously this could be extended to
+# as many users as required.
+;[myshare]
+;   comment = Mary's and Fred's stuff
+;   path = /usr/somewhere/shared
+;   valid users = mary fred
+;   public = no
+;   writeable = yes
+;   printable = no
+;   create mask = 0765
+
+底下提供範例讓您參考：
+範例一：Samba Server 當網域主控站PDC
+[global]
+   workgroup = fyjh
+   netbios name = ntserver1
+   server string = Samba Server
+   hosts allow = 192.168.1. 127.
+   log file = /var/log/log.%m
+   max log size = 50
+   security = user
+   encrypt passwords = yes
+   socket options = TCP_NODELAY 
+   local master = yes
+   os level = 33
+   domain master = yes 
+   preferred master = yes
+   domain logons = yes
+   dns proxy = no 
+   client code page=950
+   coding system=cap
+
+#============================ Share Definitions ==============================
+[homes]
+   comment = Home Directories
+   browseable = no  ;在『網路上的芳鄰』只有自己看得到
+   writeable = yes  ;允許寫入檔案
+其它資源分享自行設定
+
+範例二：Samba Server 不當網域主控站PDC而當一般資源分享
+[global]
+   workgroup = fyjh
+   netbios name = samba1
+   server string = Samba Server
+   hosts allow = 192.168.1. 127.
+   log file = /var/log/log.%m
+   max log size = 50
+   security = share
+   socket options = TCP_NODELAY 
+   local master = no
+   os level = 33
+   domain master = no 
+   preferred master = no
+   domain logons = no
+   dns proxy = no 
+   client code page=950
+   coding system=cap
+
+#============================ Share Definitions ==============================
+其它資源分享自行設定
+
+如何使用虛擬光碟
+第一步：
+a.首先在PDC伺服器建立放置虛擬光碟主程式的目錄，例如：/home/samba/vdn
+　#mkdir /home/samba
+  #mkdir /home/samba/vdn
+b.將/home/samba/vdn的所有權設定為某一個帳號(例如：admin)，由這個帳號來管理
+  #chown admin /home/samba/vdn
+c.編輯smb.con加入底下的設定
+[vdn]
+   comment = virtual cdrom
+   path = /home/samba/vdn
+   public = yes
+   writeable = yes
+   write list = admin
+
+備註：在windows下以admin登入網域，然後執行虛擬光碟的安裝程式，將主程式安裝在『網路上的芳鄰』
+　　　伺服器vdn的目錄下就可以了。
+
+第二步：建立另一台Samba Server當光碟櫃
+a.首先在伺服器建立放置虛擬光碟片的目錄，例如：/home/samba/cdrom
+　#mkdir /home/samba
+  #mkdir /home/samba/cdrom
+b.編輯smb.con加入底下的設定
+[cdrom]
+   comment = virtual cdrom
+   path = /home/samba/cdrom
+   public = yes
+   read only = yes
+   browseable = yes
+備註：建議在windows下製作光碟片檔案，先存放在local端的硬碟上，再用ftp上傳(因為ftp上傳的速度
+　　　非常快)
+
+建立samba使用者的帳號
+　　samba裝好後會自動將主機上的使用者帳號轉入/usr/local/private/smbpasswd內（這些資料是沒有用的，通常我會先將他們清除掉），建立samba使用者的帳號時，samba會先檢查欲建立的帳號是否存在FreeBSD上；欲建立samba使用者的帳號，是使用/usr/local/bin/smbpasswd命令。
+範例：假設您要建立admin帳號
+　　　#smbpasswd -a admin
+　　　New SMB password:
+　　　Retype new SMB password:
+　　　Password changed
+備註：至於如何建立samba大量使用者？請參閱『我修改的工具程式』區下的『建立samba大量使用者』
+
+啟動samba
+　#cd /usr/local/etc/rc.d
+　#cp samba.sh.sample samba.sh
+　#sync;sync;sync;reboot
+
+至於如何設定samba當列印分享？待續.....

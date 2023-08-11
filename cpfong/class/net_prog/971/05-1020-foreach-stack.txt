@@ -1,0 +1,79 @@
+3.6 foreach 控制結構
+3.7 perl 最愛的預設變數 $_
+	3.7.1 reverse 算符
+	3.7.2 sort 算符 : work only ascii, so 不必太強調
+3.8 純量語境和串列語境
+	3.8.1 在純量語境下使用產生串列的運算式
+	3.8.2 在串列語境下使用產生純量的運算式
+	3.8.3 強制成為純量語境
+3.9 串列語境下的 <STDIN>
+
+chapter 六 基本輸入/輸出
+6.1 讀取標準輸入
+6.2 從鑽石形算符輸入
+6.3 調用引數
+6.4 寫到標準輸出
+	
+------
+3.6	foreach $n (1..10){
+		print $n;
+	}
+
+	$var = "this";
+	foreach $var (qw/ a b c /){
+	# ('a', 'b', 'c')
+		print $var;
+	}
+	print $var;
+
+3.7	@a = 1..3;
+	foreach $_ (@a){
+		print $_;
+
+	@a = qw / 1 2 3 /;
+	foreach (@a){
+		print;
+	}
+
+3.7.1	@a = (a,b,c);
+	# @a = qw / a b c /;
+	@b = reverse @a;
+	print "@a", @b;
+
+3.8	5 + something 此處 something 一定是純量, 因為運算元 + 為純量的運算元
+	@people = qw/ mary john /;
+	$number = 5 + @people;  
+	print $number;
+
+3.8.1	@array = (1,25,39);
+	$b = @array; print $b; # $b == 3
+
+	@c = $b; print @c; # @c=(3)
+
+3.8.2	@array = undef # undef 為純量, 所以 $array[0] = undef, 但是 $array[1] ... 不知
+	@array = () # 這個才是真正把 @array 給 init 的方式
+
+	$a = 5;
+	$a = undef;
+
+3.8.3   @array = (1,2,5); 
+	print @array, "\n" ; # 陣列印出
+	print scalar @array; # 強制成純量
+
+3.9	$line = <STDIN> # 純量語境, 所以系統期待的輸入只有一行而已
+	@line = <STDIN> # 串列語境, 所以等待中的輸入有多行, 直到 Ctrl+d 的停止符號
+
+-----
+6.1	chomp($line=<STDIN>);
+	while (defined($line=<STDIN>)){ 
+		print "$line";
+	}
+	
+	while (<>){
+	  	chomp;
+		print;
+	}
+
+	for 和 while 的不同: 量大時差異會十分明顯, 因為 while 每次只進一行會快許多.
+	while: 讀取一列 (只有一列) 輸入, 把它存在某個變數中, 且執行迴圈的主體, 再來進下一個輸入列 
+	foreach: 串列語境, 所以所有的輸入必需全部讀入

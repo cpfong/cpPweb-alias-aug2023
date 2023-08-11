@@ -1,0 +1,75 @@
+#text book p3-17
+
+import math
+
+r=eval(input('Enter the radius:'))
+area=r*r*math.pi
+p=2*math.pi*r
+print('Area=%.2f' % (area), f" per={p}")
+
+#text book p3-19
+n1,n2,n3=eval(input('enter 3 number sep by ,'))
+
+tot=n1+n2+n3
+print(f"{n1}+{n2}+{n3}={tot}")
+
+#p3-26ex9
+s=input("input 5 numbers sep with space: ")
+
+#n1, n2, n3, n4, n5=s.split(',')
+n1, n2, n3, n4, n5=s.split()
+
+sum=eval(n1) + eval(n2) + eval(n3) + eval(n4) + eval(n5)
+avg=sum/5
+print ("sum = %s" % sum, "avg = %s" % avg)
+
+
+# cp's comment
+# diff between 
+# import random
+# and 
+# from random import random
+# random.random() or random()
+
+#!/usr/local/bin/python
+from random import random
+
+tar=int(random() * 100 % 3)
+
+i=int(eval(input('number: ')))
+
+if (i == tar) :
+ print("bingo\n")
+else :
+ print("miss\n")
+ print("tar=%d" % tar)
+
+# exercise 1
+# cal BMI
+# BMI = mass / h^2  (kg/m^2)
+# 72.57 / (1.78)^2 = 22.9 kg/m^2
+# https://www.calculator.net/bmi-calculator.html
+
+
+#ex2.py example
+from random import random
+
+tar1=int(random() * 100 % 10)
+tar2=int(random() * 100 % 10)
+tar3=int(random() * 100 % 10)
+
+print(f" {tar1} {tar2} {tar3}")
+
+i=int(eval(input('number: ')))
+
+if (i == tar1) :
+ print("bingo1")
+else :
+ if (i == tar2) :
+  print("bingo2")
+ else :
+  if (i == tar3) :
+   print("bingo3")
+  else :
+   print("miss\n")
+

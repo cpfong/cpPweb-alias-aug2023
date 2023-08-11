@@ -1,0 +1,33 @@
+start a service
+--
+/etc/rc.d/sshd stop
+/etc/rc.d/sshd start
+/etc/rc.d/sshd restart
+service sshd stop
+service sshd start
+service sshd restart
+
+/usr/local/etc/rc.d/apache24 restart
+service apache24 restart
+
+tail /var/log/httpd-error.log
+
+
+vnc (console login) on Aliyun
+--
+
+ntp (system time sync)
+--
+https://www.freebsd.org/doc/handbook/network-ntp.html
+
+crontab
+--
+https://docs.freebsd.org/doc/6.1-RELEASE/usr/share/doc/handbook/configtuning-cron.html
+
+crontab -l
+sudo crontab -e
+
+apply account on koofr
+http://www.koofr.eu
+pkg install -y rclone
+rclone config

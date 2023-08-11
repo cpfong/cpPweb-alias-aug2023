@@ -1,0 +1,7 @@
+1. adding parameter into process
+2. return value
+
+ex1: sum 1 to n 
+ex2: maximum 
+ex3: even or odd
+ex4: the largest number in array

@@ -1,0 +1,23 @@
+Q: appsheet come from?
+A: one company create it, and later google brought it 
+
+Q: why appsheet?
+A: connect a GUI with DB and via mobile device (iphone APP)
+google sheet is a DB, appsheet is a UI
+fill in DB is easy, however display it is hard
+
+
+Q: simple example
+A:
+write your heart beat into gSheet and display on your iPhone app
+
+Q: left side of the app editor
+ Home gives you suggested next steps and access to educational resources.
+ Info lets you see and manage the technical details of your app.
+ Data lets you define how AppSheet interacts with your data.
+ UX lets you create and customize views, along with the look and feel of your app.
+ Automation lets you create modular bots that can automate certain tasks such as sentiment analysis and optical character recognition.
+ Security lets you set up user roles and define security features.
+ Intelligence lets you incorporate machine learning into your app, such as sentiment analysis and optical character recognition.
+ Users enables you to share your app and manage who has access to it.
+ Manage allows you to track and control your app's authors, deployment state, and usage.

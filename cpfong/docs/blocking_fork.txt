@@ -1,0 +1,29 @@
+#obj: Blocking wait example
+
+my @children_pids;
+my $parent_pid=$$; # note: in this code, there is only one parent which is ME
+
+print "Parent: my pid $parent_pid\n";
+
+# parent(ME) create 10 child 
+# child wait to random time then exit
+for my $count (1..2){
+    die "$@" unless defined( my $child_pid = fork() );
+    if ($child_pid) {  # If I have a child PID, then I must be the parent
+        push @children_pids, $child_pid;
+        print "children's PIDs: @children_pids\n";
+    } else { # I am the child
+        my $wait_time = int(rand(10));
+        sleep $wait_time;
+        my $localtime = localtime;
+        print "Child: Some child exited at $localtime\n";
+        exit 0; # Exit the child
+    }
+}
+
+foreach my $c (@children_pids) {
+        print "Parent: Waiting on $c\n";
+	waitpid($c, 0); #blocking wait. will not go to next step unless $child reaped
+        my $localtime = localtime;
+        print "Parent: Child $child was reaped - $localtime.\n";
+}

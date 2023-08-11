@@ -1,0 +1,7 @@
+initrd
+chain		root=100
+---
+ab
+Xprogs Xvesa
+flwm
+startx

@@ -1,0 +1,36 @@
+--
+p874 -> acc@ip.hinet.net
+v2910 -> dhcp get his ip
+all out with 114.33.159.33 automatically , no need to fill in p874 nor v2910
+--
+
+p874 --> 73704106@wifi.hinet.net (or 73704106@hinet.net note 73704106@ip.hinet.net 放 p874 不可以)
+v2910 -> PPPoE 73704106@ip.hinet.net fix IP 114.33.159.33 (note: ip.hinet 一定放 client 端)
+
+--
+p874 default acc:pwd user user cht chtsvdsl --> user:ktel cht:ktel
+v2910 default acc:pwd EMPTY:EMPTY --> EMPTY:ktel
+--
+
+Reset then build up P874
+--
+* 內定 WLAN 燈號是暗的, 且 192.168.1.1 管理介面沒有 wlan
+* cht 密碼 chtsvdsl 是 p874 管理者
+* user 密碼 user 是 hinet 管理人
+* 要把 config 的二行弄好, p874 的 WLAN 燈才會亮且 wlan 選項才會出現
+* config 要先弄下來, 再用 vi 去改二行的 0 成 1
+
+1. use pencil to click 10 secs small hole of RESET
+   (you will see all light OFF, then start ...)
+2. ifconfig 192.168.1.2 then connect a wired to P974
+   now I can key in IE http://192.168.1.1
+3. cht -> chtsvdsl 
+   user -> user
+4. http://192.168.1.1
+	setup new cht and user password (do not use the default)
+
+P874 use cht to setup password only
+     use user to setup all others 73704106@ip.hinet.net k2221947 and all others
+     use ip.hinet.net to specify that i use fix ip
+
+

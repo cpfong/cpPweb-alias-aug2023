@@ -1,0 +1,27 @@
+Windows+R for run: cmd
+
+# name server lookup, in and out
+nslookup
+>quit
+
+# previous action
+arrow up
+
+# prompt (help use ?)
+> ?
+
+# change dns server
+> server 8.8.8.8
+
+# set query type to ns
+> set type=ns
+> mooo.com
+> quit
+
+#
+# https://freedns.afraid.org
+# modify IP
+
+# enter again
+nslookup
+> server ns1.afraid.org

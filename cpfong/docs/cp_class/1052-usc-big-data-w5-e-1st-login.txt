@@ -1,0 +1,4 @@
+* security group open port 80
+* ssh -i secret.pem ec2-user@1.2.3.4
+* change password of ec2-user
+* exit ; relogin

@@ -1,0 +1,123 @@
+<html><head><meta http-equiv="Content-Type" content="text/html" charset="utf-8">
+
+</head><body bgcolor="white">
+<title>學習之旅</title>
+
+<table>
+<tbody>
+   <tr><td><a href="./cp_class/aws.html"><img src=../../img/awsLogo64.jpg></img>aws</a> --
+<!--
+   <tr><td><a href="./cp_class/aws.html"><img src="https://drive.google.com/uc?export=view&id=1kyjPJFMl0MVIMOOLYU0jktU4wCz4_p8d"></img>aws</a> --
+   <td><a href= cp_class/usc_cp_class.html><img src="https://drive.google.com/uc?export=view&id=1u9bx6AFyNpDsD8SsLBT_0KmdVPfDBP-N"></img>usc</a> --
+   <td><a href= cp_class/2017webduino.html><img src="https://drive.google.com/uc?export=view&id=1qhbYbi_BzbNM-LMkLMIp9B-f2dlV1VKa">arduino</a> --
+   <td><a href= cp_class/fvti_cp_class.html><img src="https://drive.google.com/uc?export=view&id=1m5pGIFW86BeT3AkOoybyO5Lu35pUNTZN">fvti</a> --
+   <tr><td><a href=./shell/index.html><img src="https://drive.google.com/uc?export=view&id=1iLox6Khbj-KNSqBTqNII_Ysq1RS7mnTe">shell</a> --
+       <td><a href=./boot.html><img src="https://drive.google.com/uc?export=view&id=1V_fb7eNiZivrNn7vOVhsXn8w76GTuSVw">boot</a> --
+   <td><a href=./scim.html><img src="https://drive.google.com/uc?export=view&id=1aAlkRSyMzOo5vtcxVhoNZxi3pElsh-K7">scim</a> --
+   <td><a href=./thingspeak.html><img src="https://drive.google.com/uc?export=view&id=18a6GFm_MrGt1-I7onbfC_Dvgmje9KIph">thingSpeak </a>
+   <tr><td><a href=./perl.html><img src="https://drive.google.com/uc?export=view&id=1DC-t5wnCuQ6jna_ovh1vACj_pvpon0H7">perl</a> --
+   <td><a href=./daemon.html><img src="https://drive.google.com/uc?export=view&id=1AW_nXKiXkw8nkBMsuz8FLqnNrYa6g0nH">daemon</a>
+   <td><a href=./arduino-8266.html><img src="https://drive.google.com/uc?export=view&id=1Bj6l9KZ_AfdQV3L9u1yaXkybQd6xvZpK"> wifi_ard</a>
+   <tr><td><a href=./perl-utf8.html><img src="https://drive.google.com/uc?export=view&id=1DGykA3BCkCWtKIwDf2pseM4U-1BzeVeP">utf8</a> --
+	<td><a href=./shadowsocks.html><img src="https://drive.google.com/uc?export=view&id=1Z4EJTNbK9U50Ufr-SMEPKhyJJZit_jv6">vpn</a> --
+	<td><a href=./pingtung-class.html><img src="https://drive.google.com/uc?export=view&id=1vaFRBVziAPl9J7ypLUsrrn1K5mUladtK">pingtung</a>
+	<td><a href=./tls.html><img src="https://drive.google.com/uc?export=view&id=1uQJhxNRrWkkFmuNh0tLQ2li5pXYdH10O">TLS</a>
+zzz
+-->
+   <td><a href= cp_class/usc_cp_class.html><img src=../../img/usc_logo_1.jpg></img>usc</a> --
+   <td><a href= cp_class/2017webduino.html><img src=../../img/arduino12-64x39.png>arduino</a> --
+   <td><a href= cp_class/fvti_cp_class.html><img src=../../img/fvti-logo.jpg>fvti</a> --
+   <tr><td><a href=./shell/index.html><img src=../../img/shell_black.png>shell</a> --
+   <td><a href=./boot.html><img src=../../img/boot.1.64.png>boot</a> --
+   <td><a href=./scim.html><img src=../../img/scim64.jpeg>scim</a> --
+   <td><a href=./thingspeak.html><img src=../../img/thinkspeak-s.png>thingSpeak </a>
+   <tr><td><a href=./perl.html><img src=../../img/perl128.png>perl</a> --
+   <td><a href=./daemon.html><img src=../../img/daemon-small.jpg.png>daemon</a>
+   <td><a href=./arduino-8266.html><img src=../../img/8266-arduino.png> wifi_ard</a>
+   <td><a href=./apache-perl-module.html><img src=../../img/apache_perl_module.png>ap_pl_mod</a>
+   <tr><td><a href=./perl-utf8.html><img src=../../img/utf8-128.png>utf8</a> --
+   <td><a href=./shadowsocks.html><img src=../../img/vpn64.png>vpn</a> --
+   <td><a href=./pingtung-class.html><img src=../../img/corpimg128.png>pingtung</a>
+   <td><a href=./tls.html><img src=../../img/tls-enc128.jpeg>TLS-letscrypt-certbot</a>
+<!--
+	<td><a href=./computer-hardware-level-c.html> 電腦硬體裝修</a> --
+-->
+   <tr><td><a href="./python.html"><img src=../../img/python128.png>python</a> --
+   <td><a href="./clone.html"><img src=../../img/clone64.jpg> clone <a> --
+   <td><a href=./leather.html><img src="https://drive.google.com/uc?export=view&id=1gw5zXlhGj4IU6zdDm93un7S9N3dAPbdT">leather</a>
+   <td><a href="./cp_class/my-rc.html">Remote Control of Drone</a> --
+   <td><a href="./r_language.html">R lang</a> --
+   <a href=./dns2tcp.html>dns22tcp</a> --
+   <a href=./tinycorelinux/tc-index.html>tinyCoreLinux</a> --
+    <td><a href="./soekris.html">SoeKris 4826</a>
+    </td><td><a href="http://www.ifong.org/~cpfong/docs/nas/index.html">                NAS@mis.fjtc 及 dns</a>
+    </td><td><a href="http://www.ifong.org/~cpfong/docs/vpn/index-orig-vpn.html">	vpn  </a> 
+    </td><td><a href="http://www.ifong.org/~cpfong/docs/solaris.html">			   Solaris </a> 
+    </td><td><a href="http://www.ifong.org/~cpfong/docs/apache">			   Apache </a>
+    </td><td><a href="http://www.ifong.org/~cpfong/docs/ghost">		   	   ghost svr</a>
+</td></tr><tr><td><a href="http://www.ifong.org/~cpfong/docs/cp_class/index.html">                cp's class </a>
+    </td><td><a href="http://www.ifong.org/~cpfong/docs/pppoe/index.html">                PPPoE </a>
+    </td><td><a href="http://sources.redhat.com/cygwin/"> Cygwin</a>
+    </td><td><a href="http://www.ifong.org/~cpfong/docs/hd/index.html"> HD </a>
+</td></tr><tr><td><a href="http://www.ifong.org/~cpfong/docs/dns.html"> DNS </a>
+    </td><td><a href="http://www.nchu.edu.tw/trnc/ann/">區網公佈欄 </a>
+    </td><td><a href="http://www.osa.mhit.edu.tw/ann/use.php"> ANN 說明 </a>
+    </td><td><a href="http://www.ored.me/%7Ecpfong/docs/mail/index.html"> Mail</a>
+</td></tr><tr><td><a href="http://www.ored.me/%7Ecpfong/docs/photoshop/p.html">                   PhotoShop - </a>
+    </td><td><a href="http://www.ored.me/%7Ecpfong/docs/gimp/index.html"> Gimp </a>
+    </td><td><a href="http://www.ored.me/%7Ecpfong/docs/perl/index.html"> Perl </a>
+    </td><td><a href="http://www.ored.me/%7Ecpfong/docs/irc/index.html"> IRC </a>
+</td></tr><tr><td><a href="http://www.ored.me/%7Ecpfong/docs/html/index.html">                    進階 HTML </a>
+    </td><td><a href="http://www.ored.me/%7Ecpfong/docs/dhcp/index.html"> DHCP </a>
+    </td><td><a href="http://www.ored.me/%7Ecpfong/docs/ipf/index.html"> ipfilter</a>
+    </td><td><a href="http://www.ored.me/%7Ecpfong/docs/shell/index.html"> shell </a>
+</td></tr><tr><td><a href="http://www.ored.me/%7Ecpfong/docs/word.html">                          Use  Word </a>
+    </td><td><a href="http://www.ored.me/%7Ecpfong/docs/win9x.html">				Win9x 相關 </a>
+    </td><td><a href="http://www.ored.me/%7Ecpfong/docs/samba/index.html">				Samba</a>
+    </td><td><a href="http://www.ored.me/%7Ecpfong/docs/oracle/index.html">				Oracle</a>
+</td></tr><tr><td><a href="http://www.ored.me/%7Ecpfong/docs/js/index.html">                      JavaScript</a>
+</td></tr><tr><td><a href="http://www.ored.me/%7Ecpfong/docs/ws_ftp/wsftp.html">                  Ws_FTP How</a>
+    </td><td><a href="http://www.ored.me/%7Ecpfong/docs/mirror/mirror.html">Mirror </a>
+    </td><td><a href="http://www.ored.me/%7Ecpfong/docs/old/ftp1.html">ftp1</a>
+    </td><td><a href="http://www.ored.me/%7Ecpfong/docs/old/ftp2.html">ftp2</a>
+    </td><td><a href="http://www.ored.me/%7Ecpfong/docs/old/ftp3.html">ftp3</a>
+</td></tr><tr><td><a href="http://www.ored.me/%7Ecpfong/docs/old/pine.txt">                       pine Mail</a>
+</td></tr><tr><td><a href="http://www.ored.me/%7Ecpfong/docs/old/unix1.html">                     Unix入門及實用指令介紹</a>
+    </td><td><a href="http://www.ored.me/%7Ecpfong/docs/old/unix2.html"> UNIX 的基本指令</a>
+    </td><td><a href="http://www.ored.me/%7Ecpfong/docs/emacs_index.html"> Emacs (指令行移動)</a>
+</td></tr><tr><td><a href="http://www.ored.me/%7Ecpfong/docs/vi/vi.html">                       vi2 Editor</a>
+    </td><td><a href="http://www.ored.me/%7Ecpfong/docs/postgresql/index.html">             PostgreSQL Doc</a>
+</td></tr><tr><td><a href="http://www.ored.me/%7Ecpfong/docs/news/index.html">                    INND.News</a>
+</td></tr><tr><td><a href="http://www.ytjh.ylc.edu.tw/yzec/faq/Start/index.htm">Win98 FAQ</a>
+    </td><td><a href="http://www.ored.me/%7Ecpfong/docs/w2k_hotkey.html">Win2K HotKey</a>
+</td></tr><tr><td><a href="http://www.ora.nsysu.edu.tw/%7Egoldentime/">nsysu GoldTime Boot CD</a>
+    </td><td><a href="http://www.ored.me/%7Ecpfong/docs/cd/cp_index.html">CP Boot CD</a>
+    </td><td><a href="http://www.ored.me/%7Ecpfong/docs/bios/bios.html"> BIOS </a>
+</td></tr><tr><td><a href="http://www.ored.me/%7Ecpfong/docs/emacs_index.html">Emacs</a>
+</td></tr><tr><td><a href="http://www.ored.me/%7Ecpfong/docs/ch.html"> 旗山國中 91 年 1 月 "網路法律" </a><br>  
+</td></tr><tr><td><a href="http://www20.pos.to/%7Esleipnir/software/sleipnir/index.html">@spei</a> <br>
+	</td><td><a href="http://www.ored.me/%7Ecpfong/docs/Sleipnir_cht.zip">ei_chinese.zip </a>
+	</td><td><a href="http://www.ored.me/%7Ecpfong/docs/engver_fb.zip">ei_eng.zip </a>
+</td></tr><tr><td><a href="http://www.ored.me/%7Ecpfong/docs/java/">Java</a> <br>
+    </td><td><a href="http://www.ored.me/%7Ecpfong/docs/msshort.html">MS short</a> <br>
+</td></tr><tr><td><a href="http://org.netbase.org/vinum-mirrored.html"> vinum </a> 
+    </td><td><a href="http://www.freebsddiary.org/vinum.php"> diary vinum </a>
+</td></tr><tr><td><a href="http://www.ored.me/%7Ecpfong/docs/how2rj45">RJ45 </a>
+    </td><td><a href="http://www.ored.me/%7Ecpfong/docs/rs232">RS232 </a>
+    </td><td><a href="http://www.ored.me/%7Ecpfong/docs/2r.html">route</a>
+</td></tr></tbody></table>
+<br>
+<a href="http://www.ored.me/%7Ecpfong/docs/ILpart1.html">isolinux.cfg</a> --
+<a href="http://www.cdshell.org/">cdshell</a> --
+<a href="http://www.911cd.net/forums/">911cd</a> --
+<a href="http://syslinux.zytor.com/">syslinux</a> --
+<a href="http://people.freebsd.org/%7Ealfred/pxe/">install FreeBSD w PXE</a> --
+<a href="http://www.isgsp.net/freebsd/pxe.html">install Ghost w PXE@BSD</a> -- 
+<a href="http://www.ored.me/%7Ecpfong/docs/pxe.html"> @localhost </a> --
+<a href="http://www.ored.me/%7Ecpfong/docs/usb_boot">USB Boot HowTo</a> --
+<br>
+<a href="http://www.ored.me/%7Ecpfong/docs/sample_space.txt"> sample space </a> --
+<a href=./20150612_nsysu_vm.txt>nsysu VM</a>
+
+</body></html>
+

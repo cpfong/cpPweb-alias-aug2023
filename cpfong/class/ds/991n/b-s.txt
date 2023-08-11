@@ -1,0 +1,25 @@
+    Sub Main()
+        Dim a() As Integer = {1, 2, 3, 4, 5}
+        Dim r As Integer = bs(a, 5, 0, a.GetUpperBound(0))
+        If (r = -1) Then
+            Console.WriteLine("NOT found")
+        Else
+            Console.WriteLine("index = " & r & " and value=" & a(r))
+        End If
+        Console.ReadKey()
+    End Sub
+    Function bs(ByVal a() As Integer, ByVal key As Integer, ByVal l As Integer, ByVal h As Integer) As Integer
+        Dim m As Integer
+
+        While (l <= h)
+            m = Int((l + h) / 2)
+            If (key = a(m)) Then
+                Return m
+            ElseIf (key > a(m)) Then
+                l = m + 1
+            Else
+                h = m - 1
+            End If
+        End While
+        Return -1
+    End Function

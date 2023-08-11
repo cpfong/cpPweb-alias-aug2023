@@ -1,0 +1,9 @@
+##  chang Jerry telephoneNumber (first delete then add one in)
+dn: cn=Jerry Carter,ou=people,dc=plainjoe,dc=org
+changetype: modify
+delete: telephoneNumber
+telephoneNumber: 555-123-1234
+-
+changetype: modify
+add: telephoneNumber
+telephoneNumber: 234-555-6789

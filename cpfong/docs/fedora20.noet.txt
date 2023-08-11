@@ -1,0 +1,7 @@
+Q: become root
+A: su - 	#user no need to be wheel group
+
+Q: no chinese
+A: install in eng, when up will let you select chinese input and use internet to update system into chinese secretly
+
+

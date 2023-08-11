@@ -1,0 +1,1781 @@
+  <HTML>
+  <HEAD>
+  
+  <TITLE>MySQL Reference Manual for version 5.0.3-alpha - 23  Error Handling in MySQL</TITLE>
+   <style> code {color:purple} tt {color:green} samp {color:navy} pre {color:maroon} </style>
+  </HEAD>
+  <BODY BGCOLOR=silver TEXT=#000000 LINK=#101090 VLINK=#7030B0>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_MySQL_Connectors.html">previous</A>, <A HREF="manual_Extending_MySQL.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="Error-handling" HREF="manual_toc.html#Error-handling">23  Error Handling in MySQL</A></H1>
+
+<P>
+This chapter lists the errors that may appear when you call MySQL from
+any host language.  The first list displays server error messages.
+The second list displays client program messages.
+
+</P>
+<P>
+Server error information comes from the following files:
+
+</P>
+
+<UL>
+<LI>
+
+The Error values and the symbols in parentheses correspond to
+definitions in the <tt>`include/mysqld_error.h'</tt> MySQL source file.
+
+<LI>
+
+The SQLSTATE values correspond to definitions
+in the <tt>`include/sql_state.h'</tt> MySQL source file.
+
+SQLSTATE error codes are displayed only if
+you use MySQL version 4.1 and up. SQLSTATE codes
+were added for compatibility with X/Open, ANSI, and ODBC
+behavior.
+
+<LI>
+
+The Message values correspond to the error messages that are listed
+in the <tt>`sql/share/english/errmsg.txt'</tt> file.  %d or %s represent numbers
+or strings that are substituted into the messages %when they are displayed.
+
+</UL>
+
+<P>
+Because updates are frequent, it is possible that
+these files will contain additional error information not listed here.
+
+</P>
+
+
+<UL>
+
+<LI>Error: <code>1000</code> SQLSTATE: <code>HY000</code> (<code>ER_HASHCHK</code>)
+
+Message: hashchk
+
+<LI>Error: <code>1001</code> SQLSTATE: <code>HY000</code> (<code>ER_NISAMCHK</code>)
+
+Message: isamchk
+
+<LI>Error: <code>1002</code> SQLSTATE: <code>HY000</code> (<code>ER_NO</code>)
+
+Message: NO
+
+<LI>Error: <code>1003</code> SQLSTATE: <code>HY000</code> (<code>ER_YES</code>)
+
+Message: YES
+
+<LI>Error: <code>1004</code> SQLSTATE: <code>HY000</code> (<code>ER_CANT_CREATE_FILE</code>)
+
+Message: Can't create file '%s' (errno: %d)
+
+<LI>Error: <code>1005</code> SQLSTATE: <code>HY000</code> (<code>ER_CANT_CREATE_TABLE</code>)
+
+Message: Can't create table '%s' (errno: %d)
+
+<LI>Error: <code>1006</code> SQLSTATE: <code>HY000</code> (<code>ER_CANT_CREATE_DB</code>)
+
+Message: Can't create database '%s' (errno: %d)
+
+<LI>Error: <code>1007</code> SQLSTATE: <code>HY000</code> (<code>ER_DB_CREATE_EXISTS</code>)
+
+Message: Can't create database '%s'; database exists
+
+<LI>Error: <code>1008</code> SQLSTATE: <code>HY000</code> (<code>ER_DB_DROP_EXISTS</code>)
+
+Message: Can't drop database '%s'; database doesn't exist
+
+<LI>Error: <code>1009</code> SQLSTATE: <code>HY000</code> (<code>ER_DB_DROP_DELETE</code>)
+
+Message: Error dropping database (can't delete '%s', errno: %d)
+
+<LI>Error: <code>1010</code> SQLSTATE: <code>HY000</code> (<code>ER_DB_DROP_RMDIR</code>)
+
+Message: Error dropping database (can't rmdir '%s', errno: %d)
+
+<LI>Error: <code>1011</code> SQLSTATE: <code>HY000</code> (<code>ER_CANT_DELETE_FILE</code>)
+
+Message: Error on delete of '%s' (errno: %d)
+
+<LI>Error: <code>1012</code> SQLSTATE: <code>HY000</code> (<code>ER_CANT_FIND_SYSTEM_REC</code>)
+
+Message: Can't read record in system table
+
+<LI>Error: <code>1013</code> SQLSTATE: <code>HY000</code> (<code>ER_CANT_GET_STAT</code>)
+
+Message: Can't get status of '%s' (errno: %d)
+
+<LI>Error: <code>1014</code> SQLSTATE: <code>HY000</code> (<code>ER_CANT_GET_WD</code>)
+
+Message: Can't get working directory (errno: %d)
+
+<LI>Error: <code>1015</code> SQLSTATE: <code>HY000</code> (<code>ER_CANT_LOCK</code>)
+
+Message: Can't lock file (errno: %d)
+
+<LI>Error: <code>1016</code> SQLSTATE: <code>HY000</code> (<code>ER_CANT_OPEN_FILE</code>)
+
+Message: Can't open file: '%s' (errno: %d)
+
+<LI>Error: <code>1017</code> SQLSTATE: <code>HY000</code> (<code>ER_FILE_NOT_FOUND</code>)
+
+Message: Can't find file: '%s' (errno: %d)
+
+<LI>Error: <code>1018</code> SQLSTATE: <code>HY000</code> (<code>ER_CANT_READ_DIR</code>)
+
+Message: Can't read dir of '%s' (errno: %d)
+
+<LI>Error: <code>1019</code> SQLSTATE: <code>HY000</code> (<code>ER_CANT_SET_WD</code>)
+
+Message: Can't change dir to '%s' (errno: %d)
+
+<LI>Error: <code>1020</code> SQLSTATE: <code>HY000</code> (<code>ER_CHECKREAD</code>)
+
+Message: Record has changed since last read in table '%s'
+
+<LI>Error: <code>1021</code> SQLSTATE: <code>HY000</code> (<code>ER_DISK_FULL</code>)
+
+Message: Disk full (%s); waiting for someone to free some space...
+
+<LI>Error: <code>1022</code> SQLSTATE: <code>23000</code> (<code>ER_DUP_KEY</code>)
+
+Message: Can't write; duplicate key in table '%s'
+
+<LI>Error: <code>1023</code> SQLSTATE: <code>HY000</code> (<code>ER_ERROR_ON_CLOSE</code>)
+
+Message: Error on close of '%s' (errno: %d)
+
+<LI>Error: <code>1024</code> SQLSTATE: <code>HY000</code> (<code>ER_ERROR_ON_READ</code>)
+
+Message: Error reading file '%s' (errno: %d)
+
+<LI>Error: <code>1025</code> SQLSTATE: <code>HY000</code> (<code>ER_ERROR_ON_RENAME</code>)
+
+Message: Error on rename of '%s' to '%s' (errno: %d)
+
+<LI>Error: <code>1026</code> SQLSTATE: <code>HY000</code> (<code>ER_ERROR_ON_WRITE</code>)
+
+Message: Error writing file '%s' (errno: %d)
+
+<LI>Error: <code>1027</code> SQLSTATE: <code>HY000</code> (<code>ER_FILE_USED</code>)
+
+Message: '%s' is locked against change
+
+<LI>Error: <code>1028</code> SQLSTATE: <code>HY000</code> (<code>ER_FILSORT_ABORT</code>)
+
+Message: Sort aborted
+
+<LI>Error: <code>1029</code> SQLSTATE: <code>HY000</code> (<code>ER_FORM_NOT_FOUND</code>)
+
+Message: View '%s' doesn't exist for '%s'
+
+<LI>Error: <code>1030</code> SQLSTATE: <code>HY000</code> (<code>ER_GET_ERRNO</code>)
+
+Message: Got error %d from storage engine
+
+<LI>Error: <code>1031</code> SQLSTATE: <code>HY000</code> (<code>ER_ILLEGAL_HA</code>)
+
+Message: Table storage engine for '%s' doesn't have this option
+
+<LI>Error: <code>1032</code> SQLSTATE: <code>HY000</code> (<code>ER_KEY_NOT_FOUND</code>)
+
+Message: Can't find record in '%s'
+
+<LI>Error: <code>1033</code> SQLSTATE: <code>HY000</code> (<code>ER_NOT_FORM_FILE</code>)
+
+Message: Incorrect information in file: '%s'
+
+<LI>Error: <code>1034</code> SQLSTATE: <code>HY000</code> (<code>ER_NOT_KEYFILE</code>)
+
+Message: Incorrect key file for table '%s'; try to repair it
+
+<LI>Error: <code>1035</code> SQLSTATE: <code>HY000</code> (<code>ER_OLD_KEYFILE</code>)
+
+Message: Old key file for table '%s'; repair it!
+
+<LI>Error: <code>1036</code> SQLSTATE: <code>HY000</code> (<code>ER_OPEN_AS_READONLY</code>)
+
+Message: Table '%s' is read only
+
+<LI>Error: <code>1037</code> SQLSTATE: <code>HY001</code> (<code>ER_OUTOFMEMORY</code>)
+
+Message: Out of memory; restart server and try again (needed %d bytes)
+
+<LI>Error: <code>1038</code> SQLSTATE: <code>HY001</code> (<code>ER_OUT_OF_SORTMEMORY</code>)
+
+Message: Out of sort memory; increase server sort buffer size
+
+<LI>Error: <code>1039</code> SQLSTATE: <code>HY000</code> (<code>ER_UNEXPECTED_EOF</code>)
+
+Message: Unexpected EOF found when reading file '%s' (errno: %d)
+
+<LI>Error: <code>1040</code> SQLSTATE: <code>08004</code> (<code>ER_CON_COUNT_ERROR</code>)
+
+Message: Too many connections
+
+<LI>Error: <code>1041</code> SQLSTATE: <code>HY000</code> (<code>ER_OUT_OF_RESOURCES</code>)
+
+Message: Out of memory; check if mysqld or some other process uses all available memory; if not, you may have to use 'ulimit' to allow mysqld to use more memory or you can add more swap space
+
+<LI>Error: <code>1042</code> SQLSTATE: <code>08S01</code> (<code>ER_BAD_HOST_ERROR</code>)
+
+Message: Can't get hostname for your address
+
+<LI>Error: <code>1043</code> SQLSTATE: <code>08S01</code> (<code>ER_HANDSHAKE_ERROR</code>)
+
+Message: Bad handshake
+
+<LI>Error: <code>1044</code> SQLSTATE: <code>42000</code> (<code>ER_DBACCESS_DENIED_ERROR</code>)
+
+Message: Access denied for user '%s'@'%s' to database '%s'
+
+<LI>Error: <code>1045</code> SQLSTATE: <code>28000</code> (<code>ER_ACCESS_DENIED_ERROR</code>)
+
+Message: Access denied for user '%s'@'%s' (using password: %s)
+
+<LI>Error: <code>1046</code> SQLSTATE: <code>3D000</code> (<code>ER_NO_DB_ERROR</code>)
+
+Message: No database selected
+
+<LI>Error: <code>1047</code> SQLSTATE: <code>08S01</code> (<code>ER_UNKNOWN_COM_ERROR</code>)
+
+Message: Unknown command
+
+<LI>Error: <code>1048</code> SQLSTATE: <code>23000</code> (<code>ER_BAD_NULL_ERROR</code>)
+
+Message: Column '%s' cannot be null
+
+<LI>Error: <code>1049</code> SQLSTATE: <code>42000</code> (<code>ER_BAD_DB_ERROR</code>)
+
+Message: Unknown database '%s'
+
+<LI>Error: <code>1050</code> SQLSTATE: <code>42S01</code> (<code>ER_TABLE_EXISTS_ERROR</code>)
+
+Message: Table '%s' already exists
+
+<LI>Error: <code>1051</code> SQLSTATE: <code>42S02</code> (<code>ER_BAD_TABLE_ERROR</code>)
+
+Message: Unknown table '%s'
+
+<LI>Error: <code>1052</code> SQLSTATE: <code>23000</code> (<code>ER_NON_UNIQ_ERROR</code>)
+
+Message: Column '%s' in %s is ambiguous
+
+<LI>Error: <code>1053</code> SQLSTATE: <code>08S01</code> (<code>ER_SERVER_SHUTDOWN</code>)
+
+Message: Server shutdown in progress
+
+<LI>Error: <code>1054</code> SQLSTATE: <code>42S22</code> (<code>ER_BAD_FIELD_ERROR</code>)
+
+Message: Unknown column '%s' in '%s'
+
+<LI>Error: <code>1055</code> SQLSTATE: <code>42000</code> (<code>ER_WRONG_FIELD_WITH_GROUP</code>)
+
+Message: '%s' isn't in GROUP BY
+
+<LI>Error: <code>1056</code> SQLSTATE: <code>42000</code> (<code>ER_WRONG_GROUP_FIELD</code>)
+
+Message: Can't group on '%s'
+
+<LI>Error: <code>1057</code> SQLSTATE: <code>42000</code> (<code>ER_WRONG_SUM_SELECT</code>)
+
+Message: Statement has sum functions and columns in same statement
+
+<LI>Error: <code>1058</code> SQLSTATE: <code>21S01</code> (<code>ER_WRONG_VALUE_COUNT</code>)
+
+Message: Column count doesn't match value count
+
+<LI>Error: <code>1059</code> SQLSTATE: <code>42000</code> (<code>ER_TOO_LONG_IDENT</code>)
+
+Message: Identifier name '%s' is too long
+
+<LI>Error: <code>1060</code> SQLSTATE: <code>42S21</code> (<code>ER_DUP_FIELDNAME</code>)
+
+Message: Duplicate column name '%s'
+
+<LI>Error: <code>1061</code> SQLSTATE: <code>42000</code> (<code>ER_DUP_KEYNAME</code>)
+
+Message: Duplicate key name '%s'
+
+<LI>Error: <code>1062</code> SQLSTATE: <code>23000</code> (<code>ER_DUP_ENTRY</code>)
+
+Message: Duplicate entry '%s' for key %d
+
+<LI>Error: <code>1063</code> SQLSTATE: <code>42000</code> (<code>ER_WRONG_FIELD_SPEC</code>)
+
+Message: Incorrect column specifier for column '%s'
+
+<LI>Error: <code>1064</code> SQLSTATE: <code>42000</code> (<code>ER_PARSE_ERROR</code>)
+
+Message: %s near '%s' at line %d
+
+<LI>Error: <code>1065</code> SQLSTATE: <code>HY000</code> (<code>ER_EMPTY_QUERY</code>)
+
+Message: Query was empty
+
+<LI>Error: <code>1066</code> SQLSTATE: <code>42000</code> (<code>ER_NONUNIQ_TABLE</code>)
+
+Message: Not unique table/alias: '%s'
+
+<LI>Error: <code>1067</code> SQLSTATE: <code>42000</code> (<code>ER_INVALID_DEFAULT</code>)
+
+Message: Invalid default value for '%s'
+
+<LI>Error: <code>1068</code> SQLSTATE: <code>42000</code> (<code>ER_MULTIPLE_PRI_KEY</code>)
+
+Message: Multiple primary key defined
+
+<LI>Error: <code>1069</code> SQLSTATE: <code>42000</code> (<code>ER_TOO_MANY_KEYS</code>)
+
+Message: Too many keys specified; max %d keys allowed
+
+<LI>Error: <code>1070</code> SQLSTATE: <code>42000</code> (<code>ER_TOO_MANY_KEY_PARTS</code>)
+
+Message: Too many key parts specified; max %d parts allowed
+
+<LI>Error: <code>1071</code> SQLSTATE: <code>42000</code> (<code>ER_TOO_LONG_KEY</code>)
+
+Message: Specified key was too long; max key length is %d bytes
+
+<LI>Error: <code>1072</code> SQLSTATE: <code>42000</code> (<code>ER_KEY_COLUMN_DOES_NOT_EXITS</code>)
+
+Message: Key column '%s' doesn't exist in table
+
+<LI>Error: <code>1073</code> SQLSTATE: <code>42000</code> (<code>ER_BLOB_USED_AS_KEY</code>)
+
+Message: BLOB column '%s' can't be used in key specification with the used table type
+
+<LI>Error: <code>1074</code> SQLSTATE: <code>42000</code> (<code>ER_TOO_BIG_FIELDLENGTH</code>)
+
+Message: Column length too big for column '%s' (max = %d); use BLOB instead
+
+<LI>Error: <code>1075</code> SQLSTATE: <code>42000</code> (<code>ER_WRONG_AUTO_KEY</code>)
+
+Message: Incorrect table definition; there can be only one auto column and it must be defined as a key
+
+<LI>Error: <code>1076</code> SQLSTATE: <code>HY000</code> (<code>ER_READY</code>)
+
+Message: %s: ready for connections. Version: '%s'  socket: '%s'  port: %d
+
+<LI>Error: <code>1077</code> SQLSTATE: <code>HY000</code> (<code>ER_NORMAL_SHUTDOWN</code>)
+
+Message: %s: Normal shutdown
+
+<LI>Error: <code>1078</code> SQLSTATE: <code>HY000</code> (<code>ER_GOT_SIGNAL</code>)
+
+Message: %s: Got signal %d. Aborting!
+
+<LI>Error: <code>1079</code> SQLSTATE: <code>HY000</code> (<code>ER_SHUTDOWN_COMPLETE</code>)
+
+Message: %s: Shutdown complete
+
+<LI>Error: <code>1080</code> SQLSTATE: <code>08S01</code> (<code>ER_FORCING_CLOSE</code>)
+
+Message: %s: Forcing close of thread %ld  user: '%s'
+
+<LI>Error: <code>1081</code> SQLSTATE: <code>08S01</code> (<code>ER_IPSOCK_ERROR</code>)
+
+Message: Can't create IP socket
+
+<LI>Error: <code>1082</code> SQLSTATE: <code>42S12</code> (<code>ER_NO_SUCH_INDEX</code>)
+
+Message: Table '%s' has no index like the one used in CREATE INDEX; recreate the table
+
+<LI>Error: <code>1083</code> SQLSTATE: <code>42000</code> (<code>ER_WRONG_FIELD_TERMINATORS</code>)
+
+Message: Field separator argument is not what is expected; check the manual
+
+<LI>Error: <code>1084</code> SQLSTATE: <code>42000</code> (<code>ER_BLOBS_AND_NO_TERMINATED</code>)
+
+Message: You can't use fixed rowlength with BLOBs; please use 'fields terminated by'
+
+<LI>Error: <code>1085</code> SQLSTATE: <code>HY000</code> (<code>ER_TEXTFILE_NOT_READABLE</code>)
+
+Message: The file '%s' must be in the database directory or be readable by all
+
+<LI>Error: <code>1086</code> SQLSTATE: <code>HY000</code> (<code>ER_FILE_EXISTS_ERROR</code>)
+
+Message: File '%s' already exists
+
+<LI>Error: <code>1087</code> SQLSTATE: <code>HY000</code> (<code>ER_LOAD_INFO</code>)
+
+Message: Records: %ld  Deleted: %ld  Skipped: %ld  Warnings: %ld
+
+<LI>Error: <code>1088</code> SQLSTATE: <code>HY000</code> (<code>ER_ALTER_INFO</code>)
+
+Message: Records: %ld  Duplicates: %ld
+
+<LI>Error: <code>1089</code> SQLSTATE: <code>HY000</code> (<code>ER_WRONG_SUB_KEY</code>)
+
+Message: Incorrect sub part key; the used key part isn't a string, the used length is longer than the key part, or the storage engine doesn't support unique sub keys
+
+<LI>Error: <code>1090</code> SQLSTATE: <code>42000</code> (<code>ER_CANT_REMOVE_ALL_FIELDS</code>)
+
+Message: You can't delete all columns with ALTER TABLE; use DROP TABLE instead
+
+<LI>Error: <code>1091</code> SQLSTATE: <code>42000</code> (<code>ER_CANT_DROP_FIELD_OR_KEY</code>)
+
+Message: Can't DROP '%s'; check that column/key exists
+
+<LI>Error: <code>1092</code> SQLSTATE: <code>HY000</code> (<code>ER_INSERT_INFO</code>)
+
+Message: Records: %ld  Duplicates: %ld  Warnings: %ld
+
+<LI>Error: <code>1093</code> SQLSTATE: <code>HY000</code> (<code>ER_UPDATE_TABLE_USED</code>)
+
+Message: You can't specify target table '%s' for update in FROM clause
+
+<LI>Error: <code>1094</code> SQLSTATE: <code>HY000</code> (<code>ER_NO_SUCH_THREAD</code>)
+
+Message: Unknown thread id: %lu
+
+<LI>Error: <code>1095</code> SQLSTATE: <code>HY000</code> (<code>ER_KILL_DENIED_ERROR</code>)
+
+Message: You are not owner of thread %lu
+
+<LI>Error: <code>1096</code> SQLSTATE: <code>HY000</code> (<code>ER_NO_TABLES_USED</code>)
+
+Message: No tables used
+
+<LI>Error: <code>1097</code> SQLSTATE: <code>HY000</code> (<code>ER_TOO_BIG_SET</code>)
+
+Message: Too many strings for column %s and SET
+
+<LI>Error: <code>1098</code> SQLSTATE: <code>HY000</code> (<code>ER_NO_UNIQUE_LOGFILE</code>)
+
+Message: Can't generate a unique log-filename %s.(1-999)
+
+<LI>Error: <code>1099</code> SQLSTATE: <code>HY000</code> (<code>ER_TABLE_NOT_LOCKED_FOR_WRITE</code>)
+
+Message: Table '%s' was locked with a READ lock and can't be updated
+
+<LI>Error: <code>1100</code> SQLSTATE: <code>HY000</code> (<code>ER_TABLE_NOT_LOCKED</code>)
+
+Message: Table '%s' was not locked with LOCK TABLES
+
+<LI>Error: <code>1101</code> SQLSTATE: <code>42000</code> (<code>ER_BLOB_CANT_HAVE_DEFAULT</code>)
+
+Message: BLOB/TEXT column '%s' can't have a default value
+
+<LI>Error: <code>1102</code> SQLSTATE: <code>42000</code> (<code>ER_WRONG_DB_NAME</code>)
+
+Message: Incorrect database name '%s'
+
+<LI>Error: <code>1103</code> SQLSTATE: <code>42000</code> (<code>ER_WRONG_TABLE_NAME</code>)
+
+Message: Incorrect table name '%s'
+
+<LI>Error: <code>1104</code> SQLSTATE: <code>42000</code> (<code>ER_TOO_BIG_SELECT</code>)
+
+Message: The SELECT would examine more than MAX_JOIN_SIZE rows; check your WHERE and use SET SQL_BIG_SELECTS=1 or SET SQL_MAX_JOIN_SIZE=# if the SELECT is okay
+
+<LI>Error: <code>1105</code> SQLSTATE: <code>HY000</code> (<code>ER_UNKNOWN_ERROR</code>)
+
+Message: Unknown error
+
+<LI>Error: <code>1106</code> SQLSTATE: <code>42000</code> (<code>ER_UNKNOWN_PROCEDURE</code>)
+
+Message: Unknown procedure '%s'
+
+<LI>Error: <code>1107</code> SQLSTATE: <code>42000</code> (<code>ER_WRONG_PARAMCOUNT_TO_PROCEDURE</code>)
+
+Message: Incorrect parameter count to procedure '%s'
+
+<LI>Error: <code>1108</code> SQLSTATE: <code>HY000</code> (<code>ER_WRONG_PARAMETERS_TO_PROCEDURE</code>)
+
+Message: Incorrect parameters to procedure '%s'
+
+<LI>Error: <code>1109</code> SQLSTATE: <code>42S02</code> (<code>ER_UNKNOWN_TABLE</code>)
+
+Message: Unknown table '%s' in %s
+
+<LI>Error: <code>1110</code> SQLSTATE: <code>42000</code> (<code>ER_FIELD_SPECIFIED_TWICE</code>)
+
+Message: Column '%s' specified twice
+
+<LI>Error: <code>1111</code> SQLSTATE: <code>HY000</code> (<code>ER_INVALID_GROUP_FUNC_USE</code>)
+
+Message: Invalid use of group function
+
+<LI>Error: <code>1112</code> SQLSTATE: <code>42000</code> (<code>ER_UNSUPPORTED_EXTENSION</code>)
+
+Message: Table '%s' uses an extension that doesn't exist in this MySQL version
+
+<LI>Error: <code>1113</code> SQLSTATE: <code>42000</code> (<code>ER_TABLE_MUST_HAVE_COLUMNS</code>)
+
+Message: A table must have at least 1 column
+
+<LI>Error: <code>1114</code> SQLSTATE: <code>HY000</code> (<code>ER_RECORD_FILE_FULL</code>)
+
+Message: The table '%s' is full
+
+<LI>Error: <code>1115</code> SQLSTATE: <code>42000</code> (<code>ER_UNKNOWN_CHARACTER_SET</code>)
+
+Message: Unknown character set: '%s'
+
+<LI>Error: <code>1116</code> SQLSTATE: <code>HY000</code> (<code>ER_TOO_MANY_TABLES</code>)
+
+Message: Too many tables; MySQL can only use %d tables in a join
+
+<LI>Error: <code>1117</code> SQLSTATE: <code>HY000</code> (<code>ER_TOO_MANY_FIELDS</code>)
+
+Message: Too many columns
+
+<LI>Error: <code>1118</code> SQLSTATE: <code>42000</code> (<code>ER_TOO_BIG_ROWSIZE</code>)
+
+Message: Row size too large. The maximum row size for the used table type, not counting BLOBs, is %ld. You have to change some columns to TEXT or BLOBs
+
+<LI>Error: <code>1119</code> SQLSTATE: <code>HY000</code> (<code>ER_STACK_OVERRUN</code>)
+
+Message: Thread stack overrun:  Used: %ld of a %ld stack.  Use 'mysqld -O thread_stack=#' to specify a bigger stack if needed
+
+<LI>Error: <code>1120</code> SQLSTATE: <code>42000</code> (<code>ER_WRONG_OUTER_JOIN</code>)
+
+Message: Cross dependency found in OUTER JOIN; examine your ON conditions
+
+<LI>Error: <code>1121</code> SQLSTATE: <code>42000</code> (<code>ER_NULL_COLUMN_IN_INDEX</code>)
+
+Message: Column '%s' is used with UNIQUE or INDEX but is not defined as NOT NULL
+
+<LI>Error: <code>1122</code> SQLSTATE: <code>HY000</code> (<code>ER_CANT_FIND_UDF</code>)
+
+Message: Can't load function '%s'
+
+<LI>Error: <code>1123</code> SQLSTATE: <code>HY000</code> (<code>ER_CANT_INITIALIZE_UDF</code>)
+
+Message: Can't initialize function '%s'; %s
+
+<LI>Error: <code>1124</code> SQLSTATE: <code>HY000</code> (<code>ER_UDF_NO_PATHS</code>)
+
+Message: No paths allowed for shared library
+
+<LI>Error: <code>1125</code> SQLSTATE: <code>HY000</code> (<code>ER_UDF_EXISTS</code>)
+
+Message: Function '%s' already exists
+
+<LI>Error: <code>1126</code> SQLSTATE: <code>HY000</code> (<code>ER_CANT_OPEN_LIBRARY</code>)
+
+Message: Can't open shared library '%s' (errno: %d %s)
+
+<LI>Error: <code>1127</code> SQLSTATE: <code>HY000</code> (<code>ER_CANT_FIND_DL_ENTRY</code>)
+
+Message: Can't find function '%s' in library'
+
+<LI>Error: <code>1128</code> SQLSTATE: <code>HY000</code> (<code>ER_FUNCTION_NOT_DEFINED</code>)
+
+Message: Function '%s' is not defined
+
+<LI>Error: <code>1129</code> SQLSTATE: <code>HY000</code> (<code>ER_HOST_IS_BLOCKED</code>)
+
+Message: Host '%s' is blocked because of many connection errors; unblock with 'mysqladmin flush-hosts'
+
+<LI>Error: <code>1130</code> SQLSTATE: <code>HY000</code> (<code>ER_HOST_NOT_PRIVILEGED</code>)
+
+Message: Host '%s' is not allowed to connect to this MySQL server
+
+<LI>Error: <code>1131</code> SQLSTATE: <code>42000</code> (<code>ER_PASSWORD_ANONYMOUS_USER</code>)
+
+Message: You are using MySQL as an anonymous user and anonymous users are not allowed to change passwords
+
+<LI>Error: <code>1132</code> SQLSTATE: <code>42000</code> (<code>ER_PASSWORD_NOT_ALLOWED</code>)
+
+Message: You must have privileges to update tables in the mysql database to be able to change passwords for others
+
+<LI>Error: <code>1133</code> SQLSTATE: <code>42000</code> (<code>ER_PASSWORD_NO_MATCH</code>)
+
+Message: Can't find any matching row in the user table
+
+<LI>Error: <code>1134</code> SQLSTATE: <code>HY000</code> (<code>ER_UPDATE_INFO</code>)
+
+Message: Rows matched: %ld  Changed: %ld  Warnings: %ld
+
+<LI>Error: <code>1135</code> SQLSTATE: <code>HY000</code> (<code>ER_CANT_CREATE_THREAD</code>)
+
+Message: Can't create a new thread (errno %d); if you are not out of available memory, you can consult the manual for a possible OS-dependent bug
+
+<LI>Error: <code>1136</code> SQLSTATE: <code>21S01</code> (<code>ER_WRONG_VALUE_COUNT_ON_ROW</code>)
+
+Message: Column count doesn't match value count at row %ld
+
+<LI>Error: <code>1137</code> SQLSTATE: <code>HY000</code> (<code>ER_CANT_REOPEN_TABLE</code>)
+
+Message: Can't reopen table: '%s'
+
+<LI>Error: <code>1138</code> SQLSTATE: <code>22004</code> (<code>ER_INVALID_USE_OF_NULL</code>)
+
+Message: Invalid use of NULL value
+
+<LI>Error: <code>1139</code> SQLSTATE: <code>42000</code> (<code>ER_REGEXP_ERROR</code>)
+
+Message: Got error '%s' from regexp
+
+<LI>Error: <code>1140</code> SQLSTATE: <code>42000</code> (<code>ER_MIX_OF_GROUP_FUNC_AND_FIELDS</code>)
+
+Message: Mixing of GROUP columns (MIN(),MAX(),COUNT(),...) with no GROUP columns is illegal if there is no GROUP BY clause
+
+<LI>Error: <code>1141</code> SQLSTATE: <code>42000</code> (<code>ER_NONEXISTING_GRANT</code>)
+
+Message: There is no such grant defined for user '%s' on host '%s'
+
+<LI>Error: <code>1142</code> SQLSTATE: <code>42000</code> (<code>ER_TABLEACCESS_DENIED_ERROR</code>)
+
+Message: %s command denied to user '%s'@'%s' for table '%s'
+
+<LI>Error: <code>1143</code> SQLSTATE: <code>42000</code> (<code>ER_COLUMNACCESS_DENIED_ERROR</code>)
+
+Message: %s command denied to user '%s'@'%s' for column '%s' in table '%s'
+
+<LI>Error: <code>1144</code> SQLSTATE: <code>42000</code> (<code>ER_ILLEGAL_GRANT_FOR_TABLE</code>)
+
+Message: Illegal GRANT/REVOKE command; please consult the manual to see which privileges can be used
+
+<LI>Error: <code>1145</code> SQLSTATE: <code>42000</code> (<code>ER_GRANT_WRONG_HOST_OR_USER</code>)
+
+Message: The host or user argument to GRANT is too long
+
+<LI>Error: <code>1146</code> SQLSTATE: <code>42S02</code> (<code>ER_NO_SUCH_TABLE</code>)
+
+Message: Table '%s.%s' doesn't exist
+
+<LI>Error: <code>1147</code> SQLSTATE: <code>42000</code> (<code>ER_NONEXISTING_TABLE_GRANT</code>)
+
+Message: There is no such grant defined for user '%s' on host '%s' on table '%s'
+
+<LI>Error: <code>1148</code> SQLSTATE: <code>42000</code> (<code>ER_NOT_ALLOWED_COMMAND</code>)
+
+Message: The used command is not allowed with this MySQL version
+
+<LI>Error: <code>1149</code> SQLSTATE: <code>42000</code> (<code>ER_SYNTAX_ERROR</code>)
+
+Message: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use
+
+<LI>Error: <code>1150</code> SQLSTATE: <code>HY000</code> (<code>ER_DELAYED_CANT_CHANGE_LOCK</code>)
+
+Message: Delayed insert thread couldn't get requested lock for table %s
+
+<LI>Error: <code>1151</code> SQLSTATE: <code>HY000</code> (<code>ER_TOO_MANY_DELAYED_THREADS</code>)
+
+Message: Too many delayed threads in use
+
+<LI>Error: <code>1152</code> SQLSTATE: <code>08S01</code> (<code>ER_ABORTING_CONNECTION</code>)
+
+Message: Aborted connection %ld to db: '%s' user: '%s' (%s)
+
+<LI>Error: <code>1153</code> SQLSTATE: <code>08S01</code> (<code>ER_NET_PACKET_TOO_LARGE</code>)
+
+Message: Got a packet bigger than 'max_allowed_packet' bytes
+
+<LI>Error: <code>1154</code> SQLSTATE: <code>08S01</code> (<code>ER_NET_READ_ERROR_FROM_PIPE</code>)
+
+Message: Got a read error from the connection pipe
+
+<LI>Error: <code>1155</code> SQLSTATE: <code>08S01</code> (<code>ER_NET_FCNTL_ERROR</code>)
+
+Message: Got an error from fcntl()
+
+<LI>Error: <code>1156</code> SQLSTATE: <code>08S01</code> (<code>ER_NET_PACKETS_OUT_OF_ORDER</code>)
+
+Message: Got packets out of order
+
+<LI>Error: <code>1157</code> SQLSTATE: <code>08S01</code> (<code>ER_NET_UNCOMPRESS_ERROR</code>)
+
+Message: Couldn't uncompress communication packet
+
+<LI>Error: <code>1158</code> SQLSTATE: <code>08S01</code> (<code>ER_NET_READ_ERROR</code>)
+
+Message: Got an error reading communication packets
+
+<LI>Error: <code>1159</code> SQLSTATE: <code>08S01</code> (<code>ER_NET_READ_INTERRUPTED</code>)
+
+Message: Got timeout reading communication packets
+
+<LI>Error: <code>1160</code> SQLSTATE: <code>08S01</code> (<code>ER_NET_ERROR_ON_WRITE</code>)
+
+Message: Got an error writing communication packets
+
+<LI>Error: <code>1161</code> SQLSTATE: <code>08S01</code> (<code>ER_NET_WRITE_INTERRUPTED</code>)
+
+Message: Got timeout writing communication packets
+
+<LI>Error: <code>1162</code> SQLSTATE: <code>42000</code> (<code>ER_TOO_LONG_STRING</code>)
+
+Message: Result string is longer than 'max_allowed_packet' bytes
+
+<LI>Error: <code>1163</code> SQLSTATE: <code>42000</code> (<code>ER_TABLE_CANT_HANDLE_BLOB</code>)
+
+Message: The used table type doesn't support BLOB/TEXT columns
+
+<LI>Error: <code>1164</code> SQLSTATE: <code>42000</code> (<code>ER_TABLE_CANT_HANDLE_AUTO_INCREMENT</code>)
+
+Message: The used table type doesn't support AUTO_INCREMENT columns
+
+<LI>Error: <code>1165</code> SQLSTATE: <code>HY000</code> (<code>ER_DELAYED_INSERT_TABLE_LOCKED</code>)
+
+Message: INSERT DELAYED can't be used with table '%s' because it is locked with LOCK TABLES
+
+<LI>Error: <code>1166</code> SQLSTATE: <code>42000</code> (<code>ER_WRONG_COLUMN_NAME</code>)
+
+Message: Incorrect column name '%s'
+
+<LI>Error: <code>1167</code> SQLSTATE: <code>42000</code> (<code>ER_WRONG_KEY_COLUMN</code>)
+
+Message: The used storage engine can't index column '%s'
+
+<LI>Error: <code>1168</code> SQLSTATE: <code>HY000</code> (<code>ER_WRONG_MRG_TABLE</code>)
+
+Message: All tables in the MERGE table are not identically defined
+
+<LI>Error: <code>1169</code> SQLSTATE: <code>23000</code> (<code>ER_DUP_UNIQUE</code>)
+
+Message: Can't write, because of unique constraint, to table '%s'
+
+<LI>Error: <code>1170</code> SQLSTATE: <code>42000</code> (<code>ER_BLOB_KEY_WITHOUT_LENGTH</code>)
+
+Message: BLOB/TEXT column '%s' used in key specification without a key length
+
+<LI>Error: <code>1171</code> SQLSTATE: <code>42000</code> (<code>ER_PRIMARY_CANT_HAVE_NULL</code>)
+
+Message: All parts of a PRIMARY KEY must be NOT NULL; if you need NULL in a key, use UNIQUE instead
+
+<LI>Error: <code>1172</code> SQLSTATE: <code>42000</code> (<code>ER_TOO_MANY_ROWS</code>)
+
+Message: Result consisted of more than one row
+
+<LI>Error: <code>1173</code> SQLSTATE: <code>42000</code> (<code>ER_REQUIRES_PRIMARY_KEY</code>)
+
+Message: This table type requires a primary key
+
+<LI>Error: <code>1174</code> SQLSTATE: <code>HY000</code> (<code>ER_NO_RAID_COMPILED</code>)
+
+Message: This version of MySQL is not compiled with RAID support
+
+<LI>Error: <code>1175</code> SQLSTATE: <code>HY000</code> (<code>ER_UPDATE_WITHOUT_KEY_IN_SAFE_MODE</code>)
+
+Message: You are using safe update mode and you tried to update a table without a WHERE that uses a KEY column
+
+<LI>Error: <code>1176</code> SQLSTATE: <code>HY000</code> (<code>ER_KEY_DOES_NOT_EXITS</code>)
+
+Message: Key '%s' doesn't exist in table '%s'
+
+<LI>Error: <code>1177</code> SQLSTATE: <code>42000</code> (<code>ER_CHECK_NO_SUCH_TABLE</code>)
+
+Message: Can't open table
+
+<LI>Error: <code>1178</code> SQLSTATE: <code>42000</code> (<code>ER_CHECK_NOT_IMPLEMENTED</code>)
+
+Message: The storage engine for the table doesn't support %s
+
+<LI>Error: <code>1179</code> SQLSTATE: <code>25000</code> (<code>ER_CANT_DO_THIS_DURING_AN_TRANSACTION</code>)
+
+Message: You are not allowed to execute this command in a transaction
+
+<LI>Error: <code>1180</code> SQLSTATE: <code>HY000</code> (<code>ER_ERROR_DURING_COMMIT</code>)
+
+Message: Got error %d during COMMIT
+
+<LI>Error: <code>1181</code> SQLSTATE: <code>HY000</code> (<code>ER_ERROR_DURING_ROLLBACK</code>)
+
+Message: Got error %d during ROLLBACK
+
+<LI>Error: <code>1182</code> SQLSTATE: <code>HY000</code> (<code>ER_ERROR_DURING_FLUSH_LOGS</code>)
+
+Message: Got error %d during FLUSH_LOGS
+
+<LI>Error: <code>1183</code> SQLSTATE: <code>HY000</code> (<code>ER_ERROR_DURING_CHECKPOINT</code>)
+
+Message: Got error %d during CHECKPOINT
+
+<LI>Error: <code>1184</code> SQLSTATE: <code>08S01</code> (<code>ER_NEW_ABORTING_CONNECTION</code>)
+
+Message: Aborted connection %ld to db: '%s' user: '%s' host: `%s' (%s)
+
+<LI>Error: <code>1185</code> SQLSTATE: <code>HY000</code> (<code>ER_DUMP_NOT_IMPLEMENTED</code>)
+
+Message: The storage engine for the table does not support binary table dump
+
+<LI>Error: <code>1186</code> SQLSTATE: <code>HY000</code> (<code>ER_FLUSH_MASTER_BINLOG_CLOSED</code>)
+
+Message: Binlog closed, cannot RESET MASTER
+
+<LI>Error: <code>1187</code> SQLSTATE: <code>HY000</code> (<code>ER_INDEX_REBUILD</code>)
+
+Message: Failed rebuilding the index of  dumped table '%s'
+
+<LI>Error: <code>1188</code> SQLSTATE: <code>HY000</code> (<code>ER_MASTER</code>)
+
+Message: Error from master: '%s'
+
+<LI>Error: <code>1189</code> SQLSTATE: <code>08S01</code> (<code>ER_MASTER_NET_READ</code>)
+
+Message: Net error reading from master
+
+<LI>Error: <code>1190</code> SQLSTATE: <code>08S01</code> (<code>ER_MASTER_NET_WRITE</code>)
+
+Message: Net error writing to master
+
+<LI>Error: <code>1191</code> SQLSTATE: <code>HY000</code> (<code>ER_FT_MATCHING_KEY_NOT_FOUND</code>)
+
+Message: Can't find FULLTEXT index matching the column list
+
+<LI>Error: <code>1192</code> SQLSTATE: <code>HY000</code> (<code>ER_LOCK_OR_ACTIVE_TRANSACTION</code>)
+
+Message: Can't execute the given command because you have active locked tables or an active transaction
+
+<LI>Error: <code>1193</code> SQLSTATE: <code>HY000</code> (<code>ER_UNKNOWN_SYSTEM_VARIABLE</code>)
+
+Message: Unknown system variable '%s'
+
+<LI>Error: <code>1194</code> SQLSTATE: <code>HY000</code> (<code>ER_CRASHED_ON_USAGE</code>)
+
+Message: Table '%s' is marked as crashed and should be repaired
+
+<LI>Error: <code>1195</code> SQLSTATE: <code>HY000</code> (<code>ER_CRASHED_ON_REPAIR</code>)
+
+Message: Table '%s' is marked as crashed and last (automatic?) repair failed
+
+<LI>Error: <code>1196</code> SQLSTATE: <code>HY000</code> (<code>ER_WARNING_NOT_COMPLETE_ROLLBACK</code>)
+
+Message: Some non-transactional changed tables couldn't be rolled back
+
+<LI>Error: <code>1197</code> SQLSTATE: <code>HY000</code> (<code>ER_TRANS_CACHE_FULL</code>)
+
+Message: Multi-statement transaction required more than 'max_binlog_cache_size' bytes of storage; increase this mysqld variable and try again
+
+<LI>Error: <code>1198</code> SQLSTATE: <code>HY000</code> (<code>ER_SLAVE_MUST_STOP</code>)
+
+Message: This operation cannot be performed with a running slave; run STOP SLAVE first
+
+<LI>Error: <code>1199</code> SQLSTATE: <code>HY000</code> (<code>ER_SLAVE_NOT_RUNNING</code>)
+
+Message: This operation requires a running slave; configure slave and do START SLAVE
+
+<LI>Error: <code>1200</code> SQLSTATE: <code>HY000</code> (<code>ER_BAD_SLAVE</code>)
+
+Message: The server is not configured as slave; fix in config file or with CHANGE MASTER TO
+
+<LI>Error: <code>1201</code> SQLSTATE: <code>HY000</code> (<code>ER_MASTER_INFO</code>)
+
+Message: Could not initialize master info structure; more error messages can be found in the MySQL error log
+
+<LI>Error: <code>1202</code> SQLSTATE: <code>HY000</code> (<code>ER_SLAVE_THREAD</code>)
+
+Message: Could not create slave thread; check system resources
+
+<LI>Error: <code>1203</code> SQLSTATE: <code>42000</code> (<code>ER_TOO_MANY_USER_CONNECTIONS</code>)
+
+Message: User %s has already more than 'max_user_connections' active connections
+
+<LI>Error: <code>1204</code> SQLSTATE: <code>HY000</code> (<code>ER_SET_CONSTANTS_ONLY</code>)
+
+Message: You may only use constant expressions with SET
+
+<LI>Error: <code>1205</code> SQLSTATE: <code>HY000</code> (<code>ER_LOCK_WAIT_TIMEOUT</code>)
+
+Message: Lock wait timeout exceeded; try restarting transaction
+
+<LI>Error: <code>1206</code> SQLSTATE: <code>HY000</code> (<code>ER_LOCK_TABLE_FULL</code>)
+
+Message: The total number of locks exceeds the lock table size
+
+<LI>Error: <code>1207</code> SQLSTATE: <code>25000</code> (<code>ER_READ_ONLY_TRANSACTION</code>)
+
+Message: Update locks cannot be acquired during a READ UNCOMMITTED transaction
+
+<LI>Error: <code>1208</code> SQLSTATE: <code>HY000</code> (<code>ER_DROP_DB_WITH_READ_LOCK</code>)
+
+Message: DROP DATABASE not allowed while thread is holding global read lock
+
+<LI>Error: <code>1209</code> SQLSTATE: <code>HY000</code> (<code>ER_CREATE_DB_WITH_READ_LOCK</code>)
+
+Message: CREATE DATABASE not allowed while thread is holding global read lock
+
+<LI>Error: <code>1210</code> SQLSTATE: <code>HY000</code> (<code>ER_WRONG_ARGUMENTS</code>)
+
+Message: Incorrect arguments to %s
+
+<LI>Error: <code>1211</code> SQLSTATE: <code>42000</code> (<code>ER_NO_PERMISSION_TO_CREATE_USER</code>)
+
+Message: '%s'@'%s' is not allowed to create new users
+
+<LI>Error: <code>1212</code> SQLSTATE: <code>HY000</code> (<code>ER_UNION_TABLES_IN_DIFFERENT_DIR</code>)
+
+Message: Incorrect table definition; all MERGE tables must be in the same database
+
+<LI>Error: <code>1213</code> SQLSTATE: <code>40001</code> (<code>ER_LOCK_DEADLOCK</code>)
+
+Message: Deadlock found when trying to get lock; try restarting transaction
+
+<LI>Error: <code>1214</code> SQLSTATE: <code>HY000</code> (<code>ER_TABLE_CANT_HANDLE_FT</code>)
+
+Message: The used table type doesn't support FULLTEXT indexes
+
+<LI>Error: <code>1215</code> SQLSTATE: <code>HY000</code> (<code>ER_CANNOT_ADD_FOREIGN</code>)
+
+Message: Cannot add foreign key constraint
+
+<LI>Error: <code>1216</code> SQLSTATE: <code>23000</code> (<code>ER_NO_REFERENCED_ROW</code>)
+
+Message: Cannot add or update a child row: a foreign key constraint fails
+
+<LI>Error: <code>1217</code> SQLSTATE: <code>23000</code> (<code>ER_ROW_IS_REFERENCED</code>)
+
+Message: Cannot delete or update a parent row: a foreign key constraint fails
+
+<LI>Error: <code>1218</code> SQLSTATE: <code>08S01</code> (<code>ER_CONNECT_TO_MASTER</code>)
+
+Message: Error connecting to master: %s
+
+<LI>Error: <code>1219</code> SQLSTATE: <code>HY000</code> (<code>ER_QUERY_ON_MASTER</code>)
+
+Message: Error running query on master: %s
+
+<LI>Error: <code>1220</code> SQLSTATE: <code>HY000</code> (<code>ER_ERROR_WHEN_EXECUTING_COMMAND</code>)
+
+Message: Error when executing command %s: %s
+
+<LI>Error: <code>1221</code> SQLSTATE: <code>HY000</code> (<code>ER_WRONG_USAGE</code>)
+
+Message: Incorrect usage of %s and %s
+
+<LI>Error: <code>1222</code> SQLSTATE: <code>21000</code> (<code>ER_WRONG_NUMBER_OF_COLUMNS_IN_SELECT</code>)
+
+Message: The used SELECT statements have a different number of columns
+
+<LI>Error: <code>1223</code> SQLSTATE: <code>HY000</code> (<code>ER_CANT_UPDATE_WITH_READLOCK</code>)
+
+Message: Can't execute the query because you have a conflicting read lock
+
+<LI>Error: <code>1224</code> SQLSTATE: <code>HY000</code> (<code>ER_MIXING_NOT_ALLOWED</code>)
+
+Message: Mixing of transactional and non-transactional tables is disabled
+
+<LI>Error: <code>1225</code> SQLSTATE: <code>HY000</code> (<code>ER_DUP_ARGUMENT</code>)
+
+Message: Option '%s' used twice in statement
+
+<LI>Error: <code>1226</code> SQLSTATE: <code>42000</code> (<code>ER_USER_LIMIT_REACHED</code>)
+
+Message: User '%s' has exceeded the '%s' resource (current value: %ld)
+
+<LI>Error: <code>1227</code> SQLSTATE: <code>HY000</code> (<code>ER_SPECIFIC_ACCESS_DENIED_ERROR</code>)
+
+Message: Access denied; you need the %s privilege for this operation
+
+<LI>Error: <code>1228</code> SQLSTATE: <code>HY000</code> (<code>ER_LOCAL_VARIABLE</code>)
+
+Message: Variable '%s' is a SESSION variable and can't be used with SET GLOBAL
+
+<LI>Error: <code>1229</code> SQLSTATE: <code>HY000</code> (<code>ER_GLOBAL_VARIABLE</code>)
+
+Message: Variable '%s' is a GLOBAL variable and should be set with SET GLOBAL
+
+<LI>Error: <code>1230</code> SQLSTATE: <code>42000</code> (<code>ER_NO_DEFAULT</code>)
+
+Message: Variable '%s' doesn't have a default value
+
+<LI>Error: <code>1231</code> SQLSTATE: <code>42000</code> (<code>ER_WRONG_VALUE_FOR_VAR</code>)
+
+Message: Variable '%s' can't be set to the value of '%s'
+
+<LI>Error: <code>1232</code> SQLSTATE: <code>42000</code> (<code>ER_WRONG_TYPE_FOR_VAR</code>)
+
+Message: Incorrect argument type to variable '%s'
+
+<LI>Error: <code>1233</code> SQLSTATE: <code>HY000</code> (<code>ER_VAR_CANT_BE_READ</code>)
+
+Message: Variable '%s' can only be set, not read
+
+<LI>Error: <code>1234</code> SQLSTATE: <code>42000</code> (<code>ER_CANT_USE_OPTION_HERE</code>)
+
+Message: Incorrect usage/placement of '%s'
+
+<LI>Error: <code>1235</code> SQLSTATE: <code>42000</code> (<code>ER_NOT_SUPPORTED_YET</code>)
+
+Message: This version of MySQL doesn't yet support '%s'
+
+<LI>Error: <code>1236</code> SQLSTATE: <code>HY000</code> (<code>ER_MASTER_FATAL_ERROR_READING_BINLOG</code>)
+
+Message: Got fatal error %d: '%s' from master when reading data from binary log
+
+<LI>Error: <code>1237</code> SQLSTATE: <code>HY000</code> (<code>ER_SLAVE_IGNORED_TABLE</code>)
+
+Message: Slave SQL thread ignored the query because of replicate-*-table rules
+
+<LI>Error: <code>1238</code> SQLSTATE: <code>HY000</code> (<code>ER_INCORRECT_GLOBAL_LOCAL_VAR</code>)
+
+Message: Variable '%s' is a %s variable
+
+<LI>Error: <code>1239</code> SQLSTATE: <code>42000</code> (<code>ER_WRONG_FK_DEF</code>)
+
+Message: Incorrect foreign key definition for '%s': %s
+
+<LI>Error: <code>1240</code> SQLSTATE: <code>HY000</code> (<code>ER_KEY_REF_DO_NOT_MATCH_TABLE_REF</code>)
+
+Message: Key reference and table reference don't match
+
+<LI>Error: <code>1241</code> SQLSTATE: <code>21000</code> (<code>ER_OPERAND_COLUMNS</code>)
+
+Message: Operand should contain %d column(s)
+
+<LI>Error: <code>1242</code> SQLSTATE: <code>21000</code> (<code>ER_SUBQUERY_NO_1_ROW</code>)
+
+Message: Subquery returns more than 1 row
+
+<LI>Error: <code>1243</code> SQLSTATE: <code>HY000</code> (<code>ER_UNKNOWN_STMT_HANDLER</code>)
+
+Message: Unknown prepared statement handler (%.*s) given to %s
+
+<LI>Error: <code>1244</code> SQLSTATE: <code>HY000</code> (<code>ER_CORRUPT_HELP_DB</code>)
+
+Message: Help database is corrupt or does not exist
+
+<LI>Error: <code>1245</code> SQLSTATE: <code>HY000</code> (<code>ER_CYCLIC_REFERENCE</code>)
+
+Message: Cyclic reference on subqueries
+
+<LI>Error: <code>1246</code> SQLSTATE: <code>HY000</code> (<code>ER_AUTO_CONVERT</code>)
+
+Message: Converting column '%s' from %s to %s
+
+<LI>Error: <code>1247</code> SQLSTATE: <code>42S22</code> (<code>ER_ILLEGAL_REFERENCE</code>)
+
+Message: Reference '%s' not supported (%s)
+
+<LI>Error: <code>1248</code> SQLSTATE: <code>42000</code> (<code>ER_DERIVED_MUST_HAVE_ALIAS</code>)
+
+Message: Every derived table must have its own alias
+
+<LI>Error: <code>1249</code> SQLSTATE: <code>01000</code> (<code>ER_SELECT_REDUCED</code>)
+
+Message: Select %u was reduced during optimization
+
+<LI>Error: <code>1250</code> SQLSTATE: <code>42000</code> (<code>ER_TABLENAME_NOT_ALLOWED_HERE</code>)
+
+Message: Table '%s' from one of the SELECTs cannot be used in %s
+
+<LI>Error: <code>1251</code> SQLSTATE: <code>08004</code> (<code>ER_NOT_SUPPORTED_AUTH_MODE</code>)
+
+Message: Client does not support authentication protocol requested by server; consider upgrading MySQL client
+
+<LI>Error: <code>1252</code> SQLSTATE: <code>42000</code> (<code>ER_SPATIAL_CANT_HAVE_NULL</code>)
+
+Message: All parts of a SPATIAL index must be NOT NULL
+
+<LI>Error: <code>1253</code> SQLSTATE: <code>42000</code> (<code>ER_COLLATION_CHARSET_MISMATCH</code>)
+
+Message: COLLATION '%s' is not valid for CHARACTER SET '%s'
+
+<LI>Error: <code>1254</code> SQLSTATE: <code>HY000</code> (<code>ER_SLAVE_WAS_RUNNING</code>)
+
+Message: Slave is already running
+
+<LI>Error: <code>1255</code> SQLSTATE: <code>HY000</code> (<code>ER_SLAVE_WAS_NOT_RUNNING</code>)
+
+Message: Slave has already been stopped
+
+<LI>Error: <code>1256</code> SQLSTATE: <code>HY000</code> (<code>ER_TOO_BIG_FOR_UNCOMPRESS</code>)
+
+Message: Uncompressed data size too large; the maximum size is %d (probably, length of uncompressed data was corrupted)
+
+<LI>Error: <code>1257</code> SQLSTATE: <code>HY000</code> (<code>ER_ZLIB_Z_MEM_ERROR</code>)
+
+Message: ZLIB: Not enough memory
+
+<LI>Error: <code>1258</code> SQLSTATE: <code>HY000</code> (<code>ER_ZLIB_Z_BUF_ERROR</code>)
+
+Message: ZLIB: Not enough room in the output buffer (probably, length of uncompressed data was corrupted)
+
+<LI>Error: <code>1259</code> SQLSTATE: <code>HY000</code> (<code>ER_ZLIB_Z_DATA_ERROR</code>)
+
+Message: ZLIB: Input data corrupted
+
+<LI>Error: <code>1260</code> SQLSTATE: <code>HY000</code> (<code>ER_CUT_VALUE_GROUP_CONCAT</code>)
+
+Message: %d line(s) were cut by GROUP_CONCAT()
+
+<LI>Error: <code>1261</code> SQLSTATE: <code>01000</code> (<code>ER_WARN_TOO_FEW_RECORDS</code>)
+
+Message: Row %ld doesn't contain data for all columns
+
+<LI>Error: <code>1262</code> SQLSTATE: <code>01000</code> (<code>ER_WARN_TOO_MANY_RECORDS</code>)
+
+Message: Row %ld was truncated; it contained more data than there were input columns
+
+<LI>Error: <code>1263</code> SQLSTATE: <code>22004</code> (<code>ER_WARN_NULL_TO_NOTNULL</code>)
+
+Message: Column set to default value; NULL supplied to NOT NULL column '%s' at row %ld
+
+<LI>Error: <code>1264</code> SQLSTATE: <code>22003</code> (<code>ER_WARN_DATA_OUT_OF_RANGE</code>)
+
+Message: Out of range value adjusted for column '%s' at row %ld
+
+<LI>Error: <code>1265</code> SQLSTATE: <code>01000</code> (<code>ER_WARN_DATA_TRUNCATED</code>)
+
+Message: Data truncated for column '%s' at row %ld
+
+<LI>Error: <code>1266</code> SQLSTATE: <code>HY000</code> (<code>ER_WARN_USING_OTHER_HANDLER</code>)
+
+Message: Using storage engine %s for table '%s'
+
+<LI>Error: <code>1267</code> SQLSTATE: <code>HY000</code> (<code>ER_CANT_AGGREGATE_2COLLATIONS</code>)
+
+Message: Illegal mix of collations (%s,%s) and (%s,%s) for operation '%s'
+
+<LI>Error: <code>1268</code> SQLSTATE: <code>HY000</code> (<code>ER_DROP_USER</code>)
+
+Message: Can't drop one or more of the requested users
+
+<LI>Error: <code>1269</code> SQLSTATE: <code>HY000</code> (<code>ER_REVOKE_GRANTS</code>)
+
+Message: Can't revoke all privileges, grant for one or more of the requested users
+
+<LI>Error: <code>1270</code> SQLSTATE: <code>HY000</code> (<code>ER_CANT_AGGREGATE_3COLLATIONS</code>)
+
+Message: Illegal mix of collations (%s,%s), (%s,%s), (%s,%s) for operation '%s'
+
+<LI>Error: <code>1271</code> SQLSTATE: <code>HY000</code> (<code>ER_CANT_AGGREGATE_NCOLLATIONS</code>)
+
+Message: Illegal mix of collations for operation '%s'
+
+<LI>Error: <code>1272</code> SQLSTATE: <code>HY000</code> (<code>ER_VARIABLE_IS_NOT_STRUCT</code>)
+
+Message: Variable '%s' is not a variable component (can't be used as XXXX.variable_name)
+
+<LI>Error: <code>1273</code> SQLSTATE: <code>HY000</code> (<code>ER_UNKNOWN_COLLATION</code>)
+
+Message: Unknown collation: '%s'
+
+<LI>Error: <code>1274</code> SQLSTATE: <code>HY000</code> (<code>ER_SLAVE_IGNORED_SSL_PARAMS</code>)
+
+Message: SSL parameters in CHANGE MASTER are ignored because this MySQL slave was compiled without SSL support; they can be used later if MySQL slave with SSL is started
+
+<LI>Error: <code>1275</code> SQLSTATE: <code>HY000</code> (<code>ER_SERVER_IS_IN_SECURE_AUTH_MODE</code>)
+
+Message: Server is running in --secure-auth mode, but '%s'@'%s' has a password in the old format; please change the password to the new format
+
+<LI>Error: <code>1276</code> SQLSTATE: <code>HY000</code> (<code>ER_WARN_FIELD_RESOLVED</code>)
+
+Message: Field or reference '%s%s%s%s%s' of SELECT #%d was resolved in SELECT #%d
+
+<LI>Error: <code>1277</code> SQLSTATE: <code>HY000</code> (<code>ER_BAD_SLAVE_UNTIL_COND</code>)
+
+Message: Incorrect parameter or combination of parameters for START SLAVE UNTIL
+
+<LI>Error: <code>1278</code> SQLSTATE: <code>HY000</code> (<code>ER_MISSING_SKIP_SLAVE</code>)
+
+Message: It is recommended to use --skip-slave-start when doing step-by-step replication with START SLAVE UNTIL; otherwise, you will get problems if you get an unexpected slave's mysqld restart
+
+<LI>Error: <code>1279</code> SQLSTATE: <code>HY000</code> (<code>ER_UNTIL_COND_IGNORED</code>)
+
+Message: SQL thread is not to be started so UNTIL options are ignored
+
+<LI>Error: <code>1280</code> SQLSTATE: <code>42000</code> (<code>ER_WRONG_NAME_FOR_INDEX</code>)
+
+Message: Incorrect index name '%s'
+
+<LI>Error: <code>1281</code> SQLSTATE: <code>42000</code> (<code>ER_WRONG_NAME_FOR_CATALOG</code>)
+
+Message: Incorrect catalog name '%s'
+
+<LI>Error: <code>1282</code> SQLSTATE: <code>HY000</code> (<code>ER_WARN_QC_RESIZE</code>)
+
+Message: Query cache failed to set size %lu; new query cache size is %lu
+
+<LI>Error: <code>1283</code> SQLSTATE: <code>HY000</code> (<code>ER_BAD_FT_COLUMN</code>)
+
+Message: Column '%s' cannot be part of FULLTEXT index
+
+<LI>Error: <code>1284</code> SQLSTATE: <code>HY000</code> (<code>ER_UNKNOWN_KEY_CACHE</code>)
+
+Message: Unknown key cache '%s'
+
+<LI>Error: <code>1285</code> SQLSTATE: <code>HY000</code> (<code>ER_WARN_HOSTNAME_WONT_WORK</code>)
+
+Message: MySQL is started in --skip-name-resolve mode; you must restart it without this switch for this grant to work
+
+<LI>Error: <code>1286</code> SQLSTATE: <code>42000</code> (<code>ER_UNKNOWN_STORAGE_ENGINE</code>)
+
+Message: Unknown table engine '%s'
+
+<LI>Error: <code>1287</code> SQLSTATE: <code>HY000</code> (<code>ER_WARN_DEPRECATED_SYNTAX</code>)
+
+Message: '%s' is deprecated; use '%s' instead
+
+<LI>Error: <code>1288</code> SQLSTATE: <code>HY000</code> (<code>ER_NON_UPDATABLE_TABLE</code>)
+
+Message: The target table %s of the %s is not updatable
+
+<LI>Error: <code>1289</code> SQLSTATE: <code>HY000</code> (<code>ER_FEATURE_DISABLED</code>)
+
+Message: The '%s' feature is disabled; you need MySQL built with '%s' to have it working
+
+<LI>Error: <code>1290</code> SQLSTATE: <code>HY000</code> (<code>ER_OPTION_PREVENTS_STATEMENT</code>)
+
+Message: The MySQL server is running with the %s option so it cannot execute this statement
+
+<LI>Error: <code>1291</code> SQLSTATE: <code>HY000</code> (<code>ER_DUPLICATED_VALUE_IN_TYPE</code>)
+
+Message: Column '%s' has duplicated value '%s' in %s
+
+<LI>Error: <code>1292</code> SQLSTATE: <code>22007</code> (<code>ER_TRUNCATED_WRONG_VALUE</code>)
+
+Message: Truncated incorrect %s value: '%s'
+
+<LI>Error: <code>1293</code> SQLSTATE: <code>HY000</code> (<code>ER_TOO_MUCH_AUTO_TIMESTAMP_COLS</code>)
+
+Message: Incorrect table definition; there can be only one TIMESTAMP column with CURRENT_TIMESTAMP in DEFAULT or ON UPDATE clause
+
+<LI>Error: <code>1294</code> SQLSTATE: <code>HY000</code> (<code>ER_INVALID_ON_UPDATE</code>)
+
+Message: Invalid ON UPDATE clause for '%s' column
+
+<LI>Error: <code>1295</code> SQLSTATE: <code>HY000</code> (<code>ER_UNSUPPORTED_PS</code>)
+
+Message: This command is not supported in the prepared statement protocol yet
+
+<LI>Error: <code>1296</code> SQLSTATE: <code>HY000</code> (<code>ER_GET_ERRMSG</code>)
+
+Message: Got error %d '%s' from %s
+
+<LI>Error: <code>1297</code> SQLSTATE: <code>HY000</code> (<code>ER_GET_TEMPORARY_ERRMSG</code>)
+
+Message: Got temporary error %d '%s' from %s
+
+<LI>Error: <code>1298</code> SQLSTATE: <code>HY000</code> (<code>ER_UNKNOWN_TIME_ZONE</code>)
+
+Message: Unknown or incorrect time zone: '%s'
+
+<LI>Error: <code>1299</code> SQLSTATE: <code>HY000</code> (<code>ER_WARN_INVALID_TIMESTAMP</code>)
+
+Message: Invalid TIMESTAMP value in column '%s' at row %ld
+
+<LI>Error: <code>1300</code> SQLSTATE: <code>HY000</code> (<code>ER_INVALID_CHARACTER_STRING</code>)
+
+Message: Invalid %s character string: '%s'
+
+<LI>Error: <code>1301</code> SQLSTATE: <code>HY000</code> (<code>ER_WARN_ALLOWED_PACKET_OVERFLOWED</code>)
+
+Message: Result of %s() was larger than max_allowed_packet (%ld) - truncated
+
+<LI>Error: <code>1302</code> SQLSTATE: <code>HY000</code> (<code>ER_CONFLICTING_DECLARATIONS</code>)
+
+Message: Conflicting declarations: '%s%s' and '%s%s'
+
+<LI>Error: <code>1303</code> SQLSTATE: <code>2F003</code> (<code>ER_SP_NO_RECURSIVE_CREATE</code>)
+
+Message: Can't create a %s from within another stored routine
+
+<LI>Error: <code>1304</code> SQLSTATE: <code>42000</code> (<code>ER_SP_ALREADY_EXISTS</code>)
+
+Message: %s %s already exists
+
+<LI>Error: <code>1305</code> SQLSTATE: <code>42000</code> (<code>ER_SP_DOES_NOT_EXIST</code>)
+
+Message: %s %s does not exist
+
+<LI>Error: <code>1306</code> SQLSTATE: <code>HY000</code> (<code>ER_SP_DROP_FAILED</code>)
+
+Message: Failed to DROP %s %s
+
+<LI>Error: <code>1307</code> SQLSTATE: <code>HY000</code> (<code>ER_SP_STORE_FAILED</code>)
+
+Message: Failed to CREATE %s %s
+
+<LI>Error: <code>1308</code> SQLSTATE: <code>42000</code> (<code>ER_SP_LILABEL_MISMATCH</code>)
+
+Message: %s with no matching label: %s
+
+<LI>Error: <code>1309</code> SQLSTATE: <code>42000</code> (<code>ER_SP_LABEL_REDEFINE</code>)
+
+Message: Redefining label %s
+
+<LI>Error: <code>1310</code> SQLSTATE: <code>42000</code> (<code>ER_SP_LABEL_MISMATCH</code>)
+
+Message: End-label %s without match
+
+<LI>Error: <code>1311</code> SQLSTATE: <code>01000</code> (<code>ER_SP_UNINIT_VAR</code>)
+
+Message: Referring to uninitialized variable %s
+
+<LI>Error: <code>1312</code> SQLSTATE: <code>0A000</code> (<code>ER_SP_BADSELECT</code>)
+
+Message: SELECT in a stored procedure must have INTO
+
+<LI>Error: <code>1313</code> SQLSTATE: <code>42000</code> (<code>ER_SP_BADRETURN</code>)
+
+Message: RETURN is only allowed in a FUNCTION
+
+<LI>Error: <code>1314</code> SQLSTATE: <code>0A000</code> (<code>ER_SP_BADSTATEMENT</code>)
+
+Message: Statements like SELECT, INSERT, UPDATE (and others) are not allowed in a FUNCTION
+
+<LI>Error: <code>1315</code> SQLSTATE: <code>42000</code> (<code>ER_UPDATE_LOG_DEPRECATED_IGNORED</code>)
+
+Message: The update log is deprecated and replaced by the binary log; SET SQL_LOG_UPDATE has been ignored
+
+<LI>Error: <code>1316</code> SQLSTATE: <code>42000</code> (<code>ER_UPDATE_LOG_DEPRECATED_TRANSLATED</code>)
+
+Message: The update log is deprecated and replaced by the binary log; SET SQL_LOG_UPDATE has been translated to SET SQL_LOG_BIN
+
+<LI>Error: <code>1317</code> SQLSTATE: <code>70100</code> (<code>ER_QUERY_INTERRUPTED</code>)
+
+Message: Query execution was interrupted
+
+<LI>Error: <code>1318</code> SQLSTATE: <code>42000</code> (<code>ER_SP_WRONG_NO_OF_ARGS</code>)
+
+Message: Incorrect number of arguments for %s %s; expected %u, got %u
+
+<LI>Error: <code>1319</code> SQLSTATE: <code>42000</code> (<code>ER_SP_COND_MISMATCH</code>)
+
+Message: Undefined CONDITION: %s
+
+<LI>Error: <code>1320</code> SQLSTATE: <code>42000</code> (<code>ER_SP_NORETURN</code>)
+
+Message: No RETURN found in FUNCTION %s
+
+<LI>Error: <code>1321</code> SQLSTATE: <code>2F005</code> (<code>ER_SP_NORETURNEND</code>)
+
+Message: FUNCTION %s ended without RETURN
+
+<LI>Error: <code>1322</code> SQLSTATE: <code>42000</code> (<code>ER_SP_BAD_CURSOR_QUERY</code>)
+
+Message: Cursor statement must be a SELECT
+
+<LI>Error: <code>1323</code> SQLSTATE: <code>42000</code> (<code>ER_SP_BAD_CURSOR_SELECT</code>)
+
+Message: Cursor SELECT must not have INTO
+
+<LI>Error: <code>1324</code> SQLSTATE: <code>42000</code> (<code>ER_SP_CURSOR_MISMATCH</code>)
+
+Message: Undefined CURSOR: %s
+
+<LI>Error: <code>1325</code> SQLSTATE: <code>24000</code> (<code>ER_SP_CURSOR_ALREADY_OPEN</code>)
+
+Message: Cursor is already open
+
+<LI>Error: <code>1326</code> SQLSTATE: <code>24000</code> (<code>ER_SP_CURSOR_NOT_OPEN</code>)
+
+Message: Cursor is not open
+
+<LI>Error: <code>1327</code> SQLSTATE: <code>42000</code> (<code>ER_SP_UNDECLARED_VAR</code>)
+
+Message: Undeclared variable: %s
+
+<LI>Error: <code>1328</code> SQLSTATE: <code>HY000</code> (<code>ER_SP_WRONG_NO_OF_FETCH_ARGS</code>)
+
+Message: Incorrect number of FETCH variables
+
+<LI>Error: <code>1329</code> SQLSTATE: <code>02000</code> (<code>ER_SP_FETCH_NO_DATA</code>)
+
+Message: No data to FETCH
+
+<LI>Error: <code>1330</code> SQLSTATE: <code>42000</code> (<code>ER_SP_DUP_PARAM</code>)
+
+Message: Duplicate parameter: %s
+
+<LI>Error: <code>1331</code> SQLSTATE: <code>42000</code> (<code>ER_SP_DUP_VAR</code>)
+
+Message: Duplicate variable: %s
+
+<LI>Error: <code>1332</code> SQLSTATE: <code>42000</code> (<code>ER_SP_DUP_COND</code>)
+
+Message: Duplicate condition: %s
+
+<LI>Error: <code>1333</code> SQLSTATE: <code>42000</code> (<code>ER_SP_DUP_CURS</code>)
+
+Message: Duplicate cursor: %s
+
+<LI>Error: <code>1334</code> SQLSTATE: <code>HY000</code> (<code>ER_SP_CANT_ALTER</code>)
+
+Message: Failed to ALTER %s %s
+
+<LI>Error: <code>1335</code> SQLSTATE: <code>0A000</code> (<code>ER_SP_SUBSELECT_NYI</code>)
+
+Message: Subselect value not supported
+
+<LI>Error: <code>1336</code> SQLSTATE: <code>42000</code> (<code>ER_SP_NO_USE</code>)
+
+Message: USE is not allowed in a stored procedure
+
+<LI>Error: <code>1337</code> SQLSTATE: <code>42000</code> (<code>ER_SP_VARCOND_AFTER_CURSHNDLR</code>)
+
+Message: Variable or condition declaration after cursor or handler declaration
+
+<LI>Error: <code>1338</code> SQLSTATE: <code>42000</code> (<code>ER_SP_CURSOR_AFTER_HANDLER</code>)
+
+Message: Cursor declaration after handler declaration
+
+<LI>Error: <code>1339</code> SQLSTATE: <code>20000</code> (<code>ER_SP_CASE_NOT_FOUND</code>)
+
+Message: Case not found for CASE statement
+
+<LI>Error: <code>1340</code> SQLSTATE: <code>HY000</code> (<code>ER_FPARSER_TOO_BIG_FILE</code>)
+
+Message: Configuration file '%s' is too big
+
+<LI>Error: <code>1341</code> SQLSTATE: <code>HY000</code> (<code>ER_FPARSER_BAD_HEADER</code>)
+
+Message: Malformed file type header in file '%s'
+
+<LI>Error: <code>1342</code> SQLSTATE: <code>HY000</code> (<code>ER_FPARSER_EOF_IN_COMMENT</code>)
+
+Message: Unexpected end of file while parsing comment '%s'
+
+<LI>Error: <code>1343</code> SQLSTATE: <code>HY000</code> (<code>ER_FPARSER_ERROR_IN_PARAMETER</code>)
+
+Message: Error while parsing parameter '%s' (line: '%s')
+
+<LI>Error: <code>1344</code> SQLSTATE: <code>HY000</code> (<code>ER_FPARSER_EOF_IN_UNKNOWN_PARAMETER</code>)
+
+Message: Unexpected end of file while skipping unknown parameter '%s'
+
+<LI>Error: <code>1345</code> SQLSTATE: <code>HY000</code> (<code>ER_VIEW_NO_EXPLAIN</code>)
+
+Message: EXPLAIN/SHOW can not be issued; lacking privileges for underlying table
+
+<LI>Error: <code>1346</code> SQLSTATE: <code>HY000</code> (<code>ER_FRM_UNKNOWN_TYPE</code>)
+
+Message: File '%s' has unknown type '%s' in its header
+
+<LI>Error: <code>1347</code> SQLSTATE: <code>HY000</code> (<code>ER_WRONG_OBJECT</code>)
+
+Message: '%s.%s' is not %s
+
+<LI>Error: <code>1348</code> SQLSTATE: <code>HY000</code> (<code>ER_NONUPDATEABLE_COLUMN</code>)
+
+Message: Column '%s' is not updatable
+
+<LI>Error: <code>1349</code> SQLSTATE: <code>HY000</code> (<code>ER_VIEW_SELECT_DERIVED</code>)
+
+Message: View's SELECT contains a subquery in the FROM clause
+
+<LI>Error: <code>1350</code> SQLSTATE: <code>HY000</code> (<code>ER_VIEW_SELECT_CLAUSE</code>)
+
+Message: View's SELECT contains a '%s' clause
+
+<LI>Error: <code>1351</code> SQLSTATE: <code>HY000</code> (<code>ER_VIEW_SELECT_VARIABLE</code>)
+
+Message: View's SELECT contains a variable or parameter
+
+<LI>Error: <code>1352</code> SQLSTATE: <code>HY000</code> (<code>ER_VIEW_SELECT_TMPTABLE</code>)
+
+Message: View's SELECT contains a temporary table '%s'
+
+<LI>Error: <code>1353</code> SQLSTATE: <code>HY000</code> (<code>ER_VIEW_WRONG_LIST</code>)
+
+Message: View's SELECT and view's field list have different column counts
+
+<LI>Error: <code>1354</code> SQLSTATE: <code>HY000</code> (<code>ER_WARN_VIEW_MERGE</code>)
+
+Message: View merge algorithm can't be used here for now (assumed undefined algorithm)
+
+<LI>Error: <code>1355</code> SQLSTATE: <code>HY000</code> (<code>ER_WARN_VIEW_WITHOUT_KEY</code>)
+
+Message: View being updated does not have complete key of underlying table in it
+
+<LI>Error: <code>1356</code> SQLSTATE: <code>HY000</code> (<code>ER_VIEW_INVALID</code>)
+
+Message: View '%s.%s' references invalid table(s) or column(s)
+
+<LI>Error: <code>1357</code> SQLSTATE: <code>HY000</code> (<code>ER_SP_NO_DROP_SP</code>)
+
+Message: Can't drop a %s from within another stored routine
+
+<LI>Error: <code>1358</code> SQLSTATE: <code>HY000</code> (<code>ER_SP_GOTO_IN_HNDLR</code>)
+
+Message: GOTO is not allowed in a stored procedure handler
+
+<LI>Error: <code>1359</code> SQLSTATE: <code>HY000</code> (<code>ER_TRG_ALREADY_EXISTS</code>)
+
+Message: Trigger already exists
+
+<LI>Error: <code>1360</code> SQLSTATE: <code>HY000</code> (<code>ER_TRG_DOES_NOT_EXIST</code>)
+
+Message: Trigger does not exist
+
+<LI>Error: <code>1361</code> SQLSTATE: <code>HY000</code> (<code>ER_TRG_ON_VIEW_OR_TEMP_TABLE</code>)
+
+Message: Trigger's '%s' is view or temporary table
+
+<LI>Error: <code>1362</code> SQLSTATE: <code>HY000</code> (<code>ER_TRG_CANT_CHANGE_ROW</code>)
+
+Message: Updating of %s row is not allowed in %strigger
+
+<LI>Error: <code>1363</code> SQLSTATE: <code>HY000</code> (<code>ER_TRG_NO_SUCH_ROW_IN_TRG</code>)
+
+Message: There is no %s row in %s trigger
+
+<LI>Error: <code>1364</code> SQLSTATE: <code>HY000</code> (<code>ER_NO_DEFAULT_FOR_FIELD</code>)
+
+Message: Field '%s' doesn't have a default value
+
+<LI>Error: <code>1365</code> SQLSTATE: <code>22012</code> (<code>ER_DIVISION_BY_ZERO</code>)
+
+Message: Division by 0
+
+<LI>Error: <code>1366</code> SQLSTATE: <code>HY000</code> (<code>ER_TRUNCATED_WRONG_VALUE_FOR_FIELD</code>)
+
+Message: Incorrect %s value: '%s' for column '%s' at row %ld
+
+<LI>Error: <code>1367</code> SQLSTATE: <code>22007</code> (<code>ER_ILLEGAL_VALUE_FOR_TYPE</code>)
+
+Message: Illegal %s '%s' value found during parsing
+
+<LI>Error: <code>1368</code> SQLSTATE: <code>HY000</code> (<code>ER_VIEW_NONUPD_CHECK</code>)
+
+Message: CHECK OPTION on non-updatable view '%s.%s'
+
+<LI>Error: <code>1369</code> SQLSTATE: <code>HY000</code> (<code>ER_VIEW_CHECK_FAILED</code>)
+
+Message: CHECK OPTION failed '%s.%s'
+
+</UL>
+
+<P>
+Client error information comes from the following files:
+
+</P>
+
+<UL>
+<LI>
+
+The Error values and the symbols in parentheses correspond to
+definitions in the <tt>`include/errmsg.h'</tt> MySQL source file.
+
+<LI>
+
+The Message values correspond to the error messages that are listed
+in the <tt>`libmysql/errmsg.c'</tt> file.  %d or %s represent numbers
+or strings that are substituted into the messages %when they are displayed.
+
+</UL>
+
+<P>
+Because updates are frequent, it is possible that
+these files will contain additional error information not listed here.
+
+</P>
+
+
+<UL>
+
+<LI>Error: <code>2000</code> (<code>CR_UNKNOWN_ERROR</code>)
+
+Message: Unknown MySQL error
+
+<LI>Error: <code>2001</code> (<code>CR_SOCKET_CREATE_ERROR</code>)
+
+Message: Can't create UNIX socket (%d)
+
+<LI>Error: <code>2002</code> (<code>CR_CONNECTION_ERROR</code>)
+
+Message: Can't connect to local MySQL server through socket '%s' (%d)
+
+<LI>Error: <code>2003</code> (<code>CR_CONN_HOST_ERROR</code>)
+
+Message: Can't connect to MySQL server on '%s' (%d)
+
+<LI>Error: <code>2004</code> (<code>CR_IPSOCK_ERROR</code>)
+
+Message: Can't create TCP/IP socket (%d)
+
+<LI>Error: <code>2005</code> (<code>CR_UNKNOWN_HOST</code>)
+
+Message: Unknown MySQL server host '%s' (%d)
+
+<LI>Error: <code>2006</code> (<code>CR_SERVER_GONE_ERROR</code>)
+
+Message: MySQL server has gone away
+
+<LI>Error: <code>2007</code> (<code>CR_VERSION_ERROR</code>)
+
+Message: Protocol mismatch; server version = %d, client version = %d
+
+<LI>Error: <code>2008</code> (<code>CR_OUT_OF_MEMORY</code>)
+
+Message: MySQL client ran out of memory
+
+<LI>Error: <code>2009</code> (<code>CR_WRONG_HOST_INFO</code>)
+
+Message: Wrong host info
+
+<LI>Error: <code>2010</code> (<code>CR_LOCALHOST_CONNECTION</code>)
+
+Message: Localhost via UNIX socket
+
+<LI>Error: <code>2011</code> (<code>CR_TCP_CONNECTION</code>)
+
+Message: %s via TCP/IP
+
+<LI>Error: <code>2012</code> (<code>CR_SERVER_HANDSHAKE_ERR</code>)
+
+Message: Error in server handshake
+
+<LI>Error: <code>2013</code> (<code>CR_SERVER_LOST</code>)
+
+Message: Lost connection to MySQL server during query
+
+<LI>Error: <code>2014</code> (<code>CR_COMMANDS_OUT_OF_SYNC</code>)
+
+Message: Commands out of sync; you can't run this command now
+
+<LI>Error: <code>2015</code> (<code>CR_NAMEDPIPE_CONNECTION</code>)
+
+Message: %s via named pipe
+
+<LI>Error: <code>2016</code> (<code>CR_NAMEDPIPEWAIT_ERROR</code>)
+
+Message: Can't wait for named pipe to host: %s  pipe: %s (%lu)
+
+<LI>Error: <code>2017</code> (<code>CR_NAMEDPIPEOPEN_ERROR</code>)
+
+Message: Can't open named pipe to host: %s  pipe: %s (%lu)
+
+<LI>Error: <code>2018</code> (<code>CR_NAMEDPIPESETSTATE_ERROR</code>)
+
+Message: Can't set state of named pipe to host: %s  pipe: %s (%lu)
+
+<LI>Error: <code>2019</code> (<code>CR_CANT_READ_CHARSET</code>)
+
+Message: Can't initialize character set %s (path: %s)
+
+<LI>Error: <code>2020</code> (<code>CR_NET_PACKET_TOO_LARGE</code>)
+
+Message: Got packet bigger than 'max_allowed_packet' bytes
+
+<LI>Error: <code>2021</code> (<code>CR_EMBEDDED_CONNECTION</code>)
+
+Message: Embedded server
+
+<LI>Error: <code>2022</code> (<code>CR_PROBE_SLAVE_STATUS</code>)
+
+Message: Error on SHOW SLAVE STATUS:
+
+<LI>Error: <code>2023</code> (<code>CR_PROBE_SLAVE_HOSTS</code>)
+
+Message: Error on SHOW SLAVE HOSTS:
+
+<LI>Error: <code>2024</code> (<code>CR_PROBE_SLAVE_CONNECT</code>)
+
+Message: Error connecting to slave:
+
+<LI>Error: <code>2025</code> (<code>CR_PROBE_MASTER_CONNECT</code>)
+
+Message: Error connecting to master:
+
+<LI>Error: <code>2026</code> (<code>CR_SSL_CONNECTION_ERROR</code>)
+
+Message: SSL connection error
+
+<LI>Error: <code>2027</code> (<code>CR_MALFORMED_PACKET</code>)
+
+Message: Malformed packet
+
+<LI>Error: <code>2028</code> (<code>CR_WRONG_LICENSE</code>)
+
+Message: This client library is licensed only for use with MySQL servers having '%s' license
+
+<LI>Error: <code>2029</code> (<code>CR_NULL_POINTER</code>)
+
+Message: Invalid use of null pointer
+
+<LI>Error: <code>2030</code> (<code>CR_NO_PREPARE_STMT</code>)
+
+Message: Statement not prepared
+
+<LI>Error: <code>2031</code> (<code>CR_PARAMS_NOT_BOUND</code>)
+
+Message: No data supplied for parameters in prepared statement
+
+<LI>Error: <code>2032</code> (<code>CR_DATA_TRUNCATED</code>)
+
+Message: Data truncated
+
+<LI>Error: <code>2033</code> (<code>CR_NO_PARAMETERS_EXISTS</code>)
+
+Message: No parameters exist in the statement
+
+<LI>Error: <code>2034</code> (<code>CR_INVALID_PARAMETER_NO</code>)
+
+Message: Invalid parameter number
+
+<LI>Error: <code>2035</code> (<code>CR_INVALID_BUFFER_USE</code>)
+
+Message: Can't send long data for non-string/non-binary data types (parameter: %d)
+
+<LI>Error: <code>2036</code> (<code>CR_UNSUPPORTED_PARAM_TYPE</code>)
+
+Message: Using unsupported buffer type: %d  (parameter: %d)
+
+<LI>Error: <code>2037</code> (<code>CR_SHARED_MEMORY_CONNECTION</code>)
+
+Message: Shared memory (%lu)
+
+<LI>Error: <code>2038</code> (<code>CR_SHARED_MEMORY_CONNECT_REQUEST_ERROR</code>)
+
+Message: Can't open shared memory; client could not create request event (%lu)
+
+<LI>Error: <code>2039</code> (<code>CR_SHARED_MEMORY_CONNECT_ANSWER_ERROR</code>)
+
+Message: Can't open shared memory; no answer event received from server (%lu)
+
+<LI>Error: <code>2040</code> (<code>CR_SHARED_MEMORY_CONNECT_FILE_MAP_ERROR</code>)
+
+Message: Can't open shared memory; server could not allocate file mapping (%lu)
+
+<LI>Error: <code>2041</code> (<code>CR_SHARED_MEMORY_CONNECT_MAP_ERROR</code>)
+
+Message: Can't open shared memory; server could not get pointer to file mapping (%lu)
+
+<LI>Error: <code>2042</code> (<code>CR_SHARED_MEMORY_FILE_MAP_ERROR</code>)
+
+Message: Can't open shared memory; client could not allocate file mapping (%lu)
+
+<LI>Error: <code>2043</code> (<code>CR_SHARED_MEMORY_MAP_ERROR</code>)
+
+Message: Can't open shared memory; client could not get pointer to file mapping (%lu)
+
+<LI>Error: <code>2044</code> (<code>CR_SHARED_MEMORY_EVENT_ERROR</code>)
+
+Message: Can't open shared memory; client could not create %s event (%lu)
+
+<LI>Error: <code>2045</code> (<code>CR_SHARED_MEMORY_CONNECT_ABANDONED_ERROR</code>)
+
+Message: Can't open shared memory; no answer from server (%lu)
+
+<LI>Error: <code>2046</code> (<code>CR_SHARED_MEMORY_CONNECT_SET_ERROR</code>)
+
+Message: Can't open shared memory; cannot send request event to server (%lu)
+
+<LI>Error: <code>2047</code> (<code>CR_CONN_UNKNOW_PROTOCOL</code>)
+
+Message: Wrong or unknown protocol
+
+<LI>Error: <code>2048</code> (<code>CR_INVALID_CONN_HANDLE</code>)
+
+Message: Invalid connection handle
+
+<LI>Error: <code>2049</code> (<code>CR_SECURE_AUTH</code>)
+
+Message: Connection using old (pre-4.1.1) authentication protocol refused (client option 'secure_auth' enabled)
+
+<LI>Error: <code>2050</code> (<code>CR_FETCH_CANCELED</code>)
+
+Message: Row retrieval was canceled by mysql_stmt_close() call
+
+<LI>Error: <code>2051</code> (<code>CR_NO_DATA</code>)
+
+Message: Attempt to read column without prior row fetch
+
+</UL>
+
+<P><HR><P>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_MySQL_Connectors.html">previous</A>, <A HREF="manual_Extending_MySQL.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+ </BODY>
+ </HTML>

@@ -1,0 +1,75 @@
+u:unknown  v:day_shown aAB:scores 1:quiz 2:quiz 3:mid -:absent h:helper
+ix ssid q m
+--------------------
+01 79 A
+02 16 A 
+03 05 A  
+04 21 A  
+05 23 A  
+06 25 A  
+07 27 A  
+08 31 A  
+09 33 A  
+10 35 A  
+11 53 A 
+12 71 A h
+13 73 D
+14 83 A
+15 85 A
+16 89 A
+17 93 A
+18 95 A
+19 99 A
+20 01 A
+21 05 A
+22 07 A
+23 09 A
+24 04 A
+25 18 A
+26 30 A
+27 32 A
+28 58 A
+29 66 F
+30 88 A
+31 00 A
+32 12 A
+33 17 F 0
+
+
+201709-201801
+-:absent v:show
+--
+ix sid 20 27 11 18 25 1 8 15 22 29 6 13 20 27 3 10 17 24
+01 79   v  v -  v  v  v v
+02 16   v  v v  v  v  v v
+03 05   v  v v  v  v  v v
+04 21   v  v v  v  v  v v
+05 23   v  v v  v  v  v v
+06 25   v  v -  v  v  v v
+07 27   v  - v  -  -  - - -
+08 31   v  v v  -  v  v - -
+09 33   v  v v  v  v  v v
+10 35   v  v v  v  v  v v
+11 53   v  v v  v  v  v v
+12 71   v  v v  v  v  v v
+13 73   -  - v  v  -  v v
+14 83   v  v v  v  v  v v
+15 85   v  v v  v  v  v v
+16 89   v  v v  v  v  v -
+17 93   v  x v  -  -  v v
+18 95   v  v v  v  v  v v
+19 99   v  v v  -  -  - - -
+20 01   v  - v  -  -  - - -
+21 05   v  v v  v  v  v v
+22 07   v  v v  v  v  v v
+23 09   v  v v  v  v  v v
+24 04   -  v v  v  v  v v
+25 18   v  v v  -  v  v v
+26 30   v  v v  v  v  v v
+27 32   v  v v  v  v  v v
+28 58   v  v v  v  v  v v
+29 66   -  v -  v  v  - - -
+30 88   v  v v  -  v  v - v
+31 00   v  v v  v  v  v v
+32 12   v  v v  v  v  v v
+33 17   -  - -  -  -  - - -

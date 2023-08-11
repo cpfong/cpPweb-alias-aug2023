@@ -1,0 +1,27 @@
+mkdir /home/j/www
+mkdir -p /home/js/www
+cpdup /home/j/skel /home/js/www
+
+echo hostname=www >> /home/js/www/etc/rc.conf
+echo firewall_enable="YES"  >> /home/js/www/etc/rc.conf
+echo firewall_type="open"   >> /home/js/www/etc/rc.conf
+echo sendmail_enable="NONE" >> /home/js/www/etc/rc.conf
+echo nameserver 192.168.0.1 >> /home/js/www/etc/resolv.conf
+echo ipfw -q add 2000 allow ip from any to any >> /home/js/www/etc/ipfw.rules
+
+mount -t nullfs -r /home/j/mroot /home/j/www
+mount -t nullfs /home/js/www /home/j/www/s
+mount -t devfs devfs /home/j/www/dev
+mount -t fdescfs fdescfs /home/j/www/dev/fd
+mount -t procfs procfs /home/j/www/proc
+
+ifconfig epair create
+ifconfig epairJIDb 192.168.0.2/30 up
+ifconfig bridge0 addm epairJIDb
+jail -c vnet name=www host.hostname=www.myVM.kpprc path=/home/j/www persist
+ifconfig epairJIDa vnet 1
+jexec 1 ifconfig epairJIDa 192.168.0.1/30 up
+jexec 1 route add default 192.168.0.2
+jexec 1 /etc/rc.d/ipfw restart
+
+# other post jail stuff here

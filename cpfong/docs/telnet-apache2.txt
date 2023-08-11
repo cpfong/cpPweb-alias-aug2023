@@ -1,0 +1,6 @@
+HEAD: Retrieve Header Information # no interesting in body
+--
+HEAD / HTTP/1.0	# Note that the server does not return any data after the headers.
+enter twice
+
+

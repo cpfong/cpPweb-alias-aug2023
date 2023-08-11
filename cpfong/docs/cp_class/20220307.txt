@@ -1,0 +1,26 @@
+P3.1 Stack
+--
+example of stack
+ stack: The stack of trays in a cafeteria; Back/Forward stacks on browsers;
+
+stack: LIFO
+push and pop
+variable: only one (index top is enough)
+
+example: push(a); push(b); push(c); push(d)
+top->	d
+	c
+	b
+	a
+
+if start from -1, then now top=3
+# note: push need one argument, pop no need argument, however it has return vale
+
+boundary conditions: overflow and empty
+empty: top == -1
+overflow: top == MAX 
+
+#note: push need to check overflow and pop need to check empty
+
+coding:
+

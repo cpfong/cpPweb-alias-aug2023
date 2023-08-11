@@ -1,0 +1,22 @@
+組織資料資源的特色:
+1. 分享性 (不是實體, 只可放一地點)
+2. 數位化 
+3. 可壓縮
+4. 可擴張
+5. 頁獻大
+
+檔案管理 
+bits byte field record files database
+
+primary key
+
+資料庫管理系統 DBMS
+	階層式: 一對多
+	網路式: 多對多
+	關連式: 有彈性
+
+關連式: 
+	row, record, tuple
+	column, attribute, field
+	ex:
+

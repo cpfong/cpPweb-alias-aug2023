@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# last stage of making a jail env
+
+skel='/home/j/skel'
+root='/home/j/mroot'
+
+## remember mk pw DB say yes
+# Enter 2, no yes yes
+echo "mergemaster -t $skel/var/tmp/temproot -D $skel -i"
+
+echo "cd $skel"
+echo "rm -R bin boot lib libexec mnt proc rescue sbin sys usr dev"
+
+#Now, symlink the read-write file system to the read-only file system.
+echo "cd $root"
+echo "mkdir s"
+
+echo "ln -s /s/etc etc"
+echo "ln -s /s/home home"
+echo "ln -s /s/root root"
+echo "ln -s /s/tmp tmp"
+echo "ln -s /s/var var"
+echo "ln -s /s/usr-local usr/local"
+echo "ln -s /s/usr-X11R6 usr/X11R6"

@@ -1,0 +1,31 @@
+orm0: <ISA Option ROM> at iomem 0xeb000-0xeffff pnpid ORM0000 on isa0
+vga0: <Generic ISA VGA> at port 0x3c0-0x3df iomem 0xa0000-0xbffff pnpid PNP0900 on isa0
+attimer0: <AT timer> at port 0x40 on isa0
+Timecounter "i8254" frequency 1193182 Hz quality 0
+Event timer "i8254" frequency 1193182 Hz quality 100
+Timecounters tick every 10.000 msec
+pass0 at ata1 bus 0 scbus1 target 0 lun 0
+pass0: <QEMU HARDDISK 2.5+> ATA-7 device
+pass0: Serial Number QM00003
+pass0: 16.700MB/s transfers (WDMA2, PIO 8192bytes)
+Trying to mount root from ufs:/dev/ada0s1a [ro]...
+mountroot: waiting for device /dev/ada0s1a...
+Mounting from ufs:/dev/ada0s1a failed with error 19.
+
+Loader variables:
+  vfs.root.mountfrom=ufs:/dev/ada0s1a
+  vfs.root.mountfrom.options=ro
+
+Manual root filesystem specification:
+  <fstype>:<device> [options]
+      Mount <device> using filesystem <fstype>
+      and with the specified (optional) option list.
+
+    eg. ufs:/dev/da0s1a
+        zfs:zroot/ROOT/default
+        cd9660:/dev/cd0 ro
+          (which is equivalent to: mount -t cd9660 -o ro /dev/cd0 /)
+
+  ?               List valid disk boot devices
+  .               Yield 1 second (for background tasks)
+  <empty line>    Abort manual input

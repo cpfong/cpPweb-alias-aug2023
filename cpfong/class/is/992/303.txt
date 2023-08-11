@@ -1,0 +1,8 @@
+cmos 設定 cd-rom 最先開機: F10
+開機的不同方式: cdrom, A, hd, ethernet, usb
+
+使用光碟片:
+	1. 磁區分割, C D , note: D > C
+	2. 使用 ghost 備份
+	3. 掃毒
+	4. mini xp

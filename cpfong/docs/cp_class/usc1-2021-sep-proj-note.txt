@@ -1,0 +1,5 @@
+due: 24:00 2022/01/04 (Tue)
+save at: ~/final-proj/
+text book 2 exercises and report.txt  (note: everyone must have 3 files)
+how to read: cat ~/final-proj/final-proj.txt
+note: 40%

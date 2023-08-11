@@ -1,0 +1,29 @@
+使用繼承： extend
+資料型態： private protected public
+覆寫 : 原有之方法把它以新的內容取代
+super : 新繼承的 class 和原先 class 都有同一個方法時， 要呼叫原先的方法要使用 super.method 的方式來叫用
+建構式： 和類別同名的方法稱為建構式 
+	public class Balloon {
+		protected int x,y,radius;
+		public Balloon(){ x=10; y=10; radius=20; }
+		public Balloon(int ix, int iy, int ir){ x=ix; y=iy; radius=ir; }
+	}
+	public class DiffBalloon extends Balloon{
+		super();
+	}
+	public class ModBalloon extends Balloon{
+		super(ix,iy,ir);
+	}
+final: 類別中某些變數和方法不想讓別人改的即用 final (但要慎重考慮）
+abstract: 抽象表示類別不完整
+	public abstract class Shape{
+		protected int x,y;
+		protect int size;
+		public void moveRight(){x=x+10;}
+		public abstract vodi display(Graphics paper);
+	}
+	public class extends Shape{
+		public void display (Graphics paper){
+			paper.drawOval(x,y,size,size);
+		}
+	}

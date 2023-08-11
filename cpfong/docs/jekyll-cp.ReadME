@@ -1,0 +1,40 @@
+ruby:		programming language
+gems:		ruby package, also be called plug-in
+bundler:	packages (gems) manager 
+jekyll:		a ruby gem (ruby package)
+
+ref ( also check )
+--
+gaia:/home/cpfong/00bsd_my_doc/proj/how2-tech/2022.1109.utuntu20.04.5.VM.jekyll.txt
+gaia:~cpfong/bin/d.jekyll
+
+Q: why use jekyll
+A: static and github use it
+
+Q: what is jekyll
+A: static web site generator
+
+Q: what are needed?
+A: ruby and jekyll bundler
+
+jekyll build
+
+Liquid 						#templating language which has three main components
+ obj	{{ page.title 			}}	#output predefined variables as content on a page
+ tag	{% if page.show_sidebar 	%}	#define the logic and control flow for templates
+ filter	{{ "hi" | capitalize 		}}	#change the output of a Liquid object
+
+ex orig index.html
+
+---
+---
+ <h1>{{ "Hello World!" | downcase }}</h1>	#lower case
+
+Front Matter					#YAML placed between two triple-dashed lines at the start of a file
+---
+my_number: 5					#global variable
+---
+{{ page.my_number }}				#call front matter variables in Liquid using the page variable
+
+Layouts						#templates that can be used by any page in your site
+_layouts default.html

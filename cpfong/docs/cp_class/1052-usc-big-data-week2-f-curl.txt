@@ -1,0 +1,11 @@
+http://www.7-zip.org
+https://curl.haxx.se/
+http://whatismyip.com
+
+32 or 64?
+
+* no install needed
+* under bin/curl.exe
+
+* go to freedns site change IP using using web int (directly url) and keyin IP
+* curl update web IP using my current IP

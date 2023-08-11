@@ -1,0 +1,17 @@
+#!/usr/bin/env perl
+
+#builtin index can help you find substring
+
+my $where = index('hello world', 'wo');
+print $where;
+
+@gSSHjail-> cat 02-rindex.pl
+#!/usr/bin/env perl
+
+my $f='/usr/local/bin/perl';
+
+my $last=rindex($f, '/');
+my $exe_cmd=substr($f, $last+1);
+
+print $exe_cmd;
+@

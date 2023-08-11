@@ -1,0 +1,17 @@
+DROP DATABASE IF EXISTS a101500239;
+CREATE DATABASE a101500239 CHARACTER SET utf8;
+USE a101500239;
+
+DROP TABLE IF EXISTS emp;
+
+CREATE TABLE emp (
+  empno INT NOT NULL,
+  ename VARCHAR(16) NOT NULL,
+  job VARCHAR(16),
+  manager INT,
+  hiredate DATE,
+  salary float(7, 2),
+  comm float(7,2),
+  deptno INT,
+  PRIMARY KEY (empno)
+);

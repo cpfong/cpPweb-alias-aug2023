@@ -1,0 +1,12 @@
+1. teache students how to make new boot USB
+3. chinse font
+4. chinse input (scim)
+5. install packages
+6. chromium
+7. install openssh
+8  sudo and su
+root@box:~# /usr/local/etc/init.d/openssh status
+Usage /usr/local/etc/init.d/openssh {start|stop|restart|keygen}
+
+passwd
+

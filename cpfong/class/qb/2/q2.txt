@@ -1,0 +1,86 @@
+印出下列之結果
+
+rem ----------- 1
+print int(3.5), int(2*3.5), int(3.5)*2
+print int(-3.6), int(-6), int(6)
+print fix(4.56), fix(-3.86)
+
+rem ----------- 2
+x$="instring in another string"
+y$="str"
+print instr(6,x$,y$), instr(x$, y$)
+print instr(9,x$,y$), instr(x$, "ano")
+
+rem ----------- 3
+data Sun, Mon, Tue, Wed, Thu, Fri, Sat
+dim w$(6)
+for i = 0 to 6
+	read w$(i)
+next i
+for i = 3 to 6
+	print w$(i);
+next i
+
+rem ----------- 4
+for j=9 to 7 step -2
+	for k = 4 to 9 step 3
+		print j+k;
+	next k
+next j 
+
+rem ----------- 5
+p = 1
+n = 1
+do until n > 5
+	p=p*n
+	n=n+1
+loop
+print "ans = ";p
+
+rem ----------- 6
+data 12,8,10,13
+for d = 1 to 4
+	read q
+	print d,
+	for i = 1 to q
+		print "*";
+	next i
+	print
+next d
+
+rem ----------- 7
+for i = 0 to 10
+	a(i)=i
+next i
+for i = 1 to 5
+	s=s+a(i)
+next i
+print "s=";s
+
+rem ----------- 8
+st="1234"
+xx=val(st)
+print int(xx/10)
+
+
+rem ----------- 9
+data 1,2,34,5,6,7,8
+for i = 1 to 7
+	read a(i)
+next i
+input "number=", z
+f=0
+i=0
+do until i = 7
+	if a(i)= z then
+		f = 1
+		exit do
+	else
+		i=i+1
+	end if
+loop
+if f = 1 then
+	print "found"
+else
+	print "not found"
+end if

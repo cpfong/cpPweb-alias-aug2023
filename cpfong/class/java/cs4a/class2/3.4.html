@@ -1,0 +1,36 @@
+<html>
+<ol> chap 09
+	<li> point 的 variable 若為 protected 則 extends 的 circle 可以用 x=xx
+	<li> point 的 var 若為 private 則即始使用 extends, circle 也要用 method.getx 來取得 x
+	<li> circletest { ...  circle c = new circle(1.2, 1, 2); }
+	<li> DecimalFormat two = new DecimalFormat("0.00");
+</ol>
+
+<ol> point --> circle --> cylinder (點, 圓, 圓柱體)
+	<li> 可以用二種方法來比較, 一為 protected, 一為 private
+	<li> super 表示要用其 parent
+	<li> DecimalFormat two = new DecimalFormat("0.00"); two.format(4.555555);
+	<li> 利用 System.out.println 即可以把結果印出
+</ol>
+
+<ol> point
+	<li> variable: x,y
+	<li> getx, gety
+	<li> setx, sety
+</ol>
+
+<ol> circle
+	<li> extends point
+	<li> variable: radius
+	<li> getr, getcir, getarea
+	<li> setr
+</ol>
+
+<ol> cylinder
+	<li> extends circle
+	<li> variable: height
+	<li> geth, getvol
+	<li> seth
+</ol>
+
+</html>

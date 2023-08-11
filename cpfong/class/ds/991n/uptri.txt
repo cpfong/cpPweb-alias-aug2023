@@ -1,0 +1,23 @@
+        Dim a(5, 5) As Integer
+        Dim r, c As Integer
+        Dim count As Integer = 1
+
+        ' 上三角給值, 下三角為 0
+        For r = 1 To a.GetUpperBound(0)
+            For c = 1 To a.GetUpperBound(1)
+
+                If r <= c Then
+                    a(r, c) = count
+                End If
+
+            Next
+        Next
+
+        For r = 1 To a.GetUpperBound(0)
+            For c = 1 To a.GetUpperBound(1)
+                Console.Write(a(r, c) & " ")
+            Next
+            Console.WriteLine()
+        Next
+
+        Console.ReadKey()

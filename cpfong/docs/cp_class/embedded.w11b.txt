@@ -1,0 +1,24 @@
+#!/bin/sh
+fetch http://ftp-archive.freebsd.org/pub/FreeBSD-Archive/old-releases/VM-IMAGES/11.2-RELEASE/amd64/Latest/FreeBSD-11.2-RELEASE-amd64.qcow2.xz
+fetch https://qemu.weilnetz.de/w64/2020/qemu-w64-setup-20200201.exe
+fetch http://ftp-archive.freebsd.org/pub/FreeBSD-Archive/old-releases/ISO-IMAGES/11.2/FreeBSD-11.2-RELEASE-i386-bootonly.iso.xz
+fetch http://ftp-archive.freebsd.org/pub/FreeBSD-Archive/old-releases/ISO-IMAGES/11.2/FreeBSD-11.2-RELEASE-i386-memstick.img.xz
+fetch https://www.ibiblio.org/pub/micro/pc-stuff/freedos/files/distributions/1.2/FD12FLOPPY.zip
+fetch https://www.ibiblio.org/pub/micro/pc-stuff/freedos/files/distributions/1.2/FD12LGCY.iso
+
+Q: What is QCOW2? 
+A: QCOW stands for QEMU copy-on-write. The QCOW2 format decouples the physical storage layer from the virtual layer by adding a mapping between logical and physical blocks
+
+qemu (simulator like virtualbox and is more powerful)
+--
+windows7 OS: installed qemu-w32-setup-20200201.exe
+note: qemu under this dir: /drives/c/Program\ Files\ \(x86\)/qemu/
+
+boot with BSD iso is working as following:
+[cpfong.cpfong-PC]->  /drives/c/Program\ Files\ \(x86\)/qemu/qemu-system-x86_64w.exe -cdrom FreeBSD-11.2-RELEASE-i386-bootonly.iso	# working
+
+boot with DOS floppy img as this:
+> qemu-system-i386 -fda FreeDOS_FLOPPY.img	# note -hda FAIL, however fda ok
+
+boot i386-mini-memstick.img under mobaxterm
+> qemu-system-i386 -hda FreeBSD-11.2-RELEASE-i386-mini-memstick.img

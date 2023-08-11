@@ -1,0 +1,10 @@
+import tejapi
+tejapi.ApiConfig.api_key = "your-secret"
+
+data = tejapi.get('TRAIL/TAPRCD',
+                   coid='2330',
+                   mdate={'gte':'2021-11-01', 'lte':'2021-11-14'},
+                   opts={'columns':['mdate','close_d', 'volume']},
+                   chinese_column_name=True
+                  )
+print(data)

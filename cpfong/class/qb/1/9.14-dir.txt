@@ -1,0 +1,8 @@
+F8
+cd \windows\command
+cd \
+dir /ad 
+dir *.com
+dir /s
+dir /p
+F3

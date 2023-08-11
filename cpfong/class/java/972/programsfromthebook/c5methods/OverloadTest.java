@@ -1,0 +1,53 @@
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class OverloadTest extends JFrame implements ActionListener {
+
+    private JButton button;
+    private JPanel panel;
+
+    public static void main(String[] args) {
+        OverloadTest frame = new OverloadTest();
+        frame.setSize(400, 300);
+        frame.createGUI();
+        frame.setVisible(true);
+    }
+
+    private void createGUI() {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        Container window = getContentPane();
+        window.setLayout(new FlowLayout() );
+
+        panel = new JPanel();
+        panel.setPreferredSize(new Dimension(300, 200));
+        panel.setBackground(Color.white);
+        window.add(panel);
+
+        button = new JButton("Press me");
+        window.add(button);
+        button.addActionListener(this);
+    }
+
+    private int addUp(int a, int b) {
+        return a + b;
+    }
+
+    private int addUp(int a, int b, int c) {
+        return a + b + c;
+    }
+
+ 
+    public void actionPerformed(ActionEvent event) {
+        int sum2, sum3;
+        int x = 22, y = 87, z = 42;
+        sum2 = addUp(x,y);
+        sum3 = addUp(x, y, z);
+    }
+}
+
+
+
+
+

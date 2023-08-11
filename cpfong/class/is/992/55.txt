@@ -1,0 +1,3 @@
+使用 google 找 portscan
+http://www.t1shopper.com/tools/port-scan/ 可以線上掃描, 但在防火牆後即不適用
+http://www.xfocus.net

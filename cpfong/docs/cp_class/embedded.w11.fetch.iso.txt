@@ -1,0 +1,8 @@
+#!/bin/sh
+fetch http://ftp-archive.freebsd.org/pub/FreeBSD-Archive/old-releases/VM-IMAGES/11.2-RELEASE/amd64/Latest/FreeBSD-11.2-RELEASE-amd64.qcow2.xz
+fetch https://qemu.weilnetz.de/w64/2020/qemu-w64-setup-20200201.exe
+fetch http://ftp-archive.freebsd.org/pub/FreeBSD-Archive/old-releases/ISO-IMAGES/11.2/FreeBSD-11.2-RELEASE-i386-bootonly.iso.xz
+fetch http://ftp-archive.freebsd.org/pub/FreeBSD-Archive/old-releases/ISO-IMAGES/11.2/FreeBSD-11.2-RELEASE-i386-memstick.img.xz
+fetch https://www.ibiblio.org/pub/micro/pc-stuff/freedos/files/distributions/1.2/FD12FLOPPY.zip
+fetch https://www.ibiblio.org/pub/micro/pc-stuff/freedos/files/distributions/1.2/FD12LGCY.iso
+

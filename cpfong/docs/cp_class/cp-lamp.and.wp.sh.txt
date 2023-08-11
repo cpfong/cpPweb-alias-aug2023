@@ -1,0 +1,103 @@
+# this script is from 
+# http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-LAMP.html
+
+sudo yum update -y
+sudo yum install -y httpd24 php56 mysql55-server php56-mysqlnd
+sudo service httpd start
+sudo chkconfig httpd on
+
+# you may test your apache now from outside
+
+# set file permissions
+sudo groupadd www
+sudo usermod -a -G www ec2-user
+
+# You need to log out and log back in to pick up the new group
+sudo chown -R root:www /var/www
+sudo chmod 2775 /var/www
+find /var/www -type d -exec sudo chmod 2775 {} \;
+find /var/www -type f -exec sudo chmod 0664 {} \;
+
+echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php
+#To test your LAMP web server
+#http://my.public.dns.amazonaws.com/phpinfo.php
+
+rm /var/www/html/phpinfo.php
+
+# MySQL
+sudo service mysqld start
+sudo mysql_secure_installation
+
+# When prompted, Just press ENTER since 1st install no pwd for root yet
+# then setup root password and press 4 Y to said YES note: i use yy2330xxxx2340 as pwd
+
+sudo chkconfig mysqld on
+
+# Install phpMyAdmin
+sudo yum-config-manager --enable epel
+sudo yum install -y phpMyAdmin
+
+# NOTE!!  your_ip_address is the IP you are using right now,
+# system will allow only this IP to login mysql. it is like security group
+#sudo sed -i -e 's/127.0.0.1/your_ip_address/g' /etc/httpd/conf.d/phpMyAdmin.conf
+sudo sed -i -e 's/127.0.0.1/163.32.125.75/g' /etc/httpd/conf.d/phpMyAdmin.conf
+
+sudo service httpd restart
+
+# you may now testing from outside
+# http://my.public.dns.amazonaws.com/phpmyadmin
+
+# install wordpress now
+# http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/hosting-wordpress.html
+wget https://wordpress.org/latest.tar.gz
+tar -xzf latest.tar.gz
+
+mysql -u root -p
+
+# note there are 3 pairs of single quote (pwd need one TOO)
+mysql> 
+CREATE USER 'wordpress-user'@'localhost' IDENTIFIED BY 'your_strong_password';
+
+# note back single quote, NOT single quote
+create database `wordpress-db`;
+GRANT ALL PRIVILEGES ON `wordpress-db`.* TO "wordpress-user"@"localhost";
+FLUSH PRIVILEGES;
+exit;
+
+# To create and edit the wp-config.php file
+cd wordpress/
+cp wp-config-sample.php wp-config.php
+vi wp-config.php
+define('DB_NAME', 'wordpress-db');
+define('DB_USER', 'wordpress-user');
+define('DB_PASSWORD', 'your_strong_password');
+
+# now in wp-config.php find 
+#define('AUTH_KEY'  ....
+#define('NONCE_SALT'
+# put lots of junk there
+
+# move wordpress/* to the Apache document root
+mkdir /var/www/html/blog
+mv * /var/www/html/blog
+sudo service httpd stop
+sudo vi /etc/httpd/conf/httpd.conf
+ <Directory "/var/www/html">
+ AllowOverride None --> AllowOverride All
+
+# fix file permissions
+sudo usermod -a -G www apache
+sudo chown -R apache /var/www
+sudo chgrp -R www /var/www
+sudo chmod 2775 /var/www
+find /var/www -type d -exec sudo chmod 2775 {} \;
+find /var/www -type f -exec sudo chmod 0664 {} \;
+sudo service httpd restart
+
+# done
+# you may http://pub.domain.com/blog now
+# You should see the WordPress installation screen.
+
+# acc:pwd admin:xx2330yy2340
+
+# note: there is a install wordpress button at the bottom, just press it to finish it

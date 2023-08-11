@@ -1,0 +1,24 @@
+my server: www.mydomain.com 3.4.5.6 at AWS
+os: FreeBSD
+www: under jail
+
+AWS security group open 80 443
+ipfw.rules forward 80, 443 to www 10.0.0.1
+www has two ip 10.0.0.1 and 10.0.0.2 (setup at jail.conf)
+
+10.0.0.1 is apache reverse proxy server (port 80)
+10.0.0.2 is my real web server port 8080 (however both of them run in one apache24)
+
+httpd.conf has to both listen port 80 and 8080
+
+and i put my config here (automatically start)
+apache24/Includes/reverse-proxy-rule.conf
+
+# order is MATTER, /irene must go first before /
+<VirtualHost *:80>
+ DocumentRoot "/usr/local/www/apache24/data"
+ ServerName www.mydomain.com
+ ProxyRequests Off 
+ ProxyPass / http://10.0.0.2:8080/ #note: 10.0.0.1 proxy data to 10.0.0.2
+ ProxyPassReverse / http://10.0.0.2:8080/
+</VirtualHost>

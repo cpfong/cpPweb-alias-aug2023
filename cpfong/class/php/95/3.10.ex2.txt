@@ -1,0 +1,13 @@
+<?php
+	// one can change all this parameters into variable
+	// change this into different subroutine
+
+        $conn = mysql_connect("localhost","www","pwd") or die(mysql_error());
+	$db = mysql_select_db("3ab", $conn) or die(mysql_error());
+	$r  = mysql_query("show tables") or die(mysql_error());
+	$ta = mysql_fetch_array($r);
+	echo "$ta[Tables_in_3ab]\n";
+
+	mysql_free_result($r) or die(mysql_error());
+        mysql_close($conn);
+?>

@@ -1,0 +1,8 @@
+fdisk just like gpart but only command line (no graphic interface)
+and is more powerful if you have a running linux system 
+
+sudo fdisk -l /dev/sdb
+sudo fdisk /dev/sdb
+ p
+ n
+ t

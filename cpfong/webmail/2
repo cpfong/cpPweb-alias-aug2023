@@ -1,0 +1,51 @@
+From cpfong.bbs@bbs.civil.ncku.edu.tw Tue Feb 29 13:52:49 2000
+Return-Path: <cpfong.bbs@bbs.civil.ncku.edu.tw>
+Received: from ms24.hinet.net (root@ms24.hinet.net [168.95.4.24])
+	by bb.cc.fjtc.edu.tw (8.9.3/8.9.3) with ESMTP id NAA00443
+	for <cpfong@bb.cc.fjtc.edu.tw>; Tue, 29 Feb 2000 13:52:43 +0800 (CST)
+	(envelope-from cpfong.bbs@bbs.civil.ncku.edu.tw)
+From: cpfong.bbs@bbs.civil.ncku.edu.tw
+Received: from uranus.civil.ncku.edu.tw (uranus.civil.ncku.edu.tw [140.116.36.40])
+	by ms24.hinet.net (8.8.8/8.8.8) with ESMTP id NAA18896
+	for <cpfong@ms24.hinet.net>; Tue, 29 Feb 2000 13:52:21 +0800 (CST)
+Received: from bbs.civil.ncku.edu.tw (IDENT:bbs@bbs.civil.ncku.edu.tw [140.116.36.100])
+	by uranus.civil.ncku.edu.tw (8.9.3/8.9.2) with ESMTP id NAA11598
+	for <cpfong@ms24.hinet.net>; Tue, 29 Feb 2000 13:52:19 +0800 (CST)
+	(envelope-from cpfong.bbs@bbs.civil.ncku.edu.tw)
+Received: (from bbs@localhost)
+	by bbs.civil.ncku.edu.tw (8.9.1/8.9.0) id NAA24949
+	for cpfong@ms24.hinet.net; Tue, 29 Feb 2000 13:52:18 +0800 (CST)
+Date: Tue, 29 Feb 2000 13:52:18 +0800 (CST)
+Message-Id: <200002290552.NAA24949@bbs.civil.ncku.edu.tw>
+Reply-To: cpfong.bbs@bbs.civil.ncku.edu.tw
+To: cpfong@ms24.hinet.net
+Subject: Re: ¦³ÃöIMP WebMail
+X-Disclaimer: ¦¨¤j¤g¤ì¤j¦aÀJ¶ì®a¹ï¥»«H¤º®e®¤¤£­t³d¡C
+Status: O
+Content-Length: 794
+Lines: 23
+
+µo«H¤H: stylon.bbs@bbs.yzu.edu.tw (¸ÓºÎÄ±¤F§a...), ¬ÝªO: bsd
+¼Ð  ÃD: Re: ¦³ÃöIMP WebMail
+µo«H¯¸: ¤¸´¼¤j¾Ç­·¤§¶ð (Sat Nov 27 01:00:20 1999)
+Âà«H¯¸: CivilEngineer!news.civil.ncku!nsysu-news!spring!news!MOECC-INN2!news.n
+¨Ó·½¯¸: bbs.yzu.edu.tw
+
+¡° ¤Þ­z¡mgis87506@cis.nctu.edu.tw (Jian-Liang Liu)¡n¤§»Ê¨¥¡G
+: ¸ÓºÎÄ±¤F§a... (stylon.bbs@bbs.yzu.edu.tw) ´£¨ì:
+:       ·sªº IMP (ÁÙ¨S¥¿¦¡ release ¥X¨Ó)¤w¸g¦³¤¤¤åªº°T®§¤F.
+
+        ­è­è®³¤F 2.2.0pre5 ¦^¨Ó¡A¬Ý¨Ó submit ¨ì dev list ¤Wªº°T®§²×
+        ©ó¶i¤F source ùØ¤F...8-)
+        ¤£¹L¥u¦³ locale/ ¥Ø¿ýùØªºÀÉ®×¦Ó¤w¡A¦pªG­n¥Îªº¸Ü¡AÁÙ±o¦b
+        config/lang.php3 ùØ¥[¤W¤@¦æ:
+
+        $lang->lang['zh-tw'] = 'Traditional Chinese';
+
+-- 
+
+        ¥Î BBS ¼g¤é°Oªº [35m©@°Ø¿ß[m
+
+-- 
+¡° Origin: ¤¸´¼¤j¾Ç ­·¤§¶ð <bbs.yzu.edu.tw> ¡» From: [140.138.2.181][0m
+

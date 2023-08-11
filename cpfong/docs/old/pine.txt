@@ -1,0 +1,119 @@
+電子郵件之使用 - PINE
+
+講師:馮治平
+日期:6/23/1999
+連絡: cpfong@ms24.hinet.net
+
+Part A: 快問快答 (Q&A)
+
+Q: 如何才能使用 pine 來收發電子郵件?
+A: 先用 telnet 來連上主機, 再打入 pine. 例如: Win95 -> 開始 -> 執行 ->
+   telnet cc.dl.fjtc.edu.tw -> login -> cpfong -> passwd -> My123 -> pine
+
+Q: 別人詢問我的電子郵件帳號, 我應如何回答?
+A: 把你的帳號加上@再加上主機. 例如: cpfong@cc.dl.fjtc.edu.tw
+
+Q: 我在 login 主機時, 密碼打完卻沒反應?
+A: 為了不讓別人看到你的輸入, 所以系統在您輸入密碼時不會有任何回應
+   要在你鍵入 ENTER 時, 它會查是否是正確的密碼. (注意: 大小寫是不同的)
+
+Q: 用簽入 (login) 主機的方式來收發 email 有何優點?
+A: 1. 任何地方你都可以收發, 及看你以前的 email
+   2. 糸統是 SUN UNIX, 比較不會因不小心而把 email 去除
+
+Q: 我如何把 email 取回放在我的 Outlook 上
+A: smtp 選 cc.dl.fjtc.edu.tw 帳號和密碼輸入正確的即可
+
+Q: 如何備份我的 email?
+A: 定期上主機 ftp 回你的 email folder 即可
+
+Q: 我鍵入的中文, 有時有一,二個會成亂碼?
+A: 鍵入 Ctrl+L 會重新整理 screen
+
+Q: 第一次用 pine, 它會問我要不要 documents ?
+A: 是的, 但只有第一次會問而已, 你可以選 yes, 或 no 以決定是否要 pine 的 documents
+
+Q: 有多少人用 pine
+A: 大多數 unix 的主機都有提供 pine, 例如: nsysu, hinet, npust, ...
+
+Q: 可以取得這講義?
+A: http://proxy.fjtc.edu.tw/~cpfong -> Mall -> Learn -> PINE
+
+Q: 我想知道多些 pine
+A: http://www.washington.edu/pine
+   http://www.washington.edu/pine/faq/
+
+Q: 我只想很快的看和送 email, 不想了解太多.
+A: 1. telnet -> login -> pine -> C -> 寫好 -> Ctrl+x
+   2. telnet -> loign -> pine -> i 
+
+
+Part B: 基本知識
+1. main menu --> pine 
+PINE 3.96   MAIN MENU                             Folder: INBOX  1 Message    
+      ?     使用說明               -  PINE 的使用說明                    
+      C     寫信                   -  寫信或是發表文章                   
+      I     查看信件夾             -  查看目前信件夾內的信件             
+      L     信件夾列表             -  列出信件夾或是 NEWS GROUP 以供選擇 
+      A     地址簿                 -  更新或修改地址簿的內容             
+      S     設定 PINE              -  設定 PINE 的架構或是內部參數       
+      Q     離開 PINE              -  結束 PINE 的使用                   
+
+   Copyright 1989-1997.  PINE is a trademark of the University of Washington.
+
+? 說明                    P 前一個命令                R 版權說明                
+O 其它命令   L [列出信件] N 後一個命令                K 鍵盤鎖定             
+---------------------------------------------------------------------------
+2. C 寫信 (Compose a email) -> pine -> c
+To      : cpfong@ms24.hinet.net 
+Cc      : cpfong@mail.ece.fjtc.edu.tw
+Attchmnt: /export/home1/cpfong/sudo-1.5.4.tar.gz (176 KB) ""
+Subject : test for the email
+----- Message Text -----
+this is a email, 
+
+^G 輔助說明  ^X 送出      ^R 完整標頭  ^Y 上一頁    ^K 剪下一行  ^O 暫緩寫信  
+^C 取消      ^D 刪除字元  ^J 夾附件    ^V 下一頁    ^U 恢復刪除  ^T 地址列表
+---------------------------------------------------------------------------
+3.L     信件夾列表             -  列出信件夾或是 NEWS GROUP 以供選擇 
+INBOX               sent-mail           saved-messages      sent-mail-may-199
+
+? 輔助說明   M 主選單       P 前一信夾   - 上一頁     D 刪除        R 更名      
+O 其它命令   V [檢視信件夾] N 後一信夾 Spc 下一頁     A 增加             
+
+
+
+
+
+4.A     地址簿                 -  更新或修改地址簿的內容             
+cmy      CM Yang                     cmyang@center.fjtc.edu.tw                  
+cp       CP Fong                     cpfong@ms24.hinet.net                      
+
+                        [現在正在地址簿 .addressbook 中]
+? 輔助說明   M 主選單      P 前一個     - 上一頁      D 刪除        C 寫信      
+O 其它命令   V [檢視/編輯] N 後一個   Spc 下一頁      A 加入        W 搜尋
+-----------------------------------------------------------------------------
+
+5.S     設定 PINE              -  設定 PINE 的架構或是內部參數       
+ 請從下列表單中選擇你所要設定的工作 :                                            
+? 輔助說明    P [*印表機]  C 環境設定    S 簽名檔                               
+^C 取消       N 設定新密碼 U 更新環境            
+
+C 環境設定
+personal-name
+pruned-folders
+default-fcc	sent
+postponed-folder
+signature-file
+expunge-without-confirm
+quit-without-confirm
+
+
+PartC: 實做
+1. signature --> Config -> S
+2. ftp a file to server --> ftp cc.dl.fjtc.edu.tw
+3. email to a friend with an attachment --> Attachmnt -> ^j -> ^t
+4. check sent folder -> Main -> i
+5. reply forward take_address save_attachment -> reply, forward, take
+6. postpone 
+7. manage your own folder

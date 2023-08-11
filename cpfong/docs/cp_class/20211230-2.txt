@@ -1,0 +1,15 @@
+# pi_digits.txt
+# p206.file_reader.py
+
+with open('pi_digits.txt') as fh:
+ contents = fh.read()
+ print(contents)
+ #print(contents.rstrip())
+
+# p209
+with open('pi_digits.txt') as fh:
+ for line in fh:
+  print(line)
+
+#p213
+#https://nostarch.com/pythoncrashcourse2e/

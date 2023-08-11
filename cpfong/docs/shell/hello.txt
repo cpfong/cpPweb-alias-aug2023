@@ -1,0 +1,10 @@
+#!/bin/sh
+printf "Hello World"
+
+# as ref only, use printf NOT echo now
+echo Hello World
+echo Hello later lots of spaces        World
+echo 'Hello later lots of spaces        World'
+echo "Hello * World"
+echo "Hello" World
+

@@ -1,0 +1,42 @@
+tce-load -wi Xvesa Xlibs Xprogs flwm wbar
+tce-load -wi firflysung urxvt
+#startx
+tce-load -wi fcitx-4.0 (will get local-col-zh)
+# nood need for this (.xsession no need to modify)
+#ftpget good.xsssion and insert into ~/.xsession
+ctrl-alt-delete ( end X )
+
+login as tc to auto enter X
+fcitx (now you can see fcitx)
+urxvt (you can use ctrl-space to switch between chinse & english)
+tce-load -wi fcitx-4.0-talbe-changjei
+end X
+enter X now you can use changjei
+DONE!
+--
+
+-- for chromium to work
+gtk-query-immodules-2.0 > /usr/local/etc/gtk-2.0/gtk.immodules
+sed -i "s#/usr/local/share/locale#/usr/share/locale#g" /usr/local/etc/gtk-2.0/gtk.immodules
+--
+
+-- good.xsession
+Xvesa -br -screen 1024x768x32 -shadow -2button -mouse /dev/input/mice,5 -nolisten tcp -I >/dev/null 2>&1 &
+export XPID=$!
+waitforX || ! echo failed in waitforX || exit
+"$DESKTOP" 2>/tmp/wm_errors &
+# enough for urxvt
+export LC_CTYPE=zh_TW.UTF-8
+export XIM=fcitx
+export XMODIFIERS=@im=fcitx
+# 4 chromium-browser-locale.tcz
+###export LANG=zh_TW.UTF-8
+###export LC_ALL=zh_TW.UTF-8
+###export XIM_PROGRAM=fcitx
+###export GTK_IM_MODULE=XIM
+###export QT_IM_MODULE=XIM
+export WM_PID=$!
+[ -x ./.setbackground ] && ./.setbackground
+[ -x ./.mouse_config ] && ./.mouse_config &
+[ $(which "$ICONS".sh) ] && ${ICONS}.sh &
+[ -d ".X.d" ] && find ".X.d" -type f -print | while read F; do . "$F"; done

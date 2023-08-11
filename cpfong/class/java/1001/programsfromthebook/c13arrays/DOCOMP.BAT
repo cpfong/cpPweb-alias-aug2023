@@ -1,0 +1,1 @@
+Q:\STAFF\MikeParr\japafiles\redir -eo "S:\jdk142\bin\javac.exe" -classpath "S:\jdk142\lib\classes.zip;Q:\STAFF\MikeParr\japafiles;F:\DOUGS\books\Java\Java4\programs\arrays;.;"  "F:\DOUGS\books\Java\Java4\programs\arrays\Balloons.java" > F:\DOUGS\books\Java\Java4\programs\arrays\comperrs.txt

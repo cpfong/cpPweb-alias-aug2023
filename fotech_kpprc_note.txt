@@ -1,0 +1,7 @@
+<a href=https://wupsrv.kpprc.edu.tw:9443> kpprc VM </a> -
+install necessary software at windows os
+
+login account: MyUserName_AT_vsphere_Dot_local
+password  (check email)
+
+now you can login to GUI of VMWare

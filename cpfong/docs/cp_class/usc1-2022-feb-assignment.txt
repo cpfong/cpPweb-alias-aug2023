@@ -1,0 +1,13 @@
+hw
+--
+due: 6/7 24:00 extend to 6/8 24:00 further ext to 6/17 24:00
+obj: order system
+style: any
+upload: https://forms.gle/UmKXuEjBikP9hXXQ6
+all files: result, code, report ... 
+
+note:
+ 1. zip file max size: 100M (orig 10M)
+ 2. due day extend 24 hrs
+ 3. must include project directory file (+5 ex: result.jpg, report.doc, project-order ..., no project-order max 60)
+ 4. 6/9->75  6/10->65 ... (late 1 day decrease 10)

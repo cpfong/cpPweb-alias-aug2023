@@ -1,0 +1,18 @@
+chap8 9 要一起上.
+
+有三組比較時是 control, treatment, placebo 時, 文獻上都是二二相比,
+即 c-t, t-p, c-p 二二相比, alfa 約為 0.1 不再 0.05 所以 type1 error 會很大
+chap8 三組 subject 使用不同.
+chap9 則 subject 使用相同.
+
+chap7 目的要先瞭解
+p130 	prob or mean
+
+probablity 
+one sample: 則為收集資料驗証 null hypo 例如: 馬總統的施政滿意度為
+九成, 這時我們要設計一個實驗來實際証明滿意度為九成
+two sample: 市長有二人要選: 蘇及郝, 支持度為 0.4 及 0.45 則要比較這二個的 diff
+
+mean
+one sample: continuous 的資料要看測山的 mean 和 原觀察的假說是否相同 
+two sample: control vs treatment grp , subject 為 independent , variance 是否同?

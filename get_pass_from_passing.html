@@ -1,0 +1,26 @@
+<FORM NAME="foo">
+<INPUT TYPE="hidden" NAME="burns">
+</FORM>
+
+<SCRIPT LANGUAGE="javascript">
+
+ var locate = window.location
+ document.foo.burns.value = locate
+
+ var text = document.foo.burns.value
+
+ function delineate(str){
+  theleft  = str.indexOf("=") + 1;
+  theright = str.lastIndexOf("&");
+  return(str.substring(theleft, theright));
+ }
+
+ function delineate2(str){
+  point = str.lastIndexOf("=");
+  return(str.substring(point+1,str.length));
+ }
+
+ document.write("First Name is " +delineate (text) + "<br>");
+ document.write("Last Name is "  +delineate2(text));
+
+</SCRIPT> 

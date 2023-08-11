@@ -1,0 +1,33 @@
+hw3
+ex2 u=300 sd=20 所以 95% 會在(u-2sd, u+2sd) 即 260,340 間
+目前要 350 所以它的機率會小於 2.5% (5/2), z=(350-300)/20=2.5
+查課本 p379 upper tail z 為 2.5 倍的 sd 時的機率為 0.0062 即 06.2%
+
+ex5 南方, 北方, 西方的犯罪率, 使 histogram 看 mean, sd, mode 查是否
+有 norm dist, chap8 則是進一步使用 one way anova 去分析三個區域是否
+有不同的行為模式.
+
+ex6 bayer's rule 和 screening test 為發展新的公式(方法)後一定要使用的分析
+工具, 參考老師的 first handout 的 reference book 1B Fundamental of Bostaistic 4the Edition
+Bernard Rosner
+
+sesitivity: 敏感度, 全都有病的樣本中可以驗出真正得病的機率
+specifisity: 特異性, 全都沒病的樣本中驗出沒病的機率
+二個特性都維持在 80% 以上則稱這個新的方式是一個好的方法.
+
+Type1, Type2 error 
+Chap6,7,8,9 比較二組藥, 看新發展出來的是否比目前在市面上的更佳
+
+null hypothesie: drag(c) = drag(i) c 表 control, i 表 invention
+alternative hypothesis drag(c) < drag(i)
+
+觀察現象, 早期皆為 null hypo, 因為觀察到了某個特性所以動手來設計一個實驗看
+觀察到的是否正確 
+
+新的研究都是要 alternative hypo, 因為想發明要比目前的方法更好的方法.
+
+驗証發現的東西等於原本的東西時, 其重點在 Type1 error
+驗証發現的東西比原本的東西更好時, 其重點在 Type2 error
+
+課本 p116 7.4 小節中 Ho=u1-u2=0 Ha=u1-u2 <> delta 0
+

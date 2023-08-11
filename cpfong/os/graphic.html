@@ -1,0 +1,248 @@
+<html>
+<head>
+<title>Solaris 資訊站</title>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+
+<BODY TEXT="#0000ff" LINK="#0000ff" VLINK="#0000ff" bgcolor="FFFFFF" background="../../images/title_bg.gif">
+<CENTER>
+
+<H2><font color="#0000FF">主題：圖型介面相關問題</H2>
+</CENTER>
+  	</font><font color="#800000">
+  	<p align="left"><font size="4">1&nbsp;如何避免進入Solaris的圖形介面&nbsp; </font> <br>
+    </font><font color="#0000FF">
+    <br>
+    </font><b><font color="#FF00FF">Q:</font><font color="#0000FF">&nbsp;</font></b><font color="#0000FF"><b>我想讓console保持在字元模式下，該如何做&nbsp;
+    </b> <br>
+    <br>
+    </font><font color="#FF00FF"><b>A1:</b></font><font color="#0000FF">&nbsp;<br>
+    <br>
+    這裏有一份很好的FAQ，http://www.wins.uva.nl/pub/solaris/solaris2.html&nbsp; <br>
+    <br>
+    下文引自http://www.science.uva.nl/pub/solaris/solaris2.html#q3.54&nbsp; <br>
+    <br>
+    如何允許/禁止dtlogin？&nbsp; <br>
+    <br>
+    是否啟動dtlogin可以用/usr/dt/bin/dtconfig命令進行設置，不帶任何參數執行該&nbsp; <br>
+    命令，提示如下：&nbsp; <br>
+    <br>
+    /usr/dt/bin/dtconfig&nbsp;-d&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(disable&nbsp;auto-start)&nbsp; <br>
+    /usr/dt/bin/dtconfig&nbsp;-e&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(enable&nbsp;auto-start)&nbsp; <br>
+    /usr/dt/bin/dtconfig&nbsp;-kill&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(kill&nbsp;dtlogin)&nbsp; <br>
+    /usr/dt/bin/dtconfig&nbsp;-reset&nbsp;&nbsp;&nbsp;&nbsp;(reset&nbsp;dtlogin)&nbsp; <br>
+    /usr/dt/bin/dtconfig&nbsp;-p&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(printer&nbsp;action&nbsp;update)&nbsp; <br>
+    /usr/dt/bin/dtconfig&nbsp;-inetd&nbsp;&nbsp;&nbsp;&nbsp;(inetd.conf&nbsp;/usr/dt&nbsp;daemons)&nbsp; <br>
+    /usr/dt/bin/dtconfig&nbsp;-inetd.ow&nbsp;(inetd.conf&nbsp;/usr/openwin&nbsp;daemons)&nbsp; <br>
+    <br>
+    如果絕大多數時間你並不想關閉圖形模式，可以在&quot;session&quot;功能表上選擇&nbsp; <br>
+    &quot;command&nbsp;line&nbsp;login&quot;。&nbsp; <br>
+    <br>
+    </font><font color="#FF00FF"><b>A2:</b></font><font color="#0000FF">&nbsp;&nbsp; <br>
+    <br>
+    更省事的辦法是&nbsp; <br>
+    cd&nbsp;/etc/rc2.d&nbsp; <br>
+    mv&nbsp;S99dtlogin&nbsp;s99dtlogin&nbsp; </font>
+</p>
+  	<p align="left"><font color="#0000FF">
+    <br>
+    </font><font color="#FF00FF"><b>Q:</b></font><font color="#0000FF">&nbsp;<b>Solaris&nbsp;CDE視窗的啟動與關閉</b>&nbsp; <br>
+    <br>
+    </font><font color="#FF00FF">A:</font><font color="#0000FF">&nbsp;&nbsp; <br>
+    <br>
+    用/usr/dt/bin/dtlogin&nbsp; <br>
+    <br>
+    dtlogin&nbsp;-daemon&nbsp;&nbsp;從命令行啟動註冊視窗&nbsp; <br>
+    dtlogin&nbsp;-e&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;使系統自動啟動註冊視窗&nbsp; <br>
+    dtlogin&nbsp;-d&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;取消自動啟動&nbsp; <br>
+    dtlogin&nbsp;-kill&nbsp;&nbsp;&nbsp;&nbsp;殺掉註冊視窗&nbsp; <br>
+    　</font></p>
+  	<p align="left"><font color="#0000FF">
+    <br>
+    </font><font color="#800000"><font size="4">2.&nbsp;Solaris&nbsp;7的鎖屏&nbsp; 
+    (screen lock)</font><br>
+    </font><font color="#0000FF">
+    <br>
+    </font><font color="#FF00FF">Q:&nbsp;</font><font color="#0000FF">Solaris&nbsp;7中哪個進程負責鎖屏效應。7以前的版本，某些人在console登錄後鎖屏，&nbsp; <br>
+    &nbsp;&nbsp;&nbsp;回家前忘記取消鎖屏，我簡單地殺掉xlock進程即可。但是我不知道Solaris&nbsp;7中&nbsp; <br>
+    &nbsp;&nbsp;&nbsp;該怎麼做。看了看dtsession和dtscreen的一些東西，但是無論我殺掉二者中哪個&nbsp; <br>
+    &nbsp;&nbsp;&nbsp;進程，console掛起在黑屏的無限迴圈中，只有滑鼠游標可見&nbsp; <br>
+    <br>
+    </font><font color="#FF00FF">A:&nbsp;</font><font color="#0000FF"><br>
+    <br>
+    應該是dtscreen&nbsp; <br>
+    <br>
+    </font><font size="4" color="#800000">3&nbsp;如何調整鍵盤重複率&nbsp; <br>
+    </font><font color="#0000FF">
+    <br>
+    </font><b><font color="#FF00FF">Q:</font></b><font color="#0000FF">&nbsp;Ultra&nbsp;5&nbsp;Solaris&nbsp;8&nbsp;如何設置鍵盤重複率？我想設置重複率到最大，延遲到最小。&nbsp; <br>
+    <br>
+    </font><b><font color="#FF00FF">A:</font></b><font color="#0000FF">&nbsp;<br>
+    <br>
+    如果是root想對系統中所有用戶做此修改，編輯/etc/dt/config/Xservers，增加&nbsp; <br>
+    -ar1&nbsp;和&nbsp;-ar2選項。如果/etc/dt/config/Xservers不存在，從&nbsp; <br>
+    /usr/dt/config/Xservers複製一份過來。&nbsp; <br>
+    <br>
+    如果不是root，僅僅想修改自己的配置，用/usr/openwin/bin/accessx配置鍵盤和鼠&nbsp; <br>
+    標參數。&nbsp; <br>
+    <br>
+    man&nbsp;-M&nbsp;/usr/openwin/man&nbsp;Xsun&nbsp; <br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;-ar1&nbsp;milliseconds&nbsp; <br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;這麼多毫秒後按鍵開始自動重複。缺省500毫秒。參數對於x86或者PowerPC&nbsp; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;無效。&nbsp; <br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;-ar2&nbsp;milliseconds&nbsp; <br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;兩次自動重複之間的時間間隔(毫秒單位)。缺省50毫秒。參數對於x86或者&nbsp; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PowerPC無效。&nbsp; <br>
+    <br>
+    man&nbsp;-M&nbsp;/usr/openwin/man&nbsp;accessx&nbsp; <br>
+    <br>
+    </font><font color="#800000" size="4">4&nbsp;如何拔掉鍵盤繼續使用Solaris&nbsp; <br>
+    </font><font color="#0000FF">
+    <br>
+    </font><b><font color="#FF00FF">Q:&nbsp;</font></b><font color="#0000FF">我這裏的E250/E3500裝了Solaris後鍵盤都不能拔掉，一拔掉就進入OK狀態。而老&nbsp; <br>
+    &nbsp;&nbsp;&nbsp;式的SparcServer&nbsp;1000E是可以不要鍵盤運行的，不知道要在哪里設置才能夠不要&nbsp; <br>
+    &nbsp;&nbsp;&nbsp;鍵盤運行？&nbsp; <br>
+    <br>
+    </font><b><font color="#FF00FF">Q:&nbsp;</font></b><font color="#0000FF">這裏是一台Sun&nbsp;Ultra&nbsp;5，拔掉鍵盤後，系統停止回應&nbsp; <br>
+    <br>
+    </font><b><font color="#FF00FF">A1:</font></b><font color="#0000FF">&nbsp;&nbsp; <br>
+    <br>
+    拔掉鍵盤導致Ultra&nbsp;5的console設備偵測到一次BREAK條件。BREAK條件將中斷操作系&nbsp; <br>
+    統，使系統進入OBP(open&nbsp;boot&nbsp;prom)監視狀態。如果啟動內核時使用了kadb內核調&nbsp; <br>
+    試器，BREAK條件使系統進入kadb調試狀態。&nbsp; <br>
+    <br>
+    參看kbd(1)手冊頁，有幾種辦法禁止這種行為：&nbsp; <br>
+    <br>
+    a.&nbsp;永久辦法&nbsp; <br>
+    <br>
+    vi&nbsp;/etc/default/kbd&nbsp; <br>
+    <br>
+    KEYBOARD_ABORT=disable&nbsp; <br>
+    <br>
+    /usr/bin/kbd&nbsp;-i&nbsp;(不用重新啟動機器)&nbsp; <br>
+    <br>
+    b.&nbsp;臨時辦法&nbsp; <br>
+    <br>
+    /usr/bin/kbd&nbsp;-a&nbsp;disable&nbsp; <br>
+    與之對應的就是&nbsp; <br>
+    /usr/bin/kbd&nbsp;-a&nbsp;enable&nbsp; <br>
+    <br>
+    c.&nbsp;看BSM的時候找到的另外一種解決辦法，在/etc/system檔中增加如下行&nbsp; <br>
+    <br>
+    set&nbsp;abort_enable&nbsp;=&nbsp;0&nbsp; <br>
+    <br>
+    </font><b><font color="#FF00FF">A2:&nbsp;</font></b><font color="#0000FF">&nbsp; <br>
+    <br>
+    用kbd(1)命令&nbsp; <br>
+    <br>
+    kbd&nbsp;[&nbsp;enable&nbsp;|&nbsp;disable&nbsp;|&nbsp;alternate&nbsp;]&nbsp; <br>
+    <br>
+    enable&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;允許&nbsp;STOP-A&nbsp; <br>
+    disable&nbsp;&nbsp;&nbsp;:&nbsp;禁止&nbsp;STOP-A&nbsp; <br>
+    alternate&nbsp;:&nbsp;允許拔掉鍵盤，但不禁止&nbsp;STOP-A&nbsp; <br>
+    <br>
+    為了使用&nbsp;alternate&nbsp;選項，需要安裝下列補丁&nbsp; <br>
+    <br>
+    Solaris&nbsp;2.6&nbsp;105924-10&nbsp; <br>
+    Solaris&nbsp;7&nbsp;&nbsp;&nbsp;107589-03&nbsp; <br>
+    <br>
+    </font><font size="4" color="#800000">5&nbsp;Solaris下如何設置顯卡解析度&nbsp; <br>
+    </font><font color="#0000FF">
+    <br>
+    </font><b><font color="#FF00FF">A1:</font></b><font color="#0000FF">&nbsp;&nbsp; <br>
+    <br>
+    /etc/openwin/server/etc/OWconfig&nbsp; <br>
+    /usr/openwin/server/etc/OWconfig&nbsp; <br>
+    <br>
+    </font><b><font color="#FF00FF">A2:</font></b><font color="#0000FF">&nbsp;&nbsp; <br>
+    <br>
+    /usr/sbin/m64config&nbsp;-prconf&nbsp;-propt&nbsp; <br>
+    /usr/sbin/m64config&nbsp;-res&nbsp;&#39;?&#39;&nbsp; <br>
+    <br>
+    ls&nbsp;-l&nbsp;/dev/fb&nbsp;(一個符號鏈結)&nbsp; <br>
+    <br>
+    ls&nbsp;-l&nbsp;/dev/fbs/m640&nbsp;(一個符號鏈結)&nbsp; <br>
+    prtconf&nbsp;-F&nbsp;(Return&nbsp;the&nbsp;device&nbsp;pathname&nbsp;of&nbsp;the&nbsp;console&nbsp;frame&nbsp;buffer)&nbsp; <br>
+    m64config&nbsp;-res&nbsp;1152x900x76&nbsp;-depth&nbsp;8&nbsp; <br>
+    <br>
+    ls&nbsp;-l&nbsp;/dev/fbs/ffb0&nbsp;(一個符號鏈結)&nbsp; <br>
+    /usr/sbin/ffbconfig&nbsp;-prconf&nbsp;-propt&nbsp;(當前設置1152x900x76x8)&nbsp; <br>
+    <br>
+    參看m64config(1M)、ffbconfig(1M)手冊頁&nbsp; <br>
+    <br>
+    </font><font color="#800000">6&nbsp;Solaris下如何設置顯示刷新率</font><font color="#0000FF">&nbsp; <br>
+    <br>
+    </font><b><font color="#FF00FF">A1:</font></b><font color="#0000FF">&nbsp;&nbsp; <br>
+    <br>
+    除了m64config(1M)，還有一種辦法，就是進入OBP狀態設置解析度、刷新率。進入&nbsp; <br>
+    OBP狀態至少有兩種方法&nbsp; <br>
+    <br>
+    #&nbsp;sync&nbsp;&nbsp;&nbsp;&nbsp;&lt;--&nbsp;同步檔系統，準備重啟&nbsp; <br>
+    #&nbsp;init&nbsp;0&nbsp;&nbsp;&lt;--&nbsp;關閉系統後將停留在OBP狀態，也就是ok提示符下&nbsp; <br>
+    <br>
+    其實我們最常用的做法是Stop-A進入OBP狀態&nbsp; <br>
+    <br>
+    ok&gt;&nbsp;show-displays&nbsp; <br>
+    <br>
+    這裏可以看到當前的顯示設備，如果你只有一個顯示設備，那麼這裏有兩個提示，選&nbsp; <br>
+    擇a就選擇了當前顯示設備，選擇q表示退出，你只能選擇a。選擇之後可以Ctrl-Y輸&nbsp; <br>
+    入那個很長的設備路徑全名。&nbsp; <br>
+    <br>
+    ok&gt;&nbsp;dev&nbsp;&lt;設備路徑全名&gt;&nbsp;(用Ctrl-Y輸入)&nbsp; <br>
+    <br>
+    選擇並設置成當前結點，後面的words命令只處理當前結點，不接受指定&nbsp; <br>
+    <br>
+    ok&gt;&nbsp;pwd&nbsp;&nbsp;(驗證當前路徑是否正確)&nbsp; <br>
+    ok&gt;&nbsp;words&nbsp; <br>
+    <br>
+    列出當前結點的方法名，解析度和刷新率是作為方法提供的。比如你可能看到&nbsp; <br>
+    <br>
+    r1024x768x77x24&nbsp; <br>
+    r1152x900x76x8&nbsp; <br>
+    <br>
+    注意，數字前面有一個小寫的&#39;r&#39;，表示resolution。假設我們以前的設置是&nbsp; <br>
+    1152x900x76x8，現在想改成1024x768x77x24，用如下命令&nbsp; <br>
+    <br>
+    ok&gt;&nbsp;setenv&nbsp;output-device&nbsp;screen:r1024x768x77x24&nbsp; <br>
+    ok&gt;&nbsp;boot&nbsp;-r&nbsp; <br>
+    <br>
+    再次注意，&quot;screen:&quot;之後指定的是方法名，也就是說前面有那個小寫的&#39;r&#39;。你用&nbsp; <br>
+    words看到什麼就指定什麼。自己估計顯存大小，解析度、刷新率、顏色深度是相互&nbsp; <br>
+    制約的。最好不要自己調節這些參數，很容易損壞顯示設備。OBP狀態下設置解析度、&nbsp; <br>
+    刷新率的命令普遍描述如下&nbsp; <br>
+    <br>
+    ok&gt;&nbsp;setenv&nbsp;output-device&nbsp;&lt;device-path&gt;:&lt;resolution&gt;&nbsp; <br>
+    <br>
+    上面screen是個別名，可以用devalias看到本來的設備路徑全名，也就是&nbsp; <br>
+    show-displays看到的那個設備路徑全名。指定設備路徑全名也可以，如果你撐著了&nbsp; <br>
+    的話。&nbsp; <br>
+    <br>
+    ok&gt;&nbsp;devalias&nbsp;&nbsp;(檢查設備別名)&nbsp; <br>
+    <br>
+    啟動之後可以用如下命令檢查當前設置&nbsp; <br>
+    <br>
+    #&nbsp;m64config&nbsp;-prconf&nbsp;|&nbsp;grep&nbsp;Current&nbsp; <br>
+    Current&nbsp;resolution&nbsp;setting:&nbsp;1024x768x77&nbsp; <br>
+    Current&nbsp;depth:&nbsp;24&nbsp; <br>
+    #&nbsp; <br>
+    <br>
+    警告：和調節PC機所配顯示設備一樣，這種調節具有破壞性，務必小心。對於高版本&nbsp; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;的Solaris，建議使用m64config等工具調節顯示刷新率，低版本Solaris才考&nbsp; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;慮進入OBP狀態設置。&nbsp; <br>
+    <br>
+    </font><b><font color="#FF00FF">A2:</font></b><font color="#0000FF">&nbsp;<br>
+    <br>
+    x86/Solaris下可用kdmconfig&nbsp; <b <br><br>
+    </b><BR>
+</p>
+  	<!-- 文章內容起始 -->
+  	
+  	
+  	
+  	<!-- 文章內容結束 -->
+  	<br>
+</BODY>
+</HTML>

@@ -1,0 +1,6 @@
+two categories for IFS  and there are differences between space and others
+ A: IFS default white spaces char : omit automatically space
+ B: others : take everything serious
+
+printf '   a b    c  ' | { IFS=  read -r line ; printf "[$line]\n"; }# [   a b    c  ] keep the spaces
+printf ':a:b :c:::'    | { IFS=: read -r n i j; printf "n=%s,i=%s,j=%s" "$n" "$i" "$j"; } # n=,i=a,j=b :c:::

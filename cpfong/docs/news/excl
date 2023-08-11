@@ -1,0 +1,27 @@
+以下是一封由 freebsd.csie news server 下轉的信, 
+請注意到 ! 在 Path 之中是代表一個 "分隔的符號", 
+所以在 newsfeeds 之中. site 下的 ! 和 pattern
+下的 ! 有著不太相同的意義.
+
+ME:!*/!local,!collabra-internal:*,!test:
+  :        site                : group :
+
+site 下的 ! 只是分隔而已, 排外是由 / 來做的
+group 下的 ! 則有意義, 是表示合於 test 即 "不" 要
+
+
+-- forwarded message --
+Path: FreeBSD.csie.NCTU.edu.tw!freebsd.sinica.edu.tw!freebsd.ntu.edu.tw!wd-news!WD
+From: runni.bbs@wdbbs.net (^^)
+Newsgroups: freebsd.taiwan.admin
+Subject: [閒聊] 敢問各位先進
+Date: 15 Mar 2002 16:17:25 GMT
+Organization: 風與塵埃的對話 BBS
+Lines: 19
+Message-ID: <3lKcjc$RPe@wdbbs.net>
+NNTP-Posting-Host: ym79234.ym.edu.tw
+X-Trace: news.wdbbs.net 1016209370 49638 140.129.79.234 (15 Mar 2002 16:22:50 GMT)
+X-Complaints-To: usenet@news.wdbbs.net
+NNTP-Posting-Date: 15 Mar 2002 16:22:50 GMT
+X-Filename: BSD_ADMIN/M.1016209046.A
+Xref: FreeBSD.csie.NCTU.edu.tw freebsd.taiwan.admin:322

@@ -1,0 +1,25 @@
+1. at mac mini, use safari login https://appleid.apple.com/
+2. left menu at login&security / Apple password (right last) / 
+
+curl iCal
+password check ~/ca/apple_3party_app_pwd-20230709.txt
+
+vi foo
+--
+curl -s -X PROPFIND -u "cpfong@somewhere.com" -H "Depth: 0" --data "<propfind xmlns='DAV:'><prop><current-user-principal/></prop></propfind>" https://caldav.icloud.com/
+
+@gaia-> cat foo | sh
+Enter host password for user 'cpfong@somewhere.com': #note: must 3party password, canNOT use orig pwd of apple id, it will FAIL!
+--
+                <current-user-principal xmlns="DAV:"><href xmlns="DAV:">/145147xxxx/principal/</href></current-user-principal>
+                <status>HTTP/1.1 200 OK</status>
+
+curl -s -X PROPFIND -u "cpfong@somewhere.com" -H "Depth: 0" --data "<propfind xmlns='DAV:' xmlns:cd='urn:ietf:params:xml:ns:caldav'><prop><cd:calendar-home-set/></prop></propfind>" https://caldav.icloud.com/145147xxxx/principal/
+
+Enter host password for user 'cpfong@me.com':
+
+    <href>/145147xxxx/principal/</href>
+                <calendar-home-set xmlns="urn:ietf:params:xml:ns:caldav"><href xmlns="DAV:">https://p69-caldav.icloud.com:443/145147xxxx/calendars/</href></calendar-home-set>
+         <status>HTTP/1.1 200 OK</status>
+
+curl -s -X PROPFIND -u "cpfong@me.com" -H "Depth: 1" --data "<propfind xmlns='DAV:'><prop><displayname/></prop></propfind>" https://p69-caldav.icloud.com:443/145147xxxx/calendars/ | grep displayname

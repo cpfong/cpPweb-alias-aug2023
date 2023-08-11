@@ -1,0 +1,13 @@
+vi xxx.txt
+
+esc		-> switch command and insert mode
+i		-> insert
+move		-> jkhl
+:wq		-> write and quit
+:q!		-> quit withoud asking
+dd		-> delete one line
+:set number	-> ask the number to come out
+:1,3d		-> delete line 1 to 3
+:1,3y		-> copy line 1 to 3 to memory
+p		-> paste
+dw		-> delete word

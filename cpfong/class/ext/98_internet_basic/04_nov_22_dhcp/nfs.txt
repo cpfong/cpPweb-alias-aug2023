@@ -1,0 +1,47 @@
+NFS: Network FileSystem , it is faster than samba
+RPC: Remote Procedure Call (which is in portmap packages)
+
+[cpfong@ubuntu ~]$ s yum list |grep portmap
+portmap.i386                           4.0-65.2.2.1             installed       
+
+Q: nfs use which port ?
+A: randomly select a port less than 1024 (Attentation: not fixed one)
+   so nfs use rpc to help it
+
+Q: object of RPC
+A: rpc assig port # for nfs server then pass to nfs client, when the nfs
+daemon up, it will register to RPC, rpc use port 111 to monitor client request
+
+Q: nfs or rpc daemon up first ?
+A: rpc first, since nfs has to register from rpc. If the rpc restart, all
+daemon that register from him have to register again! (for example, NIC)
+vnc@~> ps aux |grep rpc
+root     494  0.0  0.0  1468   420  ??  Is   13Mar09   0:15.65 /usr/sbin/rpcbind
+
+Q: file ower is ?
+A: svr and client treat the file differently
+
+Cliet (@ client site, it does not know 1001, since client /etc/passwd no 1001)
+[cpfong@ubuntu nfs.AT.vnc_MIS.dir]$ ls -l big5_char.txt
+-rw-r--r-- 1 1001 root 5 11月  4 08:53 big5_char.txt
+
+at Server (note: this file is create at server by cpfong)
+vnc@~/nfs_export_2.redHat.MIS_dir> ls -l big5_char.txt 
+-rw-r--r--  1 cpfong  wheel  5 Nov  4 08:53 big5_char.txt
+
+Q: how to solve this permission problem?
+A: chmod or use NIS
+
+Q: what packages are needed?
+A: CentOS 4.x: nfs-utils, portmap
+[cpfong@ubuntu ~]$ s yum list|grep nfs
+nfs-utils.i386                         1:1.0.9-42.el5           installed       
+nfs-utils-lib.i386                     1.0.8-7.6.el5            installed  
+[cpfong@ubuntu ~]$ rpm -qa |grep nfs
+nfs-utils-lib-1.0.8-7.6.el5
+nfs-utils-1.0.9-42.el5
+
+cpfong@ubuntu ~]$ s yum list|grep portmap
+portmap.i386                           4.0-65.2.2.1             installed
+
+

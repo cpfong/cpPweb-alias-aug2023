@@ -1,0 +1,6 @@
+#sudo dd if=./FreeBSD-9.3-RELEASE-i386-bootonly.iso of=/dev/sdb3 bs=1M conv=sync
+#working
+menuentry "FreeBSD *RELEASE 9.3" {
+ set root=(hd0,msdos3)
+ kfreebsd /boot/loader
+}

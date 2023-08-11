@@ -1,0 +1,42 @@
+function onOpen(e) {
+ var subMenu = [{name:"Run Script", functionName: "main"}];
+ SpreadsheetApp.getActiveSpreadsheet().addMenu("testing", subMenu);
+}
+
+function main() {
+ var initRow = 2;
+ var email, password, result;
+ var emailCol = 1, pwCol = 2,statusCol = 3;
+ var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+ var range = sheet.getLastRow();
+
+// Validate the current OU for each user
+/*
+ if( range > 1 ){
+  sheet.getRange( 1, statusCol ).setValue("Status");
+  for( var i = initRow; i <= range; i++ ){
+   email = sheet.getRange( i, emailCol ).getValue();
+   password = sheet.getRange( i, pwCol ).getValue();
+   result = AdminDirectory.Users.update({"password" : password}, email);
+   sheet.getRange( i, statusCol ).setValue("Done Resetting!");
+   sheet.getRange( i, statusCol ).setBackground("#00FF00");
+  }
+  var ui = SpreadsheetApp.getUi();
+  var response = ui.alert("Operation Complete", "Successfully reset " + (range - 1) +" users!", ui.ButtonSet.OK);
+ }
+ else{
+  var ui = SpreadsheetApp.getUi();
+  var response = ui.alert("No users to reset","Nothing to validate, exiting process", ui.ButtonSet.OK);
+ }
+*/
+
+ var sheet = SpreadsheetApp.getActiveSheet();
+ var data = sheet.getDataRange().getValues();
+ for (var i = 0; i < data.length; i++) {
+    Logger.log('Product name: ' + data[i][0]);
+    Logger.log('Product number: ' + data[i][1]);
+ }
+ var sheet = SpreadsheetApp.getActiveSheet();
+ sheet.appendRow(['Cotton Sweatshirt XL', 'css004']);
+}
+// end main

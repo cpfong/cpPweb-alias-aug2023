@@ -1,0 +1,68 @@
+chapter 4 副常式
+
+4.1 定義副常式
+4.2 調用副常式
+4.3 傳回值
+4.4 引數
+4.5 副常式裡的私用變數
+4.6 不定長度的參數串列
+
+----
+4.0 為何要使用副常式 (subroutine) ? 它和函數 (function) 有何不同 ?
+	副常式叫用時有時會加上 & 有時則可以省略
+	subroutine: 使用者定義的自行使用的
+	function: 系統事先定義的為系統所使用, 例如: print, push, pop
+
+4.1 使用 sub 來定義自己的 subroutine
+
+	sub marine {
+		$n += 1;
+		print "水手 $n 號來報到!\n";
+	}
+
+	for (1..2){
+		marine;
+	}
+
+
+	改寫以下可以累加的程式成副程式
+
+	$n = 10;
+
+	foreach (1..$n){
+		$sum += $_;
+	} 
+	print "total = $sum";
+
+4.2 
+	放前和放後是不同的, 若在後則要使用 & 來叫用
+
+4.3 	perl subrutine 最後一行即為傳回值
+	以上頭的累加為例
+
+4.4 
+	主程式會把傳到 subroutine 的值放在 @_ 的陣列之中
+	sub compare {
+		if ($_[0] > $_[1]){
+			$_[0];
+		}
+		else {
+			$_[1];
+		}
+	}
+	print compare(1,2);
+
+4.5	使用 my 建立私有變數
+	
+4.6	
+	sub max{
+                my ($max) = shift @_;
+                while (defined(my $n = shift @_)){
+                        if ($n > $max){
+                                $max = $n;
+                        }
+                }
+                $max;
+	}
+	print max(1,2,0,11,5);
+

@@ -1,0 +1,27 @@
+sudo ifconfig eth0 down
+dsl@box:~$ sudo ping 192.168.0.1	// 當了之後即 ping 不到 gateway 了
+PING 192.168.0.1 (192.168.0.1): 56 data bytes
+ping: sendto: Network is unreachable
+~                                   
+dsl@box:~$ sudo ifconfig eth0 up	// 把介面 up 可以 ping 到 gw
+x:~$ sudo ping 192.168.0.1
+PING 192.168.0.1 (192.168.0.1): 56 data bytes
+64 bytes from 192.168.0.1: icmp_seq=0 ttl=64 time=1.0 ms
+64 bytes from 192.168.0.1: icmp_seq=1 ttl=64 time=0.5 ms
+
+dsl@box:~$ sudo ping www.hinet.net	// 但是 ping 不到 hinet
+ping: www.hinet.net: Host name lookup failure
+
+dsl@box:~$ netstat -r			// 看起來是 routing table 的問題
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+192.168.0.0     *               255.255.255.248 U         0 0          0 eth0
+
+dsl@box:~$ sudo route add default gw 192.168.0.1 eth0	// 把 defalt gw 加入再看 routing table 即 ok 了
+
+dsl@box:~$ netstat -r
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+192.168.0.0     *               255.255.255.248 U         0 0          0 eth0
+default         192.168.0.1     0.0.0.0         UG        0 0          0 eth0
+

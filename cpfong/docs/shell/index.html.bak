@@ -1,0 +1,21 @@
+ref -- <a href=./shell-reference.html > reference site </a>
+-- <a href=./find_1.html> Find Example </a>
+-- <a href=./shnote.html> shell note </a>
+<br>
+pre -- <a href=./pre.txt > pre shell </a>
+<br>
+1st -- <a href=./hello.txt> hello </a>
+<br>
+var -- <a href=./variable.txt> variable </a>
+-- <a href=./var-in-fileName.txt> variable in filename </a>
+<br>
+out -- <a href=./echo-printf.txt> echo vs printf </a>
+-- <a href=./why-printf-not-echo.txt> why printf not echo </a>
+-- <a href=./printf.txt> printf </a>
+<br>
+inp -- <a href=./simple-read.txt> simple read </a> 
+-- <a href=./read-line-by-line.txt> read line by line </a>
+-- <a href=./read-byte-by-byte.txt> read byte </a> 
+<br>
+num -- <a href=./jot.txt> jot </a> 
+user-op-using-stdin.txt

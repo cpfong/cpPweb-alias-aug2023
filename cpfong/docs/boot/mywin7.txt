@@ -1,0 +1,19 @@
+step 0: format ntfs usb
+step 1: put boot into usb (using bootsect.exe)
+step 2: cp iso/* usb:
+-- that is
+
+in win7 run cmd (as admin)
+ diskpart
+ list disk
+ select disk 2
+ clean
+ create partition primary
+ select partition 1
+ active
+ format fs=ntfs quick
+ exit
+
+d:/iso/boot/bootsect.exe /nt60 new_usb_drive: (ex e:)
+
+cp iso/* usb:

@@ -1,0 +1,22 @@
+
+  ◇ news spool 快滿的原因及解決方法
+
+------------------------------------------------------------------------
+From: skhuang@csie.nctu.edu.tw (Shih-Kun Huang)
+Newsgroups: csie.cc.ta-eval,csie.sysadmin.news
+Subject: news spool 快滿的原因及解決方法
+Date: 17 Jul 1995 04:50:07 GMT
+Organization: Dep. Computer Sci. & Information Eng., Chiao Tung Univ., Taiwan, R.O.C
+
+以前 mfchen post 過, 到 csie.sysadmin.news 找一下.
+會滿的原因最大可能是 history entries lost 掉.
+可能是當時 history 在 expire 過程無法完整寫完, 以至後面
+的 entries missed 掉. 請先跑
+/home/inn/adm/bin/newsvac > exp.rm.xx.xx
+檢查一下 exp.rm.xx.xx, 應該都是 &quotrm /usr/spool/news/......"
+之類的訊息. 我現在正在跑, 放在 /home/inn/adm/bin/exp.rm.7.17.
+再跑 &quotsh exp.rm.7.17" 即可.
+------------------------------------------------------------------------
+Shih-Kun Huang
+EC638, CSIE, NCTU, Taiwan, R.O.C. Phone: 886-35-712121 (x54765, x54709)
+

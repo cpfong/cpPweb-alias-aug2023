@@ -1,0 +1,45 @@
+* 中央極限定理 (central limit theorem) 為實驗性統計的最主要定理
+* 習題三將有一個習題是由小的 population 去驗証 central limit theorem
+* 由靜態的資料找到最終的趨勢即為使用 central limit theorem
+
+課程:
+	1. 實驗設計
+	2. probability distribution: normal, bi-normal, cosoan , . 共四個最重要的分佈
+	3. descriptive statistics: 一週
+	4. 初等統計: sysmetic, ANOVAR
+
+	chapter 7: 比重民調, 確定每組都為 normal distribution
+	chapter 8: 三組以上比較重點在 type 2 beta error 因為此時相互間的比較是最重要的
+	chapter11: 不再使用 mean std-diviation, 而採用 median (中位數),
+		因無母數分析時即針對不具 normal dist 的不連續資料
+		ANOVAR 有的分析方式 nonparametic 也會有一個相同的方式來分析
+	chapter10: 質的分析
+	chapter13: two way
+			A		B		C
+			control 	treatment1	treatment2
+			N1		B1
+			N2	
+			..
+			骨質密度	藥物治療後密度	物理治療後密度
+	one way 時有 A B C 為 one factor 有三個 level (treatment fac) 
+	如加入 time fac 例如 T1 (三個月測一次), T2(五個月), T3 此為 two way
+
+
+proposal
+	(A) Abstract: 完成下列所有後再把菁要抽出即成
+	(B) Statement of problems & relationale
+	(C) purpose & speciice aims 特定目標: 第一要做工作1, 第二要做工作2
+		Research hypothesis (假說), significance(重要性)
+	(D) Background & Literature Review(背景及文獻回顧)
+	(E) Materials & Methods (材料及方法, 依特色目標的各種方法所要使用到的材料)
+	(F) Preliminary result (事前研究成果, 事前結果來支持本研究的可行性)
+	(G) Expected outcomes  (依 specifice aim 產生的結果)
+	(H) Reference
+
+paper/thesis
+	Abstract
+	 i Introduction (B)(D)(C)
+	ii Materianls & Methods
+	iii Results/Discussion 
+	iv Discussion
+	v Conclusion & future work (探討結果和現象之關連為 discussion 

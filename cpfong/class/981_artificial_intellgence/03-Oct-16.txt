@@ -1,0 +1,96 @@
+p14
+	we can say all prolog is a functor (rules, facts data structure all are functors)
+	we can use functor to make a rule
+
+	prolog is the only program that can be modified when it is executed
+	you can add more rules and facts when you are running the prolog prog
+
+	functor defined by Name and Arity (argument)
+	X is *(4,3) same as X is 4*3 this is different then X=4*3
+	X is *(4,3) is a functor,  (is the assignment, so is like = in c)
+
+p15
+	=
+	first step do the matching, then 2nd step is the reunification, if successful then Yes, otherwise No
+	?-date(D1,M1,1983)=date(D2,map,Y2).
+	functor is the same date/3
+	variable can be unification to any structure (var or ...)
+	D1 = _G347
+	D1 unified with D2
+	M1 = map (M1 binding with map successfully), so ref to M1 is same as ref to map
+	D2=_G347 (starting with _ is the system generated variable)
+	1983=Y2
+
+	since these 3 can all be unified ,this is a successful reunification
+
+	shortcoming: no occurs checking (Y=foo(Y))  this is like a mirror put between 2 objs (this will be recursive)
+	date(D1,M1)=date(D2,map,Y20). --> No
+p16
+	disjunction
+	P:-Q.
+	P:-R,S. (you can prove R is right, and S is right then P is right)
+	--> P:-Q;R,S.  (; is disjunction and , is conjunction)
+
+p24
+	cp's note:
+	pl -s family_tree.pl
+	?-trace.  			--> enter the trace mode
+	[trace] ?- mother(ann,jon).	--> i want to trace whether ann is mother of jon
+	then use creep to debug step by step
+
+?- trace.
+
+Yes
+[trace]  ?- mother(ann,jon).
+   Call: (7) mother(ann, jon) ? creep
+   Call: (8) parent(ann, jon) ? creep
+   Exit: (8) parent(ann, jon) ? creep
+   Call: (8) female(ann) ? creep
+   Exit: (8) female(ann) ? creep
+   Exit: (7) mother(ann, jon) ? creep
+
+Yes
+[debug]  ?- 
+
+	?-mother(ann,jon).
+	when query this one prolog will search db
+	parent(ann,jon). --> fail
+	female(ann). --> fail
+	mother(X,Y):-parent(X,Y),female(X). --> ok
+	1st do the matching, these two look like the same 
+	then do the reunification (match successful may be reunification will fail)
+	mother(ann,jon):-parent(ann,jon), femail(ann)
+
+	look at p8
+	parent(ann,jon) match parent(tom,jim) ok but unification fail
+	(since atom different cannot be ref, you cannot say ref to ann is ref to tom )
+	....
+	until 
+	parent(ann,jon). match ok and unification successful 
+
+	female(ann) is the same check 4
+
+
+	mother(ann,jon) you can put before mother(X,Y) 
+	after that is useless since it will be always true accoring the previsou rule
+
+p25
+	Z is a local var (not show at header)
+	sister(X,Y):-parent(Z,X),parent(Z,Y), femaile(X).
+
+	on p8 ex
+	parent(pam,pat)
+	parent(pam,jan)
+	so pat is jan's sister (pat is X) 
+
+	?-sister(ann,ann) this should be wrong, but prolog will answer true
+	how does this come from ?
+
+in prolog you can use "trace" to see the steps
+
+	X\=Y means X cannot reunfied with Y
+
+	?-parent(X,Y),parent(Y,pat).
+
+p26
+	predecessor

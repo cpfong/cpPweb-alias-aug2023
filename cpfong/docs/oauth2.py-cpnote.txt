@@ -1,0 +1,24 @@
+vi ~/.muttrc
+set smtp_oauth_refresh_command = "/usr/home/cpfong/bin/d.google/9NewOauth2.py --quiet\
+        --user=my@gmail.com\
+        --client_id=9530050.apps.googleusercontent.com\
+        --client_secret=GOCSPX-xysysy\
+        --refresh_token=1//0eh2gQlDkz02SCgYIA"
+
+where:
+---
+user:		your google email
+client_id:	login console.developer to get it	
+client_secret:	login console.developer to get it	
+refresh_token:	generate via ./oauth2.py like ./9NewOauth2.py --user=my@gmail.com --client_id=953005.apps.googleusercontent.com --client_secret=GOCSPX-xysysy --generate_oauth2_token
+
+note: ./9NewOauth2.py --user xxx --generate_oauth2_token will return like this and Refresh Token is what i need
+-----
+Refresh Token: 1//0eh2gQlDkz02SCgYIA
+Access Token: ya29.a0ARrdaM9p1E
+Access Token Expiration Seconds: 3599
+
+1 oauth2.py use client_id client_secret to generate a web link
+2 and it ask you to get ret code from web link
+3 input code and oath2.py stop and return refresh_token
+4 use this refresh_token to goto next step 

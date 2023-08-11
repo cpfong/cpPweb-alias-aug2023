@@ -1,0 +1,103 @@
+p44 depth-limited search
+	深度前要存在 solution.
+	好處: completeness: yes, optimality: yes
+	concern: 因為執行了許多次, 是否 time 和 space 會增加很多 ?
+	多花了一些 time and space 換來了二個 yes, 本法是不錯的方式 
+	
+p49 多做了
+
+p50 bidirectional search
+	可以並行處理時, 是否可以由上及由下同時去找, 有如打一個 tunnel 一樣
+
+p51
+	分成二邊各三個, 則由 1,111,111 down 到了 2,222 少了許多.
+	看起來是一個很好的 solution, 但如何得知是一個 optimal goal,
+	然而要比較時會花去許多的時間, 因為 overhead 很高
+
+p52
+	1. overhead
+	2. 如何知道 pre-decessor 是誰, 由下向上時不知 pre-decessor 及 operator 可到 "上一個" node
+	3. 
+	4. 二邊的 node 要比對
+	5. 
+
+p53
+	idea 很好, 但要 implement 出來不容易, 另外 complexity 很高.
+
+p54	iterative deepening 為最佳的方法
+
+p56
+	要避免回 parent state, 所以應把以前的 node 先記下來, 後來再彼些比較是否曾到過
+	所以 spaces 會要得多些.
+
+----------------
+p1 informed search method
+	前面所提為依固定的方式去找, 但有一些 algorithms 是多餘的, 可以不必跑
+	是否在執行時是否有一些 info 可以幫助我們 search
+
+	Best-First Search
+	nodes 如何到 Queue 呢?  estimate of the cost of the path from a state to the closest goal
+	也稱 greedy 的 search , 最接近 goal 的點先 expand
+	
+p3
+	事先有一個估計(非準確) 的所有直線距離後由 start 開始 expand:   timisoara :329 sibiu: 253 zerind: 374 所以 sibiu 為最佳的, 因為他最短
+	heuristic 的方式, 因為使用了直線距離, 那些是估出來的, 然無法一定得到最佳的, 因預估
+	
+p5
+	很快, 但有可能找不到. heuristic function 是很重要的, 要找到一個快且好的 heuristic
+	greedy 不是一個 optimalize 的
+	有可能要 back track 例如: 直到 neamt 則無法回頭, 只能後退. (重頭來)
+	所有的 node 都要在 memory 之中
+
+p6 A* 公認最佳的 info search , 結果為 complete and optimal
+	當可以使用 heuristic 時,
+	greedy (估計)
+	uniform-cost (已知用了多少 cost, 真實的, 一定是 optimal)
+
+	the h(n) is from next state --> goal state (this one is wrong write)
+	f(n)=g(n)+h(n)
+
+	arad 到 sibiu 實際的 + 預估 得到一個最小的再以此往下
+
+p7
+	h must be admissible heuristic (要做到 admissible 則為 optimal, admissible 
+	愈接近真實的但沒超過則會更快到找到 goal, 假定 h1 h2 以 h2 佳則 h2 可以快些找到)
+
+	直線距為二點間最短的, 且不會超過, 
+
+p9
+	uniform search 為圓的 search , 則第一個遇到的一定是最短的, 加上 h 後變成不是
+	正圓的, 而是有一股力量拉向 goal, 如果 h 弄得好則包入的點即會少, 即檢查得少
+	時間即會少. h 之最佳為逼近 goal 但不能超出.
+
+p10
+	node 還是 expand 很多的 nodes, 所以時間花不少.
+
+	
+prolog 
+p35
+	pre(X,Y):- par(X,Z), pre(Z,Y)
+		if par(X,Z) can find Z then put Z to pre(Z,Y)
+		if pre(Z,Y) fail then  if there is any other possibility of par(X,Z)
+		因為  X 可能有二個以上的小孩
+
+		 
+p36
+	plus(X,Y,Z) :- The sum of the numbers X and Y is Z
+	prolog 的變數是雙向的
+
+	plus(X,Y,Z):- nonvar(X),nonvar(Y), Z is X+Y.
+	plus(X,Y,Z):- nonvar(X),nonvar(Z), Y is Z-X.
+	plus(X,Y,Z):- nonvar(Y),nonvar(Z), X is Z-Y.
+
+	nonvar : X 是否 bind 了一個值了.
+
+	plus(3,9,X).
+	plus(5,Y,20).
+	plus(Z,3,30).
+
+p39
+	connected(a,g) NO
+	connected(d,a) NO, direction is imporant!
+
+

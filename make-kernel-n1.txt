@@ -1,0 +1,59 @@
+I've created a bootable USB key with -CURRENT like this:
+
+# mkdir -p /usr/src/CURRENT/obj
+# cd /usr/src/CURRENT
+# setenv CVSROOT :pserver:anoncvs at anoncvs.fr.FreeBSD.org:/home/ncvs
+# cvs login  
+# cvs checkout src
+# cd /usr/src/CURRENT/src
+# setenv MAKEOBJDIRPREFIX /usr/src/CURRENT/obj
+# make buildworld
+# make buildkernel KERNCONF=GENERIC
+
+(USB key inserted as /dev/da0)
+
+# fdisk -I da0
+# fdisk -B da0
+# bsdlabel -w da0s1 auto
+# bsdlabel -B da0s1
+# newfs /dev/da0s1a
+# mount /dev/da0s1a /mnt
+# make installworld  DESTDIR=/mnt
+# make installkernel DESTDIR=/mnt KERNCONF=GENERIC INSTALL_NODEBUG=t
+# make distrib-dirs  DESTDIR=/mnt
+# make distribution  DESTDIR=/mnt
+# echo /dev/da0s1a / ufs rw 1 1 > /mnt/etc/fstab
+# cat <<EOF-EOF-EOF > /mnt/etc/rc.conf
+wlans_ath0="wlan0"
+ifconfig_wlan0="WPA DHCP"
+hostname=tinyCurrent
+sshd_enable="YES"
+EOF-EOF-EOF
+# cp /etc/wpa_supplicant.conf /mnt/etc
+# umount /mnt
+
+the resulting USB key boots fine;
+
+what I'm unsure about is: can I copy /usr/src/CURRENT onto the key with
+
+# cp -rp /usr/src/CURRENT /mnt
+
+and when it is booted (in my EeePC) can I do there the installation to the
+SSD again with
+
+# newfs -m 0 -o space /dev/ad2s1a
+# mount /dev/ad2s1a /mnt
+# setenv MAKEOBJDIRPREFIX /CURRENT/obj
+# cd /CURRENT/src
+# make installworld  DESTDIR=/mnt
+# make installkernel DESTDIR=/mnt KERNCONF=GENERIC INSTALL_NODEBUG=t
+# make distrib-dirs  DESTDIR=/mnt
+# make distribution  DESTDIR=/mnt
+
+or is /CURRENT/src and /CURRENT/obj not enough for the 2nd installation,
+for example because the 1st 'make installworld' has removed stuff below
+/usr/src/CURRENT/obj?
+
+Thx
+
+	matthias

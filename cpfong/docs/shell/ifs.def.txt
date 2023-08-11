@@ -1,0 +1,4 @@
+The Internal Field Separator (IFS) that is used for word splitting after expansion and to split lines into words with the read builtin command.
+
+Another interesting variable is IFS. This is the Internal Field Separator.
+The default value is SPACE TAB NEWLINE, but if you are changing it, it's easier to take a copy, as shown:

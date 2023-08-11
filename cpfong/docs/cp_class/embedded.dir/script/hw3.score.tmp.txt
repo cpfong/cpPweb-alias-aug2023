@@ -1,0 +1,32 @@
+181
+--
+1 ok
+2 ok
+3 port still 22
+4 port still 22
+5 port still 22
+6 port still 22
+
+182
+--
+01 90 .cshrc prompt not set, others fine
+02 .cshrc prompt hello: both using the same, others fine 
+03 good 4 everythings
+04 promtp is wrong, other fine and (my dir is not right)
+05 promtp is wrong, other fine and
+06 promtp is wrong, other fine and
+07 promtp is not set, .tmux.conf not set, others fine
+08 good
+09 port 22, no mosh, prompt not right
+10 promtp is wrong, other fine and
+11 port 22 prompt ok
+12 good
+13 port rename, but forget install mosh and tmux
+14 08 all fine, 29 prompt does not set 29 does not have .tmux.conf
+15 port 22 no mosh
+16 port 22 no mosh
+17 port 22 cpfong password still fvti1234
+18 promtp is wrong, other fine and 3217 prompt is ok
+19 port 22 no mosh, no tmux
+20 port 22, cpfong password is fvti1234
+21 install tmux mosh, but still use port 22 (need to restart sshd)

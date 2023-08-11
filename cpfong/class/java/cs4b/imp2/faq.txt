@@ -1,0 +1,18 @@
+Q: http 在學校機器連不上?
+A: 在學校要用 http://cpfong.fjtc.edu.tw/~l2501601
+
+Q: http 在家中機器連不上?
+A: 在校外要用 http://hiedoc.fjtc.edu.tw/~l2501601
+
+Q: 簽入主機?
+A: telnet cc.fjtc.edu.tw --> ssh l2506101@cpfong.fjtc.edu.tw ( 或 ssh cpfong )
+
+Q: 如何 組譯, run ?
+A: 1. 在 cpfong 主機之上組譯且生成 test.class ( ssh cpfong --> javac test.java )
+   2. 在 localhost 上 run ( ftp test.java --> java test )
+
+Q: 何謂 java byte code 的跨平台 ?
+A: java 在組譯完成之後會生成 java byte code 即 xxx.class 的檔, 這個檔可以放到不同的作業系統之上皆可以跑
+
+Q: 可不可以在 local ( Knoppix 或 Windows ) 組譯, 生成 class 檔, 然後在 local 跑 ?
+A: 可以, 但目前的 Knoppix 上 java 的組譯器不是最新的, 所以有些動作會不正確. 所以不建議你這樣做

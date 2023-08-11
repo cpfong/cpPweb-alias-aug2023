@@ -1,0 +1,201 @@
+From daemon  Thu Jul 12 16:27:29 2001
+Return-Path: <cpfong>
+Received: (from cpfong@localhost)
+	by center.fjtc.edu.tw (8.11.4/8.11.4) id f6C8RTm71790
+	for cpfong; Thu, 12 Jul 2001 16:27:29 +0800 (CST)
+	(envelope-from cpfong)
+Date: Thu, 12 Jul 2001 16:27:29 +0800 (CST)
+From: cpfong-馮治平 <cpfong>
+Message-Id: <200107120827.f6C8RTm71790@center.fjtc.edu.tw>
+To: cpfong
+Subject: burn_cd
+Status: RO
+Content-Length: 5407
+Lines: 185
+
+Google搜尋: burncd group:tw.bbs.comp.386bsd       Advanced 
+                  Groups Search
+                   Groups Help
+
+
+         Search all groups   搜尋所有網站
+      Groups search result 4 for burncd group:tw.bbs.comp.386bsd
+
+            Search Result 4
+      寄件者：無責任恐龍 (Dinosaur.bbs@bbs.ee.nthu.edu.tw)
+      主旨：CD-Recorder under FreeBSD 
+      新聞群組：tw.bbs.comp.386bsd
+            (This is the only article in this thread)
+      日期：1997/08/08 
+
+
+
+
+SUPPORT DRIVE
+=============
+
+     HP：HP4020, HP6020
+PHILIPS：CDD522, CDD2000, CDD2600
+PLASMON：RF4100
+
+        FreeBSD Version 2.2 or newer
+
+
+CONFIG DEVICE
+=============
+
+1. kernel config
+
+        在 kernel config 裡加上下面幾行：
+
+controller      ncr0                    ; depend on which SCSI card you use
+controller      scbus0                  ; MUST HAVE
+device          worm0   at scbus?       ; MUST HAVE
+
+        後重新 compile kernel。
+
+2. device node
+
+        到 /dev 下執行 ./MAKEDEV worm0
+
+
+USAGE
+=====
+
+1. 燒 raw image
+
+/usr/share/examples/worm/burncd.sh
+
+        這是個用來將 raw image 燒入 CD-R 裡的 shell script。使用前需先安裝
+        team 這個 package，如果用的是 Philips CDD2000 or CDD2600，還要修改
+        35 行，把 HP 4020i 改為 PHILIPS CDD2000。然後直接用：
+
+                burncd.sh [raw image file name]
+
+        來燒錄。raw image 的來源可以是用 mkisofs 做出來的，也可以是用
+        Easy CDPro、WinOnCD 等軟體製作出來之 image。
+
+2. 製作 ISO9660 / Rock Ridge 之 raw image
+
+/usr/share/examples/worm/makecdfs.sh
+
+        使用這個 shell script 來將一個目錄結構轉成 ISO9660 或 Rock Ridge
+        格式的 raw image。使用前需安裝 mkisofs 這個 package。使用方法為：
+
+                makecdfs.sh [-b] {cd-title} {input-tree} {output-file} {ID}
+
+        -b：加上這個參數可以做出可開機光碟。內定的 boot image 是
+            floppies/boot.flp (相對於 input-tree) boot.flp 可以直接拿
+            FreeBSD 的安裝片來用。
+
+        cd-title：這片 CD 的 volume name。
+
+        input-tree：要製作 raw image 的目錄頂點。
+
+        output-file：做出來的 raw image 之檔名。
+
+        ID：這片 CD 是誰做的。
+
+        這樣子做出來的光碟片在 DOS 上面還是 8.3 檔名檔式，不能有長檔名。
+        使用 Rock Ridge 格式，在 UNIX 下面有長檔名，但不支援中文長檔名。
+        如果不喜歡這樣做出來的光碟每個目錄都有個 TRANS.TBL，把 script 裡
+        mkisofs 的 -T 參數去掉。如果不需要 Rock Ridge 格式，把 -R 參數去
+        掉。
+
+3. On the Fly
+
+by Kaede.bbs@sob.m7.ntu.edu.tw：
+
+#!/bin/sh
+if [ $# -lt 3 ]; then
+        echo "usage: $0 input-tree \"cd-title\" \"copyright\" [dummy]"
+elif [ ! -d $1 ]; then
+        echo "$0: $1 is not a directory tree."
+elif [ "`id -u`" != "0" ]; then
+        echo "Sorry, this must be done as root."
+else
+        tree=$1; shift
+        title="$1"; shift
+        copyright="$1"; shift
+        echo -n "Place CD in the worm drive now and press return: "
+        read junk
+        scsi -f /dev/rworm0.ctl -c "0 0 0 0 0 0" >/dev/null 2>&1
+        wormcontrol select HP 4020i
+        wormcontrol prepdisk double $*
+        wormcontrol track data
+# 若需使用 Rock Ridge 再加上 -R 參數
+        mkisofs -a -d -N -D -V "$title" -P "$copyright" $tree \
+                | rtprio 5 team -v 1m 5 | rtprio 5 dd of=/dev/rworm0 obs=20k
+        wormcontrol fixate 1 onp
+
+4. CD Copy
+
+by Dinosaur.bbs@bbs.ee.nthu.edu.tw
+
+#!/bin/sh
+if [ "`id -u`" != "0" ]; then
+        echo "Sorry, this must be done as root."
+else
+        echo -n "Place CD in the worm drive now and press return: "
+        read junk
+        scsi -f /dev/rworm0.ctl -c "0 0 0 0 0 0" >/dev/null 2>&1
+        wormcontrol select PHILIPS CDD2000
+        wormcontrol prepdisk double $*
+        wormcontrol track data
+        rtprio 5 dd if=/dev/wcd0c bs=2048 | rtprio 5 team -v 1m 5 \
+                | rtprio 5 dd of=/dev/rworm0 obs=20k
+        wormcontrol fixate 1
+fi
+
+        經過測試，在 Panasonic CR-584(IDE) 上面完全成功，沒出過飛盤。
+        但是 SONY CDU-415(SCSI) 上面只成功過一片，剩下四片全部失事。不
+        知道為什麼，完成推翻 SCSI CD 比較適合 CD Copy 的說法。這種 CD Copy
+        只能拷貝 mode 1 的 CD-ROM，不過不管 CD9660、Joliet、Rock Ridge 格式
+        均可。
+
+5. cd-write
+
+ftp://freebsd.csie.nctu.edu.tw/pub/FreeBSD-current/ports/sysutils/cd-write
+
+        圖形介面的 CD 燒錄軟體。除了可以燒資料光碟外，也可以拿來抓 CD 音軌
+        、燒錄 Audio CD。在 FreeBSD 下面似乎不支援 Disk At Once 燒錄。目前
+        有 ports 可以直接安裝。
+
+6. cd-record
+
+ftp://freebsd.csie.nctu.edu.tw/pub/jdli/collect/cd-recorder/cdrecord/  \
+      cdrecord-1.5a5.tar.gz
+
+        支援不少 CD-R，可燒錄 multi-seesion、Audio CD，支援  mode 1、mode 2
+        CD-ROM XA mode 1、CD-ROM XA mode 2、CDI 等格式 (看來好像可以燒
+        Video-CD?) 功能看起來很強，不過在 FreeBSD 下面還沒看到比較多的使用
+        心得。在 FreeBSD 下面使用需要先做：
+
+                cd /dev; ln -s rworm0.ctl scgx
+
+        的動作 (Report by wte.bbs@bbs.ee.ncu.edu.tw)
+
+7. tosha
+
+ftp://freebsd.csie.nctu.edu.tw/pub/FreeBSD-current/ports/audio/tosha
+
+        FreeBSD 下面用來抓音軌的程式，目前只適用於 SCSI CD-ROM 上面。
+
+
+
+--
+      ???  ??   __________________________________________
+      ?  ?  ???? E-mail : g853732@Oz.nthu.edu.tw
+--->??  ?  ?????????????????  ????
+  ???  ?  ????  ??  ?????  ???  ??  ?
+  ??????????  ???????????????  ?--->
+ [7m 花五百萬蓋個中庭花園有何作用：在大家反對下拆除時可以再消化掉三百萬預算  [0m
+
+--
+※ Origin: 清華電機 ◆ From: g853732.HUNG.AB.
+
+
+       
+
+&copy;2001 Google
+

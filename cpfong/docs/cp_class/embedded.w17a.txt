@@ -1,0 +1,18 @@
+fetch related src.txz then untar (my vultr VM: FreeBSD 12.1-RELEASE 2021.01.03)
+cd /usr/src/tools/tools/nanobsd/embedded; sh ../nanobsd.sh -c ./qemu-i386.cfg # cat ./README
+04:38:20 ### log: /usr/embedded/obj/_.bk # after 4hrs 38mins
+check /usr/embedded/obj/ (3.1G) for log 
+result image /usr/embedded/images/_.disk.image.qemu-i386.qcow2.xz
+check /usr/embedded/qemu-i386/ (556M) for image detail
+
+simulate on FreeBSD
+--
+qemu-system-x86_64 -hdc _.disk.image.qemu-i386.qcow2 -nographic  # note: my VM on vultr is amd64, 
+
+simulate at windows7
+--
+https://www.qemu.org/
+./qemu-system-i386 -hdc _.disk.image.qemu-i386.qcow2 -nographic  # note: notebook is i386 system and qcom2 file is Serial Port output)
+# you may check last 2 lines of /usr/src/tools/tools/nanobsd/embedded/README for the above simulation cmd
+
+root no need pwd to login (network is working ok on this img)

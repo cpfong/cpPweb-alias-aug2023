@@ -1,0 +1,11 @@
+20220507
+
+Server
+--
+1. login line developper console 
+2. under provider (one can create new provider when his new channel be created) / create a new channel (type: Messaging API) / create success
+3. goto just created new channel / Messaging API / Channel access token / click Issue button 
+
+Client
+--
+iphone line scan Bar Code to add that channel as good friend

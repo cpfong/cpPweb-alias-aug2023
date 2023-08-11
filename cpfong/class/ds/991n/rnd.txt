@@ -1,0 +1,12 @@
+    Dim a(20) As Integer
+
+
+        For i As Integer = 0 To a.GetUpperBound(0)
+            a(i) = Rnd() * 100
+        Next
+
+        Array.Sort(a)
+
+        For i As Integer = 0 To a.GetUpperBound(0)
+            ListBox1.Items.Add(a(i))
+        Next 

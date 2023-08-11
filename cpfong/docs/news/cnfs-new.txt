@@ -1,0 +1,3 @@
+cycbuff:ONE:/usr/local/news/spool/cycbuffs/one:512000
+cycbuff:TWO:/usr/local/news/spool/cycbuffs/two:512000
+cycbuff:THREE:/usr/local/news/spool/cycbuffs/three:512000

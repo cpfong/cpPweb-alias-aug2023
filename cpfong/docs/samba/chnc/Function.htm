@@ -1,0 +1,375 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0040)http://www.tp.edu.tw/documents/samba.htm -->
+<html>
+
+<head>
+<title>Redhat 6.X下的Samba Server</title>
+<meta content="text/html; charset=big5" http-equiv="Content-Type">
+<meta content="Microsoft FrontPage 3.0" name="GENERATOR">
+<meta content="FrontPage.Editor.Document" name="ProgId">
+</head>
+
+<body>
+
+<h1 align="center"><img border="0" src="Functi3.gif" width="195" height="51"></h1>
+
+<p>NT最令人感到方便的特色莫過於『網路上的芳鄰』的檔案分享功能，有了這項功能後，使得辦公室、校園裡資料的傳遞與分享得以落實。以往在FreeBSD的世界裡其實也有NFS可以在Unix 
+Like的作業系統下做檔案分享，但是與Windows作業環境的整合還是缺乏溝通的橋樑。</p>
+
+<p>自從Samba Server出現後，非但建立了FreeBSD與Windows環境的溝通管道，也可以做為Print 
+Server提供Win98/NT遠端連線列印；若是使用Samba Server搭配Apache Web Server，可在Win98/NT環境下藉由『網路上的芳鄰』登入FreeBSD主機裡使用者的個人帳號放置網頁目錄，有了這項功能，編輯個人網頁就如同在本機操作一般方便。除此之外，Samba 
+Server也可以完全取代NT PDC（Primary Domain Controler）成為NT網域主控者管理NT網域機群，當然，Samba也可以將目錄、檔案分享給其他Unix 
+Like、Mac、OS/2的機器使用，應用層面可以說是相當廣闊，更令人驚訝的是Samba 
+Server也可做為WNS Server，若配合DHCP Server更可以管理大型NT網域，想想！這個集合眾多優點的伺服器，是不是會對不同機種的作業系統工作環境在整合上有著極大的助益呢？</p>
+
+<h2><span lang="EN-US">Samba的基本概念</span></h2>
+
+<p>您可將<span lang="EN-US">Samba 
+定位為一套功能極為強大的檔案伺服器軟體，所謂檔案伺服器就是將檔案伺服主機上的目錄分享出來，讓您可以透過網路對分享出來的目錄裡的檔案，做執行、讀取、寫入等動作。基本上NT的網域是使用Netbios做電腦命名服務，使用廣播封包來偵測網路上有哪些電腦、哪些目錄提供資源分享，而Samba與UNIX主機間的溝通（如目錄、檔案分享）是透過TCP/IP協定達成任務，Samba若要與NT網域做溝通，透過TCP/IP當然是行不通的，只好也使用Netbios對NT網域做廣播，讓windows機器能夠認識它，進而成為NT網域成員；因此Samba是使用smbd 
+Daemon透過TCP/IP聯繫Unix Like主機，而使用nmbd Daemon透過Netbios對NT網域做聯繫，也就是說Samba使用兩種機制達成資源分享的目的。</span></p>
+
+<p>註：<span lang="EN-US">smbd Daemon主要用來處理檔案分享和列印分享服務；nmbd 
+Daemon則用來處理wins名稱解析服務及NT Browser Service（即網路上的芳鄰）。</span></p>
+
+<pre><b><span style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New"><font
+size="4"><span
+style="mso-spacerun: yes; mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New">&nbsp;</span>如何從<span
+lang="EN-US">Windows<span
+style="mso-tab-count: 1; mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New"> </span>95使用SAMBA伺服器上的資源<o:p>
+
+</o:p>
+
+</span></font></span></b></pre>
+<div align="left">
+
+<pre style="line-height: 100%; margin-top: -3; margin-bottom: -3"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3"><o:p>
+
+</o:p>
+
+</font></span></pre>
+</div><div align="left">
+
+<pre style="line-height: 100%; margin-top: -3; margin-bottom: -3"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3"><span style="mso-spacerun: yes; mso-bidi-font-size: 10.0pt">&nbsp;</span>SAMBA伺服器簡述：<o:p>
+
+</o:p>
+
+</font></span></pre>
+</div><div align="left">
+
+<pre style="line-height: 100%; margin-top: -3; margin-bottom: -3"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">&nbsp;<o:p>
+
+</o:p>
+
+</font></span></pre>
+</div>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">當您所處的單位之UNIX系統機器上已安裝好SAMBA軟體，在啟動之後，此UNIX機器就成了一</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">台SAMBA伺服器。SAMBA軟體運用SMB（Server<span
+style="mso-spacerun: yes; mso-bidi-font-size: 10.0pt">&nbsp; </span>Message Block）協定來整合TCP/IP、</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">NETBUEI及IPX/SPX等協定，因此就採用NETBUEI協定的Windows 95而言，可輕易的把伺</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">服器上的資料夾（光碟機）當成自己PC上的資料夾（光碟機）、把伺服器上的印表機當成自己</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">PC的印表機。<o:p>
+
+</o:p>
+
+</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">&nbsp;<o:p>
+
+</o:p>
+
+</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">從Windows<span style="mso-tab-count: 1; mso-bidi-font-size: 10.0pt"> </span>95使用SAMBA伺服器上的資源的條件與步驟：<o:p>
+
+</o:p>
+
+</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">&nbsp;<o:p>
+
+</o:p>
+
+</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">1.在SAMBA伺服器上需有使用帳號：<o:p>
+
+</o:p>
+
+</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">&nbsp;<o:p>
+
+</o:p>
+
+</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3"><span style="mso-spacerun: yes; mso-bidi-font-size: 10.0pt">&nbsp;</span>使用者要透過SAMBA來共享其他資源，先決條件是需在SAMBA上建有使用帳號。（此例中是</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">由中心建立），連線至伺服器，在登入鍵入正確的使用者名稱與密碼）後，才可使用伺服器上</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">的資源。<o:p>
+
+</o:p>
+
+</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">&nbsp;<o:p>
+
+</o:p>
+
+</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3"> 為了方便帳號建立作業，如果使用者在gate上已有帳號，我們將使用與gate上相同ID作為</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">您在SAMBA伺服器上的使用者名稱，而您的密碼將暫設成與使用者名稱相同，待使用者日後再</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">自行更改（密碼的更改方法俟步驟7再說明，建議遵循步驟操作一步執行）；而如果你尚未申</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">請gate主機上的帳號，則請與中心聯繫處理。<o:p>
+
+</o:p>
+
+</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">&nbsp;<o:p>
+
+</o:p>
+
+</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">2.安裝網路協定及網路設定：<o:p>
+
+</o:p>
+
+</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">&nbsp;<o:p>
+
+</o:p>
+
+</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3"><span style="mso-spacerun: yes; mso-bidi-font-size: 10.0pt">&nbsp;</span>請以滑鼠左鍵點選Windows<span
+style="mso-tab-count: 1; mso-bidi-font-size: 10.0pt"> </span>95桌面上的”網路上的芳鄰”選項，再按右鍵以打開其快顯功能</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">表，選擇”內容”項目，則您的螢幕會出現標題為”網路”的視窗，在”組態”標籤頁中除需有網路</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">卡且必須設定正確外，另需有用戶端服務程式－－”Client<span
+style="mso-spacerun: yes; mso-bidi-font-size: 10.0pt"> </span>for<span
+style="mso-spacerun: yes; mso-bidi-font-size: 10.0pt"> </span>Microsoft Networks”</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">與通訊協定－－”NETBUEI”（若無，請先分別新增）。接著，請在主網路登入選擇”Client<span
+style="mso-tab-count: 1; mso-bidi-font-size: 10.0pt">&nbsp;</span></font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">for<span style="mso-spacerun: yes; mso-bidi-font-size: 10.0pt">&nbsp;</span>Microsoft<span
+style="mso-spacerun: yes; mso-bidi-font-size: 10.0pt"> </span>Networks”。再接著點選”識別資料”標籤頁，”電腦名稱”建議使用SAMBA</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">伺服器上的使用者名稱，而”工作群組”一定要是workgroup，”電腦說明”則可任意指定。<o:p>
+
+</o:p>
+
+</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">&nbsp;<o:p>
+
+</o:p>
+
+</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">3.登入Windows網路：<o:p>
+
+</o:p>
+
+</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">&nbsp;<o:p>
+
+</o:p>
+
+</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3"><span style="mso-spacerun: yes; mso-bidi-font-size: 10.0pt">&nbsp;</span>Windows<span
+style="mso-tab-count: 1; mso-bidi-font-size: 10.0pt"> </span>95啟動之初，畫面會停留在要求登入Windows網路的小視窗上，如果您鍵入使用者</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">名稱與密碼，就已登入Windows網路了。<o:p>
+
+</o:p>
+
+</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3"><span style="mso-spacerun: yes; mso-bidi-font-size: 10.0pt">&nbsp;</span>而登入Windows網路的使用者名稱與密碼是由使用者自己決定，但若要登入SAMBA伺服器，那</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">麼登入Windows網路的使用者名稱與密碼就必須與SAMBA伺服器上的使用者名稱與密碼相同。<o:p>
+
+</o:p>
+
+</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">&nbsp;<o:p>
+
+</o:p>
+
+</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">4.尋找SAMBA伺服器、建立該伺服器捷徑、並登入該伺服器：<o:p>
+
+</o:p>
+
+</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">&nbsp;<o:p>
+
+</o:p>
+
+</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">　</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><font size="3"><span
+lang="EN-US"><span style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New"> </span></span><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US">以滑鼠左鍵雙按Windows<span
+style="mso-spacerun: yes; mso-bidi-font-size: 10.0pt">&nbsp; </span>95桌面上的”網路上的芳鄰”就可看見屬於自己單位的伺</span><span
+style="mso-bidi-font-size: 10.0pt" lang="EN-US"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New">服器，若</span></span></font></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><font size="3"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"> </span><span
+style="mso-bidi-font-size: 10.0pt" lang="EN-US"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New">無，則請用滑鼠點選Windows 95工作列上的”開始”--&gt;</span><span
+style="mso-bidi-font-size: 10.0pt; font-family: Courier New; mso-ascii-font-family: 細明體">”</span></span><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US">尋找” --&gt;”電腦”，鍵入\\abc</span></font></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">（以尋找abc之SAMBA伺服器為例）之後按”立即尋找”即可找到。<o:p>
+
+</o:p>
+
+</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3">&nbsp;<o:p>
+
+</o:p>
+
+</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3"><span style="mso-spacerun: yes; mso-bidi-font-size: 10.0pt">&nbsp;&nbsp;</span>使用者在找到之後，請在桌面上建立該伺服器的捷徑，再以滑鼠左鍵雙按該伺服器的捷徑登入</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><font size="3"><span
+lang="EN-US"><span style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New"> </span></span><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US">之，此時，SAMBA伺服器會詢問您的密碼，但是由於SAMBA伺服器上的使用者名稱及密碼與 </span></font></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><font size="3"><span
+lang="EN-US"><span style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New"> </span></span><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US">Windows網路之使用者名稱及密碼相同，因此，請您再以滑鼠之左鍵雙按該伺服器即可完成登</span></font></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US"><font
+size="3"> 入。此時你已完成第一次登入SAMBA伺服器的動作，Windows<span
+style="mso-tab-count: 1; mso-bidi-font-size: 10.0pt">&nbsp;</span>95會記住你曾登入SAMBA伺服</font></span></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><font size="3"><span
+lang="EN-US"><span style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New"> </span></span><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US">器，下一次當您開機進入Windows<span
+style="mso-spacerun: yes; mso-bidi-font-size: 10.0pt">&nbsp;</span>95並登入 Windows網路後，Windows 95則會自動幫你</span></font></pre>
+
+<pre style="line-height: 100%; margin-top: 4; margin-bottom: 4"><font size="3"><span
+lang="EN-US"><span style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New"> </span></span><span
+style="mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Courier New" lang="EN-US">登入SAMBA伺服器。<o:p>
+
+</o:p>
+
+</span></font></pre>
+</body>
+</html>

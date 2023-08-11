@@ -1,0 +1,333 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta http-equiv="Content-Style-Type" content="text/css" />
+		<meta name="generator" content="MediaWiki 1.15.1" />
+		<meta name="keywords" content="HOWTO setup freebsd 6 ldap authentication,Howto" />
+		<link rel="shortcut icon" href="/favicon.ico" />
+		<link rel="search" type="application/opensearchdescription+xml" href="/opensearch_desc.php" title="Chaos (en)" />
+		<link rel="alternate" type="application/rss+xml" title="Chaos RSS Feed" href="/index.php?title=Special:RecentChanges&amp;feed=rss" />
+		<link rel="alternate" type="application/atom+xml" title="Chaos Atom Feed" href="/index.php?title=Special:RecentChanges&amp;feed=atom" />
+		<title>HOWTO setup freebsd 6 ldap authentication - Chaos</title>
+		<link rel="stylesheet" href="/skins/common/shared.css?207" type="text/css" media="screen" />
+		<link rel="stylesheet" href="/skins/common/commonPrint.css?207" type="text/css" media="print" />
+		<link rel="stylesheet" href="/skins/monobook/main.css?207" type="text/css" media="screen" />
+		<!--[if lt IE 5.5000]><link rel="stylesheet" href="/skins/monobook/IE50Fixes.css?207" type="text/css" media="screen" /><![endif]-->
+		<!--[if IE 5.5000]><link rel="stylesheet" href="/skins/monobook/IE55Fixes.css?207" type="text/css" media="screen" /><![endif]-->
+		<!--[if IE 6]><link rel="stylesheet" href="/skins/monobook/IE60Fixes.css?207" type="text/css" media="screen" /><![endif]-->
+		<!--[if IE 7]><link rel="stylesheet" href="/skins/monobook/IE70Fixes.css?207" type="text/css" media="screen" /><![endif]-->
+		<link rel="stylesheet" href="/index.php?title=MediaWiki:Common.css&amp;usemsgcache=yes&amp;ctype=text%2Fcss&amp;smaxage=18000&amp;action=raw&amp;maxage=18000" type="text/css" />
+		<link rel="stylesheet" href="/index.php?title=MediaWiki:Print.css&amp;usemsgcache=yes&amp;ctype=text%2Fcss&amp;smaxage=18000&amp;action=raw&amp;maxage=18000" type="text/css" media="print" />
+		<link rel="stylesheet" href="/index.php?title=MediaWiki:Monobook.css&amp;usemsgcache=yes&amp;ctype=text%2Fcss&amp;smaxage=18000&amp;action=raw&amp;maxage=18000" type="text/css" />
+		<link rel="stylesheet" href="/index.php?title=-&amp;action=raw&amp;maxage=18000&amp;gen=css" type="text/css" />
+		<!--[if lt IE 7]><script type="text/javascript" src="/skins/common/IEFixes.js?207"></script>
+		<meta http-equiv="imagetoolbar" content="no" /><![endif]-->
+
+		<script type= "text/javascript">/*<![CDATA[*/
+		var skin = "monobook";
+		var stylepath = "/skins";
+		var wgArticlePath = "/index.php/$1";
+		var wgScriptPath = "";
+		var wgScript = "/index.php";
+		var wgVariantArticlePath = false;
+		var wgActionPaths = {};
+		var wgServer = "http://chaos.untouchable.net";
+		var wgCanonicalNamespace = "";
+		var wgCanonicalSpecialPageName = false;
+		var wgNamespaceNumber = 0;
+		var wgPageName = "HOWTO_setup_freebsd_6_ldap_authentication";
+		var wgTitle = "HOWTO setup freebsd 6 ldap authentication";
+		var wgAction = "view";
+		var wgArticleId = "1428";
+		var wgIsArticle = true;
+		var wgUserName = null;
+		var wgUserGroups = null;
+		var wgUserLanguage = "en";
+		var wgContentLanguage = "en";
+		var wgBreakFrames = false;
+		var wgCurRevisionId = 1734;
+		var wgVersion = "1.15.1";
+		var wgEnableAPI = true;
+		var wgEnableWriteAPI = true;
+		var wgSeparatorTransformTable = ["", ""];
+		var wgDigitTransformTable = ["", ""];
+		var wgRestrictionEdit = [];
+		var wgRestrictionMove = [];
+		/*]]>*/</script>
+
+		<script type="text/javascript" src="/skins/common/wikibits.js?207"><!-- wikibits js --></script>
+		<!-- Head Scripts -->
+		<script type="text/javascript" src="/skins/common/ajax.js?207"></script>
+		<script type="text/javascript" src="/index.php?title=-&amp;action=raw&amp;gen=js&amp;useskin=monobook"><!-- site js --></script>
+	</head>
+<body class="mediawiki ltr ns-0 ns-subject page-HOWTO_setup_freebsd_6_ldap_authentication skin-monobook">
+	<div id="globalWrapper">
+		<div id="column-content">
+	<div id="content">
+		<a name="top" id="top"></a>
+				<h1 id="firstHeading" class="firstHeading">HOWTO setup freebsd 6 ldap authentication</h1>
+		<div id="bodyContent">
+			<h3 id="siteSub">From Chaos</h3>
+			<div id="contentSub"></div>
+									<div id="jump-to-nav">Jump to: <a href="#column-one">navigation</a>, <a href="#searchInput">search</a></div>			<!-- start content -->
+			<table cellpadding="0" cellspacing="0" style="margin-top: 0px; border:1px solid Grey;" align="center">
+<tr>
+<td style="border-bottom:1px solid Grey; background:#efefef;"><center><small>This article is part  of the <b><a href="/index.php/Category:Howto" title="Category:Howto">HOWTO</a></b> series.</small></center>
+</td></tr></table>
+<table id="toc" class="toc" summary="Contents"><tr><td><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1"><a href="#Summary"><span class="tocnumber">1</span> <span class="toctext">Summary</span></a></li>
+<li class="toclevel-1"><a href="#Caveats"><span class="tocnumber">2</span> <span class="toctext">Caveats</span></a></li>
+<li class="toclevel-1"><a href="#Details"><span class="tocnumber">3</span> <span class="toctext">Details</span></a>
+<ul>
+<li class="toclevel-2"><a href="#pam_ldap"><span class="tocnumber">3.1</span> <span class="toctext">pam_ldap</span></a></li>
+<li class="toclevel-2"><a href="#nss_ldap"><span class="tocnumber">3.2</span> <span class="toctext">nss_ldap</span></a></li>
+<li class="toclevel-2"><a href="#nsswitch.conf"><span class="tocnumber">3.3</span> <span class="toctext">nsswitch.conf</span></a></li>
+<li class="toclevel-2"><a href="#Old_Accounts"><span class="tocnumber">3.4</span> <span class="toctext">Old Accounts</span></a></li>
+<li class="toclevel-2"><a href="#Test"><span class="tocnumber">3.5</span> <span class="toctext">Test</span></a></li>
+<li class="toclevel-2"><a href="#Samba"><span class="tocnumber">3.6</span> <span class="toctext">Samba</span></a></li>
+<li class="toclevel-2"><a href="#Apache"><span class="tocnumber">3.7</span> <span class="toctext">Apache</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="#References"><span class="tocnumber">4</span> <span class="toctext">References</span></a></li>
+</ul>
+</td></tr></table><script type="text/javascript"> if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
+<a name="Summary" id="Summary"></a><h2> <span class="mw-headline">Summary</span></h2>
+<p>This is an article designed to quickly and efficiently list what changes need to be made on a FreeBSD server to allow SSH, system, Apache, Samba, and sudo authentication via an OpenLDAP server.
+</p>
+<a name="Caveats" id="Caveats"></a><h2> <span class="mw-headline">Caveats</span></h2>
+<p>This article assumes the following:
+</p>
+<ul><li> You already have a working LDAP server with users and groups pre-populated.
+</li><li> You have a good understanding of how FreeBSD is laid out.
+</li><li> Any software that you want to authenticate via LDAP is compiled with LDAP support. This includes, but is not limited to:
+<ul><li> Apache
+</li><li> Samba
+</li><li> nss_ldap
+</li><li> pam_ldap
+</li><li> sudo
+</li></ul>
+</li></ul>
+<a name="Details" id="Details"></a><h2> <span class="mw-headline">Details</span></h2>
+<a name="pam_ldap" id="pam_ldap"></a><h3> <span class="mw-headline">pam_ldap</span></h3>
+<p>First things first, setup System and SSH authentication to use LDAP. Go in to the directory /etc/pam.d, and edit the files <i>other</i>, <i>sshd</i>, and <i>system</i>. Under the auth section, just above the line that reads:
+</p>
+<pre>
+auth            required        pam_unix.so             no_warn try_first_pass
+</pre>
+<p>Add the following:
+</p>
+<pre>
+auth            sufficient      /usr/local/lib/pam_ldap.so      no_warn try_first_pass
+</pre>
+<p>Each of the 3 files, <i>other</i>, <i>sshd</i>, and <i>system</i> should have an <b>auth</b> section that looks like this:
+</p>
+<pre>
+# auth
+auth            required        pam_nologin.so          no_warn
+auth            sufficient      pam_opie.so             no_warn no_fake_prompts
+auth            requisite       pam_opieaccess.so       no_warn allow_local
+#auth           sufficient      pam_krb5.so             no_warn try_first_pass
+#auth           sufficient      pam_ssh.so              no_warn try_first_pass
+auth            sufficient      /usr/local/lib/pam_ldap.so      no_warn try_first_pass
+auth            required        pam_unix.so             no_warn try_first_pass
+</pre>
+<p>Save the files and exit.
+</p>
+<a name="nss_ldap" id="nss_ldap"></a><h3> <span class="mw-headline">nss_ldap</span></h3>
+<p>Now, we need to modify /usr/local/etc/ldap.conf and create a symlink for nss_ldap.conf. There are many options in ldap.conf, yours may vary. I have only included the ones I modified below. Note that this also covers setting up sudo, since we define the sudoers_base.
+</p>
+<pre>
+host ldap.mycompany.net
+base dc=mycompany,dc=net
+sudoers_base   ou=Sudoers,dc=mycompany,dc=net
+binddn uid=manager,ou=Users,dc=mycompany,dc=net
+bindpw mysecret
+port 389
+timelimit 30
+bind_timelimit 120
+bind_policy soft
+nss_base_passwd         ou=Computers,dc=mycompany,dc=net?sub
+nss_base_passwd         ou=Users,dc=mycompany,dc=net?sub
+nss_base_group          ou=Groups,dc=mycompany,dc=net?one
+pam_password ssha
+logdir /var/log/syslog/nss_ldap
+</pre>
+<p>Create the symlink for nss_ldap.conf:
+</p>
+<table cellpadding="2" cellspacing="0" style="margin-top: 0px; margin-bottom: 0px; border:1px solid Grey;">
+<tr>
+<td style="border-bottom:1px solid Grey; background:#efefef;">root@localhost:/usr/local/etc# ln -s ldap.conf nss_ldap.conf
+</td></tr></table>
+<a name="nsswitch.conf" id="nsswitch.conf"></a><h3> <span class="mw-headline">nsswitch.conf</span></h3>
+<p>Modify the file /etc/nsswitch.conf. This contains the settings for obtaining user and group information. Mine looks something like this:
+</p>
+<pre>
+group: files ldap
+group_compat: nis
+hosts: files dns
+networks: files
+passwd: files ldap
+passwd_compat: nis
+shells: files
+</pre>
+<a name="Old_Accounts" id="Old_Accounts"></a><h3> <span class="mw-headline">Old Accounts</span></h3>
+<p>If you still have old /etc/passwd accounts, delete them now. You should make sure you are currently su'd to root and that you have no chance of losing your connection to your server. <b>You might lock yourself out!</b>
+</p>
+<table cellpadding="2" cellspacing="0" style="margin-top: 0px; margin-bottom: 0px; border:1px solid Grey;">
+<tr>
+<td style="border-bottom:1px solid Grey; background:#efefef;">root@localhost:~# pw userdel -n username
+</td></tr></table>
+<a name="Test" id="Test"></a><h3> <span class="mw-headline">Test</span></h3>
+<p>Using one of your new user accounts, SSH to your system and see if you can login. If you cannot, turn up logging and start debugging.
+</p>
+<a name="Samba" id="Samba"></a><h3> <span class="mw-headline">Samba</span></h3>
+<p>On to Samba. Ensure Samba is compiled with LDAP support. Edit /usr/local/etc/smb.conf, and add settings for LDAP auth that look something like the following. Note that these are only LDAP-specific settings. There are many other options that go in to smb.conf, yours will vary. <i><b>Note that these settings are for a Samba server that IS NOT a domain controller.</b></i>
+</p>
+<pre>
+passdb backend = ldapsam:ldap://ldap.mycompany.net/
+ldap delete dn = Yes
+ldap ssl = no
+ldap suffix = dc=mycompany,dc=net
+ldap admin dn = uid=root,dc=mycompany,dc=net
+ldap group suffix = ou=Groups
+ldap user suffix = ou=Users
+ldap machine suffix = ou=Computers
+ldap idmap suffix = ou=Idmap
+</pre>
+<p>To set the password for the Admin DN in Samba, run 'smbpasswd -w mysecret'. It will save the encrypted password to secrets.tdb.
+</p>
+<table cellpadding="2" cellspacing="0" style="margin-top: 0px; margin-bottom: 0px; border:1px solid Grey;">
+<tr>
+<td style="border-bottom:1px solid Grey; background:#efefef;">root@localhost:/usr/local/etc# smbpasswd -w mysecret
+</td></tr></table>
+<p>Restart Samba, you should be able to connect to the system using a user from LDAP.
+</p>
+<a name="Apache" id="Apache"></a><h3> <span class="mw-headline">Apache</span></h3>
+<p>As long as your Apache is configured with LDAP support, enabling .htaccess files to auth against LDAP is easy. I have included the text below from one of mine that I use as a template. Other than loading the Apache DSO's for ldap in httpd.conf (see below), this should be all the config you need to do.
+</p>
+<pre>
+AuthLDAPEnabled On
+AuthLDAPAuthoritative On
+AuthLDAPDereferenceAliases never
+AuthLDAPGroupAttributeIsDN On
+AuthLDAPGroupAttribute memberUid
+AuthLDAPBindDN uid=manager,ou=users,dc=mycompany,dc=net
+AuthLDAPBindPassword mysecret
+AuthName &quot;(LDAP) Restricted Files&quot;
+AuthType Basic
+AuthLDAPURL ldap://ldap.mycompany.net/dc=mycompany,dc=net?uid?sub?(objectClass=posixAccount)
+
+# Let any valid user in
+require valid-user
+
+# Let only joe in
+#require user joe
+
+# Let anyone from group Administrators in
+#require group cn=Administrators,ou=groups,dc=mycompany,dc=net
+</pre>
+<p>These are the 2 lines you will need in httpd.conf to load mod_ldap and mod_auth_ldap.
+</p>
+<pre>
+LoadModule ldap_module libexec/apache2/mod_ldap.so
+LoadModule auth_ldap_module libexec/apache2/mod_auth_ldap.so
+</pre>
+<a name="References" id="References"></a><h2> <span class="mw-headline">References</span></h2>
+<ul><li> <a href="http://gentoo-wiki.com/HOWTO_LDAP_SAMBA_PDC_Basic_Evaluation" class="external free" title="http://gentoo-wiki.com/HOWTO_LDAP_SAMBA_PDC_Basic_Evaluation" rel="nofollow" target="_blank">http://gentoo-wiki.com/HOWTO_LDAP_SAMBA_PDC_Basic_Evaluation</a>
+</li></ul>
+
+<!-- 
+NewPP limit report
+Preprocessor node count: 68/1000000
+Post-expand include size: 926/2097152 bytes
+Template argument size: 140/2097152 bytes
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key chaos_untouchable_net:pcache:idhash:1428-0!1!0!!en!2!edit=0 and timestamp 20100102094104 -->
+<div class="printfooter">
+Retrieved from "<a href="http://chaos.untouchable.net/index.php/HOWTO_setup_freebsd_6_ldap_authentication">http://chaos.untouchable.net/index.php/HOWTO_setup_freebsd_6_ldap_authentication</a>"</div>
+			<div id='catlinks' class='catlinks'><div id="mw-normal-catlinks"><a href="/index.php/Special:Categories" title="Special:Categories">Categories</a>:&#32;<span dir='ltr'><a href="/index.php/Category:Freebsd" title="Category:Freebsd">Freebsd</a></span> | <span dir='ltr'><a href="/index.php/Category:Howto" title="Category:Howto">Howto</a></span></div></div>			<!-- end content -->
+						<div class="visualClear"></div>
+		</div>
+	</div>
+		</div>
+		<div id="column-one">
+	<div id="p-cactions" class="portlet">
+		<h5>Views</h5>
+		<div class="pBody">
+			<ul>
+	
+				 <li id="ca-nstab-main" class="selected"><a href="/index.php/HOWTO_setup_freebsd_6_ldap_authentication" title="View the content page [c]" accesskey="c">Page</a></li>
+				 <li id="ca-talk" class="new"><a href="/index.php?title=Talk:HOWTO_setup_freebsd_6_ldap_authentication&amp;action=edit&amp;redlink=1" title="Discussion about the content page [t]" accesskey="t">Discussion</a></li>
+				 <li id="ca-viewsource"><a href="/index.php?title=HOWTO_setup_freebsd_6_ldap_authentication&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></li>
+				 <li id="ca-history"><a href="/index.php?title=HOWTO_setup_freebsd_6_ldap_authentication&amp;action=history" title="Past revisions of this page [h]" accesskey="h">History</a></li>			</ul>
+		</div>
+	</div>
+	<div class="portlet" id="p-personal">
+		<h5>Personal tools</h5>
+		<div class="pBody">
+			<ul>
+				<li id="pt-login"><a href="/index.php?title=Special:UserLogin&amp;returnto=HOWTO_setup_freebsd_6_ldap_authentication" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="portlet" id="p-logo">
+		<a style="background-image: url();" href="/index.php/Main_Page" title="Visit the main page [z]" accesskey="z"></a>
+	</div>
+	<script type="text/javascript"> if (window.isMSIE55) fixalpha(); </script>
+	<div class='generated-sidebar portlet' id='p-navigation'>
+		<h5>Navigation</h5>
+		<div class='pBody'>
+			<ul>
+				<li id="n-mainpage"><a href="/index.php/Main_Page" title="Visit the main page">Main Page</a></li>
+				<li id="n-New-articles"><a href="/index.php/Special:NewPages">New articles</a></li>
+				<li id="n-recentchanges"><a href="/index.php/Special:RecentChanges" title="The list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li>
+				<li id="n-Available-categories"><a href="/index.php/Special:Categories">Available categories</a></li>
+				<li id="n-randompage"><a href="/index.php/Special:Random" title="Load a random page [x]" accesskey="x">Random page</a></li>
+				<li id="n-help"><a href="/index.php/Help:Contents" title="The place to find out">Help</a></li>
+				<li id="n-Sever-support"><a href="/index.php/Sitesupport-url">Sever support</a></li>
+				<li id="n-Contact-Us"><a href="http://untouchable.net/contact-us.html">Contact Us</a></li>
+				<li id="n-Templates"><a href="/index.php/Template">Templates</a></li>
+			</ul>
+		</div>
+	</div>
+	<div id="p-search" class="portlet">
+		<h5><label for="searchInput">Search</label></h5>
+		<div id="searchBody" class="pBody">
+			<form action="/index.php" id="searchform"><div>
+				<input type='hidden' name="title" value="Special:Search"/>
+				<input id="searchInput" name="search" type="text" title="Search Chaos [f]" accesskey="f" value="" />
+				<input type='submit' name="go" class="searchButton" id="searchGoButton"	value="Go" title="Go to a page with this exact name if exists" />&nbsp;
+				<input type='submit' name="fulltext" class="searchButton" id="mw-searchButton" value="Search" title="Search the pages for this text" />
+			</div></form>
+		</div>
+	</div>
+	<div class="portlet" id="p-tb">
+		<h5>Toolbox</h5>
+		<div class="pBody">
+			<ul>
+				<li id="t-whatlinkshere"><a href="/index.php/Special:WhatLinksHere/HOWTO_setup_freebsd_6_ldap_authentication" title="List of all wiki pages that link here [j]" accesskey="j">What links here</a></li>
+				<li id="t-recentchangeslinked"><a href="/index.php/Special:RecentChangesLinked/HOWTO_setup_freebsd_6_ldap_authentication" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li>
+<li id="t-specialpages"><a href="/index.php/Special:SpecialPages" title="List of all special pages [q]" accesskey="q">Special pages</a></li>
+				<li id="t-print"><a href="/index.php?title=HOWTO_setup_freebsd_6_ldap_authentication&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li>				<li id="t-permalink"><a href="/index.php?title=HOWTO_setup_freebsd_6_ldap_authentication&amp;oldid=1734" title="Permanent link to this revision of the page">Permanent link</a></li>			</ul>
+		</div>
+	</div>
+		</div><!-- end of the left (by default at least) column -->
+			<div class="visualClear"></div>
+			<div id="footer">
+				<div id="f-poweredbyico"><a href="http://www.mediawiki.org/"><img src="/skins/common/images/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" /></a></div>
+			<ul id="f-list">
+					<li id="lastmod"> This page was last modified on 24 August 2007, at 23:04.</li>
+					<li id="viewcount">This page has been accessed 2,102 times.</li>
+					<li id="privacy"><a href="/index.php/Chaos:Privacy_policy" title="Chaos:Privacy policy">Privacy policy</a></li>
+					<li id="about"><a href="/index.php/Chaos:About" title="Chaos:About">About Chaos</a></li>
+					<li id="disclaimer"><a href="/index.php/Chaos:General_disclaimer" title="Chaos:General disclaimer">Disclaimers</a></li>
+			</ul>
+		</div>
+</div>
+
+		<script type="text/javascript">if (window.runOnloadHook) runOnloadHook();</script>
+<!-- Served in 0.209 secs. --></body></html>

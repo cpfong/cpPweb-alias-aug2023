@@ -1,0 +1,9 @@
+bash-2.05b$ hostname
+news.fjtc.edu.tw
+
+bash-2.05b$ telnet tt.fjtc.edu.tw 119
+Trying 163.15.204.128...
+Connected to tt.fjtc.edu.tw.
+Escape character is '^]'.
+502 You have no permission to talk.  Goodbye.
+Connection closed by foreign host.

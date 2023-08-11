@@ -1,0 +1,38 @@
+ 1 / 1Fichier
+ 2 / Alias for an existing remote
+ 3 / Amazon Drive
+ 4 / Amazon S3 Compliant Storage Provider (AWS, Alibaba, Ceph, Digital Ocean, Dreamhost, IBM COS, Minio, Tencent COS, etc)
+ 5 / Backblaze B2
+ 6 / Box
+ 7 / Cache a remote
+ 8 / Citrix Sharefile
+ 9 / Dropbox
+10 / Encrypt/Decrypt a remote
+11 / FTP Connection
+12 / Google Cloud Storage (this is not Google Drive)
+13 / Google Drive
+14 / Google Photos
+15 / Hubic
+16 / In memory object storage system.
+17 / Jottacloud
+18 / Koofr
+19 / Local Disk
+20 / Mail.ru Cloud
+21 / Mega
+22 / Microsoft Azure Blob Storage
+23 / Microsoft OneDrive
+24 / OpenDrive
+25 / OpenStack Swift (Rackspace Cloud Files, Memset Memstore, OVH)
+26 / Pcloud
+27 / Put.io
+28 / QingCloud Object Storage
+29 / SSH/SFTP Connection
+30 / Sugarsync
+31 / Tardigrade Decentralized Cloud Storage
+32 / Transparently chunk/split large files
+33 / Union merges the contents of several upstream fs
+34 / Webdav
+35 / Yandex Disk
+36 / http Connection
+37 / premiumize.me
+38 / seafile

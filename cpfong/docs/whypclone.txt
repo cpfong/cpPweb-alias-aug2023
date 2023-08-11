@@ -1,0 +1,16 @@
+best backup tool: dd However it take too much spaces and slow
+
+partclone support: ext2, ext3, ext4, hfs+, reiserfs, xfs, jfs, ntfs, fat(12/16/32), exfat and partclone.dd to backup system it does not support yet
+
+sudo partclone.ext4 -c -s /dev/sdb1 -o /mnt/orangepilite.pcl
+#--clone --slice --output
+#8G sdb1 --> 1.3G backup img of orangepilite.pcl
+
+partclone.ext4 -c -s /dev/sdb1 |gzip -c -9 >/mnt/orangepilite.pcl.gz
+# further zip to 454M
+
+[lujun9972@T520 mnt]$ sudo bash -c "dd if=/dev/sdb1 | gzip -c -9 >/mnt/orangepilite.dd.gz"
+7785037824 bytes (7.8 GB, 7.3 GiB) copied, 601.261 s, 12.9 MB/s
+
+[lujun9972@T520 mnt]$ ls -lh /mnt/orangepilite.dd.gz 
+-rw-r–r– 1 root root 5.4G Mar   8 21:49 /mnt/orangepilite.dd.gz

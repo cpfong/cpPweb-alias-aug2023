@@ -1,0 +1,55 @@
+1. ¥ô·N¿é¤J¤@¨Ç¼Æ¦r, §â³o¨Ç¼Æ¤¤ªº©Ò¦³©_¼Æ¬Û¥[ (20%)
+$s = 0;
+while (<STDIN>){
+        if ($_ % 2){ $s += $_;}
+}
+print $s;
+
+2. ¼g¤@°Æµ{¦¡¥i¥H§â¤@¦ê¥ÑÁä½L¿é¤Jªº¦r¤¸¥Ñ a ¨ì z ¦L¥X (20%)
+while (<STDIN>){
+        chomp;
+        push @a, $_;
+}
+
+@b = sort @a;
+print @b;
+
+3. ¼g¤@¤äµ{¦¡, ´£¥Ü¨Ï¥ÎªÌÁä¤J¤G­Ó¼Æ­È¤Î¤@­Ó¦r¤¸, (20%)
+¿é¤Jªº¦r¤¸­Y¬° + «h§â¤G­Ó¼Æ¬Û¥[, ¥B§âµ²ªG¦L¥X 
+­Y¬° - * / «h¥H´î­¼°£³B²z, ­Y¬° x . «h¥H¦r¦ê³B²z
+¥B§âµ²ªG¦L¥X
+chomp($a = <STDIN>);
+chomp($b = <STDIN>);
+chomp($o = <STDIN>);
+
+if ($o eq '+'){print "$a + $b=", $a+$b;}
+if ($o eq '-'){print "$a - $b=", $a-$b;}
+if ($o eq '*'){print "$a * $b=", $a*$b;}
+if ($o eq '/'){print "$a / $b=", $a/$b;}
+if ($o eq 'x'){print "$a x $b=", $a x $b;}
+
+4. @a = qw / cd hd dvd keyboard /;¬
+½Ð¥Ñ¤@µ{¦¡Åª¤J¤@­Ó¦r¤¸, ­Y¤£¬O eof «h®Ú¾Ú¿é¤J¼Æ¦r¦L¥X¬Û¹ïÀ³ªºª««~¦W
+@a = qw ? cd hd dvd keyboard ?;
+chomp($i = <STDIN>);
+print $a[$i];
+
+5. ¼g¤@°Æµ{¦¡¥i¥H§â¤@¦ê¼Æ¦r¤¤ªº³Ì¤pªº¼Æ¦r§ä¥X, °Æµ{¦¡¼g¦n«á,
+¥ÑÁä½LÅª¤J¤@¦ê¼Æ­È, §â³Ì¤pªº¦L¥X¨Ó
+sub min{
+	my $min = shift @_;
+	while (my $t = shift @_){
+		if ($t < $min){
+			$min=$t;
+		}
+	}
+	$min;
+}
+
+while (<STDIN>){
+	chomp;
+	push @a, $_;
+}
+
+$min = min @a;
+print $min;

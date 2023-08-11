@@ -1,0 +1,1103 @@
+  <HTML>
+  <HEAD>
+  
+  <TITLE>MySQL Reference Manual for version 5.0.3-alpha - B  Credits</TITLE>
+   <style> code {color:purple} tt {color:green} samp {color:navy} pre {color:maroon} </style>
+  </HEAD>
+  <BODY BGCOLOR=silver TEXT=#000000 LINK=#101090 VLINK=#7030B0>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_Problems.html">previous</A>, <A HREF="manual_TODO.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="Credits" HREF="manual_toc.html#Credits">B  Credits</A></H1>
+
+<P>
+<A NAME="IDX2369"></A>
+
+</P>
+<P>
+This appendix lists the developers, contributors, and supporters that have
+helped to make MySQL what it is today.
+
+</P>
+
+
+
+<H2><A NAME="Developers" HREF="manual_toc.html#Developers">B.1  Developers at MySQL AB</A></H2>
+
+<P>
+These are the developers that are or have been employed by MySQL AB
+to work on the <code>MySQL</code> database software, roughly in the order they
+started to work with us. Following each developer is a small list of the
+tasks that the developer is responsible for, or the accomplishments they
+have made. All developers are involved in support.
+
+</P>
+
+<DL COMPACT>
+
+<DT>Michael (Monty) Widenius
+<DD>
+
+<UL>
+<LI>
+
+Lead developer and main author of the MySQL server (<code>mysqld</code>).
+<LI>
+
+New functions for the string library.
+<LI>
+
+Most of the <code>mysys</code> library.
+<LI>
+
+The <code>ISAM</code> and <code>MyISAM</code> libraries (B-tree index file
+handlers with index compression and different record formats).
+<LI>
+
+The <code>HEAP</code> library. A memory table system with our superior full dynamic
+hashing. In use since 1981 and published around 1984.
+<LI>
+
+The <code>replace</code> program (take a look at it, it's <strong>COOL</strong>!).
+<LI>
+
+Connector/ODBC (MyODBC), the ODBC driver for Windows.
+<LI>
+
+Fixing bugs in MIT-pthreads to get it to work for MySQL Server. And
+also Unireg, a curses-based application tool with many utilities.
+<LI>
+
+Porting of <code>mSQL</code> tools like <code>msqlperl</code>, <code>DBD</code>/<code>DBI</code>, and
+<code>DB2mysql</code>.
+<LI>
+
+Most of <code>crash-me</code> and the foundation for the MySQL benchmarks.
+</UL>
+
+<DT>David Axmark
+<DD>
+
+<UL>
+<LI>
+
+Initial main writer of the <strong>Reference Manual</strong>,
+including enhancements to <code>texi2html</code>.
+<LI>
+
+Automatic Web site updating from the manual.
+<LI>
+
+Initial Autoconf, Automake, and Libtool support.
+<LI>
+
+Licensing.
+<LI>
+
+Parts of all the text files.  (Nowadays only the <tt>`README'</tt> is
+left. The rest ended up in the manual.)
+<LI>
+
+Lots of testing of new features.
+<LI>
+
+Our in-house Free Software legal expert.
+<LI>
+
+Mailing list maintainer (who never has the time to do it right...).
+<LI>
+
+Our original portability code (more than 10 years old now). Nowadays
+only some parts of <code>mysys</code> are left.
+<LI>
+
+Someone for Monty to call in the middle of the night when he just got
+that new feature to work.
+<LI>
+
+Chief "Open Sourcerer" (MySQL community relations).
+</UL>
+
+<DT>Jani Tolonen
+<DD>
+
+<UL>
+<LI>
+
+<code>mysqlimport</code>
+<LI>
+
+A lot of extensions to the command-line clients.
+<LI>
+
+<code>PROCEDURE ANALYSE()</code>
+</UL>
+
+<DT>Sinisa Milivojevic
+<DD>
+
+<UL>
+<LI>
+
+Compression (with <code>zlib</code>) in the client/server protocol.
+<LI>
+
+Perfect hashing for the lexical analyzer phase.
+<LI>
+
+Multi-row <code>INSERT</code>
+<LI>
+
+<code>mysqldump</code> -e option
+<LI>
+
+<code>LOAD DATA LOCAL INFILE</code>
+<LI>
+
+<code>SQL_CALC_FOUND_ROWS</code> <code>SELECT</code> option
+<LI>
+
+<code>--max-user-connections=...</code> option
+<LI>
+
+<code>net_read</code> and <code>net_write_timeout</code>
+<LI>
+
+<code>GRANT</code>/<code>REVOKE</code> and <code>SHOW GRANTS FOR</code>
+<LI>
+
+New client/server protocol for 4.0
+<LI>
+
+<code>UNION</code> in 4.0
+<LI>
+
+Multiple-table <code>DELETE</code>/<code>UPDATE</code>
+<LI>
+
+Derived tables in 4.1
+<LI>
+
+User resources management
+<LI>
+
+Initial developer of the <code>MySQL++</code> C++ API and the <code>MySQLGUI</code> client.
+</UL>
+
+<DT>Tonu Samuel (past developer)
+<DD>
+
+<UL>
+<LI>
+
+VIO interface (the foundation for the encrypted client/server protocol).
+<LI>
+
+MySQL Filesystem (a way to use MySQL databases as files
+and directories).
+<LI>
+
+The <code>CASE</code> expression.
+<LI>
+
+The <code>MD5()</code> and <code>COALESCE()</code> functions.
+<LI>
+
+<code>RAID</code> support for <code>MyISAM</code> tables.
+</UL>
+
+<DT>Sasha Pachev
+<DD>
+
+<UL>
+<LI>
+
+Initial implementation of replication (up to version 4.0).
+<LI>
+
+<code>SHOW CREATE TABLE</code>.
+<LI>
+
+<code>mysql-bench</code>
+</UL>
+
+<DT>Matt Wagner
+<DD>
+
+<UL>
+<LI>
+
+MySQL test suite.
+<LI>
+
+Webmaster (until 2002).
+<LI>
+
+Coordinator of development.
+</UL>
+
+<DT>Miguel Solorzano
+<DD>
+
+<UL>
+<LI>
+
+Win32 development and release builds.
+<LI>
+
+Windows NT server code.
+<LI>
+
+WinMySQLAdmin
+</UL>
+
+<DT>Timothy Smith (past developer)
+<DD>
+
+<UL>
+<LI>
+
+Dynamic character sets support.
+<LI>
+
+configure, RPMs and other parts of the build system.
+<LI>
+
+Initial developer of <code>libmysqld</code>, the embedded server.
+</UL>
+
+<DT>Sergei Golubchik
+<DD>
+
+<UL>
+<LI>
+
+Full-text search.
+<LI>
+
+Added keys to the <code>MERGE</code> library.
+</UL>
+
+<DT>Jeremy Cole
+<DD>
+
+<UL>
+<LI>
+
+Proofreading and editing this fine manual.
+<LI>
+
+<code>ALTER TABLE ... ORDER BY ...</code>.
+<LI>
+
+<code>UPDATE ... ORDER BY ...</code>.
+<LI>
+
+<code>DELETE ... ORDER BY ...</code>.
+</UL>
+
+<DT>Indrek Siitan
+<DD>
+
+<UL>
+<LI>
+
+Designing/programming of our Web interface.
+<LI>
+
+Author of our newsletter management system.
+</UL>
+
+<DT>Jorge del Conde
+<DD>
+
+<UL>
+<LI>
+
+<code>MySQLCC</code> (<code>MySQL Control Center</code>)
+<LI>
+
+Win32 development
+<LI>
+
+Initial implementation of the Web site portals.
+</UL>
+
+<DT>Venu Anuganti
+<DD>
+
+<UL>
+<LI>
+
+MyODBC 3.51
+<LI>
+
+New client/server protocol for 4.1 (for prepared statements).
+</UL>
+
+<DT>Arjen Lentz
+<DD>
+
+<UL>
+<LI>
+
+Maintainer of the MySQL Reference Manual.
+<LI>
+
+Preparing the O'Reilly printed edition of the manual.
+</UL>
+
+<DT>Alexander (Bar) Barkov, Alexey (Holyfoot) Botchkov, and Ramil Kalimullin
+<DD>
+
+<UL>
+<LI>
+
+Spatial data (GIS) and R-Trees implementation for 4.1
+<LI>
+
+Unicode and character sets for 4.1; documentation for same
+</UL>
+
+<DT>Oleksandr (Sanja) Byelkin
+<DD>
+
+<UL>
+<LI>
+
+Query cache in 4.0
+<LI>
+
+Implementation of subqueries (4.1).
+</UL>
+
+<DT>Aleksey (Walrus) Kishkin and Alexey (Ranger) Stroganov
+<DD>
+
+<UL>
+<LI>
+
+Benchmarks design and analysis.
+<LI>
+
+Maintenance of the MySQL test suite.
+</UL>
+
+<DT>Zak Greant
+<DD>
+
+<UL>
+<LI>
+
+Open Source advocate, MySQL community relations.
+</UL>
+
+<DT>Carsten Pedersen
+<DD>
+
+<UL>
+<LI>
+
+The MySQL Certification program.
+</UL>
+
+<DT>Lenz Grimmer
+<DD>
+
+<UL>
+<LI>
+
+Production (build and release) engineering.
+</UL>
+
+<DT>Peter Zaitsev
+<DD>
+
+<UL>
+<LI>
+
+<code>SHA1()</code>, <code>AES_ENCRYPT()</code> and <code>AES_DECRYPT()</code> functions.
+<LI>
+
+Debugging, cleaning up various features.
+</UL>
+
+<DT>Alexander (Salle) Keremidarski
+<DD>
+
+<UL>
+<LI>
+
+Support.
+<LI>
+
+Debugging.
+</UL>
+
+<DT>Per-Erik Martin
+<DD>
+
+<UL>
+<LI>
+
+Lead developer for stored procedures (5.0) and triggers.
+</UL>
+
+<DT>Jim Winstead
+<DD>
+
+<UL>
+<LI>
+
+Lead Web developer.
+</UL>
+
+<DT>Mark Matthews
+<DD>
+
+<UL>
+<LI>
+
+Connector/J driver (Java).
+</UL>
+
+<DT>Peter Gulutzan
+<DD>
+
+<UL>
+<LI>
+
+SQL standards compliance.
+<LI>
+
+Documentation of existing MySQL code/algorithms.
+<LI>
+
+Character set documentation.
+</UL>
+
+<DT>Guilhem Bichot
+<DD>
+
+<UL>
+<LI>
+
+Replication, from <code>MySQL</code> version 4.0.
+<LI>
+
+Fixed handling of exponents for <code>DECIMAL</code>.
+<LI>
+
+Author of <code>mysql_tableinfo</code>.
+</UL>
+
+<DT>Antony T. Curtis
+<DD>
+
+<UL>
+<LI>
+
+Porting of the MySQL Database software to OS/2.
+</UL>
+
+<DT>Mikael Ronstrom
+<DD>
+
+<UL>
+<LI>
+
+Much of the initial work on NDB Cluster until 2000. Roughly half the
+code base at that time. Transaction protocol, node recovery, system
+restart and restart code and parts of the API functionality.
+<LI>
+
+Lead Architect, developer, debugger of NDB Cluster 1994-2004
+<LI>
+
+Lots of optimisations
+</UL>
+
+<DT>Jonas Oreland
+<DD>
+
+<UL>
+<LI>
+
+On-line Backup
+<LI>
+
+The automatic test environment of MySQL Cluster
+<LI>
+
+Portability Library for NDB Cluster
+<LI>
+
+Lots of other things
+</UL>
+
+<DT>Pekka Nouisiainen
+<DD>
+
+<UL>
+<LI>
+
+Ordered index implementation of MySQL Cluster
+<LI>
+
+BLOB support in MySQL Cluster
+<LI>
+
+Charset support in MySQL Cluster
+</UL>
+
+<DT>Martin Skold
+<DD>
+
+<UL>
+<LI>
+
+Unique index implementation of MySQL Cluster
+<LI>
+
+Integration of NDB Cluster into MySQL
+</UL>
+
+<DT>Magnus Svensson
+<DD>
+
+<UL>
+<LI>
+
+The test framework for MySQL Cluster
+<LI>
+
+Integration of NDB Cluster into MySQL
+</UL>
+
+<DT>Tomas Ulin
+<DD>
+
+<UL>
+<LI>
+
+Lots of work on configuration changes for simple installation and use of
+MySQL Cluster
+</UL>
+
+</DL>
+
+
+
+<H2><A NAME="Contributors" HREF="manual_toc.html#Contributors">B.2  Contributors to MySQL</A></H2>
+
+<P>
+<A NAME="IDX2370"></A>
+
+</P>
+<P>
+While MySQL AB owns all copyrights in the <code>MySQL server</code>
+and the <code>MySQL manual</code>, we wish to recognize those who have made
+contributions of one kind or another to the <code>MySQL distribution</code>.
+Contributors are listed here, in somewhat random order:
+
+</P>
+<DL COMPACT>
+
+<DT>Gianmassimo Vigazzola <a HREF="mailto:qwerg@mbox.vol.it">qwerg@mbox.vol.it</a> or <a HREF="mailto:qwerg@tin.it">qwerg@tin.it</a>
+<DD>
+The initial port to Win32/NT.
+<DT>Per Eric Olsson
+<DD>
+For more or less constructive criticism and real testing of the dynamic
+record format.
+<DT>Irena Pancirov <a HREF="mailto:irena@mail.yacc.it">irena@mail.yacc.it</a>
+<DD>
+Win32 port with Borland compiler.  <code>mysqlshutdown.exe</code> and
+<code>mysqlwatch.exe</code>
+<DT>David J. Hughes
+<DD>
+For the effort to make a shareware SQL database. At TcX, the predecessor
+of MySQL AB, we started with <code>mSQL</code>, but found that it couldn't
+satisfy our purposes so instead we wrote an SQL interface to our
+application builder Unireg.  <code>mysqladmin</code> and <code>mysql</code> client are
+programs that were largely influenced by their <code>mSQL</code> counterparts.
+We have put a lot of effort into making the MySQL syntax a superset of
+<code>mSQL</code>. Many of the API's ideas are borrowed from <code>mSQL</code> to
+make it easy to port free <code>mSQL</code> programs to the MySQL API.
+The MySQL software doesn't contain any code from <code>mSQL</code>.
+Two files in the distribution (<tt>`client/insert_test.c'</tt> and
+<tt>`client/select_test.c'</tt>) are based on the corresponding (non-copyrighted)
+files in the <code>mSQL</code> distribution, but are modified as examples showing
+the changes necessary to convert code from <code>mSQL</code> to MySQL Server.
+(<code>mSQL</code> is copyrighted David J. Hughes.)
+<DT>Patrick Lynch
+<DD>
+For helping us acquire <a HREF="http://www.mysql.com/">http://www.mysql.com/</a>.
+<DT>Fred Lindberg
+<DD>
+For setting up qmail to handle the MySQL mailing list and for the
+incredible help we got in managing the MySQL mailing lists.
+<DT>Igor Romanenko <a HREF="mailto:igor@frog.kiev.ua">igor@frog.kiev.ua</a>
+<DD>
+<code>mysqldump</code> (previously <code>msqldump</code>, but ported and enhanced by
+Monty).
+<DT>Yuri Dario
+<DD>
+For keeping up and extending the MySQL OS/2 port.
+<DT>Tim Bunce
+<DD>
+Author of <code>mysqlhotcopy</code>.
+<DT>Zarko Mocnik <a HREF="mailto:zarko.mocnik@dem.si">zarko.mocnik@dem.si</a>
+<DD>
+Sorting for Slovenian language.
+<DT>"TAMITO" <a HREF="mailto:tommy@valley.ne.jp">tommy@valley.ne.jp</a>
+<DD>
+The <code>_MB</code> character set macros and the ujis and sjis character sets.
+<DT>Joshua Chamas <a HREF="mailto:joshua@chamas.com">joshua@chamas.com</a>
+<DD>
+Base for concurrent insert, extended date syntax, debugging on NT, and
+answering on the MySQL mailing list.
+<DT>Yves Carlier <a HREF="mailto:Yves.Carlier@rug.ac.be">Yves.Carlier@rug.ac.be</a>
+<DD>
+<code>mysqlaccess</code>, a program to show the access rights for a user.
+<DT>Rhys Jones <a HREF="mailto:rhys@wales.com">rhys@wales.com</a> (And GWE Technologies Limited)
+<DD>
+For one of the early JDBC drivers.
+<DT>Dr Xiaokun Kelvin ZHU <a HREF="mailto:X.Zhu@brad.ac.uk">X.Zhu@brad.ac.uk</a>
+<DD>
+Further development of one of the early JDBC drivers and other MySQL-related
+Java tools.
+<DT>James Cooper <a HREF="mailto:pixel@organic.com">pixel@organic.com</a>
+<DD>
+For setting up a searchable mailing list archive at his site.
+<DT>Rick Mehalick <a HREF="mailto:Rick_Mehalick@i-o.com">Rick_Mehalick@i-o.com</a>
+<DD>
+For <code>xmysql</code>, a graphical X client for MySQL Server.
+<DT>Doug Sisk <a HREF="mailto:sisk@wix.com">sisk@wix.com</a>
+<DD>
+For providing RPM packages of MySQL for Red Hat Linux.
+<DT>Diemand Alexander V. <a HREF="mailto:axeld@vial.ethz.ch">axeld@vial.ethz.ch</a>
+<DD>
+For providing RPM packages of MySQL for Red Hat Linux-Alpha.
+<DT>Antoni Pamies Olive <a HREF="mailto:toni@readysoft.es">toni@readysoft.es</a>
+<DD>
+For providing RPM versions of a lot of MySQL clients for Intel
+and SPARC.
+<DT>Jay Bloodworth <a HREF="mailto:jay@pathways.sde.state.sc.us">jay@pathways.sde.state.sc.us</a>
+<DD>
+For providing RPM versions for MySQL 3.21.
+<DT>David Sacerdote <a HREF="mailto:davids@secnet.com">davids@secnet.com</a>
+<DD>
+Ideas for secure checking of DNS hostnames.
+<DT>Wei-Jou Chen <a HREF="mailto:jou@nematic.ieo.nctu.edu.tw">jou@nematic.ieo.nctu.edu.tw</a>
+<DD>
+Some support for Chinese(BIG5) characters.
+<DT>Wei He <a HREF="mailto:hewei@mail.ied.ac.cn">hewei@mail.ied.ac.cn</a>
+<DD>
+A lot of functionality for the Chinese(GBK) character set.
+<DT>Jan Pazdziora <a HREF="mailto:adelton@fi.muni.cz">adelton@fi.muni.cz</a>
+<DD>
+Czech sorting order.
+<DT>Zeev Suraski <a HREF="mailto:bourbon@netvision.net.il">bourbon@netvision.net.il</a>
+<DD>
+<code>FROM_UNIXTIME()</code> time formatting, <code>ENCRYPT()</code> functions, and
+<code>bison</code> advisor.
+Active mailing list member.
+<DT>Luuk de Boer <a HREF="mailto:luuk@wxs.nl">luuk@wxs.nl</a>
+<DD>
+Ported (and extended) the benchmark suite to <code>DBI</code>/<code>DBD</code>. Have
+been of great help with <code>crash-me</code> and running benchmarks. Some new
+date functions. The <code>mysql_setpermission</code> script.
+<DT>Alexis Mikhailov <a HREF="mailto:root@medinf.chuvashia.su">root@medinf.chuvashia.su</a>
+<DD>
+User-defined functions (UDFs); <code>CREATE FUNCTION</code> and
+<code>DROP FUNCTION</code>.
+<DT>Andreas F. Bobak <a HREF="mailto:bobak@relog.ch">bobak@relog.ch</a>
+<DD>
+The <code>AGGREGATE</code> extension to UDF functions.
+<DT>Ross Wakelin <a HREF="mailto:R.Wakelin@march.co.uk">R.Wakelin@march.co.uk</a>
+<DD>
+Help to set up InstallShield for MySQL-Win32.
+<DT>Jethro Wright III <a HREF="mailto:jetman@li.net">jetman@li.net</a>
+<DD>
+The <tt>`libmysql.dll'</tt> library.
+<DT>James Pereria <a HREF="mailto:jpereira@iafrica.com">jpereira@iafrica.com</a>
+<DD>
+Mysqlmanager, a Win32 GUI tool for administering MySQL Servers.
+<DT>Curt Sampson <a HREF="mailto:cjs@portal.ca">cjs@portal.ca</a>
+<DD>
+Porting of MIT-pthreads to NetBSD/Alpha and NetBSD 1.3/i386.
+<DT>Martin Ramsch <a HREF="mailto:m.ramsch@computer.org">m.ramsch@computer.org</a>
+<DD>
+Examples in the MySQL Tutorial.
+<DT>Steve Harvey
+<DD>
+For making <code>mysqlaccess</code> more secure.
+<DT>Konark IA-64 Centre of Persistent Systems Private Limited
+<DD>
+<a HREF="http://www.pspl.co.in/konark/">http://www.pspl.co.in/konark/</a>.  Help with the Win64 port of the
+MySQL server.
+<DT>Albert Chin-A-Young.
+<DD>
+Configure updates for Tru64, large file support and better TCP wrappers
+support.
+<DT>John Birrell
+<DD>
+Emulation of <code>pthread_mutex()</code> for OS/2.
+<DT>Benjamin Pflugmann
+<DD>
+Extended <code>MERGE</code> tables to handle <code>INSERTS</code>. Active member
+on the MySQL mailing lists.
+<DT>Jocelyn Fournier
+<DD>
+Excellent spotting and reporting innumerable bugs
+(especially in the MySQL 4.1 subquery code).
+<DT>Marc Liyanage
+<DD>
+Maintaining the Mac OS X packages and providing invaluable feedback
+on how to create Mac OS X PKGs.
+<DT>Robert Rutherford
+<DD>
+Providing invaluable information and feedback about the QNX port.
+<DT>Previous developers of NDB Cluster
+<DD>
+Lots of people were involved in various ways summer students, master thesis
+students, employees. In total more than 100 people so too many to mention here.
+Notable name is Ataullah Dabaghi who up until 1999 contributed around a
+third of the code base. A special thanks also to developers of the AXE system
+which provided much of the architecturial foundations for NDB Cluster with
+blocks, signals and crash tracing functionality. Also credit should be given
+to those who believed in the ideas enough to allocate of their budgets for its
+development from 1992 to present time.
+</DL>
+
+<P>
+Other contributors, bugfinders, and testers: James H. Thompson, Maurizio
+Menghini, Wojciech Tryc, Luca Berra, Zarko Mocnik, Wim Bonis, Elmar
+Haneke, <a HREF="mailto:jehamby@lightside">jehamby@lightside</a>, <a HREF="mailto:psmith@BayNetworks.com">psmith@BayNetworks.com</a>,
+<a HREF="mailto:duane@connect.com.au">duane@connect.com.au</a>, Ted Deppner <a HREF="mailto:ted@psyber.com">ted@psyber.com</a>,
+Mike Simons, Jaakko Hyvatti.
+
+</P>
+<P>
+And lots of bug report/patches from the folks on the mailing list.
+
+</P>
+<P>
+A big tribute goes to those that help us answer questions on the
+MySQL mailing lists:
+
+</P>
+<DL COMPACT>
+
+<DT>Daniel Koch <a HREF="mailto:dkoch@amcity.com">dkoch@amcity.com</a>
+<DD>
+Irix setup.
+<DT>Luuk de Boer <a HREF="mailto:luuk@wxs.nl">luuk@wxs.nl</a>
+<DD>
+Benchmark questions.
+<DT>Tim Sailer <a HREF="mailto:tps@users.buoy.com">tps@users.buoy.com</a>
+<DD>
+<code>DBD::mysql</code> questions.
+<DT>Boyd Lynn Gerber <a HREF="mailto:gerberb@zenez.com">gerberb@zenez.com</a>
+<DD>
+SCO-related questions.
+<DT>Richard Mehalick <a HREF="mailto:RM186061@shellus.com">RM186061@shellus.com</a>
+<DD>
+<code>xmysql</code>-related questions and basic installation questions.
+<DT>Zeev Suraski <a HREF="mailto:bourbon@netvision.net.il">bourbon@netvision.net.il</a>
+<DD>
+Apache module configuration questions (log &#38; auth), PHP-related
+questions, SQL syntax-related questions and other general questions.
+<DT>Francesc Guasch <a HREF="mailto:frankie@citel.upc.es">frankie@citel.upc.es</a>
+<DD>
+General questions.
+<DT>Jonathan J Smith <a HREF="mailto:jsmith@wtp.net">jsmith@wtp.net</a>
+<DD>
+Questions pertaining to OS-specifics with Linux, SQL syntax, and other
+things that might need some work.
+<DT>David Sklar <a HREF="mailto:sklar@student.net">sklar@student.net</a>
+<DD>
+Using MySQL from PHP and Perl.
+<DT>Alistair MacDonald <a HREF="mailto:A.MacDonald@uel.ac.uk">A.MacDonald@uel.ac.uk</a>
+<DD>
+Not yet specified, but is flexible and can handle Linux and maybe HP-UX.
+Will try to get user to use <code>mysqlbug</code>.
+<DT>John Lyon <a HREF="mailto:jlyon@imag.net">jlyon@imag.net</a>
+<DD>
+Questions about installing MySQL on Linux systems, using either
+<tt>`.rpm'</tt> files or compiling from source.
+<DT>Lorvid Ltd. <a HREF="mailto:lorvid@WOLFENET.com">lorvid@WOLFENET.com</a>
+<DD>
+Simple billing/license/support/copyright issues.
+<DT>Patrick Sherrill <a HREF="mailto:patrick@coconet.com">patrick@coconet.com</a>
+<DD>
+ODBC and VisualC++ interface questions.
+<DT>Randy Harmon <a HREF="mailto:rjharmon@uptimecomputers.com">rjharmon@uptimecomputers.com</a>
+<DD>
+<code>DBD</code>, Linux, some SQL syntax questions.
+</DL>
+
+
+
+<H2><A NAME="Documenters_Translators" HREF="manual_toc.html#Documenters_Translators">B.3  Documenters and translators</A></H2>
+
+<P>
+<A NAME="IDX2371"></A>
+<A NAME="IDX2372"></A>
+
+</P>
+<P>
+The following people has helped us with writing the MySQL documentation and
+translating the documentation or error messages in MySQL.
+
+</P>
+<DL COMPACT>
+
+<DT>Paul DuBois
+<DD>
+Ongoing help with making this manual correct and understandable.
+That includes rewriting Monty's and David's attempts at English into
+English as other people know it.
+<DT>Kim Aldale
+<DD>
+Helped to rewrite Monty's and David's early attempts at English into English.
+<DT>Michael J. Miller Jr. <a HREF="mailto:mke@terrapin.turbolift.com">mke@terrapin.turbolift.com</a>
+<DD>
+For the first MySQL manual. And a lot of spelling/language
+fixes for the FAQ (that turned into the MySQL manual a long
+time ago).
+<DT>Yan Cailin
+<DD>
+First translator of the MySQL Reference Manual into simplified
+Chinese in early 2000 on which the Big5 and HK coded
+(<a HREF="http://mysql.hitstar.com/">http://mysql.hitstar.com/</a>) versions were
+based. <a HREF="http://linuxdb.yeah.net"> Personal home page at
+linuxdb.yeah.net</a>.
+<DT>Jay Flaherty <a HREF="mailto:fty@mediapulse.com">fty@mediapulse.com</a>
+<DD>
+Big parts of the Perl <code>DBI</code>/<code>DBD</code> section in the manual.
+<DT>Paul Southworth <a HREF="mailto:pauls@etext.org">pauls@etext.org</a>, Ray Loyzaga <a HREF="mailto:yar@cs.su.oz.au">yar@cs.su.oz.au</a>
+<DD>
+Proof-reading of the Reference Manual.
+<DT>Therrien Gilbert <a HREF="mailto:gilbert@ican.net">gilbert@ican.net</a>, Jean-Marc Pouyot <a HREF="mailto:jmp@scalaire.fr">jmp@scalaire.fr</a>
+<DD>
+French error messages.
+<DT>Petr Snajdr, <a HREF="mailto:snajdr@pvt.net">snajdr@pvt.net</a>
+<DD>
+Czech error messages.
+<DT>Jaroslaw Lewandowski <a HREF="mailto:jotel@itnet.com.pl">jotel@itnet.com.pl</a>
+<DD>
+Polish error messages.
+<DT>Miguel Angel Fernandez Roiz
+<DD>
+Spanish error messages.
+<DT>Roy-Magne Mo <a HREF="mailto:rmo@www.hivolda.no">rmo@www.hivolda.no</a>
+<DD>
+Norwegian error messages and testing of MySQL 3.21.xx.
+<DT>Timur I. Bakeyev <a HREF="mailto:root@timur.tatarstan.ru">root@timur.tatarstan.ru</a>
+<DD>
+Russian error messages.
+<DT><a HREF="mailto:brenno@dewinter.com">brenno@dewinter.com</a> &#38; Filippo Grassilli <a HREF="mailto:phil@hyppo.com">phil@hyppo.com</a>
+<DD>
+Italian error messages.
+<DT>Dirk Munzinger <a HREF="mailto:dirk@trinity.saar.de">dirk@trinity.saar.de</a>
+<DD>
+German error messages.
+<DT>Billik Stefan <a HREF="mailto:billik@sun.uniag.sk">billik@sun.uniag.sk</a>
+<DD>
+Slovak error messages.
+<DT>Stefan Saroiu <a HREF="mailto:tzoompy@cs.washington.edu">tzoompy@cs.washington.edu</a>
+<DD>
+Romanian error messages.
+<DT>Peter Feher
+<DD>
+Hungarian error messages.
+<DT>Roberto M. Serqueira
+<DD>
+Portuguese error messages.
+<DT>Carsten H. Pedersen
+<DD>
+Danish error messages.
+<DT>Arjen G. Lentz
+<DD>
+Dutch error messages, completing earlier partial translation
+(also work on consistency and spelling).
+</DL>
+
+
+
+<H2><A NAME="Used_Libraries" HREF="manual_toc.html#Used_Libraries">B.4  Libraries used by and included with MySQL</A></H2>
+
+<P>
+<A NAME="IDX2373"></A>
+
+</P>
+<P>
+The following is a list of the creators of the libraries we have
+included with the MySQL server source to make it easy to compile and
+install MySQL. We are very thankfully to all individuals that have
+created these and it has made our life much easier.
+
+</P>
+<DL COMPACT>
+
+<DT>Fred Fish
+<DD>
+For his excellent C debugging and trace library. Monty has made a number
+of smaller improvements to the library (speed and additional options).
+<DT>Richard A. O'Keefe
+<DD>
+For his public domain string library.
+<DT>Henry Spencer
+<DD>
+For his regex library, used in <code>WHERE column REGEXP regexp</code>.
+<DT>Chris Provenzano
+<DD>
+Portable user level pthreads. From the copyright: This product includes
+software developed by Chris Provenzano, the University of California,
+Berkeley, and contributors.  We are currently using version 1_60_beta6
+patched by Monty (see <tt>`mit-pthreads/Changes-mysql'</tt>).
+<DT>Jean-loup Gailly and Mark Adler
+<DD>
+For the zlib library (used on MySQL on Windows).
+<DT>Bjorn Benson
+<DD>
+For his safe_malloc (memory checker) package which is used in when you
+configure MySQL with <code>--debug</code>.
+<DT>Free Software Foundation
+<DD>
+The <code>readline</code> library (used by the <code>mysql</code> command-line client).
+<DT>The NetBSD foundation
+<DD>
+The <code>libedit</code> package (optionally used by the <code>mysql</code> command-line
+client).
+</DL>
+
+
+
+<H2><A NAME="Packages" HREF="manual_toc.html#Packages">B.5  Packages that support MySQL</A></H2>
+
+<P>
+<A NAME="IDX2374"></A>
+<A NAME="IDX2375"></A>
+
+</P>
+<P>
+The following is a list of creators/maintainers of some of the most
+important API/packages/applications that a lot of people use with MySQL.
+
+</P>
+<P>
+We can't list every possible package here because the list would then be
+way to hard to maintain. For other packages, please refer to the
+software portal at <a HREF="http://solutions.mysql.com/software/">http://solutions.mysql.com/software/</a>.
+
+</P>
+<DL COMPACT>
+
+<DT>Tim Bunce, Alligator Descartes
+<DD>
+For the <code>DBD</code> (Perl) interface.
+<DT>Andreas Koenig <a HREF="mailto:a.koenig@mind.de">a.koenig@mind.de</a>
+<DD>
+For the Perl interface for MySQL Server.
+<DT>Jochen Wiedmann <a HREF="mailto:wiedmann@neckar-alb.de">wiedmann@neckar-alb.de</a>
+<DD>
+For maintaining the Perl <code>DBD::mysql</code> module.
+<DT>Eugene Chan <a HREF="mailto:eugene@acenet.com.sg">eugene@acenet.com.sg</a>
+<DD>
+For porting PHP for MySQL Server.
+<DT>Georg Richter
+<DD>
+MySQL 4.1 testing and bug hunting.
+New PHP 5.0 <code>mysqli</code> extension (API) for use with MySQL 4.1 and up.
+<DT>Giovanni Maruzzelli <a HREF="mailto:maruzz@matrice.it">maruzz@matrice.it</a>
+<DD>
+For porting iODBC (Unix ODBC).
+<DT>Xavier Leroy <a HREF="mailto:Xavier.Leroy@inria.fr">Xavier.Leroy@inria.fr</a>
+<DD>
+The author of LinuxThreads (used by the MySQL Server on Linux).
+</DL>
+
+
+
+<H2><A NAME="Tools_used_to_create_MySQL" HREF="manual_toc.html#Tools_used_to_create_MySQL">B.6  Tools that were used to create MySQL</A></H2>
+
+<P>
+<A NAME="IDX2376"></A>
+
+</P>
+<P>
+The following is a list of some of the tools we have used to create MySQL.
+We use this to express our thanks to those that has created them as without
+these we could not have made MySQL what it is today.
+
+</P>
+<DL COMPACT>
+
+<DT>Free Software Foundation
+<DD>
+From whom we got an excellent compiler (<code>gcc</code>), an excellent
+debugger (<code>gdb</code> and the <code>libc</code> library (from which we have
+borrowed <tt>`strto.c'</tt> to get some code working in Linux).
+<DT>Free Software Foundation &#38; The XEmacs development team
+<DD>
+For a really great editor/environment used by almost everybody at
+MySQL AB.
+<DT>Julian Seward
+<DD>
+Author of <code>valgrind</code>, an excellent memory checker tool that has helped
+us find a lot of otherwise hard to find bugs in MySQL.
+<DT>Dorothea L&uuml;tkehaus and Andreas Zeller
+<DD>
+For <code>DDD</code> (The Data Display Debugger) which is an excellent
+graphical frontend to <code>gdb</code>).
+</DL>
+
+
+
+<H2><A NAME="Supporters" HREF="manual_toc.html#Supporters">B.7  Supporters of MySQL</A></H2>
+
+<P>
+<A NAME="IDX2377"></A>
+
+</P>
+<P>
+While MySQL AB owns all copyrights in the <code>MySQL server</code>
+and the <code>MySQL manual</code>, we wish to recognize the following companies,
+which helped us finance the development of the <code>MySQL server</code>,
+such as by paying us for developing a new feature or giving us hardware
+for development of the <code>MySQL server</code>.
+
+</P>
+<DL COMPACT>
+
+<DT>VA Linux / Andover.net
+<DD>
+Funded replication.
+<DT>NuSphere
+<DD>
+Editing of the MySQL manual.
+<DT>Stork Design studio
+<DD>
+The MySQL Web site in use between 1998-2000.
+<DT>Intel
+<DD>
+Contributed to development on Windows and Linux platforms.
+<DT>Compaq
+<DD>
+Contributed to Development on Linux/Alpha.
+<DT>SWSoft
+<DD>
+Development on the embedded <code>mysqld</code> version.
+<DT>FutureQuest
+<DD>
+<code>--skip-show-database</code>
+</DL>
+
+<P><HR><P>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_Problems.html">previous</A>, <A HREF="manual_TODO.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+ </BODY>
+ </HTML>

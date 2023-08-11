@@ -1,0 +1,24 @@
+chapter 16 行程管理
+16.1 system 函式
+	16.1.1 避免使用 shell
+16.2 exec 函式
+16.3 環境變數
+16.4 用倒引號來擷取輸出結果
+	16.4.1 在串列語境下使用倒引號
+16.5 將行程程視為檔案代號
+
+16.1 使用 system 時, 提供給 system 的參數, 即是一般在 shell 所鍵入的命令
+	所以 perl 不該解釋
+	system 'ls -l $HOME'
+	system "ls -l $HOME"	# no good
+
+當 perl 叫子行程時, 控制權即到子行程, 若這個子行程要 run 上 37 秒, 則 perl
+也會等 37 秒, 但你可以使用 shell 的啟動背景行程
+system "long_running_command with parameters &";
+
+system --> 叫 shell --> shell 看到有 & 所以把 long_running_command 放到背景且返回給 perl 
+而 long_running_command 是 shell 所啟動的, perl 完全不知它的存在, 所以也無法直接控制它
+
+perl 的程式中使用 system 時是否會叫用 shell ? 不一定, 如果命令很簡單則不叫,
+perl 在這種情況下直接找到命令而去跑它, 但若是有奇怪的字串則會叫 shell
+(中介字符, 錢號, 分號, 豎線...) 

@@ -1,0 +1,2794 @@
+  <HTML>
+  <HEAD>
+  
+  <TITLE>MySQL Reference Manual for version 5.0.3-alpha - 14  MySQL Storage Engines and Table Types</TITLE>
+   <style> code {color:purple} tt {color:green} samp {color:navy} pre {color:maroon} </style>
+  </HEAD>
+  <BODY BGCOLOR=silver TEXT=#000000 LINK=#101090 VLINK=#7030B0>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_SQL_Syntax.html">previous</A>, <A HREF="manual_InnoDB.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="Storage_engines" HREF="manual_toc.html#Storage_engines">14  MySQL Storage Engines and Table Types</A></H1>
+
+<P>
+<A NAME="IDX1849"></A>
+<A NAME="IDX1850"></A>
+<A NAME="IDX1851"></A>
+<A NAME="IDX1852"></A>
+<A NAME="IDX1853"></A>
+<A NAME="IDX1854"></A>
+<A NAME="IDX1855"></A>
+<A NAME="IDX1856"></A>
+<A NAME="IDX1857"></A>
+<A NAME="IDX1858"></A>
+<A NAME="IDX1859"></A>
+<A NAME="IDX1860"></A>
+<A NAME="IDX1861"></A>
+<A NAME="IDX1862"></A>
+<A NAME="IDX1863"></A>
+<A NAME="IDX1864"></A>
+<A NAME="IDX1865"></A>
+<A NAME="IDX1866"></A>
+<A NAME="IDX1867"></A>
+<A NAME="IDX1868"></A>
+<A NAME="IDX1869"></A>
+<A NAME="IDX1870"></A>
+<A NAME="IDX1871"></A>
+<A NAME="IDX1872"></A>
+<A NAME="IDX1873"></A>
+<A NAME="IDX1874"></A>
+<A NAME="IDX1875"></A>
+<A NAME="IDX1876"></A>
+<A NAME="IDX1877"></A>
+
+</P>
+<P>
+MySQL supports several storage engines that act as handlers for different
+table types. MySQL storage engines include both those that handle
+transaction-safe tables and those that handle non-transaction-safe tables:
+
+</P>
+
+<UL>
+<LI>
+
+The original storage engine was <code>ISAM</code>, which managed non-transactional
+tables. This engine has been replaced by <code>MyISAM</code> and should no longer
+be used. It is deprecated in MySQL 4.1, and will be removed in MySQL 5.0.
+
+<LI>
+
+In MySQL 3.23.0, the <code>MyISAM</code> and <code>HEAP</code> storage engines were
+introduced.  <code>MyISAM</code> is an improved replacement for <code>ISAM</code>.
+The <code>HEAP</code> storage engine provides in-memory tables.
+The <code>MERGE</code> storage engine was
+added in MySQL 3.23.25.  It allows a collection of identical <code>MyISAM</code>
+tables to be handled as a single table.  All three of these storage engines
+handle non-transactional tables, and all are included in MySQL by default.
+Note that the
+<code>HEAP</code> storage engine now
+is known as the <code>MEMORY</code> engine.
+
+<LI>
+
+The <code>InnoDB</code> and <code>BDB</code>
+storage engines that handle transaction-safe tables were introduced in later
+versions of MySQL 3.23.
+Both are available in source distributions as of MySQL 3.23.34a.
+<code>BDB</code> is included in MySQL-Max binary distributions on those operating
+systems that support it.  <code>InnoDB</code> also is included in MySQL-Max binary
+distributions for MySQL 3.23.  Beginning with MySQL 4.0, <code>InnoDB</code>
+is included by default in all MySQL binary distributions.  In source
+distributions, you can enable or disable either engine by configuring MySQL
+as you like.
+
+<LI>
+
+The <code>EXAMPLE</code> storage engine was added in MySQL 4.1.3.  It is a
+``stub'' engine that does nothing.  You can create tables with this engine,
+but no data can be stored into them or retrieved from them. The purpose of
+this engine is to serve as an example in the MySQL source code that
+illustrates how to begin writing new storage engines. As such, it is
+primarily of interest to developers.
+
+<LI>
+
+<code>NDB Cluster</code> is the storage engine used by MySQL Cluster to implement
+tables that are partitioned over many computers. It is available in source
+code distributions as of MySQL 4.1.2 and binary distributions as of
+MySQL-Max 4.1.3.
+
+<LI>
+
+The <code>ARCHIVE</code> storage engine was added in MySQL 4.1.3.  It is used
+for storing large amounts of data without indexes in a very small footprint.
+
+<LI>
+
+The <code>CSV</code> storage engine was added in MySQL 4.1.4. This engine stores
+data in text files using comma-separated-values format.
+
+<LI>
+
+The <code>FEDERATED</code> storage engine was added in MySQL 5.0.3. This engine
+stores data in a remote database. In this release, it works with MySQL only,
+using the MySQL C Client API. Future releases will be able to connect to
+other data sources using other driver or client connection methods.
+
+</UL>
+
+<P>
+This chapter describes each of the MySQL storage engines except for
+<code>InnoDB</code> and <code>NDB Cluster</code>, which are covered in section <A HREF="manual_InnoDB.html#InnoDB">15  The <code>InnoDB</code> Storage Engine</A>
+and section <A HREF="manual_NDBCluster.html#NDBCluster">16  MySQL Cluster</A>.
+
+</P>
+<P>
+When you create a new table, you can tell MySQL what type of table to create
+by adding an <code>ENGINE</code> or <code>TYPE</code> table option to the <code>CREATE
+TABLE</code> statement:
+
+</P>
+
+<PRE>
+CREATE TABLE t (i INT) ENGINE = INNODB;
+CREATE TABLE t (i INT) TYPE = MEMORY;
+</PRE>
+
+<P>
+<code>ENGINE</code> is the preferred term, but cannot be used before MySQL 4.0.18.
+<code>TYPE</code> is available beginning with MySQL 3.23.0, the first
+version of MySQL for which multiple storage engines were available.
+
+</P>
+<P>
+If you omit the <code>ENGINE</code> or <code>TYPE</code> option, the default storage
+engine is used.  By default this is <code>MyISAM</code>.  You can change it by
+using the <code>--default-storage-engine</code> or <code>--default-table-type</code>
+server startup option, or by setting the <code>storage_engine</code> or
+<code>table_type</code> system variable.
+
+</P>
+<P>
+When MySQL is installed on Windows using the MySQL Configuration Wizard,
+the <code>InnoDB</code> storage engine will be the default instead of <code>MyISAM</code>.
+See section <A HREF="manual_Installing.html#mysql-config-wizard-introduction">2.3.5.1  Introduction</A>.
+
+</P>
+<P>
+To convert a table from one type to another, use an <code>ALTER TABLE</code>
+statement that indicates the new type:
+
+</P>
+
+<PRE>
+ALTER TABLE t ENGINE = MYISAM;
+ALTER TABLE t TYPE = BDB;
+</PRE>
+
+<P>
+See section <A HREF="manual_SQL_Syntax.html#CREATE_TABLE">13.2.6  <code>CREATE TABLE</code> Syntax</A> and
+section <A HREF="manual_SQL_Syntax.html#ALTER_TABLE">13.2.2  <code>ALTER TABLE</code> Syntax</A>.
+
+</P>
+
+<P>
+If you try to use a storage engine that is not compiled in or that is
+compiled in but deactivated, MySQL instead creates a table of type
+<code>MyISAM</code>.  This behavior is convenient when you want to copy tables
+between MySQL servers that support different storage engines. (For example, in
+a replication setup, perhaps your
+master server supports transactional storage engines for increased safety,
+but the slave servers use only non-transactional storage engines for greater
+speed.)
+
+</P>
+<P>
+This automatic substitution of the <code>MyISAM</code> table type when an
+unavailable type is specified can be confusing for new MySQL
+users.  In MySQL 4.1 and up, a warning is generated when a table type is
+automatically changed.
+
+</P>
+<P>
+MySQL always creates an <tt>`.frm'</tt> file to hold the table and column
+definitions. The table's index and data may be stored in one or more other
+files, depending on the table type.
+The server creates the <tt>`.frm'</tt> file above the storage engine level.
+Individual storage engines create any additional files required for the tables
+that they manage.
+
+</P>
+<P>
+A database may contain tables of different types.
+
+</P>
+<P>
+Transaction-safe tables (TSTs) have several advantages over
+non-transaction-safe tables (NTSTs):
+
+</P>
+
+<UL>
+<LI>
+
+Safer. Even if MySQL crashes or you get hardware problems, you
+can get your data back, either by automatic recovery or from a backup
+plus the transaction log.
+<LI>
+
+You can combine many statements and accept them all at the same time with
+the <code>COMMIT</code> statement (if autocommit is disabled).
+<LI>
+
+You can execute <code>ROLLBACK</code> to ignore your changes (if
+autocommit is disabled).
+<LI>
+
+If an update fails, all your changes will be restored. (With
+non-transaction-safe tables, all
+changes that have taken place are permanent.)
+<LI>
+
+Transaction-safe storage engines
+can provide better concurrency for tables that get many updates concurrently
+with reads.
+</UL>
+
+<P>
+Note that to use the <code>InnoDB</code> storage engine in MySQL 3.23, you
+must configure at least the <code>innodb_data_file_path</code> startup option.
+In 4.0 and up, <code>InnoDB</code> uses default configuration values if you specify
+none.
+See section <A HREF="manual_InnoDB.html#InnoDB_configuration">15.4  <code>InnoDB</code> Configuration</A>.
+
+</P>
+<P>
+Non-transaction-safe tables have several advantages of their own, all
+of which occur because there is no transaction overhead:
+
+</P>
+
+<UL>
+<LI>
+
+Much faster
+<LI>
+
+Lower disk space requirements
+<LI>
+
+Less memory required to perform updates
+</UL>
+
+<P>
+You can combine transaction-safe and non-transaction-safe tables in the same statements to get the best
+of both worlds. However, within a transaction with autocommit disabled,
+changes to non-transaction-safe tables still are committed immediately and
+cannot be rolled back.
+
+</P>
+
+
+
+<H2><A NAME="MyISAM_storage_engine" HREF="manual_toc.html#MyISAM_storage_engine">14.1  The <code>MyISAM</code> Storage Engine</A></H2>
+
+<P>
+<A NAME="IDX1878"></A>
+<A NAME="IDX1879"></A>
+<A NAME="IDX1880"></A>
+
+</P>
+<P>
+<code>MyISAM</code> is the default storage engine as of MySQL 3.23. It is
+based on the <code>ISAM</code> code but has many useful extensions.
+
+</P>
+<P>
+Each <code>MyISAM</code> table is stored on disk in three files.  The files have
+names that begin with the table name and have an extension to indicate the
+file type.  An <tt>`.frm'</tt> file stores the table definition.  The data file
+has an <tt>`.MYD'</tt> (MYData) extension.  The index file has an <tt>`.MYI'</tt>
+(MYIndex) extension,
+
+</P>
+<P>
+To specify explicitly that you want a <code>MyISAM</code> table, indicate that with
+an <code>ENGINE</code> or <code>TYPE</code> table option:
+
+</P>
+
+<PRE>
+CREATE TABLE t (i INT) ENGINE = MYISAM;
+CREATE TABLE t (i INT) TYPE = MYISAM;
+</PRE>
+
+<P>
+Normally, the <code>ENGINE</code> or <code>TYPE</code> option is unnecessary;
+<code>MyISAM</code> is the default storage engine unless the default has been
+changed.
+
+</P>
+<P>
+You can check or repair <code>MyISAM</code> tables with the <code>myisamchk</code>
+utility. See section <A HREF="manual_MySQL_Database_Administration.html#Crash_recovery">5.7.2.7  Using <code>myisamchk</code> for Crash Recovery</A>. You can compress <code>MyISAM</code> tables with
+<code>myisampack</code> to take up much less space.
+See section <A HREF="manual_Client-Side_Scripts.html#myisampack">8.2  <code>myisampack</code>, the MySQL Compressed Read-only Table Generator</A>.
+
+</P>
+<P>
+The following characteristics of the <code>MyISAM</code> storage engine are
+improvements over the older <code>ISAM</code> engine:
+
+</P>
+
+<UL>
+
+<LI>
+
+All data values are stored with the low byte first. This makes the data
+machine and operating system independent. The only requirement for binary
+portability is that the machine uses two's-complement signed integers
+(as every machine for the last 20 years has) and IEEE floating-point
+format (also totally dominant among mainstream machines). The only area of
+machines that may not support binary compatibility are embedded systems,
+which sometimes have peculiar processors.
+
+There is no big speed penalty for storing data low byte first; the bytes
+in a table row normally are unaligned and it doesn't take that much more
+power to read an unaligned byte in order than in reverse order.  Also, the
+code in the server that fetches column values is not time critical compared
+to other code.
+
+<LI>
+
+Large files (up to 63-bit file length) are supported on
+filesystems and operating systems that support large files.
+
+<LI>
+
+Dynamic-sized rows are much less fragmented when mixing deletes
+with updates and inserts.  This is done by automatically combining adjacent
+deleted blocks and by extending blocks if the next block is deleted.
+
+<LI>
+
+The maximum number of indexes per table is 64 (32 before MySQL 4.1.2).  This
+can be changed by recompiling.  The maximum number of columns per index is 16.
+
+<LI>
+
+The maximum key length is 1000 bytes (500 before MySQL 4.1.2).
+This can be changed by recompiling.  For the case of a key longer than
+250 bytes, a larger key block size than the default of 1024 bytes is used.
+
+<LI>
+
+<code>BLOB</code> and <code>TEXT</code> columns can be indexed.
+
+<LI>
+
+<code>NULL</code> values are allowed in indexed columns.  This takes 0-1
+bytes per key.
+
+<LI>
+
+All numeric key values are stored with the high byte first to allow better index
+compression.
+
+<LI>
+
+Index files are usually much smaller with <code>MyISAM</code> than with
+<code>ISAM</code>. This means that <code>MyISAM</code> normally will use less
+system resources than <code>ISAM</code>, but will need more CPU time when inserting
+data into a compressed index.
+
+<LI>
+
+When records are inserted in sorted order (as when you are using an
+<code>AUTO_INCREMENT</code> column), the index tree is split so that the high
+node only contains one key. This improves space utilization in the index
+tree.
+
+<LI>
+
+Internal handling of one <code>AUTO_INCREMENT</code> column per table.
+<code>MyISAM</code> automatically updates this column for <code>INSERT/UPDATE</code>.  This
+makes <code>AUTO_INCREMENT</code> columns faster (at least 10%).
+Values at the top of the sequence are not reused after being deleted as they
+are with <code>ISAM</code>.  (When an <code>AUTO_INCREMENT</code> column is
+defined as the last column of a multiple-column index, reuse of deleted
+values does occur.)  The <code>AUTO_INCREMENT</code> value can be reset with
+<code>ALTER TABLE</code> or <code>myisamchk</code>.
+
+<LI>
+
+If a table doesn't have free blocks in the middle of the data file, you can
+<code>INSERT</code> new rows into it at the same time that other threads are
+reading from the table. (These are known as concurrent inserts.) A free block can
+occur as a result of deleting rows or an update of a dynamic length row with
+more data than its current contents.  When all free blocks are used up
+(filled in), future inserts become concurrent again.
+
+<LI>
+
+You can put the data file and index file on different directories
+to get more speed with the <code>DATA DIRECTORY</code> and <code>INDEX DIRECTORY</code>
+table options to
+<code>CREATE TABLE</code>. See section <A HREF="manual_SQL_Syntax.html#CREATE_TABLE">13.2.6  <code>CREATE TABLE</code> Syntax</A>.
+
+<LI>
+
+As of MySQL 4.1, each character column can have a different character set.
+
+<LI>
+
+There is a flag in the <code>MyISAM</code> index file that indicates whether the
+table was closed correctly.  If <code>mysqld</code> is started with the
+<code>--myisam-recover</code> option, <code>MyISAM</code> tables are automatically
+checked when opened and repaired if the table wasn't closed
+properly.
+
+<LI>
+
+<code>myisamchk</code> marks tables as checked if you run it with the
+<code>--update-state</code> option. <code>myisamchk --fast</code> checks only those
+tables that don't have this mark.
+
+<LI>
+
+<code>myisamchk --analyze</code> stores statistics for key parts, not only for
+whole keys as in <code>ISAM</code>.
+
+<LI>
+
+<code>myisampack</code> can pack <code>BLOB</code> and <code>VARCHAR</code> columns;
+<code>pack_isam</code> cannot.
+
+</UL>
+
+<P>
+<code>MyISAM</code> also supports the following features, which MySQL
+will be able to use in the near future:
+
+</P>
+
+<UL>
+
+<LI>
+
+Support for a true <code>VARCHAR</code> type; a <code>VARCHAR</code> column starts
+with a length stored in two bytes.
+
+<LI>
+
+Tables with <code>VARCHAR</code> may have fixed or dynamic record length.
+
+<LI>
+
+<code>VARCHAR</code> and <code>CHAR</code> columns may be up to 64KB.
+
+<LI>
+
+A hashed computed index can be used for <code>UNIQUE</code>. This will allow
+you to have <code>UNIQUE</code> on any combination of columns in a table. (You
+can't search on a <code>UNIQUE</code> computed index, however.)
+
+</UL>
+
+
+
+<H3><A NAME="MyISAM_start" HREF="manual_toc.html#MyISAM_start">14.1.1  <code>MyISAM</code> Startup Options</A></H3>
+
+<P>
+The following options to <code>mysqld</code> can be used to change the behavior of
+<code>MyISAM</code> tables:
+
+</P>
+<DL COMPACT>
+
+<DT><code>--myisam-recover=<var>mode</var></code>
+<DD>
+Set the mode for automatic recovery of crashed <code>MyISAM</code> tables.
+
+<DT><code>--delay-key-write=ALL</code>
+<DD>
+Don't flush key buffers between writes for any <code>MyISAM</code> table.
+
+<strong>Note</strong>: If you do this, you should not use <code>MyISAM</code> tables from
+another program (such as from another MySQL server or with <code>myisamchk</code>) when
+the table is in use. Doing so will lead to index corruption.
+
+Using <code>--external-locking</code> will not help for tables that use
+<code>--delay-key-write</code>.
+
+</DL>
+
+<P>
+See section <A HREF="manual_MySQL_Database_Administration.html#Server_options">5.2.1  <code>mysqld</code> Command-Line Options</A>.
+
+</P>
+<P>
+The following system variables affect the behavior of
+<code>MyISAM</code> tables:
+
+</P>
+<DL COMPACT>
+
+<DT><code>bulk_insert_buffer_size</code>
+<DD>
+The size of the tree cache used in bulk insert
+optimization. <strong>Note</strong>: This is a limit <em>per thread</em>!
+
+<DT><code>myisam_max_extra_sort_file_size</code>
+<DD>
+Used to help MySQL to decide when to use the slow but safe key cache index
+creation method. <strong>Note</strong>: This parameter is given in megabytes
+before MySQL 4.0.3, and in bytes as of 4.0.3.
+
+<DT><code>myisam_max_sort_file_size</code>
+<DD>
+Don't use the fast sort index method to create an index if the temporary
+file would become larger than this.  <strong>Note</strong>: This parameter is
+given in megabytes before MySQL 4.0.3, and in bytes as of 4.0.3.
+
+<DT><code>myisam_sort_buffer_size</code>
+<DD>
+Set the size of the buffer used when recovering tables.
+
+</DL>
+
+<P>
+See section <A HREF="manual_MySQL_Database_Administration.html#Server_system_variables">5.2.3  Server System Variables</A>.
+
+</P>
+<P>
+Automatic recovery is activated if you start <code>mysqld</code> with the
+<code>--myisam-recover</code> option. In this case, when the server opens a
+<code>MyISAM</code> table, it checks whether the table
+is marked as crashed or whether the open count variable for the
+table is not 0 and you are running the server with
+<code>--skip-external-locking</code>.  If either of these conditions is true, the
+following happens:
+
+</P>
+
+<UL>
+
+<LI>
+
+The table is checked for errors.
+
+<LI>
+
+If the server finds an error, it tries to do a fast table repair (with
+sorting and without re-creating the data file).
+
+<LI>
+
+If the repair fails because of an error in the data file (for example, a
+duplicate-key error), the server tries again, this time re-creating the
+data file.
+
+<LI>
+
+If the repair still fails, the server tries once more with the old repair option
+method (write row by row without sorting). This method should be able to repair
+any type of error and has low disk space requirements.
+
+</UL>
+
+<P>
+If the recovery wouldn't be able to recover all rows from a previous
+completed statement and you didn't specify <code>FORCE</code> in the value of the
+<code>--myisam-recover</code> option, automatic repair aborts with an error
+message in the error log:
+
+</P>
+
+<PRE>
+Error: Couldn't repair table: test.g00pages
+</PRE>
+
+<P>
+If you specify <code>FORCE</code>, a warning like this is written instead:
+
+</P>
+
+<PRE>
+Warning: Found 344 of 354 rows when repairing ./test/g00pages
+</PRE>
+
+<P>
+Note that if the automatic recovery value includes <code>BACKUP</code>, the
+recovery process creates files with names of the form
+<tt>`<var>tbl_name-datetime</var>.BAK'</tt>.  You should have a <code>cron</code> script that
+automatically moves these files from the database directories to backup
+media.
+
+</P>
+
+
+
+<H3><A NAME="Key_space" HREF="manual_toc.html#Key_space">14.1.2  Space Needed for Keys</A></H3>
+
+<P>
+<A NAME="IDX1881"></A>
+
+</P>
+<P>
+<code>MyISAM</code> tables use B-tree indexes. You can roughly calculate
+the size for the index file as <code>(key_length+4)/0.67</code>, summed over
+all keys.  This is for the worst case when all keys are inserted in
+sorted order and the table doesn't have any compressed keys.
+
+</P>
+<P>
+String indexes are space compressed. If the first index part is a
+string, it will also be prefix compressed.  Space compression makes the
+index file smaller than the worst-case figure if the string column has a lot
+of trailing space or is a <code>VARCHAR</code> column that is not always used
+to the full length. Prefix compression is used on keys that start
+with a string.  Prefix compression helps if there are many strings
+with an identical prefix.
+
+</P>
+<P>
+In <code>MyISAM</code> tables, you can also prefix compress numbers by specifying
+<code>PACK_KEYS=1</code> when you create the table.  This helps when you have
+many integer keys that have an identical prefix when the numbers are stored
+high-byte first.
+
+</P>
+
+
+
+<H3><A NAME="MyISAM_table_formats" HREF="manual_toc.html#MyISAM_table_formats">14.1.3  <code>MyISAM</code> Table Storage Formats</A></H3>
+
+<P>
+<code>MyISAM</code> supports three different storage formats. Two of them (fixed
+and dynamic format) are chosen automatically depending on the type of
+columns you are using. The third, compressed format, can be created only
+with the <code>myisampack</code> utility.
+
+</P>
+<P>
+When you <code>CREATE</code> or <code>ALTER</code> a table that has no <code>BLOB</code>
+or <code>TEXT</code> columns, you can force the table format to <code>FIXED</code> or
+<code>DYNAMIC</code> with the <code>ROW_FORMAT</code> table option. This causes
+<code>CHAR</code> and <code>VARCHAR</code> columns to become <code>CHAR</code> for
+<code>FIXED</code> format or <code>VARCHAR</code> for <code>DYNAMIC</code> format.
+
+</P>
+<P>
+In the future, you will be able to compress or decompress tables by specifying
+<code>ROW_FORMAT={COMPRESSED | DEFAULT}</code> to <code>ALTER TABLE</code>.
+See section <A HREF="manual_SQL_Syntax.html#CREATE_TABLE">13.2.6  <code>CREATE TABLE</code> Syntax</A>.
+
+</P>
+
+
+
+<H4><A NAME="Static_format" HREF="manual_toc.html#Static_format">14.1.3.1  Static (Fixed-Length) Table Characteristics</A></H4>
+
+<P>
+Static format is the default for <code>MyISAM</code> tables.  It is used when the
+table contains no variable-length columns (<code>VARCHAR</code>, <code>BLOB</code>, or
+<code>TEXT</code>). Each row is stored using a fixed number of bytes.
+
+</P>
+<P>
+Of the three <code>MyISAM</code> storage formats, static format is the simplest
+and most secure (least subject to corruption). It is also the fastest of the
+on-disk formats. The speed comes from the easy way that rows in the data file
+can be found on disk: When looking up a row based on a row number in the
+index, multiply the row number by the row length.  Also, when scanning a
+table, it is very easy to read a constant number of records with each disk
+read operation.
+
+</P>
+<P>
+The security is evidenced if your computer crashes while the MySQL server is
+writing to a fixed-format <code>MyISAM</code> file. In this case, <code>myisamchk</code>
+can easily determine where each row starts and ends, so it can usually
+reclaim all records except the partially written one. Note that <code>MyISAM</code>
+table
+indexes can always be reconstructed based on the data rows.
+
+</P>
+<P>
+General characteristics of static format tables:
+
+</P>
+
+<UL>
+
+<LI>
+
+All <code>CHAR</code>, <code>NUMERIC</code>, and <code>DECIMAL</code> columns are space-padded
+to the column width.
+
+<LI>
+
+Very quick.
+
+<LI>
+
+Easy to cache.
+
+<LI>
+
+Easy to reconstruct after a crash, because records are located in fixed
+positions.
+
+<LI>
+
+Reorganization is unnecessary unless you delete a huge number of records
+and want to return free disk space to the operating system. To do this,
+use <code>OPTIMIZE TABLE</code> or <code>myisamchk -r</code>.
+
+<LI>
+
+Usually require more disk space than for dynamic-format tables.
+
+</UL>
+
+
+
+<H4><A NAME="Dynamic_format" HREF="manual_toc.html#Dynamic_format">14.1.3.2  Dynamic Table Characteristics</A></H4>
+
+<P>
+<A NAME="IDX1882"></A>
+<A NAME="IDX1883"></A>
+
+</P>
+<P>
+Dynamic storage format is used if a <code>MyISAM</code> table contains any
+variable-length columns (<code>VARCHAR</code>, <code>BLOB</code>, or <code>TEXT</code>), or if
+the table was created with the <code>ROW_FORMAT=DYNAMIC</code> option.
+
+</P>
+<P>
+This format is a little more complex because each row has a header that
+indicates
+how long it is. One record can also end up at more than one location when it
+is made longer as a result of an update.
+
+</P>
+<P>
+<A NAME="IDX1884"></A>
+You can use <code>OPTIMIZE TABLE</code> or <code>myisamchk</code> to defragment a
+table. If you have fixed-length columns that you access or change frequently
+in a table that also contains some variable-length columns, it might be
+a good idea to move the variable-length columns to other tables just to
+avoid fragmentation.
+
+</P>
+<P>
+General characteristics of dynamic-format tables:
+
+</P>
+
+<UL>
+
+<LI>
+
+All string columns are dynamic except those with a length less than four.
+
+<LI>
+
+Each record is preceded by a bitmap that indicates which columns contain the
+empty string (for string columns) or zero (for numeric columns). Note that
+this does not include columns that contain <code>NULL</code> values. If a string
+column has a length of zero after trailing space removal, or a numeric
+column has a value of zero, it is marked in the bitmap and not saved to
+disk.  Non-empty strings are saved as a length byte plus the string
+contents.
+
+<LI>
+
+Much less disk space usually is required than for fixed-length tables.
+
+<LI>
+
+Each record uses only as much space as is required. However, if a record
+becomes larger, it is split into as many pieces as are required, resulting
+in record fragmentation.  For example, if you update a row with information
+that extends the row length, the row will be fragmented.  In this case,
+you may have to run <code>OPTIMIZE TABLE</code> or <code>myisamchk -r</code> from time to time to get better
+performance.  Use <code>myisamchk -ei</code> to obtain table statistics.
+
+<LI>
+
+More difficult than static-format tables to reconstruct after a crash,
+because a record may be fragmented into many pieces and a link (fragment)
+may be missing.
+
+<LI>
+
+The expected row length for dynamic-sized records is calculated using the
+following expression:
+
+
+<PRE>
+3
++ (<var>number of columns</var> + 7) / 8
++ (<var>number of char columns</var>)
++ (<var>packed size of numeric columns</var>)
++ (<var>length of strings</var>)
++ (<var>number of NULL columns</var> + 7) / 8
+</PRE>
+
+There is a penalty of 6 bytes for each link. A dynamic record is linked
+whenever an update causes an enlargement of the record. Each new link will be
+at least 20 bytes, so the next enlargement will probably go in the same link.
+If not, there will be another link. You may check how many links there are
+with <code>myisamchk -ed</code>. All links may be removed with <code>myisamchk -r</code>.
+
+</UL>
+
+
+
+<H4><A NAME="Compressed_format" HREF="manual_toc.html#Compressed_format">14.1.3.3  Compressed Table Characteristics</A></H4>
+
+<P>
+<A NAME="IDX1885"></A>
+<A NAME="IDX1886"></A>
+<A NAME="IDX1887"></A>
+<A NAME="IDX1888"></A>
+
+</P>
+<P>
+Compressed storage format is a read-only format that is generated with the
+<code>myisampack</code> tool.
+
+</P>
+<P>
+All MySQL distributions as of version 3.23.19 include <code>myisampack</code> by
+default. (This version is when MySQL was placed under the GPL.) For earlier
+versions, <code>myisampack</code> was included only with licenses or support
+agreements, but the server still can read tables that were compressed
+with <code>myisampack</code>.  Compressed tables can be uncompressed with
+<code>myisamchk</code>.  (For the <code>ISAM</code> storage engine, compressed tables
+can be created with <code>pack_isam</code> and uncompressed with <code>isamchk</code>.)
+
+</P>
+<P>
+Compressed tables have the following characteristics:
+
+</P>
+
+<UL>
+
+<LI>
+
+Compressed tables take very little disk space. This minimizes disk usage, which
+is very nice when using slow disks (such as CD-ROMs).
+
+<LI>
+
+Each record is compressed separately, so there is very little access overhead.  The
+header for a record is fixed (1-3 bytes) depending on the biggest record in the
+table.  Each column is compressed differently.  There is usually a different
+Huffman tree for each column.  Some of the compression types are:
+
+
+<UL>
+
+<LI>
+
+Suffix space compression.
+
+<LI>
+
+Prefix space compression.
+
+<LI>
+
+Numbers with a value of zero are stored using one bit.
+
+<LI>
+
+If values in an integer column have a small range, the column is stored
+using the smallest possible type. For example, a <code>BIGINT</code> column
+(eight bytes) can be stored as a <code>TINYINT</code> column (one byte) if all
+its values are in the range from <code>-128</code> to <code>127</code>.
+
+<LI>
+
+If a column has only a small set of possible values, the column type is
+converted to <code>ENUM</code>.
+
+<LI>
+
+A column may use a combination of the preceding compressions.
+
+</UL>
+
+<LI>
+
+Can handle fixed-length or dynamic-length records.
+
+</UL>
+
+
+
+<H3><A NAME="MyISAM_table_problems" HREF="manual_toc.html#MyISAM_table_problems">14.1.4  <code>MyISAM</code> Table Problems</A></H3>
+
+<P>
+The file format that MySQL uses to store data has been extensively
+tested, but there are always circumstances that may cause database tables
+to become corrupted.
+
+</P>
+
+
+
+<H4><A NAME="Corrupted_MyISAM_tables" HREF="manual_toc.html#Corrupted_MyISAM_tables">14.1.4.1  Corrupted <code>MyISAM</code> Tables</A></H4>
+
+<P>
+Even though the <code>MyISAM</code> table format is very reliable (all changes to
+a table made by an SQL statement are written before the statement returns),
+you can still get corrupted tables if some of the following things happen:
+
+</P>
+
+<UL>
+
+<LI>
+
+The <code>mysqld</code> process is killed in the middle of a write.
+
+<LI>
+
+Unexpected computer shutdown occurs (for example, the computer is turned off).
+
+<LI>
+
+Hardware errors.
+
+<LI>
+
+You are using an external program (such as <code>myisamchk</code>) on a table that
+is being modified by the server at the same time.
+
+<LI>
+
+A software bug in the MySQL or <code>MyISAM</code> code.
+
+</UL>
+
+<P>
+Typical symptoms for a corrupt table are:
+
+</P>
+
+<UL>
+
+<LI>
+
+You get the following error while selecting data from the table:
+
+
+<PRE>
+Incorrect key file for table: '...'. Try to repair it
+</PRE>
+
+<LI>
+
+Queries don't find rows in the table or return incomplete data.
+
+</UL>
+
+<P>
+You can check whether a <code>MyISAM</code> table is okay with the <code>CHECK
+TABLE</code> statement.  You can repair a corrupted <code>MyISAM</code> table with
+<code>REPAIR TABLE</code>.  When <code>mysqld</code> is not running, you can also
+check or repair a table with the <code>myisamchk</code> command.
+See section <A HREF="manual_SQL_Syntax.html#CHECK_TABLE">13.5.2.3  <code>CHECK TABLE</code> Syntax</A>,
+section <A HREF="manual_SQL_Syntax.html#REPAIR_TABLE">13.5.2.6  <code>REPAIR TABLE</code> Syntax</A>, and section <A HREF="manual_MySQL_Database_Administration.html#myisamchk_syntax">5.7.2.1  <code>myisamchk</code> Invocation Syntax</A>.
+
+</P>
+<P>
+If your tables become corrupted frequently, you should try to determine why
+this is happening.  The most important thing to know is whether the table
+became corrupted as a result of a server crash. You can verify this easily
+by looking for a recent <code>restarted mysqld</code> message in the error log.
+If there is such a message, it is likely that table corruption is a
+result of the server dying.  Otherwise, corruption may have occurred during
+normal operation, which is a bug. You should try to create a reproducible
+test case that demonstrates the problem.
+See section <A HREF="manual_Problems.html#Crashing">A.4.2  What to Do If MySQL Keeps Crashing</A> and section <A HREF="manual_Porting.html#Reproduceable_test_case">E.1.6  Making a Test Case If You Experience Table Corruption</A>.
+
+</P>
+
+
+
+<H4><A NAME="MyISAM_table_close" HREF="manual_toc.html#MyISAM_table_close">14.1.4.2  Problems from Tables Not Being Closed Properly</A></H4>
+
+<P>
+Each <code>MyISAM</code> index (<tt>`.MYI'</tt>) file has a counter in the header
+that can be used to check whether a table has been closed properly.
+If you get the following warning from <code>CHECK TABLE</code> or <code>myisamchk</code>,
+it means that this counter has gone out of sync:
+
+</P>
+
+<PRE>
+clients are using or haven't closed the table properly
+</PRE>
+
+<P>
+This warning doesn't necessarily mean that the table is corrupted, but
+you should at least check the table to verify that it's okay.
+
+</P>
+<P>
+The counter works as follows:
+
+</P>
+
+<UL>
+
+<LI>
+
+The first time a table is updated in MySQL, a counter in the
+header of the index files is incremented.
+
+<LI>
+
+The counter is not changed during further updates.
+
+<LI>
+
+When the last instance of a table is closed (because of a <code>FLUSH
+TABLES</code> operation or because there isn't room in the table cache), the
+counter is decremented if the table has been updated at any point.
+
+<LI>
+
+When you repair the table or check the table and it is found to be okay,
+the counter is reset to zero.
+
+<LI>
+
+To avoid problems with interaction with other processes that might
+check the table, the counter is not decremented on close if it was zero.
+
+</UL>
+
+<P>
+In other words, the counter can go out of sync only under these conditions:
+
+</P>
+
+<UL>
+
+<LI>
+
+The <code>MyISAM</code> tables are copied without a preceding <code>LOCK TABLES</code> and
+<code>FLUSH TABLES</code>.
+
+<LI>
+
+MySQL has crashed between an update and the final close.
+(Note that the table may still be okay, because MySQL always issues writes
+for everything between each statement.)
+
+<LI>
+
+A table was modified by <code>myisamchk --recover</code> or <code>myisamchk
+--update-state</code> at the same time that it was in use by <code>mysqld</code>.
+
+<LI>
+
+Many <code>mysqld</code> servers are using the table and one server performed a
+<code>REPAIR TABLE</code> or <code>CHECK TABLE</code> on the table while it was in use by
+another server.  In this setup, it is safe to use <code>CHECK TABLE</code>,
+although you might get the warning from other servers. However, <code>REPAIR
+TABLE</code> should be avoided because when one server replaces the data file
+with a new one, this is not signaled to the other servers.
+
+In general, it is a bad idea to share a data directory among multiple servers.
+See section <A HREF="manual_MySQL_Database_Administration.html#Multiple_servers">5.10  Running Multiple MySQL Servers on the Same Machine</A> for additional discussion.
+
+</UL>
+
+
+
+<H2><A NAME="MERGE_storage_engine" HREF="manual_toc.html#MERGE_storage_engine">14.2  The <code>MERGE</code> Storage Engine</A></H2>
+
+<P>
+<A NAME="IDX1889"></A>
+<A NAME="IDX1890"></A>
+<A NAME="IDX1891"></A>
+
+</P>
+<P>
+<A NAME="IDX1892"></A>
+<A NAME="IDX1893"></A>
+<A NAME="IDX1894"></A>
+
+</P>
+
+<P>
+The <code>MERGE</code> storage engine was introduced in MySQL 3.23.25. It
+is also known as the <code>MRG_MyISAM</code> engine. The code is now reasonably
+stable.
+
+</P>
+<P>
+A <code>MERGE</code> table is a collection of identical <code>MyISAM</code> tables that
+can be used as one.  ``Identical'' means that all tables have
+identical column and index information.  You can't merge tables in which the
+columns are listed in a different order, don't have exactly the same columns, or
+have the indexes in different order.  However, any or all of the tables can be
+compressed with <code>myisampack</code>.
+See section <A HREF="manual_Client-Side_Scripts.html#myisampack">8.2  <code>myisampack</code>, the MySQL Compressed Read-only Table Generator</A>.
+Differences in table options such as <code>AVG_ROW_LENGTH</code>, <code>MAX_ROWS</code>,
+or <code>PACK_KEYS</code> do not matter.
+
+</P>
+
+<P>
+When you create a <code>MERGE</code> table, MySQL creates two files on disk.
+The files have names that begin with the table name and have an extension
+to indicate the file type.  An <tt>`.frm'</tt> file stores the table definition,
+and an <tt>`.MRG'</tt> file contains the names of the tables that should be
+used as one.  (Originally, all used tables had to be in the same database
+as the <code>MERGE</code> table itself. This restriction has been lifted as of
+MySQL 4.1.1.)
+
+</P>
+<P>
+You can use <code>SELECT</code>, <code>DELETE</code>, <code>UPDATE</code>, and (as of MySQL
+4.0) <code>INSERT</code> on the collection of tables.  For the moment, you must
+have <code>SELECT</code>, <code>UPDATE</code>, and <code>DELETE</code> privileges on the
+tables that you map to a <code>MERGE</code> table.
+
+</P>
+<P>
+If you <code>DROP</code> the <code>MERGE</code> table, you are dropping only the
+<code>MERGE</code> specification. The underlying tables are not affected.
+
+</P>
+<P>
+When you create a <code>MERGE</code> table, you must specify a
+<code>UNION=(list-of-tables)</code> clause that indicates which tables you want to
+use as one. You can optionally specify an <code>INSERT_METHOD</code> option if you
+want inserts for the <code>MERGE</code> table to happen in the first or last table
+of the <code>UNION</code> list. If you don't specify any <code>INSERT_METHOD</code>
+option or specify it with a value of <code>NO</code>, attempts to insert records
+into the <code>MERGE</code> table result in an error.
+
+</P>
+<P>
+The following example shows how to create a <code>MERGE</code> table:
+
+</P>
+
+<PRE>
+mysql&#62; CREATE TABLE t1 (
+    -&#62;    a INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    -&#62;    message CHAR(20));
+mysql&#62; CREATE TABLE t2 (
+    -&#62;    a INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    -&#62;    message CHAR(20));
+mysql&#62; INSERT INTO t1 (message) VALUES ('Testing'),('table'),('t1');
+mysql&#62; INSERT INTO t2 (message) VALUES ('Testing'),('table'),('t2');
+mysql&#62; CREATE TABLE total (
+    -&#62;    a INT NOT NULL AUTO_INCREMENT,
+    -&#62;    message CHAR(20), INDEX(a))
+    -&#62;    TYPE=MERGE UNION=(t1,t2) INSERT_METHOD=LAST;
+</PRE>
+
+<P>
+Note that the <code>a</code> column is indexed in the <code>MERGE</code> table, but is
+not declared as a <code>PRIMARY KEY</code> as it is in the underlying
+<code>MyISAM</code> tables. This is necessary because a <code>MERGE</code> table cannot
+enforce uniqueness over the set of underlying tables.
+
+</P>
+<P>
+After creating the <code>MERGE</code> table, you can do things like this:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT * FROM total;
++---+---------+
+| a | message |
++---+---------+
+| 1 | Testing |
+| 2 | table   |
+| 3 | t1      |
+| 1 | Testing |
+| 2 | table   |
+| 3 | t2      |
++---+---------+
+</PRE>
+
+<P>
+Note that you can also manipulate the <tt>`.MRG'</tt> file directly from
+outside of the MySQL server:
+
+</P>
+
+<PRE>
+shell&#62; cd /<var>mysql-data-directory</var>/<var>current-database</var>
+shell&#62; ls -1 t1 t2 &#62; total.MRG
+shell&#62; mysqladmin flush-tables
+</PRE>
+
+<P>
+To remap a <code>MERGE</code> table to a different collection of <code>MyISAM</code>
+tables, you can do one of the following:
+
+</P>
+
+<UL>
+
+<LI>
+
+<code>DROP</code> the table and re-create it.
+
+<LI>
+
+Use <code>ALTER TABLE <var>tbl_name</var> UNION=(...)</code> to change the list of underlying
+tables.
+
+<LI>
+
+Change the <tt>`.MRG'</tt> file and issue a <code>FLUSH TABLE</code> statement for the
+<code>MERGE</code> table and all underlying tables to force the storage engine to
+read the new definition file.
+
+</UL>
+
+<P>
+<code>MERGE</code> tables can help you solve the following problems:
+
+</P>
+
+<UL>
+
+<LI>
+
+Easily manage a set of log tables. For example, you can put data from
+different months into separate tables, compress some of them with
+<code>myisampack</code>, and then create a <code>MERGE</code> table to use them as one.
+
+<LI>
+
+Obtain more speed. You can split a big read-only table based on some
+criteria, and then put individual tables on different disks.
+A <code>MERGE</code> table on this could be much faster than using
+the big table. (You can also use a RAID table to get the same
+kind of benefits.)
+
+<LI>
+
+Do more efficient searches. If you know exactly what you are looking
+for, you can search in just one of the split tables for some queries
+and use a <code>MERGE</code> table for others.  You can even have many
+different <code>MERGE</code> tables that use overlapping sets of tables.
+
+<LI>
+
+Do more efficient repairs. It's easier to repair the individual tables that
+are mapped to a <code>MERGE</code> table than to repair a single really big table.
+
+<LI>
+
+Instantly map many tables as one. A <code>MERGE</code> table need not maintain
+an index of its own because it uses the indexes of the individual tables.
+As a result, <code>MERGE</code> table collections are <em>very</em> fast to create
+or remap.  (Note that you must still specify the index definitions when
+you create a <code>MERGE</code> table, even though no indexes are created.)
+
+<LI>
+
+If you have a set of tables that you join as a big table on demand or
+batch, you should instead create a <code>MERGE</code> table on them on demand.
+This is much faster and will save a lot of disk space.
+
+<LI>
+
+Exceed the file size limit for the operating system. Each <code>MyISAM</code> table
+is bound by this limit, but a collection of <code>MyISAM</code> tables is not.
+
+<LI>
+
+You can create an alias or synonym for a <code>MyISAM</code> table by defining a
+<code>MERGE</code> table that maps to that single table.  There should be no
+really notable performance impact of doing this (only a couple of indirect
+calls and <code>memcpy()</code> calls for each read).
+
+</UL>
+
+<P>
+The disadvantages of <code>MERGE</code> tables are:
+
+</P>
+
+<UL>
+
+<LI>
+
+You can use only identical <code>MyISAM</code> tables for a <code>MERGE</code> table.
+
+<LI>
+
+<code>MERGE</code> tables use more file descriptors. If 10 clients are using a
+<code>MERGE</code> table that maps to 10 tables, the server uses
+(10*10) + 10 file descriptors.  (10 data file descriptors for each of the 10
+clients, and 10 index file descriptors shared among the clients.)
+
+<LI>
+
+Key reads are slower. When you read a key, the <code>MERGE</code>
+storage engine needs to issue a read on all underlying tables to check
+which one most closely matches the given key.  If you then do a ``read-next,''
+the <code>MERGE</code> storage engine needs to search the read buffers
+to find the next key. Only when one key buffer is used up, the storage engine
+will need to read the next key block. This makes <code>MERGE</code> keys much slower
+on <code>eq_ref</code> searches, but not much slower on <code>ref</code> searches.
+See section <A HREF="manual_MySQL_Optimization.html#EXPLAIN">7.2.1  <code>EXPLAIN</code> Syntax (Get Information About a <code>SELECT</code>)</A> for more information about <code>eq_ref</code>
+and <code>ref</code>.
+
+</UL>
+
+
+
+<H3><A NAME="MERGE_table_problems" HREF="manual_toc.html#MERGE_table_problems">14.2.1  <code>MERGE</code> Table Problems</A></H3>
+
+<P>
+The following are the known problems with <code>MERGE</code> tables:
+
+</P>
+
+<UL>
+
+<LI>
+
+If you use <code>ALTER TABLE</code> to change a <code>MERGE</code> table to another
+table type, the mapping to the underlying tables is lost. Instead, the rows
+from the underlying <code>MyISAM</code> tables are copied into the altered table,
+which then is assigned the new type.
+
+<LI>
+
+Before MySQL 4.1.1, all underlying tables and the <code>MERGE</code> table itself
+had to be in the same database.
+
+<LI>
+
+<code>REPLACE</code> doesn't work.
+
+<LI>
+
+You can't use
+<code>DROP TABLE</code>,
+<code>ALTER TABLE</code>,
+<code>DELETE FROM</code> without a <code>WHERE</code> clause,
+<code>REPAIR TABLE</code>,
+<code>TRUNCATE TABLE</code>,
+<code>OPTIMIZE TABLE</code>, or
+<code>ANALYZE TABLE</code>
+on any of the tables that are
+mapped into a <code>MERGE</code> table that is ``open.''  If you do this, the
+<code>MERGE</code> table may still refer to the original table and you will
+get unexpected results. The easiest way to work around this deficiency
+is to issue a <code>FLUSH TABLES</code> statement to ensure that no <code>MERGE</code>
+tables remain ``open.''
+
+<LI>
+
+A <code>MERGE</code> table cannot maintain <code>UNIQUE</code> constraints over the
+whole table.  When you perform an <code>INSERT</code>, the data goes into the
+first or last <code>MyISAM</code> table (depending on the value of the
+<code>INSERT_METHOD</code> option). MySQL ensures that unique key values remain
+unique within that <code>MyISAM</code> table, but not across all the tables in the
+collection.
+
+<LI>
+
+Before MySQL 3.23.49, <code>DELETE FROM merge_table</code> used without a
+<code>WHERE</code> clause only clears the mapping for the table. That is, it
+incorrectly empties the <tt>`.MRG'</tt> file rather than deleting records from
+the mapped tables.
+
+<LI>
+
+Using <code>RENAME TABLE</code> on an active <code>MERGE</code> table may corrupt the
+table.  This will be fixed in MySQL 4.1.x.
+
+<LI>
+
+When you create a <code>MERGE</code> table, there is no check whether the
+underlying tables exist and have identical structure.  When the <code>MERGE</code>
+table is used, MySQL does a quick check that the record length for all
+mapped tables is equal, but this is not foolproof.  If you create a
+<code>MERGE</code> table from dissimilar <code>MyISAM</code> tables, you are very likely
+to run into strange problems.
+
+<LI>
+
+Index order in the <code>MERGE</code> table and its underlying tables should be
+the same.  If you use <code>ALTER TABLE</code> to add a <code>UNIQUE</code> index
+to a table used in a <code>MERGE</code> table, and then use <code>ALTER TABLE</code> to
+add a non-unique index on the <code>MERGE</code> table, the index order will be
+different for the tables if there was an old non-unique index in the
+underlying table. (This is because <code>ALTER TABLE</code> puts <code>UNIQUE</code>
+indexes before non-unique indexes to be able to detect duplicate keys as early
+as possible.)  Consequently, queries may return unexpected results.
+
+<LI>
+
+<code>DROP TABLE</code> on a table that is in use by a <code>MERGE</code> table does
+not work on Windows because the <code>MERGE</code> storage engine does the table
+mapping hidden from the upper layer of MySQL.  Because Windows doesn't allow
+you to delete files that are open, you first must flush all <code>MERGE</code>
+tables (with <code>FLUSH TABLES</code>) or drop the <code>MERGE</code> table before
+dropping the table.
+
+</UL>
+
+
+
+<H2><A NAME="MEMORY_storage_engine" HREF="manual_toc.html#MEMORY_storage_engine">14.3  The <code>MEMORY</code> (<code>HEAP</code>) Storage Engine</A></H2>
+
+<P>
+<A NAME="IDX1895"></A>
+<A NAME="IDX1896"></A>
+<A NAME="IDX1897"></A>
+<A NAME="IDX1898"></A>
+<A NAME="IDX1899"></A>
+<A NAME="IDX1900"></A>
+
+</P>
+<P>
+The <code>MEMORY</code> storage engine creates tables with contents that are stored
+in memory. Before MySQL 4.1, <code>MEMORY</code> tables are called <code>HEAP</code>
+tables. As of 4.1, <code>HEAP</code> is a synonym for <code>MEMORY</code>, and
+<code>MEMORY</code> is the preferred term.
+
+</P>
+<P>
+Each <code>MEMORY</code> table is associated with one disk file.  The filename
+begins with the table name and has an extension of <tt>`.frm'</tt> to indicate
+that it stores the table definition.
+
+</P>
+<P>
+To specify explicitly that you want a <code>MEMORY</code> table, indicate that with
+an <code>ENGINE</code> or <code>TYPE</code> table option:
+
+</P>
+
+<PRE>
+CREATE TABLE t (i INT) ENGINE = MEMORY;
+CREATE TABLE t (i INT) TYPE = HEAP;
+</PRE>
+
+<P>
+<code>MEMORY</code> tables are stored in memory and use hash indexes by default.
+This makes them very fast, and very useful for creating temporary tables.
+However, when the server shuts down, all data stored in <code>MEMORY</code>
+tables is lost.  The tables continue to exist because their definitions
+are stored in the <tt>`.frm'</tt> files on disk, but their contents will be
+empty when the server restarts.
+
+</P>
+<P>
+Here is an example that shows how you might create, use, and remove a
+<code>MEMORY</code> table:
+
+</P>
+
+<PRE>
+mysql&#62; CREATE TABLE test TYPE=MEMORY
+    -&#62;     SELECT ip,SUM(downloads) AS down
+    -&#62;     FROM log_table GROUP BY ip;
+mysql&#62; SELECT COUNT(ip),AVG(down) FROM test;
+mysql&#62; DROP TABLE test;
+</PRE>
+
+<P>
+<code>MEMORY</code> tables have the following characteristics:
+
+</P>
+
+<UL>
+
+<LI>
+
+Space for <code>MEMORY</code> tables is allocated in small blocks. The tables use
+100% dynamic hashing (on inserting). No overflow areas and no extra key
+space are needed.  There is no extra space needed for free lists.  Deleted
+rows are put in a linked list and are reused when you insert new data into
+the table.  <code>MEMORY</code> tables also don't have problems with deletes plus
+inserts, which is common with hashed tables.
+
+<LI>
+
+<code>MEMORY</code> tables allow up to 32 indexes per table, 16 columns per index,
+and a maximum key length of 500 bytes.
+
+<LI>
+
+Before MySQL 4.1, the <code>MEMORY</code> storage engine implements only hash
+indexes.  From MySQL 4.1 on,
+hash indexes are still the default, but
+you can specify explicitly that a <code>MEMORY</code>
+table index should be <code>HASH</code> or <code>BTREE</code> by adding a <code>USING</code>
+clause:
+
+
+<PRE>
+CREATE TABLE lookup
+    (id INT, INDEX USING HASH (id))
+    ENGINE = MEMORY;
+CREATE TABLE lookup
+    (id INT, INDEX USING BTREE (id))
+    ENGINE = MEMORY;
+</PRE>
+
+General characteristics of B-tree and hash indexes are described in
+section <A HREF="manual_MySQL_Optimization.html#MySQL_indexes">7.4.5  How MySQL Uses Indexes</A>.
+
+<LI>
+
+You can have non-unique keys in a <code>MEMORY</code> table.
+(This is an uncommon feature for implementations of hash indexes.)
+
+<LI>
+
+If you have a hash index on a <code>MEMORY</code> table that has a high degree of
+key duplication (many index entries containing the same value), updates to
+the table that affect key values and all deletes will be significantly
+slower.  The degree of slowdown is proportional to the degree of duplication
+(or, inversely proportional to the index cardinality).  You can use a
+<code>BTREE</code> index to avoid this problem.
+
+<LI>
+
+<code>MEMORY</code> tables use a fixed record length format.
+
+<LI>
+
+<code>MEMORY</code> doesn't support <code>BLOB</code> or <code>TEXT</code> columns.
+
+<LI>
+
+<code>MEMORY</code> doesn't support <code>AUTO_INCREMENT</code> columns before MySQL
+4.1.0.
+
+<LI>
+
+Prior to MySQL 4.0.2, <code>MEMORY</code> doesn't support indexes on columns that
+can contain <code>NULL</code> values.
+
+<LI>
+
+<code>MEMORY</code> tables are shared between all clients (just like any other
+non-<code>TEMPORARY</code>
+table).
+
+<LI>
+
+<code>MEMORY</code> table contents are stored in memory, which is a property that
+<code>MEMORY</code> tables share with internal tables that the server creates on
+the fly while processing queries.  However, the two types of tables differ in
+that <code>MEMORY</code> tables are not subject to storage conversion, whereas
+internal tables are:
+
+
+<UL>
+<LI>
+
+If an internal table becomes too large, the server automatically converts it
+to an on-disk table.  The size limit is determined by the value of the
+<code>tmp_table_size</code> system variable.
+
+<LI>
+
+<code>MEMORY</code> tables are never converted to disk tables.  To ensure that you
+don't accidentally do anything foolish, you can set the
+<code>max_heap_table_size</code> system variable to impose a maximum size on
+<code>MEMORY</code> tables.  For individual tables, you can also specify a
+<code>MAX_ROWS</code> table option in the <code>CREATE TABLE</code> statement.
+</UL>
+
+<LI>
+
+The server needs enough extra memory to maintain all <code>MEMORY</code> tables
+that are in use at the same time.
+
+<LI>
+
+To free memory used by a <code>MEMORY</code> table if you no longer require its
+contents, you should execute <code>DELETE</code> or
+<code>TRUNCATE TABLE</code>, or else remove the table with <code>DROP TABLE</code>.
+
+<LI>
+
+If you want to populate a <code>MEMORY</code> table when the MySQL server starts,
+you can use the <code>--init-file</code> option.  For example, you can put
+statements such as <code>INSERT INTO ... SELECT</code> or <code>LOAD DATA INFILE</code>
+into the file to load the table from some persistent data source.
+See section <A HREF="manual_MySQL_Database_Administration.html#Server_options">5.2.1  <code>mysqld</code> Command-Line Options</A>.
+
+<LI>
+
+If you are using replication, the master server's <code>MEMORY</code> tables
+become empty when it is shut down and restarted.  However, a slave is not
+aware that these tables have become empty, so it will return out-of-date
+content if you select data from them.  Beginning with MySQL 4.0.18, when a
+<code>MEMORY</code> table is used on the master for the first time since the master's
+startup, a <code>DELETE FROM</code> statement is written to the master's binary
+log automatically, thus synchronizing the slave to the master again.  Note
+that even with this strategy, the slave still has out-of-date data in the
+table during the interval between the master's restart and its first use of
+the table.  But if you use the <code>--init-file</code> option to populate the
+<code>MEMORY</code> table on the master at startup, it ensures that the failing
+time interval is zero.
+
+<LI>
+
+The memory needed for one row in a <code>MEMORY</code> table is calculated using the
+following expression:
+
+
+<PRE>
+SUM_OVER_ALL_BTREE_KEYS(<var>max_length_of_key</var> + sizeof(char*) * 4)
++ SUM_OVER_ALL_HASH_KEYS(sizeof(char*) * 2)
++ ALIGN(<var>length_of_row</var>+1, sizeof(char*))
+</PRE>
+
+<code>ALIGN()</code> represents a round-up factor to cause the row length to be an
+exact multiple of the <code>char</code> pointer size.
+<code>sizeof(char*)</code> is 4 on 32-bit machines and 8 on 64-bit machines.
+
+</UL>
+
+
+
+<H2><A NAME="BDB_storage_engine" HREF="manual_toc.html#BDB_storage_engine">14.4  The <code>BDB</code> (<code>BerkeleyDB</code>) Storage Engine</A></H2>
+
+<P>
+<A NAME="IDX1901"></A>
+<A NAME="IDX1902"></A>
+<A NAME="IDX1903"></A>
+<A NAME="IDX1904"></A>
+<A NAME="IDX1905"></A>
+<A NAME="IDX1906"></A>
+
+</P>
+
+<P>
+Sleepycat Software has provided MySQL with the Berkeley DB transactional
+storage engine. This storage engine typically is called <code>BDB</code> for short.
+Support for the <code>BDB</code> storage engine is included in MySQL source
+distributions starting from version 3.23.34a and is activated in MySQL-Max
+binary distributions.
+
+</P>
+<P>
+<code>BDB</code> tables may have a greater chance of surviving crashes and are also
+capable of <code>COMMIT</code> and <code>ROLLBACK</code> operations on transactions.
+The MySQL source distribution comes with a <code>BDB</code> distribution that has a
+couple of small patches to make it work more smoothly with MySQL.
+You can't use a non-patched <code>BDB</code> version with MySQL.
+
+</P>
+<P>
+We at MySQL AB are working in close cooperation with Sleepycat to keep the
+quality of the MySQL/BDB interface high.  (Even though Berkeley DB is in
+itself very tested and reliable, the MySQL interface is still considered
+gamma quality.  We are improving and optimizing it.)
+
+</P>
+<P>
+When it comes to support for any problems involving <code>BDB</code> tables, we
+are committed to helping our users locate the problem and create a
+reproducible test case.  Any such test case will be forwarded to Sleepycat,
+which in turn will help us find and fix the problem.  As this is a two-stage
+operation, any problems with <code>BDB</code> tables may take a little longer for
+us to fix than for other storage engines.  However, we anticipate no
+significant difficulties with this procedure because the Berkeley DB code
+itself is used in many applications other than MySQL.
+
+</P>
+<P>
+For general information about Berkeley DB, please visit the Sleepycat Web site,
+<a HREF="http://www.sleepycat.com/">http://www.sleepycat.com/</a>.
+
+</P>
+
+
+
+<H3><A NAME="BDB_portability" HREF="manual_toc.html#BDB_portability">14.4.1  Operating Systems Supported by <code>BDB</code></A></H3>
+
+<P>
+Currently, we know that the <code>BDB</code> storage engine works with the following
+operating systems:
+
+</P>
+
+<UL>
+<LI>
+
+Linux 2.x Intel
+<LI>
+
+Sun Solaris (SPARC and x86)
+<LI>
+
+FreeBSD 4.x/5.x (x86, sparc64)
+<LI>
+
+IBM AIX 4.3.x
+<LI>
+
+SCO OpenServer
+<LI>
+
+SCO UnixWare 7.1.x
+</UL>
+
+<P>
+<code>BDB</code> does not work with the following operating systems:
+
+</P>
+
+<UL>
+<LI>
+
+Linux 2.x Alpha
+<LI>
+
+Linux 2.x AMD64
+<LI>
+
+Linux 2.x IA-64
+<LI>
+
+Linux 2.x s390
+<LI>
+
+Mac OS X
+</UL>
+
+<P>
+Note: The preceding lists are not complete. We will update them as we
+receive more information.
+
+</P>
+<P>
+If you build MySQL from source with support for <code>BDB</code> tables, but the
+following error occurs when you start <code>mysqld</code>, it means <code>BDB</code>
+is not supported for your architecture:
+
+</P>
+
+<PRE>
+bdb: architecture lacks fast mutexes: applications cannot be threaded
+Can't init databases
+</PRE>
+
+<P>
+In this case, you must rebuild MySQL without <code>BDB</code> table support or
+start the server with the <code>--skip-bdb</code> option.
+
+</P>
+
+
+
+<H3><A NAME="BDB_install" HREF="manual_toc.html#BDB_install">14.4.2  Installing <code>BDB</code></A></H3>
+
+<P>
+If you have downloaded a binary version of MySQL that includes support for
+Berkeley DB, simply follow the usual binary distribution installation
+instructions. (MySQL-Max distributions include <code>BDB</code> support.)
+
+</P>
+<P>
+If you build MySQL from source, you can enable <code>BDB</code> support by running
+<code>configure</code> with the <code>--with-berkeley-db</code> option in addition
+to any other options that you normally use.  Download a distribution for
+MySQL 3.23.34 or newer, change location into its top-level directory,
+and run this command:
+
+</P>
+
+<PRE>
+shell&#62; ./configure --with-berkeley-db [other-options]
+</PRE>
+
+<P>
+For more information, see
+section <A HREF="manual_Installing.html#Installing_binary">2.7  Installing MySQL on Other Unix-Like Systems</A>,
+section <A HREF="manual_MySQL_Database_Administration.html#mysqld-max">5.1.2  The <code>mysqld-max</code> Extended MySQL Server</A>, and
+See section <A HREF="manual_Installing.html#Installing_source">2.8  MySQL Installation Using a Source Distribution</A>.
+
+</P>
+
+
+
+<H3><A NAME="BDB_start" HREF="manual_toc.html#BDB_start">14.4.3  <code>BDB</code> Startup Options</A></H3>
+
+<P>
+The following options to <code>mysqld</code> can be used to change the behavior of
+the <code>BDB</code> storage engine:
+
+</P>
+<DL COMPACT>
+
+<DT><code>--bdb-home=<var>path</var></code>
+<DD>
+The base directory for <code>BDB</code> tables.  This should be the same directory
+you
+use for <code>--datadir</code>.
+
+<DT><code>--bdb-lock-detect=<var>method</var></code>
+<DD>
+The <code>BDB</code> lock detection method. The option value should be 
+<code>DEFAULT</code>, <code>OLDEST</code>, <code>RANDOM</code>, or <code>YOUNGEST</code>.
+
+<DT><code>--bdb-logdir=<var>path</var></code>
+<DD>
+The <code>BDB</code> log file directory.
+
+<DT><code>--bdb-no-recover</code>
+<DD>
+Don't start Berkeley DB in recover mode.
+
+<DT><code>--bdb-no-sync</code>
+<DD>
+Don't synchronously flush the <code>BDB</code> logs.
+
+<DT><code>--bdb-shared-data</code>
+<DD>
+Start Berkeley DB in multi-process mode.  (Don't use <code>DB_PRIVATE</code> when
+initializing Berkeley DB.)
+
+<DT><code>--bdb-tmpdir=<var>path</var></code>
+<DD>
+The <code>BDB</code> temporary file directory.
+
+<DT><code>--skip-bdb</code>
+<DD>
+Disable the <code>BDB</code> storage engine.
+
+</DL>
+
+<P>
+See section <A HREF="manual_MySQL_Database_Administration.html#Server_options">5.2.1  <code>mysqld</code> Command-Line Options</A>.
+
+</P>
+<P>
+The following system variable affects the behavior of
+<code>BDB</code> tables:
+
+</P>
+<DL COMPACT>
+
+<DT><code>bdb_max_lock</code>
+<DD>
+The maximum number of locks you can have active on a <code>BDB</code> table.
+
+</DL>
+
+<P>
+See section <A HREF="manual_MySQL_Database_Administration.html#Server_system_variables">5.2.3  Server System Variables</A>.
+
+</P>
+<P>
+If you use the <code>--skip-bdb</code> option, MySQL will not initialize the Berkeley DB
+library and this will save a lot of memory.  However, if you use this
+option, you cannot use <code>BDB</code> tables.  If you try to create a <code>BDB</code>
+table, MySQL will create a <code>MyISAM</code> table instead.
+
+</P>
+<P>
+Normally, you should start <code>mysqld</code> without the <code>--bdb-no-recover</code>
+option if you intend to use <code>BDB</code> tables.  However, this may give you
+problems when you try to start <code>mysqld</code> if the <code>BDB</code> log files are
+corrupted.
+See section <A HREF="manual_Installing.html#Starting_server">2.9.2.3  Starting and Troubleshooting the MySQL Server</A>.
+
+</P>
+<P>
+With the <code>bdb_max_lock</code> variable, you can specify the maximum number of
+locks that can be active on a <code>BDB</code> table.  The default is
+10,000. You should increase this if errors such as the following occur
+when you perform long transactions or when <code>mysqld</code> has to examine
+many rows to execute a query:
+
+</P>
+
+<PRE>
+bdb: Lock table is out of available locks
+Got error 12 from ...
+</PRE>
+
+<P>
+You may also want to change the <code>binlog_cache_size</code> and
+<code>max_binlog_cache_size</code> variables if you are using large
+multiple-statement transactions.
+See section <A HREF="manual_MySQL_Database_Administration.html#Binary_log">5.9.4  The Binary Log</A>.
+
+</P>
+
+
+
+<H3><A NAME="BDB_characteristics" HREF="manual_toc.html#BDB_characteristics">14.4.4  Characteristics of <code>BDB</code> Tables</A></H3>
+
+<P>
+Each <code>BDB</code> table is stored on disk in two files.  The files have
+names that begin with the table name and have an extension to indicate the
+file type.  An <tt>`.frm'</tt> file stores the table definition, and a <tt>`.db'</tt>
+file contains the table data and indexes.
+
+</P>
+<P>
+To specify explicitly that you want a <code>BDB</code> table, indicate that with
+an <code>ENGINE</code> or <code>TYPE</code> table option:
+
+</P>
+
+<PRE>
+CREATE TABLE t (i INT) ENGINE = BDB;
+CREATE TABLE t (i INT) TYPE = BDB;
+</PRE>
+
+<P>
+<code>BerkeleyDB</code> is a synonym for <code>BDB</code> in the <code>ENGINE</code> or
+<code>TYPE</code> option.
+
+</P>
+<P>
+The <code>BDB</code> storage engine provides transactional tables. The way you use
+these tables depends on the autocommit mode:
+
+</P>
+
+<UL>
+
+<LI>
+
+If you are running with autocommit enabled (which is the default),
+changes to <code>BDB</code> tables are committed immediately and cannot be rolled
+back.
+
+<LI>
+
+If you are running with autocommit disabled, changes do not become
+permanent until you execute a <code>COMMIT</code> statement.  Instead of
+committing, you can execute <code>ROLLBACK</code> to forget the changes.
+
+You can start a transaction with
+the <code>BEGIN WORK</code> statement to suspend autocommit, or with
+<code>SET AUTOCOMMIT=0</code> to disable autocommit explicitly.
+
+</UL>
+
+<P>
+See section <A HREF="manual_SQL_Syntax.html#COMMIT">13.4.1  <code>START TRANSACTION</code>, <code>COMMIT</code>, and <code>ROLLBACK</code> Syntax</A>.
+
+</P>
+<P>
+The <code>BDB</code> storage engine has the following characteristics:
+
+</P>
+
+<UL>
+
+<LI>
+
+<code>BDB</code> tables can have up to 31 indexes per table, 16 columns per index,
+and a maximum key size of 1024 bytes (500 bytes before MySQL 4.0).
+
+<LI>
+
+MySQL requires a <code>PRIMARY KEY</code> in each <code>BDB</code> table so that each row
+can be uniquely identified.  If you don't create one explicitly,
+MySQL creates and maintains a hidden <code>PRIMARY KEY</code> for
+you.  The hidden key has a length of five bytes and is incremented for each
+insert attempt.
+
+<LI>
+
+The <code>PRIMARY KEY</code> will be faster than any other index, because the
+<code>PRIMARY KEY</code> is stored together with the row data.  The other indexes
+are stored as the key data + the <code>PRIMARY KEY</code>, so it's important to
+keep the <code>PRIMARY KEY</code> as short as possible to save disk space and get
+better speed.
+
+This behavior is similar to that of <code>InnoDB</code>, where shorter primary
+keys save space not only in the primary index but in secondary indexes as
+well.
+
+<LI>
+
+If all columns you access in a <code>BDB</code> table are part of the same index or
+part of the primary key, MySQL can execute the query
+without having to access the actual row.  In a <code>MyISAM</code> table, this can
+be done only if the columns are part of the same index.
+
+<LI>
+
+Sequential scanning is slower than for <code>MyISAM</code> tables because the data
+in <code>BDB</code> tables is stored in B-trees and not in a separate data file.
+
+<LI>
+
+Key values are not prefix- or suffix-compressed like key values in
+<code>MyISAM</code> tables. In other words, key information takes a little more
+space in <code>BDB</code> tables compared to <code>MyISAM</code> tables.
+
+<LI>
+
+There are often holes in the <code>BDB</code> table to allow you to insert
+new rows in the middle of the index tree.  This makes <code>BDB</code> tables
+somewhat larger than <code>MyISAM</code> tables.
+
+<LI>
+
+<code>SELECT COUNT(*) FROM <var>tbl_name</var></code> is slow for <code>BDB</code> tables, because
+no row count is maintained in the table.
+
+<LI>
+
+The optimizer needs to know the approximate number of rows in the table.
+MySQL solves this by counting inserts and maintaining this in a separate
+segment in each <code>BDB</code> table.  If you don't issue a lot of <code>DELETE</code>
+or <code>ROLLBACK</code> statements, this number should be accurate enough for
+the MySQL optimizer. However, MySQL stores the number only on close, so
+it may be incorrect if the server terminates unexpectedly. It should not
+be fatal even if this number is not 100% correct.  You can update the row
+count by using <code>ANALYZE TABLE</code> or <code>OPTIMIZE TABLE</code>.
+See section <A HREF="manual_SQL_Syntax.html#ANALYZE_TABLE">13.5.2.1  <code>ANALYZE TABLE</code> Syntax</A> and
+section <A HREF="manual_SQL_Syntax.html#OPTIMIZE_TABLE">13.5.2.5  <code>OPTIMIZE TABLE</code> Syntax</A>.
+
+<LI>
+
+Internal locking in <code>BDB</code> tables is done at the page level.
+
+<LI>
+
+<code>LOCK TABLES</code> works on <code>BDB</code> tables as with other tables.  If you
+don't use <code>LOCK TABLE</code>, MySQL issues an internal multiple-write lock on
+the table (a lock that doesn't block other writers) to ensure that the
+table will be properly locked if another thread issues a table lock.
+
+<LI>
+
+To be able to roll back transactions, the <code>BDB</code> storage engine
+maintains log files.  For maximum performance, you can use the
+<code>--bdb-logdir</code> option to place the <code>BDB</code> logs on a different disk
+than the one where your databases are located.
+
+<LI>
+
+MySQL performs a checkpoint each time a new <code>BDB</code> log file is started,
+and removes any <code>BDB</code> log files that are not needed for current
+transactions.  You can also use <code>FLUSH LOGS</code> at any time to checkpoint
+the Berkeley DB tables.
+
+For disaster recovery, you should use table backups plus MySQL's binary log.
+See section <A HREF="manual_MySQL_Database_Administration.html#Backup">5.7.1  Database Backups</A>.
+
+<strong>Warning:</strong> If you delete old log files that are still in use,
+<code>BDB</code> will not be able to do recovery at all and you may lose data if
+something goes wrong.
+
+<LI>
+
+Applications must always be prepared to handle cases where
+any change of a <code>BDB</code> table may cause an automatic rollback and any
+read may fail with a deadlock error.
+
+<LI>
+
+If you get full disk with a <code>BDB</code> table, you will get an error
+(probably error 28) and the transaction should roll back.  This contrasts
+with <code>MyISAM</code> and <code>ISAM</code> tables, for which <code>mysqld</code> will wait
+for enough free disk before continuing.
+
+</UL>
+
+
+
+<H3><A NAME="BDB_TODO" HREF="manual_toc.html#BDB_TODO">14.4.5  Things We Need to Fix for <code>BDB</code></A></H3>
+
+
+<UL>
+
+<LI>
+
+It's very slow to open many <code>BDB</code> tables at the same time. If you are
+going to use <code>BDB</code> tables, you should not have a very large table cache
+(for example, with a size larger than 256) and you should use the
+<code>--no-auto-rehash</code> option when you use the <code>mysql</code> client.  We
+plan to partly fix this in 4.0.
+
+<LI>
+
+<code>SHOW TABLE STATUS</code> doesn't yet provide very much information for
+<code>BDB</code>
+tables.
+
+<LI>
+
+Optimize performance.
+
+<LI>
+
+Change to not use page locks at all for table scanning operations.
+</UL>
+
+
+
+<H3><A NAME="BDB_restrictions" HREF="manual_toc.html#BDB_restrictions">14.4.6  Restrictions on <code>BDB</code> Tables</A></H3>
+
+<P>
+The following list indicates restrictions that you must observe when using
+<code>BDB</code> tables:
+
+</P>
+
+<UL>
+<LI>
+
+Each
+<code>BDB</code> table stores in the <tt>`.db'</tt> file the path to the file as it
+was created.  This was done to be able to detect locks in a multi-user
+environment that supports symlinks.  However, the consequence is that
+<code>BDB</code> table files cannot be moved from one database directory to
+another.
+
+<LI>
+
+When making backups of <code>BDB</code> tables, you must either use
+<code>mysqldump</code> or else make a backup that includes the files for each
+<code>BDB</code> table (the <tt>`.frm'</tt> and <tt>`.db'</tt> files) as well as the
+<code>BDB</code> log files.  The <code>BDB</code> storage engine stores unfinished
+transactions in its log files and requires them to be present when
+<code>mysqld</code> starts.  The <code>BDB</code> logs are the files in the data
+directory with names of the form <tt>`log.XXXXXXXXXX'</tt> (ten digits).
+
+<LI>
+
+If a column that allows <code>NULL</code> values has a unique index, only a single
+<code>NULL</code> value is allowed. This differs from other storage engines.
+
+</UL>
+
+
+
+<H3><A NAME="BDB_errors" HREF="manual_toc.html#BDB_errors">14.4.7  Errors That May Occur When Using <code>BDB</code> Tables</A></H3>
+
+
+<UL>
+<LI>
+
+If the following error occurs when you start <code>mysqld</code>, it means that
+the new <code>BDB</code> version doesn't support the old log file format:
+
+
+<PRE>
+bdb:  Ignoring log file: .../log.XXXXXXXXXX:
+unsupported log version #
+</PRE>
+
+In this case, you must delete all <code>BDB</code> logs from your data directory
+(the files with names that have the format <tt>`log.XXXXXXXXXX'</tt>) and
+restart <code>mysqld</code>.  We also recommend that you then use <code>mysqldump
+--opt</code> to dump your <code>BDB</code> tables, drop the tables, and restore them
+from the dump file.
+
+<LI>
+
+If autocommit mode is disabled and you drop a <code>BDB</code> table that
+is referenced in another transaction, you may get error messages of the
+following form in your MySQL error log:
+
+
+<PRE>
+001119 23:43:56  bdb:  Missing log fileid entry
+001119 23:43:56  bdb:  txn_abort: Log undo failed for LSN:
+                       1 3644744: Invalid
+</PRE>
+
+This is not fatal, but until the problem is fixed, we recommend that you
+not drop <code>BDB</code> tables except while autocommit mode is enabled.  (The
+fix is not trivial.)
+
+</UL>
+
+
+
+<H2><A NAME="EXAMPLE_storage_engine" HREF="manual_toc.html#EXAMPLE_storage_engine">14.5  The <code>EXAMPLE</code> Storage Engine</A></H2>
+
+<P>
+<A NAME="IDX1907"></A>
+<A NAME="IDX1908"></A>
+<A NAME="IDX1909"></A>
+
+</P>
+<P>
+The <code>EXAMPLE</code> storage engine was added in MySQL 4.1.3.  It is a
+``stub'' engine that does nothing.  Its purpose is to serve as an example in
+the MySQL source code that illustrates how to begin writing new storage
+engines. As such, it is primarily of interest to developers.
+
+</P>
+
+<P>
+To examine the source for the <code>EXAMPLE</code> engine, look in the
+<tt>`sql/examples'</tt> directory of a source distribution for MySQL 4.1.3 or
+newer.
+
+</P>
+<P>
+To enable this storage engine, use the <code>--with-example-storage-engine</code>
+option to <code>configure</code> when you build MySQL.
+
+</P>
+<P>
+When you create an <code>EXAMPLE</code> table, the server creates a table
+definition file in the database directory. The file begins with the table
+name and has an <tt>`.frm'</tt> extension.  No other files are created.  No data
+can be stored into the table or retrieved from it.
+
+</P>
+
+<PRE>
+mysql&#62; CREATE TABLE test (i INT) ENGINE = EXAMPLE;
+Query OK, 0 rows affected (0.78 sec)
+
+mysql&#62; INSERT INTO test VALUES(1),(2),(3);
+ERROR 1031 (HY000): Table storage engine for 'test' doesn't have this option
+
+mysql&#62; SELECT * FROM test;
+Empty set (0.31 sec)
+</PRE>
+
+<P>
+The <code>EXAMPLE</code> storage engine does not support indexing.
+
+</P>
+
+
+
+<H2><A NAME="FEDERATED_storage_engine" HREF="manual_toc.html#FEDERATED_storage_engine">14.6  The <code>FEDERATED</code> Storage Engine</A></H2>
+
+<P>
+<A NAME="IDX1910"></A>
+<A NAME="IDX1911"></A>
+<A NAME="IDX1912"></A>
+
+</P>
+
+<P>
+The <code>FEDERATED</code> storage engine was added in MySQL 5.0.3. It is a
+storage engine that accesses data in tables of remote databases rather than in
+local tables.
+
+</P>
+<P>
+To examine the source for the <code>FEDERATED</code> engine, look in the
+<tt>`sql'</tt> directory of a source distribution for MySQL 5.0.3 or
+newer.
+
+</P>
+
+
+<H3><A NAME="FEDERATED_install" HREF="manual_toc.html#FEDERATED_install">14.6.1  Installing the <code>FEDERATED</code> Storage Engine</A></H3>
+
+<P>
+To enable this storage engine, use the <code>--with-federated-storage-engine</code>
+option to <code>configure</code> when you build MySQL.
+
+</P>
+
+
+<H3><A NAME="FEDERATED_description" HREF="manual_toc.html#FEDERATED_description">14.6.2  Description of the <code>FEDERATED</code> Storage Engine</A></H3>
+
+<P>
+When you create a <code>FEDERATED</code> table, the server creates a table
+definition file in the database directory. The file begins with the table
+name and has an <tt>`.frm'</tt> extension.  No other files are created, because
+the actual data is in a remote database. This differs from the way that
+storage engines for local tables work.
+
+</P>
+<P>
+For local database tables, data files are local. For example, if you create
+a <code>MyISAM</code> table named <code>users</code>, the <code>MyISAM</code> handler creates a
+data file named <code>users.MYD</code>.  A handler for local tables reads, inserts,
+deletes, and updates data in local data files, and records are stored in a
+format particular to the handler. To read records, the handler must parse
+data into columns.  To write records, column values must be converted to
+the row format used by the handler and written to the local data file.
+
+</P>
+<P>
+With the MySQL <code>FEDERATED</code> storage engine, there are no local data
+files for a table (for example, there is no <tt>`.MYD'</tt> file). Instead, a
+remote database stores the data that normally would be in the table. This
+necessitates the use of the MySQL client API to read, delete, update,
+and insert data. Data retrieval is initiated via a <code>SELECT * FROM
+<var>tbl_name</var></code> SQL statement.  To read the result, rows are fetched one
+at a time by using the <code>mysql_fetch_row()</code> C API function, and then
+converted from the columns in the <code>SELECT</code> result set to the format
+that the <code>FEDERATED</code> handler expects.
+
+</P>
+<P>
+The basic flow is as follows:
+
+</P>
+
+<OL>
+<LI>
+
+SQL calls issues locally
+
+<LI>
+
+MySQL handler API (data in handler format)
+
+<LI>
+
+MySQL client API (data converted to SQL calls)
+
+<LI>
+
+Remote database -&#62; MySQL client API 
+
+<LI>
+
+Convert result sets (if any) to handler format
+
+<LI>
+
+Handler API -&#62; Result rows or rows-affected count to local
+
+</OL>
+
+
+
+<H3><A NAME="FEDERATED_use" HREF="manual_toc.html#FEDERATED_use">14.6.3  How to use <code>FEDERATED</code> Tables</A></H3>
+
+<P>
+The procedure for using <code>FEDERATED</code> tables is very simple. Normally, you
+have two servers running, either both on the same host or on different hosts.
+(It is also possible for a <code>FEDERATED</code> table to use another table that
+is managed by the same server, though there is little point in doing so.)
+
+</P>
+<P>
+First, you must have a table on the remote server that you want to access with
+the <code>FEDERATED</code> table. Suppose that the remote table is in the
+<code>federated</code> database and is defined like this:
+
+</P>
+
+<PRE>
+CREATE TABLE test_table ( 
+    id     int(20) NOT NULL auto_increment,
+    name   varchar(32) NOT NULL default '',
+    other  int(20) NOT NULL default '0',
+    PRIMARY KEY  (id),
+    KEY name (name),
+    KEY other_key (other)
+) 
+ENGINE=MyISAM
+DEFAULT CHARSET=latin1 ;
+</PRE>
+
+<P>
+The <code>ENGINE</code> table option could name any storage engine; the table
+need not be a <code>MyISAM</code> table.
+
+</P>
+<P>
+Next, create a <code>FEDERATED</code> table for accessing the remote table.
+The server where you will create the <code>FEDERATED</code> table is the ``client
+server.'' On this server, create the table as follows:
+
+</P>
+
+<PRE>
+CREATE TABLE federated_table (
+    id     int(20) NOT NULL auto_increment,
+    name   varchar(32) NOT NULL default '',
+    other  int(20) NOT NULL default '0',
+    PRIMARY KEY  (id),
+    KEY name (name),
+    KEY other_key (other)
+)
+ENGINE=FEDERATED
+DEFAULT CHARSET=latin1
+COMMENT='mysql://root@remote_host:9306/federated/test_table';
+</PRE>
+
+<P>
+The structure of this table must be exactly the same as the remote table,
+except that the <code>ENGINE</code> table option should be <code>FEDERATED</code> and
+the <code>COMMENT</code> table option is a connection string that indicates to
+the <code>FEDERATED</code> engine how to connect to the remote server.
+
+</P>
+<P>
+The <code>FEDERATED</code> engine will create only the <tt>`test_table.frm'</tt> file in
+the <code>federated</code> database.
+
+</P>
+<P>
+The remote host information indicates the remote server to which your
+``client'' server will connect, and the database and table information
+indicates which remote table to use as the ``data file.'' In the example,
+the remote server is indicated to be running as <code>remote_host</code> on port
+9306, so you want to start that server so that it is indeed listening to
+port 9306.
+
+</P>
+<P>
+The general form of the connection string in the <code>COMMENT</code> option is as
+follows:
+
+</P>
+
+<PRE>
+<var>scheme</var>://<var>user_name</var>[:<var>password</var>]@<var>host_name</var>[:<var>port_num</var>]:/<var>db_name</var>/<var>tbl_name</var>
+</PRE>
+
+<P>
+Only <code>mysql</code> is supported as the <var>scheme</var> at this point, and the
+password and port number are optional.
+
+</P>
+<P>
+Here are some example connection strings:
+
+</P>
+
+<PRE>
+COMMENT='mysql://username:password@hostname:port/database/tablename'
+COMMENT='mysql://username@hostname/database/tablename'
+COMMENT='mysql://username:password@hostname/database/tablename'
+</PRE>
+
+<P>
+The use of <code>COMMENT</code> for specifying the connection string is non-optimal
+and likely will change in MySQL 5.1.  Keep this in mind when you use
+<code>FEDERATED</code> tables, because it means you'll need to make some
+modifications when that happens.
+
+</P>
+<P>
+Also, because a password is stored in the connection string as plain text,
+it can be seen by any user who can use <code>SHOW CREATE TABLE</code> or <code>SHOW TABLE STATUS</code> for the <code>FEDERATED</code> table.
+
+</P>
+
+
+
+<H3><A NAME="FEDERATED_limitations" HREF="manual_toc.html#FEDERATED_limitations">14.6.4  Limitations of the <code>FEDERATED</code> Storage Engine</A></H3>
+
+<P>
+What the <code>FEDERATED</code> storage engine does and doesn't support:
+
+</P>
+
+<UL>
+
+<LI>
+
+In the first version, the remote server must be a MySQL server.  Support by
+<code>FEDERATED</code> for other database engines may be be added in the future.
+
+<LI>
+
+The remote table that a <code>FEDERATED</code> table points to <em>must</em> exist
+before you try to access the table through the <code>FEDERATED</code> table.
+
+<LI>
+
+It is possible for one <code>FEDERATED</code> table to point to another, but
+you must be careful not to create a loop.  You know and have heard the
+screeching of audio feedback? You know what you see visually when you
+place two mirrors in front of each other, how the reflection continues
+for eternity? Well, need we say more?!
+
+<LI>
+
+There is no support for transactions.
+
+<LI>
+
+There is no way for the <code>FEDERATED</code> engine to know if the remote table
+has changed. The reason for this is that this table has to work like a
+data file that would never be written to by anything other than the 
+database. The integrity of the data in the local table could be breached 
+if there was any change to the remote database.
+
+<LI>
+
+The <code>FEDERATED</code> storage engine supports <code>SELECT</code>, <code>INSERT</code>,
+<code>UPDATE</code>, <code>DELETE</code>, and indexes.  It does not support <code>ALTER
+TABLE</code>, <code>DROP TABLE</code>, or any other Data Definition Language statements.
+The first implementation does not use Prepared statements.  It remains
+to be seen whether the limited subset of the client API for the server
+supports this capability.
+
+<LI>
+
+The implementation uses <code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>,
+<code>DELETE</code> and not <code>HANDLER</code>.
+
+<LI>
+
+<code>FEDERATED</code> tables do not work with the query cache.
+
+</UL>
+
+<P>
+Some of these limitations may be lifted in future versions of the
+<code>FEDERATED</code> handler.
+    
+
+</P>
+
+
+<H2><A NAME="ARCHIVE_storage_engine" HREF="manual_toc.html#ARCHIVE_storage_engine">14.7  The <code>ARCHIVE</code> Storage Engine</A></H2>
+
+<P>
+<A NAME="IDX1913"></A>
+<A NAME="IDX1914"></A>
+<A NAME="IDX1915"></A>
+
+</P>
+<P>
+The <code>ARCHIVE</code> storage engine was added in MySQL 4.1.3.
+It is used for storing large amounts of data without indexes in a very
+small footprint.
+
+</P>
+<P>
+To enable this storage engine, use the <code>--with-archive-storage-engine</code>
+option to <code>configure</code> when you build MySQL.
+
+</P>
+<P>
+When you create an <code>ARCHIVE</code> table, the server creates a table definition
+file in the database directory. The file begins with the table name and has
+an <tt>`.frm'</tt> extension.  The storage engine creates other files, all having
+names beginning with the table name.  The data and metadata files have
+extensions of <tt>`.ARZ'</tt> and <tt>`.ARM'</tt>. An <tt>`.ARN'</tt> file may appear
+during optimization operations.
+
+</P>
+<P>
+The <code>ARCHIVE</code> engine supports only <code>INSERT</code> and <code>SELECT</code>.  (No
+deletes, replaces, or updates.)  A <code>SELECT</code> performs a complete table
+scan. Records are compressed as they are inserted.  Use of <code>OPTIMIZE
+TABLE</code> can analyze the table and pack it into a smaller format.
+
+</P>
+<P>
+The <code>ARCHIVE</code> engine uses row-level locking.
+
+</P>
+
+
+
+<H2><A NAME="CSV_storage_engine" HREF="manual_toc.html#CSV_storage_engine">14.8  The <code>CSV</code> Storage Engine</A></H2>
+
+<P>
+<A NAME="IDX1916"></A>
+<A NAME="IDX1917"></A>
+<A NAME="IDX1918"></A>
+
+</P>
+<P>
+The <code>CSV</code> storage engine was added in MySQL 4.1.4. This engine stores
+data in text files using comma-separated-values format.
+
+</P>
+<P>
+To enable this storage engine, use the <code>--with-csv-storage-engine</code>
+option to <code>configure</code> when you build MySQL.
+
+</P>
+<P>
+When you create a <code>CSV</code> table, the server creates a table definition
+file in the database directory. The file begins with the table name and has
+an <tt>`.frm'</tt> extension.  The storage engine also creates a data file. Its
+name begins with the table name and has a <tt>`.CSV'</tt> extension.  The data
+file is a plain text file. When you store data into the table, the storage
+engine saves it into the data file in CSV format.
+
+</P>
+
+<PRE>
+mysql&#62; CREATE TABLE test(i INT, c CHAR(10)) ENGINE = CSV;
+Query OK, 0 rows affected (0.12 sec)
+
+mysql&#62; INSERT INTO test VALUES(1,'record one'),(2,'record two');
+Query OK, 2 rows affected (0.00 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql&#62; SELECT * FROM test;
++------+------------+
+| i    | c          |
++------+------------+
+|    1 | record one |
+|    2 | record two |
++------+------------+
+2 rows in set (0.00 sec)
+</PRE>
+
+<P>
+If you examine the <tt>`test.CSV'</tt> file in the database directory after
+executing the preceding statements, its contents look like this:
+
+</P>
+
+<PRE>
+"1","record one"
+"2","record two"
+</PRE>
+
+<P>
+The <code>CSV</code> storage engine does not support indexing.
+
+</P>
+
+
+
+<H2><A NAME="ISAM_storage_engine" HREF="manual_toc.html#ISAM_storage_engine">14.9  The <code>ISAM</code> Storage Engine</A></H2>
+
+<P>
+<A NAME="IDX1919"></A>
+<A NAME="IDX1920"></A>
+<A NAME="IDX1921"></A>
+
+</P>
+<P>
+The original storage engine in MySQL was the <code>ISAM</code> engine. It was the
+only storage engine available until MySQL 3.23, when the improved
+<code>MyISAM</code> engine was introduced as the default. <code>ISAM</code> now is
+deprecated.  As of MySQL 4.1, it's included in the source but not enabled in
+binary distributions.  It will disappear in MySQL 5.0.
+Embedded MySQL server versions do not support <code>ISAM</code> tables by default.
+
+</P>
+<P>
+Due to the deprecated status of <code>ISAM</code>, and because <code>MyISAM</code> is
+an improvement over <code>ISAM</code>, you are advised to convert any remaining
+<code>ISAM</code> tables to <code>MySAM</code> as soon as possible.  To convert an
+<code>ISAM</code> table to a <code>MyISAM</code> table, use an <code>ALTER TABLE</code>
+statement:
+
+</P>
+
+<PRE>
+mysql&#62; ALTER TABLE <var>tbl_name</var> TYPE = MYISAM;
+</PRE>
+
+<P>
+For more information about <code>MyISAM</code>, see
+section <A HREF="manual_Storage_engines.html#MyISAM_storage_engine">14.1  The <code>MyISAM</code> Storage Engine</A>.
+
+</P>
+<P>
+Each <code>ISAM</code> table is stored on disk in three files.  The files have
+names that begin with the table name and have an extension to indicate the
+file type.  An <tt>`.frm'</tt> file stores the table definition.  The data file
+has an <tt>`.ISD'</tt> extension.  The index file has an <tt>`.ISM'</tt>
+extension.
+
+</P>
+<P>
+<code>ISAM</code> uses B-tree indexes.
+
+</P>
+<P>
+You can check or repair <code>ISAM</code> tables with the <code>isamchk</code> utility.
+See section <A HREF="manual_MySQL_Database_Administration.html#Crash_recovery">5.7.2.7  Using <code>myisamchk</code> for Crash Recovery</A>.
+
+</P>
+<P>
+<code>ISAM</code> has the following properties:
+
+</P>
+
+<UL>
+<LI>Compressed and fixed-length keys
+
+<LI>Fixed and dynamic record length
+
+<LI>16 indexes per table, with 16 key parts per key
+
+<LI>Maximum key length 256 bytes (default)
+
+<LI>Data values are stored in machine format; this is fast, but machine/OS dependent
+
+</UL>
+
+<P>
+Many of the properties of <code>MyISAM</code> tables are also true for <code>ISAM</code>
+tables. However, there are also many differences. The following list
+describes some of the ways that <code>ISAM</code> is distinct from <code>MyISAM</code>:
+
+</P>
+
+<UL>
+
+<LI>
+
+Not binary portable across OS/platforms.
+
+<LI>
+
+Can't handle tables larger than 4GB.
+
+<LI>
+
+Only supports prefix compression on strings.
+
+<LI>
+
+Smaller (more restrictive) key limits.
+
+<LI>
+
+Dynamic tables become more fragmented.
+
+<LI>
+
+Doesn't support <code>MERGE</code> tables.
+
+<LI>
+
+Tables are checked and repaired with <code>isamchk</code> rather than with
+<code>myisamchk</code>.
+
+<LI>
+
+Tables are compressed with <code>pack_isam</code> rather than with <code>myisampack</code>.
+
+<LI>
+
+Cannot be used with the <code>BACKUP TABLE</code> or  <code>RESTORE TABLE</code>
+backup-related statements.
+
+<LI>
+
+Cannot be used with the <code>CHECK TABLE</code>, <code>REPAIR TABLE</code>, <code>OPTIMIZE
+TABLE</code>, or <code>ANALYZE TABLE</code> table-maintenance statements.
+
+<LI>
+
+No support for full-text searching or spatial data types.
+
+<LI>
+
+No support for multiple character sets per table.
+
+<LI>
+
+Indexes cannot be assigned to specific key caches.
+
+</UL>
+
+<P><HR><P>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_SQL_Syntax.html">previous</A>, <A HREF="manual_InnoDB.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+ </BODY>
+ </HTML>

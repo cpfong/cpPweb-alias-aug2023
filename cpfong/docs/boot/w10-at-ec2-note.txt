@@ -1,0 +1,98 @@
+@sun-> aws s3 ls s3://some-bucket/w10.vhd
+aws ec2 import-image --description "Windows 10" --disk-containers file://containers.json --region ap-northeast-1
+
+@sun-> aws ec2 describe-import-image-tasks --region ap-northeast-1 | grep 11fe -A14
+fail:
+"Status": "deleted",
+"StatusMessage": "ClientError: EFI partition detected. UEFI booting is not supported in EC2.",
+
+ok status report
+ "StatusMessage": "converting",
+ "StatusMessage": "preparing ami",
+ "Status": "completed",
+
+Q: how to creae VHD?
+A: VirtualBox on windows
+note: not every virtualbox can create win64, most can only crate win32 and i successfully create on Taipei brother desktop using VirtualBox
+
+virtualbox before it create VM, it will ask about type: select VHD
+
+Q: on Singpore zone create w10 AMI
+A:
+rclone vhd back
+aws s3 ls s3://fily-huang
+aws s3 cp w10.vhd s3://fily-huang
+
+note: date of s3 toyoko cannot be used at seoul
+@sun-> aws s3 mb s3://fily-huang-2 --region ap-northeast-2
+@sun-> aws s3 cp win10-64-2.vhd s3://fily-huang-2 --region ap-northeast-2
+
+vi containers.json
+--
+[
+  {
+    "Description": "Windows 10 22feb",
+    "Format": "vhd",
+    "UserBucket": {
+        "S3Bucket": "fily-huang-2",
+        "S3Key": "win10-64-2.vhd"
+    }
+}]
+
+#aws iam create-role --role-name vmimport --assume-role-policy-document file://trust-policy.json
+#no need for above, since i have an trust-policy in system alrady
+
+vi role-policy.json
+--
+{
+   "Version": "2012-10-17",
+   "Statement": [
+      {
+         "Effect": "Allow",
+         "Action": [
+            "s3:ListBucket",
+            "s3:GetBucketLocation"
+         ],
+         "Resource": [
+            "arn:aws:s3:::fily-huang-2"
+         ]
+      },
+      {
+         "Effect": "Allow",
+         "Action": [
+            "s3:GetObject"
+         ],
+         "Resource": [
+            "arn:aws:s3:::fily-huang-2/*"
+         ]
+      },
+      {
+         "Effect": "Allow",
+         "Action":[
+            "ec2:ModifySnapshotAttribute",
+            "ec2:CopySnapshot",
+            "ec2:RegisterImage",
+            "ec2:Describe*"
+         ],
+         "Resource": "*"
+      }
+   ]
+}
+
+aws iam put-role-policy --role-name vmimport --policy-name vmimport --policy-document file://role-policy.json
+aws ec2 import-image --description "Windows 10" --disk-containers file://containers.json --region ap-northeast-2
+aws ec2 describe-import-image-tasks --region ap-northeast-2 | grep 22feb -A14
+
+
+#!/bin/sh
+
+b='fily-huang-3'
+z='ap-southeast-2'
+f='win10-64-2.vhd'
+
+echo aws s3 mb s3://$b --region $z
+echo aws s3 cp $f s3://$b --region $z
+# vi role-policy.json
+echo aws iam put-role-policy --role-name vmimport --policy-name vmimport --policy-document file://role-policy.json
+echo aws ec2 import-image --description Windows-10 --disk-containers file://containers.json --region $z
+echo aws ec2 describe-import-image-tasks --region $z

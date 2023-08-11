@@ -1,0 +1,2 @@
+Q: replace mutiple spaces into one using sed regex expression
+A: echo '1  2 3    4' | sed -r "s/ +/ /g"

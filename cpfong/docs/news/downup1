@@ -1,0 +1,6 @@
+Comaq-> sudo /usr/local/etc/rc.d/innd.sh stop
+Comaq-> sudo /usr/local/etc/rc.d/innd.sh start
+
+Dec 27 22:13:33 hiedoc innd: CNFS-sm: No magic cookie found for cycbuff ONE, initializing
+Dec 27 22:13:33 hiedoc innd: CNFS-sm: No magic cookie found for cycbuff TWO, initializing
+Dec 27 22:13:33 hiedoc innd: CNFS-sm: No magic cookie found for cycbuff THREE, initializing

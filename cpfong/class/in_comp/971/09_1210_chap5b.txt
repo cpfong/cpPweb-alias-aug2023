@@ -1,0 +1,34 @@
+chap5B
+
+較為知名的 CPU: 
+	Intel, AMD, Motorolla, Freescale, IBM
+
+Intel 的 cpu:
+	Pentium, Celeron, Xeon 
+
+http://www.intel.com 可以看到 intel 的各種 cpu 包含:
+桌上型, 筆記型, 掌上型, 伺服器, 網路設備
+
+Intel: 世界上最大的 cpu 公司.
+AMD: 第二大的 cpu 公司, 生產較為低階的 cpu
+Motorolla: 原先生產給 mac 使用的 cpu, 但目前少有, 另有通訊設備的 cpu
+IBM: 目前己少
+
+CISC: complex instruction set computing 複雜指令集計算
+此計算指令較下者為慢
+
+RISC: reduced instruction set computing 精簡指令集計算
+高階電腦使用
+
+5.8 
+ps2, usb, 平行埠, Serial port (check text book)
+以上為週邊名稱, 由課本上的範例來說明
+
+SCSI 小型電腦系統介面
+高階電腦所使用的一使介面, 常使用於硬碟和掃描器, 
+hd 介面 (硬碟) 可分為 ide, sata, sas, scsi
+
+USB, IEEE 1394, PCMCIA (筆電的擴充)
+usb : universal serial bus, 有 1.0 2.0 二個版本, 後者速度更快
+ieee 1934 為和 usb 相近的介面, 比 usb 1.0 快, 但比 2.0 慢 
+pcmcia 有 type II, type III 二種, 目前己少用

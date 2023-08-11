@@ -1,0 +1,14 @@
+install=NetBoot\about.exe
+
+REM ** PC-DOS 7 users must manually add HIMEM.SYS and un-rem the next line
+device=himem.sys
+
+files=40
+break=off
+buffers=30
+lastdrive=z
+stacks=0,0
+dos=high,umb
+install=NetBoot\SHSURDRV.EXE 8192k,D480,N: /Q
+install=NetBoot\tunz.com -o NetBoot\boot.zip N:\
+SHELL=N:\COMMAND.COM /E:4096 /P 

@@ -1,0 +1,60 @@
+# acme.sh no package but a shell
+
+pkg install -y curl #acme need curl or wget
+# this is the right way to install acme.sh
+cpfong@v2ray:~ % curl https://get.acme.sh | sh -s email=cp.ifong4@gmail.com # under ~cpfong/.acme.sh/
+
+[Sun Jun 26 00:42:37 UTC 2022] Installing from online archive.
+[Sun Jun 26 00:42:37 UTC 2022] Downloading https://github.com/acmesh-official/acme.sh/archive/master.tar.gz
+[Sun Jun 26 00:42:38 UTC 2022] It is recommended to install socat first.
+[Sun Jun 26 00:42:38 UTC 2022] We use socat for standalone server if you use standalone mode.
+[Sun Jun 26 00:42:38 UTC 2022] If you don't use standalone mode, just ignore this warning.
+[Sun Jun 26 00:42:38 UTC 2022] Installing to /home/cpfong/.acme.sh
+[Sun Jun 26 00:42:38 UTC 2022] Installed to /home/cpfong/.acme.sh/acme.sh
+[Sun Jun 26 00:42:38 UTC 2022] Installing alias to '/home/cpfong/.profile'
+[Sun Jun 26 00:42:38 UTC 2022] OK, Close and reopen your terminal to start using acme.sh
+[Sun Jun 26 00:42:38 UTC 2022] Installing alias to '/home/cpfong/.cshrc'
+[Sun Jun 26 00:42:38 UTC 2022] Installing cron job
+13 0 * * * "/home/cpfong/.acme.sh"/acme.sh --cron --home "/home/cpfong/.acme.sh" > /dev/null
+[Sun Jun 26 00:42:38 UTC 2022] OK
+[Sun Jun 26 00:42:38 UTC 2022] Install success!
+
+cpfong@v2ray:~/.acme.sh % ./acme.sh --issue -d v2ray.ifong.org --dns --yes-I-know-dns-manual-mode-enough-go-ahead-please
+[Sun Jun 26 00:45:10 UTC 2022] Using CA: https://acme.zerossl.com/v2/DV90
+[Sun Jun 26 00:45:10 UTC 2022] Create account key ok.
+[Sun Jun 26 00:45:11 UTC 2022] No EAB credentials found for ZeroSSL, let's get one
+[Sun Jun 26 00:45:12 UTC 2022] Registering account: https://acme.zerossl.com/v2/DV90
+[Sun Jun 26 00:45:27 UTC 2022] Registered
+[Sun Jun 26 00:45:27 UTC 2022] ACCOUNT_THUMBPRINT='wh6c2H9HUffX9gspyke6qquBj8Ea8HN2mYu_1Va_6R8'
+[Sun Jun 26 00:45:27 UTC 2022] Creating domain key
+[Sun Jun 26 00:45:28 UTC 2022] The domain key is here: /home/cpfong/.acme.sh/v2ray.ifong.org/v2ray.ifong.org.key
+[Sun Jun 26 00:45:28 UTC 2022] Single domain='v2ray.ifong.org'
+[Sun Jun 26 00:45:28 UTC 2022] Getting domain auth token for each domain
+[Sun Jun 26 00:45:47 UTC 2022] Getting webroot for domain='v2ray.ifong.org'
+[Sun Jun 26 00:45:47 UTC 2022] Add the following TXT record:
+[Sun Jun 26 00:45:47 UTC 2022] Domain: '_acme-challenge.v2ray.ifong.org'
+[Sun Jun 26 00:45:47 UTC 2022] TXT value: '7KNxTube0d7wAploLZ2AvmOzdWl2ODAlQYSOWl-2s98'
+[Sun Jun 26 00:45:47 UTC 2022] Please be aware that you prepend _acme-challenge. before your domain
+[Sun Jun 26 00:45:47 UTC 2022] so the resulting subdomain will be: _acme-challenge.v2ray.ifong.org
+[Sun Jun 26 00:45:47 UTC 2022] Please add the TXT records to the domains, and re-run with --renew.
+[Sun Jun 26 00:45:47 UTC 2022] Please add '--debug' or '--log' to check more details.
+[Sun Jun 26 00:45:47 UTC 2022] See: https://github.com/acmesh-official/acme.sh/wiki/How-to-debug-acme.sh
+
+goto name.com add TXT record for next step
+
+TXT _acme-challenge.v2ray.ifong.org 7KNxTube0d7wAploLZ2AvmOzdWl2ODAlQYSOWl-2s98 300
+
+# must DO this!! (--renew)
+cpfong@v2ray:~/hidden-Dot.acme.sh % ./acme.sh --renew -d v2ray.ifong.org --yes-I-know-dns-manual-mode-enough-go-ahead-please
+[Mon Jun 27 11:27:49 CST 2022] Renew: 'v2ray.ifong.org'
+[Mon Jun 27 11:27:49 CST 2022] Renew to Le_API=https://acme.zerossl.com/v2/DV90
+[Mon Jun 27 11:27:59 CST 2022] Using CA: https://acme.zerossl.com/v2/DV90
+[Mon Jun 27 11:27:59 CST 2022] Single domain='v2ray.ifong.org'
+[Mon Jun 27 11:27:59 CST 2022] Getting domain auth token for each domain
+[Mon Jun 27 11:27:59 CST 2022] Verifying: v2ray.ifong.org
+[Mon Jun 27 11:28:19 CST 2022] Processing, The CA is processing your order, please just wait. (1/30)
+[Mon Jun 27 11:29:15 CST 2022] Your cert is in: /home/cpfong/.acme.sh/v2ray.ifong.org/v2ray.ifong.org.cer
+[Mon Jun 27 11:29:15 CST 2022] Your cert key is in: /home/cpfong/.acme.sh/v2ray.ifong.org/v2ray.ifong.org.key
+[Mon Jun 27 11:29:15 CST 2022] The intermediate CA cert is in: /home/cpfong/.acme.sh/v2ray.ifong.org/ca.cer
+[Mon Jun 27 11:29:15 CST 2022] And the full chain certs is there: /home/cpfong/.acme.sh/v2ray.ifong.org/fullchain.cer
+cpfong@v2ray:~/hidden-Dot.acme.sh % 

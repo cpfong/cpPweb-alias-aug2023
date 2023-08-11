@@ -1,0 +1,27 @@
+
+  ◇ news.daily and expireover 參數調整
+
+------------------------------------------------------------------------
+
+                << news.daily and expireover 參數調整 >>
+
+現在一天跑兩次 news.daily, 但一些過程並不需一天兩次, 將參數調整如下:
+
+40 19 * * * su news -c '/home/inn/news/bin/news.daily delayrm norenumber nologs'
+40 4  * * * su news -c '/home/inn/news/bin/news.daily delayrm'
+0 8 * * * su news -c '/home/inn/news/bin/expireover -s'
+0 7 * * 7 su news -c '/home/inn/news/bin/expireover -a'
+
+因每天已跑 expireover -s, news.daily 就不再加上 expireover 參數. 第一次
+news.daily 基本上只做 article remove, 不做 expireover, renumber 及
+scanlog.
+
+另外, active 的備份除了在 /usr/lib/news/active.bak 外, 第二次 news.daily
+後也有一份放在 /home/inn/log/OLD/active.xx.gz.
+
+第一次 news.daily 過程約 4 小時, 第二次約 2 小時. 去除 expireover 動作
+後可能每次最多可省 30 分到 1 小時. 明天再觀察情況.
+------------------------------------------------------------------------
+Shih-Kun Huang
+EC638, CSIE, NCTU, Taiwan, R.O.C. Phone: 886-35-712121 (x54765, x54709)
+

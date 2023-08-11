@@ -1,0 +1,26 @@
+http://microsux.dk/?p=302
+--
+Due to a recent situation where I had to install FreeBSD on a IBM X3250 without the remote control upgrade to the IMM (to mount images virtually) and with no CD/DVD drive available an alternative solution had to be cooked up.
+
+These files will enable you to use the zfsinstaller from mfsBSD SE in the fixit prompt of a FreeBSD 8.2 memstick (usb) image. As always I assume you know basic FreeBSD to use this guide.
+
+Once you are in the prompt setup network f.x. with DHCP
+
+dhclient -l /tmp/leases em0
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
+
+Now fetch the zfsint.sh script
+
+fetch http://microsux.dk/zfs/zfsinst.sh
+my comment:
+fetch http://www.ored.me/microsux.dk/zfs/zfsinst.sh
+
+Modify the scripts last line before running it to suit your needs (or just comment the line out and run the zfsinstall_mod.sh manually)  if you want mirror add -r mirror. Once ready run the script.
+	
+sh zfsinst.sh
+
+If you get an error about partitions already on your drive(s) you can use the destroygeom_mod.sh in /tmp/zfsinst.
+
+/tmp/zfsinst/destroygeom_mod.sh -d your-device-id
+
+That’s it – you have now used the zfsinstall script via the FreeBSD memstick image.

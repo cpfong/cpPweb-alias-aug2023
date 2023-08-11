@@ -1,0 +1,188 @@
+section 1
+p575
+
+General
+-----------------
+6 persons m o p r s t
+sit around the table 
+
+Rules
+-----------------
+t <x> p
+s <x> m
+r m
+
+1. if r in the s right who is on the right of r
+	m 
+	o
+	p
+	s
+	t
+
+2. which is ok
+	m s r t p o
+	m s t p r o
+	t o p s m r
+	t r m p s o
+	t s r m o p
+
+3. if m next to p which is ok to sit p
+	o
+	o s 
+	o s r
+	r s t
+	o r s t
+
+4. if t m and s r, which one should beside s
+	m
+	o
+	p 
+	r
+	t
+
+5. if t across o who must on p
+	m and o
+	m and s
+	o and r
+	o and s	
+	r and t
+
+p577
+General
+-------------------------------
+six persons s t u x y z
+
+Rules
+-------------------------------
+exacly 2 watch suspect
+by car either u, or x
+by train either t, z
+z -> s
+s <x> x
+
+9. if by car who could be watching
+	s t
+	s x
+	t y
+	u x
+	u y
+
+10. if by train and t is NOT
+	s y
+	s z
+	u z
+	x y
+	x z
+
+11. if y is which one , then which one NOT in
+	s 
+	t
+	u
+	x
+	z 
+
+12. if by car and s is one then the ohter
+	t
+	u
+	x
+	y
+	z
+	
+13. if by car a pair to look, then by train
+    same pair still looking then who must in
+	t
+	u
+	x
+	y
+	z
+
+General
+-----------------------------
+five patinets n p t v x
+three roon, each with 2 sigle bed
+
+Rule
+------------------------------
+same sex
+disease g cannot share with infection
+v and x has g and no infection
+n infection
+p t have a broken leg
+n t x are male, p v are female
+
+14. if n with t, which is true
+	none can share with disease g
+	none share with x
+	none share with broken leg
+	broken leg whare with x
+	g with x
+
+15. if six in
+	is male 
+	if female or if male do not have an infection
+	has broken leg
+	dos not have an infection
+	has g
+
+16. if z , a male with g no infection , z must share rooms with
+	n
+	p 
+	t
+	v
+	x 
+
+General
+-------------------------
+1 to 7 workstation
+k l m are human
+r1 r2 are robot
+
+Rules
+----------------------
+r1 and r2 each exactly 2 consecutive number station
+human can detect flaw but may not detect every one
+station 1 cannot detect flaw
+
+17. whhc is possible
+	r2 r2 l k m r1 r1 
+	r1 r2 m r1 r2 k l
+	m r1 r1 k r2 l r2
+	l m r2 r1 r2 r1 k
+	k l r1 r1 r2 m l
+
+18. if k for 7 and l is 4 which is true
+	k but not l could detect a flaw
+	m is 1 or 3 
+	r1 is 3 or 5
+	r2 is 5 and 6
+	a flaw detect by 3 could be detect by 6
+
+19. if r2 cause flaw at 4 and remove by 6 L can NOT be
+	1
+	2
+	3
+	5 
+	7
+
+20. if m in 6 which is true
+	k in 1 or 7
+	l in 3 or 5
+	eithe k or l in even number
+	k and l adjacent
+	l an odd number 
+
+? 21. if r1 in 3 and k can detect flaw by r1
+	k in 4	
+	k in 5 
+	l in 1
+	r1 in 4
+	r2 in 5
+
+22. r1 must 3 or 4 but cannot operate both
+    r2 must 5 or 6 but cannot operate both
+    which is NOT true
+	r1 2, r2 4
+	r1 3, r2 5
+	r1 3, r2 6
+	r1 4, r2 5 
+	r1 5, r2 6

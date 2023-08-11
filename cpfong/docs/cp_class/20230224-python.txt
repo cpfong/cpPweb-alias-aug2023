@@ -1,0 +1,51 @@
+#!/usr/bin/env perl
+
+#python print original way 
+#using "" % list
+
+print "I am %s %s. %s" % ("Monkey", "D", "Luffy")
+
+v_l=2 #variable long
+v_w=3 #variable width
+
+print "when long=%d width=%d, rectangle area=%d" % (v_l, v_w, v_l*v_w)
+
+#2008 python2.6 print new way str.format() use {} and format to replace %
+#cps comment: this is complicate
+print 'long= {:d} width={:d}'.format(v_l, v_w)
+
+
+#!/usr/bin/env perl
+#number
+l=2
+w=3
+print "%d %d" % (l, w)
+print (l, w)
+
+#string
+first= 'john'   # note: signle quote means string
+last = 'chen'
+
+full_name=first+last
+print(first, last, full_name)
+
+str = "line1\nline2"
+print(str)
+
+for i in range(3):
+ print (i, i*i)
+
+for i in range(3):
+ print "%d %2d" % (i, i*i)
+
+
+#!/usr/bin/env perl
+list = ['giant', 'merida', 'joker']
+print (type(list))
+
+
+#!/usr/bin/env python
+
+import array as arr
+a = arr.array('i', [3, 6, 9, 12])       #integer and type should be the same
+print(a)

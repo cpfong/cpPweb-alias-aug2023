@@ -1,0 +1,45 @@
+<html>
+<HEAD>
+<TITLE></TITLE>
+</HEAD>
+<body>
+<center>This is Administration Page</center>
+<br>
+UserID : <? echo $auth['loginID']?><BR>
+<a href=>Admin Top Page</a><BR>
+<a href=?menu=view>View User Information</a><BR>
+<a href=?menu=add>Add New User </a><BR>
+<a href=?page=logout>logout</a><BR>
+<BR>
+<?
+//        echo "now $menu mode";
+        switch($menu){
+                case "del":
+                                include("$admindir/del.ihtml");
+                                exit;
+
+                case "edit":
+                                include("$admindir/edit.ihtml");
+                                exit;
+                case "view":
+                                include("$admindir/view.ihtml");
+                                exit;
+                case "add":
+                                include("$admindir/add.ihtml");
+                                exit;
+                case "action":
+                                include("$admindir/action.ihtml");
+                                exit;
+                default:
+                                include("$admindir/default.ihtml");
+                                exit;
+
+        }
+
+
+
+//fwrite($fp,"test\n");
+
+?>
+</body>
+</html>

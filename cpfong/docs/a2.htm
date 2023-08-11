@@ -1,0 +1,321 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"><html><head>
+<meta content="text/html; charset=big5" http-equiv="Content-Type"><title>無標題文件</title>
+
+<style type="text/css">
+<!--
+@import url(../antonio.css);
+-->
+</style></head>
+
+<body marginheight="0" marginwidth="0" topmargin="0" leftmargin="0" background="a2_files/bg10.gif">
+<table bgcolor="#ffffff" align="center" width="770">
+  <tbody><tr> 
+    <td valign="top" height="390"> <div align="center"> 
+        <table width="770">
+          <tbody><tr> 
+            <td height="20">預約專線：臺北市大安區通安街49號B1 電話：(02)2701-9290 傳真：(02)2784-6736&nbsp; 
+              E-mail : <a href="mailto:miryna@cm1.hinet.net">miryna@cm1.hinet.net</a> 
+              10mb 容量</td>
+          </tr>
+          <tr>
+            <td height="20"><div align="center"><img height="17" width="313" src="a2_files/bigtom.gif"></div></td>
+          </tr>
+        </tbody></table>
+        
+        <table bordercolor="#e7e7e7" cellspacing="0" cellpadding="2" border="1" width="670">
+          <tbody><tr> 
+            <td bgcolor="#e7e7e7"><a name="2001"></a><font color="#990000"><strong>2001-加快XP開機及關機速度</strong></font></td>
+          </tr>
+          <tr> 
+            <td><ul>
+                <li>在〔開始〕→〔執行〕→鍵入〔Regedit〕</li>
+                <li>找到 HKEY_CURRENT_USER\Control Panel\Desktop 鍵，將右邊視窗的 WaitToKillAppTimeout 
+                  改為 1000<br>
+                  ( 原設定值：20000 )即關閉程序時僅等待1秒。 </li>
+                <li>將字串值 HungAppTimeout的數值改為：200( 原設定值：5000 )， 表示程序出錯時等待0.5秒。</li>
+              </ul>
+              <ul>
+                <li>找到 HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control</li>
+                <li>將字串值 WaitToKillServiceTimeout 設為：1000或更小。 ( 原設定值：20000 ) </li>
+                <li>將字串值〔HungAppTimeout〕的數值資料更改為〔200〕<br>
+                </li>
+              </ul></td>
+          </tr>
+          <tr> 
+            <td bgcolor="#e7e7e7"><a name="2002"></a><font color="#990000"><strong>2002-加快預讀能力改善開機速度</strong></font> 
+            </td>
+          </tr>
+          <tr> 
+            <td><p>Windows XP 預讀設定可提高系統速度，加快開機速度。</p>
+              <ul>
+                <li> 在〔開始〕→〔執行〕→鍵入〔Regedit〕找到HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SessionManager\ 
+                  MemoryManagement 在PrefetchParameters 右邊視窗將〔EnablePrefetcher〕的數值資料如下更改：<br>
+                  PIII 800MHz 以上的可嘗試將數值資料更改為〔4〕或〔5〕<br>
+                  以下的建議保留數值資料為預設值即〔3〕 <br>
+                </li>
+              </ul></td>
+          </tr>
+          <tr> 
+            <td bgcolor="#e7e7e7"><a name="2003"></a><font color="#990000"><strong>2003-關機時自動關閉停止回應程式</strong></font></td>
+          </tr>
+          <tr> 
+            <td><ul>
+                <li>讓系統自動關閉停止回應的程式。<br>
+                  打開註冊表 HKEY_CURRENT_USER\Control Panel\Desktop 鍵， 將 AutoEndTasks 
+                  值設為 1。 ( 原設定值：0 ) <br>
+                </li>
+              </ul></td>
+          </tr>
+          <tr> 
+            <td bgcolor="#e7e7e7"><a name="2004"></a><font color="#990000"><strong>2004-在啟動電腦時執行 
+              Defrag 程式</strong></font></td>
+          </tr>
+          <tr> 
+            <td><ul>
+                <li>在〔開始〕→〔執行〕→鍵入〔Regedit〕→〔HKEY_LOCAL_MACHINE〕<br>
+                  →〔SOFTWARE〕→〔Microsoft〕→〔Dfrg〕→〔BootOptimizeFunction 〕<br>
+                  將字串值〔Enable〕設定為〔Y〕等於開啟而設定為〔N〕等於關閉<br>
+                </li>
+              </ul></td>
+          </tr>
+          <tr> 
+            <td bgcolor="#e7e7e7"><a name="2005"></a><font color="#990000"><strong>2005-減少多重啟動時等待時間</strong></font> 
+            </td>
+          </tr>
+          <tr> 
+            <td><ul>
+                <li>打開 開始\ 控制台\ 系統\ 進階\啟動及修復項目\ 按設定\系統啟動\預設作業系統 --兩個項目都打勾- 填入您想等待的時間 
+                  ps : 假如填入"0" 系統將不會讓您等待而直接載入您上次選定的作業系統 <br>
+                  <br>
+                  另一個方法</li>
+                <li> 用 Notepad 打開在 C:\　目錄下的 boot.ini 檔案，將內容〔timeout〕 的設定值由預設的 
+                  30 (秒) 改為要求等待的秒數數字 --存檔<br>
+                </li>
+              </ul></td>
+          </tr>
+          <tr> 
+            <td bgcolor="#e7e7e7"><a name="2006"></a><font color="#990000"><strong>2006-減少Windows 
+              XP 開機載入區域網路時等待的時間</strong></font></td>
+          </tr>
+          <tr> 
+            <td><ul>
+                <li>開始~連線~顯示所有連線 </li>
+                <li>按~區域網路~右鍵~選內容 </li>
+                <li>在一般下面~選Internet Protocol(TCP/IP)~按內容</li>
+                <li> 使用下列的ip位址~第一個192.168.0.1~第二個打255.255.255.0 <br>
+                  這樣就好了~以後開機就不會停頓了 <br>
+                </li>
+              </ul></td>
+          </tr>
+          <tr> 
+            <td bgcolor="#e7e7e7"><a name="2007"></a><font color="#990000"><strong>2007-使用微軟 
+              Bootvis.exe 最佳化啟動速度</strong></font></td>
+          </tr>
+          <tr> 
+            <td><ul>
+                <li>先下載<a target="_blank" href="http://download.microsoft.com/download/whistler/BTV/1.0/WXP/EN-US/bootVis-tool.exe"> 
+                  bootVis.exe</a>檔案，然後解壓後執行 〔bootvis.exe〕</li>
+                <li> 在〔Trace〕選〔next boot + driver delays〕或其他選擇項目後XP會重新啟動並將記錄啟動資料產生成 
+                  BIN 的文件。</li>
+                <li>再在〔Bootvis.exe〕→〔file〕 →〔open〕中打開這個文件→在〔Trace〕→選〔Optimize 
+                  system〕 </li>
+                <li>此優化需時頗長，請奈心等待<br>
+                </li>
+              </ul></td>
+          </tr>
+          <tr> 
+            <td bgcolor="#e7e7e7"><a name="2008"></a><font color="#990000"><strong>2008-移除啟動時載入不需要的程式</strong></font> 
+            </td>
+          </tr>
+          <tr> 
+            <td><p>如開機時太多程序要執行時會影響開機的速度，先檢查那些檔案會在開機時執行</p>
+              <ul>
+                <li> 在〔開始〕→〔執行〕→鍵入〔msconfig〕→選〔啟動〕 </li>
+                <li>在啟動內的程式是代表開機時要執行的程式，如須暫時停止執行某些程式便取消在〔□〕的〔X〕符號便可，如想恢復開機時執行此程式在〔□〕內加回〔X〕符號便可 
+                </li>
+                <li>如希望徹底移除者在〔msconfig〕→〔啟動〕的左邊欄〔位置〕上便顯示引導程式執行的位置<br>
+                  其中：</li>
+              </ul>
+              <ol>
+                <li> HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run<br>
+                  其中的〔HKLM〕代表登錄檔上的〔HKEY_LOCAL_MACHINE〕<br>
+                  在〔Run〕的右邊視窗不需要的項目刪除</li>
+                <li> HKCU\Software\Microsoft\Windows\CurrentVersion\Run<br>
+                  其中的〔HKCU〕代表登錄檔上的〔HKEY_CURRENT_USER〕<br>
+                  在〔Run〕的右邊視窗不需要的項目刪除</li>
+                <li> SOFTWARE\Microsoft\Windows\CurrentVersion\Run<br>
+                  則代表登錄檔的路徑如下<br>
+                  HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Shared Tools\MSConfig\startupreg<br>
+                  檢查在〔startupreg〕下的路徑，將不需要的項目刪除</li>
+                <li> Common Startup<br>
+                  代表在〔開始〕→〔所有程式〕→〔啟動〕的程式<br>
+                  只要在取消在〔msconfig〕→〔啟動〕內〔□〕不選〔X〕符號便會代為將程式移離〔啟動〕<br>
+                </li>
+              </ol></td>
+          </tr>
+          <tr> 
+            <td bgcolor="#e7e7e7"><a name="2009"></a><font color="#990000"><strong>2009-加快開機的時間 
+              - 停用不需要的服務</strong></font></td>
+          </tr>
+          <tr> 
+            <td><p>Windows 在開機時會先載入很多不見得用得到的程式，以下的方法可以讓您選擇您需要載入的程式，但如您非系統高手不建議您動這個項目：</p>
+              <ul>
+                <li>關掉一些伴隨著Windows啟動的程式, 及常駐程式!!在 " 開始"--&gt; " 
+                  執行" 中<br>
+                  輸入 msconfig 進入"系統設定公用程式"在 " 啟動" 關掉不必要的程式 
+                  ,將方框中的勾勾取消,關掉不<br>
+                  必要 的程式, 不確定的程式不可以亂關,以免造成Windows錯誤!!<br>
+                  (先試試是否可以在軟體本身取消 常駐,不行再用此方法!!), 完成後按"套用",重開機!! <br>
+                </li>
+              </ul></td>
+          </tr>
+          <tr> 
+            <td bgcolor="#e7e7e7"><a name="2010"></a><font color="#990000"><strong>2010-製做XP開機磁片</strong></font></td>
+          </tr>
+          <tr> 
+            <td><p>XP要做開機磁片 </p>
+              <ul>
+                <li>在A槽--&gt;按右鍵--&gt;選格式化--&gt;選建立一個MS-DOS開機磁片 <br>
+                </li>
+              </ul></td>
+          </tr>
+          <tr> 
+            <td bgcolor="#e7e7e7"><a name="2011"></a><font color="#990000"><strong>2011-XP的自動關機問題</strong></font></td>
+          </tr>
+          <tr> 
+            <td><p>如果不能自動關機的話</p>
+              <ul>
+                <li> 控制台--&gt;電源--&gt;顯示--&gt;螢幕保護程式--&gt;電源管理--&gt;APM打勾 <br>
+                  這樣應該就可以了 </li>
+                <li>如果還不行,應該是BIOS的問題 <br>
+                </li>
+              </ul></td>
+          </tr>
+          <tr> 
+            <td bgcolor="#e7e7e7"><a name="2012"></a><font color="#990000"><strong>2012-加快開機的時間</strong></font></td>
+          </tr>
+          <tr> 
+            <td>&nbsp;</td>
+          </tr>
+          <tr> 
+            <td bgcolor="#e7e7e7"><a name="2013"></a><font color="#990000"><strong>2013-關機有捷徑</strong></font></td>
+          </tr>
+          <tr> 
+            <td><ol>
+                <li>在桌面空白位置按滑鼠右鍵 -&gt; &lt;新增&gt; -&gt; 選&lt;捷徑&gt;</li>
+                <li> 在&lt;指令行&gt;鍵入 rundll.exe user.exe,exitwindows</li>
+                <li>在&lt;選擇捷徑的名稱&gt;鍵入&lt;關閉Window&gt;或你想要的名稱 -&gt; 按&lt;完成&gt; 
+                  <br>
+                </li>
+              </ol></td>
+          </tr>
+          <tr> 
+            <td bgcolor="#e7e7e7"><a name="2014"></a><font color="#990000"><strong>2014-重新啟動有捷徑</strong></font></td>
+          </tr>
+          <tr> 
+            <td><ol>
+                <li> 在桌面空白位置按滑鼠右鍵 -&gt; &lt;新增&gt; -&gt; 選&lt;捷徑&gt;</li>
+                <li>在&lt;指令行&gt;鍵入 rundll.exe user.exe,exitwindowsexec </li>
+                <li> 在&lt;選擇捷徑的名稱&gt;鍵入&lt;重新啟動Restart&gt;或你想要的名稱 -&gt; 按&lt;完成&gt;<br>
+                </li>
+              </ol></td>
+          </tr>
+          <tr> 
+            <td bgcolor="#e7e7e7"><a name="2015"></a><font color="#990000"><strong>2015-備份及還原視窗啟動檔</strong></font></td>
+          </tr>
+          <tr> 
+            <td><p>如需重裝 Windows XP，重裝後必須重新啟動，如按下列辦法可解決此問題</p>
+              <ul>
+                <li> 備份<br>
+                  在 \Windows\system32 目錄下將 wpa.dbl 及 Wpa.bak 用軟盤備份 <br>
+                </li>
+                <li>還原<br>
+                  重裝 Windows XP 後，進入〔安全模式〕，在 \Windows\system32 目錄下將 wpa.dbl 改名為 
+                  wpadbl 及 wpa.bak 改名為　<font color="#ff0000">wpabak</font><br>
+                  然後將備份的 wpa.dbl 及 Wpa.bak 抄回此目錄<br>
+                  <br>
+                  重新啟動電腦按〔檢查 Windows XP 是否登記〕辦法更改登錄注冊<br>
+                  注：因 Windows XP 對硬件的更改次數有所限制，所以只適用於重灌系統或小量更改硬件 <br>
+                </li>
+              </ul></td>
+          </tr>
+          <tr> 
+            <td bgcolor="#e7e7e7"><a name="2016"></a><font color="#990000"><strong>2016-修復 
+              Windows XP 的啟動</strong></font></td>
+          </tr>
+          <tr> 
+            <td><p>由於在安裝 Windows XP 後再安裝其他版本的 Windows 而導致啟動後不能進入 Windows XP<br>
+                原因是當安裝其他版本的 Windows 時，C 槽的啟動區已被新安裝的<br>
+                其他版本 Windows 取替，除了用其他的軟體外，可嘗試按下辦法進行修改<br>
+                此更改不會提供任何支援及僅適用於 FAT32 格式，<br>
+                Windows 2000 因系統較接近 Windows XP，因此成功機會大<br>
+                如屬 Windows 98 或 Windows ME 未能成功修復者<br>
+                可使用有關版本的啟動磁片啟動電腦後在〔A:\&gt;〕下鍵入〔Sys :〕後從新開機便可 </p>
+              <p> <strong>被 Windows 2000 佔用了啟動系統</strong></p>
+              <blockquote> 
+                <p> 可參閱<a target="_blank" href="http://neuron.et.ntust.edu.tw/homework/90/OS/90homework%231/A9015022-3/Install.html#InsW2KAftXP">在安裝 
+                  Win XP 後安裝 Windows 2000</a>中修復 Windows XP 啟動系統的辦法 </p>
+              </blockquote>
+              <p><strong>被 Windows 98 或 ME 佔用了啟動系統</strong></p>
+              <ol>
+                <li> 先預備一張 Win98 的安裝啟動磁片</li>
+                <li> 進入 Windows 98 或 ME 用 Notepad 去編輯一個名為 Read.scr 內容如下 
+                  <p> -------------------------</p>
+                  <p>L 100 2 0 1<br>
+                    N C:\BOOTSECT.DOS<br>
+                    R BX<br>
+                    0<br>
+                    R CX<br>
+                    200<br>
+                    W<br>
+                    Q<br>
+                    <br>
+                    --------------------------</p>
+                </li>
+                <li> 
+                  <p> 將檔案存在 Windows 98 或 ME 的安裝啟動磁片及用此磁片啟動電腦</p>
+                </li>
+                <li> 
+                  <p> 如果 C 槽下有個名為 BOOTSECT.DOS 的檔案便在 A:&gt;下先執行此命令<br>
+                    ATTRIB C:\BOOTSECT.DOS -S -H -R<br>
+                    然後在 A:&gt;下鍵入 DEBUG &lt;READ.scr<br>
+                    如剛才修改了 BOOTSECT.DOS 檔案的屬性再在 A:&gt;下先執行此命令<br>
+                    ATTRIB C:\BOOTSECT.DOS ＋S ＋H ＋R</p>
+                </li>
+                <li> 
+                  <p> 在 BIOS 設定用 CD 啟動電腦，然後將 Windows XP 光碟放入及啟動電腦</p>
+                </li>
+                <li> 
+                  <p> 讓光碟自動執行至停止便會出現三個選擇，按〔R〕選修復電腦便會詢問<br>
+                    要進入哪個系統，選 Windows XP 的代號及按〔Enter〕鍵，然後輸入 Administrator 密碼<br>
+                    (與安裝時輸入的 Administrator 密碼相同) 如果沒有密碼直接按 Enter 便可</p>
+                </li>
+                <li> 
+                  <p> 在 X:\Windows&gt; 下鍵入 Fixboot 及按〔Y〕確認<br>
+                    X = Windows XP 所安裝磁碟機的代號</p>
+                </li>
+                <li> 
+                  <p>完成後取出 Win XP 光碟及鍵入〔Exit〕會重新啟動電腦 </p>
+                </li>
+                <li> 
+                  <p> 在 BIOS 選回用硬碟啟動電腦便可</p>
+                </li>
+                <li> 
+                  <p>如未能正常顯示多重啟動選單者可修改 C槽根目錄的 Boot.ini 檔案<br>
+                  </p>
+                </li>
+              </ol></td>
+          </tr>
+        </tbody></table>
+      </div></td>
+  </tr>
+</tbody></table>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+</body></html>

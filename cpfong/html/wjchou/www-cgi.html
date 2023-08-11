@@ -1,0 +1,340 @@
+
+<HTML>
+<HEAD>
+<TITLE>  如何在ＷＷＷ下建立雙向溝通之應用環境 </TITLE>
+</HEAD>
+<P>
+<BODY>
+<a name="contents">
+<H1>       如何在ＷＷＷ下建立雙向溝通之應用環境 </H1> </a>
+<P>
+<UL>
+<li> <a href="#intro">前言</a>
+<li> <a href="#www-ap">ＷＷＷ之應用架構</a>
+<li> <a href="#form-cgi">FORM與CGI</a>
+<li> <a href="#cgi-read">CGI程式如何從主機得到相關資訊</a>
+<li> <a href="#cgi-write">CGI程式如何回應相關資訊給瀏覽器</a>
+<li> <a href="#implement">實作與偵錯</a>
+<li> <a href="#summary">結語</a>
+<li> <a href="#papers">參考資料</a>
+</ul>
+<p>
+　　　　　　　　　　　　　　　　　　　　　　<i>周文正(Wen-Jeng Chou)</i>
+　　　　　　　　　　　　　　　　　　　　　　<i>清大電算中心(NTHU CCC)</i>  
+<hr>
+<a name="intro" >
+<h2>前言</h2>
+</a>
+<pre>
+       自古至今，人類想盡辦法利用各式各樣的符號、口語、書冊、影像與圖畫
+   等媒體來交換信息，由於人類智慧與科技的精進，於是發展出各種不同的技術
+   以滿足人際媒體多元化以及雙向溝通的需求。儘管多媒體通訊技術目前尚有不
+   少地方得發展改進，然而早在歐洲量子物理實驗室 (CERN) 發展出來的多媒體
+   網路資料查詢系統－－全球資訊網（ World Wide Web，WWW ）<a href="#ref1">[1]</a>後， 就奠定了
+   良好交互性多媒體（ Interactive multimedia ）資訊網的建構機制。目前您
+   只要擁有諸如 mosaic、netscape、cello 等 WWW 的瀏覽器（ Brower ），就
+   能輕易藉 Internet 感受漫遊全球多媒體資訊網之樂趣。 其中 WWW 不僅能使
+   用戶從遠端伺服主機取得多元化的資訊，而且也能提供類似可控制式的交易處
+   理（ Transaction processing ）與你的主機系統做雙向溝通<a href="#ref2">[2]</a>。尤其在資訊亭
+   (Information  Kiosk) 諸如貨品外觀查閱、 預約、 訂購與意見調查， 以及
+   Computer Base Training （ CBT ）等諸如此類交互性多媒體的應用上， WWW
+   的發展環境算是最佳的選擇。 本文僅依此交互性之理念，概述在 WWW 環境下
+   如何建置清大學生宿舍網路使用申請系統，以供讀者共饗。<p>
+</pre>
+<a href="#contents">[back to contents]</a>
+<hr>
+<a name="www-ap" >
+<h2>ＷＷＷ之應用架構</h2>
+</a>
+<pre>
+       WWW 主從（ Client and server ）架構應用示意圖如圖（ 1 ）所示。一
+   般用戶以瀏覽器對伺服主機要求服務，主機依據客機要求抓取資料以作回
+   應，瀏覽器再依回應資料屬性與本身之驅動環境配合，才能展現媒體應有的
+   效果 ( 如聲音、影像、圖形等 )<a href="#ref3">[3]</a>。主從間是以屬於自己的 HTTP （
+   HyperText Transmission Protocal ）為通訊協定。以「一致性資源定位器
+   」 (Uniform Resource Locator，URL ）<a href="#ref4">[4]</a>為位址體系（ Addressing scheme
+   ），以便在 INTERNET 要取得資料時能快速確定資料之位置與取得方式。在
+   WWW 中最常被共同存取的資源，是由富有邏輯階層形式的超文件建構語言
+   （ Hypertext Ma rkup Language，HTML ）<a href="#ref5">[5]</a>所建構的超文件。可藉此 HTML
+   文件內之所謂「超鏈結」（ Hyper link ）連接到其它不同型態的文件（如
+   聲音，影像，圖形，視訊等超媒體）與服務（如 FTP，GOPHER，NEWS，WAIS
+   ， TELNET 等），以參用 INTERNET 網路上之現有可用的資源。至於要在瀏
+   覽器輸入資料並執行類似交易行為與遠端主機交換資訊，則務必透過表格
+   (FORM) <a href="#ref6">[6]</a>與共通閘道介面（ Commom Gateway Interface，CGI ）<a href="#ref7">[7]</a>，
+   以解決傳統應用程式與伺服主機間介面上的問題。<p> 
+   <img src="www-sys.gif"> 
+
+</pre>
+<a href="#contents">[back to contents]</a>
+<hr>
+<a name="form-cgi" >
+<h2>ＦＯＲＭ與ＣＧＩ</h2>
+</a>
+<pre>
+       使用者透過瀏覽器將資料輸入至由 HTML 所建造的文件中，然後再傳遞
+   給裝有 HTTP 之伺服主機（如 CERN,HTTPD ）處理，像此類的 HTML 文件我
+   們稱之為「表格」，將資訊接收、處理、傳回的方法我們稱之為共通閘道介
+   面。而與 HTML 表格文件相呼應的是 CGI 程式或命令稿（ Scripts ）。所
+   以要製作表格型式來達到雙向交談之目的，必須具備表格 HTML 文件之檔案
+   與用來處理表格輸入的 CGI 程式。在 HTML 文件裡表格是用 FORM 標籤
+   （ tag ）來設定的，且文件中允許有兩個以上的表格，但不允許存在有巢狀
+   （ nested ）的表格。FORM 的語法是：＜ FORM action ＝ URL method ＝
+   METHOD ＞【 form text 】＜／ FORM ＞，其中 action 參數是一個指向表
+   格所需的外部服務程式（ CGI 程式）之 URL。method 參數是當按 submit
+   按鈕時，會告知伺服主機接受客端要求的處理方式。METHOD 參數的值可以是
+   "POST" 或是 "GET"，建議最好是用 "POST"，因為傳給伺服主機的資料串才
+   沒有長度限制。在一個 HTML 表格內除了不能有另一個表格外，尚可使用三
+   種不同型別的介面標籤，其分別為「輸入」（ INPUT ）、「選擇」（ SELECT ）
+   、與「文字區域」（ TEXTAREA ）。
+
+ １、INPUT 標籤
+  (1)TYPE：敘述輸入的型態，其值有下列之一：
+        a.TEXT：文數字型態（內定值）。
+        b.PASSWORD：與 TEXT 相同，但不管已設定內定值或在輸入字元時，都
+          會顯示「 * 」號。
+        c.HIDDEN：可設定欄位之內定值，因隱藏型態並不顯示於螢幕，故無法
+          藉輸入更改初值，可藉此設定的固定值送給應用系統當做字串常數使
+          用，可惜並沒有達到保密效果，因瀏覽器仍然可藉 view source 查
+          閱 HTML 文件原貌。
+        d.CHECKBOX：圈選式方格，不是 ON □就是 OFF □。
+        e.RADIO：是另一種 checkbox，但此 radio 群只能多項選一。
+        f.SUBMIT：會把表格資訊串打包後送給遠瑞主機。並會使主機執行 Action
+          下之 URL 所指定位址之外部服務程式 (CGI 程式 )。一個表格能有
+          多個 Submit，但只能允許一個 action 之外部服務程式。若 checkbox
+           與 radio 已被圈選時，其 name 值才會被打包，而 text、password
+           hidden 不管有無內容，其 name 值定會被打包送出。
+        g.RESET：把表格內所有 name 之值還原為內定值。
+	h.image : 藉此建立一個clickable image,當在image 某位置點一下,則
+	   除了有與submit 同樣效果之外,並會把x y座標(button_name.x與
+	   button_name.y)同時送給遠瑞主機.
+	   例:	&ltinput type="image" name="button_name" src="url_of_image"&gt 
+
+
+   (2)NAME：定義欄位名稱 ( 把它想成變數名稱也可 ) 之用，除了 Submit 與
+      reset 型態不需 name 外，其餘皆一定要有。
+   (3)VALUE：配合不同的 TYPE 有不同的意義，對 text 或 password 輸入型
+      別而言，是設定欄位之內定值。對 radio 或 checkbox 也是指定選項之
+      內定值，不過必須同時設 CHECKED 才有效。對 Submit 或 reset 輸入型
+      別而言，其文字內容將會變成按鈕的標籤, 若Submit 內有name屬性,則
+      其值也會送給主機。
+   (4)CHECKED：前面已提過只對 radio 或 checkbox 之輸入型別，有內定圈選
+      之意。
+   (5)SIZE：對 text 或 password 輸入型別，有定義輸入窗格大小之功效，若無
+      size 敘述項時，則內定為 20。若需要矩形窗格, 則以 SIZE= 行數, 列數定
+      義之。
+   (6)MAXLENGTH：只對 text 或 password 輸入型別有效，其定義接受輸入字串之
+      最大長度。若無 MAXLENGTH 則內定值為無限大。
+
+  ２、SELECT 標籤:
+
+       可允許使用者以下拉式從多選項中執行單選或複選。此多選項列中是以
+   ＜ SELECT ＞為起始，每一個選項值以＜ OPTION ＞為開頭，最後以＜／
+   SELECT ＞為結束。SELECT 標籤一定有 NAME 來定義選項之欄位名稱才行，
+   其中尚有一些選擇性之參數：
+    （ 1 ） SIZE：敘述「捲抽式串列」 (scrolled List) 視窗口內選項數之
+                  大小，若沒有 SIZE 參數時，則內定值為 1。
+    （ 2 ） MULTIPLE：不管有無 SIZE 參數一定是「捲抽式串列」，並且允許
+            從串列中做多項選項（以 MS 瀏覽器為例，CTRL 鍵與滑鼠左鍵同時動作）。
+            即相同欄位名稱可擁有多個不同值，例如： "name=value1&name=value2"
+            之資料串。
+    （ 3 ） OPTION 標籤內可有參數 selected，此表示此選項值為內定值，在
+            SELECT 標籤內允許多個 <OPTION selected> 選項值。
+ 
+  ３、TEXTAREA 標籤:
+       此文字區域輸入標籤提供多行輸入區，視窗口大小決定於 ROWS 與 COLS
+   之值。此項以＜ TEXTAREA ＞為起始標籤，＜／ TEXTAREA ＞為結尾標籤，頭
+   尾標籤間允許內定文字值，以供使用者修改或接受這段內定值。最後之內容會
+   與 NAME 所定義的欄位名稱成資料對。
+     CGI 在伺服主機下最主要的功能，是提供程式設計師能設計外在服務程式與
+  Scripts，以供在 Web 主客機之環境下，客瑞程式能很方便藉此介面來存取遠瑞
+  主機之資料庫。主客機雙方溝通之環境建立，是以填表格形式最為直接普遍，並
+  透過 CGI 驅動外在應用程式，以達到主客交談之目的。<p>
+</pre>
+<a href="#contents">[back to contents]</a>
+<hr>
+<a name="cgi-read" >
+<h2>CGI程式如何從主機得到相關資訊</h2>
+</a>
+<pre>
+       主機接受客端要求服務時，會以表格標籤之 Method 型態來決定與 CGI 程
+   式間的資料傳遞方式。若 Method ＝ "post"，則會以標準輸入 (stdin) 方式
+   傳送表格資料串給 CGI 程式，並在 CONTENT_LENGTH 環境變數通知資料串之長
+   度。所以 CGI 程式必需由 stdin 讀取長度為 CONTENT_LENGTH 之表格資料串
+   。此資料串是會被編成以「 & 」符號所區隔的 "name=value" 資料對。其中
+   name 為表格之欄位名稱，value 為其欄位內容。value 內之空白（ space ）
+   會被轉換為「 + 」；特殊字元會被轉成 %xx 十六之進位（例如、中文、&、=
+   ... ）。舉個例若有一個表格：
+    &lt form method="post" action="/cgi-bin/scripts"&gt
+    &lt input type="hidden" name="stdid" value="u23 56"&gt
+    &lt input type="hidden" name="domi" value=" 雅齋 "&gt
+   當按 submit 按鈕標籤，會把表格資訊打包後送給遠瑞主機。由主機啟動
+   "/document_root/cgi-bin/scripts" CGI 程式來服務（其中 /document_root
+   假設是主機放置 CGI 程式之起始目錄），則 CGI 程式能有下列比較重要的參
+   考環境：
+     CONTENT_LENGTH= 28
+     CONTENT_TYPE= application/x-www-form-urlencoded
+     REQUEST_METHOD= POST
+     SCRIPT_NAME= /cgi-bin/scripts
+     CGI程式由stdin讀取長度為 28 之表格資料串是： 
+     stdid=u23+56&domi=%B6%AE%C2N
+
+       故 CGI 首要之務在於如何剖析輸入資料串，並把 value 被轉換過之內容
+   恢復原貌，進而建立 name 與 value 間之對應關係（即把值指定給變數）。
+       當表格 Method ＝ "GET" 時，會將表格資料串（同 POST 已被轉碼）之前
+   加「? 」號，並會緊隨在 action 之 URL 後面傳給伺服主機，換言之, 由於
+   URL 字串內是以「? 」作為物件位址與查詢字串之分離符號，故您也可以不透
+   過 FORM 型式而利用 hyperlink 方式直接連結使用，例如在 HTML 文件中，以
+   &lt A HREF="/document_root/cgi-bin/scripts?stdid=u23+56&domi= 雅齋 "&gt
+   會有相同的效果，所以此時主機不是透過 stdin 傳遞表格資料串，而是將表格
+   資料串藉環境變數 QUERY_STRING 傳送給 CGI 程式。除此之外，CGI 允許在
+   ACTION 之 URL 內附加所謂 " 額外 " 資訊送給主機，此額外字串不會經主機
+   編碼轉換，並且會將它放置在環境變數 PATH_INFO 內傳給 CGI 程式，一般在
+   實際應用時，CGI 程式若要參考其他路經之檔案或程式時，可把 " 相對路徑 "
+   字串以額外資訊方式放在 PATH_INFO 內，就可從 PATH_TRANSLATED 環境變數
+   取得 " 絕對路徑 " 字串。
+     例如:URL ＝ "http://cgi-bin/scripts/foo/bar?name1=value1&name2=value2"
+     若 SCRIPT_NAME ＝ /cgi_bicc/scripts，
+     則 PATH_INFO ＝ /foo/bar
+        PATH_TRANSLATED ＝ /document_root/foo/bar
+        QUERY_STRING ＝ name1=value1&name2=value2
+        REQUEST_METHOD ＝ GET。
+
+</pre>
+<a href="#contents">[back to contents]</a>
+<hr>
+<a name="cgi-write" >
+<h2>CGI程式如何回應相關資訊給瀏覽器</h2>
+</a>
+<pre>
+       CGI 會以標準輸出（ stdout ）回應伺服主機，然後再把資訊傳回給客
+   瑞使用者。至於回應給主機的內容如何被主機認知，則完全根據送給主機內
+   容的第一行表頭 (header) 之內容來決定文件型態，表頭行之後務必空一行
+   以上空白行（即需兩個「換行字元」 "\n\n" ），再來才是資料真正內容部
+   份。常用表頭內容型態如下：
+   (a)、Content-type：type/subtype，其中 type/subtype 是指 MIME（
+       Multipurpose Internet Mail Extensions ）內容型態。例如一般最常
+       用的是 HTML 文件，其內容型態為 "context-type：text/html\n\n"，
+       此種傳輸方式可創出所謂的「虛擬 HTML 文件」（ Virtual HTML 元件
+        ），做為主客機雙向交談的建構機制。如果表頭是 "context-type：
+       text/plain\n\n"，則視為一般 ASC Ⅱ文件輸出。
+   (b)、Location：告知伺服主機此輸出不是真正文件，而是轉向（ redirect ）
+       參用其他某地方現有的 HTML 文件或其他異質主機（例如 gopher ）環
+       境。例如當 location：http：//www-server/dir1/dir2/myfile.html
+       時，則客機會轉向要求 www-server 主機之 myfile.html 來服務。又如
+       location：gopher：//gopher-server:port/path/text-file 則客機會
+       轉向 gopher 主機查詢檔案。<p>
+       由此可知，經主機從資料庫讀取資料送回瀏覽器顯示前，需促使 CGI 程
+   式先轉換成適當 HTML 超元件之表示式與連結關係。<p>
+</pre>
+<a href="#contents">[back to contents]</a>
+<hr>
+<a name="implement" >
+<h2>實作與偵錯</h2>
+</a>
+<pre>
+       清大原本在 gopher 下有一套學生宿舍網路使用申請登錄系統，雖然
+   WWW 很容易轉向至 gopher 查閱文字檔案，但以 gopher FORM 型式 (.ask)
+   作雙向交談仍然有問題（換言之,gopher FORM語法型式在HTTP上無法認知）。
+   為了要增加應用系統的維護性，故不更改原應用程式碼，只在 WWW 主機之下
+   寫一個 CGI Scripts 以驅動原應用程式。
+       目前在 internet 內已有 CGI Scripts 之範例，有的是以 perl、C、sh
+   等語言撰寫，可視個人之喜好，利用 ftp 抓回來改成適合自己的應用環境。
+   我目前CGI是以perl語言<a href="#ref8">[8]</a>撰寫，因 perl 對字串與資料剖析 (data-parsing)
+    方面有很強處理的能力，尤其是利用關聯性陣列（ associative array ）來
+   作 CGI 剖析輸入資料串，並把 value 被轉換過之內容恢復原貌，進而建立
+   name 與 value 間之對應關係（即把值指定給變數），甚感簡潔方便。
+       應用程式方面之主要功能，著重於一般資料處理的校核、存取、lock 等
+   功能，並回應相關訊息。若成功完成交易處理，CGI 程式會啟動 E_Mail(ELM)，
+   自動郵電交易（登錄或刪除）之處理結果告知用戶。
+       為讓讀者能看 HTML FORM 與 CGI 的實際應用情形，<a href="http://140.114.64.31/wjchou/domi/domi01.html">圖（ 2 ）</a>view source 
+   (或document source)可得 Hypertext超媒體的原稿，而圖（ 3 ）則是以 MOSAIC
+   瀏覽器所得到的畫面。  
+   表（ 1 ）是 <a href="wwwcgi-r.html#cgi-program">CGI程式</a>，其中 dmapin 就是應用程式。
+   圖（ 4 ）為 <a href="wwwcgi-r.html#e-mail">E_mail 告知用戶之處理結果</a>。<p>
+   <img src="domi01.gif"><p>
+</pre><pre>
+ <em><b> 在發展應用介面之過程中，應注意下列事項：</b></em><br>
+     1.CGI 程式與應用程式所印出的字串順序，會有不按應有順序印出的現象
+       ，故必需在驅動 CGI 程式時就應先設定 flush 為 on。<p>
+     2. 因 HTML 文件裡對空白（半形）或換行字元會失去效用，故在產生 HTML
+        超文件時，空白必須使用全形空白，而換行字元需以 "&lt BR&gt "或"&lt P&gt " 代替。<p>
+     3. 一個 HTML 文件允許兩個以上表格，但螢幕顯示時無法區分輸入欄位究竟
+        屬於那一個表格，故最好以 &lt HR &gt 劃線隔開以便區別。<P>
+     4. 若使用者需要從多選項中執行複選，雖可用 "&lt SELECT MULTIPLE
+       nane="field"...&gt " 來完成，因同一個欄位名稱 field 會有不同的選項值
+       ，在應用程式處理時較不便，故可以將各選項分別以 "&lt INPUT
+      type="CHECKBOX" name="fieldx" value=" 選項內容 "&gt 選項識別 " 之圈
+       選式方格來替代，其中每個選項之欄位名稱 fieldx 就可以不同了。<p>
+     5.URL 之內容有英文字母大小寫之區別。<p>
+     6.在使用瀏覽器 ( 如 mosaic) 時，隨時可利用 document source 命令查關
+       HTML 文件之原始敘述內容，以促進 HTML 文件建構之學習效果。若無法
+       document source 時，則重新 Reload 即可。<p>
+     7.在 www 環境下發展應用軟体，有時需花費不少時間在 CGI 程式、HTML 文
+      件交談之撰寫與偵錯。常用偵錯測試方法有：各別開啟「編輯 CGI 程式視窗」
+      與「瀏覽視窗」，隨同 CGI 程式或 HTML 的更改, 重選重載 (Reload) 後
+      再執行，以觀其中差異。此重複偵錯可收事半功倍之效。請注意在測試偵錯
+      階段，在瀏覽器端（以 mosaic 為例）務必先取消 proxy caching 設定，
+      致使瀏覽器放棄到主機 cache 檔案存取歷史資料，當 Reload 時永遠保証
+      HTML 文件為最新版。<p>
+     8.若有必要，應考慮 CGI 程式在處理表格資料串時，對 shell 命令有特別意
+      義之任何字元（例如：;、&、\、|、$、:、(、) ），其前面應外加 "\" 字
+      元，以改變原意來維護正常作業。<p>
+</pre>
+<a href="#contents">[back to contents]</a>
+<hr>
+<a name="summary">
+<h2>結語</h2>
+</a>
+<pre>
+       在 WWW 的應用架構下，HTML 表格與 CGI 間提供一種巧妙的方法，可讓
+   遠端的用戶以簡潔、可控制式的方式與你的主機系統做雙向交互溝通。尤其
+   是 CGI 處理方式的理念，更是異質系統間資料交換最好的選擇途徑。待將來
+   由 Intel、IBM、HP 與 Apple 所籌建的商業化 Internet （ Internet-
+   CommerceNet ）完成之後，諸如貨品外觀查閱、預約、訂購、意見調查與顧問
+   諮詢等，像此類交互性多媒體的應用，屆時皆可透過 WWW 全球資訊網來完成。
+       本文雖未提及影像、聲音等其他媒体之存取實例，其實只要在交互傳遞
+   的 HTML 內，有超媒體鏈結之 URL 敘述或線上秀圖標籤（ In-line Images
+   ），則在瀏覽器同樣能展現應有的媒体效果（當然瀏覽器應已裝置相關媒體
+  格式的展現程式才行）。故對 CGI 與應用程式之輸出而言，其實只是 HTML 文
+  件裡字串上的處理與安排罷了。<p>
+</pre>
+<a href="#contents">[back to contents]</a>
+<hr>
+<a name="papers">
+<h2>參考資料:</h2>
+</a>
+<dl>
+<dt><a name="ref1"><strong>1.</strong></a><dd>
+  T. Berners-Lee, R. Cailliau, A. Luotonen,H. H. Nielsen,and A. Street.
+  The World-Wide Web. Communications of the ACM,37(8):76-82,August 1994.<p>
+<dt><a name="ref2"><strong>2.</strong></a><dd>
+  Patrick M. Ryan. Making Mosaic Talk Back. Open Computing,p99-103,
+  October 1994. <br>
+  鄭靜 譯,"讓 Mosaic 為您傳話",開放系統與網路(1994.11),p187-194.<p>
+<dt><a name="ref3"><strong>3.</strong></a><dd>
+  黃莉婷,WWW創造全球性多媒網路,網路通訊雜誌(1994.9),p24-28.<p>
+<dt><a name="ref4"><strong>4.</strong></a><dd>
+  T. Berners-Lee. Universal Resource Identifiers in WWW.
+  http://info.cern.ch/pub/www/doc/url-spec.ps, (1994,3).<p>
+<dt><a name="ref5"><strong>5.</strong></a><dd>
+  A beginner's guide to HTML<br>
+     http://www.ncsa.uiuc.edu/demoweb/html-primer.html<p>
+<dt><a name="ref6"><strong>6.</strong></a><dd>
+ http://www.ncsa.uiuc.edu/SDG/Software/Mosaic/Docs/
+     fill-out-forms/Overview.html.<p>
+<dt><a name="ref7"><strong>7.</strong></a><dd>
+  R. McCool. The Common Gateway Interface.
+  http://hoohoo.ncsa.uiuc.edu/cgi/.<p>
+<dt><a name="ref8"><strong>8.</strong></a><dd>
+ Wall,L., Schwartz RL. Programming Perl, O'Reilly and Associates, 
+ Sebastopol CA,(1990)<p>
+</dl>
+<a href="#contents">[back to contents]</a>
+</body>
+<hr>
+<address>
+周文正(Wen-Jeng Chou)<br>
+清大電算中心(CCC NTHU)<p>
+E_MAIL: wjchou@cc.nthu.edu.tw<br>
+02/27/95<br>
+</address> 

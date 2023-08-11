@@ -1,0 +1,23 @@
+
+  ◇ news expire 參數更動
+
+------------------------------------------------------------------------
+                        << news expire 參數更動 >>
+
+
+實在真巧, 每次我要連 news 就剛好在 &quotrenumber", 害我想讀 news 的興致都沒了.
+我到現在還沒看到 renumber 的好處, 或者不 renumber 會有何缺點, 我先將
+renumber 的頻率改為一週一次,
+
+     原來為:
+40 4  * * * su news -c '/home/inn/news/bin/news.daily delayrm'
+
+     現在改為:
+40 4  * * 1-6 su news -c '/home/inn/news/bin/news.daily delayrm norenumber'
+40 4  * * 0 su news -c '/home/inn/news/bin/news.daily delayrm'
+
+這樣運氣再好, 頂多一個禮拜遇到一次.
+------------------------------------------------------------------------
+Shih-Kun Huang
+EC638, CSIE, NCTU, Taiwan, R.O.C. Phone: 886-35-712121 (x54765, x54709)
+

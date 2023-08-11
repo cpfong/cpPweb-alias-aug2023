@@ -1,0 +1,5 @@
+server (at FreeBSD) v2ray
+
+client (at Windows7) 
+  1. dos: ./v2ray # note: this v2ray will connect to v2ray of FreeBSD 
+  2. browser (sock5), browser talk to 127.0.0.1 and no need to talk to FreeBSD v2ray

@@ -1,0 +1,66 @@
+hash 
+--
+
+just like array, but index is not confined in integer
+array: index -> value (integer -> anything)
+hash: key -> value (string -> anything)
+
+note: index and key should be unique
+
+possilbe vaules of hash: number, string, undef
+
+why:
+ 1. first name find last name
+ 2. hostname find ip address
+ 3. ip address find host
+ 4. word find repeat number
+ 5. pid find his name
+
+@array
+%hash
+
+$array[0]=1
+$hash{test}=6
+
+p121
+--
+$family_name{'fred'}='flintstone';
+$frmily_name{'barney'}='rubble';
+
+foreach $person (qw / barney fred /){
+ print "I have heard $person $family_name{$persion}\n";
+}
+
+p122
+--
+key can be expression
+$foo='bar';
+print $family_name{$foo . 'ney'};
+
+hash as a whole
+--
+%some_hash = (	'foo', 35, 
+		'bar', 12.4, 
+		2.5, 'hello', 
+		'wilma', 1.72e30, 
+		'betty', "bye\n");
+
+hash is an array!
+--
+@any_array = %some_hash; # all hash keys and values now become items of array, order may different
+
+Big Arrow
+--
+my %last_name= (
+	fred=> flintstone,
+	dino=> undef,
+	barney =>rubble,
+	betty =>rubble,
+);
+
+hash function
+--
+m %hash = ('a' => 1, 'b' => 2, 'c' => 3);
+my @k = keys %hash;
+my @v = values %hash;
+

@@ -1,0 +1,43 @@
+105-2 big data introduction
+2017/02/15 - 2017/05/31
+Wednesday 234 C302 09:00-12:00 Neimen
+
+   February 2017      
+Su Mo Tu We Th Fr Sa  
+          1  2  3  4 - 
+ 5  6  7  8  9 10 11 - 
+12 13 14 15 16 17 18 w01 c1 intro aws
+19 20 21 22 23 24 25 w02 c2 apply aws account
+26 27 28             note: 27,28 off 4 228 memorial day
+                      
+     March 2017       
+Su Mo Tu We Th Fr Sa  
+          1  2  3  4 w03 c3 ec2 win2008
+ 5  6  7  8  9 10 11 w04 c4 freedns 
+12 13 14 15 16 17 18 w05 c5 ec2 AMI
+19 20 21 22 23 24 25 w06 c6 apache+mysql+php
+26 27 28 29 30 31    w07 c7 personal blog
+                      
+     April 2017       
+Su Mo Tu We Th Fr Sa  
+                   1 -
+ 2  3  4  5  6  7  8 w08 off 4 usc-week & tomb sweeping
+ 9 10 11 12 13 14 15 w09 c8 review
+16 17 18 19 20 21 22 w10 mid term
+23 24 25 26 27 28 29 w11 c9 s3
+30                    
+      May 2017        
+Su Mo Tu We Th Fr Sa  
+    1  2  3  4  5  6 w12 c10 s3 personal web site
+ 7  8  9 10 11 12 13 w13 c11 split big files to upload
+14 15 16 17 18 19 20 w14 c12 vpn
+21 22 23 24 25 26 27 w15 c13 review
+28 29 30 31          w16 final exam, note: 29-30 off 4 dragon boat festival
+                      
+     June 2017        
+Su Mo Tu We Th Fr Sa  
+             1  2  3 - 
+ 4  5  6  7  8  9 10 -
+11 12 13 14 15 16 17 -
+18 19 20 21 22 23 24 -
+25 26 27 28 29 30    -

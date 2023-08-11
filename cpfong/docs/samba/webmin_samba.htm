@@ -1,0 +1,81 @@
+<html><head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<title>簡易設定samba教學</title></head>
+
+
+<body background="main_back.gif">
+
+
+<div align="center">
+  <table border="0" cellpadding="0" cellspacing="0" width="551" height="244" id="AutoNumber1" style="border-collapse: collapse;" bordercolor="#111111">
+    <tbody><tr>
+      <td width="559" height="46">
+        <p align="center"><font size="4" color="#000080">簡易設定samba教學</font><font color="#000080">(使用Webmin) 
+          </font> 
+        </p><hr></td>
+    </tr>
+    <tr>
+      <td width="559" height="312" valign="top">
+        <p><font face="新細明體" color="#000080" size="2">一般要設定網路上的芳鄰，還要很辛苦的跑到server去更改設定檔，其實可以透過webmin的web介面去簡易設定samba上面的網路分享喔!!</font></p>
+        <p><font face="新細明體" color="#ff0000" size="2">1.Samba所偵測的使用者名稱是依據windows中一開始的登入帳號(可以按開始 
+          &gt;&gt; 登出<br>
+          　看帳號是什麼)所以當要建立帳號的時候請先確認清楚。</font></p>
+        <p><font face="新細明體" color="#000080" size="2">2.請先確認webmin版本為0.970 以上</font></p>
+        <p><font face="新細明體" color="#000080" size="2">3.登入到webmin中選取上方伺服器選項再選"Samba 
+          視窗檔案分享"</font></p>
+        <p><font face="新細明體" color="#000080" size="2">4.到"Windows 網路"中可以做一些基本設定。</font></p>
+        <p><font face="新細明體" color="#000080" size="2">5.退回到<font color="#ff0000">"Samba 
+          視窗檔案分享"</font>選取認證將裡變 <font color="#ff0000">"使用加密密碼"</font> 
+          選"是"<br>
+          </font><font face="新細明體" color="#000099" size="2">此時"Samba 視窗檔案分享"這地方下面會多出密碼加密的三個選項。</font><font color="#000099" size="2"><br>
+          再來對這三個選項做個說明<br>
+          a.編輯Samba使用者和密碼. <br>
+          　管理者可以來到這設定使用者的密碼<br>
+          b.轉換Unix使用者到samba使用者. <br>
+          　將一般user轉換到samba user<br>
+          c.組態 Unix 和 Samba 使用者自動同步. <br>
+          　進來看就知道了......</font></p>
+        <p><font color="#ff0000" size="2">PS:組態 Unix 和 Samba 使用者自動同步中就算都選取了，Samba也不會跟系統的使用者同步<br>
+          　必須在使用者建立後再去"編輯Samba使用者和密碼"再設定密碼才可以使用</font></p>
+        <hr>
+        <p>建立檔案分享:</p>
+        <p><font size="2">　SAMBA預設有二個分享，一個是使用者分享(/home/使用者名稱)另一個是印表機分享<br>
+          使用者分享是會分享該使用者的子目錄給那名使用者使用<br>
+          印表機分享則是分享印表機給使用者使用</font></p>
+        <p><font size="2">首先先到Samba分享管理，點選新增檔案共用，在共用的目錄上選所要分享的目錄<br>
+          在共用名稱給所要分享的目錄命名再來按建立此時"Samba分享管理"就會多一個剛所分享出來的<br>
+          目錄這就完成了初步設定</font></p>
+        <p><font color="#ff0000" size="2">設定完後要注意使用者是否有權限修改該目錄，一般資源分享的整個目錄的權限都要設為777</font><font color="#ff0000"><br>
+          </font></p>
+        <hr>
+        <p>限定某些使用者才能使用:</p>
+        <p><font size="2">Samba有二種限制方法，一種是限制IP，一種是限制帳號<br>
+          一樣都是先到"Samba分享管理"選取所要設定的分享，再選密碼和進入控制 </font></p>
+        <p><font size="2">如果要用限制ip，就用<font color="#ff0000">"允許的主機"</font>或<font color="#ff0000">"拒絕的主機"</font>，在裡面打上ip就可以</font></p>
+        <p><font size="2">如果要限制使用者，在<font color="#ff0000">"重新確認使用者"</font>選<font color="#ff0000">" 
+          是"</font> 然後再依所要設定的形式填入使用者帳號</font></p>
+        <p><font size="2">如果要完全開放該資料夾，就在"訪客可進入"的地方選"是"<br>
+          "Unix 訪客使用者"設定成nobody就可以了</font></p>
+        <hr>
+        <p>Internet上連線網路上的芳鄰:</p>
+        <p><font color="#000000" size="2">如果要在Internet上能夠從網路上的芳鄰連線到主機，其實很簡單，<br>
+          只要去"<font face="新細明體">Samba 視窗檔案分享</font>"中的"<font face="新細明體">Windows 
+          網路"將裡面"WINS 模式"選成<font color="#ff0000">"作為WINS伺服器"</font></font></font></p>
+        <p><font face="新細明體" size="2" color="#000000">在client 上把wins server 加入samba 
+          server 的 ip 這樣就可以了</font></p>
+        <hr>
+        <p>故障排除:</p>
+        <p>網路上的芳鄰找不到??<br>
+          <font size="2">　　因為SAMBA走的通訊協定是 TCP/IP 所以可以先從 IP 設定下去找，同時工作群組、使用者帳號密碼都會造成主機無法顯示在網芳裡，除了這些應該就沒問題了吧</font></p>
+        <p>無法寫入檔案??<br>
+          <font size="2">　　這問題只有可能是目錄權限設定不對，請chmod 777 所要分享的資料夾，這樣就可以正常寫入檔案了</font></p>
+        <hr>
+        <p>如果還有問題歡迎來信到<a href="mailto:servce@gocar.idv.tw">servce@gocar.idv.tw</a>或到討論區留言，小弟馬上做修改</p>
+        </td>
+    </tr>
+    </tbody></table>
+</div>
+
+
+</body></html>

@@ -1,0 +1,18 @@
+tce-load -wi openssh
+
+ssh tc@localhost
+Connection refused
+
+sudo /usr/local/etc/init.d/openssh 
+
+sudo /usr/local/etc/init.d/openssh keygen
+
+tc@box:~$ sudo /usr/local/etc/init.d/openssh start
+Config file /usr/local/etc/ssh/sshdd_config not found
+
+cd /usr/local/etc/ssh/
+sudo cp sshd_config.example sshd_config
+
+passwd change tc password
+
+ssh tc@localhost

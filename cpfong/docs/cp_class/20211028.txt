@@ -1,0 +1,31 @@
+# indention
+
+#p61
+message= "hello world"
+print(message) #IndentationError: unexpected indent
+
+#p62
+magicians = ['john', 'tom']
+
+# python ./me.py ; cat -n me.py (check with number)
+for i in magicians:
+ print(i)
+
+#p63 init list
+many = list(range(1,11)) # via function list
+many = [i for i in range(0,11)] # via [] and ret value may use 0
+many = []; many[0]=0; many[1]=2 ... # init with empty
+
+#p68 slice : means to
+names=['john', 'mary', 'tom']
+print(names[0:1]) #note: print only one items instead of index 0 and 1
+
+names[1:] # 1 to end
+names[:2] # start from index 0
+
+#p76 indention
+4 spaces
+do NOT mix tab with spaces
+
+chapter 5 if
+#p82

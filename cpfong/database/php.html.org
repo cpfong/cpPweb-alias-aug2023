@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<TITLE>Operation System</TITLE>
+</HEAD>
+<BODY text="#000000" bgcolor="#ffffff">  
+
+<H2><A NAME="7"></A>PHP Related Site</H2>  
+<HR NOSHADE>
+<A HREF="http://php.net/" target=_top>PHP Home</A><BR> 
+<A HREF="http://php.netvision.net.il"target=_top>netvision</A><BR> 
+<A HREF="http://www.advhtml.com"target=_top>advhtml</A><BR> 
+<A HREF="http://vzone.virgin.net/sizzling.jalfrezi/"target=_top>Jalfrezi</A><BR> 
+<A HREF="http://www.ncsa.uiuc.edu/General/Internet/WWW/HTMLPrimer.html"target=_top>Beginer</A><BR> 
+<A HREF="http://www.teleport.com/~danal/Pages/making.html"target=_top>Danal</A><BR> 
+<A HREF="http://www.davesite.com/webstation/html/"target=_top>Davesite</A><BR> 
+
+<HR NOSHADE>
+
+</BODY>
+</HTML>  

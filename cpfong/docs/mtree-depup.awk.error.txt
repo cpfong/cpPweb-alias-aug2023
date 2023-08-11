@@ -1,0 +1,9 @@
+Q: ${NANO_TOOLS}/mtree-dedup.awk permission dined
+A:
+I'm betting /home is mounted with noexec and nosuid set.
+default.sh 
+ cat ${NANO_METALOG}.pre | ${NANO_TOOLS}/mtree-dedup.awk | \
+ cat ${NANO_METALOG}.pre | /usr/home/cpfong/bin/mtree-dedup.awk
+
+1 cp this mtree to ~cpfong/bin
+2 vi default.sh 

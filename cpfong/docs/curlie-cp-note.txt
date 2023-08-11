@@ -1,0 +1,3 @@
+
+curlie httpbin.org/header
+curlie -v PUT httpbin.org/status/201 X-API-Token:123 name=john

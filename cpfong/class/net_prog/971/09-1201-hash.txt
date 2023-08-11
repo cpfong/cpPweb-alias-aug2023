@@ -1,0 +1,86 @@
+chapter 6 雜湊
+
+6.1 何謂雜湊
+	6.1.1 為什麼要使用雜湊
+6.2 存取雜湊元素
+	6.2.1 存取整份雜湊
+	6.2.2 雜湊的賦值運算
+	6.2.3 大箭號
+6.3 雜湊處理函式
+	6.3.1 keys 和 values 函式
+	6.3.2 each 函式 
+6.4 雜湊的典型用途
+	6.4.1 exists 函式
+	6.4.2 delete 函式
+	6.4.3 雜湊元素安插
+6.5 雜湊 %ENV
+
+-----------
+6.1	array 中的 index 在 hash 中我們稱為 key
+	@a = (1..3); # $a[0]=1; $a[1]=2; $a[2]=3
+	於本 array 中所有 index 皆為數字, 但 hash 的 index (即 key) 可以為任意數值型態
+
+6.1.1	講完 hash 的 assign 後再回來本小節
+6.2	$family_name{"fred"  }="flintstone";
+	$family_name{"barney"}="rubble";
+
+	foreach $p ( qw / barney fred / ){
+       	 print "$p $family_name{$p}";
+	}
+6.2.1	%some_hash=("foo", 35, "bar", 12.4, 2.5, "hello", "wilma", 1.72e30, "betty", "bye\n");
+	@any_array=%some_hash; # 注意它的變數名稱為何使用 any 因為次序會變動
+	次序會變, 但是 key --> val 的關係不會動到
+6.2.3 	因為 key 和 val 的關係不明顯, 所以會使用 => 來把關係說明白
+	my %last_name=("fred" => "flintsone", "dino" => undef, "barney" => "rubble", "betty" => "rubble",);
+
+        my %last_name=("三" => "張", "四" => "李");
+        print "名為三的人姓", $last_name{'三'};
+
+6.3.1 	利用 keys 和 values 可以顯示出 hash 中的所以 keys 和 values
+	注意這二個函數都回傳一個 array
+	my %hash = ("a"=>1, "b"=>2, "c"=>3);
+	my @k = keys %hash;
+	my @v = values %hash;
+	print @k, "\n";
+	print @v, "\n";
+
+	註: 使用 keys 來找出 key 一定會和 foreach 同時使用, 它不若使用 while each 來得有效率, 因為 for 要把所有的東西都 load 進 memory, 但是 while 不必
+
+6.3.2 	使用 each 和 while 比上一小節的方便且不佔 memory, 所以應多用本法
+	
+	while (($k, $v) = each %hash){
+		print "$k => $v \n";
+	}
+
+	單字在文件中出現的次數
+	身份証字號找出姓名
+
+	while (<>){
+		chomp;
+		@a = split;
+		foreach (@a){
+			$h{$_}++;
+		}
+	}
+
+	while (($k, $v)=each %h){
+		print "$k ==> $v\n";
+	}
+	----
+        if (! open ID, "<id.txt") { die "cannot open $!\n"; }
+
+        while (<ID>){
+                chomp;
+                @a = split;
+                $h{$a[0]} = $a[1];
+        }
+        print "input id: \n";
+        chomp($in = <STDIN>);
+        print $h{$in};
+
+6.4.1
+	%books=(fred=>3, wilma=>1,);
+
+	if (exists $books{dino}){
+		print "dino has id\n";
+	}

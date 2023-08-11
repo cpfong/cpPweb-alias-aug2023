@@ -1,0 +1,555 @@
+<!doctype html system "html3.dtd">
+<!-- HTML Reference Card
+     Accompanies "Spinning the Web" (Andrew Ford) 
+             and "The WorldWideWeb Handbook" (Peter Flynn)
+            from International Thomson Computer Press
+     Copyright (c) 1994, 1995, Andrew Ford and Peter Flynn -->
+
+<!-- Typeset (eg .dvi, .ps) or printed (eg from a Web browser) 
+     copies of this card may be freely distributed. The source 
+     code in HTML may be accessed for display but remains the 
+     property of the copyright holders. -->
+
+<html>
+  <head>
+    <title>HTML Quick Reference Guide</title>
+    <link href="mailto:pflynn@www.ucc.ie" rev="author" title="Co-author">
+    <link href="ftp://www.ucc.ie/pub/html/htmlcard.ps" rel="copy"
+      title="Printable version, 6pp, book size, recto">
+    <link href="ftp://www.ucc.ie/pub/html/htmlcard_a4.ps" rel="copy"
+      title="Printable version, 2pp, A4, landscape">
+    <link href="ftp://www.ucc.ie/pub/html/htmlcard_letter.ps" rel="copy"
+      title="Printable version, 2pp, Letter size, landscape">
+    <base href="http://www.ucc.ie/~pflynn/books/">
+  </head>
+  <body>
+    <bodytext>
+      <table>
+	<tbody>
+	  <tr>
+	    <td colspan="2">
+<h1>HTML Quick Reference Guide</h1>
+</td><td><pre>   </pre></td>
+	    <td rowspan="2"><p><a href="http://www.thomson.com/intlitcp.html"><img align="middle" alt="(ITCP)"
+	  src="itcplogo.gif"></a></p></td>
+	  </tr>
+	  <tr>
+	    <td><p><cite>Spinning the
+Web</cite><br>Andrew Ford<br>1-850-32141-8</p>
+	    </td>
+	    <td>
+	      <p><cite><a
+href="http://www.thomson.com/itcp/www_handbook/default.html">The 
+WorldWideWeb Handbook</a></cite><br>Peter Flynn<br>1-850-32205-8</p></td>
+	  </tr>
+	</tbody>
+      </table>
+    <hr>
+      <h3>Simple rules of HTML</h3>
+    <ul>
+      <li><p>Element names and attribute names are not case sensitive:
+attribute <em>values</em> <strong>are</strong>;</li>
+      <li><p>Documents start with a <samp>&lt;!doctype...&gt;</samp>
+statement, followed by a header  and a text body all enclosed in
+<samp>&lt;html&gt;</samp>...<samp>&lt;/html&gt;</samp></li>
+      <li><p>The header is enclosed in
+<samp>&lt;head&gt;</samp>...<samp>&lt;/head&gt;</samp></li>
+      <li><p>The text body is enclosed in
+<samp>&lt;body&gt;</samp>...<samp>&lt;/body&gt;</samp></li>
+      <li><p>Comments are written as <samp>&lt;!-- A comment
+--&gt;</samp></li>
+    </ul> 
+      <p>Elements marked here with a pilcrow (&#182;) are in HTML3
+(additions to or changes from HTML 2.0, RFC 1866) and may not yet be
+supported by all browsers: elements marked with an asterisk (*) are
+obsolescent or deprecated. Optional attributes are given in [square
+brackets]. The full Document Type Descriptions (DTDs) of HTML 2.0 and
+HTML3 can be found at <samp><a
+href="http://www.w3.org/hypertext/WWW/MarkUp/">http://www.w3.org/hypertext/WWW/MarkUp/</a></samp>.</p>
+    <p>All structural elements can have <samp>class</samp> (for styles),
+<samp>lang</samp>, <samp>id</samp>, <samp>clear</samp> (for
+positioning), and
+<samp>background</samp> attributes. Heading and list-oriented
+elements can have <samp>seqnum</samp>, <samp>dingbat</samp>,
+<samp>src</samp>, and <samp>nowrap</samp>. The <samp>align</samp>
+attribute can be used to affect visual positioning (<i>eg</i>
+<samp>align="center"</samp>).</p>
+<h2>Sample document</h2>
+      <blockquote>
+	<bodytext>
+<pre>
+&lt;!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 3.0//EN"&gt; 
+&lt;html&gt;
+  &lt;head&gt; 
+    &lt;!-- A sample document --&gt; 
+    &lt;title&gt;Document title&lt;/title&gt; 
+    &lt;link rev="made" href="mailto:info@itpuk.co.uk"
+     rel="publisher" title="Publisher"&gt; 
+  &lt;/head&gt;
+  &lt;body&gt; 
+    &lt;h1&gt;Top-level heading&lt;/h1&gt; 
+    &lt;p&gt;First paragraph of text.&lt;/p&gt; 
+    &lt;ul&gt; &lt;!-- A bulleted list --&gt; 
+      &lt;li&gt;&lt;p&gt;First list item&lt;/p&gt;&lt;/li&gt; 
+      &lt;li&gt;&lt;p&gt;Second list item, with a hypertext 
+          &lt;a href="info.html"&gt;link&lt;a&gt; to another
+          file.&lt;/p&gt;&lt;/li&gt; 
+    &lt;/ul&gt;
+    &lt;h2&gt;Second-level heading&lt;/h2&gt;
+    &lt;p&gt;Another paragraph, &lt;img alt="Picture of me" 
+       align="bottom" src="mypic.gif"&gt;  with an
+       illustration.&lt;/p&gt; 
+  &lt;/body&gt;
+&lt;/html&gt; 
+</pre>
+	</bodytext>
+      </blockquote>
+    <h2>Header elements</h2>
+    <dl>
+      <dt><samp>&lt;title&gt;</samp>...<samp>&lt;/title&gt;</samp></dt>
+      <dd><p>Compulsory document title (not part of the text),  recommended
+maximum length 64 characters</p></dd> 
+      <dt><samp>&lt;link ...&gt;</samp></dt>
+      <dd><p>Relationships for the document as a whole:  common
+attributes  are <samp>rel</samp>, <samp>rev</samp>, <samp>href</samp></p></dd>
+      <dt><samp>&lt;base href="<i>url</i>"&gt;</samp></dt>
+      <dd><p>Default structure for any partial (incomplete)
+URLs in the document</p></dd>
+      <dt><samp>&lt;isindex&gt;</samp></dt>            
+      <dd><p>Identifies document as a script which handles processing
+(<i>eg</i> searches)</p></dd> 
+<dt><samp>&lt;meta ...&gt;</samp></dt>
+      <dd><p>Embed meta-information as if given by the server:  attributes
+<samp>http-equiv</samp>, <samp>name</samp>, <samp>content</samp></p></dd> 
+      <dt>&#182; <samp>&lt;range from="<i>id</i>" until="<i>id</i>"&gt;</samp></dt>
+      <dd><p>Specifies a portion of the document needing special
+treatment; <samp>from</samp> and <samp>until</samp> are identified using
+<samp>&lt;spot&gt;</samp></p></dd>
+	<dt>&#182; <samp>&lt;style notation="CSS"
+href="<i>url</i>"&gt;</samp></dt> 
+	<dd><p>Identifies the notation used in an associated style
+sheet or in <samp>style</samp> attributes in the text.</p></dd>
+    </dl>
+    <h2>Section headings</h2>
+    <dl>
+      <dt><samp>&lt;h<i>n</i>&gt;</samp>...<samp>&lt;/h<i>n</i>&gt;</samp></dt>
+      <dd><p>Section headings, six levels available
+<samp>&lt;h1&gt;</samp> to <samp>&lt;h6&gt;</samp>. May occur only
+between paragraphs, not within them.</p></dd> 
+	<dt>&#182; <samp>&lt;div class="..."&gt;</samp></dt>
+	<dd><p>Encloses a whole identifiable division (section, subsection
+<i>etc</i>) along with its heading.<p></dd>
+    </dl>
+      <h2>Block-oriented elements</h2>
+      <dl>
+	<dt><samp>&lt;p&gt;</samp>...<samp>&lt;/p&gt;</samp></dt>
+	<dd><p>Paragraphs of regular text</p></dd>
+	<dt><samp>&lt;address&gt;</samp>...<samp>&lt;/address&gt;</samp></dt>
+	<dd><p>Address information blocks</p></dd>
+	<dt><samp>&lt;blockquote&gt;</samp>...<samp>&lt;/blockquote&gt;</samp> (and &#182; <samp>&lt;bq&gt;</samp>)</dt>
+	<dd><p>Block quotations (must contain paragraphs or other
+structural markup)</p></dd>
+	<dt>&#182; <samp>&lt;banner&gt;</samp>...<samp>&lt;/banner&gt;</samp></dt>
+	<dd><p>Encloses static information to remain on display</p></dd>
+	<dt>&#182; <samp>&lt;note role="..."&gt;</samp>...<samp>&lt;/note&gt;</samp></dt>
+	<dd><p>Identifies footnotes, sidenotes etc</p></dd>
+	<dt><samp>&lt;pre&gt;</samp>...<samp>&lt;/pre&gt;</samp></dt>
+	<dd><p>Preformatted text (<tt>fixed-width characters</tt>; may
+also contain in-line markup)</p></dd>
+	<dt><samp>&lt;hr&gt;</samp></dt>
+	<dd><p>Horizontal rule</p></dd>
+	<dt>Lists, <samp>&lt;form&gt;</samp> and <samp>&lt;table&gt;</samp></dt>
+	<dd><p>See below<p></dd>
+	<dt>&#182; <samp>&lt;fig src="<i>url</i>"&gt;</samp></dt>
+	<dd><p>Encloses floating figures, giving image reference, with
+optional <samp>&lt;caption&gt;</samp> and <samp>&lt;credit&gt;</samp><p></dd>
+	<dt>&#182; <samp>&lt;math&gt;</samp></dt>
+	<dd><p>Still under development<p></dd>
+      </dl>
+      <h3>Lists</h3>
+    <dl>
+	<dt>&#182; <samp>&lt;lh&gt;</samp>...<samp>&lt;/lh&gt;</samp></dt>
+	<dd><p>List header</p></dd>
+	<dt><samp>&lt;ol&gt;</samp>...<samp>&lt;/ol&gt;</samp></dt>
+	<dd><p>Ordered lists, items numbered consecutively</p></dd>
+	<dt><samp>&lt;ul&gt;</samp>...<samp>&lt;/ul&gt;</samp></dt>
+	<dd><p>Unordered lists, items bulleted</p></dd>
+	<dt><samp>&lt;li&gt;</samp>...<samp>&lt;/li&gt;</samp></dt>
+      <dd><p>List items within ordered and unordered lists (must
+contain paragraphs or other structural markup)</p></dd>
+      <dt><samp>&lt;dl&gt;</samp>...<samp>&lt;/dl&gt;</samp></dt>
+      <dd><p>Definition lists</p></dd>
+      <dt><samp>&lt;dt&gt;</samp>...<samp>&lt;/dt&gt;</samp></dt>
+      <dd><p>Definition term in a definition list</p></dd>
+      <dt><samp>&lt;dd&gt;</samp>...<samp>&lt;/dd&gt;</samp></dt>
+      <dd><p>Definition discussion in a definition list (must contain
+paragraphs or other structural markup)</p></dd>
+    </dl>
+    <p>All lists may be nested. The <samp>&lt;ol&gt;</samp>,
+<samp>&lt;ul&gt;</samp>, and <samp>&lt;dl&gt;</samp> elements may
+have a <samp>compact</samp> attribute.</p> 
+    <h2>Inline elements</h2>
+    <h3>Logical markup</h3>
+    <dl>
+      <dt>&#182; <samp>&lt;abbrev&gt;</samp>...<samp>&lt;/abbrev&gt;</samp></dt>
+      <dd><p>Identifies an abbreviation</p></dd>
+      <dt>&#182; <samp>&lt;acronym&gt;</samp>...<samp>&lt;/acronym&gt;</samp></dt>
+      <dd><p>Identifies an acronym</p></dd>
+      <dt>&#182; <samp>&lt;au&gt;</samp>...<samp>&lt;/au&gt;</samp></dt>
+      <dd><p>Authors' names</p></dd>
+      <dt><samp>&lt;cite&gt;</samp>...<samp>&lt;/cite&gt;</samp></dt>
+      <dd><p><cite>Citations</cite>, such as literary references or
+product names</p></dd>
+      <dt><samp>&lt;code&gt;</samp>...<samp>&lt;/code&gt;</samp></dt>
+      <dd><p>Fragments of <code>computer code</code></p></dd>
+      <dt>&#182; <samp>&lt;del&gt;</samp>...<samp>&lt;/del&gt;</samp></dt>
+      <dd><p>Marks text as having been deleted but kept for reference
+purposes</p></dd>
+      <dt>&#182; <samp>&lt;dfn&gt;</samp>...<samp>&lt;/dfn&gt;</samp></dt>
+      <dd><p>A <dfn>defining instance</dfn> (usually
+indexable)</p></dd>
+      <dt><samp>&lt;em&gt;</samp>...<samp>&lt;/em&gt;</samp></dt>
+      <dd><p><em>Emphasis</em>, often rendered in italics</p></dd>
+      <dt>&#182; <samp>&lt;ins&gt;</samp>...<samp>&lt;/ins&gt;</samp></dt>
+      <dd><p>Marks new text inserted</p></dd>
+      <dt><samp>&lt;kbd&gt;</samp>...<samp>&lt;/kbd&gt;</samp></dt>
+      <dd><p>Specific <kbd>keyboard input</kbd></p></dd>
+      <dt>&#182; <samp>&lt;lang&gt;</samp>...<samp>&lt;/lang&gt;</samp></dt>
+      <dd><p>Identifies a language other than the basic one of the
+document</p></dd>
+      <dt>&#182; <samp>&lt;person&gt;</samp>...<samp>&lt;/person&gt;</samp></dt>
+      <dd><p>Personal names</p></dd>
+      <dt>&#182; <samp>&lt;q&gt;</samp>...<samp>&lt;/q&gt;</samp></dt>
+      <dd><p>Encloses quoted speech (browsers should add quotes
+automatically, according to language in use)</p></dd>
+      <dt><samp>&lt;samp&gt;</samp>...<samp>&lt;/samp&gt;</samp></dt>
+      <dd><p>Samples of <samp>literal characters</samp> (such as user
+input)</p></dd>
+      <dt>&#182; <samp>&lt;s&gt;</samp>...<samp>&lt;/s&gt;</samp></dt>
+	<dd><p><s>Strikeout</s> (such as in legal work) replaces <samp>&lt;strike&gt;</samp></p></dd>
+      <dt>&#182; <samp>&lt;spot id="<i>label</i>"&gt;</samp></dt>
+      <dd><p>Marks a reference point for
+<samp>&lt;range&gt;</samp></p></dd>
+      <dt><samp>&lt;strong&gt;</samp>...<samp>&lt;/strong&gt;</samp></dt>
+      <dd><p><strong>Strong emphasis</strong>, usually rendered in
+bold</p></dd>
+      <dt>&#182; <samp>&lt;sub align="..."&gt;</samp>...<samp>&lt;/sub&gt;</samp></dt>
+      <dd><p>Subscripts</p></dd>
+      <dt>&#182; <samp>&lt;sup
+align="..."&gt;</samp>...<samp>&lt;/sup&gt;</samp></dt>
+      <dd><p>Superscripts</p></dd>
+      <dt><samp>&lt;var&gt;</samp>...<samp>&lt;/var&gt;</samp></dt>
+      <dd><p>Computer or other <var>variable names</var></p></dd>
+    </dl>
+    <h3>Visual markup</h3>
+      <dl>
+	<dt><samp>&lt;b&gt;</samp>...<samp>&lt;/b&gt;</samp></dt>
+	<dd><p><b>Bold type</b></p></dd>
+	<dt>&#182; <samp>&lt;big&gt;</samp>...<samp>&lt;/big&gt;</samp></dt>
+	<dd><p>Designates bigger text</p></dd>
+	<dt><samp>&lt;br&gt;</samp></dt>
+	<dd><p>Forced<br>linebreak</p></dd>
+	<dt><samp>&lt;i&gt;</samp>...<samp>&lt;/i&gt;</samp></dt>
+	<dd><p><i>Italic type</i></p></dd>
+	<dt>&#182; <samp>&lt;small&gt;</samp>...<samp>&lt;/small&gt;</samp></dt>
+	<dd><p>Designates smaller text</p></dd>
+	<dt>&#182; <samp>&lt;tabstop id="<i>label</i>"&gt;</samp></dt>
+	<dd><p>Sets tab stop at current location</p></dd>
+	<dt>&#182; <samp>&lt;tab to="<i>label</i>"&gt;</samp></dt>
+	<dd><p>Tabs to the labelled position</p></dd>
+	<dt><samp>&lt;tt&gt;</samp>...<samp>&lt;/tt&gt;</samp></dt>
+	<dd><p><tt>Typewriter type</tt></p></dd>
+	<dt><samp>&lt;u&gt;</samp>...<samp>&lt;/u&gt;</samp> *</dt>
+	<dd><p><u>Underlined</u></p></dd>
+      </dl>
+      <h3><a name="a">Hypertext links</a></h3>
+      <p>May occur anywhere inline markup is valid.</p>
+      <dl>
+	<dt><samp>&lt;a
+href="<i>url</i>"&gt;</samp>...<samp>&lt;/a&gt;</samp></dt>
+	<dd><p>Link to another document or resource</p></dd>
+	<dt><samp>&lt;a
+href="<i>url</i>#<i>label</i>"&gt;</samp>...<samp>&lt;/a&gt;</samp></dt>
+	<dd><p>Link to a specific destination  in another document</p></dd>
+	<dt><samp>&lt;a
+href="#<i>label</i>"&gt;</samp>...<samp>&lt;/a&gt;</samp></dt>
+	<dd><p>Link to a specific destination in the  same document</p></dd>
+	<dt>&#182; <samp>&lt;a
+id="<i>label</i>"&gt;</samp>...<samp>&lt;/a&gt;</samp></dt>
+	<dd><p>Labels the surrounded text as a target (destination). The
+use of <samp>name</samp> may continue to be honoured.</p></dd>
+      </dl>
+    <p>An <samp>&lt;a&gt;</samp> element may contain both
+<samp>href</samp> and <samp>name</samp> attributes.</p>
+    <h3><a name="urls">Uniform Resource Locators (URLs)</a></h3>
+    <p>These
+specify the location of a resource for a hypertext link:</p>
+      <table border="border">
+	<tbody>
+	  <tr>
+	    <td><p><tt><b>http:</b></tt></p></td>
+	    <td><p><tt><b>//</b></tt></p></td>
+	    <td><p><tt><b>www.thomson.com<i>:80</i>/</b></tt></p></td>
+	    <td><p><tt><b>catalog/</b></tt></p></td>
+	    <td><p><tt><b>order.html</b></tt></p></td>
+	    <td><p><tt><b>?<i>searchterm</i><br>#<i>location</i></b></tt></p></td>
+	  </tr>
+	  <tr>
+	    <td valign="top"><p>one
+of...<br><tt>http:<br>gopher:<br>ftp:<br>telnet:<br>mailto:<br>news:</tt></p></td>
+	    <td></td>
+	    <td valign="top"><p>Internet server hostname or IP address
+with optional port. Email address. Newsgroup name.</p></td>
+	    <td valign="top"><p>Path (directory or folder
+names)</p></td>
+	    <td valign="top"><p>Filename and filetype</p></td>
+	    <td valign="top"><p>Options:<br><tt>?</tt> (searching)
+means the URL must be a script;<br>using a <tt>#</tt> location implies
+target label exists (see <a
+href="#a"><samp>&lt;a&gt;</samp></a>.</p></td> 
+	  </tr>            
+	  <tr><td colspan="6"><p><em><b>Note</b> <samp>mailto:</samp>
+and <samp>news:</samp> have no double slash.</em></p></td>
+	  </tr>
+	</tbody>
+      </table>
+    <h2>Images</h2>
+    <p>External images (those requiring a page to themselves) are
+specified with the <samp>&lt;a&gt;</samp> element as hypertext links.
+Inline images are specified with <samp>&lt;img src="<i>url</i>"
+[align="..."] [alt="..."]
+[ismap|usemap]&gt;</samp>...<samp>&lt;/img&gt;</samp>. The value of
+<samp>align</samp> can be <samp>top</samp>, <samp>middle</samp> or
+<samp>bottom</samp>.  The <samp>alt</samp> attribute provides text for
+non-graphical users and is  strongly recommended.</p>
+      <p>A server-side image map is an
+<samp>&lt;img&gt;</samp> with <samp>ismap</samp> inside  an
+<samp>&lt;a&gt;</samp> element pointing to a server map file:</p>
+    <pre>
+      &lt;a href="http://www.foo.bar/cgi-bin/imagemap/mypic"&gt;
+      &lt;img src="http://www.foo.bar/mypic.gif" alt="Image map" ismap&gt;
+      &lt;/a&gt;
+</pre>
+      <p>&#182; Client-side image maps are done with a similar construction
+but using <samp>usemap</samp> instead, and providing the coordinates
+of hotspots with the <samp>&lt;map&gt;</samp> element:</p>
+      <pre>
+      &lt;img src="http://www.foo.bar/mypic.gif" alt="Image map" usemap="#mine"&gt;
+      &lt;map name="mine"&gt;
+        &lt;area name="circle" coords="20,30,..." href="<i>url</i>"&lt;
+      &lt;/map&gt;
+</pre>
+      <p>&#182; Area names <samp>rect</samp> and <samp>polygon</samp> are
+also valid. The length of the <samp>coords</samp> value is limited to
+1024 characters.</p>
+    <h2>Forms</h2>
+    <dl>
+      <dt><samp>&lt;form method="..."
+action="<i>url</i>"&gt;</samp>...<samp>&lt;/form&gt;</samp></dt>
+      <dd><p>The URL must reference a script unless it uses
+<samp>mailto:</samp>. The <samp>method</samp> is <samp>GET</samp> (for queries)
+or <samp>POST</samp> (for data collection). Within
+a form, input fields are defined with:</p> 
+        <ul>
+	  <li><p>for multiline text input (surrounds prompting
+text):<br><samp>&lt;textarea name="..." rows="<i>n</i>"
+cols="<i>n</i>"&gt;</samp>...<samp>&lt;/textarea&gt;</samp></li>
+	  <li><p>for single-line input: <samp>&lt;input name="..."
+type="..." [...]&gt;</samp><br>The
+<samp>type</samp> can be one of <samp>text</samp>,
+<samp>checkbox</samp>, <samp>radio</samp>, <samp>hidden</samp>,
+<samp>password</samp>, <samp>reset</samp>, &#182; <samp>file</samp>, 
+<samp>scribble</samp>, <samp>audio</samp>, or <samp>submit</samp>.
+Other attributes are <samp>align</samp>, <samp>checked</samp>,
+<samp>size</samp>, <samp>maxlength</samp>, <samp>src</samp>, and
+<samp>value</samp>. All <samp>&lt;input&gt;</samp> fields of a
+<samp>radio</samp> or <samp>checkbox</samp> group must have the same
+<samp>name</samp>.</li>
+	  <li><p>for menus: 
+<samp>&lt;select name="..." [multiple]&gt;</samp>...<samp>&lt;/select&gt;</samp><br>Options are given with <samp>&lt;option [value="..."]&gt;</samp>...[<samp>&lt;/option&gt;</samp>]
+within the
+<samp>&lt;select&gt;</samp>...<samp>&lt;/select&gt;</samp>.
+Individual options can have an attribute of <samp>selected</samp> or <samp>disabled</samp>.
+If no <samp>value</samp> is given, the element content is used.</li>
+	</ul></dd>
+    </dl>
+<h3>Example form</h3>
+<pre>
+  &lt;hr&gt;
+    &lt;form method="GET" action="http://www.ucc.ie/cgi-bin/uncgi/formtest"&gt;
+      &lt;p&gt;Name: &lt;input name="name" type="text" size="20"&gt;&lt;br&gt;
+         Operating system: &lt;select name="opsys"&gt;
+        &lt;option&gt;Unix&lt;option&gt;VMS&lt;option&gt;Mac&lt;option&gt;DOS&lt;option&gt;&lt;/select&gt;&lt;/p&gt;
+      &lt;p&gt;&lt;textarea name="comments" rows="4" columns="40"&gt; 
+         Please write your comments here...&lt;/textarea&gt;&lt;/p&gt;
+      &lt;p&gt;&lt;input type="submit"&gt; &lt;input type="reset"&gt;&lt;/p&gt;
+    &lt;/form&gt; 
+  &lt;hr&gt;
+</pre>
+      <form method="GET" action="http://www.ucc.ie/cgi-bin/uncgi/formtest">
+	<p>Name: <input name="name" type="text" size="20"><br>
+         Operating system: <select name="opsys">
+	    <option>Unix<option>VMS<option>Mac<option>DOS<option></select></p>
+	<p><textarea name="comments" rows="4" columns="40"> 
+         Please write your comments here...</textarea></p>
+	<p><input type="submit"> <input type="reset"></p>
+      </form> 
+      <h3>Tables</h3>
+      <dl>
+	<dt><samp>&lt;table [frame="..."]
+[border]&gt;</samp>...<samp>&lt;/table&gt;</samp></dt>
+	<dd><p>Defines a table</p></dd>
+	<dt><samp>&lt;caption&gt;</samp>...<samp>&lt;/caption&gt;</samp></dt>
+	<dd><p>Supplies a caption</p></dd>
+	<dt><samp>&lt;thead&gt;</samp>, <samp>&lt;tbody&gt;</samp> (compulsory),
+and <samp>&lt;tfoot&gt;</samp></dt>
+	<dd><p>Enclose table header, body and foot</p></dd>
+	<dt><samp>&lt;tr&gt;</samp>...<samp>&lt;/tr&gt;</samp></dt>
+	<dd><p>Encloses a table row</p></dd>
+	<dt><samp>&lt;th&gt;</samp>...<samp>&lt;/th&gt;</samp></dt>
+	<dd><p>Encloses a column or row header inside a row</p></dd>
+	<dt><samp>&lt;td [colspan=x] [rowspan=x]&gt;</samp>...<samp>&lt;/td&gt;</samp></dt>
+	<dd><p>Encloses table data (a cell value or structural markup:
+be careful of mixed content)</p></dd>
+      </dl>
+      <blockquote>
+	<bodytext>
+      <pre>
+&lt;table frame="border"&gt;
+  &lt;caption&gt;Table 1. Survey Frame&lt;/caption&gt; 
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;th&gt;&lt;p&gt;Item&lt;/th&gt;&lt;th&gt;&lt;p&gt;Quantity&lt;/th&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td align="left"&gt;&lt;p&gt;Population&lt;/td&gt;&lt;td align="right"&gt;&lt;p&gt;384,000&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td align="left"&gt;&lt;p&gt;Sample&lt;/td&gt;&lt;td align="right"&gt;&lt;p&gt;384&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</pre>
+	  <table frame="border" border>
+	    <caption>Table 1: Survey Frame</caption>
+	    <tbody>
+	      <tr>
+		<th><p>Item</th>
+		<th><p>Quantity</th>
+	      </tr>
+	      <tr>
+		<td><p>Population</td>
+		<td align="right"><p>384,000</td>
+	      </tr>
+	      <tr>
+		<td><p>Sample</td>
+		<td align="right"><p>384</td>
+	      </tr>
+	    </tbody>
+	  </table>
+	</bodytext>
+      </blockquote>
+      <hr>
+      <h2>Special characters</h2>
+      <ul>
+	<li><p><tt>&amp;lt;</tt> (&lt; less-than symbol)</li>
+	<li><p><tt>&amp;gt;</tt> (&gt; greater-than symbol)</li>
+	<li><p><tt>&amp;amp;</tt> (&amp; ampersand)</li>
+	<li><p>&#182; <tt>&amp;quot;</tt> (&quot; unidirectional typewriter-style
+<tt>"</tt>double quote<tt>"</tt>)</li>
+	<li><p>&#182; <tt>&amp;nbsp;</tt> (non-breaking space)</li>
+	<li><p>&#182; <tt>&amp;shy;</tt> (soft hyphen</li>
+      </ul>
+      <h3><a name="isolat1">ISO Latin-1 characters</a></h3>
+      <pre>
+&amp;Agrave;  &Agrave;  capital A, grave accent      &amp;iuml;    &iuml;  small i, di&aelig;resis/umlaut   
+&amp;agrave;  &agrave;  small a, grave accent        &amp;ETH;     &ETH;  capital Eth, Icelandic
+&amp;Aacute;  &Aacute;  capital A, acute accent      &amp;eth;     &eth;  small eth, Icelandic
+&amp;aacute;  &aacute;  small a, acute accent        &amp;Ntilde;  &Ntilde;  capital N, tilde        
+&amp;Acirc;   &Acirc;  capital A, circumflex        &amp;ntilde;  &ntilde;  small n, tilde               
+&amp;acirc;   &acirc;  small a, circumflex          &amp;Ograve;  &Ograve;  capital O, grave accent      
+&amp;Atilde;  &Atilde;  capital A, tilde             &amp;ograve;  &ograve;  small o, grave accent             
+&amp;atilde;  &atilde;  small a, tilde               &amp;Oacute;  &Oacute;  capital O, acute accent      
+&amp;Auml;    &Auml;  capital A, di&aelig;resis/umlaut   &amp;oacute;  &oacute;  small o, acute accent        
+&amp;auml;    &auml;  small a, di&aelig;resis/umlaut     &amp;Ocirc;   &Ocirc;  capital O, circumflex   
+&amp;Aring;   &Aring;  capital A, ring              &amp;ocirc;   &ocirc;  small o, circumflex            
+&amp;aring;   &aring;  small a, ring                &amp;Otilde;  &Otilde;  capital O, tilde             
+&amp;AElig;   &AElig;  capital AE ligature          &amp;otilde;  &otilde;  small o, tilde               
+&amp;aelig;   &aelig;  small ae ligature            &amp;Ouml;    &Ouml;  capital O, di&aelig;resis/umlaut 
+&amp;Ccedil;  &Ccedil;  capital C, cedilla           &amp;ouml;    &ouml;  small o, di&aelig;resis/umlaut   
+&amp;ccedil;  &ccedil  small c, cedilla             &amp;Oslash;  &Oslash;  capital O, slash                   
+&amp;Egrave;  &Egrave;  capital E, grave accent      &amp;oslash;  &oslash;  small o, slash          
+&amp;egrave;  &egrave;  small e, grave accent        &amp;Ugrave;  &Ugrave;  capital U, grave accent           
+&amp;Eacute;  &Eacute;  capital E, acute accent      &amp;ugrave;  &ugrave;  small u, grave accent        
+&amp;eacute;  &eacute;  small e, acute accent        &amp;Uacute;  &Uacute;  capital U, acute accent      
+&amp;Ecirc;   &Ecirc;  capital E, circumflex        &amp;uacute;  &uacute;  small u, acute accent        
+&amp;ecirc;   &ecirc;  small e, circumflex          &amp;Ucirc;   &Ucirc;  capital U, circumflex          
+&amp;Euml;    &Euml;  capital E, di&aelig;resis/umlaut   &amp;ucirc;   &ucirc;  small u, circumflex            
+&amp;euml;    &euml;  small e, di&aelig;resis/umlaut     &amp;Uuml;    &Uuml;  capital U, di&aelig;resis/umlaut 
+&amp;Igrave;  &Igrave;  capital I, grave accent      &amp;uuml;    &uuml;  small u, di&aelig;resis/umlaut      
+&amp;igrave;  &igrave;  small i, grave accent        &amp;Yacute;  &Yacute;  capital Y, acute accent      
+&amp;Iacute;  &Iacute;  capital I, acute accent      &amp;yacute;  &yacute;  small y, acute accent        
+&amp;iacute;  &iacute;  small i, acute accent        &amp;THORN;   &THORN;  capital Thorn, Icelandic       
+&amp;Icirc;   &Icirc;  capital I, circumflex        &amp;thorn;   &thorn;  small thorn, Icelandic         
+&amp;icirc;   &icirc;  small i, circumflex          &amp;szlig;   &szlig;  small sharp s, German sz           
+&amp;Iuml;    &Iuml;  capital I, di&aelig;resis/umlaut   &amp;yuml;    &yuml;  small y, di&aelig;resis/umlaut
+</pre>
+    <h3>&#182; Mathematics</h3>
+      <p><math></math></p>
+    <dl>
+      <dt><samp>&lt;math
+[model="..."]&gt;</samp>...<samp>&lt;/math&gt;</samp></dt>
+      <dd><p>Encloses a formula</p></dd>
+      <dt><samp>&lt;box&gt;</samp>...<samp>&lt;/box&gt;</samp></dt>
+      <dd><p>Surrounds symbols to be treated as a whole, optional
+<samp>delim</samp> attribute</p></dd>
+      <dt><samp>&lt;over&gt;</samp> and
+<samp>&lt;atop&gt;</samp></dt>
+      <dd><p>Separate lined and unlined fractions</p></dd>
+      <dt><samp>&lt;above&gt;</samp>...<samp>&lt;/above&gt;</samp></dt>
+      <dd><p>Identifies numerator</p></dd>
+      <dt><samp>&lt;below&gt;</samp>...<samp>&lt;/below&gt;</samp></dt>
+      <dd><p>Identifies denominator</p></dd>
+      <dt><samp>&lt;root root="<i>n</i>"&gt;</samp></dt>
+      <dd><p>Root, degree specified as <i>n</i></p></dd>
+      <dt><samp>&lt;array&gt;</samp>...<samp>&lt;/array&gt;</samp></dt>
+      <dd><p>LaTeX-like arrays</p></dd>
+      <dt><samp>&lt;arow&gt;</samp>...<samp>&lt;/arow&gt;</samp></dt>
+      <dd><p>Row within an array</p></dd>
+      <dt><samp>&lt;item&gt;</samp>...<samp>&lt;/item&gt;</samp></dt>
+      <dd><p>Item within a row in an array</p></dd>
+    </dl>
+    <p>To minimize typing, <samp>&lt;sub&gt;</samp> and
+<samp>&lt;sup&gt;</samp> tags can be replaced with the underscore
+(<tt>_</tt>) and caret (<tt>^</tt>) respectively, and
+<samp>&lt;box&gt;</samp> tags can be replaced with {curly braces},
+e.g. <code>E=mc^2^</code></p>
+    <h3>&#182; <a name="iso8859">Additional characters from ISO 8859-1</a></h3>
+<pre>
+&amp;#160; &amp;nbsp;   &#160; non-breaking space          &amp;#177; &amp;plusmn; &#177; plus-or-minus sign          
+&amp;#161; &amp;iexcl;  &#161; inverted exclamation mark   &amp;#178; &amp;sup2;   &#178; superscript two          
+&amp;#162; &amp;cent;   &#162; cent sign                   &amp;#179; &amp;sup3;   &#179; superscript three        
+&amp;#163; &amp;pound;  &#163; pound sign                  &amp;#180; &amp;acute;  &#180; acute accent             
+&amp;#164; &amp;curren; &#164; general currency sign       &amp;#181; &amp;micro;  &#181; micro sign                
+&amp;#165; &amp;yen;    &#165; yen sign                    &amp;#182; &amp;para;   &#182; pilcrow (paragraph sign) 
+&amp;#166; &amp;brvbar; &#166; broken (vertical) bar       &amp;#183; &amp;middot; &#183; middle dot               
+&amp;#167; &amp;sect;   &#167; section sign                &amp;#184; &amp;cedil;  &#184; cedilla                  
+&amp;#168; &amp;uml;    &#168; umlaut/dieresis             &amp;#185; &amp;sup1;   &#185; superscript one          
+&amp;#169; &amp;copy;   &#169; copyright sign              &amp;#186; &amp;ordm;   &#186; ordinal indicator, male  
+&amp;#170; &amp;ordf;   &#170; ordinal indicator, fem      &amp;#187; &amp;raquo;  &#187; angle quotation mark, right   
+&amp;#171; &amp;laquo;  &#171; angle quotation mark, left  &amp;#188; &amp;frac14; &#188; fraction one-quarter          
+&amp;#172; &amp;not;    &#172; not sign                    &amp;#189; &amp;frac12; &#189; fraction one-half             
+&amp;#173; &amp;shy;    &#173; soft hyphen                 &amp;#190; &amp;frac34; &#190; fraction three-quarters       
+&amp;#174; &amp;reg;    &#174; registered sign             &amp;#191; &amp;iquest; &#191; inverted question mark        
+&amp;#175; &amp;macr;   &#175; macron                      &amp;#215; &amp;times;  &#215; multiply sign                 
+&amp;#176; &amp;deg;    &#176; degree sign                 &amp;#247; &amp;div;    &#247; division sign                 
+</pre>
+    <hr>
+<!--
+    <p>Copies of this card can be downloaded in PostScript
+and <code>.dvi</code>
+format for <a href="ftp://www.ucc.ie/pub/html/htmlcard_a4.ps">A4</a> and 
+<a href="ftp://www.ucc.ie/pub/html/htmlcard_letter.ps">Letter</a> size
+stationery from <code><a
+href="ftp://ftp.thomson.com/itcp/WebExtras/">ftp://www.thomson.com/itcp/WebExtras/</a></code>
+using anonymous FTP. Information about ITCP's titles can be obtained
+from <code><a
+href="http://www.thomson.com/intlitcp.html">http://www.thomson.com/intlitcp.html</a></code>.</p>
+-->
+  </body>
+</html>
+

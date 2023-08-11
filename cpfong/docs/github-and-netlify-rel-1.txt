@@ -1,0 +1,10 @@
+二者不同
+--
+github: 空間, 用來存放資料 hard disk, space for data
+netlify: 控制平台 control platform
+
+account: 登入
+--
+netlify use github account to login: net 不必申請另外的帳戶而是依附在 github 下用它的帳號來登入
+netlify logout does NOT mean logout, github has to logout first!: 登出時 netlify 不是真正登出而應 github 先登出，netlify 再登出
+

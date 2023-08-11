@@ -1,0 +1,44 @@
+ref: 
+http://n4jj.x.rootbsd.net:8080/~cpfong/docs/cp_class/ec2-vpn-mac-tunnelblick.txt
+
+0. make no-ip work 1st
+1. add udp 1194 into security group
+2. sudo yum install -y openvpn (server side)
+ cd /etc/openvpn/
+ # ls ~/00bsd_my_doc/aws/vpn/00ReadME.txt (step to make openvpn.config.tgz)
+ sudo curl -O http://199.102.79.18:8080/tmp/openvpn.config.tgz
+ tar xfvz openvpn.config.tgz
+ service openvpn start
+ cat ./rc.local >> /etc/rc.local
+ reboot
+ now mac client with connect to server
+
+setup openvpn client 4 windows (4 steps)
+--
+download software from here:
+http://help.unotelly.com/support/articles/184301-openvpn-desktop-client-setup-windows-
+
+Step 1: Download and Install the OpenVPN Desktop Client
+Step 2: Download OpenVPN Config File
+Step 3: Add OpenVPN Configuration File to the Desktop Client
+Step 4: Connect to YourNewVPNServer
+
+
+setup tunnelblick vpn client 4 mac
+--
+scp ec2-user@vpn.mic.ifong.org:~/new-vpn.key .
+install tunnelblick.config
+now client vpn UP
+
+-- client config @ mac
+dev tun
+proto udp
+remote vpn.cp.ifong.org 1194
+resolv-retry infinite
+nobind
+secret openvpn-key.txt
+ifconfig 192.168.2.2 192.168.2.1
+comp-lzo
+verb 3
+dhcp-option DNS 8.8.8.8
+redirect-gateway def1

@@ -1,0 +1,55 @@
+vi foo.txt
+--
+
+ -- in and out :q!
+ -- cmd mode vs insert mode
+ -- cursor movement hjkl
+ -- i : insert mode
+ -- a : append mode
+ -- :q!		no write and quit
+ -- :wq!	write quit 
+ -- x		cmd mode to remove one character
+ -- 5x		remove 5 characters
+ -- dd		delete one line
+ -- 2dd		delete two lines
+ -- dw		delete one word
+ -- y		yank
+ -- yw		yank a word
+ -- 2yy		yank 2 lines
+ -- p		paste
+ -- $		to end
+ -- 0		to front
+ -- /		search then n to next
+ -- u		command mode undo
+
+ -- modify something and save
+ -- esc		insert mode --> cmd mode
+
+
+echo
+
+env variable
+--
+echo $SHELL
+echo $HOME
+
+vi ~/.bashrc
+PS1="hello-> "
+:wq!
+source ~/.bashrc
+
+mouse copy paste
+mouse left drag (copy)
+mouse right click (paste)
+
+mkdir		make a directory
+rmdir		remove a directory, cannot remove empty dir, use rm -fr to remove a non empty dir
+cd		change directory
+rm		remove a file
+rm -fr		force to remove whole directory
+pwd		show currrent directory
+cd ..		move up directory
+cd ~		cd to HOME directory just like cd
+
+change bash system prompt
+source ~/.bashrc

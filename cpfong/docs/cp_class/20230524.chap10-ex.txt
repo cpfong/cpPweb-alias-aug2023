@@ -1,0 +1,24 @@
+Example10-ex1
+--
+fill in $b$1 $b$2
+sum($f$6:f6) --> sum until me
+$d$5 == -$b$1
+$d$6 == =NPV($B$2,$C$6:C6)+$D$5
+
+Exampl10-ex2
+--
+fill in $c$4:$c$7 according to ex2
+PMT is payment
+
+Exampl10-ex3
+--
+DATA --> future analyze --> target search
+target is $B$6
+
+Exampl10-ex4
+--
+vertical!!
+add monthly pay using PMT
+DATA --> future analyze --> blue print manager
+
+3 banks, however everyone is based on $b$2 $b$3 $b$4 and values differ

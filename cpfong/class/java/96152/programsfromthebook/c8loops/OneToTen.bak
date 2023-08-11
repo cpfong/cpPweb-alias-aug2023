@@ -1,0 +1,43 @@
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+class OneToTen extends JFrame implements ActionListener {
+
+    private JButton button;
+    private JTextField textField;
+
+    public static void main (String []  args) {
+        OneToTen demo = new OneToTen();
+        demo.setSize(400,300);
+        demo.createGUI();
+        demo.show();
+    }
+
+    private void createGUI() {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        Container win = getContentPane();
+        win.setLayout(new FlowLayout());
+
+        button = new JButton("Press me");
+        win.add(button);
+        button.addActionListener(this);
+
+        textField = new JTextField(30);
+        win.add(textField);
+    }
+
+    public void actionPerformed(ActionEvent event) {
+        int number;
+String oneToTen;
+
+        number = 1;
+        while (number <= 10) {
+            oneToTen= oneToTen+ Integer.toString(number) + " ";
+            number++;
+
+        }
+        textField.setText(oneToTen);
+    }
+}

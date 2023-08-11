@@ -1,0 +1,12 @@
+$ cat foo
+$ cat foo | perl ./test.sh
+abcd line1
+defg line2
+
+$ cat test.sh
+#!/bin/sh
+
+while IFS= read -r line
+do
+ printf "$line\n"
+done </dev/stdin

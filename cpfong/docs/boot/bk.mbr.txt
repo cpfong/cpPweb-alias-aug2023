@@ -1,0 +1,17 @@
+Posted by Carthik in guides, ubuntu. 
+
+I found myself in the situation of helping a friend reinstall windows on a system which also has Ubuntu on it. In other words, it was a dual boot system, and we were both afraid that re-installing Windows will overwrite the Master Boot Record (MBR) and make it impossible to boot into Ubuntu in the short term. So we devised a plan, with a little help from google to backup his MBR before reinstalling windows, and then restoring it after reinstalling windows.
+
+Create a backup of your MBR by doing a:
+
+$dd if=/dev/hdx of=MBR-backup bs=512 count=1
+
+That should read "create a disk dump of the input file, which is /dev/hdx (change to hda, or hdb or sda, depending on where the MBR is on your computer), and save it in the output-file MBR-backup in the directory from where the command is issued. Backup the first sector only, while you are at it".
+
+Now that is the backup of your MBR. Restore it later using:
+
+$dd if=MBR-backup of=/dev/hdx bs=512 count=1
+
+Again, change hdx to hda, or hdb or wherever the MBR needs to be restored to. You may have to use a live cd to restore the backup since you will be unable to login to Linux after you reinstall Windows.
+
+As with all other advice, take this with a pinch of salt, and search on google for a solution to your problem, understand the solution and then embark on your mission!

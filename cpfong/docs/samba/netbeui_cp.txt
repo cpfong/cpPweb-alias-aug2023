@@ -1,0 +1,188 @@
+*
+
+淺談網路上的芳鄰
+
+* _駱鴻凱_
+
+  第一次接觸時，相信很多人會對桌面上「網路上的芳鄰」圖示感到新奇有趣。點
+選這個圖示後，許多電腦呈現在眼前，無數的網路資源隨手可得，果然是很方便。
+但方便之餘遺也有遺憾，網路確定正常，就是看不到想要的電腦；經常點選一部電
+腦後被告知「不存在」，或是手電筒在視窗內不斷搖呀搖，等後多時才顯示出來，
+令人感到不解，因此許多人對它是又愛又恨。本篇文章就帶您一起了解「網路上的
+芳鄰」是如何幫助我們取得網路資源，以及各種狀況產生的原因，好讓今後使用它
+時能得心應手。
+
+  ※以下所指「網路」一詞，係指 Microsoft 區域網路。
+
+  ※「電腦」表示作業系統為 Windows NT 3.5 以上或 Windows 95/98 。
+
+使用網路上的芳鄰
+
+  試想在 Microsoft 網路中，若不使用網路芳鄰，該如何取用網路上分享的資
+源？您可以在 DOS 模式下使用 net use 指令，如： *net use z: \\*<computer
+name>\<shared name>
+
+  以上指令表示連接網路磁碟機。雖然可以達到目的，但前題是您必須先知道分享
+目錄名稱及所在位置，而且輸入指令的方式不符合 Windows 的精神。 使用網路上
+的芳鄰當然就沒有這個困擾，因此它的確是好用的工具。
+
+  網路如何設定才能使用網路上的芳鄰？在 WIN 95 或 WIN 98 中，進入「控制
+台」，選取「網路」，在「組態」頁內，確定安裝以下元件
+
+  1. 網路卡驅動程式
+  2. 至少一種通訊協定，如 TCP/IP、NetBEUI 或 IPX/SPX
+  3. Client for Microsoft Networks
+  4. File and Printer sharing for Microsoft Networks
+
+  安裝第三項後便可存取網路上的 WIN 95/98 或 NT 機器，也就是具有 Client
+的功能；安裝第四項表示具有 Server 功能， 其他人便可在網路芳鄰內看到您的
+電腦。如果要存取 NetWare Server ，則第二項必須要有 IPX/SPX ，第三項得改
+為 Client for NetWare Networks。
+
+  至於 NT，同樣進入「控制台」，選取「網路」，在「介面卡」及「通訊協定」
+頁內， 確定已安裝適當的網路卡驅動程式及至少一種通訊協定，便可使用網路芳
+鄰，因為 NT 於安裝時已強制給定 Server (相當於 File and Printer sharing
+for Microsoft Networks)及Workstation(Client for Microsoft Networks)兩個
+Service ，您只要進入「控制台」，選取「服務」，確定這兩個 Service 處於啟
+動狀態即可。如果要存取 NetWare Server，除確定安裝 NWLink (IPX/SPX) 通訊
+協定之外，於「控制台」/「網路」「服務」頁內，NT Workstation 上必須加裝
+Client Service for NetWare， NT Server 上則加裝Gateway Service for
+NetWare。
+
+進入主題：Browser Service
+
+  執行網路上的芳鄰，當您看到許多電腦或網域名單時，可曾想到這些名單如何得
+來？如果是執行當時才開始尋找電腦，尋找方式除了廣播外別無他法，多部電腦同
+時執行的結果，勢必引發網路大塞車，因此 Microsoft 以 Browser Service 作為
+解決方法。網路上必須有數部電腦擔任 Browser， 維護並隨時更新網路上的電腦
+與網域名單，任何一部電腦執行網路上的芳鄰時，便可向Browser要求名單，然後
+將名單顯示在視窗內。
+
+  擔任 Browser 的電腦是由作業系統自行決定，並以競選的方式來取得資格，當
+選條件大致依照以下優先順序：
+
+  1. 網域主控站 (Primary Domain Controller, PDC)
+  2. 網域備份控制站 (Backup Domain Controller, BDC)
+  3. NT Server
+  4. NT Workstation
+  5. WIN 98/95
+  如果作業系統相同，則比較版本，新版優先權較舊版高。
+
+  Browser 可細分以下四種身份：
+
+  1. Potential Browser：尚未擔任Browser，但可發出競選通知並有機會成為
+Browser
+  2. Master Browser：每個網域或群組必須且只有一部電腦作為Master
+Browser，維護該網域內電腦的名單
+  3. Backup Browser：每12分鐘複製Master Browser上的名單。當網域內的電腦
+數目低於15部時， Backup Browser通常只有一部，由Master Browser 兼任，超過
+此數目時，由 Master Browser 指定一部 Potential Browser 來擔任第二個
+Backup Browser
+  4. Domain Master：維護網路上網域或群組名單，提供給所有 Master Browser。
+
+  當網域或群組內第一部電腦開機時，它會檢查本身是否為 Potential Browser
+，若是，則成為 Master Browser ，並對整個網路廣播宣告，其它 Master
+Browser 收到此一宣告後便將該網域記錄到網域名單。若第二部開機的電腦層級較
+第一部高，則會將 Master Browser 搶過來，第一部便失去此身份，因此PDC 一定
+是 Master Browser 。
+
+  網路上任一電腦 (Client) 第一次執行網路芳鄰時，會對整個網路發出廣播提出
+要求，網域內的Master Browser接到此一訊息後，便將Backup Browser名單回應給
+Client，Client依據名單再向Backup Browser提出要求，Backup Browser接到訊息
+後，才將網路上所有網域或群組的電腦名單提供給Client。之所以如此二來二往，
+主要是避免Master Browser負荷過多的要求。當Client第二次執行網路芳鄰時，就
+會直接向Backup Browser提出要求。
+
+  當網路上已俱備Master Browser 與Backup Browser，任何一部層級較低的電腦
+開機後，會發出廣播宣告加入網域或群組，Master Browser接到此訊息後，便將該
+電腦名稱加入名單內，該電腦每12分鐘會主動向Master Browser宣告健在。前面已
+提過，Backup Browser每12分鐘才會向Master Browser複製名單，因此該電腦開機
+後幾分鐘之內，網路上除了Master Browser外，沒有任何一部電腦的網路芳鄰內可
+以看得到該電腦，運氣最壞是12分鐘後才看得到。
+
+  而當一部非Browser的電腦關機後，它不會主動通知Master Browser，在三次宣
+告健在的週期內，也就是36分鐘後，Master Broaser才會將該電腦從名單中移除。
+因此再加上Master Browser 與Backup Browser每12分鐘複製週期，每部電腦的網
+路芳鄰內最多在48分鐘之內還可以見到該電腦，只是點選後得不到想要的就是了。
+
+  如果Master Browser關機，它會主動發出廣播，網域或群組內所有的Potential
+Browser便展開競選。新當選的Master Browser必須發出廣播，要求網域或群組內
+的電腦回應健在，以便重新建立名單。但是一旦Master Browser不正常關機，必須
+等待Backup Browser要求複製名單時才會查覺。若Master Browser身兼Backup
+Browser且只有一部Backup Browser，配合以上兩種狀況，網路上的芳鄰除了手電
+筒在搖之外，是看不到任何電腦的。
+
+  本節敘述的內容僅說明網路上的芳鄰如何顯示名單，至於點選某部電腦後發生了
+什麼事？為何點選後等了老半天才顯示分享目錄呢？以下就針對此現象繼續討論。
+
+NetBIOS名稱解析
+
+  NetBIOS名稱解析是Windows對於電腦名稱的一種辨識方法。對於NetBIOS這個名
+稱的意義在此不作說明。使用此方法的應用程式稱為NetBIOS AP，「網路上的芳
+鄰」即是NetBIOS AP。網域、群組和電腦名稱對NetBIOS AP來說稱為NetBIOS
+Name，換句話說，NetBIOS AP只認得NetBIOS Name。
+
+  既然「網路上的芳鄰」只認得NetBIOS Name，因此使用不同網路通訊協定時，便
+需不同的名稱解析方法，才能適用於該通訊協定。 以TCP/IP來說，NetBIOS名稱解
+析便是將NetBIOS Name對應至IP位址。以下就僅針對TCP/IP來作進一步的探討。
+
+  圖一為使用TCP/IP時的NetBIOS名稱解析流程，點選網路芳鄰內某一部電腦後，
+作業系統首先會查詢本機的NetBIOS Cache有無該電腦的IP位址記錄。您可在DOS模
+式下執行以下指令得知是否有記錄：
+*nbtstat –c*
+
+  獲得了IP位址，便可向該電腦進行登入的要求。若查無記錄，則第二步驟會向
+WINS (Windows Internet Name Service) 伺服器查詢。WINS伺服器內除了記錄電
+腦名稱與IP位址對應之外，還記錄了Master Browser、PDC等是由哪一部電腦擔
+任。名稱解析要能進入第二步驟，執行網路芳鄰的那部電腦必須為WINS Client，
+方法是在網路的TCP/IP設定中，進入WINS設定頁內，輸入WINS伺服器的IP位址即
+可。此外網路上所有電腦都為WINS Client，此步驟才能發揮最大功效。
+
+  若不是WINS Client 或WINS伺服器內無記錄，就必須進入第三步驟──向網路發出
+廣播查詢。一旦連廣播都沒回應，通常表示沒有希望了，或是點選的那部電腦在別
+的網路區段上，因此第四步驟──使用LMHOSTS檔案便可解決。此檔案位在NT的Winnt
+\System32\Drivers\Etc目錄，以及WIN 95/98的Windows目錄內。NT預設狀況下
+LMHOSTS檔案是不存在的，必須將Lmhosts.sam檔案更名才可，同時也必須手動加入
+電腦名稱與IP位址的對應，如：
+*192.9.200.8 aresweb *
+
+  第五與第六步驟是將NetBIOS Name當成Host Name來作解析。Host Name是
+Windows Sockets AP，如HTTP、FTP等所辨識的名稱，雖然也是電腦名稱，但與
+NetBIOS Name是不同的。在WIN 95/98之下， 必須在TCP/IP的DNS設定頁內選取
+「啟動DNS」；而NT下必須在TCP/IP的WINS設定頁內，選取「啟用DNS for Windows
+解析」。請注意網路上所有電腦的DNS設定頁內，「主機名稱」 (Host Name) 與電
+腦名稱 (NetBIOS Name) 必須一致。確認後，名稱解析便轉為Host名稱解析階段
+了。HOSTS檔案與LMHOSTS檔案位於同一目錄裡，也是必須手動加入記錄。在TCP/IP
+的DNS設定頁內指定DNS伺服器IP位址便可進入第六步驟。名稱解析若進入這兩個步
+驟，在網路上的芳鄰內，應該只能見到砂漏轉來轉去，然後顯示該電腦不存在，因
+為這兩個步驟通常是為了存取UNIX機器而設。
+
+效能的探討
+
+  由以上兩節討論中，不難發現「廣播」是網路芳鄰的最愛，多部電腦使用的結果
+必使網路上充滿垃圾，如何將廣播封包減到最少又可暢快地使用？以下提供兩個簡
+單的方法。
+
+  1.使用單一網路通訊協定：Windows允許使用多種通訊協定，如TCP/IP、
+NetBEUI、IPX/SPX等，雖然很方便，但也幫助廣播製造了更多垃圾，同時也減緩存
+取網路資源的速度，只使用一種通訊協定當然是最理想不過了，因此若沒必要，請
+將多餘的通訊協定移除。
+
+  2. 使用WINS伺服器：配合使用TCP/IP，NT Server提供WINS伺服器功能，安裝
+後，只要網路上所有電腦都成為WINS Client，WINS伺服器便自動建立NetBIOS
+Name記錄，執行網路芳鄰時就直接向WINS伺服器查詢Master Browser與Backup
+Browser的IP位址，然後直接向Backup Browser要求名單，點選任何一部電腦時也
+是向WINS伺服器取得該電腦的IP位址，因此從頭到尾都不必廣播，加上處於
+NetBIOS名稱解析的第二步驟，「快感」將可預期。除此之外，當公司內部以
+Router區隔成多個區段，若沒有WINS伺服器，網路芳鄰內將無法看到其它區段內的
+電腦。
+
+結語
+
+  本篇文章儘量以最少篇幅來解說網路上的芳鄰，若有欠缺周詳之處，或有錯誤敘
+述，敬請見諒並指正，也歡迎共同討論。關於Browser Service、NetBIOS Name以
+及NetBIOS 名稱解析的詳細資料，或是如何更改登錄來調整Browser的運作方式與
+NetBIOS名稱解析流程，請參考Microsoft Windows NT Resource Kit或Microsoft
+Windows 95/98 Resource Kit。
+
+圖一、NetBIOS名稱解析流程

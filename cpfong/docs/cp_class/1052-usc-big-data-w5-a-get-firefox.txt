@@ -1,0 +1,10 @@
+powershell at windows 2008 server
+
+# stub format
+Invoke-WebRequest -Uri 'https://download.mozilla.org/?product=firefox-stub&os=win&lang=en-US' -OutFile ./firefox-stub.exe
+
+# latest us windows
+Invoke-WebRequest -Uri 'https://download.mozilla.org/?product=firefox-latest&os=win&lang=en-US' -OutFile ./firefox-latest.exe
+
+# google drive is OK too (make gdrive file public first)
+PS C:\Users\Administrator> Invoke-WebRequest -Uri "https://drive.google.com/uc?id=1A4ptjtfKqcukSnE5UVk2YVRkLXM&export=download" -Outfile ./local.firefox52.exe

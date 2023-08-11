@@ -1,0 +1,67 @@
+chapter 2: 純量資料 scalar data
+
+複習上回: 數值的六個運算元.   
+2.2.3 字串算符
+2.2.4 數值與字串間的自動轉換
+2.4 純量變數
+
+2.5 用 print 輸出結果
+	2.51 在字串裡安插純量變數
+	2.52 算符的優先順序與結合性 
+	2.53 比較算符
+2.6 if 控制結構
+	2.61 布林值
+2.7 取得使用者的輸入
+	2.71 chomp 算符
+2.8  while 控制結構
+2.9  undef 值
+2.10 defined 函式
+
+---- 重點整理 ----
+複習上回: 數值的六個運算元.   
+
+2.51	$what = '香蕉';
+	print "我愛的水果為$what";
+2.53	比較算符分成數值比較和字串比較
+	==, >=, ... 等為數值使用, eq, ne ... 則為字串比較
+	$a = 1; if ($a == 1)
+	$a = '1'; if ($a eq 1)
+
+	以下為一個有趣的例子:
+	$a = 1; # note $a = '1' 也是如此
+	if ($a == 1){ print "var a equal number 1 \n"; }
+	if ($a eq 1){ print "var a equal string 1 \n"; }
+	結果二個都會印出, 因為在運算子有一個特性會把前後的運算元變成它想要的型式
+2.71	$line = <STDIN>;
+	if ($line eq "\n"){
+		print "you input an empty string\n";
+	}
+	else {
+		print "you have input the following:\n$line\n";
+	}
+	
+	chomp($line=<STDIN>);
+	print $line;
+
+	$line="abc\n"; $r = chomp $line; print $r;
+	$line="abc  "; $r = chomp $line; print $r;
+2.8	$c = 0;
+	while ($c < 10){
+		$c += 2;
+		print "now $c \n";
+	}
+2.9	變數未定義之前它的值為 undef, 注意: 它不是 0 也不是空字串, 它的名字
+	就叫 undef, 但是如果拿來使用時, 若為文字型態則為空字串, 若為數字則為 0
+	是以所有的變數 "不必" 先初始化! 因為一使用時即初始化了.
+	$n = 1; #$sum 在此例中即由 undef 變成了 0
+	while ($n < 11){
+		$sum += $n;
+		$n++;
+	}
+
+	if ($not_number == undef){ print "not_number is undefined yet\n"; }
+	if ($not_string eq undef){ print "not_string is undefined yet\n"; }
+
+	while (<STDIN>){
+		print;
+	}

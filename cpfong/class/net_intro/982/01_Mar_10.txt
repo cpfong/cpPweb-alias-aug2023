@@ -1,0 +1,26 @@
+個人首頁: http://cc.fotech.edu.tw/~你的帳號
+例如: http://cc.fotech.edu.tw/~s971306121
+http://cc.fotech.edu.tw/~s972206101
+
+原理: pc -> 集線器(Hub) -> 閘道器(Gateway) -> 電算中心(Lan 區網) -> 外界(Wan 廣網域)
+
+step1. 是否取到 ip (身份)? ipconfig /all (使用 cmd 叫出 dos)
+step2. 是否可以連到閘道器 ? ping
+step3. 是否可以連到雅虎 ? ping
+  
+1. 瞭解問題：因為之前我做了什麼動作而導致無法連線？
+2. 確認 IP： 先看看自己的網卡有無驅動 (控制台)？ 正確的 IP 來連線？
+3. 確認區網連線：利用 ping 來溝通內部兩部主機
+4. 確認對外連線：以 ping 的方法確定對外連線是可以成功的；
+5. 確認 DNS 查詢：利用 nslookup 或 host 或 dig 檢查 www.google.com 看看；
+
+6. 確認對方伺服器正常服務：是否對方伺服器忙線中？或他的機器掛了？
+7. 確認我方伺服器：是否某些服務沒有正確啟動？可利用 netstat 檢查， 是否某些安全機制的套件沒有開放，例如 SELinux 這項機制；
+8. 防火牆或權限的問題：是否由於權限設定錯誤所致？ 是否由於您的機器有防火牆忘記啟用可連線的埠口所致？這個可以透過 tcpdump 來處理！ 
+
+ip: 身份 id
+mask: 網路遮罩
+gateway: 閘道器
+dns: 名稱伺服
+
+如何設定 ip, mask, gateway, DNS ?

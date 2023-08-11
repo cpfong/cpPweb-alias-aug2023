@@ -1,0 +1,30 @@
+f = 'pi_million_digits.txt'
+f2= 'data'
+
+with open(f) as fh:
+    lines = fh.readlines()
+
+s=[0] * 3
+
+with open(f2) as fh2:
+    line2s=fh2.readlines()
+
+i=0
+for line in line2s:
+ l=line.rstrip()
+ s[i]=l
+ i = i+1
+
+pi_string = ''
+
+for line in lines:
+    pi_string += line.strip()
+
+print(s)
+
+count=0
+for i in s:
+ if i in pi_string:
+   count += 1
+
+print(f"total count = {count}")

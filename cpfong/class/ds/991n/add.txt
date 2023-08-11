@@ -1,0 +1,21 @@
+    Sub Main()
+        Dim a(,) As Integer = {{0, 0, 0, 0}, {0, 1, 1, 1}, {0, 2, 2, 2}}
+        Dim b(,) As Integer = {{0, 0, 0, 0}, {0, 2, 2, 2}, {0, 3, 3, 3}}
+
+        Dim d(2, 3) As Integer
+
+        Dim r, c As Integer
+        For r = 1 To a.GetUpperBound(0)
+            For c = 1 To a.GetUpperBound(1)
+                d(r, c) = a(r, c) + b(r, c)
+            Next
+        Next
+
+        For r = 1 To a.GetUpperBound(0)
+            For c = 1 To a.GetUpperBound(1)
+                Console.Write(d(r, c) & " ")
+            Next
+            Console.WriteLine()
+        Next
+
+        Console.ReadKey()

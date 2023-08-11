@@ -1,0 +1,6 @@
+	fact(0) = 1
+        fact_sum = 0
+        For i = 1 To 10
+            fact(i) = fact(i - 1) * i
+            fact_sum += fact(i)
+        Next

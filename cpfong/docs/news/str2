@@ -1,0 +1,17 @@
+method timecaf {
+	newsgroups: fjtc.*
+	class: 1
+	size: 2,32000
+}
+# Tiny for 8M only test 
+method cnfs {
+	newsgroups: test
+	class: 2
+	options: TI1
+}
+# Huge for 2G all others
+method cnfs {
+	newsgroups: *
+	class: 3
+	options: HUGE
+}

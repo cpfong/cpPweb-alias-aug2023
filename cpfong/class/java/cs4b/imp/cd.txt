@@ -1,0 +1,3 @@
+連線上主機 cpfong.fjtc.edu.tw 
+cd /cdrom
+ls

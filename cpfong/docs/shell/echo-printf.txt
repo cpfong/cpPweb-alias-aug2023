@@ -1,0 +1,17 @@
+root@www:/usr/local/www/apache24/data/cpfong/docs/shell # which echo printf
+echo: shell built-in command.
+/usr/bin/printf
+
+$var='test'
+$printf %s $var	#note: no newline
+$echo $var
+
+$ printf %s "this is a test"	# all in one string (only 2 args)
+this is a test
+
+$ printf %s this is a test	# 5 args here
+thisisatest
+
+$var='this is a test'
+printf %s "$var"		# this is a test
+printf %s $var			# thisisatest

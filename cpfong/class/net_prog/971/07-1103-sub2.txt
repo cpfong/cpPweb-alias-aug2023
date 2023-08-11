@@ -1,0 +1,91 @@
+4.7 關於 my 變數
+4.8 use strict 編譯命令
+4.9 return 算符
+	4.9.1 省略 &
+	
+4.10 傳回非純量值
+4.11 持續的私用變數
+
+---
+4.7 my 為私有變數, 未宣告 my 的變數全為全體變數
+    my 可以使用在任何 block 中, 不限於副常式中
+	foreach (1..10){
+		my $square = $_ * $_;
+		print "$_ 平方為 $square\n";
+	}
+	print "out of foreach sq = $square\n";
+
+	my ($num) = @_; # 串列語境
+	my  $num  = @_; # 純量語境
+	
+	my $fred, $barney  ; # 錯, 因為沒宣告 $barney, 它為純量語境
+	my ($fred, $barney); # ok
+
+4.8 return 立即返回之意
+4.10 for (reverse 1..10){
+		print;
+	}
+
+	sub list_from_fred_to_barney{
+		if ($fred < $barney){
+			$fred .. $barney;
+		}
+		else {
+			reverse $barney .. $fred;
+		}
+	}
+
+	$fred=11; $barney=6;
+	@c = list_from_fred_to_barney;
+	print "@c";
+
+	另一  return 的用法為: 表示傳回值有問題, 可以直接打 return 不接任何參數
+	sub add_1_to_many{
+		my $n = shift @_;
+		if ($n <= 0){
+			return;
+		}
+		for (1..$n){
+			$sum += $_;
+		}
+		$sum;
+	}
+
+	if (defined($sum = add_1_to_many(10))){
+		print "total = $sum\n";
+	}
+	else {
+		print "input error\n";
+	}
+
+4.11 利用 state 可以有 my + static 的效果在 (perl version 要在 5.10 以上才可)
+	use 5.010;
+	sub marine{
+		state $n = 0;
+		$n += 1;
+		print "in marine n = $n\n";
+	}
+
+	$n=0;
+	print "outsite n = $n\n";
+	foreach (1..3){
+		marine;
+	} 
+	print "outsite n = $n\n";
+
+
+	use 5.010;
+	running_sum(5,6);
+	running_sum(1..3);
+	running_sum(4);
+
+	sub running_sum{
+		state $sum=0;
+		state @numbers;
+
+		foreach my $number (@_){
+			push @numbers, $number;
+			$sum += $number;
+		}
+		say "(@numbers) 的總和是 $sum";
+	}

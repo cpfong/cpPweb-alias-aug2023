@@ -1,0 +1,51 @@
+<meta http-equiv="Content-Type" content="text/html" charset="utf-8">
+<html>
+2019.07.24
+<br><br>
+
+<font color=blue>硬碟磁區為三區以上，最少有兩個為系統安裝磁區，一個為資料磁區 </font><br>
+-- <br>
+ windows7  C D (Fedora 看不到) <br>
+ Fefora /dev/sda2 /dev/sda3 /dev/sda5 <br>
+<br>
+
+<font color=blue>資料磁區中建立一個目錄，目錄名稱: 工作崗位號碼</font><br>
+--<br>
+D:\24<br>
+<br>
+
+<font color=blue>電腦名稱，該電腦名稱為cXX (computer XX) </font><br>
+--<br>
+c24<br>
+<br>
+
+<font color=blue> hosts檔案，自動備份資料磁區術科工作崗位號碼</font><br>
+--<br>
+D:\24\hosts<br>
+/dev/sda3 看掛在那兒(監評指定), ex /mnt 則放在 /mnt/hosts<br>
+mount -t vfat /dev/sda3 /mnt<br>
+<br>
+
+<font color=blue> FTP主機，主機IP為192.168.240.200，登錄帳號為tXX，初值密碼為passwdXX</font><br>
+--<br>
+主機 192.168.240.200<br>
+帳號 t24<br>
+密碼 passwd24<br>
+<br>
+
+<font color=blue> FTP主機之個人帳號的web目錄</font><br>
+--<br>
+主機 192.168.240.200<br>
+帳號 t24<br>
+密碼 新改密碼<br>
+目的地 web/index.htm<br>
+<br>
+
+<font color=blue> 檔案壓縮</font><br>
+--<br>
+d:\24\20190901<br>
+<br>
+
+<font color=blue> 個人網頁網址並將個人網頁網址預設為瀏覽器首頁</font><br>
+--<br>
+http://192.168.240.200/t24<br>

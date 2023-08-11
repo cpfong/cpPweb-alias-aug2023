@@ -1,0 +1,22 @@
+Module Module1
+    Sub main()
+        Dim a(10, 2) As Integer
+        Dim i As Integer = 1
+        While (i <= 10)
+            a(i, 1) = Int(Rnd() * 20) + 50
+            a(i, 2) = i + 1
+            i += 1
+        End While
+        a(i - 1, 2) = -1
+        Dim target As Integer = InputBox("pls input target")
+        Dim top = 1
+        While (top <> -1)
+            Console.Write(a(top, 1) & " ")
+            If (a(top, 1) = target) Then
+                Console.WriteLine("found " & target)
+                Exit While
+            End If
+            top = a(top, 2)
+        End While
+    End Sub
+End Module

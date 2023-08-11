@@ -1,0 +1,12 @@
+Q: why compile new kernel has all sort of problem? and it takes lots of time.
+A: 
+i am thinking to do this to solve:
+ 1. build world only once from GENERIC
+ 2. all others using -w to skip build world to goto build kernel directly (30mins)
+
+--ref
+use GENERIC to build world and build kernel and others
+then all use -w to skip build world 
+
+i suspect build world everytime with a new KERNEL config will mess up swap
+so just keep the original build world copy in swap, and do build kernel for all other Kernel config

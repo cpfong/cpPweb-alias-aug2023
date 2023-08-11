@@ -1,0 +1,13 @@
+# note: under sh prompt
+$ x=$(date +%d%m%y)
+$ echo $x
+251218
+
+# another way is use back single quote `
+# `` can replace $()
+$ y=`date +%d%m%y`                                                                                                     
+$ echo $y                                                                                                              
+251218  
+
+# using command /bin/date
+touch file.`date +%m%d%y`.txt

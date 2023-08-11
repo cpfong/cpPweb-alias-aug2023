@@ -1,0 +1,23 @@
+time sync 2 ways
+--
+1. /usr/sbin/ntpd
+  /etc/ntp.conf
+  /etc/rc.d/ntpd start
+2. /usr/sbin/ntpdate
+   ntpdate ntp_server
+   crontab
+
+Q: rclone config ->FAIL
+rclone lsd koofr:
+2020/10/29 15:28:37 Failed to create file system for "koofr:": Invalid response status! Got 401, expected [200]; headers: map[Content-Length:[0] Date:[Thu, 29 Oct 2020 07:28:35 GMT] Www-Authenticate:[Token] X-Request-Id:[9c56744b-521a-4238-475d-09f8e1e8b19a]], content:
+
+A:
+0. App password
+1. time
+2. rm config
+3. reinstall
+4. reboot
+
+rclone union
+--
+https://rclone.org/union/

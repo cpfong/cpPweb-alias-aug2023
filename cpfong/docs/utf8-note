@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8"/>
+
+perl treat strings affected by utf8 flag <br>
+-- <br>
+strings: A:octets B:String (binary and characters) <br>
+ie Perl only recognize two encoding: ascii(octets) and utf8(string) <br>
+ <br>
+utf8 flag On: string as utf8 <br>
+utf8 flag Off: string as octets <br>
+ <br>
+example <br>
+-- <br>
+use  Encode; <br>
+use  strict; <br>
+ <br>
+my $str  = "你好" ; #E4BDA0 E5A5BD <br>
+Encode::_utf8_on ( $str ); print length ( $str ); #2 <br>
+Encode::_utf8_off( $str ); print length ( $str ); #6 (echo 你好 | od -h) <br>
+0000000      bde4    e5a0    bda5    000a

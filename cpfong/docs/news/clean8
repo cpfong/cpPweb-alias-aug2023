@@ -1,0 +1,213 @@
+
+  ◇ [usenet] SPAM filtering - Clean Feed 的使用介紹
+
+------------------------------------------------------------------------
+發信人: u8414067@ccsun38.cc.nctu.edu.tw (benjamin), 看板: NetNews
+標  題: [usenet] SPAM filtering - Clean Feed 的使用介紹
+發信站: National Chiao Tung University, Hsinchu, Ta (Fri Dec 19 05:36:18 1997)
+轉信站: maxwell!bbs.ee.ntu!freebsd.ntu!news.cs.nthu!news.cis.nctu!news.nctu!ne
+
+
+	
+	在常見的usenet討論區之中, 廣告或垃圾文章的流竄是一直另人困
+	
+	擾的一個問題, 該如何去面對或是解決這樣的問題是大多數 news
+	
+	server的管理者都想要得到的答案, 我們暫且不論有關這方面的政
+
+	策性問題,單從技術方面來看, 在這裡提供一些有關從news server
+
+	反制spam的作法與小小的心得給大家參考.
+
+
+	一般來說在處理spam常採用的方法有兩種, 一種是發現spam的情況後
+
+	再發出cancel message去刪除存在server上的文章, 雖然這樣做能
+
+	夠減少某些的spam, 但是運用這種作法而產生的流量增加和硬碟的
+
+	儲存也是可以預見的, 因為一旦發現一篇spam之後, 我們就得發出
+
+	一篇cancel message, 這個cancel message在網路上必然會傳送經
+
+	過某些區域, 也會被某些的server儲存下來, 當spam的情況越來越
+
+	多, 我們所需要發出的cancel message也跟著增多, 當這些cancel
+
+	message 加起來所製造的流量將也是一筆可觀的數字.
+
+
+	目前, 則有一種較有效率的做法, 簡單的來說就是從news server
+
+	部份過濾掉我們認為是spam的文章, 這些文章將會如同掉如無底洞
+
+	一般, 既不會儲存下來也不會送給其他的server, 這樣的作法除了
+
+	減少流量之外, 所有的處理均在memory中處理完畢, 以減少disk
+
+	I/O 的次數, 這些好處是對單一的server而言, 另外, 更重要的是
+
+	如果能夠從news server 上做這樣的處理, 對整個網路和其他的
+
+	server也是有幫助的; 有了news server在第一線的處理,  不但減
+
+	輕自己的loading,  降低網路資源的浪費(當然, 這是理想狀況, 
+
+	實際的情況就像cschen在前面所提到的multile feeding path的問題
+
+	, 仍有待觀察), 底下將以inn-1.7.2配合clean_feed 來介紹詳細的作法
+
+
+	首先先提一下filter的運作原理, 目前inn提供的filter可以用perl
+
+	和tcl兩種語言來寫(不過我沒試過tcl) ; inn 利用perl附的library
+
+	製造出一個associative array來供給filter使用,利用這個array就可以
+
+	將每篇文章的header資料傳給filter處理, 因此, innd在收到每篇文
+
+	章時就把這些資料傳給filter, 讓filter判斷, 並按照filter傳回的
+
+	值來決定是否要收下這篇文章; 目前inn提供了innd和nnrpd的filter
+
+	這些filter都已經有現成的範例可看, 當然也可以配合自己的情況來
+
+	設計filter. (現成的範例在安裝inn時就有, 它是放在
+
+	inn-1.7.2/samples/filter_innd.pl)
+
+
+=======>使用filter(用於innd, nnrpd的filter原理相去不遠)的方式:
+
+	開始安裝:
+
+		1.取回cleanfeed
+		  作者網頁http://www.exit109.com/~jeremy/news/antispam.html
+		
+		2.安裝perl 5.003以上(現在出到5.004_xx了...)		
+
+		3.安裝inn-1.7.x板(本範例使用inn-1.7.2)
+		  a.為了要使用perl filter的功能
+		    請將config.data中的設定修改為
+		    PERL_SUPPORT	DO		
+		    PERL_LIB		-L/usr/local/lib/perl5.....
+		    PERL_INC		-I/usr/local/lib/perl5....
+		    其中PERL_LIB PERL_INC就是perl的library include檔案
+		    所放置的位置, 與安裝perl時的設定有關		
+		
+		  b.讓inn運轉一段時間並確定沒有任何問題
+
+		4.解開cleanfeed
+		  a.其中主要有兩個檔案, 一個是用來patch innd, 另一個
+		    就是perl filter
+		  b.其中也附有README, 請詳細閱讀.
+
+		5.將patch加入inn之中, 如果沒有問題的話,
+		  就重新compile, 並安裝
+
+		  cp filter.patch inn-1.7.2/innd
+		  cd inn-1.7.2/innd
+		  make clean
+		  patch &ltfilter.patch
+		  make
+		  mv /usr/news/bin/innd /usr/news/bin/innd.old
+		  cp innd /usr/news/bin/innd
+		  ctlinnd throttle &quotreplacing innd"
+		  ctlinnd shutdown &quotreplacing innd"
+		  /usr/news/bin/rc.news
+	
+		  a.上面所提的目錄和檔名由自己的系統設定為準
+		  b.compile的innd可以直接copy, 也可以用make update重新安裝
+		    不過make update會將所有的binary都重裝一次
+		
+		6.安裝filter
+			  
+		  cd /usr/news/bin/control
+		  mv filter_innd.pl filter_innd.pl.old
+		  cp /wherever/cleanfeed/filter_innd.pl .
+		  vi filter_innd.pl  (設定filter的相關變數)
+		  perl -cw filter_innd.pl   (檢查是否有任何語法錯誤)
+		  ctlinnd reload filter.perl &quotinstall filter"
+	
+		  觀看filter的效果
+		  tail -f /var/log/news/news.notice
+
+	filter的設定:
+
+		filter本身就是一個perl script, 在這個filter的前頭列了
+		一些變數可以提供給我們方便的設定filter
+
+	$maxgroups:當crosspost超過這個數字以後就開始reject
+	
+	$maxfollowups:這是用來避免faq之類的文章被filter擋掉
+	
+	$tjfmaxgroups:對於test,jobs,forsale的newsgroup可做分開的crosspost
+		      限制
+	
+	$maxmultiposts:當multipost超過此一限制就開始reject, multipost和
+		       crosspost是不同的
+
+	$ArticleHistSize:filter每收到一篇文章就會檢查並放入自己的history
+			 中提供下一次的比對, $ArticleHistSize設定history
+			 的大小
+
+	$EMPHistSize:當文章被確認為multipost並被濾掉時, 它的資料也會被
+		     記錄起來提供下一次的比對, $EMPHistSize設定EMP
+		     history的大小
+
+	$block_binaries:是否檢查binary被post在非binary的討論區
+			(一般說來alt.binaries.*都是允許post binary的)
+
+	$block_mime_html:檢查經過mime編碼的html, 這並不會影響到一般
+			 html
+
+	$max_encoded_lines:設定文章中可容許出現編碼的最大行數, 簡言之
+			   這是用來防止有些經過pgp處理的文章被當成binary
+			   而濾掉
+
+	$bin_allowed:可以允許post binary的newsgroup
+
+	$block_html:過濾html
+
+	$verbose:若設定為1的話(就是true的意思), 較為詳細的資料會被記錄到
+		 news.notice
+
+	$badguys:想要慮掉某些特別的host可以寫在這
+
+	$badips:同上, 但是用ip表示,上面兩個變數會與From和Organization兩
+		個header比對
+
+	$exempt:cleanfeed會檢查NNTP-Posting-Host這個header來判斷是否有
+		multipost等情況的產生(通常短時間內大量送出文章的情形)
+		在$exempt加入host名稱可避免被濾掉(台灣有相當多的bbs都是
+		採用nnrp配上crontab送出文章, 就很有可能被濾掉, 實際情況
+		正在測試中)
+
+====================	
+附註:
+	1.crosspost就是一般所指的, 在news server上只存在一篇文章, 其餘的
+	  均是用link指向同一篇文章
+
+	2.multipost的情況最常發生在bbs上的各板轉貼, 即使文章的標題, 作者
+	  , 內容都一樣,  但是對於一個news server來說它的message-id仍然不
+	  一樣, 因此就被視為不同的文章, 在news server上造成硬碟空間的浪費
+
+	3.相關的參考資料
+	  inn-1.7.2/REAME.perlhook
+	  inn-1.7.2/README.tclhook
+	  inn-1.7.2/Install.*
+	  http://www.exit109.com/~jeremy/news/antispam.html
+	  newsgroup news.software.nntp
+
+	4.cleanfeed也有給cyclone的filter, 不過cyclone這個news server是
+	  要錢的....
+
+	5.感謝C.S.Chen & jason 的協助
+	
+	6.如果有任何錯誤, 請大家指正, 謝謝
+
+
+
+-- 
+Chung-Liang Cheng
+

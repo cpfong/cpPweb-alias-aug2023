@@ -1,0 +1,6 @@
+news-> tail news.notice
+
+Dec 28 01:32:20 news nnrpd[3130]: SERVER perl filtering enabled
+Dec 28 01:32:20 news nnrpd[3130]: cpfong.fjtc.edu.tw connect
+Dec 28 01:32:20 news nnrpd[3130]: cpfong.fjtc.edu.tw no_permission
+Dec 28 01:32:20 news nnrpd[3130]: cpfong.fjtc.edu.tw times user 0.009 system 0.009 e

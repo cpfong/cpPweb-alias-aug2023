@@ -1,0 +1,17 @@
+#!/bin/sh
+
+pif="vtnet0"
+pip="1.2.3.4"
+jnet="10.0.0.1/24"
+
+add="ipfw -q add"
+
+/sbin/ipfw -q -f flush
+ipfw disable one_pass
+ipfw -q nat 1 config ip $pip same_ports unreg_only reset
+
+$add 2000 allow ip from $jnet to $jnet
+$add 2001 nat 1 ip from $jnet to any via $pif
+$add 2002 nat 1 ip from any to $pip
+##$add 4999 deny log all from any to any via $pif # real world use (after 1st succeed, then i can try this out)
+$add 5000 allow all from any to any via $pif # just pass all for the begging

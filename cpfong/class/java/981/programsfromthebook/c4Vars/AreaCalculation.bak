@@ -1,0 +1,49 @@
+//--------STARTEXTRACT=allarea.xtr
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class AreaCalculation extends JFrame 
+    implements ActionListener {
+
+    private JButton button;
+
+    public static void main(String[] args) {
+        AreaCalculation frame = new AreaCalculation();
+        frame.setSize(400, 300);
+        frame.createGUI();
+        frame.setVisible(true);
+    }
+
+    private void createGUI() {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        Container window = getContentPane();
+        window.setLayout(new FlowLayout() );
+
+        button = new JButton("Press me");
+        window.add(button);
+        button.addActionListener(this);
+    }
+
+    public void actionPerformed(ActionEvent event) {
+        //STARTEXTRACT=areadec.xtr
+        int area;
+        int length;
+        int width;
+        //ENDEXTRACT=areadec.xtr 
+        //STARTEXTRACT=lengets20.xtr
+        length = 20;
+        //ENDEXTRACT=lengets20.xtr        
+        width = 10;
+        //STARTEXTRACT=areaassign.xtr
+        area = length * width;
+        //ENDEXTRACT=areaassign.xtr  
+        //STARTEXTRACT=areashow.xtr
+        JOptionPane.showMessageDialog(null, "Area is: " + area);
+        //ENDEXTRACT=areashow.xtr
+    }
+}
+//----------ENDEXTRACT=allarea.xtr
+
+
+

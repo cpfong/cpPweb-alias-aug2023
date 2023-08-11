@@ -1,0 +1,3 @@
+@SaTurn-> sudo jail -m securelevel=3 name=foo # usually best practice to set securelevel of a jailed environment to the highest possible value (3)
+
+Allowing certain actions may have unwanted side effects. This is particularly true for the allow.sysvipc option. Sysvipc inside the jail is not namespaced, so different jails may affect each other

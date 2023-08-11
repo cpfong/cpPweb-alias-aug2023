@@ -1,0 +1,245 @@
+<title>NCDesign HTML Design Guide - Frames</title>
+
+<base target="_top">
+<center>
+
+<hr size=5>
+
+<h1 align=center>Special Elements - Frames -</h1>
+<h4 align=center><font size=3>HTML Design Guide - Frame v2.01
+        &lt;Last Update: 1 November 1995&gt;</font></h4>
+<hr>
+
+</center>
+
+<p>
+
+
+<!------------------ Frame ---------------------------->
+
+<a name="frame">
+<h2><img align=top src="../../br20t.gif" alt=+> Frame Basic </h2>
+</a>
+
+<!------Basic------->
+
+<h3>&lt;frameset&gt; ... &lt;/frameset&gt;<br>
+&lt;frame src="url"&gt <br>
+&lt;noframes&gt; ... &lt;/noframes&gt;</h3>
+HTML document included in &lt;noframes&gt; are for 
+browsers not supported frames.
+
+<dl><dt><dd>
+&lt;HTML&gt;<br>
+&lt;HEAD&gt;<br>
+&lt;/HEAD&gt;<br>
+&lt;FRAMESET&gt;<br>
+	<dl><dt>
+	<dd>&lt;FRAME SRC="url"&gt;
+	<dd>&lt;NOFRAMES&gt; ... &lt;/NOFRAMES&gt;
+	</dl>
+
+&lt;/FRAMESET&gt;<br>
+&lt;HTML&gt;<br>
+</dl>
+
+<pre>
+
+</pre>
+
+
+<!--   ################## Size ########################-->
+
+<a name="size">
+<h2><img align=top src="../../br20t.gif" alt=+> Frame Size </h2>
+</a>
+
+<!------COLS------->
+
+<h3>&lt;frameset cols=#&gt;</h3>
+
+<dl><dt><dd>
+<pre>
+&lt;frameset cols=30%,20%,50%&gt;
+&lt;frame src="A.html"&gt;
+&lt;frame src="B.html"&gt;
+&lt;frame src="C.html"&gt;
+&lt;/frameset&gt;
+
+<a href="cols.html">Sample Page</a>
+</pre>
+</dl>
+
+<TABLE width=100 height=120 BORDER>
+<TR>
+<td width=30% align=center> A </td>
+<td width=20% align=center> B </td>
+<td width=50% align=center> C </td>
+</TABLE>
+
+
+
+<pre>
+
+</pre>
+
+
+<!------ROWS------->
+
+<h3>&lt;frameset rows=#&gt;</h3>
+
+<dl><dt><dd>
+<pre>
+&lt;frameset rows=25%,25%,50%&gt;
+&lt;frame src="A.html"&gt;
+&lt;frame src="B.html"&gt;
+&lt;frame src="C.html"&gt;
+&lt;/frameset&gt;
+
+<a href="rows.html">Sample Page</a>
+</pre>
+</dl>
+
+<TABLE width=100 height=120 BORDER>
+<TR height=25%><td align=center> A </td>
+<TR height=25%><td align=center> B </td>
+<TR height=50%><td align=center> C </td>
+</TABLE>
+
+
+
+<pre>
+
+</pre>
+
+
+
+<!------COLS & ROWS------->
+
+<h3>COLS & ROWS</h3>
+
+<dl><dt><dd>
+<pre>
+&lt;frameset cols=20%,*&gt;
+&lt;frame src="A.html"&gt;
+     &lt;frameset rows=40%,*&gt;
+     &lt;frame src="B.html"&gt;
+     &lt;frame src="C.html"&gt;
+     &lt;/frameset&gt;
+&lt;/frameset&gt;
+
+<a href="row_col.html">Sample Page</a>
+</pre></dl>
+
+<TABLE width=100 height=120 BORDER>
+<TR><td rowspan=2 align=center width=20%> A </td>
+<td align=center height=40%> B </td>
+<TR><td align=center height=60%> C </td>
+</TABLE>
+
+<pre>
+
+</pre>
+
+
+<!------No Resize------->
+
+<h3>No Resize &lt;frame noresize&gt;</h3>
+
+
+<dl><dt><dd>
+Default frame is resizable.
+</dl>
+
+
+<pre>
+
+</pre>
+
+
+<!-- ################## Frame Attribute ########################-->
+
+<a name="option">
+<h2><img align=top src="../../br20t.gif" alt=+> Frame Option </h2>
+</a>
+
+<!------NAME------->
+
+<h3>Frame Name <br>
+&lt;frame name=#&gt;<br>
+&lt;a href=url target=#&gt;</h3>
+
+<dl><dt><dd>
+<pre>
+&lt;frameset cols=50%,50%&gt;
+&lt;frame src="A.html"&gt;
+&lt;frame src="B.html" name="HELLO"&gt;
+&lt;/frameset&gt;
+
+<a href="target.html">Sample Page</a>
+</pre>
+</dl>
+
+<TABLE width=100 height=120 BORDER>
+<TR>
+<td width=50% align=center> A </td>
+<td width=50% align=center> B </td>
+</TABLE>
+
+
+<pre>
+
+</pre>
+
+
+
+<!------MARGIN------->
+
+<a name=margin>
+<h3>Margin &lt;frame marginwidth=# marginheight=#&gt;</h3>
+</a>
+
+<dl><dt><dd>
+<pre>
+&lt;frameset cols=50%,50%&gt;
+&lt;frame src="A.html"&gt;
+&lt;frame src="A.html" 
+    marginwidth=50 
+    marginheight=50&gt;
+&lt;/frameset&gt;
+
+<a href="margin.html">Sample Page</a>
+</pre></dl>
+
+<TABLE width=100 height=120 BORDER>
+<TR>
+<td width=50% align=center> AAAA </td>
+<td width=50% align=center> AA<br>AA </td>
+</TABLE>
+
+
+
+
+<pre>
+
+</pre>
+
+
+
+
+
+<!------SCROLLBAR------->
+
+<h3>Scrollbar &lt;frame scrolling=#&gt;
+#=yes, no, auto</h3>
+
+<dl><dt><dd>
+#=auto is a default.
+</dl>
+
+<pre>
+
+</pre>
+
+
+

@@ -1,0 +1,7 @@
+<html>
+<title>web page with applet</title>
+Here is the applet in a web page.
+
+<applet code ="SumTextFieldsApplet.class"
+width = 300 height = 150> </applet>
+</html>

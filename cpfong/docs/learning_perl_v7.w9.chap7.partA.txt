@@ -1,0 +1,91 @@
+regex
+--
+// # short for m// match
+
+$_='yabba dabba doo';
+
+if (/abba/){
+ print "hit abba\n";
+}
+
+$_ = "coke	sprite";#note TAB
+
+my @a=("\t", "\N{CHARACTER TABULATION}", "\011", "\x09", "\x{9}","${tab}");
+#       0               1                   2       3       4       5(this on does NOT hit)
+
+foreach $k (@a){
+ if (/coke${k}sprite/){
+   print "$k hit\n";
+ }
+}
+
+p130
+--
+$_ = '(yabba dabba doo)';
+
+my $pat = '(';
+if (/$pat/){ #FAIL
+ print "hit\n";
+}
+
+code
+--
+$_ = '(yabba dabba doo)';
+
+my $pat = '(';
+if (/$pat/){ #FAIL since ( is a special character
+ print "hit\n";
+}
+
+p132 wildcard .
+--
+$_ = "yabba dabba doo";
+if (/ab.a/) {
+ print "It matched!\n";
+}
+
+p134 Quantifiers
+--
+? * + {
+
+$_ = 'Bamm-bamm';
+if (/Bamm-?bamm/) { #match one 
+ print "It matched!\n";
+}
+
+$_ = 'Bamm-----bamm';
+if (/Bamm-*bamm/) { #zero or more 
+ print "It matched!\n";
+}
+
+$_ = 'Bamm bamm';
+if (/Bamm +bamm/) { #one or more
+ print "It matched!\n";
+}
+
+$_ = "yabbbba dabbba doo.";
+if (/ab{2,3}a/) { #minmum to maximum
+ print "It matched!\n"
+}
+
+$_ = "yabbbba dabbba doo.";
+if (/ab{3,}a/) { #minmun without maximum
+print "It matched!\n";
+}
+
+Optional		{0,1} ?
+Zero or more 		{0,} *
+One or more 		{1,} +
+Minimum with no maximum {3,}
+Minimum with maximum 	{3,5}
+Exactly 		{3}
+
+Grouping in pattern
+--
+m/fred+/
+m/(fred)+/
+
+$_ = "yabba dabba doo";
+if (/y(.)(.)\2\1/) { # matches 'abba'
+ print "It matched after the y!\n";
+}

@@ -1,0 +1,54 @@
+1. dig 可以查網址和 ip 的對應, 例如: 在系統下打 dig www.hinet.net
+   可以知 www.hinet.net 的 ip 是  61.219.38.89 試以 dig 來查三個你
+   常去的網址的 ip 後把這三個對應的值放入雜湊表中, 再以 hash 來
+   輸入任一個網址, 程式即可把對應的 ip 印出.
+
+%h = qw /www.hinet.net 61.219.38.89
+        vnc.mis.fotech.edu.tw 163.15.205.213
+        www.yahoo.com.tw 202.43.195.13/;
+#
+# $h{www.hinet.net}		= "61.219.38.89";
+# $h{vnc.mis.fotech.edu.tw}	= "163.15.205.213";
+# $h{www.yahoo.com.tw}		= "202.43.195.13";
+#
+print "input \n";
+chomp ($in = <STDIN>);
+print "ip of $in is  $h{$in}\n";
+
+
+2. 上題中, 請輸入任一網址後請立即判別此網址是否存在於本 hash 之中 
+
+%h = qw /www.hinet.net 61.219.38.89
+        vnc.mis.fotech.edu.tw 163.15.205.213
+        www.yahoo.com.tw 202.43.195.13/;
+
+print "input \n";
+chomp ($in = <STDIN>);
+if (exists $h{$in}){
+	print $h{$in} . "\n";
+}
+else {
+	print "not exists\n";
+}
+
+3. 何謂量詞, 有那些? 
+在正規表示式中, 量詞代表其前一的字元出現的次數,
+量詞有 * + ? 其中 * 為 >=0, + 為 >= 1 , 而 ? 則表 ==0 or ==1
+
+4. 寫一程式, 印出在輸入資料中, 同時出現 John 和 Mary 的每一列.
+
+while (<>){
+	if (/John/){
+		if (/Mary/){
+			print;
+		}
+	}
+}
+
+加分題: 利用第五章的 open 寫一個程式可以拷貝 file1 到 file2 
+open SRC, "<file1";
+open DST, ">file2";
+
+while (<SRC>){
+        print DST $_;
+}

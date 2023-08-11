@@ -1,0 +1,1501 @@
+  <HTML>
+  <HEAD>
+  
+  <TITLE>MySQL Reference Manual for version 5.0.3-alpha - 24  Extending MySQL</TITLE>
+   <style> code {color:purple} tt {color:green} samp {color:navy} pre {color:maroon} </style>
+  </HEAD>
+  <BODY BGCOLOR=silver TEXT=#000000 LINK=#101090 VLINK=#7030B0>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_Error-handling.html">previous</A>, <A HREF="manual_Problems.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="Extending_MySQL" HREF="manual_toc.html#Extending_MySQL">24  Extending MySQL</A></H1>
+
+
+
+<H2><A NAME="MySQL_internals" HREF="manual_toc.html#MySQL_internals">24.1  MySQL Internals</A></H2>
+
+<P>
+<A NAME="IDX2260"></A>
+<A NAME="IDX2261"></A>
+
+</P>
+<P>
+This chapter describes a lot of things that you need to know when
+working on the MySQL code. If you plan to contribute to MySQL
+development, want to have access to the bleeding-edge in-between
+versions code, or just want to keep track of development, follow the
+instructions in section <A HREF="manual_Installing.html#Installing_source_tree">2.8.3  Installing from the Development Source Tree</A>.
+If you are interested in MySQL internals, you should also subscribe
+to our <code>internals</code> mailing list. This list is relatively low
+traffic. For details on how to subscribe, please see
+section <A HREF="manual_Introduction.html#Mailing-list">1.4.1.1  The MySQL Mailing Lists</A>.
+All developers at MySQL AB are on the <code>internals</code> list and we
+help other people who are working on the MySQL code. Feel free to
+use this list both to ask questions about the code and to send
+patches that you would like to contribute to the MySQL project!
+
+</P>
+
+
+
+<H3><A NAME="MySQL_threads" HREF="manual_toc.html#MySQL_threads">24.1.1  MySQL Threads</A></H3>
+
+<P>
+The MySQL server creates the following threads:
+
+</P>
+
+<UL>
+
+<LI>
+
+The TCP/IP connection thread handles all connection requests and
+creates a new dedicated thread to handle the authentication and
+SQL query processing for each connection.
+
+<LI>
+
+On Windows NT there is a named pipe handler thread that does the same work as
+the TCP/IP connection thread on named pipe connect requests.
+
+<LI>
+
+The signal thread handles all signals.  This thread also normally handles
+alarms and calls <code>process_alarm()</code> to force timeouts on connections
+that have been idle too long.
+
+<LI>
+
+If <code>mysqld</code> is compiled with <code>-DUSE_ALARM_THREAD</code>, a dedicated
+thread that handles alarms is created.  This is only used on some systems where
+there are problems with <code>sigwait()</code> or if you want to use the
+<code>thr_alarm()</code> code in your application without a dedicated signal
+handling thread.
+
+<LI>
+
+If one uses the <code>--flush_time=#</code> option, a dedicated thread is created
+to flush all tables at the given interval.
+
+<LI>
+
+Every connection has its own thread.
+
+<LI>
+
+Every different table on which one uses <code>INSERT DELAYED</code> gets its
+own thread.
+
+<LI>
+
+If you use <code>--master-host</code>, a slave replication thread will be
+started to read and apply updates from the master.
+</UL>
+
+<P>
+<code>mysqladmin processlist</code> only shows the connection, <code>INSERT DELAYED</code>,
+and replication threads.
+
+</P>
+
+
+
+<H3><A NAME="MySQL_test_suite" HREF="manual_toc.html#MySQL_test_suite">24.1.2  MySQL Test Suite</A></H3>
+
+<P>
+<A NAME="IDX2262"></A>
+<A NAME="IDX2263"></A>
+
+</P>
+<P>
+Until recently, our main full-coverage test suite was based on proprietary
+customer data and for that reason has not been publicly available. The only
+publicly available part of our testing process consisted of the <code>crash-me</code>
+test, a Perl DBI/DBD benchmark found in the <code>sql-bench</code> directory, and
+miscellaneous tests located in <code>tests</code> directory. The lack of a
+standardized publicly available test suite has made it difficult for our users,
+as well developers, to do regression tests on the MySQL code. To address
+this problem, we have created a new test system that is included in
+Unix source distributions and binary distributions starting with Version
+3.23.29.  The tests can be run under Unix, or on Windows in the Cygwin
+environment if the server has been compiled under Cygwin. They cannot be
+run in a native Windows environment currently.
+
+</P>
+<P>
+The current set of test cases doesn't test everything in MySQL, but it
+should catch most obvious bugs in the SQL processing code, OS/library
+issues, and is quite thorough in testing replication.  Our eventual goal
+is to have the tests cover 100% of the code.  We welcome contributions
+to our test suite.  You may especially want to contribute tests that
+examine the functionality critical to your system, because this will ensure
+that all future MySQL releases will work well with your
+applications.
+
+</P>
+
+
+
+<H4><A NAME="running_mysqltest" HREF="manual_toc.html#running_mysqltest">24.1.2.1  Running the MySQL Test Suite</A></H4>
+
+<P>
+The test system consist of a test language interpreter
+(<code>mysqltest</code>), a shell script to run all
+tests(<code>mysql-test-run</code>), the actual test cases written in a special
+test language, and their expected results.  To run the test suite on
+your system after a build, type <code>make test</code> or
+<code>mysql-test/mysql-test-run</code> from the source root.  If you have
+installed a binary distribution, <code>cd</code> to the install root
+(eg. <code>/usr/local/mysql</code>), and do <code>scripts/mysql-test-run</code>.
+All tests should succeed.  If not, you should try to find out why and
+report the problem if this is a bug in MySQL.
+See section <A HREF="manual_Extending_MySQL.html#Reporting_mysqltest_bugs">24.1.2.3  Reporting Bugs in the MySQL Test Suite</A>.
+
+</P>
+<P>
+From MySQL 4.1 on,
+if you have a copy of <code>mysqld</code> running on the machine where you want to
+run the test suite you do not have to stop it, as long as it is not using
+ports <code>9306</code> and <code>9307</code>.  If one of those ports is taken, you should
+edit <code>mysql-test-run</code> and change the values of the master and/or slave
+port to one that is available.
+
+</P>
+<P>
+Before MySQL 4.1, <code>mysql-test-run</code> does not try to run its own server
+by default but tries to use your currently running server. To override this
+and cause <code>mysql-test-run</code> to start its own server, run it with
+the <code>--local</code> option.
+
+</P>
+<P>
+You can run one individual test case with
+<code>mysql-test/mysql-test-run test_name</code>.
+
+</P>
+<P>
+If one test fails, you should test running <code>mysql-test-run</code> with
+the <code>--force</code> option to check whether any other tests fail.
+
+</P>
+
+
+
+<H4><A NAME="extending_mysqltest" HREF="manual_toc.html#extending_mysqltest">24.1.2.2  Extending the MySQL Test Suite</A></H4>
+
+<P>
+You can use the <code>mysqltest</code> language to write your own test cases.
+Unfortunately, we have not yet written full documentation for it.
+You can, however, look at our current test cases and use
+them as an example.  The following points should help you get started:
+
+</P>
+
+<UL>
+<LI>
+
+The tests are located in <tt>`mysql-test/t/*.test'</tt>
+
+<LI>
+
+A test case consists of <code>;</code> terminated statements and is similar to the
+input of <code>mysql</code> command-line client.  A statement by default is a query
+to be sent to MySQL server, unless it is recognized as internal
+command (eg. <code>sleep</code>).
+
+<LI>
+
+All queries that produce results--for example, <code>SELECT</code>, <code>SHOW</code>,
+<code>EXPLAIN</code>, etc., must be preceded with <var>@/path/to/result/file</var>.  The
+file must contain the expected results.  An easy way to generate the result
+file is to run <code>mysqltest -r &#60; t/test-case-name.test</code> from the
+<tt>`mysql-test'</tt> directory, and then edit the generated result files, if
+needed, to adjust them to the expected output.  In that case, be very careful
+about not adding or deleting any invisible characters -- make sure to only
+change the text and/or delete lines.  If you have to insert a line, make sure
+that the fields are separated by a hard tab, and that there is a hard tab at the end.
+You may want to use <code>od -c</code> to make sure that your text editor has not messed
+anything up during edit.  We hope that you will never have to edit the output
+of <code>mysqltest -r</code> as you only have to do it when you find a bug.
+
+<LI>
+
+To be consistent with our setup, you should put your result files in the
+<tt>`mysql-test/r'</tt> directory and name them <tt>`test_name.result'</tt>.  If the
+test produces more than one result, you should use <tt>`test_name.a.result'</tt>,
+<tt>`test_name.b.result'</tt>, etc.
+
+<LI>
+
+If a statement returns an error, you should specify it with
+<code>--error error-number</code> on the line before the statement.
+The error number can be
+a list of possible error numbers separated by <samp>`,'</samp>.
+
+<LI>
+
+If you are writing a replication test case, you should on the first line of
+the test file, put <code>source include/master-slave.inc;</code>.  To switch between
+master and slave, use <code>connection master;</code> and <code>connection slave;</code>.
+If you need to do something on an alternate connection, you can do
+<code>connection master1;</code> for the master, and <code>connection slave1;</code> for
+the slave.
+
+<LI>
+
+If you need to do something in a loop, you can use something like this:
+
+<PRE>
+let $1=1000;
+while ($1)
+{
+ # do your queries here
+ dec $1;
+}
+</PRE>
+
+<LI>
+
+To sleep between queries, use the <code>sleep</code> command. It supports fractions
+of a second, so you can use <code>sleep 1.3;</code>, for example, to sleep 1.3
+seconds.
+
+<LI>
+
+To run the slave with additional options for your test case, put them
+in the command-line format in <tt>`mysql-test/t/test_name-slave.opt'</tt>. For
+the master, put them in <tt>`mysql-test/t/test_name-master.opt'</tt>.
+
+<LI>
+
+If you have a question about the test suite, or have a test case to contribute,
+send an email message to the MySQL <code>internals</code> mailing list.
+See section <A HREF="manual_Introduction.html#Mailing-list">1.4.1.1  The MySQL Mailing Lists</A>.
+As this list does not accept
+attachments, you should ftp all the relevant files to:
+<a HREF="ftp://ftp.mysql.com/pub/mysql/upload/">ftp://ftp.mysql.com/pub/mysql/upload/</a>
+
+</UL>
+
+
+
+<H4><A NAME="Reporting_mysqltest_bugs" HREF="manual_toc.html#Reporting_mysqltest_bugs">24.1.2.3  Reporting Bugs in the MySQL Test Suite</A></H4>
+
+<P>
+If your MySQL version doesn't pass the test suite you should
+do the following:
+
+</P>
+
+<UL>
+<LI>
+
+Don't send a bug report before you have found out as much as possible of
+what when wrong!  When you do it, please use the <code>mysqlbug</code> script
+so that we can get information about your system and MySQL
+version. See section <A HREF="manual_Introduction.html#Bug_reports">1.4.1.3  How to Report Bugs or Problems</A>.
+<LI>
+
+Make sure to include the output of <code>mysql-test-run</code>, as well as
+contents of all <tt>`.reject'</tt> files in <tt>`mysql-test/r'</tt> directory.
+<LI>
+
+If a test in the test suite fails, check whether the test fails also when run
+by its own:
+
+
+<PRE>
+cd mysql-test
+mysql-test-run --local test-name
+</PRE>
+
+If this fails, then you should configure MySQL with
+<code>--with-debug</code> and run <code>mysql-test-run</code> with the
+<code>--debug</code> option. If this also fails send the trace file
+<tt>`var/tmp/master.trace'</tt> to <a HREF="ftp://ftp.mysql.com/pub/mysql/upload/">ftp://ftp.mysql.com/pub/mysql/upload/</a>
+so that we can examine it. Please remember to also include a full
+description of your system, the version of the mysqld binary and how you
+compiled it.
+
+<LI>
+
+Try also to run <code>mysql-test-run</code> with the <code>--force</code> option to
+see whether there is any other test that fails.
+
+<LI>
+
+If you have compiled MySQL yourself, check our manual for how
+to compile MySQL on your platform or, preferable, use one of
+the binaries we have compiled for you at
+<a HREF="http://dev.mysql.com/downloads/">http://dev.mysql.com/downloads/</a>.  All our standard binaries should
+pass the test suite !
+
+<LI>
+
+If you get an error, like <code>Result length mismatch</code> or <code>Result
+content mismatch</code> it means that the output of the test didn't match
+exactly the expected output. This could be a bug in MySQL or
+that your mysqld version produces slight different results under some
+circumstances.
+
+Failed test results are put in a file with the same base name as the
+result file with the <code>.reject</code> extension.  If your test case is
+failing, you should do a diff on the two files.  If you cannot see how
+they are different, examine both with <code>od -c</code> and also check their
+lengths.
+
+<LI>
+
+If a test fails totally, you should check the logs file in the
+<tt>`mysql-test/var/log'</tt> directory for hints of what went wrong.
+
+<LI>
+
+If you have compiled MySQL with debugging you can try to debug this
+by running <code>mysql-test-run</code> with the <code>--gdb</code> and/or <code>--debug</code>
+options.
+See section <A HREF="manual_Porting.html#Making_trace_files">E.1.2  Creating Trace Files</A>.
+
+If you have not compiled MySQL for debugging you should probably
+do that.  Just specify the <code>--with-debug</code> options to <code>configure</code>!
+See section <A HREF="manual_Installing.html#Installing_source">2.8  MySQL Installation Using a Source Distribution</A>.
+</UL>
+
+
+
+<H2><A NAME="Adding_functions" HREF="manual_toc.html#Adding_functions">24.2  Adding New Functions to MySQL</A></H2>
+
+<P>
+<A NAME="IDX2264"></A>
+<A NAME="IDX2265"></A>
+<A NAME="IDX2266"></A>
+<A NAME="IDX2267"></A>
+<A NAME="IDX2268"></A>
+
+</P>
+<P>
+There are two ways to add new functions to MySQL:
+
+</P>
+
+<UL>
+<LI>You can add the function through the user-defined function (UDF)
+
+interface.  User-defined functions are added and removed dynamically using
+the <code>CREATE FUNCTION</code> and <code>DROP FUNCTION</code> statements.
+See section <A HREF="manual_Extending_MySQL.html#CREATE_FUNCTION">24.2.1  <code>CREATE FUNCTION/DROP FUNCTION</code> Syntax</A>.
+
+<LI>You can add the function as a native (built in) MySQL function.
+
+Native functions are compiled into the <code>mysqld</code> server and become
+available on a permanent basis.
+</UL>
+
+<P>
+Each method has advantages and disadvantages:
+
+</P>
+
+<UL>
+<LI>
+
+If you write a user-defined function, you must install the object file
+in addition to the server itself.  If you compile your function into the
+server, you don't need to do that.
+<LI>
+
+You can add UDFs to a binary MySQL distribution.  Native functions
+require you to modify a source distribution.
+<LI>
+
+If you upgrade your MySQL distribution, you can continue to use your
+previously installed UDFs.  For native functions, you must repeat your
+modifications each time you upgrade.
+</UL>
+
+<P>
+Whichever method you use to add new functions, they may be used just like
+native functions such as <code>ABS()</code> or <code>SOUNDEX()</code>.
+
+</P>
+
+
+
+<H3><A NAME="CREATE_FUNCTION" HREF="manual_toc.html#CREATE_FUNCTION">24.2.1  <code>CREATE FUNCTION/DROP FUNCTION</code> Syntax</A></H3>
+
+<P>
+<A NAME="IDX2269"></A>
+<A NAME="IDX2270"></A>
+<A NAME="IDX2271"></A>
+<A NAME="IDX2272"></A>
+<A NAME="IDX2273"></A>
+<A NAME="IDX2274"></A>
+<A NAME="IDX2275"></A>
+
+</P>
+
+<PRE>
+CREATE [AGGREGATE] FUNCTION function_name RETURNS {STRING|REAL|INTEGER}
+       SONAME shared_library_name
+
+DROP FUNCTION function_name
+</PRE>
+
+<P>
+A user-defined function (UDF) is a way to extend MySQL with a new
+function that works like native (built in) MySQL function such as
+<code>ABS()</code> and <code>CONCAT()</code>.
+
+</P>
+<P>
+<code>AGGREGATE</code> is a new option for MySQL 3.23.  An
+<code>AGGREGATE</code> function works exactly like a native MySQL
+<code>GROUP</code> function like <code>SUM</code> or <code>COUNT()</code>.
+
+</P>
+<P>
+<code>CREATE FUNCTION</code> saves the function's name, type, and shared library
+name in the <code>mysql.func</code> system table.  You must have the
+<code>INSERT</code> and <code>DELETE</code> privileges for the <code>mysql</code> database
+to create and drop functions.
+
+</P>
+<P>
+All active functions are reloaded each time the server starts, unless
+you start <code>mysqld</code> with the <code>--skip-grant-tables</code> option.  In
+this case, UDF initialization is skipped and UDFs are unavailable.
+(An active function is one that has been loaded with <code>CREATE FUNCTION</code>
+and not removed with <code>DROP FUNCTION</code>.)
+
+</P>
+<P>
+For instructions on writing user-defined functions, see section <A HREF="manual_Extending_MySQL.html#Adding_UDF">24.2.2  Adding a New User-defined Function</A>.
+For the UDF mechanism to work, functions must be written in C or
+C++, your operating system must support dynamic loading and you must have
+compiled <code>mysqld</code> dynamically (not statically).
+
+</P>
+<P>
+Note that to make <code>AGGREGATE</code> work, you must have a
+<code>mysql.func</code> table that contains the column <code>type</code>.  If you do not
+have this table, you should run the script
+<code>mysql_fix_privilege_tables</code> to create it.
+
+</P>
+
+
+
+<H3><A NAME="Adding_UDF" HREF="manual_toc.html#Adding_UDF">24.2.2  Adding a New User-defined Function</A></H3>
+
+<P>
+<A NAME="IDX2276"></A>
+<A NAME="IDX2277"></A>
+<A NAME="IDX2278"></A>
+
+</P>
+
+<P>
+For the UDF mechanism to work, functions must be written in C or C++ and
+your operating system must support dynamic loading.  The MySQL source
+distribution includes a file <tt>`sql/udf_example.cc'</tt> that defines 5 new
+functions.  Consult this file to see how UDF calling conventions work.
+
+</P>
+<P>
+For <code>mysqld</code> to be able to use UDF functions, you should configure MySQL
+with <code>--with-mysqld-ldflags=-rdynamic</code> The reason is that to on
+many platforms (including Linux) you can load a dynamic library (with
+<code>dlopen()</code>) from a static linked program, which you would get if
+you are using <code>--with-mysqld-ldflags=-all-static</code> If you want to
+use an UDF that needs to access symbols from <code>mysqld</code> (like the
+<code>metaphone</code> example in <tt>`sql/udf_example.cc'</tt> that uses
+<code>default_charset_info</code>), you must link the program with
+<code>-rdynamic</code> (see <code>man dlopen</code>).
+
+</P>
+<P>
+If you are using a precompiled version of the server, use MySQL-Max,
+which supports dynamic loading.
+
+</P>
+<P>
+For each function that you want to use in SQL statements, you should define
+corresponding C (or C++) functions.  In the following discussion, the name
+``xxx'' is used for an example function name.  To distinguish between SQL and
+C/C++ usage, <code>XXX()</code> (uppercase) indicates an SQL function call, and
+<code>xxx()</code> (lowercase) indicates a C/C++ function call.
+
+</P>
+<P>
+The C/C++ functions that you write to implement the interface for
+<code>XXX()</code> are:
+
+</P>
+<DL COMPACT>
+
+<DT><code>xxx()</code> (required)
+<DD>
+The main function.  This is where the function result is computed.
+The correspondence between the SQL type and return type of your C/C++
+function is shown here:
+
+<TABLE BORDER>
+<TR><TD><strong>SQL Type</strong> </TD><TD> <strong>C/C++ Type</strong>
+</TD></TR>
+<TR><TD><code>STRING</code> </TD><TD> <code>char *</code>
+</TD></TR>
+<TR><TD><code>INTEGER</code> </TD><TD> <code>long long</code>
+</TD></TR>
+<TR><TD><code>REAL</code> </TD><TD> <code>double</code>
+</TD></TR>
+</TABLE>
+
+<DT><code>xxx_init()</code> (optional)
+<DD>
+The initialization function for <code>xxx()</code>.  It can be used to:
+
+
+<UL>
+<LI>
+
+Check the number of arguments to <code>XXX()</code>.
+<LI>
+
+Check that the arguments are of a required type or, alternatively,
+tell MySQL to coerce arguments to the types you want when
+the main function is called.
+<LI>
+
+Allocate any memory required by the main function.
+<LI>
+
+Specify the maximum length of the result.
+<LI>
+
+Specify (for <code>REAL</code> functions) the maximum number of decimals.
+<LI>
+
+Specify whether the result can be <code>NULL</code>.
+</UL>
+
+<DT><code>xxx_deinit()</code> (optional)
+<DD>
+The deinitialization function for <code>xxx()</code>.  It should deallocate any
+memory allocated by the initialization function.
+</DL>
+
+<P>
+When an SQL statement invokes <code>XXX()</code>, MySQL calls the
+initialization function <code>xxx_init()</code> to let it perform any required
+setup, such as argument checking or memory allocation.  If <code>xxx_init()</code>
+returns an error, the SQL statement is aborted with an error message and the
+main and deinitialization functions are not called.  Otherwise, the main
+function <code>xxx()</code> is called once for each row.  After all rows have been
+processed, the deinitialization function <code>xxx_deinit()</code> is called so it
+can perform any required cleanup.
+
+</P>
+<P>
+For aggregate functions (like <code>SUM()</code>), you must also provide the
+following functions:
+
+</P>
+<DL COMPACT>
+
+<DT><code>xxx_reset()</code> (required)
+<DD>
+Reset sum and insert the argument as the initial value for a new group.
+<DT><code>xxx_add()</code> (required)
+<DD>
+Add the argument to the old sum.
+</DL>
+
+<P>
+When using aggregate UDFs, MySQL works the following way:
+
+</P>
+
+<OL>
+<LI>
+
+Call <code>xxx_init()</code> to let the aggregate function allocate the memory it
+will need to store results.
+<LI>
+
+Sort the table according to the <code>GROUP BY</code> expression.
+<LI>
+
+For the first row in a new group, call the <code>xxx_reset()</code> function.
+<LI>
+
+For each new row that belongs in the same group, call the
+<code>xxx_add()</code> function.
+<LI>
+
+When the group changes or after the last row has been processed,
+call <code>xxx()</code> to get the result for the aggregate.
+<LI>
+
+Repeat 3-5 until all rows has been processed
+<LI>
+
+Call <code>xxx_deinit()</code> to let the UDF free any memory it has allocated.
+</OL>
+
+<P>
+All functions must be thread-safe (not just the main function,
+but the initialization and deinitialization functions as well). This means
+that you are not allowed to allocate any global or static variables that
+change!  If you need memory, you should allocate it in <code>xxx_init()</code>
+and free it in <code>xxx_deinit()</code>.
+
+</P>
+
+
+
+<H4><A NAME="UDF_calling" HREF="manual_toc.html#UDF_calling">24.2.2.1  UDF Calling Sequences for simple functions</A></H4>
+
+<P>
+<A NAME="IDX2279"></A>
+
+</P>
+<P>
+The main function should be declared as shown here.  Note that the return
+type and parameters differ, depending on whether you will declare the SQL
+function <code>XXX()</code> to return <code>STRING</code>, <code>INTEGER</code>, or <code>REAL</code>
+in the <code>CREATE FUNCTION</code> statement:
+
+</P>
+<P>
+For <code>STRING</code> functions:
+
+</P>
+
+<PRE>
+char *xxx(UDF_INIT *initid, UDF_ARGS *args,
+          char *result, unsigned long *length,
+          char *is_null, char *error);
+</PRE>
+
+<P>
+For <code>INTEGER</code> functions:
+
+</P>
+
+<PRE>
+long long xxx(UDF_INIT *initid, UDF_ARGS *args,
+              char *is_null, char *error);
+</PRE>
+
+<P>
+For <code>REAL</code> functions:
+
+</P>
+
+<PRE>
+double xxx(UDF_INIT *initid, UDF_ARGS *args,
+              char *is_null, char *error);
+</PRE>
+
+<P>
+The initialization and deinitialization functions are declared like this:
+
+</P>
+
+<PRE>
+my_bool xxx_init(UDF_INIT *initid, UDF_ARGS *args, char *message);
+
+void xxx_deinit(UDF_INIT *initid);
+</PRE>
+
+<P>
+The <code>initid</code> parameter is passed to all three functions.  It points to a
+<code>UDF_INIT</code> structure that is used to communicate information between
+functions.  The <code>UDF_INIT</code> structure members follow.  The
+initialization function should fill in any members that it wishes to change.
+(To use the default for a member, leave it unchanged.):
+
+</P>
+<DL COMPACT>
+
+<DT><code>my_bool maybe_null</code>
+<DD>
+<code>xxx_init()</code> should set <code>maybe_null</code> to <code>1</code> if <code>xxx()</code>
+can return <code>NULL</code>.  The default value is <code>1</code> if any of the
+arguments are declared <code>maybe_null</code>.
+
+<DT><code>unsigned int decimals</code>
+<DD>
+The number of decimals.  The default value is the maximum number of decimals in
+the arguments passed to the main function.  (For example, if the function is
+passed <code>1.34</code>, <code>1.345</code>, and <code>1.3</code>, the default would be 3,
+because <code>1.345</code> has 3 decimals.
+
+<DT><code>unsigned int max_length</code>
+<DD>
+The maximum length of the string result.  The default value differs depending
+on the result type of the function.  For string functions, the default is the
+length of the longest argument.  For integer functions, the default is 21
+digits.  For real functions, the default is 13 plus the number of decimals
+indicated by <code>initid-&#62;decimals</code>.  (For numeric functions, the length
+includes any sign or decimal point characters.)
+
+If you want to return a blob, you can set this to 65KB or 16MB; this
+memory is not allocated but used to decide which column type to use if
+there is a need to temporary store the data.
+
+<DT><code>char *ptr</code>
+<DD>
+A pointer that the function can use for its own purposes.  For example,
+functions can use <code>initid-&#62;ptr</code> to communicate allocated memory
+between functions.  In <code>xxx_init()</code>, allocate the memory and assign it
+to this pointer:
+
+
+<PRE>
+initid-&#62;ptr = allocated_memory;
+</PRE>
+
+In <code>xxx()</code> and <code>xxx_deinit()</code>, refer to <code>initid-&#62;ptr</code> to use
+or deallocate the memory.
+</DL>
+
+
+
+<H4><A NAME="UDF_aggr._calling" HREF="manual_toc.html#UDF_aggr._calling">24.2.2.2  UDF Calling Sequences for aggregate functions</A></H4>
+
+<P>
+<A NAME="IDX2280"></A>
+
+</P>
+<P>
+Here follows a description of the different functions you need to define
+when you want to create an aggregate UDF function.
+
+</P>
+<P>
+Note that the following function is NOT needed or used by MySQL 4.1.1.
+You can keep still have define this function if you want to have your
+code work with both MySQL 4.0 and MySQL 4.1.1
+
+</P>
+
+<PRE>
+char *xxx_reset(UDF_INIT *initid, UDF_ARGS *args,
+                char *is_null, char *error);
+</PRE>
+
+<P>
+This function is called when MySQL finds the first row in a new group.
+In the function you should reset any internal summary variables and then set
+the given argument as the first argument in the group.
+
+</P>
+<P>
+In many cases this is implemented internally by reseting all variables
+(for example by calling <code>xxx_clear()</code> and then calling
+<code>xxx_add()</code>.
+
+</P>
+<P>
+The following function is only required by MySQL 4.1.1 and above:
+
+</P>
+
+<PRE>
+char *xxx_clear(UDF_INIT *initid, char *is_null, char *error);
+</PRE>
+
+<P>
+This function is called when MySQL needs to reset the summary results.
+This will be called at the beginning for each new group but can also be
+called to reset the values for a query where there was no matching rows.
+<code>is_null</code> will be set to point to <code>CHAR(0)</code> before calling
+<code>xxx_clear()</code>.
+
+</P>
+<P>
+You can use the <code>error</code> pointer to store a byte if something went
+wrong .
+
+</P>
+
+<PRE>
+char *xxx_add(UDF_INIT *initid, UDF_ARGS *args,
+              char *is_null, char *error);
+</PRE>
+
+<P>
+This function is called for all rows that belongs to the same group,
+except for the first row. In this you should add the value in UDF_ARGS
+to your internal summary variable.
+
+</P>
+<P>
+The <code>xxx()</code> function should be declared identical as when you
+define a simple UDF function. See section <A HREF="manual_Extending_MySQL.html#UDF_calling">24.2.2.1  UDF Calling Sequences for simple functions</A>.
+
+</P>
+<P>
+This function is called when all rows in the group has been processed.
+You should normally never access the <code>args</code> variable here but
+return your value based on your internal summary variables.
+
+</P>
+<P>
+All argument processing in <code>xxx_reset()</code> and <code>xxx_add()</code>
+should be done identically as for normal UDFs. See section <A HREF="manual_Extending_MySQL.html#UDF_arguments">24.2.2.3  Argument Processing</A>.
+
+</P>
+<P>
+The return value handling in <code>xxx()</code> should be done identically as
+for a normal UDF. See section <A HREF="manual_Extending_MySQL.html#UDF_return_values">24.2.2.4  Return Values and Error Handling</A>.
+
+</P>
+<P>
+The pointer argument to <code>is_null</code> and <code>error</code> is the same for
+all calls to <code>xxx_reset()</code>, <code>xxx_clear()</code>, <code>xxx_add()</code> and
+<code>xxx()</code>.
+You can use this to remember that you got an error or if the <code>xxx()</code>
+function should return <code>NULL</code>. Note that you should not store a string
+into <code>*error</code>!  This is just a 1 byte flag!
+
+</P>
+<P>
+<code>is_null</code> is reset for each group (before calling <code>xxx_clear()</code>).
+<code>error</code> is never reset.
+
+</P>
+<P>
+If <code>is_null</code> or <code>error</code> are set after <code>xxx()</code>, then MySQL
+will return <code>NULL</code> as the result for the group function.
+
+</P>
+
+
+<H4><A NAME="UDF_arguments" HREF="manual_toc.html#UDF_arguments">24.2.2.3  Argument Processing</A></H4>
+
+<P>
+<A NAME="IDX2281"></A>
+<A NAME="IDX2282"></A>
+
+</P>
+<P>
+The <code>args</code> parameter points to a <code>UDF_ARGS</code> structure that has the
+members listed here:
+
+</P>
+<DL COMPACT>
+
+<DT><code>unsigned int arg_count</code>
+<DD>
+The number of arguments.  Check this value in the initialization function
+if you want your function to be called with a particular number of arguments.
+For example:
+
+
+<PRE>
+if (args-&#62;arg_count != 2)
+{
+    strcpy(message,"XXX() requires two arguments");
+    return 1;
+}
+</PRE>
+
+<DT><code>enum Item_result *arg_type</code>
+<DD>
+The types for each argument.  The possible type values are
+<code>STRING_RESULT</code>, <code>INT_RESULT</code>, and <code>REAL_RESULT</code>.
+
+To make sure that arguments are of a given type and return an
+error if they are not, check the <code>arg_type</code> array in the initialization
+function.  For example:
+
+
+<PRE>
+if (args-&#62;arg_type[0] != STRING_RESULT ||
+    args-&#62;arg_type[1] != INT_RESULT)
+{
+    strcpy(message,"XXX() requires a string and an integer");
+    return 1;
+}
+</PRE>
+
+As an alternative to requiring your function's arguments to be of particular
+types, you can use the initialization function to set the <code>arg_type</code>
+elements to the types you want.  This causes MySQL to coerce
+arguments to those types for each call to <code>xxx()</code>.  For example, to
+specify coercion of the first two arguments to string and integer, do this in
+<code>xxx_init()</code>:
+
+
+<PRE>
+args-&#62;arg_type[0] = STRING_RESULT;
+args-&#62;arg_type[1] = INT_RESULT;
+</PRE>
+
+<DT><code>char **args</code>
+<DD>
+<code>args-&#62;args</code> communicates information to the initialization function
+about the general nature of the arguments your function was called with.  For a
+constant argument <code>i</code>, <code>args-&#62;args[i]</code> points to the argument
+value.  (See below for instructions on how to access the value properly.)
+For a non-constant argument, <code>args-&#62;args[i]</code> is <code>0</code>.
+A constant argument is an expression that uses only constants, such as
+<code>3</code> or <code>4*7-2</code> or <code>SIN(3.14)</code>.  A non-constant argument is an
+expression that refers to values that may change from row to row, such as
+column names or functions that are called with non-constant arguments.
+
+For each invocation of the main function, <code>args-&#62;args</code> contains the
+actual arguments that are passed for the row currently being processed.
+
+Functions can refer to an argument <code>i</code> as follows:
+
+
+<UL>
+<LI>
+
+An argument of type <code>STRING_RESULT</code> is given as a string pointer plus a
+length, to allow handling of binary data or data of arbitrary length.  The
+string contents are available as <code>args-&#62;args[i]</code> and the string length
+is <code>args-&#62;lengths[i]</code>.  You should not assume that strings are
+null-terminated.
+
+<LI>
+
+For an argument of type <code>INT_RESULT</code>, you must cast
+<code>args-&#62;args[i]</code> to a <code>long long</code> value:
+
+
+<PRE>
+long long int_val;
+int_val = *((long long*) args-&#62;args[i]);
+</PRE>
+
+<LI>
+
+For an argument of type <code>REAL_RESULT</code>, you must cast
+<code>args-&#62;args[i]</code> to a <code>double</code> value:
+
+
+<PRE>
+double    real_val;
+real_val = *((double*) args-&#62;args[i]);
+</PRE>
+
+</UL>
+
+<DT><code>unsigned long *lengths</code>
+<DD>
+For the initialization function, the <code>lengths</code> array indicates the
+maximum string length for each argument. You should not change these.
+For each invocation of the main function, <code>lengths</code> contains the
+actual lengths of any string arguments that are passed for the row
+currently being processed.  For arguments of types <code>INT_RESULT</code> or
+<code>REAL_RESULT</code>, <code>lengths</code> still contains the maximum length of
+the argument (as for the initialization function).
+</DL>
+
+
+
+<H4><A NAME="UDF_return_values" HREF="manual_toc.html#UDF_return_values">24.2.2.4  Return Values and Error Handling</A></H4>
+
+<P>
+<A NAME="IDX2283"></A>
+<A NAME="IDX2284"></A>
+<A NAME="IDX2285"></A>
+<A NAME="IDX2286"></A>
+
+</P>
+<P>
+The initialization function should return <code>0</code> if no error occurred and
+<code>1</code> otherwise.  If an error occurs, <code>xxx_init()</code> should store a
+null-terminated error message in the <code>message</code> parameter.  The message
+will be returned to the client.  The message buffer is
+<code>MYSQL_ERRMSG_SIZE</code> characters long, but you should try to keep the
+message to less than 80 characters so that it fits the width of a standard
+terminal screen.
+
+</P>
+<P>
+The return value of the main function <code>xxx()</code> is the function value, for
+<code>long long</code> and <code>double</code> functions.  A string functions should
+return a pointer to the result and store the length of the string in the
+<code>length</code> arguments.
+
+</P>
+<P>
+Set these to the contents and length of the return value.  For example:
+
+</P>
+
+<PRE>
+memcpy(result, "result string", 13);
+*length = 13;
+</PRE>
+
+<P>
+The <code>result</code> buffer that is passed to the calc function is 255 byte
+big. If your result fits in this, you don't have to worry about memory
+allocation for results.
+
+</P>
+<P>
+If your string function needs to return a string longer than 255 bytes,
+you must allocate the space for it with <code>malloc()</code> in your
+<code>xxx_init()</code> function or your <code>xxx()</code> function and free it in
+your <code>xxx_deinit()</code> function.  You can store the allocated memory
+in the <code>ptr</code> slot in the <code>UDF_INIT</code> structure for reuse by
+future <code>xxx()</code> calls.  See section <A HREF="manual_Extending_MySQL.html#UDF_calling">24.2.2.1  UDF Calling Sequences for simple functions</A>.
+
+</P>
+<P>
+To indicate a return value of <code>NULL</code> in the main function, set
+<code>is_null</code> to <code>1</code>:
+
+</P>
+
+<PRE>
+*is_null = 1;
+</PRE>
+
+<P>
+To indicate an error return in the main function, set the <code>error</code>
+parameter to <code>1</code>:
+
+</P>
+
+<PRE>
+*error = 1;
+</PRE>
+
+<P>
+If <code>xxx()</code> sets <code>*error</code> to <code>1</code> for any row, the function
+value is <code>NULL</code> for the current row and for any subsequent rows
+processed by the statement in which <code>XXX()</code> was invoked.  (<code>xxx()</code>
+will not even be called for subsequent rows.) <strong>Note</strong>: In
+MySQL versions prior to 3.22.10, you should set both <code>*error</code>
+and <code>*is_null</code>:
+
+</P>
+
+<PRE>
+*error = 1;
+*is_null = 1;
+</PRE>
+
+
+
+<H4><A NAME="UDF_compiling" HREF="manual_toc.html#UDF_compiling">24.2.2.5  Compiling and Installing User-defined Functions</A></H4>
+
+<P>
+<A NAME="IDX2287"></A>
+<A NAME="IDX2288"></A>
+<A NAME="IDX2289"></A>
+
+</P>
+<P>
+Files implementing UDFs must be compiled and installed on the host where
+the server runs.  This process is described below for the example UDF
+file <tt>`udf_example.cc'</tt> that is included in the MySQL source distribution.
+
+</P>
+<P>
+The immediately following instructions are for Unix. Instructions for
+Windows are given later in this section.
+
+</P>
+<P>
+The <tt>`udf_example.cc'</tt> file contains the following functions:
+
+</P>
+
+<UL>
+<LI>
+
+<code>metaphon()</code> returns a metaphon string of the string argument.
+This is something like a soundex string, but it's more tuned for English.
+<LI>
+
+<code>myfunc_double()</code> returns the sum of the ASCII values of the
+characters in its arguments, divided by the sum of the length of its arguments.
+<LI>
+
+<code>myfunc_int()</code> returns the sum of the length of its arguments.
+<LI>
+
+<code>sequence([const int])</code> returns an sequence starting from the given
+number or 1 if no number has been given.
+<LI>
+
+<code>lookup()</code> returns the IP number for a hostname.
+<LI>
+
+<code>reverse_lookup()</code> returns the hostname for an IP number.
+The function may be called with a string <code>'xxx.xxx.xxx.xxx'</code> or
+four numbers.
+</UL>
+
+<P>
+A dynamically loadable file should be compiled as a sharable object file,
+using a command something like this:
+
+</P>
+
+<PRE>
+shell&#62; gcc -shared -o udf_example.so udf_example.cc
+</PRE>
+
+<P>
+If you are using <code>gcc</code>, you should be able to create
+<tt>`udf_example.so'</tt> with a simpler command:
+
+</P>
+
+<PRE>
+shell&#62; make udf_example.so
+</PRE>
+
+<P>
+You can easily find out the correct compiler options for your system by
+running this command in the <tt>`sql'</tt> directory of your MySQL
+source tree:
+
+</P>
+
+<PRE>
+shell&#62; make udf_example.o
+</PRE>
+
+<P>
+You should run a compile command similar to the one that <code>make</code> displays,
+except that you should remove the <code>-c</code> option near the end of the line
+and add <code>-o udf_example.so</code> to the end of the line.  (On some systems,
+you may need to leave  the <code>-c</code> on the command.)
+
+</P>
+<P>
+Once you compile a shared object containing UDFs, you must install it and
+tell MySQL about it. Compiling a shared object from <tt>`udf_example.cc'</tt>
+produces a file named something like <tt>`udf_example.so'</tt> (the exact name
+may vary from platform to platform). Copy this file to some directory
+searched by the dynamic linker <code>ld</code>, such as <tt>`/usr/lib'</tt> or add the
+directory in which you placed the shared object to the linker configuration
+file (for example, <tt>`/etc/ld.so.conf'</tt>).
+
+</P>
+<P>
+On many systems, you can also set the <code>LD_LIBRARY</code> or
+<code>LD_LIBRARY_PATH</code> environment variable to point at the directory where
+you have your UDF function files. The <code>dlopen</code> manual page tells you
+which variable you should use on your system. You should set this in
+<code>mysql.server</code> or <code>mysqld_safe</code> startup scripts and restart
+<code>mysqld</code>.
+
+</P>
+<P>
+On some systems, the <code>ldconfig</code> program that configures the dynamic
+linker will not recognize shared objects unless their name begins with
+<code>lib</code>. In this case you should rename a file such as
+<tt>`udf_example.so'</tt> to <tt>`libudf_example.so'</tt>.
+
+</P>
+<P>
+On Windows, you can compile user-defined functions by using the following
+procedure:
+
+</P>
+
+<OL>
+
+<LI>
+
+You will need to obtain the BitKeeper source repository for MySQL 4.0 or
+higher.
+See section <A HREF="manual_Installing.html#Installing_source_tree">2.8.3  Installing from the Development Source Tree</A>.
+
+<LI>
+
+In the source repository, look in the <tt>`VC++Files/examples/udf_example'</tt>
+directory. You will find files named <tt>`udf_example.def'</tt>,
+<tt>`udf_example.dsp'</tt>, and <tt>`udf_example.dsw'</tt> there.
+
+<LI>
+
+In the source repository, look in the <tt>`sql'</tt> directory. Copy
+the <tt>`udf_example.cc'</tt> from this directory to the
+<tt>`VC++Files/examples/udf_example'</tt> directory and rename the file to
+<tt>`udf_example.cpp'</tt>.
+
+<LI>
+
+Open the <tt>`udf_example.dsw'</tt> file with Visual Studio VC++ and use it
+to compile the UDFs as a normal project.
+
+</OL>
+
+<P>
+After the library is installed, notify <code>mysqld</code> about the new
+functions with these commands:
+
+</P>
+
+<PRE>
+mysql&#62; CREATE FUNCTION metaphon RETURNS STRING SONAME 'udf_example.so';
+mysql&#62; CREATE FUNCTION myfunc_double RETURNS REAL SONAME 'udf_example.so';
+mysql&#62; CREATE FUNCTION myfunc_int RETURNS INTEGER SONAME 'udf_example.so';
+mysql&#62; CREATE FUNCTION lookup RETURNS STRING SONAME 'udf_example.so';
+mysql&#62; CREATE FUNCTION reverse_lookup
+    -&#62;        RETURNS STRING SONAME 'udf_example.so';
+mysql&#62; CREATE AGGREGATE FUNCTION avgcost
+    -&#62;        RETURNS REAL SONAME 'udf_example.so';
+</PRE>
+
+<P>
+Functions can be deleted using <code>DROP FUNCTION</code>:
+
+</P>
+
+<PRE>
+mysql&#62; DROP FUNCTION metaphon;
+mysql&#62; DROP FUNCTION myfunc_double;
+mysql&#62; DROP FUNCTION myfunc_int;
+mysql&#62; DROP FUNCTION lookup;
+mysql&#62; DROP FUNCTION reverse_lookup;
+mysql&#62; DROP FUNCTION avgcost;
+</PRE>
+
+<P>
+The <code>CREATE FUNCTION</code> and <code>DROP FUNCTION</code> statements update the
+system table <code>func</code> in the <code>mysql</code> database.  The function's name,
+type and shared library name are saved in the table.  You must have the
+<code>INSERT</code> and <code>DELETE</code> privileges for the <code>mysql</code> database
+to create and drop functions.
+
+</P>
+<P>
+You should not use <code>CREATE FUNCTION</code> to add a function that has already
+been created.  If you need to reinstall a function, you should remove it with
+<code>DROP FUNCTION</code> and then reinstall it with <code>CREATE FUNCTION</code>.  You
+would need to do this, for example, if you recompile a new version of your
+function, so that <code>mysqld</code> gets the new version.  Otherwise, the server
+will continue to use the old version.
+
+</P>
+<P>
+Active functions are reloaded each time the server starts, unless you start
+<code>mysqld</code> with the <code>--skip-grant-tables</code> option.  In this case, UDF
+initialization is skipped and UDFs are unavailable.  (An active function is
+one that has been loaded with <code>CREATE FUNCTION</code> and not removed with
+<code>DROP FUNCTION</code>.)
+
+</P>
+
+
+
+<H3><A NAME="Adding_native_function" HREF="manual_toc.html#Adding_native_function">24.2.3  Adding a New Native Function</A></H3>
+
+<P>
+<A NAME="IDX2290"></A>
+<A NAME="IDX2291"></A>
+<A NAME="IDX2292"></A>
+
+</P>
+<P>
+The procedure for adding a new native function is described here.  Note
+that you cannot add native functions to a binary distribution because
+the procedure involves modifying MySQL source code.  You must
+compile MySQL yourself from a source distribution.  Also note
+that if you migrate to another version of MySQL (for example,
+when a new version is released), you will need to repeat the procedure
+with the new version.
+
+</P>
+<P>
+To add a new native MySQL function, follow these steps:
+
+</P>
+
+<OL>
+<LI>
+
+Add one line to <tt>`lex.h'</tt> that defines the function name in the
+<code>sql_functions[]</code> array.
+<LI>
+
+If the function prototype is simple (just takes zero, one, two or three
+arguments), you should in lex.h specify SYM(FUNC_ARG#) (where # is the
+number of arguments) as the second argument in the
+<code>sql_functions[]</code> array and add a function that creates a function
+object in <tt>`item_create.cc'</tt>.  Take a look at <code>"ABS"</code> and
+<code>create_funcs_abs()</code> for an example of this.
+
+If the function prototype is complicated (for example takes a variable number
+of arguments), you should add two lines to <tt>`sql_yacc.yy'</tt>. One
+indicates the preprocessor symbol that <code>yacc</code> should define (this
+should be added at the beginning of the file). Then define the function
+parameters and add an ``item'' with these parameters to the
+<code>simple_expr</code> parsing rule.  For an example, check all occurrences
+of <code>ATAN</code> in <tt>`sql_yacc.yy'</tt> to see how this is done.
+<LI>
+
+In <tt>`item_func.h'</tt>, declare a class inheriting from <code>Item_num_func</code> or
+<code>Item_str_func</code>, depending on whether your function returns a number or a
+string.
+<LI>
+
+In <tt>`item_func.cc'</tt>, add one of the following declarations, depending
+on whether you are defining a numeric or string function:
+
+<PRE>
+double   Item_func_newname::val()
+longlong Item_func_newname::val_int()
+String  *Item_func_newname::Str(String *str)
+</PRE>
+
+If you inherit your object from any of the standard items (like
+<code>Item_num_func</code>), you probably only have to define one of these
+functions and let the parent object take care of the other functions.
+For example, the <code>Item_str_func</code> class defines a <code>val()</code> function
+that executes <code>atof()</code> on the value returned by <code>::str()</code>.
+
+<LI>
+
+You should probably also define the following object function:
+
+<PRE>
+void Item_func_newname::fix_length_and_dec()
+</PRE>
+
+This function should at least calculate <code>max_length</code> based on the
+given arguments. <code>max_length</code> is the maximum number of characters
+the function may return.  This function should also set <code>maybe_null
+= 0</code> if the main function can't return a <code>NULL</code> value.  The
+function can check whether any of the function arguments can return
+<code>NULL</code> by checking the arguments' <code>maybe_null</code> variable. You
+can take a look at <code>Item_func_mod::fix_length_and_dec</code> for a
+typical example of how to do this.
+</OL>
+
+<P>
+All functions must be thread-safe (in other words, don't use any global or
+static variables in the functions without protecting them with mutexes).
+
+</P>
+<P>
+If you want to return <code>NULL</code>, from <code>::val()</code>, <code>::val_int()</code>
+or <code>::str()</code> you should set <code>null_value</code> to 1 and return 0.
+
+</P>
+<P>
+For <code>::str()</code> object functions, there are some additional
+considerations to be aware of:
+
+</P>
+
+<UL>
+<LI>
+
+The <code>String *str</code> argument provides a string buffer that may be
+used to hold the result. (For more information about the <code>String</code> type,
+take a look at the <tt>`sql_string.h'</tt> file.)
+<LI>
+
+The <code>::str()</code> function should return the string that holds the result or
+<code>(char*) 0</code> if the result is <code>NULL</code>.
+<LI>
+
+All current string functions try to avoid allocating any memory unless
+absolutely necessary!
+</UL>
+
+
+
+<H2><A NAME="Adding_procedures" HREF="manual_toc.html#Adding_procedures">24.3  Adding New Procedures to MySQL</A></H2>
+
+<P>
+<A NAME="IDX2293"></A>
+<A NAME="IDX2294"></A>
+<A NAME="IDX2295"></A>
+
+</P>
+<P>
+In MySQL, you can define a procedure in C++ that can access and
+modify the data in a query before it is sent to the client.  The modification
+can be done on a row-by-row or <code>GROUP BY</code> level.
+
+</P>
+<P>
+We have created an example procedure in MySQL 3.23 to
+show you what can be done.
+
+</P>
+<P>
+Additionally we recommend you to take a look at <code>mylua</code>.
+With this you can use the LUA language to load a procedure at
+runtime into <code>mysqld</code>.
+
+</P>
+
+
+
+<H3><A NAME="procedure_analyse" HREF="manual_toc.html#procedure_analyse">24.3.1  Procedure Analyse</A></H3>
+
+<P>
+<code>analyse([max elements,[max memory]])</code>
+
+</P>
+<P>
+This procedure is defined in the <tt>`sql/sql_analyse.cc'</tt>.  This
+examines the result from your query and returns an analysis of the
+results:
+
+</P>
+
+<UL>
+<LI>
+
+<code>max elements</code> (default 256) is the maximum number of distinct values
+<code>analyse</code> will notice per column.  This is used by <code>analyse</code> to
+check whether
+the optimal column type should be of type <code>ENUM</code>.
+<LI>
+
+<code>max memory</code> (default 8192) is the maximum memory <code>analyse</code> should
+allocate per column while trying to find all distinct values.
+</UL>
+
+
+<PRE>
+SELECT ... FROM ... WHERE ... PROCEDURE ANALYSE([max elements,[max memory]])
+</PRE>
+
+
+
+<H3><A NAME="Writing_a_procedure" HREF="manual_toc.html#Writing_a_procedure">24.3.2  Writing a Procedure</A></H3>
+
+<P>
+For the moment, the only documentation for this is the source.
+
+</P>
+<P>
+You can find all information about procedures by examining the following files:
+
+</P>
+
+<UL>
+<LI><tt>`sql/sql_analyse.cc'</tt>
+
+<LI><tt>`sql/procedure.h'</tt>
+
+<LI><tt>`sql/procedure.cc'</tt>
+
+<LI><tt>`sql/sql_select.cc'</tt>
+
+</UL>
+
+<P><HR><P>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_Error-handling.html">previous</A>, <A HREF="manual_Problems.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+ </BODY>
+ </HTML>

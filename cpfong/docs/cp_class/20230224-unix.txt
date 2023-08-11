@@ -1,0 +1,10 @@
+.		current dir
+~		user HOME
+..		upper dir
+TAB		command tab completion
+ls		list files and dir HERE; ls; ls ~; ls ~/0214
+mkdir		make a directory; mkdir 0224; mkdir ./dir
+cd		change directory; cd; cd ~/0214
+touch		new file size 0; touch ~/0214/foo
+rm		delete a file; rm ~/0214/foo; rm -fr dir/; 
+rmdir		delete a dir; rmdir dir/

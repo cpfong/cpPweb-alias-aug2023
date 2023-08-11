@@ -1,0 +1,12 @@
+under /usr/src/sys
+or /sys
+
+the following dir are related to /sys
+--
+arch/conf (arch: i386 amd64 ...)
+
+cp GENERIC MYKERNEL
+/usr/sbin/config NEW
+cd ../compile/NEW
+make depend; make # compile kernel (nanoBSD need this, but not make install)
+make install # install kernel (note: if only you want to install into VM, nanoBSD does NOT need to do this)

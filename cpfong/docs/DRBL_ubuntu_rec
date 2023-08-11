@@ -1,0 +1,907 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=Big5"><title>DRBL安裝於ubuntu紀錄</title>
+  
+
+
+  <link href="DRBL_ubuntu_rec_files/css1" rel="stylesheet" type="text/css">
+
+  <style>
+table{style;border:1px dashed; border-color:顏色色碼}
+.style1 {color: #FF0000}
+a:link {
+text-decoration: none;
+}
+a:visited {
+text-decoration: none;
+}
+a:hover {
+text-decoration: underline;
+}
+a:active {
+text-decoration: none;
+}
+.style2 {color: #0000FF}
+.style4 {color: #006600}
+.style5 {
+font-size: 18px;
+font-weight: bold;
+}
+  </style>
+  <meta content="祥安國小資訊組" name="author"></head>
+<body>
+
+<table style="width: 867px; height: 347px;" border="0" cellpadding="0" cellspacing="0">
+
+  <tbody>
+
+    <tr>
+
+      <td height="44" width="52">&nbsp;</td>
+
+      <td width="780">
+      <div align="center"><img src="DRBL_ubuntu_rec_files/saes50_word.jpg"><span class="style5"> &nbsp; 利用DRBL把電腦教室搞成ubuntu吧！<br>
+
+      <br>
+
+      </span>
+      <hr style="width: 100%; height: 2px;"><span class="style5"></span></div>
+
+      </td>
+
+      <td width="33">&nbsp;</td>
+
+    </tr>
+
+    <tr>
+
+      <td height="197">&nbsp;</td>
+
+      <td>
+      <p>目的：我想試試電腦課上傳說中好用又漂亮的ubuntu而不要上XP（vista），可是又希望Linux好管理，試試DRBL吧。</p>
+
+      <p>DRBL是什麼？無硬碟系統，server端裝啥學生就用啥，詳細說明<a href="http://drbl.nchc.org.tw/faq/" target="_blank">請看
+此</a>。&nbsp;</p>
+
+      <p>XP上好好的為何要這麼做累自己?請看<a href="http://drbl.nchc.org.tw/faq/index.php#path=./1_DRBL_common&amp;entry=00_1_why_FOSS.faq" target="_blank">國網中心說明</a>，我想身為資訊教師「該做就做吧！」</p>
+
+      <p>這些東西網路上都有，我只是收集起來整理成適合我們電腦教室流程，感謝前人種樹，歡迎同好一起體驗Linux的世界。</p>
+
+      <table bgcolor="#f5f5f5" border="0" height="169" width="752">
+
+        <tbody>
+
+          <tr>
+
+            <td bgcolor="#ffffcc" width="744">
+            <ul>
+
+              <li>以ubuntu 6.10
+為主安裝 DRBL運行於電腦教室學生端，本範例server為中信局最低階直立式SATA電腦（有空我會試試一般PC），教室環境為Server
+→ Giga對內網卡 → 100M 48port 加 1port Giga Switch Hub
+→
+37台sis900網卡賽揚1.7G &amp; 512MB主機。</li>
+
+            </ul>
+
+            <ul>
+
+              <li>下載<a href="http://download.ossacc.org/edubuntu.iso">OSSACC
+6.10Edubuntu</a>&nbsp;燒錄成光碟，ubuntu<a href="http://www.ubuntu.org.tw/">其他版本或相關資訊</a>(ubuntu中文
+站)。</li>
+
+            </ul>
+
+            <ul>
+
+              <li>DRBL安裝當然是參考偉大的國網中心<a href="http://drbl.nchc.org.tw/">http://drbl.nchc.org.tw/</a>、
+以及<a href="http://www.google.com.tw/">google</a>引擎所得。</li>
+
+            </ul>
+
+            <ul>
+
+              <li>安裝ubuntu方式<a href="http://wiki.ubuntu.org.tw/index.php/Ubuntu6.10Install">http://wiki.ubuntu.org.tw/index.php/Ubuntu6.10Install</a></li>
+
+            </ul>
+
+            <ul>
+
+              <li>光碟開機完直接點桌面install即可，250GB（其實大約只要80G就夠了），分割區我切成：根
+目錄 / 100G，/tftpboot 100G，/tmp 20G ，SWAP 30G （格式選擇
+ReiserFS，不過tftpboot最好獨立出來）</li>
+
+            </ul>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+      </table>
+
+      <p>準備好了嗎？泡杯咖啡開始吧！</p>
+
+      <p></p>
+
+      <hr style="width: 100%; height: 2px;"> </td>
+
+      <td>&nbsp;</td>
+
+    </tr>
+
+    <tr>
+
+      <td rowspan="14">&nbsp;</td>
+
+      <td>
+      <p class="style5">1. 設定網路卡</p>
+
+      <p> 系統 &gt; 管理 &gt;
+網路設定貴校eth0的對外IP、netmask及gatway等，eth1對內ip，請不要輸入對內gateway(記得輸入ip後要按右邊的DNS)
+      </p>
+
+      <p>開啟應用程式 &gt; 附屬應用程式 &gt; 終端機</p>
+
+      <p>在終端機下輸入（#就是終端機下提示符號，千萬不要把#也打下去喔）</p>
+
+      <p>#sudo -i&nbsp;</p>
+
+      <p>輸入管理者密碼</p>
+
+      <p>#sudo vi /etc/network/interface</p>
+
+      <p>進去文字介面把不要的界面卡刪除，不做也沒關係 (dd是刪除行
+i是插入，esc後按shift加:後輸入wq即可存檔離開，q!不存檔離開，<a href="http://www2.nsysu.edu.tw/csmlab/unix/vi_command.htm">vi
+使用參考</a>) </p>
+
+      <table align="center" bgcolor="#ffffa6" border="0" bordercolor="#000000" height="20" width="348">
+
+        <tbody>
+
+          <tr>
+
+            <td width="340">
+            <p align="left">##祥安範例檔（請勿照抄@@，不是我小氣...）<br>
+
+auto lo <br>
+
+iface lo inet loopback <br>
+
+            <br>
+
+auto eth0 <br>
+
+iface eth0 inet static <br>
+
+address 163.30.154.14 <br>
+
+netmask 255.255.255.128 <br>
+
+gateway 163.30.154.126 <br>
+
+            <br>
+
+auto eth1 <br>
+
+iface eth1 inet static <br>
+
+address 192.168.3.1 <br>
+
+netmask 255.255.255.0 <br>
+
+            </p>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+      </table>
+
+      <p>重新啟動網卡輸入</p>
+
+      <p># sudo /etc/init.d/networking restart</p>
+
+      <p>&nbsp;</p>
+
+      <hr style="width: 100%; height: 2px;"> </td>
+
+      <td rowspan="14">&nbsp;</td>
+
+    </tr>
+
+    <tr>
+
+      <td>
+      <p class="style5">2.更新系統</p>
+
+      <p>點選右上角橘色按鈕可以更新軟體</p>
+
+      <p>並進入終端機輸入&nbsp;</p>
+
+      <p>#apt-get update</p>
+
+      <p>若更新或安裝軟體失敗，可執行#apt-get install -f</p>
+
+      <p>如果嫌速度太慢可以參考網路教學更改/etc/apt/source.list（要分清楚是6.10或7.04的站台）</p><p><a href="http://www.ubuntu.org.tw/modules/newbb/viewtopic.php?topic_id=201&amp;viewmode=flat&amp;order=ASC&amp;type=&amp;mode=0&amp;start=30">http://www.ubuntu.org.tw/modules/newbb/viewtopic.php?topic_id=201&amp;viewmode=flat&amp;order=ASC&amp;type=&amp;mode=0&amp;start=30</a></p>
+
+      <p>也可參考這個網站提供的script快速更新及校調<a href="http://www.ubuntu.org.tw/modules/newbb/viewtopic.php?topic_id=5984">http://www.ubuntu.org.tw/modules/newbb/viewtopic.php?topic_id=5984</a></p>
+
+      <p>其實不改列表也無所謂。</p>
+
+      <p></p>
+
+      <hr style="width: 100%; height: 2px;"> </td>
+
+    </tr>
+
+    <tr>
+
+      <td valign="top">
+      <p class="style5">3.ubuntu7.04版修正中文輸入法（OSSACC之6.10不用）</p>
+
+      <p> 終端機下輸入</p>
+
+      <table align="center" bgcolor="#ffffa6" border="0" bordercolor="#000000" height="69" width="447">
+
+        <tbody>
+
+          <tr>
+
+            <td height="63" valign="top" width="470">
+            <p align="left">#sudo apt-get install
+scim-qtimm <br>
+
+#sudo apt-get install scim-chewing <br>
+
+#sudo apt-get install scim-tables-zh <br>
+
+#im-switch -s scim</p>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+      </table>
+
+      <p><br>
+
+重新登入即可<br>
+
+&nbsp;</p>
+
+      <hr style="width: 100%; height: 2px;"> </td>
+
+    </tr>
+
+    <tr>
+
+      <td>
+      <p class="style5">4.變更中文顯示</p>
+
+      <p>執行更新</p>
+
+      <p>#apt-get update </p>
+
+      <p>執行系統 &gt;偏好設定 &gt; language support</p>
+
+      <p>安裝列表 &gt; 更新後選chinese</p>
+
+      <p>軟體大多會變成中文 (例如Gimp繪圖軟體、即時通等)</p>
+
+      <p></p>
+
+      <hr style="width: 100%; height: 2px;"> </td>
+
+    </tr>
+
+    <tr>
+
+      <td>
+      <p class="style5">5. 安裝所需軟體</p>
+
+      <p>應用程式 &gt; 添加和刪除</p>
+
+      <p>新增Dr.GEO等你想加的軟體(不要太貪心選越多檔案越大，<a href="http://blog.ofset.org/ckhung/index.php?post/2007/09/21/Dr-Geo">Dr.GEO
+教學</a>、<a href="http://st.simps.tyc.edu.tw/modules/tadbook2/open_book.php?book_sn=3">新
+明dr.geo教學</a>)</p>
+
+      <hr style="width: 100%; height: 2px;">
+      <p></p>
+
+      </td>
+
+    </tr>
+
+    <tr>
+
+      <td>
+      <p class="style5">6.安裝DHCP</p>
+
+      <p># apt-get install dhcp3-server </p>
+
+      <p> 現在啟動會失敗，是因為沒有設定好dhcpd.conf</p>
+
+      <p>設定好後sudo /etc/init.d/networking restart</p>
+
+      <p></p>
+
+      <hr style="width: 100%; height: 2px;"> </td>
+
+    </tr>
+
+    <tr>
+
+      <td>
+      <p class="style5">7.安裝DRBL</p>
+
+      <p> #vi /etc/apt/sources.list</p>
+
+      <table align="center" bgcolor="#ffffa6" border="0" bordercolor="#000000" height="20" width="523">
+
+        <tbody>
+
+          <tr>
+
+            <td width="515">
+            <p align="left">＃按i再貼上，按esc再shift加冒號「:」輸入wq離開<br>
+
+deb <a href="http://free.nchc.org.tw/ubuntu">http://free.nchc.org.tw/ubuntu
+            </a> edgy main restricted universe multiverse <br>
+
+deb <a href="http://free.nchc.org.tw/drbl-core">http://free.nchc.org.tw/drbl-core
+            </a> drbl stable </p>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+      </table>
+
+      <p> #gpg --keyserver subkeys.pgp.net --recv-key D7E8DF3A <br>
+
+#gpg -a --export D7E8DF3A | apt-key add - <br>
+
+#apt-get update <br>
+
+#apt-get install drbl</p>
+
+      <p>將終端機顯示顏色改成黑底白字，接下來看起來比較舒適 編輯 &gt; 目前設定組合 &gt; 色彩
+&gt; 內置色彩組合 &gt; 設黑底白字</p>
+
+      <p>#/opt/drbl/sbin/drblsrv -i </p>
+
+      <p>可按Enter用預設值即可，詳細設定請參考<a href="http://drbl.nchc.org.tw/">http://drbl.nchc.org.tw</a>，
+這步驟要上網下載檔案會花不少時間。</p>
+
+      <p> #/opt/drbl/sbin/drblpush -i 詳細設定請參考<a href="http://drbl.nchc.org.tw/">http://drbl.nchc.org.tw</a>，37
+台大概七分鐘即可。</p>
+
+      <p>大部分選預設值即可，其中有個地方要注意：</p>
+
+      <p>（1）問你要不要收網卡卡號，看您自己需要嗎，如果要就按Y，然後依序把學生電腦開機，進入PXE開機（PXE在BIOS
+設定），看到
+取DHCP即可關了，我一共收37台，收完後就可以下一步問你要不要鎖ip（DHCP發固定ip給學生電腦，建議使用），按Y後會問你卡號檔在哪（預設是
+/etc/macadr-eth1.txt，可以留起來備份在別的地方，以後就不用辛苦收卡號）</p>
+
+      <p> （2）登入模式：選(1)auto login自動登入<br>
+
+      <br>
+
+      </p>
+
+      <hr style="width: 100%; height: 2px;"> </td>
+
+    </tr>
+
+    <tr>
+
+      <td>
+      <p class="style5">8.更改Dhcpd.conf </p>
+
+      <p>如果您的client電腦是sis900必須做下面這步驟</p>
+
+      <p>#vi /etc/dhcp3/dhcpd.conf</p>
+
+      <p>除去sis900註解 （下面紅色部分）<br>
+
+把sis900路徑刪除 （下面藍色部分）<br>
+
+把卡號三碼改成一碼（下面綠色部分，因為我的sis機器有兩種MAC規格，所以鎖00，其實就等於沒鎖）</p>
+
+      <table align="center" bgcolor="#ffffa6" border="0" bordercolor="#000000" height="20" width="671">
+
+        <tbody>
+
+          <tr>
+
+            <td width="663">
+            <p align="left"># Generated by DRBL. <br>
+
+# Do NOT modify this file unless you know what you are doing!</p>
+
+            <p>default-lease-time 300;<br>
+
+max-lease-time 300;<br>
+
+option subnet-mask 255.255.255.0;<br>
+
+option domain-name-servers 163.30.154.1;<br>
+
+option domain-name "saes.tyc.edu.tw"; <br>
+
+ddns-update-style none;<br>
+
+server-name drbl;</p>
+
+            <p>filename = "pxelinux.0";</p>
+
+            <p>## Uncomment the following "if block" when you
+have some
+buggy PXE NIC card (such as annoying sis900 NIC). Remember to modify
+the MAC vendor prefix and restart dhcpd service!!!<br>
+
+## This is a workround for some network card with BAD PXE code in
+firmware.<br>
+
+## It will only affect those clients with MAC vendor prefix you
+assigned.<br>
+
+## Ref: http://syslinux.zytor.com/archives/2005-August/005640.html</p>
+
+            <p><span class="style1">if substring
+(option vendor-class-identifier, 0, 3) = "PXE" {</span><br>
+
+# # **************************************************************<br>
+
+# # ***MODIFY*** the MAC vendor prefix of client network card here.<br>
+
+# # **************************************************************<br>
+
+# # For annoying sis900 network card, maybe it is 00:07:95, 00:0C:6E...<br>
+
+            <span class="style1">if substring (hardware, 1,<span class="style4"> 1) = 00</span> {</span><br>
+
+# # /opt/drbl-etherboot/eb-5.4.3-etherboot-pci.zpxe is a all-in-one pxe
+image, works for most NIC.<br>
+
+# # /opt/drbl-etherboot/sis900.zpxe is specially for sis900 NIC.<br>
+
+# # Try either one.<br>
+
+# #filename = "/opt/drbl-etherboot/eb-5.4.3-etherboot-pci.zpxe";<br>
+
+            <span class="style1">filename = "<span class="style2">sis900.zpxe</span>";</span><br>
+
+            <span class="style1">}<br>
+
+}</span></p>
+
+            <p>subnet 192.168.3.0 netmask 255.255.255.0 {<br>
+
+option broadcast-address 192.168.3.255;<br>
+
+option routers 192.168.3.1;<br>
+
+next-server 192.168.3.1;</p>
+
+            <p> host a121 {<br>
+
+hardware ethernet 00:11:d8:d5:xx:xx<br>
+
+;<br>
+
+fixed-address 192.168.3.21;<br>
+
+# option host-name "a121";<br>
+
+}<br>
+
+.<br>
+
+.<br>
+
+.<br>
+
+.<br>
+
+37台MAC 省略<br>
+
+.<br>
+
+.</p>
+
+            <p> host a122 {<br>
+
+hardware ethernet 00:11:d8:ba:xx:xx<br>
+
+;<br>
+
+fixed-address 192.168.3.22;<br>
+
+# option host-name "a122";<br>
+
+}</p>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+      </table>
+
+      <p>完成，可以試試學生電腦開機，如果沒問題，把這個dhcpd.conf拷貝起來，我都複製到/drbl-back/下，以
+後重裝軟體跑drblpush -i後dhcpd.conf的sis900部份會被改過，可直接用這個蓋掉即可。</p>
+
+      <p>記得重新啟動網卡輸入</p>
+
+      <p># sudo /etc/init.d/networking restart</p>
+
+      <p>&nbsp;</p>
+
+      <hr style="width: 100%; height: 2px;"> </td>
+
+    </tr>
+
+    <tr>
+
+      <td>
+      <p class="style5">9.更換首頁、我的最愛及Flashplayer</p>
+
+      <p>原始方法（參考用，用第二個比較方便）：</p>
+
+      <table align="center" bgcolor="#ffffa6" border="0" bordercolor="#000000" height="20" width="676">
+
+        <tbody>
+
+          <tr>
+
+            <td width="668">
+            <p>（1）先用你目前的帳號（安裝ubuntu時所設，如admin）更換FireFox首頁、<a href="http://fpdownload.macromedia.com/get/flashplayer/current/install_flash_player_9_linux.tar.gz">安
+裝flashplayer</a>（下載後解壓縮至桌面，進入以終端機執行即可）以及新增我的最愛。</p>
+
+            <p>（2）在
+/home/admin/.mozilla下尋找資料夾下亂數產生project的目錄，如下複製到你的備份資料夾（名稱隨意）。 </p>
+
+            <p>#cp/home/<span class="style2">admin</span>/.mozilla/firefox/<span class="style2">亂數</span>.default/<span style="color: rgb(255, 0, 0);">prefs.js</span>
+/drbl-back/ &nbsp;&nbsp;首頁</p>
+
+            <p>#cp/home/<span class="style2">admin</span>/.mozilla/firefox/<span class="style2">亂數</span>.default/<span style="color: rgb(255, 0, 0);">bookmarks.html</span>
+/drbl-back/ &nbsp;&nbsp;我的最愛</p>
+
+            <p>#cp /home/<span class="style2">admin</span>/.mozilla/<span class="style1">plugins</span> /drbl-back/
+&nbsp;&nbsp;複製flashplayer資料夾</p>
+
+            <p>執行DRBL指令複製新首頁至每一個使用者#/opt/drbl/sbin/drbl-cp-host
+/drbl-back/prefs.js /etc/firefox/profile/</p>
+
+            <p>執行DRBL指令複製我的最愛至每一個使用者#/opt/drbl/sbin/drbl-cp-host
+/drbl-back/bookmarks.html /etc/firefox/profile/</p>
+
+            <p>不知道這個指令能否複製flashplayer至每一個使用者？</p>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+      </table>
+
+      <p><big><big><span style="color: red;">但</span></big></big>由
+於學生端都還沒有開機上網無法產生.mozilla資料夾，所以無法複製範本至/home/學生帳號/.mozilla/下，因此可以使用Script大
+量先建置.mozilla資料夾：</p>
+
+      <table style="background-color: rgb(255, 255, 166); width: 670px; height: 20px; text-align: left; margin-left: auto; margin-right: auto;" border="0" bordercolor="#000000">
+
+        <tbody>
+
+          <tr>
+
+            <td style="width: 662px;">
+            <p>（1）先用你目前的帳號（安裝ubuntu時所設，如admin）更換FireFox首頁、<a href="http://fpdownload.macromedia.com/get/flashplayer/current/install_flash_player_9_linux.tar.gz">安
+裝flashplayer</a>（下載後解壓縮至桌面，進入以終端機執行即可）以及新增我的最愛。</p>
+
+            <p>（2）在
+/home/admin/.mozilla下尋找資料夾下亂數產生project的目錄，如下複製到你的備份資料夾（名稱隨意）。 </p>
+
+            <p>#cp/home/<span class="style2">admin</span>/.mozilla/firefox/<span class="style2">亂數</span>.default/prefs.js /drbl-back/
+&nbsp;&nbsp;首頁</p>
+
+            <p>#cp/home/<span class="style2">admin</span>/.mozilla/firefox/<span class="style2">亂數</span>.default/bookmarks.html
+/drbl-back/ &nbsp;&nbsp;我的最愛</p>
+
+            <p>#cp /home/<span class="style2">admin</span>/.mozilla/<span class="style1">plugins</span> /drbl-back/</p>
+
+            <p>要一次建立37個檔案當然要用script</p>
+
+            <p>--接下來是script內容(a121是因為我電腦起始名稱取a而ip起始號碼為21--</p>
+
+            <table style="text-align: left; color: white; width: 560px; height: 500px;" border="1" cellpadding="2" cellspacing="2">
+
+              <tbody>
+
+                <tr>
+
+                  <td style="background-color: rgb(100, 125, 163);">
+##
+建目錄<br>
+
+mkdir /home/a121/.mozilla<br>
+
+.....<br>
+
+.....略<br>
+
+.....<br>
+
+mkdir /home/a157/.mozilla<br>
+
+                  <br>
+
+##變更權限<br>
+
+chmod 777 /home/a121/.mozilla<br>
+
+.....<br>
+
+.....略<br>
+
+..... <br>
+
+chmod 777 /home/a122/.mozilla<br>
+
+                  <br>
+
+##複製Flash Plug <br>
+
+cp -Rp /drbl-back/plugins /home/a121/.mozilla/<br>
+
+.....<br>
+
+.....略<br>
+
+cp -Rp /drbl-back/plugins /home/a157/.mozilla/
+                  </td>
+
+                </tr>
+
+              </tbody>
+            </table>
+
+            <p>以上步驟可以用openoffice的spreadsheet（EXCEL）利用CONCATENATE函數
+寫成一個<a href="http://host2.saes.tyc.edu.tw/html/mis/html/04_doc/drbl/mkdir.ods">檔案</a>(
+請用ooo開啟)，再將最後一欄貼上像這樣一個<a href="http://host2.saes.tyc.edu.tw/html/mis/html/04_doc/drbl/mkdir.sh">script檔</a>，
+以後只要執行</p>
+
+            <p>#/opt/drbl/sbin/drbl-user-env-reset
+（清除/home/使用者下目錄）<br>
+
+#/opt/drbl/sbin/drbl-rm-user .mozilla （清除隱藏的.mozilla檔）<br>
+
+#sh /drbl-back/mkdir.sh&nbsp;<br>
+
+            </p>
+
+            <p>##複製我的最愛及首頁<br>
+
+執行DRBL指令複製新首頁至每一個使用者<br>
+
+#/opt/drbl/sbin/drbl-cp-host /drbl-back/prefs.js /etc/firefox/profile/<br>
+
+執行DRBL指令複製我的最愛至每一個使用者<br>
+
+#/opt/drbl/sbin/drbl-cp-host /drbl-back/bookmarks.html
+/etc/firefox/profile/</p>
+
+校時<br>
+
+你必須開啟ntp服務。以Ubuntu為例，<br>
+
+1. 在DRBL server上安裝ntp-server服務: "apt-get install ntp-server"<br>
+
+2. 將新安裝的ntp service再佈署給用戶端: "/opt/drbl/sbin/dcs -&gt; others
+-&gt; re-deploy"<br>
+
+3. 將用戶端的ntp-server服務開啟: "/opt/drbl/sbin/drbl-client-service ntp-server
+on"<br>
+
+這樣，每次用戶端開啟的時候，就會自動透過NTP伺服器來校時。 </td>
+
+          </tr>
+
+        </tbody>
+      </table>
+
+      <p><big><big><span style="color: red;">大</span></big></big>功
+告成，開學生機出現[0]時請按ENTER，選擇顯示卡型號(有時不會問型號，只有第一次會問)，接下來就請享用不受限制的Linux教學環境。</p>
+
+      <p></p>
+      <hr style="width: 100%; height: 2px;">
+      </td>
+
+    </tr>
+
+    <tr>
+
+      <td>
+      <p class="style5">10.還原學生端</p>
+
+      <table align="center" bgcolor="#ffffa6" border="0" bordercolor="#000000" height="20" width="670">
+
+        <tbody>
+
+          <tr>
+
+            <td width="662">
+            <p> 還原 <br>
+
+#/opt/drbl/sbin/drbl-user-env-reset （清除/home/使用者下目錄）<br>
+
+            </p>
+
+            <p>#/opt/drbl/sbin/drbl-rm-user .mozilla
+（清除隱藏的.mozilla檔）<br>
+
+            <br>
+
+#sh /drbl-back/mkdir.sh （拷貝flash plug）<br>
+
+            </p>
+
+            <p>#/opt/drbl/sbin/drbl-cp-host /drbl-back/prefs.js
+/etc/firefox/profile/ （複製首頁檔）</p>
+
+            <p>#/opt/drbl/sbin/drbl-cp-host
+/drbl-back/bookmarks.html /etc/firefox/profile/（複製我的最愛）</p>
+
+            <p><br>
+
+請享用全新電腦，但開機後會出現偵測顯示卡的[0]，要按「Enter」，雖然比起還原卡麻煩（需手動還原），但其實一週做一次就很夠了，因為
+ubuntu很少當機，學生也不能裝遊戲，懶一點一個月做一次也無所謂，若有更好方法敬請分享給大家。<br>
+
+            </p>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+      </table>
+
+      <p>&nbsp;</p>
+      <hr style="width: 100%; height: 2px;">
+      </td>
+
+    </tr>
+
+    <tr>
+
+      <td>
+      <p class="style5">11.安裝新軟體</p>
+
+      <table align="center" bgcolor="#ffffa6" border="0" bordercolor="#000000" height="20" width="670">
+
+        <tbody>
+
+          <tr>
+
+            <td width="662">
+            <p>在server裝完新軟體後需要執行重新push </p>
+
+            <p>#/opt/drbl/sbin/drblpush -i&nbsp;</p>
+
+            <p>
+大約10分鐘，問你要不要刪除舊使用者資料，回答yes，另外使用者開頭名稱也跟第一次設定時相同，以免舊dhcp檔的使用者名跟實際不同而不能用。<br>
+
+            <br>
+
+#cp /drbl-back/dhcpd.conf /etc/dhcp3/
+（dhcpd.conf檔會被更改，sis900失效，所以複製舊有檔案）<br>
+
+            <br>
+
+#/etc/init.d/dhcp3-server restart （重新啟動DHCP）<br>
+
+            </p>
+
+            <p>#/opt/drbl/sbin/drbl-rm-user .mozilla （清除）<br>
+
+            <br>
+
+#sh /drbl-back/mkdir.sh （拷貝flash plug）<br>
+
+            </p>
+
+            <p> #/opt/drbl/sbin/drbl-cp-host /drbl-back/prefs.js
+/etc/firefox/profile/ （複製首頁檔）</p>
+
+            <p>#/opt/drbl/sbin/drbl-cp-host
+/drbl-back/bookmarks.html /etc/firefox/profile/（複製我的最愛）</p>
+
+            <p>完成</p>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+      </table>
+
+      <br>
+      <hr style="width: 100%; height: 2px;">
+      </td>
+
+    </tr>
+
+    <tr>
+
+      <td valign="top">
+      <p><span class="style5">12.燒成光碟給學生回家玩玩</span>，
+把OSSACC光碟燒給學生，我想一台xp授權的錢就足以燒1000片，不過裡頭都沒有Dr.GEO及我們更改的東西，等我有空或善心人士製作合適
+Live-CD（孫老師提供很多<a href="http://rd.tyc.edu.tw/viewforum.php?f=15" target="_blank">可以參考</a>），不過目前至少可以上網打報告玩遊戲。<br>
+
+      </p>
+
+      <table align="center" bgcolor="#ffffa6" border="0" bordercolor="#000000" height="68" width="444">
+
+        <tbody>
+
+          <tr>
+
+            <td height="62" valign="top" width="610">
+            <p>沒試過....<br>
+
+#sudo pppoeconf <br>
+
+這是設定 pppoe 連線的語法, 能夠連上網路 </p>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+      </table>
+
+      <p>&nbsp;</p>
+      <hr style="width: 100%; height: 2px;">
+      </td>
+
+    </tr>
+
+    <tr>
+
+      <td>&nbsp;<span class="style5">13.效能報告</span><br>
+
+      <br>
+
+      <ul>
+
+        <li>目前已經跑一個多月(from
+20070901)，學生端有間是賽揚1.7+512MB的機器，同時開機約三分鐘，全班同時執行ooo約2分鐘，建議切畫面廣播前先叫學生開程式，節
+省時間。</li>
+
+        <li>加上<a href="http://apt.nc.hcc.edu.tw/web/student_server_FC5/student_server_FC5.html" target="_blank">學生FTP網路硬碟</a>、<a href="http://host2.saes.tyc.edu.tw/moodle15/course/category.php?id=8" target="_blank">數位教學教材平台</a>等，上起課來感覺還不錯，ubuntu親和的魅力不用會後
+悔，不用再被廠商追著升級非常好色、photoimpact囉。<br>
+
+
+        </li>
+      </ul>
+
+      </td>
+
+    </tr>
+
+    <tr>
+
+      <td style="text-align: right;">&nbsp;dada.teng小老鼠gmail.com</td>
+
+    </tr>
+
+  </tbody>
+</table>
+
+</body></html>

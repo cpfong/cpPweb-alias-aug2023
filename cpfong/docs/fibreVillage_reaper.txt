@@ -1,0 +1,49 @@
+waitpid PID,FLAGS
+--
+PID: -1(stands for any child process) | pid ( > 0 )
+FLAGS: 0 (for a blocking wait) | WNOHANG (return 0 or -1 if no dead children)
+
+waitpid($pid, 0) # blocking wait
+waitpid(-1, WNOHANG) # no blocking wait
+
+Blocking wait
+--
+reap should be processed as fork sequence: fork_child1/reap1 - fork_child2/reap2
+But in real world, later fork may end earlier. blocking to wait it finish is NOT a good idea
+so we can use $SIG{CHLD} to reap (no blocking wait)
+
+Non blocking wait
+--
+$SIG{CHLD} = 'IGNORE'; # Children reaped by system
+$SIG{CHLD} = 'DEFAULT'; # System defined
+$SIG{CHLD} = &REAPER; # do REAPER if SIGCHLD catched
+
+$SIG{CHLD} = &REAPER; # do REAPER if SIGCHLD catched
+--
+when child exit, child to send SIGCHLD to its parent
+parent follow child and get its return value ($?)
+
+waitpid is called from a SIGCHLD handler, to reap the children as soon as they die. And use the WHOHANG flag to make waitpid immediately return 0 if there are no dead children. So that the parent process knows which and when a child die. A loop process is used to avoid the race situation that two or more child processes reach to reaper, for normally kernel keeps track of underlivered signals using a bit vector, one bit per signal.
+
+sub REAPER
+{
+  my ($child_pid,$ex);
+  while (($child_pid = waitpid(-1,WNOHANG) ) > 0 ) {
+    $ex = $?;
+    if( $ex ) {
+      $ex = $ex/256;	#exit code of waitpid is a 16-bit value
+			#high-order 8 bits:exit code from exit().
+			#low-order 8 bits are zero if the process exited normally, 
+			#or encode the signal number that killed the process, and whether it 
+			#dumped core or not (and if it was signalled, the high-order bits are zero).
+    }
+    if( $child_pid == -1 ) {
+      printf( "reaped a child's system command\n" );
+    }
+    else {
+      printf( "PID $child_pid: " . ($ex ? " (exit $ex)." : '.')."\n" );
+    }
+  }#end while
+  $SIG{CHLD} = \&REAPER;
+  return;
+}

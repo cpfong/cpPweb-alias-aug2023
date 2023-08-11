@@ -1,0 +1,6 @@
+Q: how to test?
+A:
+you may go into sh shell to test on command line (since default shell is csh, but we usually use sh)
+
+cpfong@pluto % sh
+$ echo "hello * world"

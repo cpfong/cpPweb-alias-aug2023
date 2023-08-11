@@ -1,0 +1,94 @@
+第十四章 字串與排序
+14.1 以 index 來找尋子字串
+14.2 以 substr 來操作子字串
+14.3 以 sprintf 來編排資料
+	14.3.1 用 sprintf 來產生貨幣數值
+14.4 進階排序
+	14.4.1 以雜湊值排序雜湊
+	14.4.2 以多個鍵來排序
+
+14.1 index
+	回傳在大字串中的小字串出現的位置, 可傳二個參數或三個參數
+	$where = index($big, $small, $start);
+	print index("hello world", o);
+	print index("hello world", o,  5);
+	# print index("hello world", o, -2);
+
+	也可由後方找起
+	print rindex("/etc/passwd", "/");
+
+	chomp($in = <>);
+	chomp($ta = <>);
+	
+	print "$ta is in the " , index($in, $ta), "  position of "  , $in;
+
+14.2 substr
+	傳回要求長度的字串
+	$part = substr($string, $initial_position, $length);
+
+	my $mineral = substr("Fred J. Flintstone",8 , 5)	; print $mineral, "\n";
+	my $rock    = substr("Fred J. Flintstone",13, 1000)	; print $rock, "\n";
+
+	my $s = "Fred J. Flintstone";
+	my $xx = substr($s, 8, 5)		; print $xx;
+	$xx = substr($s, index($s, "Flint"), 5)	; print $xx; 
+	
+	如果是要到最後, 那省掉第三個參數即可
+
+	index 和 substr 聯手可以做一些事:
+	my $long = "some very very long string";
+	my $right= substr($long, index($long, "l")); print $right;
+
+	
+14.3 sprintf
+	把你想列印的格式先存到一個變數之中, 再把這個變數印出來
+	以下查 p192 p194
+        my $timestamp = (stat("t.pl"))[8];
+        my @a = localtime $timestamp;
+        my $date_tag = sprintf "%4d/%02d/%02d %2d:%02d:%02d", $a[5]+1900,$a[4]+1,$a[3],$a[2],$a[1],$a[0];
+        print $date_tag
+
+	利用 sprintf 來捨去不要的小數部分
+	my $money = sprintf "%.2f", 2.49997; print $money;
+
+	my $xx = &big_money(12345678.9);
+	print $xx;
+        sub big_money{
+                my $number = sprintf "%.2f", shift @_;
+                1 while $number =~ s/^(-?\d+)(\d\d\d)/$1,$2/;
+                $number =~ s/^(-?)/$1\$/; # 負號後數字前加入貨幣符號
+                $number;
+        }
+
+14.4 排序
+	perl 知道要如何排序, 程式寫作者要告知 perl system 如何排列
+	所以你要排序則應自己寫一個 sub
+	二個要比對的來源 perl 內定成 $a $b 二個變數, 所以這二個名稱為 reserved
+	sub by_xx { $a<$b ? -1 : $a>$b ? 1 : 0 }
+	my @a = (24.1, 24.09, 3, 0, -5);
+        my @r = sort by_xx(@a);
+	print "@r\n";
+
+        sub by_number { $a<$b ? -1 : $a>$b ? 1 : 0 }
+        my @r = sort by_number (9, 3, 10); # 注意  by_number 為一副程式, 但不要使用 & 
+        print "@r\n";
+
+	以上的程式有以下的缺點:
+	1. 自己要再多寫了一個副程式
+	2. 比較一定是 > < 或 == 所以這好像是多餘的
+
+	改成如下為更精簡
+	my @r = sort {$a <=> $b;} (9, 3, 10);
+	print @r;
+
+	要反向, 來個由大排到小的否 ? 使用 reverse 即可以達到
+	my @r = reverse sort {$a <=> $b;} (9, 3, 10);
+	print @r;
+
+
+14.4.1 sorting hash
+        my %score = ("barney" => 195, "fred" => 205);
+        my @winner= sort {$score{$a} <=> $score{$b}} keys %score;
+        foreach (@winner){
+                print "$_:$score{$_}";
+        }

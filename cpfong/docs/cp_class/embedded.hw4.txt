@@ -1,0 +1,6 @@
+obj: personal web page
+due: 2020.10.30 24:00
+
+1. introduce youself
+2. make it like real web page
+3. chinese is better

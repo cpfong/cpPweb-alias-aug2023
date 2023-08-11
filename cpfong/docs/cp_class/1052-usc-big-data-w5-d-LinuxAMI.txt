@@ -1,0 +1,2 @@
+install Linux AMI ec2
+user data part

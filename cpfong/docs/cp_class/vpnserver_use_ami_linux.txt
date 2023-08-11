@@ -1,0 +1,45 @@
+instead of aws default ami linux, now i use utuntu server since more discussion on the web!!
+ref
+ http://aws-labs.com/set-openvpn-server-ubuntu-14-04/
+
+lauch linux server as vpn server, 1st make ddns work
+ http://n4jj.x.rootbsd.net:8080/~cpfong/docs/cp_class/ami_linux_ddns.txt
+
+aws ami linux new user cannot login
+http://stackoverflow.com/questions/5918343/how-to-login-to-ec2-machine
+  vi /etc/ssh/sshd_config - PasswordAuthentication yes
+  sudo restart
+  useradd cpfong
+  passwd cpfong
+
+note:
+check n4jj:~user/ddns/00ReadME.txt and modify at most 2 files (4 files are needed: build.sh rc.conf secret secret.pri)
+
+public vpnGate by Japan
+http://www.vpngate.net/en/
+
+using linux ami, and install openvpn manually
+https://www.comparitech.com/blog/vpn-privacy/how-to-make-your-own-free-vpn-using-amazon-web-services/
+
+market place openvpn server work ok
+ref http://envyandroid.com/setup-free-private-vpn-on-amazon-ec2/
+steps:
+ 1. aws marketplace search 4 openvpn - FreeTier - t2.micro - 
+     user.data 
+     --
+     public_hostname=vpn.cp.ifong.org
+     admin_user=vpn  
+     admin_pw=my2330fotech@#$)
+     reroute_gw=1  
+     reroute_dns=1  
+ 2. ssh -i ~/ca/aws-20161201.pem openvpnas@54.199.243.194 (openvpnas@openvpnas2:~$)
+openvpnas@openvpnas2:/usr/local/openvpn_as/etc$ pwd
+/usr/local/openvpn_as/etc
+/etc/init.d/openvpnas restart
+
+openvpnas@openvpnas2:/etc/init.d$ sudo find / -name openvpnas
+/etc/pam.d/openvpnas
+/usr/local/openvpn_as/scripts/openvpnas
+/home/openvpnas
+
+ 3. goto windows openvpn client, you may login use vpn:my2330... and get aws IP 

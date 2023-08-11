@@ -1,0 +1,6 @@
+hw5
+--
+due: 2020/11/15 24:00
+obj: add a new rclone provider into rclone.conf
+notify: date -R > ~/public_html/hw5
+note: notify means turn in, you can turn in twice but score less

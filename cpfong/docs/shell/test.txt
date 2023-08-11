@@ -1,0 +1,24 @@
+test is [ (also man test)
+root@www:/usr/local/www/apache24/data/cpfong/docs/shell # diff /bin/test /bin/[
+
+root@www:/usr/local/www/apache24/data/cpfong/docs/shell # type [
+[ is a shell builtin
+
+This means that '[' is actually a program, just like ls and other programs, so it must be surrounded by spaces:
+if [$foo = "bar" ] will not work;
+
+test 100 -gt 99 && printf "100>99\n" || printf "less"
+
+test -e filename
+echo $?  --> 0 for exists (ok, no error), and 1 for does NOT exist (fail)
+
+test 
+-e FILE 	FILE exists
+-s FILE 	FILE exists and has a size greater than zero
+-n FILE		FILE nonzero length
+
+if [ $var -eq 5 ]; then
+ printf "var is 5"
+fi
+
+test $var -eq 5 && printf "var is 5" || printf "not equal"

@@ -1,0 +1,10 @@
+使用 Linux 來製作 CloneZilla Life:
+
+1. 將隨身碟插到 Linux的機器上，等個約5秒鐘
+2. 然後執行dmesg，可以看出隨身碟的分割區，這裡我們假設是/dev/sdb1
+3. get clonezilla.iso
+3. mount -o loop clonezilla.iso /mnt
+4. cd /media/sdb1
+5. (cd /mnt; tar cfv - .) | tar xfv -
+6. cd /media/sdb1/utils/linux; 
+7. bash makeboot.sh /dev/sdb1

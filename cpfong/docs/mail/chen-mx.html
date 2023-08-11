@@ -1,0 +1,166 @@
+<!-- BBS2HTML[882013805] Areicle by wcf@CCCA.NCTU.edu.tw  -->
+<HTML><HEAD><TITLE>¡º [DNS] about name server ªº MX ..</TITLE></HEAD>
+<BODY bgcolor=#000000 text=#ddffdd vlink=#ffff00 link=#ffff11>
+<center><H1>¡º [DNS] about name server ªº MX ..</H1>
+<table><tr><td><pre><hr>µo«H¤H: cschen@cc.nctu.edu.tw (C.S.Chen), ¬ÝªO: bsd
+¼Ð  ÃD: [DNS] about name server ªº MX ..
+µo«H¯¸: National Chiao Tung University, Hsinchu, Ta (Wed Jul  2 00:41:28 1997)
+Âà«H¯¸: star!news.ee.nthu!news.cis.nctu!news.iim.nctu!news.neto.net!feeder.see
+
+¶¯¶¯ (James.bbs@tiger.hcht.edu.tw) ´£¨ì:
+: ¡° ¤Þ­z¡mcchuang@ms.nctu.edu.tw (Chao-cheng Huang)¡n¤§»Ê¨¥¡G
+: : GodSpeed (opp.bbs@tiger.hcht.edu.tw) ´£¨ì:
+: : :         MX (mail exchanger) ¦p¦ó³]©w©O??
+: : :         ¯àµ¹§Ú¤@­Ó½d¨Ò¶Ü?
+: :       ª½±µ³]©w´N¦n°Õ. eg.
+: : mac           IN      A       111.111.111.111
+: :               IN      MX      0 foo.bar.com.
+: :               IN      MX      99 foo1.bar.com.
+: :       ³o®É, ©Ò¦³±H«H¨ì mac ªº«H¥ó³£·|³QÂà°e¨ì foo.bar.com. ³o¥x¾÷¾¹,
+: :       ¦pªG foo.bar.com. ±¾±¼¤F, ¥¦·|§ï°e¨ì foo1.bar.com. ¥h.
+: :       §Y¨Ï mac ¥u¬O¤@¥x´¶³qªº PC , ¨S¦³¦¬µo«H¥óªº¥\¯à.
+: :       ³oªF¦è man named ´N¦³¸Ô²Óªº½d¨ÒÅo.
+: 
+:         ·Q¦A½Ð±Ð¤@¤U¡A±z³o­Ó¨Ò¤l¬O¦³ mac ³o»O¾÷¾¹¡A¨º¦pªG¨S¦³©O?
+
+§AÁÙ¨S¦³§Ë²M·¡ MX ªº§@¥Î.
+
+MX ¬O DNS ¨t²Î¤W, ±Mªù¥Î¨Ó³Ì e-mail routing ¥Î.  ¤W­±ªº¨Ò¤l, ¥u¬O­è¦n
+¬Y¤@­Ó domain entry , ¨âºØ MX ©M A ¨âºØ RR ³£¦³, ¦ý³o¨Ã¤£¬O¥²­nªº.
+
+Á|¨Ò¦Ó¨¥,
+  1) §A¥i¥H±H e-mail µ¹ usenet@news.nctu.edu.tw.
+  2) ¦ý¬O, §A¦p·Q  telnet news.nctu.edu.tw , ¨t²Î·|§A  &quotunknow host&quot.
+       or something like the following.
+	-----------------------------------------------------
+	 ccnews% 24:&gttelnet news.nctu.edu.tw
+	news.nctu.edu.tw: No address associated with name
+	-----------------------------------------------------
+
+¦]¬°, ¦³¨âºØ¦]¯À:
+
+(1) ¦b NCTU ªº DNS database ¤W, ¦³Ãþ¦ü©³¤Uªº¨â­Ó³]©w,
+----------------------------------------------------------------
+news.nctu.edu.tw.	IN	MX	0 news.cc.nctu.edu.tw.
+news.cc.nctu.edu.tw.	IN	A	140.113.1.246
+----------------------------------------------------------------
+
+(2) ¦A¨Ó, ´N¬O news.cc.nctu.edu.tw ªº sendmail.cf ¸g¹L³]©w, ·|¦P®É§â 
+    news.nctu.edu.tw ·í alias name »{¤U¨Ó ( Cw ).
+
+´«¥y¸Ü, ³oùØ¥²¶· (NCTU) DNS named ³]©w, ©M (news.cc.NCTU.edu.tw) ¤W
+sendmail ªº ³]©w°t¦X.
+
+-- §O¤Hªº sendmail ³z¹L DNS ¬d MX RR, §ä¨ì target host, ³s¹L¨Ó, µM«á 
+    target host, §â¸Ó address »{¤U¨Ó.
+
+======================================================================
+
+§Ú­Ì©³¤U, ¦A§â MX ªº§@¥Î¦b»¡©ú²M¨Ç¤@¨Ç, °²³]¤µ¤Ñ¦³ mail, ­n°e¨ì¦p
+  usenet@news.cis.NCTU.edu.tw.
+
+¨Æ¹ê¤W, §A¦pªG¥J²Ó¦A¥h¬Ý  DNS MX ªº²z½×»P sendmail ¤§Ãþªº mailer, §A·|µo²{.
+sendmail ­n°e«H, ²Ä 1 ­Ó°Ê§@, ¬O¥hºô¸ô¤W, ¬d DNS ¬Ý, ¦³¨S¦³³o­Ó MX RR,
+¤]´N¬O¥h, ¥h¬d¦³¨S¦³,
+
+news.cis.nctu.edu.tw.	IN	MX	0	MX-host.some.where.
+
+³o¼Ë¤@¦æ, ³q±`¦pªG¦³, ³o¼Ë MX-host.some.where. ¦s¦b, ¨º»ò sendmail,
+°¨¤W±µµÛ´N¥i¥H·Ç³Æ±N mail, ©¹³o­Ó host ¥á. ( ¨Æ¹ê¤W, ±µ¤U¨Óªº 
+MX-host.some.where. ªº A ¬d¸ß, ¥i¥H¦b¦P¤@¦¸ªº¬d¸ß¤º, ¤@°_§¹¦¨«á,
+¦A§âµ²ªG, ¦^¶Çµ¹ sendmail )
+
+¦pªG, ³o­Ó MX RR ¤£¦s¦b. ¨º»ò, sendmail ±µµÛ²Ä 2 ¨B, ¤~·|°²³]³o­Ó entry
+ &quotnews.cis.nctu.edu.tw&quot ¥i¯à¬O¤@­Ó  FQDN/A RR. ©ó¬O, ±µ¤U¨Ó, «K¸ÕµÛ¦A
+¥h DNS ¬d¬d¬Ý, ¦³¨S¦³ news.cis.nctu.edu.tw ¹ïÀ³ªº A RR ¦s¦b.
+
+¦pªG, ¦³ªº¸Ü, ¦A¸ÕµÛ³s¹L¥h.
+
+°²³], ²Ä 2 ¨Bªº A RR ¤]§ä¤£¨ì, ±µ¤U¨Ó, sendmail ÁÙ·|¦A¸Õ¬Ý¬Ý, ¦³¨S¦³
+¶µ³oºØ  &quotwildcard MX&quot RR ¦s¦b.
+
+  *.cis.NCTU.edu.tw	IN	MX	0	MX-host2.some.where.
+
+¦pªG¦³ MX-hosts2.some.where. ¦s¦b, ¨º»ò sendmail ´N·|³s¹L¥h, ¶i¦æ
+¤U¤@¨Bªº SMTP °Ê§@.
+
+µM«á, ¦pªG³o¤T­Ó³£¨S¦³, §Aªº sendmail ´N¥i¥H½T©w, §A©Ò·Qªº e-mail
+address, «Ü¥i¯à¬O¦³ keying ¿ù»~¤§Ãþ, ¦]¦¹, ´N·|¦^§A unknow host ¤§Ãþ
+ªº error message.
+
+------------------------------------------------------------------
+ºî¦X¤W­±©Ò»¡, ¦pªG¬O±`±`­t³d±µ¦¬ e-mail ªº¾÷¾¹, ¤@©w­n³] MX RR.
+³o¼Ë remote ªº sendmail, ¥u­n¤@¦¸ MX query, ´N¥i¥H·d©w. §ä¨ì¥Øªº¦a,
+¦Ó¤£¥²¦A®ö¶O®É¶¡, µ¥²Ä 2 ¦¸. ¨Ò¦p.
+
+csie.nctu.edu.tw.	IN	MX  0 	csie.nctu.edu.tw.
+...
+csie.nctu.edu.tw.	IN	A	140.113.17.171
+....
+
+¨ä¦¸, ¤@­Ó­«ÂI¬O, wildcard MX, ¨Ï¥Î¤W­n«Ü¤p¤ß¾¨·V. 
+ ==&gt ¹ê°È¤W, ³Ì¦n¤£­n¥Î.
+
+ ¦]¬°, wildcard MX, ³q±`³£¬O·Ç³Æ¥Î¨Ó, «ü©ú­þ¨Ç RR ¬O¤£¦s¦bªº.
+ ¤@¤£¤p¤ß, ¥i¯à·|±N¤@¨Ç¥»¨Ó¦s¦bªº  e-mail ³q³q reject.
+
+¹L¥h, ¥»®Õ¥X²{¹Lªº¨Ò¤l, ¬O
+
+*.cn.nctu.edu.tw.	IN	MX 	0  MX-host.cn.nctu.edu.tw.
+
+µ²ªG, ©Ò¦³¬Y¨t­n±H©¹, ¤¤°ê¤j³°  mbox@XYZ.cn ªº e-mail, ¦b sendmail
+ processing ®É, DNS MX query ¦³¥X²{
+
+  XYZ.cn.nctu.edu.tw  ªº±¡§Î.
+
+µ²ªG, ³o¤@¨Ç mail ³£³Q¾É¨ì MX-host.cn.nctu.edu.tw. ©ó¬O, ±µ¤U¨Ó, ´N¬O,
+Âù¤èªº sendmail, ¶i¦æ SMTP ¹ï½Í. ¦ý¬O, ¦]¬°§ä¿ù¹ï¹³, ·íµM«Ü§Ö´N³Q¥H 
+&quotuser unknown&quot, ±N«H¥ó°h¦^.
+
+¦]¦¹, ¹ê°È¤W, ¥u­n¦³·§©ÀªººÞ²zªÌ, ¥Ø«e¤w´X¥G¨S¦³¤H, ·|¦A¥h³] wildcard MX,
+¦]¬°, ¤£¤p¤ß·|³]¿ùªº¾÷²v, ¹ê¦b¤Ó¤j¤F.
+
+¨ä¹ê, »OÆW¥Ø«e, ¥t¥~¦³¤@­Ó«Ü¦³½ìªº¨Ò¤l. ½Ð·Q¹³¤@¤U, ©³¤U³o¨â²Õ°²·Qªº
+e-mail adress;
+
+    mbox@mit.edu, ( ¬ü°ê MIT )
+    mbox2@mit.edu.tw. ( »OÆW©ú§Ó¤u±M )
+
+ªþ°O, 
+   °w¹ï³oºØ¼ç¦bªº¨Ò¤l, ¨ä¹ê¤w¸g¦b¬ü°ê, ¥X²{¹LÆZ­«ªº±¡ªp.
+
+  --  harvard.EDU.com  ( ½Ðª`·N, EDU.com, ¨Ã¨S¦³¥´¿ù )
+
+RFC 1535 ( search list) ´N¬O¨Ó¸Ñ³oºØ°ÝÃD. ·íµM, ­n¸ÑÄÀ³o¤@¨Ç, §K
+¤£¤F, ¤S¬O¤@¤j¬q. ¦­´Áªº BIND, ¨S¦³³oºØ¦Ò¶q, ¸I¤W³oºØ°ÝÃD, µL¸Ñ.
+
+²{¦b·s¤@¥Nªº BIND (4.9.5 and later), ³£¦³ RFC 1535 compliant.
+-- ³oºØª¬ªp, ¤~¤£­Pºc¦¨°ÝÃD.
+
+------------------------------------------------------------------
+
+:         °²¦p§Ì¦³­Ó domain DCCA.hcht.edu.tw
+:         ¦pªG§Ú·Q±H«H¨ì aaa.DCCA.hcht.edu.tw or bbb.DCCA.hcht.edu.tw ®É
+:         §Æ±æ¥u¥Î ???@DCCA.hcht.edu.tw ªº¸Ü¡A´N¬O¤£­n¥h²z aaa or bbb
+:         ¨º«ç»ò¿ì©O? ¦]¬°¨Ã¨S¦³ DCCA.hcht.edu.tw
+
+¤W­±ªº»¡©ú, À³¸Ó¸ÑÃÑªº«Ü²M·¡.  MX ©M A, ¬O¤£»Ý­n¦P®É³£©w¸qªº.
+: 
+:         ¥t¥~¡A¤]¦³¥i¯à aaa &amp bbb ¨Ã¥¼ yp ¦b¤@°_¡A±b¸¹¨Ã¤£³q¥Î
+
+Á|¤@¤U, ¤U­±¤@­Ó¨Ò¤l.
+
+DCCA.hcht.edu.tw.	IN	MX	0   MX.hcht.edu.tw.
+			IN	MX	10  relay.hcht.edu.tw.
+
+-- MX.hcht.edu.tw ¦³±b¸¹¸ê®Æ, ­t³d³Ì«á±µ¦¬.
+
+-- relay.hcht.edu.tw ¨Ã¨S¦³±b¸¹¸ê®Æ, ¥u¬O·í MX.hcht.edu.tw ¦£¤£¹L¨Ó.
+   ¼È®É, ±N  mbox@DCCA.hcht.edu.tw ªº¸ e-mail ¼È®É¦¬¤U¨Ó.
+
+  ¹L¤@¬q®É­Ô, relay.hcht.edu.tw ·|·Q¿ìªk, ¦A±N­è­è¼È¦s¤U¨Óªº e-mail ¦A
+  ©¹ MX.hcht.edu.tw °e, ¥Ñ MX.hcht.edu.tw §P©w, ³o¨Ç e-mail ¸Ó¤£¸Ó¦¬¤U¨Ó.
+
+-- 
+Joe. C.S.Chen, cschen@ns.nctu.edu.tw
+</pre></td></tr></table></center></BODY></HTML>

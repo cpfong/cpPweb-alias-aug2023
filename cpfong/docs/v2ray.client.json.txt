@@ -1,0 +1,29 @@
+"dns": {
+   "hosts": {},
+   "servers": [
+      "114.114.114.114",
+      "8.8.8.8",
+      "1.1.1.1",
+      "localhost"
+    ]
+ },
+...
+
+ "inbounds": [{
+   "port": 1080,
+   "listen": "127.0.0.1",
+   "protocol": "socks",
+...
+
+ "outbounds": [{
+   "protocol": "vmess",
+   "settings": {
+    "vnext": [{
+     "address": "myv2ray.org",
+     "port": 1080,
+     "users": [{
+       "id": "0000-d5f4-5677-ac01-7343cf9abd35",
+       "level": 1,
+       "alterId": 64
+     }]
+

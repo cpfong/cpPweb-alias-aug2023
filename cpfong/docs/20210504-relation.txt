@@ -1,0 +1,17 @@
+obj:
+--
+github: hard disk, space for data
+netlify: control platform
+
+account:
+--
+netlify use github account to login
+netlify logout does NOT mean logout, github has to logout first!
+
+implement:
+--
+wow template @ github --> copy template from wow to my github
+netlify deploy it ,all info check netlify site (deploying progress, site info ...)
+link my domain with ntlify: domain management/Add cust domain/nf.pdn.ifong.org --> after this goto sun.ifong.org vi z.pdn.ifong.org CNAME
+ # note: no need for name.com since pdn.ifong.org ns is sun.ifong.org
+ # however netlify name db look like also keep tracking this domain (nf.pdn.ifong.org)

@@ -1,0 +1,6 @@
+due 2020/10/16(Fri) 24:00
+
+1. sshd port changed 40%
+2. mosh work 40%
+3. ~/.tmux.conf 10%
+4. ~/.cshrc 10% (note: setup prompt)

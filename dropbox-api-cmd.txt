@@ -1,0 +1,24 @@
+http://www.cyberciti.biz/faq/freebsd-mount_nullf-usrports-inside-jail/
+
+as host root
+--
+D=/jail/www
+# mkdir -p $D/usr/ports
+# mount_nullfs /usr/ports $D/usr/ports
+## you may umount ports after you finished jailed port install
+
+as jailed root
+--
+/usr/ports/ports-mgmt/portupgrade
+jj# rehash
+jj# pkgdb -Ff
+portupgrade -f p5\* 
+portupgrade -fr perl
+
+/usr/ports/net/dropbox-api-command
+
+Now login to jail called www (jail id # 10):
+Try to install apache22:
+
+~/bin/sync_dropbox
+into crontab

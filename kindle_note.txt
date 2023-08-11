@@ -1,0 +1,26 @@
+Q: 中文語系
+A: Kindle 3 雖然支援中文，但因預設語系是 en-US，在閱讀中文電子書時，
+	偶爾有缺字或方塊出現，透過修改預設語系成為
+	zh-TW.utf8 or zh-CN.utf8 就可以完整支援繁體中文或簡體中文了。
+
+	修改方法：
+	home -> menu -> search
+	;debugOn (ENTER)
+	~changeLocale zh-TW.utf8 (ENTER)
+	;debugOFF (ENTER)
+	接著重開機 Restart Kindle
+	home -> menu -> settings -> menu -> Restart
+	若要再改回來原來預設語系，只要把 zh-TW.utf8 改成 en-US 即可。
+
+Q: PDF Reader
+A:
+	關於用 Kindle DX 來看 PDF，有多餘白色區域的部份，
+	我是用 A-PDF Page Crop 3.4 這個程式，這雖然是要錢的，
+	但去下載試用版也只是在第一頁會加浮水印，其他頁面沒有影響，
+	也沒看它有時間限制。
+
+Q: download E-Book
+A:	我建議從 Amazon 網站上的 Manage your Kindle 那頁下載
+	(https://www.amazon.com/manageyourkindle; 最下面過去訂書紀錄那裏，從右邊拉下式選單選
+	Transfer via computer)，還有要確定這台 Kindle 是登記在你 Amazon 帳號。我這樣做從來都沒問題。
+	http://www.mobile01.com/topicdetail.php?f=116&t=1677465&p=12

@@ -1,0 +1,77 @@
+import java.net.*;
+import java.io.*;
+
+public class OrderTicket {
+	private static String url="http://railway.hinet.net/trw24/order_kind1.jsp?";
+
+	public static void add(String attribute, String value) {
+		if(url.endsWith("&") || url.endsWith("?")) {
+			url+= attribute + "=" + value;
+    		}
+		else {
+			url+= "&" + attribute + "=" + value;
+		}
+	} // end add
+
+	public static void order() throws IOException {
+		URL website = new URL(url);
+		int count=1;
+		while(true) {
+			System.out.println("開始第" + count + "次嚐試訂票...");
+			System.out.println("\n" + url);
+			count++;
+			URLConnection connection = website.openConnection();
+			BufferedReader in = new BufferedReader(
+			new InputStreamReader(connection.getInputStream()));
+			String line=null;
+			String content="";
+			while( (line=in.readLine())!=null) {
+			content+=line;
+		} // end while 
+		in.close();
+
+		if(content.indexOf("您的車票已訂到")!=-1) {
+			BufferedWriter bw = new BufferedWriter(new FileWriter("result.html"));
+			bw.write(content);
+			bw.close();
+			System.out.println("票 ok 了, 請看 result.html");
+			System.exit(0);
+		}
+		else {
+			System.out.println("票尚未定到，一分鐘之後將會再次嚐試...");
+			try {
+			Thread.sleep(60000); // sleep 1 minute, and try it again later.
+			} // end try
+			catch(InterruptedException e) {
+				e.printStackTrace();
+			}
+      		}
+    }
+  }
+  public static void main(String[] args) {
+    String id= "A123032958";  //請改成你自己的身份證字號
+    String from="004"; //台東
+    String to="185"; //高雄
+    String date="2004/06/24";
+    String startTime="11:00";
+    String endTime="12:00";
+    String quantity="1";
+    String kind="*1";
+    String returnTicket="0";
+    add("personId", id);
+    add("fromStation", from);
+    add("toStation", to);
+    add("getinDate", date);
+    add("getinStartTime", startTime);
+    add("getinEndTime", endTime);
+    add("orderQty", quantity);
+    add("trainKindIn", kind);
+    add("returnTicket", returnTicket);
+    try {
+      order();
+    }
+    catch(IOException e) {
+      System.out.println("連線失敗，請檢查你的網路連線。");
+    }
+  }
+}

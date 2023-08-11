@@ -1,0 +1,53 @@
+jail epair vimage freebsd
+--
+
+setenv D /ada2p1/j
+mkdir -p $D
+cd /usr/src
+make world DESTDIR=$D --> (this takes lots of time, for me  90 minutes)
+cd etc/
+make distribution DESTDIR=$D
+
+mount -t devfs devfs $D/dev
+
+vi /etc/rc.conf for necessary part
+-
+jail_enable="YES"
+jail_list="test"
+
+# for the "test" jail
+jail_test_rootdir="/ada2p1/j"
+jail_test_hostname="test.school.edu"
+jail_test_ip=""
+jail_test_devfs_enable="YES"
+jail_test_devfs_ruleset="test_ruleset"
+
+-- ok, now is the show time (better recompile kernel put in vimage then reboot the system and do the testing)
+# /etc/rc.d/jail start test
+#jls
+#jexec 2 csh
+
+root@test:/ # pwd
+/
+root@test:~ # df
+Filesystem   1K-blocks     Used    Avail Capacity  Mounted on
+/dev/aacd0p2 135072540 34247648 90019092    28%    /
+##commend, it is working
+
+# /etc/rc.d/jail stop test
+
+ref
+http://bsdbased.com/2009/12/06/freebsd-8-vimage-epair-howto
+
+# jail -c vnet name=test host.hostname=test path=/ada2p1/j persist
+# ifconfig epair create --> will epair0a epair0b (pair)
+
+[cpfong@hostT ~] jls |grep test
+11 - testj /ada2p1/j
+# ifconfig epair0b vnet 11
+# jexec 11 ifconfig epair0b 192.168.11.2 --> test jail
+# ifconfig epair0a 192.168.11.1 --> host
+
+[cpfong@hostT ~] ping 192.168.11.2
+PING 192.168.11.2 (192.168.11.2): 56 data bytes
+64 bytes from 192.168.11.2: icmp_seq=0 ttl=64 time=0.028 ms

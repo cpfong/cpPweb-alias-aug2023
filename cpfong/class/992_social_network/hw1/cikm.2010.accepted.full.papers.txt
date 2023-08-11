@@ -1,0 +1,1259 @@
+ 
+
+    * Participants <#>
+      Home <http://www.yorku.ca/cikm10/index.php> News
+      <http://www.yorku.ca/cikm10/news.php> Themes
+      <http://www.yorku.ca/cikm10/themes.php> Important Dates
+      <http://www.yorku.ca/cikm10/important_dates.php> Registration
+      <http://www.yorku.ca/cikm10/registration.php> Call for
+      Participation
+      <http://www.yorku.ca/cikm10/call_for_participation.php> Student
+      Travel <http://www.yorku.ca/cikm10/student_travel.php> Awards
+      <http://www.yorku.ca/cikm10/awards.php> Photo Gallery <javascript:;>
+    * Program <#>
+      Schedule <http://www.yorku.ca/cikm10/schedule.php> Keynote
+      Speakers <http://www.yorku.ca/cikm10/keynote_speakers.php> Full
+      Papers <http://www.yorku.ca/cikm10/papers.php> Posters
+      <http://www.yorku.ca/cikm10/posters.php> Workshops
+      <http://www.yorku.ca/cikm10/workshops.php> Tutorials
+      <http://www.yorku.ca/cikm10/tutorials.php> Demos
+      <http://www.yorku.ca/cikm10/demos.php> Industry Event
+      <http://www.yorku.ca/cikm10/industry_event.php>
+    * Contributors <#>
+      Call for Papers <http://www.yorku.ca/cikm10/call_for_papers.php>
+      Call for Tutorials
+      <http://www.yorku.ca/cikm10/call_for_tutorials.php> Call for
+      Workshops <http://www.yorku.ca/cikm10/call_for_workshops.php> Call
+      for Demos <http://www.yorku.ca/cikm10/call_for_demo.php> Call for
+      Sponsorship <http://www.yorku.ca/cikm10/call_for_sponsorship.php>
+      How to Submit <http://www.yorku.ca/cikm10/how_to_submit.php>
+    * Locations <#>
+      Conference Site <http://www.yorku.ca/cikm10/conference_site.php>
+      Places of Interest
+      <http://www.yorku.ca/cikm10/places_of_interest.php> Shopping
+      <http://www.yorku.ca/cikm10/shopping.php> Accomodation
+      <http://www.yorku.ca/cikm10/accomodation.php>
+    * About Us <#>
+      Organizers <http://www.yorku.ca/cikm10/organizers.php> History
+      <http://www.yorku.ca/cikm10/history.php> Program Committee
+      <http://www.yorku.ca/cikm10/program_committee.php> Contact Us
+      <http://www.yorku.ca/cikm10/contact_us.php>
+    * Search <http://www.yorku.ca/cikm10/searchresults.php>
+
+
+    *CIKM'10 **? Session Details*
+
+
+    CIKM 2010 Accepted Full Papers
+
+*Paper ID*
+
+	
+
+*                                  Title and Authors *
+
+*Session 1A*
+
+	
+
+
+      KM Track: Information Extraction
+
+255
+
+	
+
+Components for Information Extraction: Ontology-Based Information
+Extractors and Generic Platforms, Daya Wimalasuriya and Dejing Dou
+
+390
+
+	
+
+Automatically Acquiring a Semantic Network of Related Concepts, Sean
+Szumlanski and Fernando Gomez
+
+435
+
+	
+
+Online Annotation of Text Streams with Structured Entities, Ken Pu,
+Richard Drake, Oktie Hassanzadeh and Renee Miller
+
+511
+
+	
+
+Automatic Extraction of Web Data Records Containing User-Generated
+Content, Xinying Song, Jing Liu, Cao Yunbo and Chin-Yew Lin
+
+811
+
+	
+
+An Efficient Algorithm for Mining Time Interval-based Patterns in Large
+Database, Yi-cheng Chen, Ji-Chiang Jiang, Wen-Chih  Peng and Suh-Yin Lee
+
+*Session 1B*
+
+	
+
+
+      IR Track: Ranking and Retrieval Model
+
+842
+
+	
+
+What can Quantum Theory Bring to Information Retrieval? Benjamin
+Piwowarski, Ingo Frommholz, Mounia Lalmas and Keith van Rijsbergen
+
+869
+
+	
+
+Entity Ranking using Wikipedia as a Pivot, Rianne Kaptein, Jaap Kamps,
+Pavel Serdyukov and Arjen de Vries
+
+911
+
+	
+
+Ranking under Temporal Constraints, Lidan Wang, Donald Metzler and Jimmy Lin
+
+923
+
+	
+
+Examining the Information Retrieval Process from an Inductive
+Perspective, Ronan Cummins, Mounia Lalmas and Colm O'Riordan
+
+209
+
+	
+
+On Identifying Representative Relevant Documents, Fiana Raiber and Oren
+Kurland
+
+*Session 1C*
+
+	
+
+
+      DB Track: Indexes and Query Optimization
+
+586
+
+	
+
+On the Selectivity of Multidimensional Routing Indices, Christos
+Doulkeridis, Akrivi Vlachou, Kjetil Noervaag, Yannis Kotidis and
+Michalis Vazirgiannis
+
+524
+
+	
+
+Path-Hop: Efficiently Indexing Large Graphs for Reachability Queries,
+Jing Cai and Chung Keung Poon
+
+927
+
+	
+
+On Wavelet Decomposition of Uncertain Time Series Data Sets, Yuchen
+Zhao, Charu Aggarwal and Philip Yu
+
+1453
+
+	
+
+Efficient Set-Correlation Operator inside Databases, Shaoxu Song and Lei
+Chen
+
+637
+
+	
+
+Online Update of B-trees, Marina Barsky, Alex Thomo, Zoltan Toth and
+Calisto Zuzarte
+
+*Session 1D*
+
+	
+
+
+      IR Track: Domain-Specific and Multimedia IR
+
+296
+
+	
+
+Wisdom of the Ages: Toward Delivering the Children's Web with the
+Link-based AgeRank Algorithm, Karl Gyllstrom and Marie-Francine Moens
+
+1471
+
+	
+
+A Cross-lingual Framework for Monolingual Biomedical Information
+Retrieval, Dolf Trieschnigg, Djoerd Hiemstra, Franciska de Jong and
+Wessel Kraaij
+
+230
+
+	
+
+Multi-Modal Multi-Correlation Personal News Retrieval, Zechao Li, Jing
+Liu, Xiaobin Zhu and Hanqing Lu
+
+505
+
+	
+
+Bringing Order to Your Photos: Event-Driven Classification of Flickr
+Images Based on Social Knowledge, Claudiu Firan, Mihai Georgescu,
+Wolfgang Nejdl and Raluca Paiu
+
+*Session 2A*
+
+	
+
+
+      KM Track: Link and Graph Mining
+
+212
+
+	
+
+Mining Topic-Level Influence in Heterogeneous Networks, Lu Liu, Jie
+Tang, Meng Jiang, Jiawei Han and Shiqiang Yang
+
+461
+
+	
+
+Mining Interesting Link Formation Rules in Social Networks, Cane Wing-ki
+Leung, Ee-Peng Lim, David Lo and Jianshu Weng
+
+654
+
+	
+
+SHRINK: A Structural Clustering Algorithm for Detecting Hierarchical
+Communities in Networks, Jianbin Huang, Heli Sun, Jiawei Han, Hongbo
+Deng and Yizhou Sun
+
+719
+
+	
+
+Outcome Aware Ranking in Interaction Networks, S Kameshwaran, Sameep
+Mehta and Vinayaka  Pandit
+
+1011
+
+	
+
+Expansion and Search in Networks, Arun Maiya and Tanya Berger-Wolf
+
+*Session 2B*
+
+	
+
+
+      IR Track: Machine Learning for IR (I)
+
+149
+
+	
+
+Improved Latent Concept Expansion Using Hierarchical Markov Random
+Fields, Hao Lang, Donald Metzler, Bin Wang and Jin-Tao Li
+
+162
+
+	
+
+Term Necessity Prediction, Le Zhao and Jamie Callan
+
+967
+
+	
+
+Decomposing Background Topics from Keywords by Principal Component
+Pursuit, Kerui Min, Zhengdong Zhang, John Wright and Yi Ma
+
+1064
+
+	
+
+Document Update Summarization using Incremental Hierarchical Clustering,
+Dingding Wang and Tao Li
+
+132
+
+	
+
+How about utilizing ordinal information from the distribution of
+unlabeled data? Mingjie Qian, Bo Chen and Hongwei Qi
+
+*Session 2C*
+
+	
+
+
+      DB Track: Mobile and Distributed Data Management
+
+199
+
+	
+
+Automatic Schema Merging Using Mapping Constraints over Incomplete
+Sources, Xiang Li, Christoph Quix, David Kensche and Sandra Geisler
+
+884
+
+	
+
+Preserving Location and Absence Privacy in Geo-Social Networks, Dario
+Freni, Carmen Ruiz Vicente, Sergio Mascetti, Claudio Bettini and
+Christian S. Jensen
+
+429
+
+	
+
+Preference Query Evaluation Over Expensive Attributes, Justin
+Levandoski, Mohamed Mokbel and Mohamed Khalefa
+
+885
+
+	
+
+Energy-Efficient Top-k Query Processing in Wireless Sensor Networks,
+Baichen Chen, Weifa  Liang, Rui  Zhou and Jeffrey Yu
+
+758
+
+	
+
+StableBuffer: Optimizing Write Performance for DBMS Applications on
+Flash Devices, LI YU, Xu Jianliang, Byron CHOI and Haibo Hu
+
+*Session 2D*
+
+	
+
+
+      KM Track: Classification and Clustering
+
+729
+
+	
+
+Mr.KNN: Soft Relevance for Multi-label Classification, Xiaotong Lin and
+Xue-wen Chen
+
+968
+
+	
+
+Collaborative Dual-PLSA: Mining Distinction and Commonality across
+Multiple Domains for Classification, Fuzhen Zhuang, Ping Luo, Zhiyong
+Shen, Qing He, Yuhong Xiong, Zhongzhi Shi and Hui Xiong
+
+970
+
+	
+
+Inferring Gender of Movie Reviewers:  Exploiting Writing Style, Content
+and Metadata, Jahna Otterbacher
+
+1335
+
+	
+
+A Robust Semi-supervised Classification Method for Transfer Learning,
+Akinori Fujino, Naonori Ueda and Masaaki Nagata
+
+300
+
+	
+
+Multi-View Clustering with Constraint Propagation for Learning with an
+Incomplete Mapping Between Views, Eric Eaton, Marie desJardins and Sara
+Jacob
+
+*Session 3A*
+
+	
+
+
+      KM Track: Large-scale Statistical Techniques
+
+611
+
+	
+
+Pricing Guaranteed Contracts in Online Display  Advertising, Vijay
+Bharadwaj, Wenjing Ma, Michael Schwarz, Jayavel Shanmugasundaram, Erik
+Vee, Jack Xie and Jian Yang
+
+1215
+
+	
+
+Maximum Normalized Spacing for Efficient Visual Clustering, Zhi-Gang
+Fan, Yadong Wu and Bo Wu
+
+1319
+
+	
+
+Multilevel Manifold Learning with Application to Spectral Clustering,
+Haw-ren Fang, Sophia Sakellaridi and Yousef Saad
+
+291
+
+	
+
+Accelerating Probabilistic Frequent Itemset Mining: A Model-Based 
+Approach, Liang Wang , Reynold Cheng, Sau Dan Lee and David Cheung
+
+*Session 3B*
+
+	
+
+
+      IR Track: Machine Learning for IR (II)
+
+195
+
+	
+
+Learning Click Models via Probit Bayesian Inference, Yuchen Zhang, Gang
+Wang and Weizhu Chen
+
+1140
+
+	
+
+Document Allocation Policies for Selective Searching of Distributed
+Indexes, Anagha Kulkarni and Jamie Callan
+
+701
+
+	
+
+Rank Learning for Factoid Question Answering with Linguistic and
+Semantic Constraints, Matthew Bilotti, Jonathan Elsas, Jaime Carbonell
+and Eric Nyberg
+
+928
+
+	
+
+Learning to Rank Relevant and Novel Documents through User Feedback,
+Abhimanyu Lad and Yiming Yang
+
+*Session 3C*
+
+	
+
+
+      DB Track: Top-K and Shortest Path Processing
+
+726
+
+	
+
+Set Cover Algorithms For Very Large Datasets, Graham Cormode, Howard
+Karloff and Anthony Wirth
+
+875
+
+	
+
+The Gist of Everything New: Personalized Top-k Processing over Web 2.0
+Streams, Parisa Haghani, Sebastian Michel and Karl Aberer
+
+579
+
+	
+
+Fast and Accurate Estimation of Shortest Paths in Large Graphs, Andrey
+Gubichev, Srikanta Bedathur, Stephan Seufert and Gerhard Weikum
+
+251
+
+	
+
+Fast Top-k Simple Shortest Paths Discovery on Graphs, Gao Jun , Huida
+Qiu and Xiao Jiang
+
+*Session 3D*
+
+	
+
+
+      IR Track: IR Evaluation
+
+520
+
+	
+
+Factors Affecting Click-Through Behavior in Aggregated Search
+Interfaces, Shanu Sushmita, Hideo Joho, Mounia  Lalmas and Robert Villa
+
+1069
+
+	
+
+Web Search Solved? All Result Rankings the Same? Hugo Zaragoza, B. Barla
+Cambazoglu and Ricardo Baeza-Yates
+
+1266
+
+	
+
+Assessor Error in Stratified Evaluation, William Webber, Doug Oard, Falk
+Scholer and Bruce Hedin
+
+1347
+
+	
+
+CiteData: A New Multi-faceted Dataset for Evaluating Personalized Search
+Performance, Abhay Harpale, Yiming Yang, Siddharth Gopal, Daqing He and
+Zhen Yue
+
+*Session 4A*
+
+	
+
+
+      KM Track: Information Filtering and Recommender Systems (I)
+
+246
+
+	
+
+Learning a User-Thread Alignment Manifold for Thread Recommendation in
+Online Forum, Jun Zhao, Jiajun Bu, Chun Chen, Ziyu Guan and Can Wang
+
+365
+
+	
+
+FacetCube: A Framework of Incorporating Prior Knowledge into
+Non-negative Tensor Factorization, Yun Chi and Shenghuo Zhu
+
+587
+
+	
+
+Travel Route Recommendation using Geotags in Photo Sharing Sites,
+Takeshi Kurashima, Tomoharu Iwata, Go Irie and Ko Fujimura
+
+593
+
+	
+
+Boosting Social Network Connectivity with Link Revival, Yuan Tian, Qi
+He, Qiankun Zhao, Xingjie Liu and Wang-Chien Lee
+
+644
+
+	
+
+Power in Unity: Forming Teams in Large-Scale Community Systems, Aris
+Anagnostopoulos, Luca Becchetti, Carlos Castillo, Aristides Gionis and
+Stefano Leonardi
+
+*Session 4B*
+
+	
+
+
+      IR Track: Social Networks and Text Mining
+
+1208
+
+	
+
+Who Should I Cite? Learning Literature Search Models from Citation
+Behavior, Steven Bethard and Dan Jurafsky
+
+286
+
+	
+
+A Structured Approach to Query Recommendation With Social Annotation
+Data, Jiafeng Guo, Xueqi Cheng, Gu Xu and Huawei Shen
+
+1154
+
+	
+
+Using the Past to Score the Present: Extending Term Weighting Models
+with Revision History Analysis, Ablimit Aji, Yu Wang, Eugene Agichtein
+and Evgeniy Gabrilovich
+
+714
+
+	
+
+Bag-of-Word Pyramid and Multi-Scale Text Analysis, Shuang-Hong Yang and
+Hongyuan Zha
+
+1188
+
+	
+
+Latent Interest-Topic Model: Finding the causal relationships behind
+dyadic data, Noria Kawa
+
+*Session 4C*
+
+	
+
+
+      Industry Track: IR Applications
+
+Invited talk
+
+	
+
+Title: The Shift from Search to Matching
+Dr. Vasco Pedro - CEO and Co-founder, Bueda, Inc
+
+1301
+
+	
+
+PROSPECT: A system for screening candidates for recruitment, Amit Singh,
+Rose Catherine, Karthik Visweswariah, Vijil Chenthamarakshan and Nanda
+Kambhatla
+
+695
+
+	
+
+Active Caching for Similarity Queries Based on Shared-Neighbor
+Information, Michael Houle, Vincent Oria and Umar Qasim
+
+895
+
+	
+
+Searching Consumer Image Collections Using Web-based Concept Expansion,
+Mark Wood, Stacie  Hibino and Alexander Loui
+
+*Session 4D*
+
+	
+
+
+      DB Track: Information Retrieval in Databases
+
+1207
+
+	
+
+Index Structures for Efficiently Searching Natural Language Text, Pirooz
+Chubak and Davood Rafiei
+
+277
+
+	
+
+Efficient Temporal Keyword Queries over Versioned Text, Avishek Anand,
+Srikanta Bedathur, Klaus Berberich and Ralf Schenkel
+
+1076
+
+	
+
+Result-Size Estimation for Information-Retrieval Subqueries, Guido
+Sautter, Klemens Böhm and Andranik Khachatryan
+
+151
+
+	
+
+FACeTOR: Cost-Driven Exploration of Faceted Query Results, Abhijith
+Kashyap, Vagelis Hristidis and Michalis Petropoulos
+
+361
+
+	
+
+A Framework for Evaluating Database Keyword Search Strategies, Joel
+Coffman and Alfred Weaver
+
+*Session 5A*
+
+	
+
+
+      KM Track: Temporal, Spatial and Stream Data Mining
+
+1141
+
+	
+
+Network Growth and the Spectral Evolution Model, Jérôme Kunegis, Damien
+Fay and Christian Bauckhage
+
+391
+
+	
+
+Robust Automatic Detection of Craters in Planetary Images, Wei Ding,
+Tomasz Stepinski, Lourenco Bandeira, Ricardo Vilalta, Youxi Wu, Zhenyu
+Lu and Tianyu Cao
+
+1184
+
+	
+
+You Are Where You Tweet: A Content-Based Approach to Geo-locating
+Twitter Users, Zhiyuan Cheng, James Caverlee and Kyumin Lee
+
+1284
+
+	
+
+Partial Drift Detection Using a Rule Induction Framework, Damon Sotoudeh
+and Aijun An
+
+1411
+
+	
+
+A Method for Discovering Components of Human Rituals from Streams of 
+Sensor Data, Bamis Athanasios, Jia Fang and Andreas Savvides
+
+*Session 5B*
+
+	
+
+
+      IR Track: Filtering and Recommendation
+
+241
+
+	
+
+Two-Tier Similarity Model for Story Link Detection, Tadashi Nomoto
+
+407
+
+	
+
+Selected new training documents to update user profile, Abdulmohsen
+Algarni, Yuefeng Li and Yue Xu
+
+573
+
+	
+
+Collaborative Filtering in Social Tagging Systems Based on Joint
+Item-Tag Recommendations, Jing Peng, Daniel Zeng, Huimin Zhao and
+Fei-Yue Wang
+
+1202
+
+	
+
+Collaborative Future Event Recommendation, einat minkov, Ben Charrow,
+Jonathan Ledlie, Seth Teller and Tommi Jaakkola
+
+1228
+
+	
+
+Hybrid Tag Recommendation for Social Annotation Systems, Jonathan
+Gemmell, Thomas Schimoler, Bamshad Mobasher and Robin Burke
+
+*Session 5C*
+
+	
+
+
+      Industry Track: Databases and OLAP
+
+Invited talk
+
+	
+
+Title: Turning Dark Clouds into Silver Linings
+Dr. Glenn Paulley - Director, Engineering at Sybase iAnywhere
+
+320
+
+	
+
+XML Schema Computations: Schema Compatibility Testing and  Subschema
+Extractions, Thomas Lee and David Cheung
+
+218
+
+	
+
+Visual Cube and On-Line Analytical Processing of Images, Xin Jin,
+Liangliang Cao, Jiebo Luo, Bolin Ding, Xide Lin and Jiawei Han
+
+608
+
+	
+
+Pattern Discovery for  Large Mixed-Mode Databases, Andrew K.C. Wong, Bin
+Wu, Gene P.K. Wu and Chan Keith
+
+*Session 5D*
+
+	
+
+
+      KM Track: Data Pre- and Post-Processing
+
+1223
+
+	
+
+Constructing Classification Features using Minimal Predictive Patterns,
+Iyad Batal and Milos Hauskrecht
+
+261
+
+	
+
+RankSVR: Can Preference Data Help Regression? Hwanjo Yu, Sungchul Kim
+and Seung-Hoon Na
+
+1251
+
+	
+
+Estimating Accuracy for Text Classification Tasks on Large Unlabeled
+Data, Snigdha Chaturvedi, Tanveer  Faruquie, Venkata Subramaniam and
+Mukesh Mohania
+
+1002
+
+	
+
+A Probabilistic Topic-Connection Model for Automatic Image Annotation,
+Xin Chen, Xiaohua Hu, Zhongna Zhou, Caimei Lu, Gail  Rosen, Tingting He
+and E.K. Park
+
+427
+
+	
+
+Orientation Distance-based Discriminative Feature Extraction for
+Multi-Class Classification, Bo Liu, Yanshan Xiao and Longbing Cao
+
+*Session 7A*
+
+	
+
+
+      KM Track: Information Filtering and Recommender Systems (II)
+
+645
+
+	
+
+Evaluating, Combining and Generalizing Recommendations with
+Prerequisites, Aditya Parameswaran, Hector Garcia-Molina and Jeffrey Ullman
+
+730
+
+	
+
+Automatically Suggesting Topics for Augmenting Text Documents, Robert
+West, Doina Precup and Joelle Pineau
+
+764
+
+	
+
+Detecting Product Review Spammers using Rating Behaviors, Ee-Peng Lim,
+Bing Liu, Viet-An Nguyen, Nitin Jindal and Hady Lauw
+
+836
+
+	
+
+Classical Music for Rock Fans?: Novel Recommendations for Expanding User
+Interests, Makoto Nakatsuji, Yasuhiro Fujiwara, Akimichi Tanaka, Toshio
+Uchiyama, Ko Fujimura and Toru Ishida
+
+1183
+
+	
+
+Improving One-Class Collaborative Filtering by Incorporating Rich User
+Information, Yanen Li, Jia  Hu, Chengxiang  Zhai and Ye Chen
+
+*Session 7B*
+
+	
+
+
+      IR Track: User Modeling and Search Personalization
+
+270
+
+	
+
+Personalized Search by Tag-based User Profile and Resource Profile in
+Collaborative Tagging Systems, Yi Cai and Qing Li
+
+341
+
+	
+
+A Comparison of User and System Query Performance Predictions, Claudia
+Hauff, Diane Kelly and Leif Azzopardi
+
+1039
+
+	
+
+The Anatomy of a Click: Modeling user behavior on web information
+systems, Kunal Punera
+
+1132
+
+	
+
+Exploring Online Social Activities for Adaptive Search Personalization,
+Qihua Wang and Hongxia Jin
+
+1248
+
+	
+
+Predicting Short-Term Interests Using Activity-Based Search Context,
+Ryen White, Paul Bennett and Susan Dumais
+
+*Session 7C*
+
+	
+
+
+      Industry Track:  Web and Social Networks
+
+Invited talk
+
+	
+
+Title: On-line Social Networks: Insight, Commercial Value and
+Computational Challenges
+Dr. Gordon Sun - Chief Scientist, Tencent Technology
+
+638
+
+	
+
+Probabilistic First Pass Retrieval for Search Advertising: From Theory
+to Practice, Hema Raghavan and Rukmini Iyer
+
+817
+
+	
+
+Faceted Search and Browsing of Audio Content on Spoken Web, Mamadou
+Diao, Sougata Mukherjea, Nitendra Rajput and Kundan Srivastava
+
+334
+
+	
+
+Predicting Product Adoption in Large-Scale Social Networks, Rushi Bhatt,
+Vineet Chaoji and Rajesh Parekh
+
+*Session 7D*
+
+	
+
+
+      IR Track:  Query Analysis and Feedback
+
+311
+
+	
+
+Reverted Indexing for Feedback and Expansion, Jeremy Pickens, Matthew
+Cooper and Gene Golovchinsky
+
+674
+
+	
+
+Improving Verbose Queries using Subset Distribution, Xiaobing Xue,
+Samuel  Huston and Bruce Croft
+
+1206
+
+	
+
+A unified optimization framework for robust, risk-aware pseudo-relevance
+feedback, Joshua Dillon and Kevyn Collins-Thompson
+
+1232
+
+	
+
+Ranking Related Entities: Components and Analyses, Marc Bron, Krisztian
+Balog and Maarten de Rijke
+
+*Session 8A*
+
+	
+
+
+      KM Track: Semantic Techniques
+
+1084
+
+	
+
+Semantic tags generation and retrieval for online advertising, Mirizzi
+Roberto, Azzurra Ragone, Tommaso Di Noia and Eugenio Di Sciascio
+
+936
+
+	
+
+MENTA: Inducing Multilingual Taxonomies from Wikipedia, Gerard de Melo
+and Gerhard Weikum
+
+175
+
+	
+
+Ontology Emergence from Folksonomies, Kaipeng Liu, Binxing Fang and
+Weizhe Zhang
+
+955
+
+	
+
+Multi-document Topic Segmentation, Minwoo Jeong and Ivan Titov
+
+594
+
+	
+
+Meta-Metadata: A Metadata Semantics Language for Collection
+Representation Applications, Andruid Kerne, Yin Qu, Andrew Webb,
+Sashikanth Damaraju, Nic Lupfer and Abhinav Mathur
+
+*Session 8B*
+
+	
+
+
+      IR Track: Web Search
+
+1108
+
+	
+
+Clickthrough-Based Translation Models for Web Search: from Word Models
+to Phrase Models, Jianfeng Gao, Xiaodong He and Jian-Yun Nie
+
+1264
+
+	
+
+Temporal Query Log Profiling to Improve Web Search Ranking, Alexander
+Kotov, Pranam Kolari, Lei Duan and Yi Chang
+
+639
+
+	
+
+Improving Web Search Relevance and Freshness with Content Previews, Siva
+Gurumurthy, Hang Su, Vasileios Kandylas and Vidhyashankar  Venkataraman
+
+779
+
+	
+
+Organizing Query Completions for Web Search, Alpa Jain and Gilad Mishne
+
+854
+
+	
+
+Selectively Diversifying Web Search Results, Rodrygo Santos, Craig
+Macdonald and Iadh Ounis
+
+*Session 8C*
+
+	
+
+
+      Industry Track:  Text Mining and Analytics
+
+Invited talk
+
+	
+
+Title: Digital Advertising: Personalization, Personalization, and
+Personalization
+Dr. James Shanahan, Church and Duncan Group, Inc
+
+529
+
+	
+
+Building Re-usable Dictionary Repositories for Real-world Text Mining,
+Shantanu Godbole, Indrajit Bhattacharya, Ajay Gupta and Ashish Verma
+
+457
+
+	
+
+OpinionIt: A Text Mining System for Cross-lingual Opinion Analysis,
+Honglei Guo and Huijia  Zhu
+
+381
+
+	
+
+Hierarchical Service Analytics for Improving Productivity in an
+Enterprise Service Center, Chunye Wang, Ram Akella and Srikant Ramachandran
+
+*Session 8D*
+
+	
+
+
+      IR Track: Scalability and Efficiency
+
+196
+
+	
+
+VSEncoding: Efficient Coding and Fast Decoding of Integer Lists via
+Dynamic Programming, Rossano Venturini and Fabrizio Silvestri
+
+329
+
+	
+
+Efficient Term Proximity Search with Term-Pair Indexes, Hao Yan, Shuming
+Shi, Fan Zhang, torsten suel and Ji-Rong Wen
+
+1003
+
+	
+
+Improved Index Compression Techniques  for Versioned Document
+Collections, Jinru He, Junyuan  Zeng, Torsten Suel
+
+1240
+
+	
+
+Building Efficient Multi-Threaded Search Nodes, Carolina Bonacic, Carlos
+Garcia, Marin Mauricio, Manuel Prieto-Matias and Francisco Tirado
+
+1332
+
+	
+
+Real Time Memory Efficient Data Redundancy Removal Algorithm, Ankur
+Narang, Souvik Bhattacherjee and Vikas Garg
+
+ 
+
+ 
+
+	
+
+Platinum Sponsors
+
+Microsoft Logo (Gold Sponsor) <http://research.microsoft.com/en-us/>
+
+ 
+
+Gold Sponsors
+
+Ebay Logo (Gold Sponsor) <http://www.ebay.com/>
+
+ 
+
+Soso Logo (Gold Sponsor) <http://www.soso.com/>
+
+ 
+
+<http://labs.yahoo.com/>
+
+ 
+
+<http://www.nokia.ca/>
+
+ 
+
+<http://www.google.com/>
+
+ 
+
+<http://www.infobright.com/>
+
+ 
+
+<http://www.ir-facility.org/>
+
+<http://www.mitacs.math.ca/>
+
+ 
+
+<http://www.yandex.com/>
+
+ 
+
+<http://www.umbc.edu/>
+
+ 
+
+<http://www.churchandduncan.com/>
+
+ 
+
+<http://www.research.ibm.com/>
+
+ 
+
+<http://www.dossierview.com/>
+
+<http://www.cambridge.org/>
+
+<http://www.cambridge.org/>
+
+ACM Logo (Sponsor) <http://www.acm.org/>
+
+Sig Web Logo (Sponsor) <http://www.sigweb.org:88/about/>
+
+Sigir Logo (Sponsor) <http://www.sigir.org/>
+
+SIGKDD Logo (Sponsor) <http://www.sigkdd.org/>
+
+York Univ. Logo (Sponsor) <http://www.yorku.ca/>
+
+CIKM 2010 Logo
+ACM CIKM 2010
+
+19th ACM International Conference on Information and Knowledge
+Management Photo Galleryclose <#>
+19th ACM International Conference on Information and Knowledge
+Management Photo Galleryclose <#>
+Ajax Loader

@@ -1,0 +1,60 @@
+1. 家中寬頻上網的 adsl 傳輸速度為 8M bps 時下載一個 100M bytes 的檔案
+需要 100 / 60 分鐘  (因為 100/(8M/8) * 1/60) 而 200M 則要 200/60 分鐘
+請寫一程式可以列出 100M 到 800M 的檔案, 使用 8M adsl 的連線要多少分 ? 
+main(){
+        int i,u,l,s;
+        float m;
+        u=800; l=100; s=100;
+        i=l;
+        while (i <= u){
+                m = (float)i/60;
+                printf("%dM\t%.1fmins\n", i,m);
+                i += s;
+        }
+}
+
+2. 寫一程式可以計算由鍵盤輸入的所有字 (未到 EOF) 中, 有多少個 a 到 e (5 個) 
+的英文字, 若輸入為U a!Zb1 輸出應為
+a 1
+b 1
+c 0
+d 0
+e 0
+other 4
+
+main(){
+        int i,c;
+        int a[6];
+        char b[]="abcde";
+
+        for (i=0; i<6;i++){
+                a[i]=0;
+        }       
+
+        while ((c=getchar()) != EOF){
+                        if(c >= 'a' && c <= 'e'){
+                                ++a[c-'a'];
+                        }
+                        else {
+                                if (c != '\n') { ++a[5]; }
+                        }
+        }       
+
+        for (i=0; i<5;i++){
+                printf("%c \t %d \n", b[i], a[i]); 
+        } 
+        printf("%s \t %d\n", "other", a[5]); 
+}
+
+3. 利用 scanf 和 printf 來由 stdin 讀入二個數, 後計算
+二個數的 加, 減, 乘, 除的數值
+main(){
+        int i,j;
+        printf("input 2 number: ex 2 3");  
+        scanf("%d", &i);
+        scanf("%d", &j);
+        printf("%d + %d = %d\n", i, j, i+j); 
+        printf("%d - %d = %d\n", i, j, i-j); 
+        printf("%d * %d = %d\n", i, j, i*j); 
+        printf("%d / %d = %d\n", i, j, i/j); 
+}

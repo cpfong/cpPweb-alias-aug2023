@@ -1,0 +1,77 @@
+From cpfong.bbs@bbs.civil.ncku.edu.tw Tue Feb 29 13:53:15 2000
+Return-Path: <cpfong.bbs@bbs.civil.ncku.edu.tw>
+Received: from ms24.hinet.net (root@ms24.hinet.net [168.95.4.24])
+	by bb.cc.fjtc.edu.tw (8.9.3/8.9.3) with ESMTP id NAA00450
+	for <cpfong@bb.cc.fjtc.edu.tw>; Tue, 29 Feb 2000 13:53:09 +0800 (CST)
+	(envelope-from cpfong.bbs@bbs.civil.ncku.edu.tw)
+From: cpfong.bbs@bbs.civil.ncku.edu.tw
+Received: from uranus.civil.ncku.edu.tw (uranus.civil.ncku.edu.tw [140.116.36.40])
+	by ms24.hinet.net (8.8.8/8.8.8) with ESMTP id NAA19243
+	for <cpfong@ms24.hinet.net>; Tue, 29 Feb 2000 13:53:04 +0800 (CST)
+Received: from bbs.civil.ncku.edu.tw (IDENT:bbs@bbs.civil.ncku.edu.tw [140.116.36.100])
+	by uranus.civil.ncku.edu.tw (8.9.3/8.9.2) with ESMTP id NAA11606
+	for <cpfong@ms24.hinet.net>; Tue, 29 Feb 2000 13:52:55 +0800 (CST)
+	(envelope-from cpfong.bbs@bbs.civil.ncku.edu.tw)
+Received: (from bbs@localhost)
+	by bbs.civil.ncku.edu.tw (8.9.1/8.9.0) id NAA24968
+	for cpfong@ms24.hinet.net; Tue, 29 Feb 2000 13:52:55 +0800 (CST)
+Date: Tue, 29 Feb 2000 13:52:55 +0800 (CST)
+Message-Id: <200002290552.NAA24968@bbs.civil.ncku.edu.tw>
+Reply-To: cpfong.bbs@bbs.civil.ncku.edu.tw
+To: cpfong@ms24.hinet.net
+Subject: Re: 有關IMP WebMail
+X-Disclaimer: 成大土木大地雕塑家對本信內容恕不負責。
+Status: O
+Content-Length: 1557
+Lines: 49
+
+發信人: tuan.bbs@cszone.twbbs.org (nobody), 看板: bsd
+標  題: Re: 有關IMP WebMail
+發信站: 程式設計樂園(CSZone) (Mon Dec 13 21:25:39 1999)
+轉信站: CivilEngineer!news.civil.ncku!netnews.csie.nctu!ctu-peer!news.nctu!fre
+來源站: octa2.ee.ntu.edu.tw
+
+
+假設我的server的ip是192.168.1.1
+之前已經安裝好了 Apache+PHP3+MySQL(可裝可不裝)
+同時也安裝好IMAP,
+
+就可以抓取 horde-1.0.11.tar.gz 和 imp-2.0.11.tar.gz 檔案.
+把檔案解出來.
+
+# tar xvzf horde-1.0.11.tar.gz
+# mv horde-1.0.11 horde
+# cd horde
+# tar ~/xvzf imp-2.0.11.tar.gz
+# mv imp-2.0.11 imp
+# cd lib/src
+# ./build.pl
+# cd ~/horde/imp/lib/src
+# ./build.pl
+# cd ~
+# cp -r horde /httpd/htdocs
+# cd /httpd/htdocs/horde
+# ./install.sh
+這樣子就可以用browser開啟, http://192.168.1.1/horde/setup.php3
+然後就一步步都是設定的東西了.用web介面的設定方式應該看得懂了吧?!
+
+PHP好像不可以使用 4.0beta的,不然horde的
+/horde/templates/setup/session.lib的這一行
+var $imp = new HordeLang;
+執行起來會有問題. 那就不能夠setup了.
+
+※ 引述《lman.bbs@bbs.ccns.ncku.edu.tw (大量閱讀大量思考)》之銘言：
+: ※ 引述《stylon.bbs@bbs.yzu.edu.tw (該睡覺了吧...)》之銘言：
+: >         剛剛拿了 2.2.0pre5 回來，看來 submit 到 dev list 上的訊息終
+: >         於進了 source 裏了...8-)
+: >         不過只有 locale/ 目錄裏的檔案而已，如果要用的話，還得在
+: >         config/lang.php3 裏加上一行:
+: >         $lang->lang['zh-tw'] = 'Traditional Chinese';
+: 弟在安裝imp及horde時遇到了困難！
+: 是否可請兄台將簡易的安裝流程寫出讓大家看看呢！？
+: 不需要太過詳細！
+: 弟主要對於他的install檔感覺不太清楚！
+
+--
+※ Origin: 程式設計樂園 ◆ From: eagle.seed.net.tw
+

@@ -1,0 +1,17 @@
+如何使用安全連線 ssh ?
+為何使用 ssh ?
+一些簡單的 unix 指令
+	ls
+	ls -la
+	cd
+	pwd
+	passwd
+	rm
+
+telnet tw.yahoo.com port
+
+nslookup 及 dns 的使用, 正查和反查 ?
+dig 的使用
+
+google 的免費 dns 伺服器 8.8.8.8
+

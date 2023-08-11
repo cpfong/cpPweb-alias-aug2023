@@ -1,0 +1,1 @@
+A slice is a subset of the rows, columns, and actions of a table

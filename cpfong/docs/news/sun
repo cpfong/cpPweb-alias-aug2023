@@ -1,0 +1,3 @@
+     su news -c '/usr/lib/news/bin/ctlinnd newgroup local.list.name m'
+sudo su news -c '/usr/lib/news/bin/ctlinnd newgroup local.list.name m'
+

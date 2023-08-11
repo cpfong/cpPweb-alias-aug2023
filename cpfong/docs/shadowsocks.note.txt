@@ -1,0 +1,33 @@
+server
+--
+FreeBSD
+pkg install -y shadowsocks-libev
+config: /usr/local/etc/shadows-libev/
+
+fine tune
+--
+#increase the maximum number of open file descriptors
+sysctl -a | grep 
+https://shadowsocks.org/en/config/advanced.html
+
+client
+--
+mintLinux (FAIL!)
+sudo apt-get install python-twisted-core python-gtk2 python-m2crypto
+sudo apt-get update
+sudo apt-get install python-pip
+sudo apt-get install shadowsocks-qt5
+--
+mintLinux shadowsocks client (succeed!)
+Start / All / software manager / search shadowsock (then Shadowsokcs-Qt5 green letter icon show up, and can be clicked)
+
+
+windows 7 (ok)
+https://github.com/netroby/shadowsocks-gui-for-windows/releases
+
+ios at iphone
+--
+potatso lite (free and good for every apps)
+socketrock (nt 100 and down line)
+
+

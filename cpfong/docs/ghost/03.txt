@@ -1,0 +1,71 @@
+《小問題大煩惱》
+
+  如何善用Symantec Ghost之Multicast Server功能
+
+    數學所 呂紹勳
+
+      當有一部PC之系統需要重新安裝，偏偏此時您又無法親自到達該
+    部電腦面前，將含有Ghost Image之光碟片放入光碟機中安裝，而或
+    是您到了該電腦前，卻又沒有光碟機讓您使用，這時您該怎麼辦呢？
+
+      類似像上述這樣的問題，相信每一個電腦使用者或多或少都會遇
+    到。尤其，如果您常需要替一般使用者安裝系統，那麼，Symantec
+    Ghost這套軟體便會是您的好幫手，且現在網路的發達與資料傳輸速
+    度的快速，Multicast的功能更是您應該要善加使用的。
+
+      要使用Multicast，首先必須先建立支援網路卡功能的Ghost開機
+    片，步驟如下：
+
+    1.從開始/程式集/Symantec Ghost，選擇「Ghost Boot Wizard」，
+      出現如【圖一】的畫面。
+
+    2.按下一步，選擇符合該部PC之網路卡，比如DLink DFE530-TX。緊
+      接著按下一步，選擇「Symantec Ghost」的方式，如【圖二】所示。
+
+    3.選擇以DHCP的方式，或是給予該部等待重新安裝系統的PC固定的IP
+       Address（本文以DHCP為例），如【圖三】所示。
+
+    4.放入空白磁片，等待製作開機片，參見【圖四】。
+
+    5.開機片製作完成，參見【圖五】。
+
+      若是該台PC的網路卡並沒有在Ghost Boot Wizard的網路卡支援列
+    表裡，要如何製作支援Ghost的網路開機片呢？其實很簡單，只要先
+    準備該片網路卡的驅動程式，再依據下列步驟進行製作即可：
+
+    1.仍是先啟動Ghost Boot Wizard，選擇「Network Boot Disk」，
+      出現如【圖六】的畫面。
+
+    2.假設現在要做的是支援DLink 660的網路卡驅動程式，請點選「Add」，
+      在出現如【圖七】的畫面後，點選「NDIS2 Driver」。
+
+    3.按「OK」後，將符合該部PC的網路卡Driver置於軟碟機內，而後
+      Browse位於軟碟機內的NDIS2資料夾檔案，並自訂Driver Name為
+      「DLINK-660」，因此Filename就會變成：「A:\NDIS2\DOS\DLKFET.DOS」，
+      如【圖八】所示。
+
+      依照上述步驟，並依其精靈指示，即可順利製作出符合該部PC網
+    路卡之開機磁片了。做完開機片，接著即是使用Multicast Server
+    將您的 Ghost Image檔案，利用現有網路，傳輸到剛剛利用開機片
+    開機的機器上，以便順利完成重新安裝系統的工作。
+
+      首先，請開啟「Multicast Server」，將Session Name命名為
+    「work」，並點選「Load To Clients」。而後於Image File處，選
+    擇Ghost Image的所在位置，最後並按下「Accept Clients」鍵即可。
+    如【圖九】所示。
+
+      至於Client端，只要以Ghost開機片開機，而後選擇「Multicasting」，
+    並填入Session Name：「work」即可。
+
+      只要利用上述各步驟，便能輕易地利用網路功能將系統重新安裝，
+    而不需千里迢迢跑至該台PC使用者處重新安裝軟體，如此將可節省
+    了不少寶貴的時間。
+
+      Symantec Ghost可以說是作業系統佈署、軟體派送、使用者資料
+    移轉以及災難回復的一個最佳工具。而在最新的Symantec Ghost7.0
+    Corporate Edition中，更新增了許多新功能，包括：「使用者資料
+    移轉」、「累計式備份」及「Ghost/AutoInstall」的整合。若是您
+    對於該項軟體有興趣一識的話，可連線至
+    「http://enterprisesecurity.symantec.com/products/products.cfm?ProductID=3&PID=7301222」
+    之網址下載試用，相信對於日後不論您是在系統安裝或者是管理上，
+    都可以提供一定程度的幫助。

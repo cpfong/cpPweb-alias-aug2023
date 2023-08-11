@@ -1,0 +1,162 @@
+  確定 kernel 有 vn, 以及 /dev/vn*
+  然候 cvsup 更新到最新的 stable source!!
+
+  先切換到這個目錄 src/release/picobsd
+  裡面應該有這些檔案和目錄
+
+ -rw-r--r--   1 root  wheel   701  8 28  1999 README.html
+ -rw-r--r--   1 root  wheel    10  2 18  2001 Version
+ drwxr-xr-x   2 root  wheel   512  3 19 16:42 bridge
+ drwxr-xr-x   3 root  wheel   512  4  2 18:31 build
+ drwxr-xr-x   4 root  wheel   512  3 14 17:09 dial
+ drwxr-xr-x   3 root  wheel   512  3 14 07:43 doc
+ drwxr-xr-x   3 root  wheel   512  3 16 22:20 floppy.tree
+ drwxr-xr-x   2 root  wheel  3072  3 14 07:43 help
+ drwxr-xr-x   3 root  wheel   512  4  2 09:14 isp
+ drwxr-xr-x   4 root  wheel   512  3 15 18:08 mfs_tree
+ drwxr-xr-x   3 root  wheel   512  3 20 03:26 net
+ drwxr-xr-x   4 root  wheel   512  3 14 17:09 router
+ drwxr-xr-x  11 root  wheel   512  3 14 07:43 tinyware
+
+  README.html/doc 的年代久遠, 參考資料其實不多, 這裡大部份的
+  資料都是來自 picobsd(8)/handbook 和 build/picobsd,
+
+  另外的 bridge/dial/isp/net/router 這幾個目錄都是範例,
+  不過年久失修, 不一定能直接使用
+
+  floppy.tree/mfs_tree/tinyware/build 這幾個才是主要的
+
+   floppy.tree  這個目錄是將來 picoBSD 磁片上預設的內容, 也就是 mount 之後
+                可以直接修改 picobsd 的設定, 不必再重新 build kernel
+   mfs_tree     這個目錄是 memory disk 預設的內容, 將來會寫進 kernel 裡,
+                若是有更動, 就必須重新 build kernel
+   tinyware     一些減肥過的 utility, 如 ps, netstat 等
+   build        裡面就是放一些建立 picoBSD 用的 shell scripts, 以及暫存區
+
+
+  為了方便起見, 這邊先用 isp 當藍本, 修改成用來把 486nb 變成一台 AP 的 picoBSD
+  在 isp 的目錄下有這些檔案,
+
+ -rw-r--r--  1 root  wheel  3882  3  8 21:36 PICOBSD
+ -rw-r--r--  1 root  wheel    95  4  2 10:34 config
+ -rw-r--r--  1 root  wheel  1437  4  2 13:31 crunch.conf
+ drwxr-xr-x  5 root  wheel   512  3 17 10:28 floppy.tree
+ -rw-r--r--  1 root  wheel   991  2 20  2001 mfs.mtree
+
+  其中 isp/floppy.tree 和前一個 floppy.tree 作用是一樣的,
+  build picoBSD 時, 會合併這兩個目錄中所有的檔案, 如果兩個目錄有同樣的檔
+  案, 則這邊的檔案會取代預設的 floppy.tree
+
+  crunch.conf 的詳細設定請參考 crunchgen(1), 裡面寫到的程式, 都是 picoBSD
+  系統將來要裝的程式, 這次因為要把一台 486nb 做成一台 AP, 所以需要一些 pcmcia
+  用的程式 pccardd/pccardc, 以及 wireless nic 要用的 wicontrol, 另外如果還
+  有需要, 例如 sleep, 也可以自己加進去
+
+  在前面加入 pccard/wicontrol/sleep source 的路徑, 順序不是很重要,
+
+    srcdirs /usr/src/usr.sbin/pccard
+    srcdirs /usr/src/usr.sbin/wicontrol
+    srcdirs /usr/src/bin/sleep
+
+    progs pccardd pccardc wicontrol sleep
+
+  也順手刪掉不用的程式, 例如 mount_msdos
+
+
+  接著是 config, 裡面是 picoBSD 要在 root fs(memory disk) 建立 /dev 的資料,
+  除了 std 外, 還要替 486 nb 建兩個(?) card0 card1,
+
+        MY_DEVS="std tun2 vty10 fd0 pty0 \
+                cuaa0 cuaa1 \
+                ttyd0 ttyd1 bpf0 card0 card1"
+
+  picobsd scripts 會把這些 pass 給 MAKEDEV, std 會建一些基礎的, 不過不
+  一定會用到, 可以用自己要的替換掉, 詳細的內容可以看 /dev/MAKEDEV
+
+  mfs.mtree 是用來建立 root fs(memory disk) 的目錄結構, 通常不必更動,
+
+  PICOBSD 是 kernel configuration file, 最前面有兩行要特別注意,
+
+   #PicoBSD       2400    init    4096            32768
+   options MD_ROOT_SIZE=2400
+
+  雖然"#PicoBSD ..." 這行是註解, 不過在 picobsd scripts 裡, 需要這些行
+  後面的數字, 所以不能省, 這是用來設定 memory disk 時, newfs 用到的,
+  而 MD_ROOT_SIZE 是 compile kernel 時, 保留在 kernel 裡的空間, memory disk
+  就塞在這一塊空間裡, 有興趣的可以翻翻 /usr/src/sys/dev/md/md.c
+
+  其餘就和一般的 kernel configuration file 一樣. :)
+
+  接著要做的是在 floop.tree 這個目錄下, 放一些 etc/rc.conf 之類的,
+  不過 picoBSD 用的比一般 FreeBSD 用的 rc.conf 精減很多, 在預設的 floppy.tree
+  裡除了 rc.conf 之外, 僅有 rc.firewall, 其它要自己加進去, 或是自己寫,
+  因為我預定是用 486nb, 需要用到 pcmcia, 所以我直接把 /etc/pccard_ether,
+  /etc/rc.pccard, /etc/defaults/pccard.conf 依樣在 isp/floppy.tree 下也弄個
+  etc.  該設定的變數就參考相對的 rc.firewall/rc.pccard 裡面
+
+  還有一點不太一樣的是, 這些自己額外加進去的, 並不一定會正確動起來,
+  這是因為啟動時的順序不太一樣, 第一個被啟動的 rc, 是放在 mfs_tree/etc
+  裡面, 這個 rc 會先將沒有放在 memory disk 的檔案, 也就是沒有和 kernel 一起載
+  入的一些檔案, 通通複製到 root fs, 接著才執行 floppy.tree/etc/rc1,
+  rc1 的功用就是設定各種系統的參數, 啟動網路設備, 然後載入 rc.xxxx 等等...
+
+  至於有哪些 rc.xxxx 會被 rc1 載入, 就請各位自己稍微 trace 一下, 這篇主要是
+  提一個概要, 至於我自己寫的 rc.conf, 因為太懶, 功力又低, 難登大雅之堂, 就不
+  貼出來露餡了 XD
+
+  另外要提的是 picobsd/floppy.tree/etc/hosts 這個檔案的內容
+
+ 127.0.0.1               localhost localhost.walk
+ 10.0.0.1        default
+ 192.168.10.11  vm
+
+ #ethertable     This line starts the ethernet->hostname mapping
+ # main_ether            hostname
+ # 00:12:34:56:78:9a     myaddress
+ # 00:bd:*               vm
+ # default               default
+
+  大概是這個樣子, 前三行和一般的 hosts 寫法一樣, 不過後面的部份不完全是註解,
+  如果沒有把卡號寫進去, 啟動的時候 rc1 只會抓到 default, 然後停下來等輸入.
+  看到這裡, 只覺得寫出 rc1 的前輩真的是很聰明, 連這種地方都可以運用.  :)
+  這邊可以填好多張卡的資料, picoBSD 啟動時, 會自動從卡號查表設定這臺機器的
+  網路卡, 不必每一臺機器都要準備一張 floppy.
+
+  floppy.tree/etc/networks 也和 hosts 有類似的機制, 這裡不多提
+
+  最後一個是別忘了放一個 master.passwd 在 isp/floppy/etc, 免得啟動後沒帳號
+  進去 :Q
+
+
+  都弄好了上面的資料後, 換到 build 目錄裡, 這裡有一個重要的 shell script,
+  就是 picobsd, 今天寫這篇的時候, 順手更新了一下 source code, picobsd 似乎
+  還沒更新, 在 776 和 779 這兩行, 如果等一下 compile 到一半, 出現 newfs 出
+  錯的訊息, 就把 ${l_vndev}a 改成 ${l_vndev}c, 因為 /dev/vn* 似乎沒有辦法
+  使用 "a" 進行 newfs, 如果有人懂, 請不吝賜教.
+
+  執行的方式是 ./picobsd -n -v isp
+
+  這樣就會產生一個子目錄 build/build_dir-isp
+  裡面有個 picobsd.bin, 用 dd 把這個檔案寫到磁片裡就可以了,
+  這邊要說 picobsd 的一個引數 --no_all_in_mfs,
+  如果沒有給這個引數, picobsd 會把所有放在 floppy.tree 的檔案
+  通通塞進 memory disk 裡頭, 這樣 kernel 讀完, 全部的檔案就一起和 kernel 放
+  到記憶體裡了, 可是如果要改設定, 就要重新執行一次 picobsd,
+  而加了 --no_all_in_mfs 的效果, 可以把做出來的 picobsd.bin 掛到 vn* 看一看,
+  floppy.tree 裡頭的東西都跑出來了, 這時候先前提到的 rc 裡的一行 cp 就會
+  有作用, 改設定時只要把 mount floppy, 改一改寫回去就完成, 適合測試時使用.
+
+  另外一個有用的引數是 -v , 可以顯示現在 picobsd 做到哪個階段,
+
+  -n 是讓 picobsd 用 non-interactive 的方式跑 (interactive mode 好像有 bug)
+
+
+  如果有裝 vmware, 可以在 kernel 裡加入 lnc0, 然後直接用 vmware 去測,
+  省去插拔 floppy 的苦工 :p
+
+  以上是 picobsd 的大致狀況, 寫的很趕, 也很粗慥, 請各位見諒.
+
+  過兩天我會仔細寫另一篇心得, 因為 picoBSD 受限於 floppy 的關係,
+  其它程式必須要弄成 static link, 下一篇就是利用 picoBSD 裡學到的
+  資料和經驗, 把整個一般的 FreeBSD 塞到記憶體裡(記憶體要夠多),
+  單機型的 diskless :p

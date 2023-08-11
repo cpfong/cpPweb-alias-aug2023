@@ -1,0 +1,8 @@
+Download EC2-Windows-Launch.zip https://s3.amazonaws.com/ec2-downloads-windows/EC2Launch/latest/EC2-Windows-Launch.zip
+Download install.ps1 to the same directory where you downloaded EC2-Windows-Launch.zip.
+
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
+Get-ExecutionPolicy -List
+Run install.ps1
+
+PS C:\> C:\ProgramData\Amazon\EC2-Windows\Launch\Scripts\InitializeInstance.ps1 -Schedule

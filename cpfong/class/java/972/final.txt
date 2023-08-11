@@ -1,0 +1,50 @@
+物件導向程式設計(二)期末考 
+目錄: 0622-final
+檔名: f1a.java f1b.java f1b.gif f2.java  f2.gif f3.java f3.gif f4.java f4.gif
+
+1a. 撰寫介面, 以描述代表圓型的類別, 類別名為 Circle, 
+Circle 有三個屬性: 半徑, 圓心 x 位置, 圓心 y 位置, 
+具有 getRadius (取半徑), setRadius (設半徑), 
+setCircle (設圓心), getCircleX (取圓心 x 座標) getCircleY (取圓心 y 座標)
+,getArea 方法, 請自行決定合適的方法參數. 
+1b. 撰寫類別使用 1a 的介面, 且使用 1a 的方法設定圓心及
+列印出目前圓心,半徑和面積 ( PI * r * r)
+
+2. vehicle 是車輛的 abstract class , 而 bike (單車),
+motorcycle (機車), auto (汽車) 則為 vehicle 的子類別, 
+vehicle 有 setPower, getPower和 says 方法, power 變數為 String
+表示車子的動力來源 (單車為 man, 機汽車為 motor), says 方法可傳回
+字串, 表示車的種類, 單車為 bike, 汽車為 auto, 機車為 motor,
+請分別由三種類別建立 giant, sym, toyota 物件, 把三個物件加入
+陣列清單, 且使用其方法.
+
+3.何謂 exception, 請寫程式來舉一個例子
+4. 利用課本 17-31 頁上的命令列引數的方法寫一個程式可以計算輸入檔案的行數
+
+
+
+
+
+
+物件導向程式設計(二)期末考 
+目錄: 0622-final
+檔名: f1a.java f1b.java f1b.gif f2.java  f2.gif f3.java f3.gif f4.java f4.gif
+
+1a. 撰寫介面, 以描述代表正方型的類別, 類別名為 Square, 
+Square 有三個屬性: 邊長, 正方型中心點 x 位置, 正方型中心點 y 位置, 
+具有 getSide (取邊長), setSide (設邊長), 
+setCenter (設中心座標), getCenterX (取中心 x 座標) getCenterY (取中心 y 座標)
+,getArea 方法, 請自行決定合適的方法參數. 
+1b. 撰寫類別使用 1a 的介面, 且使用 1a 的方法設定中心及
+列印出目前中心,邊長和面積 ( side * side )
+
+2. vehicle 是車輛的 abstract class , 而 bike (單車),
+motorcycle (機車), auto (汽車) 則為 vehicle 的子類別, 
+vehicle 有 setPower, getPower和 says 方法, power 變數為 String
+表示車子的動力來源 (單車為 man, 機汽車為 motor), says 方法可傳回
+字串, 表示車的種類, 單車為 bike, 汽車為 auto, 機車為 motor,
+請分別由三種類別建立 giant, sym, toyota 物件, 把三個物件加入
+陣列清單, 且使用其方法.
+
+3. 何謂 thread 請寫程式來舉一個例子
+4. 利用課本 17-31 頁上的命令列引數的方法寫一個程式可以計算輸入檔案的行數

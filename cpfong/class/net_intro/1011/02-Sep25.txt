@@ -1,0 +1,10 @@
+1. Alt+Tab
+2. Save or Quit?
+3. spend lots of time to do booting usb for All students 
+
+3. chinse font
+4. chinse input (scim)
+5. install packages
+6. chromium
+7. sshd
+8. tftpd

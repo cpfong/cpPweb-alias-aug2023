@@ -1,0 +1,20 @@
+#!/bin/sh
+
+str_without_white_in_between=''
+
+for item in `cat`; do # note: all those white in between will be treated as separator
+ str_without_white_in_between=${str_without_white_in_between}${item}
+done
+
+printf "%s\n" "$str_without_white_in_between" | hexdump -b -c
+
+## another way
+#	read dummy oct << EOF
+#	$(dd bs=1 count=1|od -b)
+#	EOF
+
+od – octal, decimal, hex, ASCII dump
+     -a             Output named characters.
+     -b             Output octal bytes.
+     -c             Output C-style escaped characters.
+     -d             Output unsigned decimal shorts.  Equivalent to -t u2.

@@ -1,0 +1,29 @@
+12.2 stat 函數
+判定某一個檔案的讀寫執行的屬性 
+chomp($n = shift @ARGV);
+($x,$y,$mode,@x)=stat $n;
+print $mode, "\n";
+
+if ($mode & 0400){print "r"; } else {print "-";}
+if ($mode & 0200){print "w"; } else {print "-";}
+if ($mode & 0100){print "x\n"; } else {print "-\n";}
+
+access time 屬性的範例
+chomp($n = shift @ARGV);
+$access = (stat $n)[8];
+$date = localtime $access;
+print "$date\n";
+
+$day  =(localtime $access)[3];
+print $day;
+
+使用 -M 及 stat 來比較二個檔案那一個的更新時間較接近現在
+(注意: -M 時的傳回值為浮點數)
+
+chomp($n1 = shift @ARGV);
+chomp($n2 = shift @ARGV);
+
+if (-M $n1 > -M $n2) { print "$n1 older than $n2\n"; } else { print "$n1 younger than $n2\n"; }
+if ((stat $n1)[9] > (stat $n2)[9]) { print "$n1 younger than $n2\n"; } else { print "$n1 older than $n2\n"; }
+
+12.5 的習題練習

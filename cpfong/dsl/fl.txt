@@ -1,0 +1,10 @@
+exit firefox
+launch Dillo
+
+untar install_flash_player_7_linux_r73.tar.gz
+
+sudo cp install_flash_player_7_linux/libflashplayer.so /usr/local/firefox/plugins/
+sudo cp install_flash_player_7_linux/flashplayer.xpt /usr/local/firefox/components/
+sudo vi /usr/local/firefox/greprefs/all.js --> goto line 740 , 2000 changed to 300
+
+now launch firefox you have flash player ready!!

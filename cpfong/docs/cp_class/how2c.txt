@@ -1,0 +1,13 @@
+vi test.c
+--
+ main(){
+  printf "test\n";
+ }
+
+compile
+--
+cc ./test.c
+
+execute
+--
+./a.out

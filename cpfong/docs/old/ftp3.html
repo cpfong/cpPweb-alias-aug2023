@@ -1,0 +1,527 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<title>檔案傳輸ftp的使用</title>
+</head>
+
+<body>
+
+<dl>
+  <h1><font color="#800040">◎ 檔案傳輸 -- ftp 的使用 ◎</font></h1>
+  <h2><font color="#0000ff">○ 第一節 ftp 常用指令介紹 ○</font></h2>
+  <dd><pre><font color="#0080ff" size="+1">  □ FTP (File Transfer Protocol) 是 Internet 上標準的檔案傳輸協定，ftp 則
+     是使用此傳輸協定，應用在網路檔案傳輸的程式。ftp 的格式如下：
+        ftp [IP or domain_name]
+     其參數的意義和 telnet 一樣，例：ftp ftp.ntu.edu.tw</font></pre>
+  </dd>
+  <dd><pre><font color="#0080c0" size="+1">  □ 進入 ftp 之後，如果與 remote host 連上了，它將會自動執行登入的動作，
+     詢問你 username 和密碼，確認完畢後，就可看到提示符號 &quot;ftp&gt;&quot; ，開始進
+     行檔案傳輸。</font></pre>
+  </dd>
+  <dd><pre><font color="#0080ff" size="+1">  □ 以下介紹 ftp 的指令：（註：local host 是使用者下 ftp 指令所在的機器，
+     remote host 是 ftp 命令指定的機器）
+
+
+</font><font
+color="#0080c0" size="+1">     ⊙ ascii   將傳輸模式設為 ascii 模式，通常用於傳送文字檔。此傳輸模式
+                是進入 ftp 程式的初設值。
+</font><font
+color="#0080ff" size="+1">
+
+     ⊙ bin (binary)    將傳輸模式設為二進位模式，通常用於傳送執行檔、壓縮
+                        檔、圖形檔及影像檔等。
+
+
+</font><font
+color="#0080c0" size="+1">     ⊙ dir     列出 remote host 上的檔案。
+</font><font
+color="#0080ff" size="+1">
+
+     ⊙ ls      簡要列出 remote host 上的檔案。
+
+
+</font><font
+color="#0080c0" size="+1">     ⊙ cd      更換 remote host 目前所在目錄。
+</font><font
+color="#0080ff" size="+1">
+
+     ⊙ pwd     顯示 remote host 目前所在路徑名稱。
+
+
+</font><font
+color="#0080c0" size="+1">     ⊙ get &lt;檔名&gt;      從 remote host 抓一個檔案到 local host 上(download)
+</font><font
+color="#0080ff" size="+1">
+
+     ⊙ mget &lt;檔名，可用萬用字元&gt;       同上，可一次抓多檔。
+
+
+</font><font
+color="#0080c0" size="+1">     ⊙ put &lt;檔名&gt;      從 local host 傳送一個檔案到 remote host 上(upload)
+</font><font
+color="#0080ff" size="+1">
+
+     ⊙ mput &lt;檔名，可用萬用字元&gt;       同上，可一次傳多檔。
+
+
+</font><font
+color="#0080c0" size="+1">     ⊙ lcd     改變 local host 目前所在目錄。有的 ftp 程式無此功能。
+</font><font
+color="#0080ff" size="+1">
+
+     ⊙ ldir    列出 local host 上的目錄內容。有的 ftp 程式無此功能。
+
+
+</font><font
+color="#0080c0" size="+1">     ⊙ mkdir   在 remote host 上建一個目錄。
+</font><font
+color="#0080ff" size="+1">
+
+     ⊙ rmdir   在 remote host 上刪除一個目錄。
+
+
+</font><font
+color="#0080c0" size="+1">     ⊙ delete/mdelete  刪除 remote host 上的檔案，mdelete 可刪多檔。
+</font><font
+color="#0080ff" size="+1">
+
+     ⊙ open <IP domain_name or>    建立與指定 remote host 的連線。進 ftp
+                程式時若未指定 remote host，必須用此指令連上一個 remote
+                host 才能作檔案傳輸。若用 close 指令結束與一個 remote host
+                的連線後，可用此指令與另一個 remote host 連線。
+
+
+</font><font
+color="#0080c0" size="+1">     ⊙ close   和目前已連線的 remote host 結束連線。
+</font><font
+color="#0080ff" size="+1">
+
+     ⊙ bye/quit        結束連線並離開 ftp 程式。
+
+
+</font><font
+color="#0080c0" size="+1">     ⊙ prompt [on|off]     若 prompt 為 on，在一次傳多檔時（mget/mput），
+                ftp 會逐一詢問每個檔是否要做傳輸的工作，使用者必須逐一回答
+                每個詢問。若 prompt 為 off，則不會詢問，每個檔皆做傳輸。系
+                統預設值為 prompt on。
+</font><font
+color="#0080ff" size="+1">
+
+     ⊙ hash    若為 on，傳輸時每傳 8K（隨設定而異），就會印出一個 &quot;#&quot;
+
+
+</font><font
+color="#0080c0" size="+1">     ⊙ user    登錄時，若 username 或 password 打錯，可用此命令重新登錄，
+                登錄成功後才能開始傳檔。
+</font><font
+color="#0080ff" size="+1">
+
+     ⊙ help    線上輔助指令。</font></pre>
+  </dd>
+  <dd><pre><font size="+1"><font color="#0080c0">  □ anonymous ftp
+</font><font
+color="#0080ff">
+
+     ⊙ 有不少 ftp 站存放不少有用的資料並開放給各地的使用者抓取。這些 ftp
+        站均提供了一個公用帳號 anonymous (或 ftp），使各地使用者能利用此帳
+        號抓到該 ftp 站上有用的檔案。anonymous ftp 站在詢問 password 時會
+        要求使用者輸入其 E-mail address，為尊重該 ftp 站管理者，請使用者遵
+        照其使用規則，輸入完整 E-mail address，尤其是外國的 ftp 站，以維護
+        台灣的形象。
+
+
+</font><font
+color="#0080c0">     ⊙ 目前國內最大 ftp 站是校園網路策進會提供的 NCTUCCCA.edu.tw，台大的
+        使用者可用 ftp.ntu.edu.tw，兩者的內容一樣。該站的規模在亞太地區是
+        數一數二的，定時會從國外各大站傳送（Mirror）檔案回來，使國內使用者
+        可在該站以較快的速度抓所需的檔案。由於連往國外線路負荷很重且速度很
+        慢，請確定你在 ftp.ntu.edu.tw 抓不到所要資料後才到國外抓。ftp.ntu.
+        edu.tw 的 /PC/garbo 和 /PC/simtel 內有不少 for PC 的有用程式，值得
+        參考。
+</font><font
+color="#0080ff">
+
+</font></pre>
+  </dd>
+  </font>
+  <dd><pre><font color="#0080ff" size="+1">  □ 如果你在連上網路的 PC 上使用 ftp，就可從 PC download 或 upload 檔案到
+     你帳號內，也可直接 ftp 到其他 ftp 站去抓檔。</font></pre>
+  </dd>
+  <font size="+1">
+  <dd><pre><font color="#0080c0">  □ 以下舉例說明如何從 ftp 取得最新的 PSPICE 教育版：
+     先在 UNIX 下打 ftp ftp.ntu.edu.tw，然後出現 Connected to 140.112.1.23.
+     訊息並可看到 NTU FTP Server 的進站畫面，以及要求你輸入 username：
+</font></font><font
+color="#0080ff" size="+1">
+
+220 ftp.ntu.edu.tw Anonymous FTP Archives, WELCOME from cctwin.ee.ntu.edu.tw
+</font><font
+color="#ff0000" size="+1">Name (140.112.1.23:b81045):</font><font color="#0080ff" size="+1"> ftp         &lt;---- 帳號打 ftp 
+
+331 Send your complete e-mail address(user@host.subdomain.domain)as password
+</font><font
+color="#ff0000" size="+1">Password:</font><font color="#0080ff" size="+1">                               &lt;---- 密碼打你的 E-mail address 
+
+230- Welcome b81045@cctwin.ee.ntu.edu.tw. Local time: Feb 21 15:49:59 1995.
+</font><font
+color="#ff0000" size="+1">ftp&gt;</font><font color="#0080ff" size="+1"> cd PC/simtel/electric              &lt;---- 進 /PC/simtel/electric 目錄 
+
+250 Change exactly to the directory &quot;/PC/simtel/electric&quot;.
+</font><font
+color="#ff0000" size="+1">ftp&gt;</font><font color="#0080ff" size="+1"> dir ps*                            &lt;---- 看 ps* 開頭的檔案 
+
+200 PORT command successful.
+150 Opening ASCII mode data connection for /bin/ls.
+-r--r--r--   1 NTU      NCTUCCCA  1040816 Mar 21  1994 pspic54a.zip
+-r--r--r--   1 NTU      NCTUCCCA  1187958 Mar 21  1994 pspic54b.zip
+-r--r--r--   1 NTU      NCTUCCCA   930859 Mar 21  1994 pspic54c.zip
+226 Transfer complete.
+remote: ps*
+207 bytes received in 0.25 seconds (0.8 Kbytes/s)
+
+
+</font><font
+color="#ff0000" size="+1">ftp&gt;</font><font color="#0080ff" size="+1"> bin                                &lt;---- 記得壓縮檔要用二進位傳檔 
+
+</font><font
+color="#ff0000" size="+1">ftp&gt;</font><font color="#0080ff" size="+1"> mget ps*.zip                       &lt;---- 要抓 ps*.zip 的檔案 mget pspic54a.zip? y 
+
+200 PORT command successful.
+150 Opening BINARY mode data connection for /PC/simtel/electric/pspic54a
+.zip (1040816 bytes).
+</font><font
+color="#ff0000" size="+1">mget pspic54b.zip?</font><font color="#0080ff" size="+1"> y
+</font><font
+color="#ff0000" size="+1">mget pspic54c.zip?</font><font color="#0080ff" size="+1"> y
+
+
+     用磁片拷回去後以 pkunzip 解壓縮，一個檔案解到一片磁片上，第一片裡有
+     setup.exe，在 MSWindows 下安裝後，你就有最新的 PSPICE for Windows教育
+     版。</font></pre>
+    <font size="+1"><h2><font color="#0000ff">○ 第二節 ftp 的設定檔 .netrc ○</font></h2>
+  </dd>
+  </font>
+  <dd><pre><font color="#0080ff" size="+1">  </font><font color="#ff0000" size="+1">□</font><font
+color="#0080ff" size="+1"> 各位如果常常利用 ftp 傳檔，一定會覺得每次要打名字和密碼會很麻煩。只要
+     在自己的根目錄下放 .netrc 檔就可以免去麻煩。</font></pre>
+  </dd>
+  <dd><pre><font color="#0080ff" size="+1">  </font><font color="#ff0000" size="+1">□</font><font
+color="#0080ff" size="+1"> </font><font size="+1"><font color="#0080c0">.netrc 檔案內容的格式：
+        machine xxxxxx  login xxxxxx    password xxxxxxx
+     例如：
+        machine cctwin.ee.ntu.edu.tw login b82000    password a9Xe7qW
+        machine ftp.ntu.edu.tw       login anonymous password b82000@</font></pre>
+  </dd>
+  </font>
+  <dd><pre><font color="#0080ff" size="+1">  </font><font color="#ff0000" size="+1">□</font><font
+color="#0080ff" size="+1"> 請注意，因為 .netrc 檔中有你的密碼存在，所以必須更改檔案屬性，除了你
+     自己之外的任何人皆不能讀寫，以免密碼外洩。最好只存 anonymous ftp 站的
+     密碼就好了。</font></pre>
+    <font size="+1"><h2><font color="#0000ff">○ 第三節 ncftp -- 更好用的 ftp ○</font></h2>
+  </dd>
+  </font>
+  <dd><pre><font color="#0080ff" size="+1">  </font><font color="#ff0000" size="+1">□</font><font
+color="#0080ff" size="+1"> </font><font color="#0080c0" size="+1">有的工作站裝有 ncftp，它是一個較好的 ftp 介面，多了些方便的功能。它在
+     連上 ftp server 後，自動幫你鍵入 ftp 作為 username，和你的 E-mail
+     address 作為密碼。對常用 anonymous ftp 的人很方便。還有，它可以記錄你
+     上一次離開該 ftp 站時的工作目錄，下次你再進入同一個 ftp 站時，便會自
+     動更換工作目錄到你上次離開時的目錄去。此外，它還多了兩個有用的指令：</font><font
+color="#0080ff" size="+1">
+
+
+     ⊙ predir
+        ncftp 會把你上次 dir 的結果存起來，下 predir 指令可列出上次 dir 的
+        結果，不必向 remote ftp server 再傳送目錄資料，這在網路傳輸速率慢
+        時能節省時間，而且有 more 分頁看的功能。
+
+
+ </font><font
+size="+1"><font color="#0080c0">    ⊙ page
+        可直接顯示 remote host 上文字檔的內容，例如目錄下有 00INDEX.TXT 或
+        READ.ME，則用 page 00INDEX.TXT 或 page READ.ME 就可以直接將內容顯
+        示，省去將該檔案傳回後再看的時間。</font></pre>
+    <h2><font color="#0000ff">○ 第四節 台灣學術網路 ftp 站列表 ○</font></h2>
+  </dd>
+  <dd><pre><font size="+1"><font color="#0080ff">  </font><font color="#ff0000">□</font><font
+color="#0080ff"> 以下均為 anonymous ftp 站，資料來源：交大資工 gopher
+</font></pre>
+    <table>
+<TBODY>
+      <tr>
+        <td><font color="#0080ff">教育部 </font></td>
+        <td><font color="#0080ff">moers2.edu.tw </font></td>
+        <td><font color="#0080ff">140.111.2.22 </font></td>
+        <td><font color="#0080ff">CAI,TANet交通氣象 </font></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><font color="#0080ff">ftp.edu.tw </font></td>
+        <td><font color="#0080ff">192.83.166.10</font></td>
+        <td><font color="#0080ff">各類軟體,USENET </font></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><font color="#0080ff">hpserv.edu.tw </font></td>
+        <td><font color="#0080ff">140.111.3.14 </font></td>
+        <td><font color="#0080ff">HP/UX軟體,資訊 </font></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><font color="#0080ff">ibmserv.edu.tw </font></td>
+        <td><font color="#0080ff">140.111.3.11</font></td>
+        <td><font color="#0080ff">AIX軟體 </font></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><font color="#0080ff">decserv.edu.tw </font></td>
+        <td><font color="#0080ff">140.111.3.12 </font></td>
+        <td><font color="#0080ff">Dec軟體,資訊 </font></td>
+      </tr>
+      <tr>
+        <td><font color="#0080ff">台灣大學 </font></td>
+        <td><font color="#0080ff">ftp.ntu.edu.tw </font></td>
+        <td><font color="#0080ff">140.112.1.23 </font></td>
+        <td><font color="#0080ff">(AFS Client 站) </font></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><font color="#0080ff">earth.csie.ntu.edu.tw</font></td>
+        <td><font color="#0080ff">140.112.28.163 </font></td>
+        <td><font color="#0080ff">計算機科學研究 </font></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><font color="#0080ff">wheel.csie.ntu.edu.tw </font></td>
+        <td><font color="#0080ff">140.112.30.80</font></td>
+        <td><font color="#0080ff">聲音,影像,動畫 </font></td>
+      </tr>
+      <tr>
+        <td><font color="#0080ff">台灣師大 </font></td>
+        <td><font color="#0080ff">ftp.ntnu.edu.tw </font></td>
+        <td><font color="#0080ff">140.122.65.19</font></td>
+        <td><font color="#0080ff">校園資料,PC,UNIX </font></td>
+      </tr>
+      <tr>
+        <td><font color="#0080ff">中央大學 </font></td>
+        <td><font color="#0080ff">softu1.ncu.edu.tw </font></td>
+        <td><font color="#0080ff">140.115.19.11 </font></td>
+        <td><font color="#0080ff">UUNET,CS軟體,文件 </font></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><font color="#0080ff">dongpo.math.ncu.edu.tw </font></td>
+        <td><font color="#0080ff">140.115.25.3 </font></td>
+        <td><font color="#0080ff">TeX,vi,教授資料 </font></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><font color="#0080ff">linux1.pine.ncu.edu.tw </font></td>
+        <td><font color="#0080ff">140.115.11.33</font></td>
+        <td><font color="#0080ff">Linux </font></td>
+      </tr>
+      <tr>
+        <td><font color="#0080ff">中原大學 </font></td>
+        <td><font color="#0080ff">cchp01.cc.cycu.edu.tw </font></td>
+        <td><font color="#0080ff">140.135.20.2 </font></td>
+        <td><font color="#0080ff">PC,UNIX,RFC </font></td>
+      </tr>
+      <tr>
+        <td><font color="#0080ff">交通大學 </font></td>
+        <td><font color="#0080ff">ftp.nctu.edu.tw</font></td>
+        <td><font color="#0080ff">140.113.250.2 </font></td>
+        <td><font color="#0080ff">(AFS Client 站) </font></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><font color="#0080ff">nctuccca.edu.tw </font></td>
+        <td><font color="#0080ff">192.83.166.10</font></td>
+        <td><font color="#0080ff">140.111.1.10 </font></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><font color="#0080ff">ftp.cc.nctu.edu.tw </font></td>
+        <td><font color="#0080ff">140.113.4.11 </font></td>
+        <td><font color="#0080ff">CAI 教育,virus </font></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><font color="#0080ff">ftp.csie.nctu.edu.tw </font></td>
+        <td><font color="#0080ff">140.113.17.5 </font></td>
+        <td><font color="#0080ff">系所,USENET,軟體 </font></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><font color="#0080ff">jupiter.csie.nctu.edu.tw </font></td>
+        <td><font color="#0080ff">140.113.216.217 </font></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><font color="#0080ff">netbsd.csie.nctu.edu.tw</font></td>
+        <td><font color="#0080ff">140.113.17.242 </font></td>
+        <td><font color="#0080ff">NetBSD </font></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><font color="#0080ff">linux.csie.nctu.edu.tw </font></td>
+        <td><font color="#0080ff">140.113.235.252</font></td>
+        <td><font color="#0080ff">Linux </font></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><font color="#0080ff">ftp.cis.nctu.edu.tw </font></td>
+        <td><font color="#0080ff">140.113.204.21 </font></td>
+        <td><font color="#0080ff">軟體,圖形影像聲音 </font></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><font color="#0080ff">ftp.tem.nctu.edu.tw </font></td>
+        <td><font color="#0080ff">140.113.30.104</font></td>
+        <td><font color="#0080ff">GIS,圖形,PC,UNIX </font></td>
+      </tr>
+      <tr>
+        <td><font color="#0080ff">清華大學 </font></td>
+        <td><font color="#0080ff">net.nthu.edu.tw </font></td>
+        <td><font color="#0080ff">140.114.64.15 </font></td>
+        <td><font color="#0080ff">清大圖館,系統資料 </font></td>
+      </tr>
+      <tr>
+        <td><font color="#0080ff">中興大學 </font></td>
+        <td><font color="#0080ff">ftp.nchu.edu.tw </font></td>
+        <td><font color="#0080ff">140.120.1.21 </font></td>
+        <td><font color="#0080ff">校園資料,PC,UNIX </font></td>
+      </tr>
+      <tr>
+        <td><font color="#0080ff">逢甲大學</font></td>
+        <td><font color="#0080ff">ftp.fcu.edu.tw </font></td>
+        <td><font color="#0080ff">140.134.254.3 </font></td>
+        <td><font color="#0080ff">校園資料,PC,UNIX </font></td>
+      </tr>
+      <tr>
+        <td><font color="#0080ff">中正大學</font></td>
+        <td><font color="#0080ff">ftp.ccu.edu.tw </font></td>
+        <td><font color="#0080ff">140.123.1.3</font></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><font color="#0080ff">成功大學 </font></td>
+        <td><font color="#0080ff">mail.ncku.edu.tw </font></td>
+        <td><font color="#0080ff">140.116.2.10 </font></td>
+        <td><font color="#0080ff">吉它,圖片,多媒體 </font></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><font color="#0080ff">snoopy.ncku.edu.tw </font></td>
+        <td><font color="#0080ff">140.116.2.11 </font></td>
+        <td><font color="#0080ff">PC,UNIX </font></td>
+      </tr>
+      <tr>
+        <td><font color="#0080ff">中山大學 </font></td>
+        <td><font color="#0080ff">ftp.nsysu.edu.tw </font></td>
+        <td><font color="#0080ff">140.117.11.3 </font></td>
+        <td><font color="#0080ff">校園資料,圖形,PC </font></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><font color="#0080ff">ccnf2.nsysu.edu.tw </font></td>
+        <td><font color="#0080ff">140.117.16.100</font></td>
+        <td><font color="#0080ff">PC </font></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><font color="#0080ff">mis.nsysu.edu.tw </font></td>
+        <td><font color="#0080ff">140.117.72.1 </font></td>
+        <td><font color="#0080ff">MIDI,PD </font></td>
+      </tr>
+      <tr>
+        <td><font color="#0080ff">中華工學院</font></td>
+        <td><font color="#0080ff">cs.chpi.edu.tw </font></td>
+        <td><font color="#0080ff">140.126.4.221</font></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><font color="#0080ff">pbbs.chpi.edu.tw</font></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><font color="#0080ff">元智工學院</font></td>
+        <td><font color="#0080ff">river.yzit.edu.tw </font></td>
+        <td><font color="#0080ff">140.138.36.41 </font></td>
+        <td><font color="#0080ff">Liunx,OS/2 </font></td>
+      </tr>
+      <tr>
+        <td><font color="#0080ff">屏東技術學院 </font></td>
+        <td><font color="#0080ff">ftp.nppi.edu.tw </font></td>
+        <td><font color="#0080ff">140.127.1.5</font></td>
+        <td><font color="#0080ff">校園資料,PC,Linux </font></td>
+      </tr>
+      <tr>
+        <td><font color="#0080ff">花蓮師範學院</font></td>
+        <td><font color="#0080ff">cc.nhltc.edu.tw </font></td>
+        <td><font color="#0080ff">192.192.6.110</font></td>
+        <td><font color="#0080ff">校園,教育資料 </font></td>
+      </tr>
+      <tr>
+        <td><font color="#0080ff">中研院 </font></td>
+        <td><font color="#0080ff">ftp.sinica.edu.tw </font></td>
+        <td><font color="#0080ff">140.109.14.2 </font></td>
+        <td><font color="#0080ff">PC </font></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><font color="#0080ff">ftp.iis.sinica.edu.tw </font></td>
+        <td><font color="#0080ff">140.109.20.249</font></td>
+        <td><font color="#0080ff">資訊所資料,PC </font></td>
+      </tr>
+      <tr>
+        <td><font color="#0080ff">高速電腦中心</font></td>
+        <td><font color="#0080ff">ftp.nchc.gov.tw </font></td>
+        <td><font color="#0080ff">140.110.1.40 </font></td>
+        <td><font color="#0080ff">NetLib,高速計算 </font></td>
+      </tr>
+      <tr>
+        <td><font color="#0080ff">晶片設計實作</font></td>
+        <td><font color="#0080ff">ftp.cic.edu.tw </font></td>
+        <td><font color="#0080ff">140.126.24.62 </font></td>
+        <td><font color="#0080ff">CAD,中心資料 </font></td>
+      </tr>
+      <tr>
+        <td><font color="#0080ff">資策會 </font></td>
+        <td><font color="#0080ff">iiidns.iii.org.tw </font></td>
+        <td><font color="#0080ff">140.92.1.45</font></td>
+        <td><font color="#0080ff">資策會資料,PC </font></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><font color="#0080ff">ftp.iii.org.tw </font></td>
+        <td><font color="#0080ff">140.92.1.65 </font></td>
+        <td><font color="#0080ff">ftp.seed.net.tw </font></td>
+      </tr>
+      <tr>
+        <td><font color="#0080ff">工研院 </font></td>
+        <td><font color="#0080ff">comserv.itri.org.tw </font></td>
+        <td><font color="#0080ff">140.96.200.1</font></td>
+        <td><font color="#0080ff">PC,UNIX,文件 </font></td>
+      </tr>
+      <tr>
+        <td><font color="#0080ff">數據所HINET</font></td>
+        <td><font color="#0080ff">serv.hinet.net </font></td>
+        <td><font color="#0080ff">168.95.192.6 </font></td>
+        <td><font color="#0080ff">(AFS Client 站) </font></td>
+      </tr>
+      <tr>
+        <td><font color="#0080ff">FIDONET </font></td>
+        <td><font color="#0080ff">ftp.fido.net.tw </font></td>
+        <td><font color="#0080ff">192.72.5.3 </font></td>
+        <td><font color="#0080ff">PC,網路,圖片,聲音 </font></td>
+      </tr>
+</TBODY>
+    </table>
+    <p align="center"><font color="#0080ff">　</font></font></p>
+  </dd>
+  </font>
+</dl>
+</body>
+</html>

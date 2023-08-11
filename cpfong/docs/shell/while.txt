@@ -1,0 +1,14 @@
+#!/bin/sh
+#
+#cpfong@pluto % which continue break
+#continue: shell built-in command.
+#break: shell built-in command.
+#--
+count=0
+e=10
+
+while test ${count} -ne $e; do
+ printf "%s\n" $count
+ count=$((count+1))
+ test ${count} -eq 5 && break
+done

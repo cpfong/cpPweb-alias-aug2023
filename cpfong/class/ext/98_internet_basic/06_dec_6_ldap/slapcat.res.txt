@@ -1,0 +1,110 @@
+dn: dc=ceenet,dc=ceu,dc=hu
+objectClass: dcObject
+objectClass: organization
+dc: ceenet
+o: CEENET Workshop 2001
+structuralObjectClass: organization
+entryUUID: 38f2319e-7200-102e-8bf0-eff48d77597c
+creatorsName: cn=Manager,dc=ceenet,dc=ceu,dc=hu
+createTimestamp: 20091130133008Z
+entryCSN: 20091130133008Z#000000#00#000000
+modifiersName: cn=Manager,dc=ceenet,dc=ceu,dc=hu
+modifyTimestamp: 20091130133008Z
+
+dn: cn=Manager,dc=ceenet,dc=ceu,dc=hu
+objectClass: organizationalRole
+cn: Manager
+structuralObjectClass: organizationalRole
+entryUUID: 38f30718-7200-102e-8bf1-eff48d77597c
+creatorsName: cn=Manager,dc=ceenet,dc=ceu,dc=hu
+createTimestamp: 20091130133008Z
+entryCSN: 20091130133008Z#000001#00#000000
+modifiersName: cn=Manager,dc=ceenet,dc=ceu,dc=hu
+modifyTimestamp: 20091130133008Z
+
+dn: ou=people,dc=ceenet,dc=ceu,dc=hu
+objectClass: organizationalUnit
+ou: people
+structuralObjectClass: organizationalUnit
+entryUUID: b67cc5b6-7200-102e-8bf2-eff48d77597c
+creatorsName: cn=Manager,dc=ceenet,dc=ceu,dc=hu
+createTimestamp: 20091130133339Z
+entryCSN: 20091130133339Z#000000#00#000000
+modifiersName: cn=Manager,dc=ceenet,dc=ceu,dc=hu
+modifyTimestamp: 20091130133339Z
+
+dn: uid=scarter,ou=people,dc=ceenet,dc=ceu,dc=hu
+cn: Sam Carter
+sn: Carter
+givenName: Sam
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+ou: Accounting
+ou: People
+l: Sunnyvale
+uid: scarter
+mail: scarter@tutorial.hu
+telephoneNumber: +1 408 555 4798
+facsimileTelephoneNumber: +1 408 555 9751
+roomNumber: 4612
+userPassword:: c3ByYWlu
+structuralObjectClass: inetOrgPerson
+entryUUID: b67d6a48-7200-102e-8bf3-eff48d77597c
+creatorsName: cn=Manager,dc=ceenet,dc=ceu,dc=hu
+createTimestamp: 20091130133339Z
+entryCSN: 20091130133339Z#000001#00#000000
+modifiersName: cn=Manager,dc=ceenet,dc=ceu,dc=hu
+modifyTimestamp: 20091130133339Z
+
+dn: uid=tmorris,ou=people,dc=ceenet,dc=ceu,dc=hu
+cn: Ted Morris
+sn: Morris
+givenName: Ted
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+ou: Accounting
+ou: People
+l: Santa Clara
+uid: tmorris
+mail: tmorris@tutorial.hu
+telephoneNumber: +1 408 555 9187
+facsimileTelephoneNumber: +1 408 555 8473
+roomNumber: 4117
+userPassword:: aXJyZWZ1dGFibGU=
+structuralObjectClass: inetOrgPerson
+entryUUID: b67efef8-7200-102e-8bf4-eff48d77597c
+creatorsName: cn=Manager,dc=ceenet,dc=ceu,dc=hu
+createTimestamp: 20091130133339Z
+entryCSN: 20091130133339Z#000002#00#000000
+modifiersName: cn=Manager,dc=ceenet,dc=ceu,dc=hu
+modifyTimestamp: 20091130133339Z
+
+dn: uid=T01022,ou=people,dc=ceenet,dc=ceu,dc=hu
+cn:: Y3AgZm9uZyA=
+sn: A123032958
+givenName: cp
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+ou: ldap tutorial
+ou: People
+l: Budapest
+uid: T01022
+mail: cp@mci.hu
+telephoneNumber: 08-723-9032
+facsimileTelephoneNumber: 07-788-9777
+roomNumber: 108
+userPassword:: Tm9QYXNz
+structuralObjectClass: inetOrgPerson
+entryUUID: b67f6f32-7200-102e-8bf5-eff48d77597c
+creatorsName: cn=Manager,dc=ceenet,dc=ceu,dc=hu
+createTimestamp: 20091130133339Z
+entryCSN: 20091130133339Z#000003#00#000000
+modifiersName: cn=Manager,dc=ceenet,dc=ceu,dc=hu
+modifyTimestamp: 20091130133339Z
+

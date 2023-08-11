@@ -1,0 +1,27 @@
+Red Hat Package Manager (RPM) 是在用做安裝,刪除軟體的工具
+
+Query:
+rpm -q [query_opts] package [...]
+ex rpm -q -a, rpm -q jwhois, rpm -qi jwhois
+
+install and delete:
+rpm -i package	(install package)
+ex rpm -ivh fortune-mod-1.2.1-1.i386.rpm 
+
+rpm -e package	(delete package) 
+ex rpm -e fortune-mod whois	(delete 2 packages)
+
+rpm -V package	(view package)
+
+何處可以取得較新的軟體 ?
+http://rpm.pbone.net
+http://www.rpmfind.net
+http://www.freshrpms.net
+http://fedora.redhat.com
+
+use top menu: 
+	application --> add/remove --> search bind -->  install bind-9.3.6-4.p1.e15.i386 and caching-name-config
+
+install new package
+rpm -Uvh http://apt.sw.be/redhat/el5/en/i386/rpmforge/RPMS/rpmforge-release-0.3.6-1.el5.rf.i386.rp
+

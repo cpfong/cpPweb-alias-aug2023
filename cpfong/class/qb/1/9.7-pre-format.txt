@@ -1,0 +1,13 @@
+問題: 如何作一張可以開機且有 dos 和 qbasic 的磁片?
+回答: 
+1. 開機進入 windows --> 開始 (左下角) --> 執行 (倒數三) --> command -->確定
+2. ftp ftp.ece.fjtc.edu.tw
+3. ftp
+4. a@a (特別注意: 這些鍵入的不會出現在螢幕上 !!!)
+5. bin
+6. cd pub/tmp
+7. get rawrite.exe
+8. get d62-boot.img
+9. quit
+a. dir (要看到有 rawrite.exe 和 d62-boot.img 才對, 否則重來一次)
+b. rawrite d62-boot.img a:

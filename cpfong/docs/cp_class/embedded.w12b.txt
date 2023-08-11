@@ -1,0 +1,6 @@
+Q: BSD with internet?
+A: qcom2 get from official site VM dir
+Program\ Files/qemu/qemu-system-i386  -m 2048 -hda FreeBSD-11.2-RELEASE-i386.qcow2 -netdev user,id=mynet0,hostfwd=tcp:127.0.0.1:7722-:22 -device e1000,netdev=mynet0
+
+Q: bsd VM on FreeBSD using qemu?
+A: -nographic must add in

@@ -1,0 +1,31 @@
+FreeBSD10.3 vm on EC2 with jail
+	
+	
+Obj: install FreeBSD on aws and jail each service using ipfw/nat
+hist:
+2017/06/03 file created
+2017/0618 vnet sometime cannot get ns jail packet and use ipfw/nat with xn0 alias to solve
+
+I install a FreeBSD VM using one us cloud company and use for more than 2 years. It is very stable and it never need to reboot. I want to try on amazon ec2 too since it is cheaper. I write a smaill shell script to setup FreeBSD jail (install packages, buildworld ...) after installed at AWS. I also create jail for each service and was running ok at first. Then I find cpu usage always high. I use cloned lo1 and ipfw/nat for this version.
+
+After googling for cpu high clue, I decide to use VIMAGE (vnet) with ipfw/nat. There are 3 way to do the firewall: ipfw/nat  ipfw with natd and pf. FreeBSD ipfw/nat is compiled in the kernel, so it may have better performance than ipfw with natd. After I successfully installed as ipfw/nat, I find it run quite smooth and no cpu usage high anymore.
+
+However I cannot figure the perfect vnet/ipfw/nat ipfw rules. The rule I run works most of the time but sometime ns cannot get through behind jail. Jailed www daemaon does not work sometime (very slow or respond). Then I try not compiled VIMAGE in and use alias xn0 (ec2 nic). This works great. ipfw rule just use type open and put ipfw nat rule in rc.conf. Put all jail stuff in /etc/jail.conf.
+
+-- the following is just for reference
+Here I would like to share some points I learn from ipfw/nat:
+1.  use firewall_type="open" after jails setup at first. not any fancy setup, at jail you should be able to go out
+2.  check /etc/firewall.rc there are some very usefull info (note for the ipfw rule number 0050 nat part)
+3.  after you play some time with "open", you can setup your own ipfw.rules. Remember to make /etc/rc.conf firewall_type="open" since  you may lock youself up. Under that you can reboot your VM from aws console
+4.  my ipfw.rules (take firewall.rc as an example)
+  /sbin/ipfw -q nat 1 config if xn0 log same_ports reset redirect_port udp 192.168.0.1:53 53
+ $cmd 00010 - 00999 are your host services
+ $cmd 01000 nat 1 ip4 from any to any via $pif
+ $cmd 01001 -- whatever is your Jail services
+ $cmd 65000 allow ip from any to any
+
+ipfw rule affect a lot and it sometime affect firefox behavior. when you suspect this, add a rule at the top and watch for the log. ex:
+ipfw add 50 allow log ip from any to any via $pif
+tail /var/log/security
+
+Tags: freebsd

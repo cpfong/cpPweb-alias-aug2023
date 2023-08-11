@@ -1,0 +1,4 @@
+window manger change 
+editor
+shell
+basic command

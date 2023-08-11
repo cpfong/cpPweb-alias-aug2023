@@ -1,0 +1,5 @@
+The for loop shall execute a sequence of commands for each member in a list of items. 
+
+    in word ...
+shall be equivalent to:
+    in "$@"

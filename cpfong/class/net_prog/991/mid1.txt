@@ -1,0 +1,33 @@
+
+# ans 1
+print "2222\n";
+print "   2\n";
+print "   2\n";
+print "2222\n";
+print "2   \n";
+print "2222\n";
+
+
+# ans 2
+print "input number: \n";
+$n = <STDIN>;
+foreach (1..$n){
+	$sum += $_;
+}
+print "total = $sum\n";
+
+# ans 3
+@a=("nobody", "nobody", "nobody", "Chuang Three", "Lee Four", "Wong Five", "Chen Siz", "Lin Seven");
+
+@in = <STDIN>;
+
+foreach (@in){
+	chomp;
+	print "$a[$_],";
+}
+
+# another version ans 3
+
+@st = <STDIN>;
+sort @st;
+print pop @st;

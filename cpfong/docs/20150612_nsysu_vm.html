@@ -1,0 +1,65 @@
+<hmtl>
+asking: 協助推廣區網虛擬化雲端主機服務<br>
+case: 2nd DNS: nsysu, ncku, ntu, nctu as example <br>
+obj: install FreeBSD dns jail on nsysu VM <br>
+ver: 2015/05/28 file created by cp@ifong.org<br>
+steps: install OS - jail Host Env - each jail service<br>
+why: we are using gmail and want to receive email even our school network down<br>
+special tks: 中山大學, 王聖全先生
+<br><br>
+<a href=http://goo.gl/tzGpTL>文件網址 </a> --
+<a href=https://wupsrv.kpprc.edu.tw:9443>高高屏9443</a> note: 2 warning about VM plugin is normal && no asking install plugin at the bottom
+<br><br>
+
+安裝注意事項: <br>
+	1. 請先安裝登入頁面下方VMware-ClientIntegrationPlugin-5.5.0工具程式<br>
+	2. login:	account_get_from_kpprc@vsphere.local<br>
+	3. passwd:	what_ever_you_received<br>
+	4. ip:		163.28.129.137 (later)<br>
+	5. 使用 chrome 且把 enable npapi --> chrome://flags/#enable-npapi <br>
+	6. vCenter - left bottom - 虛擬機器 - 摘要 - CD (note: client access control will show up) - 本機磁碟 iso (注意: 如果沒看到本機則表示 1 或 5 沒做好)<br>
+	7. console	虛擬機器 - 動作 - 開主控台 (will show in new tab of chrome) <br>
+<br>
+ref: 
+<a href=https://www.freebsd.org/doc/handbook/jails.html> FreeBSD handbook about jail</a> --
+<a href=http://cpfong.livejournal.com/122580.html> jail article 1</a> --
+<a href=http://cpfong.livejournal.com/122260.html> jail article 2</a> --
+
+<br><br>
+host related files: -
+<a href=./h.rc.conf> rc.conf </a> --
+<a href=./h.ipfw.rules> ipfw.rules </a> --
+<a href=./VIMG> kernel </a> --
+<a href=./h.natd.conf> natd.conf </a> --
+<a href=./h.resolv.conf> resolv.conf </a>
+<br>
+jails related files: -
+<a href=./j.rc.conf>rc.conf </a> --
+<a href=./j.resolv.conf> resolv.conf </a> -
+<a href=./j.ipfw.rules> ipfw.rules </a> --
+<br><br>
+host part <br>
+1. <a href=https://www.freebsd.org/doc/handbook/jails-application.html> handbook </a> <br>
+2. 重新<a href=https://www.freebsd.org/doc/handbook/kernelconfig-building.html>組繹核心</a>, 加入 VIMAGE <br>
+3. 佈置 jail 環境小程式 <a href=./01stageOne_jail.txt>stage1</a> -- <a href=./02stageTwo_jail.txt>stage2</a> -- <a href=./00_create_new_j.txt>create</a> -- <a href=./03dns.txt>new exmaple</a> -- 
+<br><br>
+jails part <br>
+1. @host sudo jexec jID csh (ex: jexec 1 csh) <br>
+2. use shell to create a jail txt file (ex: sh 00_create_new_j.txt www > www.j.txt) <br>
+3. use www.j.txt as an example to create jail www <br>
+4. this txt file include these parts: make home - config - mount - netconfig - jail service <br>
+5. note: part 1 2 (make home & config) is needed only once<br>
+6. time comsuming part: ipfw.rules<br>
+<table>
+<tr><td><td>      @jail host www.hinet.net (jexec 2 csh)
+<tr><td><td>      @host tail /var/log/security
+<tr><td><td>      @host solve dns in the first place
+</table>
+7. mount note: @host sudo mount -t nullfs /usr/ports /home/j/myutil/usr/ports <br>
+@host apache22 # make -DBATCH <br>
+@jail make -DBATCH install  (note: you may need to run this: ldconfig)<br>
+8. natd.conf port forwarding <br>
+9. telnet port 80 from outside and tail security <br>
+/etc/hosts 163.28.129.137 www.myVM.kpprc.my.domain www.myVM.kpprc <br>
+
+</html>

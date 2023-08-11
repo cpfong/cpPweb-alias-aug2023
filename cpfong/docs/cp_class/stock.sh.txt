@@ -1,0 +1,30 @@
+#!/bin/sh
+
+db='cpfong'
+t='test'
+d='./data.csv'
+
+echo "DROP DATABASE IF EXISTS $db;"
+echo "CREATE DATABASE $db CHARACTER SET utf8;"
+echo "USE $db;"
+echo "DROP TABLE IF EXISTS $t;"
+
+printf "CREATE TABLE %s (
+  rank INT,
+  sid INT,
+  sname VARCHAR(16),
+  deal float(7,2),
+  updown varchar(10),
+  percent varchar(10),
+  hi float(7,2),
+  lo float(7,2),
+  diff float(7,2),
+  many int,
+  total float(20,4)
+);\n" $t
+
+while read line; do
+ line=$(echo $line | tr -d ',')
+ set -- $line
+ printf "insert into %s values(%s, %s, '%s', %s, '%s', '%s', %s, %s, %s, %s, %s);\n" $t $1 $2 $3 $4 $5 $6 $7 $8 $9 ${10} ${11}
+done < $d

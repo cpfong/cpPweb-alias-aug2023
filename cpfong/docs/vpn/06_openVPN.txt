@@ -1,0 +1,116 @@
+/usr/ports/security/openvpn
+make port "沒有" 自動產生 /usr/local/etc/openvpn 目錄
+
+you may check out this:
+http://www.isgsp.net/freebsd/freebsd-openvpn.html
+--
+mkdir /usr/local/etc/openvpn
+cp /usr/local/share/doc/openvpn/sample-config-files/server.conf  /usr/local/etc/openvpn/openvpn.conf
+
+ca 要生成 server only 的(nsCertType=server) 以讓它更安全
+ ~/tmp/trash/easy-rsa/1.0] vi vars
+
+check 035_ca-openvpn.txt
+
+log related
+---
+[cpfong@mail ~] tail /etc/syslog.conf 
+!openvpn
+*.*						/var/log/openvpn.log
+
+ touch /var/log/openvpn.log
+ Restart syslogd
+
+rotate log
+--
+cpfong@mail ~] tail /etc/newsyslog.conf 
+/var/log/openvpn.log			600  7	   *	@T00  JC
+
+restart newsyslog
+
+vi /usr/local/etc/openvpn/openvpn.conf
+--
+
+client
+--
+[jessoy@ldap ~] tail /etc/rc.conf 
+openvpn_enable="YES"
+openvpn_if="tap"
+
+jessoy@ldap /usr/local/etc] sudo pkg_delete openvpn-2.2.2
+jessoy@ldap /usr/ports/security/openvpn] sudo make -DBATCH install
+[jessoy@ldap /usr/ports/security/openvpn] ls /var/db/pkg|grep openv
+openvpn-2.2.2
+
+[jessoy@ldap /usr/local/etc] sudo mkdir openvpn
+[jessoy@ldap /usr/local/etc/openvpn] sudo cp /usr/local/share/doc/openvpn/sample-config-files/client.conf openvpn.conf
+
+vi openvpn.conf
+--
+dev tap
+remote server.xxxx 1194
+;comment ns-cert-type ---
+;ns-cert-type server
+
+ca /usr/local/etc/openvpn/ca.crt
+cert /usr/local/etc/openvpn/client.crt
+key /usr/local/etc/openvpn/client.key
+tls-auth /usr/local/etc/openvpn/ta.key 1
+
+[jessoy@ldap ~] sudo /usr/local/etc/rc.d/openvpn start
+[jessoy@ldap ~] tail -F /var/log/openvpn.log
+ep  4 20:13:00 ldap openvpn[26877]: /sbin/ifconfig tap0 10.8.0.2 netmask 255.255.255.0 mtu 1500 up
+Sep  4 20:13:00 ldap openvpn[26877]: Initialization Sequence Completed
+
+also check out server part
+--
+Sep  4 21:04:15 mail openvpn[5876]: ldap.fotech.edu.tw/163.15.203.141:52761 SENT CONTROL [ldap.fotech.edu.tw]: 'PUSH_REPLY,route-gateway 10.8.0.1,ping 10,ping-restart 120,ifconfig 10.8.0.2 255.255.255.0' (status=1)
+Sep  4 21:04:15 mail openvpn[5876]: ldap.fotech.edu.tw/163.15.203.141:52761 MULTI: Learn: 00:bd:9b:f0:f9:00 -> ldap.fotech.edu.tw/163.15.203.141:52761
+
+tap0: flags=8843<UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> metric 0 mtu 1500
+        options=80000<LINKSTATE>
+        ether 00:bd:9b:f0:f9:00
+        inet 10.8.0.2 netmask 0xffffff00 broadcast 10.8.0.255
+--
+you can ping 10.8.0.1 now
+--- done with client
+
+# openvpn --mktun --dev tun2
+# ip link set tun2 up
+# ip addr add 10.0.0.1/24 dev tun2
+
+mail# whereis tshark
+tshark: /usr/ports/net/tshark
+
+tshark -i tun2
+
+http://www.freebsddiary.org/openvpn.php
+http://www.freebsddiary.org/openvpn-easy-rsa.php
+http://www.freebsddiary.org/openvpn-routed.php
+
+
+-- another way
+http://blog.up-link.ro/how-to-install-openvpn-in-freebsd/
+
+this is my shell
+-------
+#!/bin/sh
+# part 1
+mkdir -p ./testDir/openvpn/keys
+cp -R /usr/local/share/doc/openvpn/ ./testDir/openvpn/
+cd ./testDir/openvpn
+
+# part 2
+cd ./easy-rsa/2.0
+chmod +x *
+sh
+. ./vars
+sh ./clean-all
+
+sh ./build-ca
+sh ./build-key-server server
+sh ./build-key client1
+sh ./build-dh
+----
+result will be under testDir/..../2.0/keys
+

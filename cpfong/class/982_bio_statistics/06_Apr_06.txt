@@ -1,0 +1,53 @@
+4/6
+probability (chapter 3) 自行研讀
+chap3 最重要的為 conditional probability. 即 3.3 小節,
+另 3.6 小節的貝式定理最為重要 (handout p9)
+
+conditional prob ex1 某一醫生技術很好, 每個病人都說他好, 但也會有例外的病人會批評他不好的,
+ex2: 肺結核最佳檢驗方式為 X-Ray, 但也會有驗不出來的, 因為任何臨床方法都無法 100% 準確,
+
+利用 specificity , sensitivity 可以劃出 ROC curve, 這即為此一臨床方法的可信度
+
+----
+bi-nomial distribution: 賭博時用的分佈, 骰子六面假設出現 6 為 succeed 則成功機率為 1/6
+fail 的則為 5/6 
+連續 10 次中有 5 次成功的機率為 Cnj * P^j * (1-P)^(n-j)  handout p11
+Cnj = 10!/(5!*(10-5)!) 
+P=1/6 j=5 n=10
+
+ex2 請問今年清明節下雨的機率則因為以前多年的 data 可供參考所以可
+以使用 bi-nomial 來解
+
+succeed prob 和 fail prob 是相同的全為 0.5 時則分佈圖會對稱
+以點數為例, 若最高點為 5 點, 最少為 0 點, 則 0,5 機率相同
+1,4 2,3 也都會相同, 這樣才會是一個公平的賽局. 
+
+賭場則一定不能公平, 因為莊家要賺錢, 所以會使用 left skew 即 fail > succeed
+例如 0.6 0.4 如此對玩者會小不利
+
+bi-nomial 的 mean = n*p = 20*0.5=10 
+sd=sqrt(nqp)=(20*.5*.5)^1/2=2.24
+
+-----
+街道紅綠燈的秒數使用 poisson distribution
+單位時間內有多少人車過去, 單位空間內有多少的大腸桿菌 (handout p12)
+
+bi-nomal 有 4 個前提, poisson 也有 4 個假定
+1. interval 愈大機率愈高
+2. 全都是 independent
+3. ...
+
+ex3.4.1 翳院管理人員研究後結論為急診人數分佈為 poisson, 記錄顯示平均一天有 3 個急診
+則某一天央二個的或然率為 ?
+P(x=2) = f(2) = e-3 * 3^2/2! = .225
+
+ 
+Table 23.1 n=100  mean=100*0.01=1
+
+----
+chi-square dist
+主要在評估差異性
+例如設計了一個新的測量儀器則應和原有的標準儀器比較
+這時可使用 chi-square
+
+

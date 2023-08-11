@@ -1,0 +1,8 @@
+Solved :)
+
+Adding this to the bootlocal.sh did the trick:
+Quote
+
+insmod /home/dsl/e1000e-0.5.18.3/src/e1000e.o
+pump -i eth0
+ifconfig eth1 192.168.1.145 netmask 255.255.255.0

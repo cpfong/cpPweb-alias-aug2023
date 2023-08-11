@@ -1,0 +1,13 @@
+Q: why me?
+A: 20220502 i change gmail password, and mutt oauth2 to gmail fail now (or because of oob fail: https://www.googblogs.com/making-google-oauth-interactions-safer-by-using-more-secure-oauth-flows/)
+
+Gmail SMTP servers support authorization via the industry-standard OAuth 2.0 protocol. Using OAUTH protocol, no user and password directly in application. 
+
+steps:
+
+1. create new google project
+2. create credentials / Oauth Client ID / Desktop Application /  get c_id and c_sec
+3. get code https://accounts.google.com/o/oauth2/auth?client_id=%s&redirect_uri=http://localhost&response_type=code&scope=%s" ${c_id} ${scope}  (note: scope must use https://mail.google.com)
+4. get refresh token using curl --silent --request POST --data "code=${ret_code}&client_id=${c_id}&client_secret=${c_sec}&redirect_uri=http://localhost&grant_type=authorization_code" https://accounts.google.com/o/oauth2/token
+ note: step 4 : google only give ONCE refresh token, it did NOT give it out 2nd time because of security reason
+5. put it in .muttrc:  set smtp_oauth_refresh_command = "curl ...

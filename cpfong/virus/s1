@@ -1,0 +1,52 @@
+as root
+
+procmail first
+-------------------
+cd /usr/ports/mail/procmail
+make
+cd /usr/ports/mail/procmail/work/procmail-3.22/src
+
+www# vi authenticate.c
+/*#define MAILSPOOLHOME "/.mail"                      /* watch the leading / */
+#define MAILSPOOLHOME "/.mail"
+
+cd /usr/ports/mail/procmail
+make install
+
+
+sendmail
+---------------------
+cd /usr/local/src
+fetch http://www.fjtc.edu.tw/~cpfong/virus/sendmail.8.11.3.tar.gz
+fetch http://www.fjtc.edu.tw/~cpfong/virus/check_virus-1.18-8.11.3.diff
+tar xfvz sendmail.8.11.3.tar.gz
+cd /usr/local/src/sendmail-8.11.3
+patch -p1 < ../check_virus-1.18-8.11.3.diff
+./Build
+BACKUP /usr/sbin/sendmail and /etc/sendmail.cf
+make install
+cd /usr/sbin
+ln -sf /usr/libexec/sendmail/sendmail .
+
+sendmail.cf
+---------------------
+you can just fetch
+cd /var/mail
+fetch http://www.fjtc.edu.tw/~cpfong/virus/sendmail.avp.cf
+ln -s sendmail.avp.cf sendmail.cf
+
+or do it by youself
+cd /usr/local/src/sendmail-8.11.3/cf/cf
+vi generic-bsd4.4.mc
+-- just put one line in --
+divert(0)dnl
+VERSIONID(`$Id: generic-bsd4.4.mc,v 8.10 1999/02/07 07:26:02 gshapiro Exp $')
+OSTYPE(bsd4.4)dnl
+DOMAIN(generic)dnl
+FEATURE(local_procmail)
+MAILER(local)dnl
+MAILER(smtp)dnl
+----
+make generic-bsd4.4.cf
+cp generic-bsd4.4.cf /etc/mail/sendmail.avp.cf
+

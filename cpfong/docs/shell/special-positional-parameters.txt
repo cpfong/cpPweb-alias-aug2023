@@ -1,0 +1,19 @@
+special positional parameters 
+--
+$0 basename (absoulte command ie: /home/cpfong/bin/test.sh) of the program as it was called. 
+$1 .. $9 are the first 9 additional parameters the script was called with. 
+$@ is all parameters $1 .. whatever. 
+$* is similar, but does not preserve any whitespace. As a general rule, use $@ and avoid $*. 
+$# is the number of parameters the script was called with. 
+
+$$ and $! are process numbers. 
+$$ is the PID (Process IDentifier) of the currently running shell.
+$! is the PID of the last run background process. This is useful to keep track of the process as it gets on with its job.
+
+$ list='a b c d'
+$ set -- $list
+
+$ printf %s "$@"	#abcd
+$ printf "$1"		#a
+$ printf %s "$*"	#a b c d
+

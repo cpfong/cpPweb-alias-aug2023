@@ -1,0 +1,6 @@
+teach final project (use perl to filter my theory of stock)
+all files under, and this week, write certain stockID in .py and .pl
+end of today class, i start to pass this paramter into .py and .pl
+
+check files under
+../wl-proj

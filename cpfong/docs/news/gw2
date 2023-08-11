@@ -1,0 +1,507 @@
+
+   Messages 1-10 from thread
+
+                                                                     Message 1 in thread
+
+   From: dsroberts@biivax.dp.beckman.com (dsroberts@biivax.dp.beckman.com)
+   Subject: gatewaying mailing lists to newsgroups
+
+
+                                                                  View this article only
+
+   Newsgroups:
+   news.software.anu-news
+   Date: 1991-05-02 13:44:37 PST
+
+We receive a few mailing lists here and would like to make them available (at
+least readable, postable if possible) to the users here as newsgroups.  Is
+there a way to automatically gateway entries received from a mailing list
+directly into a newsgroup?  I know I can extract the mail and post in news, but
+that would be painful.  Since it appears some sites do gateway between mailing
+lists and newsgroups (info-vax, for one) it must not be too hard.  The part I
+don't understand is how you do it automatically.
+--
+---------------------------------------------------------------------------
+   Don Roberts                   Internet:  don@beckman.com
+   Beckman Instruments, Inc.     Yellnet:   714/961-3029
+   2500 Harbor Bl. Mailstop X-12 FAX:       714/961-3351
+   Fullerton, CA  92634          Disclaimer:  Always
+---------------------------------------------------------------------------
+
+                                                                     Message 2 in thread
+
+   From: sloane@kuhub.cc.ukans.edu (sloane@kuhub.cc.ukans.edu)
+   Subject: Re: gatewaying mailing lists to newsgroups
+
+
+                                                                  View this article only
+
+   Newsgroups:
+   news.software.anu-news
+   Date: 1991-05-02 13:44:37 PST
+
+In article <1991May2.084820.280@biivax.dp.beckman.com>,
+ dsroberts@biivax.dp.beckman.com writes:
+>We receive a few mailing lists here and would like to make them available (at
+>least readable, postable if possible) to the users here as newsgroups.  Is
+>there a way to automatically gateway entries received from a mailing list
+>directly into a newsgroup? I know I can extract the mail and post in news, but
+>that would be painful.  Since it appears some sites do gateway between mailing
+>lists and newsgroups (info-vax, for one) it must not be too hard.  The part I
+>don't understand is how you do it automatically.
+
+The way I handle this it to create a newsgroup with the /MAILLIST
+qualifier. This makes the group moderated, with the mailing list being
+the moderator. That way articles that are posted locally are mailed
+directly to the mailing list.
+
+Next, I subscribe NEWSMGR to the mailing list.  My periodic batch
+program extracts the mail to a file which is later added to the NEWS
+database via ADD FILE/DEFNEWSGROUP. I use unique personal names for
+each mailing list, so the To: address is different for each list. That
+way I can use the MAIL command SELECT/TO=whatever followed by EXTRACT
+to get the mail for a specific list.  Because of the way MAIL works,
+this means that I can't have things in the MAIL folder.  I have a
+program that massages the mail before it is added, but it is mostly
+cosmetic. I can send you a copy if you want one.  If you are dealing
+with BITNET LISTSERV type mailing lists, it is helpful to set your
+subscription to FULLHDR.  Just send the command SET mailing FULLHDR to
+LISTSERV@site from the account that is subscribed.
+
+--
+USmail: Bob Sloane, University of Kansas Computer Center, Lawrence, KS, 66045
+E-mail: sloane@kuhub.cc.ukans.edu, sloane@ukanvax.bitnet, AT&T: (913)864-0444
+
+                                                                     Message 3 in thread
+
+   From: Robin Fairbairns (robin@lsl.co.uk)
+   Subject: Re: gatewaying mailing lists to newsgroups
+
+
+                                                                  View this article only
+
+   Newsgroups:
+   news.software.anu-news
+   Date: 1991-05-14 10:51:27 PST
+
+In article <1991May2.140344.30315@kuhub.cc.ukans.edu>,
+  sloane@kuhub.cc.ukans.edu writes:
+>In article <1991May2.084820.280@biivax.dp.beckman.com>,
+>  dsroberts@biivax.dp.beckman.com writes:
+>>We receive a few mailing lists here and would like to make them available (at
+>>least readable, postable if possible) to the users here as newsgroups.  Is
+>>there a way to automatically gateway entries received from a mailing list
+>>directly into a newsgroup? I know I can extract the mail and post in news, but
+>>that would be painful.  Since it appears some sites do gateway between mailing
+>>lists and newsgroups (info-vax, for one) it must not be too hard.  The part I
+>>don't understand is how you do it automatically.
+>
+>The way I handle this it to create a newsgroup with the /MAILLIST
+>qualifier. This makes the group moderated, with the mailing list being
+>the moderator. That way articles that are posted locally are mailed
+>directly to the mailing list.
+
+Fair enough - this seems a good way of going about it: we don't have that
+situation here.  However, how do you avoid messages `looping'?
+
+>Next, I subscribe NEWSMGR to the mailing list.  My periodic batch
+>program extracts the mail to a file which is later added to the NEWS
+>database via ADD FILE/DEFNEWSGROUP. I use unique personal names for
+>each mailing list, so the To: address is different for each list. That
+>way I can use the MAIL command SELECT/TO=whatever followed by EXTRACT
+>to get the mail for a specific list.  Because of the way MAIL works,
+>this means that I can't have things in the MAIL folder.  I have a
+>program that massages the mail before it is added, but it is mostly
+>cosmetic. I can send you a copy if you want one.  If you are dealing
+>with BITNET LISTSERV type mailing lists, it is helpful to set your
+>subscription to FULLHDR.  Just send the command SET mailing FULLHDR to
+>LISTSERV@site from the account that is subscribed.
+
+Whereas, we subscribe some random name to the mailing list, and forward
+its mail to PMDF DELIVER%NEWSMGR, which has a command file that
+understands the various random names and applies the appropriate
+/DEFNEWSGROUP.  The advantage of this is that the incoming mailing list
+mail gets posted as soon as it arrives.  The disadvantage is that the
+command file is not a little hairy, and has to be edited for every new
+mailing list we think of.
+
+If you fancy my horrible command file, drop me a line.  (I think I've
+been -ve enough there to discourage a flood of requests ;-) (please)
+                                                                Robin
+--
+Robin Fairbairns, Senior Consultant, postmaster and general dogsbody
+Laser-Scan Ltd., Science Park, Milton Rd., Cambridge CB4 4FY, UK
+Tel (+44) 223 420414; Fax (+44) 223 420044; Telex 817346 LSLCAM G
+Email: robin@lsl.co.uk  --or--  rf@cl.cam.ac.uk
+
+                                                                     Message 4 in thread
+
+   From: sloane@kuhub.cc.ukans.edu (sloane@kuhub.cc.ukans.edu)
+   Subject: Re: gatewaying mailing lists to newsgroups
+
+
+                                                                  View this article only
+
+   Newsgroups:
+   news.software.anu-news
+   Date: 1991-05-14 23:39:46 PST
+
+In <1991May9.174502.723@lsl.co.uk>, robin@lsl.co.uk (Robin Fairbairns) writes:
+> In article <1991May2.140344.30315@kuhub.cc.ukans.edu>,
+>   sloane@kuhub.cc.ukans.edu writes:
+>>The way I handle this it to create a newsgroup with the /MAILLIST
+>>qualifier. This makes the group moderated, with the mailing list being
+>>the moderator. That way articles that are posted locally are mailed
+>>directly to the mailing list.
+>
+> Fair enough - this seems a good way of going about it: we don't have that
+> situation here.  However, how do you avoid messages `looping'?
+
+There can't be any "looping" problem. When the user posts an article,
+it is emailed to the mailing list, it IS NOT posted locally. It will
+get added to the local database when it comes back from the mailing
+list via the NEWSMGR subscription.
+
+> Whereas, we subscribe some random name to the mailing list, and forward
+> its mail to PMDF DELIVER%NEWSMGR, which has a command file that
+> understands the various random names and applies the appropriate
+> /DEFNEWSGROUP.
+
+I considered this, but I have had DELIVER abort on me frequently. For
+example if the To: address is longer than 256 (512?) characters, which
+can happen easily when there are multiple To: addresses in the header,
+the batch job dies horribly trying to assign a string that is too long.
+--
+USmail: Bob Sloane, University of Kansas Computer Center, Lawrence, KS, 66045
+E-mail: sloane@kuhub.cc.ukans.edu, sloane@ukanvax.bitnet, AT&T: (913)864-0444
+
+                                                                     Message 5 in thread
+
+   From: Todd Hooper (chooper@cc.curtin.edu.au)
+   Subject: Re: gatewaying mailing lists to newsgroups
+
+
+                                                                  View this article only
+
+   Newsgroups:
+   news.software.anu-news
+   Date: 1991-05-17 00:55:06 PST
+
+In article <1991May14.103043.30715@kuhub.cc.ukans.edu>, sloane@kuhub.cc.ukans.edu writes:
+> In <1991May9.174502.723@lsl.co.uk>, robin@lsl.co.uk (Robin Fairbairns) writes:
+>> In article <1991May2.140344.30315@kuhub.cc.ukans.edu>,
+>>   sloane@kuhub.cc.ukans.edu writes:
+>>>The way I handle this it to create a newsgroup with the /MAILLIST
+>>>qualifier. This makes the group moderated, with the mailing list being
+>>>the moderator. That way articles that are posted locally are mailed
+>>>directly to the mailing list.
+
+We have a simpler although perhaps less elegant solution.
+
+For each mailing list, I create an account and subscribe it to the list in
+question. I find this is the easiest way to deal with listservers, rather than
+creating an alias and then having trouble convincing the listserver to remove
+you from the list at some later date.
+
+In the account, I put a command file which checks & extracts all incoming mail
+and adds it to the required group. Each account has newsmanager privs. The
+news_post.cc file holds the mailing address of the group for outgoing postings.
+
+The command file is submitted every time a News update is done (every 30
+minutes). I enclose a copy below - fairly straightforward really. This is the
+one I use for the info-multinet mailing list.
+
+Todd
+
+--
+
+$!
+$! Automatic mail forward into a specified newsgroup
+$!
+$ purge/keep=5/nolog
+$ define sys$output check_mail.tmp
+$ mail
+sel newmail
+$ deass sys$output
+$ search check_mail.tmp selected
+$ exit_stat = $status
+$ sho sym exit_stat
+$ severity = F$EXTRACT(9,1,EXIT_STAT)
+$ if severity .eq. 1 then goto process_messages
+$ write sys$output "No new messages there"
+$ exit
+$process_messages:
+$copy news_manager:dummy.txt items.txt
+$mail
+set fold newmail
+extract/all/append items.txt
+del/all
+$news/noscreen
+add file items.txt/defnews=local.info-multinet/cregrp
+exit
+$ exit
+
+The file dummy.txt merely contains
+
+From:   cnewsmgr
+Subj:   Dummy
+
+                                                                     Message 6 in thread
+
+   From: sloane@kuhub.cc.ukans.edu (sloane@kuhub.cc.ukans.edu)
+   Subject: Re: gatewaying mailing lists to newsgroups
+
+
+                                                                  View this article only
+
+   Newsgroups:
+   news.software.anu-news
+   Date: 1991-05-17 11:24:12 PST
+
+In article <1991May17.092516.8200@cc.curtin.edu.au>,
+ chooper@cc.curtin.edu.au (Todd Hooper) writes:
+>For each mailing list, I create an account and subscribe it to the list in
+>question. I find this is the easiest way to deal with listservers, rather than
+>creating an alias and then having trouble convincing the listserver to remove
+>you from the list at some later date.
+
+I just subscribe the NEWSMGR account and use a different personal name
+for each mailing list. I usually send something like:
+
+SUB list-l KU_list-l Gateway
+
+Then when I want to extract the artilce from mail, I can do:
+
+MAIL> SEL/TO=KU_list-l NEWMAIL
+MAIL> EXTRACT/ALL/APPEND list-l.MAIL
+
+>In the account, I put a command file which checks & extracts all incoming mail
+>and adds it to the required group. Each account has newsmanager privs. The
+>news_post.cc file holds the mailing address of the group for outgoing postings
+
+Let me see if I understand.  The entry in NEWS_POST.CC sends a copy of
+the locally posted article to the mailing list, right? The article
+gets posted locally, and also gets emailed to the mailing list.  What
+happens when that article comes back to the account subscribed to the
+list? Doesn't it get added again?  How do you avoid duplicates?
+--
+USmail: Bob Sloane, University of Kansas Computer Center, Lawrence, KS, 66045
+E-mail: sloane@kuhub.cc.ukans.edu, sloane@ukanvax.bitnet, AT&T: (913)864-0444
+
+                                                                     Message 7 in thread
+
+   From: Vanya Cooper (vcooper@pimacc.pima.edu)
+   Subject: Re: gatewaying mailing lists to newsgroups
+
+
+                                                                  View this article only
+
+   Newsgroups:
+   news.software.anu-news
+   Date: 1991-05-17 20:22:53 PST
+
+In article <1991May17.094346.30864@kuhub.cc.ukans.edu>, sloane@kuhub.cc.ukans.edu writes:
+> In article <1991May17.092516.8200@cc.curtin.edu.au>,
+>  chooper@cc.curtin.edu.au (Todd Hooper) writes:
+>>For each mailing list, I create an account and subscribe it to the list in
+>>question. I find this is the easiest way to deal with listservers, rather than
+>>creating an alias and then having trouble convincing the listserver to remove
+>>you from the list at some later date.
+>
+> I just subscribe the NEWSMGR account and use a different personal name
+> for each mailing list. I usually send something like:
+>
+> SUB list-l KU_list-l Gateway
+>
+> Then when I want to extract the artilce from mail, I can do:
+>
+> MAIL> SEL/TO=KU_list-l NEWMAIL
+> MAIL> EXTRACT/ALL/APPEND list-l.MAIL
+>
+
+I was going to keep quiet since I we're down to just one list that we post
+locally, but maybe this will be useful to others.  Before we had a news feed, I
+used to just subscribe to a whole bunch of both Bitnet and Internet lists and
+post them to local newsgroups.  I can't remember exactly why, but I originally
+had problems using the To: address on some lists.  There were other ways to
+select these lists, but I came to the conclusion that the only method of
+sorting the mail that would work for ANY list was to use separate accounts for
+each one and I prefered having them all the same to trying to figure out what
+method would work on which lists and setting them all up differently.
+
+>>In the account, I put a command file which checks & extracts all incoming mail
+>>and adds it to the required group. Each account has newsmanager privs. The
+>>news_post.cc file holds the mailing address of the group for outgoing postings
+>
+> Let me see if I understand.  The entry in NEWS_POST.CC sends a copy of
+> the locally posted article to the mailing list, right? The article
+> gets posted locally, and also gets emailed to the mailing list.  What
+> happens when that article comes back to the account subscribed to the
+> list? Doesn't it get added again?  How do you avoid duplicates?
+
+I agree, /MAILLIST works better than the NEWS_POST.CC for this.
+
+The thing I did differently was that I created each account with a different
+username, but I used the NEWSMGR UIC for all of them and gave them each a
+subdirectory in the NEWSMGR directory with the same name as the newsgroup.
+This makes it pretty easy to manage and lets me post mail from all the lists
+from the NEWSMGR account with one job, it works for any type of list, and they
+are all set up exactly the same way.  There is a periodic NEWSMGR job with one
+line for each list like:
+
+   Read the rest of this message... (38 more lines)
+
+                                                                     Message 8 in thread
+
+   From: Todd Hooper (chooper@cc.curtin.edu.au)
+   Subject: Re: gatewaying mailing lists to newsgroups
+
+
+                                                                  View this article only
+
+   Newsgroups:
+   news.software.anu-news
+   Date: 1991-05-19 23:21:36 PST
+
+In article <1991May17.094346.30864@kuhub.cc.ukans.edu>, sloane@kuhub.cc.ukans.edu writes:
+>
+> Let me see if I understand.  The entry in NEWS_POST.CC sends a copy of
+> the locally posted article to the mailing list, right? The article
+> gets posted locally, and also gets emailed to the mailing list.  What
+> happens when that article comes back to the account subscribed to the
+> list? Doesn't it get added again?  How do you avoid duplicates?
+
+Uhhhh...I don't. I guess I just like to see my name in lights ;-)
+
+Todd
+
+                                                                     Message 9 in thread
+
+   From: cgw@vaxb.acs.unt.edu (cgw@vaxb.acs.unt.edu)
+   Subject: Re: gatewaying mailing lists to newsgroups
+
+
+                                                                  View this article only
+
+   Newsgroups:
+   news.software.anu-news
+   Date: 1991-05-17 18:30:48 PST
+
+In article <1991May17.092516.8200@cc.curtin.edu.au>, chooper@cc.curtin.edu.au (Todd Hooper) wr
+ites:
+> We have a simpler although perhaps less elegant solution.
+>
+> For each mailing list, I create an account and subscribe it to the list in
+> question. I find this is the easiest way to deal with listservers, rather than
+> creating an alias and then having trouble convincing the listserver to remove
+> you from the list at some later date.
+>
+> In the account, I put a command file which checks & extracts all incoming mail
+> and adds it to the required group. Each account has newsmanager privs. The
+> news_post.cc file holds the mailing address of the group for outgoing postings.
+>
+> The command file is submitted every time a News update is done (every 30
+> minutes). I enclose a copy below - fairly straightforward really. This is the
+> one I use for the info-multinet mailing list.
+>
+> Todd
+
+and we have an even simpler way to do it... everything as above (including
+a hearty YES! to the listserv comment) except that we SET FORWARD=NEWSMGR
+in the account created and then delete the account. due to a 'feature' of
+VMS MAIL, mail sent to that userid will still be accepted and forwarded
+to NEWSMGR, where we have a very similar comfile (except that ours
+SELECT/To=<account_name> and then EXTRACT/ALL <list-name> and then
+ADD FILE <list-name>. works pretty good. :)
+
+-cgw-
+
+ps: you might think the listserv problem still exists with this solution:
+not so. the latest version of JNET lets you do this:
+SEND/USER=<list-name> LISTSERV@node SIGNOFF <list-name>
+the /USER qualifier is a wonderful timesaver!
+
+-------------------------------------------------------------------------------
+christopher williams, `gilligan', `dude', cgw@vaxb.acs.unt.edu, +1 817 565 4161
+lead programmer/operator, the university of north texas, home of the _VaxCave_!
+`help stamp out and abolish redundancy!'           my other .sig is boring too.
+
+                                                                    Message 10 in thread
+
+   From: Gehri Grimaud (gehri@cc.usu.edu)
+   Subject: Re: gatewaying mailing lists to newsgroups
+
+
+                                                                  View this article only
+
+   Newsgroups:
+   news.software.anu-news
+   Date: 1991-05-24 06:06:22 PST
+
+In article <1991May17.092516.8200@cc.curtin.edu.au>, chooper@cc.curtin.edu.au (Todd Hooper) wr
+ites:
+> In article <1991May14.103043.30715@kuhub.cc.ukans.edu>, sloane@kuhub.cc.ukans.edu writes:
+> We have a simpler although perhaps less elegant solution.
+>
+> For each mailing list, I create an account and subscribe it to the list in
+> question. I find this is the easiest way to deal with listservers, rather than
+> creating an alias and then having trouble convincing the listserver to remove
+> you from the list at some later date.
+>
+> In the account, I put a command file which checks & extracts all incoming mail
+> and adds it to the required group. Each account has newsmanager privs. The
+> news_post.cc file holds the mailing address of the group for outgoing postings
+>
+> The command file is submitted every time a News update is done (every 30
+> minutes). I enclose a copy below - fairly straightforward really. This is the
+> one I use for the info-multinet mailing list.
+
+I must say that this has worked very well at our site!  It is much easier to
+handle.  However, I don't have each of the usernames running a job that puts
+its own mail into news.  I have a job run by newsmgr that does it for all of
+these accounts. (the news manager has privs to read the mail files)  I even
+put POSTMASTER's mail into a restricted newsgroup.
+
+eg.
+
+    $   set noon
+    $   write sys$output "Extracting mailed items"
+    $   mail
+    set file user$disk:[usunovell.mail]
+    set folder newmail
+    extract/all novell.mail
+    delete/all
+    set file user$disk:[usugis.mail]
+    set folder newmail
+    extract/all gis.mail
+    delete/all
+    set file disk$util:[usupmdf.mail]
+    set folder newmail
+    extract/all pmdf.mail
+    delete/all
+    set file disk$util:[usumulti.mail]
+    set folder newmail
+    extract/all multi.mail
+    delete/all
+    set file disk$util:[usucmu.mail]
+    set folder newmail
+    extract/all cmu.mail
+    delete/all
+    set file JAN_ROOT:[POSTMASTER]
+    set folder newmail
+    extract/all postmaster.mail
+    delete/all
+    exit
+    $ ! and so on...
+
+===============================================================================
+Gehri Grimaud                           gehri@cc.usu.edu
+Utah State University                   gehri@usu.bitnet
+Office of Computer Services             tel. (801) 750-2392
+UMC 3700
+Logan, Utah  84322
+
+            "Friends don't let friends do MS-DOS"
+===============================================================================
+
+                                      (c)2002 Google

@@ -1,0 +1,37 @@
+¡° ¤Þ­z¡mPahud (Patrick Hsieh)¡n¤§»Ê¨¥¡G
+: §Úªºsuck4.2.2¤w¸g½s¦nsucknewsrc¤F¡A·í§Ú¤U
+: suck <hostname>ªº®É­Ôsuckªº½T¦³±N¤å³¹§ì¦^¨Ó¡A
+: ¥i¬O§Ú­n¦p¦ó¦blocalºÝªºnews server¾\Åª©O¡H
+: ¥t¡Asuck¬O§ì¨ì­þ¸Ì©O¡H
+
+¦b suck ªº manpage ¤W¼g±o«Ü²M·¡¡Asuck ¤@¦@¦³¤TºØ mode¡G
+
+MODE 1 - stdout mode
+MODE 2 - Multifile mode
+MODE 3 - Batch mode
+
+¨ä¤¤¡A mode 3 ¤ñ¸û±`¥Î¡C¥¦¦³´X­Ó sub-mode¡G
+  -bi -bl -br -bf -bp
+
+
+§Ú¥­±`¥Îªº¬O -bp¡A¥¦­n°t¦X -hl ¨Ó«ü©w­nÁý¨ì­þ¡C
+
+       -bp  -  This  option tells suck to build a batch file, and
+       post the articles  in  that  batchfile  to  the  localhost
+       (specified  with  the  -hl  option).  This option uses the
+       IHAVE command to post all downloaded articles to the local
+       host.   The  batch file is called suck.post, and is put in
+       the temporary directory (-dt).  It is deleted upon comple­
+       tion,  as  are  the  successfully posted articles.  If the
+       article is not wanted by the server  (usually  because  it
+       already exists on the server, or it is too old), the arti­
+       cle is also deleted.  If other errors occur,  the  article
+       is  NOT deleted.  With the following command line, you can
+       download and post articles without  worrying  if  you  are
+       using INND or CNEWS.
+
+   suck news.xxx.yyy -bp -hl localhost -c
+
+--
+[m¡° Origin: »O¤j¹q¾÷ Maxwell ¯¸ ¡» From: localhost
+

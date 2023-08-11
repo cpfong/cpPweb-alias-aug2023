@@ -1,0 +1,10 @@
+#!/bin/sh
+# obj: suzuke scim + chewing
+
+wget http://misun2.fotech.edu.tw/~cpfong/dsl/TCscim.tar.gz
+tar xfvz TCscim.tar.gz
+cp TCscim/* /mnt/sdb2/tce/optional
+cat >> /mnt/sdb2/tce/onboot.lst <<EOF
+scim-chewing-0.3.4.tcz
+scim-1.4.9.tcz
+EOF

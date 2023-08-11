@@ -1,0 +1,7 @@
+telnet www.fotech.edu.tw 80
+
+tce-load -wi apache2.tcz
+
+find / -name apachectl -type f
+find / -name httpd.conf -type f
+

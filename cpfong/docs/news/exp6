@@ -1,0 +1,27 @@
+
+  ◇ expire.ctl 與 history 的關係
+
+------------------------------------------------------------------------
+From: mfchen@csie.nctu.edu.tw (Ming-Feng Chen)
+Newsgroups: csie.sysadmin.news
+Subject: Re: expire.ctl 與 history 的關係
+Date: 15 Mar 1994 23:50:15 GMT
+Organization: Computer Science & Information Enginerring NCTU
+
+    關於空白行 (沒有 3rd field) 我認為是因為 expire.ctl 中有設定一個
+/remember/:14   &lt--- 這一行, 所以所有的 msgid 都會保留 14 天以上,
+所以會出現許多如下所示的 entry, 其目的可能是為了避免產生 loop,
+事先記錄好最近 14 天內收到的所有文章 msgid.
+
+&lt2l4uib$1gc@ccsun35.csie.nctu.edu.tw>   762707348~-
+
+    我將 gopher.csie 的 expire.ctl 設定為 /remember/:3
+等明天 expire 後再看看 history 應該可以查出原因.
+
+------------------------------------------------------------------------
+-----------------------------------------
+Ming-Feng Chen          NCTU csie
+E-mail: mfchen@csie.nctu.edu.tw
+Tel:    (035) 712121 ext. 3708 / 3718
+-----------------------------------------
+

@@ -1,0 +1,38 @@
+while (<>){
+ chomp;
+ print; print "\n";
+}
+
+foreach (@ARGV) {
+ chomp;
+ print "$_\n";
+}
+
+#@ARGV = qw /file1 file2/;
+while (<>){ #print content of  file1 then file2
+ chomp;
+ print "$_\n";
+}
+
+my @array=(1,2,3);
+
+print "@array";
+print "@array\n";
+
+printf("%6d\n", 42);
+
+unix    \n
+dos     \r\n
+
+vi unix
+ 1
+ 2
+ 3
+cp unix dos
+unix2dos dos
+
+file unix
+file dos
+
+od -c unix
+od -c dos

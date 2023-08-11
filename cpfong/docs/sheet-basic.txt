@@ -1,0 +1,9 @@
+fields (BAD)
+name telephone sex addr
+
+
+fields (good) # 1st as key index (do not duplicate)
+idx name telephone sex addr
+1
+2
+3

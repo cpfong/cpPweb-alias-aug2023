@@ -1,0 +1,42 @@
+#!/bin/sh
+#
+# version 2012/06/15 file create cpfong
+# object  terminal server using dnsmasq (default one under Control Panel some work, but not always)
+# note: run as a regular user (not root)
+#
+
+# make tftpboot directory for TFTPD and PXE
+mkdir -p /home/tc/tftpboot/pxelinux.cfg
+cp /mnt/sdb2/tce/boot/core.gz /home/tc/tftpboot/
+cp /mnt/sdb2/tce/boot/vmlinuz /home/tc/tftpboot/
+cp /usr/share/syslinux/pxelinux.0 /home/tc/tftpboot/
+
+#
+cat <<EOF >/tmp/default
+DEFAULT tinycore
+TIMEOUT 300
+LABEL tinycore
+KERNEL vmlinuz
+APPEND quiet initrd=core.gz
+EOF
+mv /tmp/default /home/tc/tftpboot/pxelinux.cfg
+
+# non root user install this first!!
+#/usr/bin/tce-load -wi dnsmasq
+cp /usr/local/etc/dnsmasq.conf.example /tmp/dnsmasq.conf
+
+cat <<EOF >>/tmp/dnsmasq.conf
+interface=eth0
+dhcp-range=192.168.1.50,192.168.1.150,12h
+dhcp-option=option:router,192.168.1.1
+dhcp-boot=pxelinux.0
+enable-tftp
+tftp-root=/home/tc/tftpboot
+dhcp-leasefile=/tmp/dnsmasq.leases
+EOF
+
+sudo mv /tmp/dnsmasq.conf /etc
+
+#
+#sudo /usr/local/sbin/dnsmasq start
+#end

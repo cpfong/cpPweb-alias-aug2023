@@ -1,0 +1,47 @@
+cp's note: vultr FreeBSD12.1R build world 2021jan (buildworld right from clean insalled vm)
+--
+18:26 - 11:26 5hrs zfs set primarycache = none swap on zfs, zroot/ build world 22:32 end on out of swap
+22:32 - swap on zfs /etc/sysctl.conf vm.pageout_oom_seq=1024 03:51 killed, out of swap
+06:19 swap on zfs pageout_oom=10240 Jan 27 11:42:03 sun kernel: pid 51913 (cc), jid 0, uid 0, was killed: out of swap space
+jan28 zfs for / and swap on ufs size 2G: fail on out of swap
+jan29 
+ buildworld: zfs for / (install on vultr using own partition shell) swap on ufs to 4G: 07:00 13:00 PASS!!
+ buildkernel: 14:00 - 14:36 PASS :)
+
+-- sol 1 (x)
+/boot/loader.conf vfs.zfs.arc_max="512M" FAIL 2021 
+ Jan 26 16:05:08 sun kernel: pid 97295 (c++), jid 0, uid 0, was killed: out of swap space
+
+-- sol 2 (x)
+Stopped the scrub via "zpool scrub -s" and the problem stopped occurring.
+
+-- sol 3 (x)
+then I think it related to RAM or SWAP, should I disabled ARC? zfs set primarycache=none tank working!!! (according to author)
+ FAIL! 2021jan Jan 26 22:13:12 sun kernel: pid 2100 (c++), jid 0, uid 0, was killed: out of swap space
+ 
+--sol 4 (x)
+After upgrading to 11.2 from 10.4 processes get killed due to out of swap space. vm.pageout_oom_seq=1024 or more has been used to avoid kills when there was plenty of swap space. 
+1024 fail Jan 27 01:40:06 sun kernel: swap_pager_getswapspace(32): failed
+
+--sol 5 (v)
+That's what I often do. You can do the buildworld/buildkernel on a "beefy" machine. Then NFS export (can be set read-only) /usr/src/ and /usr/obj. Mount those on the "small" machine and do the install. The only thing you need to watch out for is the date/time. Make sure both system are running the exact same date/time or else you can get some really weird errors.
+
+--sol 6 (v)
+Q: VPS at rootbsd. (2010 FreeBSD 8.1R)
+A: 
+You are using ZFS on root on a very low memory system. (less significant in this case)
+Swap on ZFS has been shown to be a bad idea, but exponentially so when you have memory constraints. Minimum recommended RAM is 4 GB for ZFS
+
+primarycache and secondarycache haved changed to none and turns out it still deadlocks.
+
+This may be fixed in the long run but for now a swap partition (or swap file on UFS) is the only reliable solution as far as I know.
+
+I'm sure there are a few posts about problems with swap on ZFS on here. If at all possible, just don't do it. Create a completely separate partition during install and just use that like any other normal install. The machine uses swap when it's low on RAM, but all writes to ZFS are cached in RAM for 5-30 seconds before being flushed to disk as a single transaction, so you're trying to use RAM in order to write data to disk, when you're trying to use disk because you're out of RAM...
+
+@sun-> gpart show
+=>      40  52428720  vtbd0  GPT  (25G)
+        40      1024      1  freebsd-boot  (512K)
+      1064       984         - free -  (492K)
+      2048   4194304      2  freebsd-swap  (2.0G)
+   4196352  48230400      3  freebsd-zfs  (23G)
+  52426752      2008         - free -  (1.0M)

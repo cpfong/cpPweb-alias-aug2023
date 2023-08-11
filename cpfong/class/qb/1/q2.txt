@@ -1,0 +1,9 @@
+data 77,76,84
+read a,b,c
+total=a+b+c
+print "total="total
+
+data 4, 6
+read a,b
+if (a > b) then
+	print "a="

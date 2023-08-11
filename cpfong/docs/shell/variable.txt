@@ -1,0 +1,15 @@
+var='hello world'
+underline_is_a_GOOD_var='abc'
+minus-is-bad-var='def'
+
+echo $var $underline_is_a_GOOD_var $minus-is-bad-var
+
+## under shell prompt which is $
+x=1 ok
+x = 1  NO, no space is allowed
+
+real case:
+--
+$ x = 1
+sh: x: not found
+$

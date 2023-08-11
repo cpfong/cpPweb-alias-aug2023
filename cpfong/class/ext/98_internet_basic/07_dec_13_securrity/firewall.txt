@@ -1,0 +1,81 @@
+using iptables to do the ip forwarding
+
+Q: how to see whether firewall is up
+A: [root@ubuntu cpfong]# /etc/init.d/iptables status
+you can use GUI to up and down this service
+
+Q: How to start it from the begging (when it boot the system)
+[root@ubuntu cpfong]# cat /etc/sysctl.conf |grep forward
+# Controls IP packet forwarding
+net.ipv4.ip_forward = 0
+
+Q: is ip_forward running?
+[root@ubuntu cpfong]# cat /proc/sys/net/ipv4/ip_forward 
+1
+
+Q: how CentOS's ip_forwarding firewall be implemented?
+A: CentOS has an extremely powerful firewall built in, commonly referred to as iptables, 
+but more accurately is iptables/netfilter. Iptables is the userspace module, 
+netfilter is a kernel module, built into the kernel, that actually does the filtering. 
+
+Q: what ip address, protocol (tcp,udp,icmp) ports
+A:
+
+Q: what is INPUT, OUTPUT, FORWARD chains ?
+A: predefined chains (INPUT, OUTPUT and FORWARD) that are checked against any network traffic (IP packets) 
+i.e. accepting or dropping the packet (DROP, ACCEPT)
+
+
+3 predefined chains (INPUT, OUTPUT, FORWARD)
+INPUT - into host 
+OUTPUT - All packets originating from the host computer. 
+FORWARD - neither destined nor from the host but passing through (routed by) the host computer.
+
+Q: can you give an example?
+[cpfong@ubuntu tmp_nfs]$ sudo iptables -L -n
+DROP       all  --  0.0.0.0/0            140.117.11.4       
+note: L means list, n means numeric
+
+[root@ubuntu cpfong]# telnet mail.nsysu.edu.tw smtp
+Connected to mail.nsysu.edu.tw (140.117.11.4).
+Escape character is '^]'.
+220 mail.nsysu.edu.tw ESMTP Postfix
+
+[root@ubuntu cpfong]# iptables -I OUTPUT -d mail.nsysu.edu.tw -j DROP
+[root@ubuntu cpfong]# telnet mail.nsysu.edu.tw smtp
+Trying 140.117.11.4...
+
+Q: how to flush all rules
+[root@ubuntu cpfong]# iptables -F
+
+Q: [root@ubuntu cpfong]# iptables -I OUTPUT -d mail.nsysu.edu.tw -j DROP
+A: 
+-I	Insert to this chain (OUTPUT is a predefined chain!)
+-D	Delete
+-A	Append
+-P	Policy
+
+-i	input  interface
+-o	output interface
+-p	protocol type (TCP, UDP, ICMP)
+-d	destination
+-s	source
+--sport	source port
+--dport	destination port
+-j	jump to this action
+
+
+Q: what are 3 talbes of iptalbes ?
+A: filter, nat, mangle (default is filter)
+[root@ubuntu cpfong]# iptables -L
+[root@ubuntu cpfong]# iptables -L -t filter
+[root@ubuntu cpfong]# iptables -L -t nat
+
+Q: only delete one rule?
+A: [root@ubuntu cpfong]# iptables -D INPUT 1
+delete INPUT chain #1
+
+Q: how to save and restore the tables
+[root@www cpfong]# iptables-save
+[root@www cpfong]# iptables-restore < ./my_iptables
+[root@www cpfong]# iptables-restore < ./my_iptables

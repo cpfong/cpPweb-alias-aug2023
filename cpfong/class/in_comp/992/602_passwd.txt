@@ -1,0 +1,4 @@
+1. Administrator 是預設無密碼的.
+2. 何謂後門? 
+3. 如何改管理者的密碼?
+4. http://www.explorehacking.com/2011/02/setting-backdoor-in-windows-command.html

@@ -1,0 +1,60 @@
+//-----------STARTEXTRACT=filedemo1.xtr
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import java.util.*; 
+import java.io.*;
+
+class FileDemo1 extends JFrame 
+implements ActionListener {
+    private JTextArea inputTextArea; 
+    private JButton saveButton;
+//--------------STARTEXTRACT=decprintwriter.xtr
+    private PrintWriter outFile;
+//--------------ENDEXTRACT=decprintwriter.xtr
+    public static void main(String [] args) {
+        FileDemo1 frame = new FileDemo1();
+
+
+        frame.setSize(400, 300);
+        frame.createGUI();
+        frame.show();
+    }
+
+    private void createGUI() {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        Container window = getContentPane();
+        window.setLayout(new FlowLayout());
+
+
+        saveButton = new JButton("save");
+        window.add( saveButton);
+        saveButton.addActionListener(this);
+        inputTextArea = new JTextArea(10,30);
+        window.add (inputTextArea);
+
+    }
+    public void actionPerformed(ActionEvent evt) { 
+        if (evt.getSource() == saveButton ) {
+            try{
+//------------------------------------STARTEXTRACT=outfile.xtr
+                outFile = new PrintWriter(
+               new FileWriter("testout.txt"), true);
+//----------------------------------------ENDEXTRACT=outfile.xtr 
+//------------------STARTEXTRACT=doprint.xtr
+               outFile.print(inputTextArea.getText());
+//------------------ENDEXTRACT=doprint.xtr
+//---------STARTEXTRACT=doclose.xtr
+                outFile.close();
+//---------ENDEXTRACT=doclose.xtr
+            }
+            catch (IOException e) {
+                System.err.println("File Error: " + e.toString() );
+                System.exit(1);
+            }
+        }
+    }
+}
+//-----------ENDEXTRACT=filedemo1.xtr
+
+

@@ -1,0 +1,79 @@
+hash functions:
+--
+keys
+values
+each
+
+# each example, note: does NOT sort orderly
+while (($key, $value) = each %hash){
+ print "$key => $value\n";
+}
+
+# using sort to print out orderly
+foreach $k (sort keys %hash){
+ $v=%h{$k};
+ print "$k => $v\n";
+ # we can do this way too
+ # print "$k => $h{$k}\n";
+}
+
+# ex file with only one word in each line
+# perl ./test.pl this is a test that is a test
+
+my %h;
+while ($_= pop @ARGV){
+ $h{$_}++;
+}
+
+while (my ($k,$v)=each %h){
+ print "$k => $v\n";
+}
+
+$books{'fred'}=3
+$books{'wilma'}=1
+
+# two more functions for hash: exists delete
+
+if (exists $books{'dino'}) { #does dino has applied?
+ print "dion applied\n"; # else if will be undef
+}
+
+my $person='betty';
+delete $books{$person};  #revoke $persion
+
+delete vs undef
+$books{$person}=undef;
+
+undef still exists while delete no longer exists anymore
+
+exercise
+--
+my %h=qw/ fred flintstone barney rubble wilma flintstone /;
+
+print "input name: "; chomp($k=<>);
+print "$k => $h{$k}\n"
+
+ex2
+--
+my %h;
+while (<>){
+ chomp;
+ $h{$_}++;
+}
+
+foreach (sort keys %h){
+ print "$_ => $h{$_}\n";
+}
+
+ex3
+--
+my $l=0;
+while (my ($k,$v)=each %ENV){
+ if (length($k) > $l){
+  $l=length($k);
+ }
+}
+
+foreach (sort keys %ENV){
+ printf "%-${l}s %s\n", $_, $ENV{$_};
+}

@@ -1,0 +1,2 @@
+sudo nmap 127.0.0.1
+http://cs.ecs.baylor.edu/~donahoo/classes/gennet/NetCmds.html

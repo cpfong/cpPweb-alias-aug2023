@@ -1,0 +1,592 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:x="urn:schemas-microsoft-com:office:excel"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=Big5">
+<meta name=ProgId content=Excel.Sheet>
+<meta name=Generator content="Microsoft Excel 9">
+<link rel=File-List href="./off-hour.files/filelist.xml">
+<link rel=Edit-Time-Data href="./off-hour.files/editdata.mso">
+<link rel=OLE-Object-Data href="./off-hour.files/oledata.mso">
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>cpfong</o:Author>
+  <o:LastAuthor>cpfong</o:LastAuthor>
+  <o:Created>2005-09-11T13:15:39Z</o:Created>
+  <o:LastSaved>2005-09-11T13:16:28Z</o:LastSaved>
+  <o:Company>self</o:Company>
+  <o:Version>9.2812</o:Version>
+ </o:DocumentProperties>
+ <o:OfficeDocumentSettings>
+  <o:DownloadComponents/>
+  <o:LocationOfComponents HRef="file:E:\msowc.cab"/>
+ </o:OfficeDocumentSettings>
+</xml><![endif]-->
+<style>
+<!--table
+	{mso-displayed-decimal-separator:"\.";
+	mso-displayed-thousand-separator:"\,";}
+@page
+	{margin:1.0in .75in 1.0in .75in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;}
+.font5
+	{color:blue;
+	font-size:12.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:新細明體, serif;
+	mso-font-charset:136;}
+tr
+	{mso-height-source:auto;
+	mso-ruby-visibility:none;}
+col
+	{mso-width-source:auto;
+	mso-ruby-visibility:none;}
+br
+	{mso-data-placement:same-cell;}
+.style0
+	{mso-number-format:General;
+	text-align:general;
+	vertical-align:bottom;
+	white-space:nowrap;
+	mso-rotate:0;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	color:windowtext;
+	font-size:12.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:新細明體;
+	mso-generic-font-family:auto;
+	mso-font-charset:136;
+	border:none;
+	mso-protection:locked visible;
+	mso-style-name:一般;
+	mso-style-id:0;}
+td
+	{mso-style-parent:style0;
+	padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:12.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:新細明體;
+	mso-generic-font-family:auto;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:bottom;
+	border:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	mso-protection:locked visible;
+	white-space:nowrap;
+	mso-rotate:0;}
+.xl24
+	{mso-style-parent:style0;
+	font-size:10.0pt;
+	font-family:新細明體, serif;
+	mso-font-charset:136;
+	text-align:center;
+	border:.5pt solid gray;
+	background:white;
+	mso-pattern:auto none;
+	white-space:normal;}
+.xl25
+	{mso-style-parent:style0;
+	color:green;
+	font-size:10.0pt;
+	font-family:新細明體, serif;
+	mso-font-charset:136;
+	text-align:center;
+	border:.5pt solid gray;
+	background:white;
+	mso-pattern:auto none;
+	white-space:normal;}
+.xl26
+	{mso-style-parent:style0;
+	color:red;
+	font-size:10.0pt;
+	font-family:新細明體, serif;
+	mso-font-charset:136;
+	text-align:center;
+	border:.5pt solid gray;
+	background:white;
+	mso-pattern:auto none;
+	white-space:normal;}
+.xl27
+	{mso-style-parent:style0;
+	font-size:10.0pt;
+	font-family:新細明體, serif;
+	mso-font-charset:136;
+	text-align:center;
+	border-top:.5pt solid gray;
+	border-right:.5pt solid gray;
+	border-bottom:none;
+	border-left:.5pt solid gray;
+	white-space:normal;}
+.xl28
+	{mso-style-parent:style0;
+	font-size:10.0pt;
+	font-family:新細明體, serif;
+	mso-font-charset:136;
+	text-align:center;
+	border-top:none;
+	border-right:.5pt solid gray;
+	border-bottom:none;
+	border-left:.5pt solid gray;
+	white-space:normal;}
+.xl29
+	{mso-style-parent:style0;
+	font-size:10.0pt;
+	font-family:新細明體, serif;
+	mso-font-charset:136;
+	text-align:center;
+	border-top:none;
+	border-right:.5pt solid gray;
+	border-bottom:.5pt solid gray;
+	border-left:.5pt solid gray;
+	white-space:normal;}
+.xl30
+	{mso-style-parent:style0;
+	font-size:10.0pt;
+	font-family:新細明體, serif;
+	mso-font-charset:136;
+	border-top:.5pt solid gray;
+	border-right:.5pt solid gray;
+	border-bottom:none;
+	border-left:.5pt solid gray;
+	white-space:normal;}
+.xl31
+	{mso-style-parent:style0;
+	font-size:10.0pt;
+	font-family:新細明體, serif;
+	mso-font-charset:136;
+	border-top:none;
+	border-right:.5pt solid gray;
+	border-bottom:none;
+	border-left:.5pt solid gray;
+	white-space:normal;}
+.xl32
+	{mso-style-parent:style0;
+	font-size:10.0pt;
+	font-family:新細明體, serif;
+	mso-font-charset:136;
+	border-top:none;
+	border-right:.5pt solid gray;
+	border-bottom:.5pt solid gray;
+	border-left:.5pt solid gray;
+	white-space:normal;}
+.xl33
+	{mso-style-parent:style0;
+	border-top:none;
+	border-right:.5pt solid gray;
+	border-bottom:none;
+	border-left:none;}
+.xl34
+	{mso-style-parent:style0;
+	border-top:none;
+	border-right:none;
+	border-bottom:.5pt solid gray;
+	border-left:none;}
+.xl35
+	{mso-style-parent:style0;
+	border-top:none;
+	border-right:.5pt solid gray;
+	border-bottom:.5pt solid gray;
+	border-left:none;}
+.xl36
+	{mso-style-parent:style0;
+	font-size:10.0pt;
+	font-family:新細明體, serif;
+	mso-font-charset:136;
+	text-align:center;
+	border-top:.5pt solid gray;
+	border-right:none;
+	border-bottom:.5pt solid gray;
+	border-left:.5pt solid gray;
+	background:white;
+	mso-pattern:auto none;
+	white-space:normal;}
+.xl37
+	{mso-style-parent:style0;
+	font-size:10.0pt;
+	font-family:新細明體, serif;
+	mso-font-charset:136;
+	text-align:center;
+	border-top:.5pt solid gray;
+	border-right:none;
+	border-bottom:.5pt solid gray;
+	border-left:none;
+	background:white;
+	mso-pattern:auto none;
+	white-space:normal;}
+.xl38
+	{mso-style-parent:style0;
+	font-size:10.0pt;
+	font-family:新細明體, serif;
+	mso-font-charset:136;
+	text-align:center;
+	border-top:.5pt solid gray;
+	border-right:.5pt solid gray;
+	border-bottom:.5pt solid gray;
+	border-left:none;
+	background:white;
+	mso-pattern:auto none;
+	white-space:normal;}
+.xl39
+	{mso-style-parent:style0;
+	text-align:center;
+	white-space:normal;}
+.xl40
+	{mso-style-parent:style0;
+	color:blue;
+	font-weight:700;
+	font-family:新細明體, serif;
+	mso-font-charset:136;
+	text-align:center;
+	border-top:none;
+	border-right:none;
+	border-bottom:.5pt solid gray;
+	border-left:none;
+	white-space:normal;}
+ruby
+	{ruby-align:left;}
+rt
+	{color:windowtext;
+	font-size:9.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:新細明體, serif;
+	mso-font-charset:136;
+	mso-char-type:none;
+	display:none;}
+-->
+</style>
+<!--[if gte mso 9]><xml>
+ <x:ExcelWorkbook>
+  <x:ExcelWorksheets>
+   <x:ExcelWorksheet>
+    <x:Name>Sheet1</x:Name>
+    <x:WorksheetOptions>
+     <x:DefaultRowHeight>330</x:DefaultRowHeight>
+     <x:Print>
+      <x:ValidPrinterInfo/>
+      <x:PaperSizeIndex>9</x:PaperSizeIndex>
+      <x:HorizontalResolution>600</x:HorizontalResolution>
+      <x:VerticalResolution>0</x:VerticalResolution>
+     </x:Print>
+     <x:Selected/>
+     <x:Panes>
+      <x:Pane>
+       <x:Number>3</x:Number>
+       <x:RangeSelection>A1:H1</x:RangeSelection>
+      </x:Pane>
+     </x:Panes>
+     <x:ProtectContents>False</x:ProtectContents>
+     <x:ProtectObjects>False</x:ProtectObjects>
+     <x:ProtectScenarios>False</x:ProtectScenarios>
+    </x:WorksheetOptions>
+   </x:ExcelWorksheet>
+   <x:ExcelWorksheet>
+    <x:Name>Sheet2</x:Name>
+    <x:WorksheetOptions>
+     <x:DefaultRowHeight>330</x:DefaultRowHeight>
+     <x:ProtectContents>False</x:ProtectContents>
+     <x:ProtectObjects>False</x:ProtectObjects>
+     <x:ProtectScenarios>False</x:ProtectScenarios>
+    </x:WorksheetOptions>
+   </x:ExcelWorksheet>
+   <x:ExcelWorksheet>
+    <x:Name>Sheet3</x:Name>
+    <x:WorksheetOptions>
+     <x:DefaultRowHeight>330</x:DefaultRowHeight>
+     <x:ProtectContents>False</x:ProtectContents>
+     <x:ProtectObjects>False</x:ProtectObjects>
+     <x:ProtectScenarios>False</x:ProtectScenarios>
+    </x:WorksheetOptions>
+   </x:ExcelWorksheet>
+  </x:ExcelWorksheets>
+  <x:WindowHeight>9120</x:WindowHeight>
+  <x:WindowWidth>14955</x:WindowWidth>
+  <x:WindowTopX>120</x:WindowTopX>
+  <x:WindowTopY>75</x:WindowTopY>
+  <x:ProtectStructure>False</x:ProtectStructure>
+  <x:ProtectWindows>False</x:ProtectWindows>
+ </x:ExcelWorkbook>
+</xml><![endif]-->
+</head>
+
+<body link=blue vlink=purple leftmargin=0 topmargin=0>
+
+<table x:str border=0 cellpadding=0 cellspacing=0 width=576 style='border-collapse:
+ collapse;table-layout:fixed;width:432pt'>
+ <col width=72 span=8 style='width:54pt'>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td colspan=8 height=22 class=xl39 width=576 style='height:16.5pt;width:432pt'>94年度
+  上學期 老師 OFFICE HOUR設定</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td colspan=8 height=22 class=xl40 width=576 style='height:16.5pt;width:432pt'>教師Office
+  Hour設定成功<font class=font5>(您共有6小時的Office Hour)</font></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl24 width=72 style='height:16.5pt;border-top:none;
+  width:54pt'>節次/星期</td>
+  <td class=xl24 width=72 style='border-top:none;border-left:none;width:54pt'>星期一</td>
+  <td class=xl24 width=72 style='border-top:none;border-left:none;width:54pt'>星期二</td>
+  <td class=xl24 width=72 style='border-top:none;border-left:none;width:54pt'>星期三</td>
+  <td class=xl24 width=72 style='border-top:none;border-left:none;width:54pt'>星期四</td>
+  <td class=xl24 width=72 style='border-top:none;border-left:none;width:54pt'>星期五</td>
+  <td class=xl25 width=72 style='border-top:none;border-left:none;width:54pt'>星期六</td>
+  <td class=xl26 width=72 style='border-top:none;border-left:none;width:54pt'>星期日</td>
+ </tr>
+ <tr height=38 style='height:28.5pt'>
+  <td height=38 class=xl27 width=72 style='height:28.5pt;border-top:none;
+  width:54pt' x:num>1</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td class=xl30 width=72 style='border-top:none;border-left:none;width:54pt'>五資五甲</td>
+  <td class=xl30 width=72 style='border-top:none;border-left:none;width:54pt'>Office
+  Hour時間</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl28 width=72 style='height:16.5pt;width:54pt'>8:00~8:50</td>
+  <td class=xl31 width=72 style='border-left:none;width:54pt'>H607</td>
+  <td class=xl31 width=72 style='border-left:none;width:54pt'>萬大校區</td>
+ </tr>
+ <tr height=38 style='height:28.5pt'>
+  <td height=38 class=xl29 width=72 style='height:28.5pt;width:54pt'>　</td>
+  <td class=xl32 width=72 style='border-left:none;width:54pt'>計算機網路(1) 　</td>
+  <td class=xl32 width=72 style='border-left:none;width:54pt'>wan 　</td>
+ </tr>
+ <tr height=38 style='height:28.5pt'>
+  <td height=38 class=xl27 width=72 style='height:28.5pt;border-top:none;
+  width:54pt' x:num>2</td>
+  <td class=xl30 width=72 style='border-top:none;border-left:none;width:54pt'>二資二甲</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td class=xl30 width=72 style='border-top:none;border-left:none;width:54pt'>五資五甲</td>
+  <td class=xl30 width=72 style='border-top:none;border-left:none;width:54pt'>Office
+  Hour時間</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl28 width=72 style='height:16.5pt;width:54pt'>9:00~9:50</td>
+  <td class=xl31 width=72 style='border-left:none;width:54pt'>HB07</td>
+  <td class=xl31 width=72 style='border-left:none;width:54pt'>H607</td>
+  <td class=xl31 width=72 style='border-left:none;width:54pt'>萬大校區</td>
+ </tr>
+ <tr height=38 style='height:28.5pt'>
+  <td height=38 class=xl29 width=72 style='height:28.5pt;width:54pt'>　</td>
+  <td class=xl32 width=72 style='border-left:none;width:54pt'>網際網路實務(二) 　</td>
+  <td class=xl32 width=72 style='border-left:none;width:54pt'>計算機網路(1) 　</td>
+  <td class=xl32 width=72 style='border-left:none;width:54pt'>wan 　</td>
+ </tr>
+ <tr height=38 style='height:28.5pt'>
+  <td height=38 class=xl27 width=72 style='height:28.5pt;border-top:none;
+  width:54pt' x:num>3</td>
+  <td class=xl30 width=72 style='border-top:none;border-left:none;width:54pt'>二資二甲</td>
+  <td class=xl30 width=72 style='border-top:none;border-left:none;width:54pt'>Office
+  Hour時間</td>
+  <td class=xl30 width=72 style='border-top:none;border-left:none;width:54pt'>五資五甲</td>
+  <td class=xl30 width=72 style='border-top:none;border-left:none;width:54pt'>Office
+  Hour時間</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl28 width=72 style='height:16.5pt;width:54pt'>10:00~10:50</td>
+  <td class=xl31 width=72 style='border-left:none;width:54pt'>HB07</td>
+  <td class=xl31 width=72 style='border-left:none;width:54pt'>萬大校區</td>
+  <td class=xl31 width=72 style='border-left:none;width:54pt'>H607</td>
+  <td class=xl31 width=72 style='border-left:none;width:54pt'>萬大校區</td>
+ </tr>
+ <tr height=38 style='height:28.5pt'>
+  <td height=38 class=xl29 width=72 style='height:28.5pt;width:54pt'>　</td>
+  <td class=xl32 width=72 style='border-left:none;width:54pt'>網際網路實務(二) 　</td>
+  <td class=xl32 width=72 style='border-left:none;width:54pt'>wan 　</td>
+  <td class=xl32 width=72 style='border-left:none;width:54pt'>計算機網路(1) 　</td>
+  <td class=xl32 width=72 style='border-left:none;width:54pt'>wan 　</td>
+ </tr>
+ <tr height=38 style='height:28.5pt'>
+  <td height=38 class=xl27 width=72 style='height:28.5pt;border-top:none;
+  width:54pt' x:num>4</td>
+  <td class=xl30 width=72 style='border-top:none;border-left:none;width:54pt'>二資二甲</td>
+  <td class=xl30 width=72 style='border-top:none;border-left:none;width:54pt'>Office
+  Hour時間</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td class=xl30 width=72 style='border-top:none;border-left:none;width:54pt'>Office
+  Hour時間</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl28 width=72 style='height:16.5pt;width:54pt'>11:00~11:50</td>
+  <td class=xl31 width=72 style='border-left:none;width:54pt'>HB07</td>
+  <td class=xl31 width=72 style='border-left:none;width:54pt'>萬大校區</td>
+  <td class=xl31 width=72 style='border-left:none;width:54pt'>萬大校區</td>
+ </tr>
+ <tr height=38 style='height:28.5pt'>
+  <td height=38 class=xl29 width=72 style='height:28.5pt;width:54pt'>　</td>
+  <td class=xl32 width=72 style='border-left:none;width:54pt'>網際網路實務(二) 　</td>
+  <td class=xl32 width=72 style='border-left:none;width:54pt'>wan 　</td>
+  <td class=xl32 width=72 style='border-left:none;width:54pt'>wan 　</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td colspan=8 height=22 class=xl36 width=576 style='border-right:.5pt solid gray;
+  height:16.5pt;width:432pt'>午餐時間</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl27 width=72 style='height:16.5pt;border-top:none;
+  width:54pt' x:num>5</td>
+  <td class=xl30 width=72 style='border-top:none;border-left:none;width:54pt'>四資二甲</td>
+  <td class=xl30 width=72 style='border-top:none;border-left:none;width:54pt'>五資四甲</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl28 width=72 style='height:16.5pt;width:54pt'>12:40~13:30</td>
+  <td class=xl31 width=72 style='border-left:none;width:54pt'>H607</td>
+  <td class=xl31 width=72 style='border-left:none;width:54pt'>IB109</td>
+ </tr>
+ <tr height=38 style='height:28.5pt'>
+  <td height=38 class=xl29 width=72 style='height:28.5pt;width:54pt'>　</td>
+  <td class=xl32 width=72 style='border-left:none;width:54pt'>程式設計(一) 　</td>
+  <td class=xl32 width=72 style='border-left:none;width:54pt'>物件導向程式設計(1) 　</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl27 width=72 style='height:16.5pt;border-top:none;
+  width:54pt' x:num>6</td>
+  <td class=xl30 width=72 style='border-top:none;border-left:none;width:54pt'>四資二甲</td>
+  <td class=xl30 width=72 style='border-top:none;border-left:none;width:54pt'>五資四甲</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl28 width=72 style='height:16.5pt;width:54pt'>13:40~14:30</td>
+  <td class=xl31 width=72 style='border-left:none;width:54pt'>H607</td>
+  <td class=xl31 width=72 style='border-left:none;width:54pt'>IB109</td>
+ </tr>
+ <tr height=38 style='height:28.5pt'>
+  <td height=38 class=xl29 width=72 style='height:28.5pt;width:54pt'>　</td>
+  <td class=xl32 width=72 style='border-left:none;width:54pt'>程式設計(一) 　</td>
+  <td class=xl32 width=72 style='border-left:none;width:54pt'>物件導向程式設計(1) 　</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl27 width=72 style='height:16.5pt;border-top:none;
+  width:54pt' x:num>7</td>
+  <td class=xl30 width=72 style='border-top:none;border-left:none;width:54pt'>四資二甲</td>
+  <td class=xl30 width=72 style='border-top:none;border-left:none;width:54pt'>五資四甲</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl28 width=72 style='height:16.5pt;width:54pt'>14:40~15:30</td>
+  <td class=xl31 width=72 style='border-left:none;width:54pt'>H607</td>
+  <td class=xl31 width=72 style='border-left:none;width:54pt'>IB109</td>
+ </tr>
+ <tr height=38 style='height:28.5pt'>
+  <td height=38 class=xl29 width=72 style='height:28.5pt;width:54pt'>　</td>
+  <td class=xl32 width=72 style='border-left:none;width:54pt'>程式設計(一) 　</td>
+  <td class=xl32 width=72 style='border-left:none;width:54pt'>物件導向程式設計(1) 　</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl27 width=72 style='height:16.5pt;border-top:none;
+  width:54pt' x:num>8</td>
+  <td class=xl30 width=72 style='border-top:none;border-left:none;width:54pt'>四資二甲</td>
+  <td class=xl30 width=72 style='border-top:none;border-left:none;width:54pt'>五資四甲</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td rowspan=3 class=xl30 width=72 style='border-bottom:.5pt solid gray;
+  border-top:none;width:54pt'>　</td>
+  <td colspan=2 style='mso-ignore:colspan'></td>
+  <td class=xl33>　</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl28 width=72 style='height:16.5pt;width:54pt'>15:40~16:30</td>
+  <td class=xl31 width=72 style='border-left:none;width:54pt'>H607</td>
+  <td class=xl31 width=72 style='border-left:none;width:54pt'>IB109</td>
+  <td colspan=2 style='mso-ignore:colspan'></td>
+  <td class=xl33>　</td>
+ </tr>
+ <tr height=38 style='height:28.5pt'>
+  <td height=38 class=xl29 width=72 style='height:28.5pt;width:54pt'>　</td>
+  <td class=xl32 width=72 style='border-left:none;width:54pt'>程式設計(一) 　</td>
+  <td class=xl32 width=72 style='border-left:none;width:54pt'>物件導向程式設計(1) 　</td>
+  <td class=xl34>　</td>
+  <td class=xl34>　</td>
+  <td class=xl35>　</td>
+ </tr>
+ <![if supportMisalignedColumns]>
+ <tr height=0 style='display:none'>
+  <td width=72 style='width:54pt'></td>
+  <td width=72 style='width:54pt'></td>
+  <td width=72 style='width:54pt'></td>
+  <td width=72 style='width:54pt'></td>
+  <td width=72 style='width:54pt'></td>
+  <td width=72 style='width:54pt'></td>
+  <td width=72 style='width:54pt'></td>
+  <td width=72 style='width:54pt'></td>
+ </tr>
+ <![endif]>
+</table>
+
+</body>
+
+</html>

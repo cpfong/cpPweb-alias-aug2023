@@ -1,0 +1,12 @@
+%ls -la
+total 5
+drwxr-xr-x   2 news  news   512 Dec 25 09:32 .
+drwxr-xr-x  10 root  wheel  512 Dec 24 12:43 ..
+-rw-r--r--   1 news  news     5 Dec 25 09:32 LOCK.innwatch
+srwxrwxr-x   1 news  news     0 Dec 25 09:31 control
+-rw-rw-r--   1 news  news     5 Dec 25 09:31 innd.pid
+-rw-rw-r--   1 news  news     5 Dec 25 09:32 innwatch.pid
+srwxrwxr-x   1 news  news     0 Dec 25 09:31 nntpin
+%pwd
+/usr/local/news/run
+

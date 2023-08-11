@@ -1,0 +1,25 @@
+cd /usr/local/avp
+mkdir updates
+fetch http://www.fjtc.edu.tw/~cpfong/virus/update_newest_virus_code.sh
+chmod +x update_newest_virus_code.sh
+
+fetch http://www.fjtc.edu.tw/~cpfong/virus/mirror.newsest.avp.virus.code
+vi mirror.newest.avp.virus.code
+cd /etc
+ln -s /usr/local/avp/mirror.newsest.avp.virus.code .
+
+fetch http://www.fjtc.edu.tw/~cpfong/virus/AvpUpdater
+chmod +x AvpUpdater
+
+crontab -e
+# update avp newest virus codes daily by cpf
+37 4 * * * /usr/local/bin/mirror /etc/mirror.newsest1.avp.virus.code
+17 5 * * * /usr/local/avp/update_newest_virus_code.sh
+
+www# cat /var/run/sendmail.pid 
+95
+kill -TERM 95
+/usr/sbin/sendmail -bd -q30m
+
+www# tail /var/log/maillog
+Jan 23 23:13:58 www sendmail[72644]: starting daemon (8.11.3): SMTP+queueing@00:30:00

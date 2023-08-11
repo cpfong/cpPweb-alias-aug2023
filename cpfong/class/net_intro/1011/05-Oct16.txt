@@ -1,0 +1,13 @@
+ssh -CY tc@server
+firefox
+
+ControlPanel
+Setup --> Services -> tftpd
+
+ps aux | grep tftpd
+pgrep udpsvd
+
+tc@box:~$ tftp -l nn -r file2 -g 192.168.1.11
+
+tc@box:~$ sudo /sbin/udpsvd -E 0 69 tftpd /home/tc/
+

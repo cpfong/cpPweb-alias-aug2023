@@ -1,0 +1,50 @@
+<meta http-equiv='Content-Type' content='text/html; charset=big5'>
+主題: picoBSD 把 FreeBSD 放在一張 3.5" floppy 上 <br>
+目的: 在一台沒有 CD-ROM 的主機重新分割 partition 後把一個 ghost 的 img 檔放上去 extract 以安 win98 <br>
+作者: 馮治平 cpfong <br>
+日期: 2003/12/25 <br>
+參考: <a href=http://www.cse.ucsc.edu/~brucem/pico_notes.htm> Brucem </a> -- <a href=http://thewall.sourceforge.net/>Wall</a> -- <a href=http://info.iet.unipi.it/~luigi/picobsd/> luigi </a> -- <a href=http://lists.freebsd.org/pipermail/freebsd-small/> Mailing </a> -- <a href=http://www.fjtc.edu.tw/~cpfong/os/one_floppy_unix.html> cpfong </a> --
+<br>
+前言: 選用 FreeBSD 4.5R 的原因為想重頭開始且由 Brucem 的筆記來實做, 另如果你只要一張 pico 則 the wall(見上) 是個不錯的選擇.<br>
+步驟: 
+<ol> 做一開機片 
+	<li> 把 4.5.iso 由 ftp 弄回來且安在你的機器上, 用最小安裝 (Mininum) 
+	<li> xyz# whoami --> root; 
+	<li> xyz# uname -a -->  FreeBSD xyz.fjtc.edu.tw 4.5-RELEASE FreeBSD 4.5-RELEASE
+	<li> xyz# ls /usr/src/release/ --> ls: /usr/src/release/: No such file or directory
+	<li> xyx# /stand/sysinstall --> 安 src 下所有的東西 (sources for everything)
+	<li> xyz# ls /usr/src/ --> release sys
+	<li> xyz# pwd --> /root
+	<li> xyz# mkdir bin
+	<li> xyz# ln -s /usr/src/release/picobsd/build/picobsd bin/picobsd (先 ln 到 $PATH 上再說)
+	<li> xyz# rehash
+	<li> xyz# cp -R /usr/src/release/picobsd/net mynet
+	<li> xyz# picobsd mynet
+	<li> ENTER 於 READY, build it -->  miibus_if.h: No such file or directory mkdep: compile failed *** Error code 1
+	<li> mynet/PICOBSD 下的 fxp0 要 device miibus 但我是建議你先把 PICOBSD 先放小一些為佳, 不則 floppy 放不下 
+	<li> vi mynet/PICOBSD mynet/config mynet/crunch.conf
+	<li> <a href=./PICOBSD.t> 我的 PICOBSD </a> -- <a href=./config.t> 我的 config </a> --  <a href=./crunch.conf.t> 我的 crunch.conf</a> 
+	<li> 第二個畫面出現 Build mynet completed 這時可以 Cacel (尚然可以要它在 floppy 上寫入)
+	<li> /dev/vn0c        1403      600      803    43%       2      60     3%  注意這個如太 full 則 floppy 會放不下 
+	<li> xyz# ls -l build_dir-mynet/picobsd.bin --> -rw-r--r--  1 root  wheel  1474560 Dec 25 09:29 build_dir-mynet/picobsd.bin
+	<li> xyz# dd if=build_dir-mynet/picobsd.bin of=/dev/fd0
+	<li> 可以拿這片去開機了
+</ol>
+
+<ol type=disc> 再多些 
+	<li> 如何來寫在 floppy 上的這個 kernel 的 etc/rc.conf ? 
+	<ol> 覆蓋法
+		<li> pwd --> xyz# pwd --> /root
+		<li> cp mynet/floppy.tree/etc/rc.conf .
+		<li> vi rc.conf
+		<li> gzip rc.conf
+		<li> mount /dev/fd0 /mnt
+		<li> mkdir /mnt/etc; cp rc.conf.gz /mnt/etc
+		<li> umount /mnt
+	</ol>
+	<ol> 重組譯法
+		<li> vi mynet/floppy.tree/etc/rc.conf
+		<li> pico mynet 
+		<li> 新的 kernel 已有你要改的東西了
+	</ol>
+</ol>

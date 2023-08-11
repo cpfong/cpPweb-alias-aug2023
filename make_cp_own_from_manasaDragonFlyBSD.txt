@@ -1,0 +1,56 @@
+@hv.fotech (big hd)
+--
+  mkdir /media/newimage
+  cd /usr/src
+
+-- ver1
+  make DESTDIR=/media/newimage buildworld
+  make DESTDIR=/media/newimage buildkernel
+  make DESTDIR=/media/newimage installkernel
+  make DESTDIR=/media/newimage installworld
+  cd /usr/src/release/scripts
+  ./make-memstick.sh /media/newimage /tmp/my-memstick.img
+
+-- my ver
+dd if=/dev/zero of=rescue.img bs=1 count=1 seek=1967028736
+mdconfig -at vnode -f rescue.img
+newfs -nUL rescue /dev/md2
+mount -o noatime /dev/md2 /mnt
+
+cd /usr/src
+make buildworld buildkernel	KERNCONF=CPMAUSB
+make installworld		DESTDIR=/mnt
+make installkernel		DESTDIR=/mnt KERNCONF=CPMAUSB
+
+cd etc
+make distribution 		DESTDIR=/mnt
+
+vi /mnt/etc/fstab
+/dev/da0s1a	/	ufs	rw	1 1
+
+umount /mnt
+dd if=rescue.img of=/dev/da0
+try new usb out
+
+--
+Insert usb stick
+fdisk -BI /dev/da0
+bsdlabel -B -w da0s1
+newfs -U /dev/da0s1a
+mount /dev/ad0s1a /mnt
+make installworld installkernel distribution DESTDIR=/mnt
+
+Edit /mnt/etc/fstab
+/dev/da0s1a /      ufs       rw                                           1 1
+
+Edit /mnt/etc/rc.conf for your needs
+unmount /mnt
+
+
+mkdir /usr/USB-or-CD
+
+cd /sys/i386/conf
+cp GENERIC CPMAUSB
+
+[cpfong@hv /sys/i386/conf] tail -1 CPMAUSB 
+options ROOTDEVNAME=\"ufs:da0s1\"

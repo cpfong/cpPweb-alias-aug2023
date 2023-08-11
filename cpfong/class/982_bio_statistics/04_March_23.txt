@@ -1,0 +1,25 @@
+one picture more than thousand words
+1967 前使用幾何數為為主, 1967 後使用代數, 笛卡兒開始, ax2+bx+c=0 較為抽象
+
+代數 f(x)=1/... exp(...) 和一個 normal dist 的圖比起來, 圖形可愛太多了.
+身高,體重,血壓這些個自然現象的分佈大都為 normal dist, 不正常者會有一些變異
+
+變數種類:
+	1. continous 連續型, 可以正常量化的, 例如: 重量 0.23821
+	2. ordinary 非連續, 例如: 疼痛指數 (有次序性的) 使用 median 中位數, 無母數分析
+	3. nominal 例如: 男女, 沒有次序性, 給一個代數, 無先後之分
+
+工程上使用 error 非使用統計上的 u, sd 來討論, 生物上因為參數的不同所以沒有標準
+所以常會把統計的 idea 帶入
+
+central limit theory (中央極限定理又名大數法則) ANOVA, sysmetic 分析
+無法使用 sysmetic 分析的使用 non-parametic 分析
+
+電路圖的 LI''+RI'+1/c I = v(t) 和力學的 my''+By'+ky=f(t) (虎克定理) 有十分相近
+的地方, 一為機械, 另一為電力, 但公式是相似的.
+
+中央極限: 收集資料最主要的目的為預估母群體, 為了想要預估一個不可能測得的母群體的所有 DATA 的 mean, sd
+每組抽 n 個, 共抽 m 組來分析時, 只要 n 夠多, 則不論母群體是否是 normail dist 都可以預估
+到母群體的 mean sd, 
+
+當母群體為 normal dist 時則只要一組即可以預測到母的 mean, sd

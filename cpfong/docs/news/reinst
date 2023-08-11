@@ -1,0 +1,16 @@
+pkg_delete inn-2.3.20021126
+note: system will create a news dir under /var/log, so remove it
+----------------------------------------------
+hiedoc# pwd
+/var/log
+hiedoc# ls -ld news
+drwxr-xr-x  3 news  news  512 Dec 27 17:05 news
+hiedoc# date
+Fri Dec 27 17:10:04 CST 2002
+----------------------------------------------
+cd /var/log; rm -fr news
+
+
+hiedoc# pwd
+/usr/ports/news/inn-stable
+hiedoc# make clean;make ;make install

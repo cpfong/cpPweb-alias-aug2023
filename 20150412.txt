@@ -1,0 +1,9 @@
+2016/01/23 to so-net Dink
+
+http://192.168.1.1
+cht chtsvdsl
+
+--- org
+http://192.168.1.1
+cht k7digital
+left side Manual --> 5 Management --

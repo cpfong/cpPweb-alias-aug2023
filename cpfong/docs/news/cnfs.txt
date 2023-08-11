@@ -1,0 +1,28 @@
+bbs# cd spool/
+bbs# ls
+archive         incoming        out
+articles        innfeed         ove
+
+bbs# mkdir cycbuffs
+
+bbs# pwd
+/usr/local/news/spool/cycbuffs
+
+make 3 32K (one, two, three) files for storage of cnfs
+one, two, three will grow automatically!
+--------------------------------------------------------
+
+bbs# dd if=/dev/zero of=./one bs=32k count=1
+1024+0 records in
+1024+0 records out
+33554432 bytes transferred in 3.572667 secs (9391985 bytes/sec)
+bbs# dd if=/dev/zero of=./two bs=32k count=1
+1024+0 records in
+1024+0 records out
+33554432 bytes transferred in 3.589107 secs (9348964 bytes/sec)
+bbs# dd if=/dev/zero of=./three bs=32k count=1
+1024+0 records in
+1024+0 records out
+33554432 bytes transferred in 3.585755 secs (9357703 bytes/sec)
+
+bbs# chown -R news.news cycbuffs/

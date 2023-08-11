@@ -1,0 +1,28 @@
+# Install bind and bind-chroot packages
+
+# Edit your /etc/sysconfig/named file.
+Add the following line:
+ROOTDIR="/var/named/chroot"
+
+# Edit your /etc/named.conf file.
+# Change the following line:
+listen-on port 53 { 127.0.0.1; };
+-->
+listen-on port 53 { any; };
+
+This allows the bind daemon to listen on all your network IPs, not just your loopback(127.0.0.1) address.
+Change this line:
+allow-query     { localhost; };
+to
+allow-query     { 192.168.0.0/24; };
+
+You now allow all the machines in your home LAN to use your DNS server.
+Make sure it starts at boot time.
+
+# chkconfig named on
+
+Restart your DNS server.
+# service named restart
+
+now  you can try to use your own dns
+# dig @192.168.0.10 google.com

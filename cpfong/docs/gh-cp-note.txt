@@ -1,0 +1,34 @@
+Q: where is gh?
+A: gh is a package in FreeBSD
+
+@gaia-> pkg info | grep Git
+gh-2.5.2_1                     GitHub's official command line tool
+
+gh is for github.com where git is for any git (not just github.com)
+
+Q: why gh?
+A:
+gh can talk to github.com #note: git talk to certain repo, gh can talk to github.com as a whole
+
+Q: gh 101
+A: get a token  #note: you can use mini Mac (with browser) get ~/.config/gh and copy gh dir to FreeBSD
+
+# note: token created using Settings / Developer settings / Personal access tokens
+@gaia-> gh auth login --with-token < ~/ca/git/git-gfoohub-admin-token-30days 
+@gaia-> gh repo list
+
+
+Q: where did gh save token?
+A: using gh auth status can check it out
+
+@gaia-> gh auth status
+github.com
+  ✓ Logged in to github.com as gfoohub (/home/cpfong/.config/gh/hosts.yml)
+  ✓ Git operations for github.com configured to use ssh protocol.
+  ✓ Token: *******************
+
+@gaia-> cat ~/.config/gh/hosts.yml
+github.com:
+    user: gfoohub
+    oauth_token: xxx
+    git_protocol: ssh

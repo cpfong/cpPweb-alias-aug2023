@@ -1,0 +1,14 @@
+index=4 name=181205043105 and higtest socre of class score=94
+
+-- distribution
+49 34
+94 1
+89 1
+30 2
+92 3
+84 1
+79 1
+0 1
+
+-- debug
+total=44

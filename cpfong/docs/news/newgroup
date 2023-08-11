@@ -1,0 +1,7 @@
+bbs# ./ctlinnd newgroup testing.cp
+Ok
+bbs# pwd
+/usr/local/news/bin
+
+s vi /usr/local/news/db/newsgroups
+testing.cp              Testing board for cp

@@ -1,0 +1,25 @@
+< 	redirect input (from file)
+<<	here document (nothhing to do with file)
+<<<	string as file (file + here)
+
+cat foo.txt
+cat <foo.txt	# cat usually get input from file, now use < as redirector ; same as the above line
+cat <<EOF	# << is nothing to do with redirect, but is HERE document ; EOF is a sign
+a
+b
+c
+EOF
+
+cat <<EOF >foo
+
+$ tr a-z A-Z <<EOF
+$ tr a-z A-Z <<< 'one two three'
+
+$ FOO='one two three'
+$ tr a-z A-Z <<< $FOO	# FreeBSD fail
+
+$ bc <<< 2^10 	#FAIL
+$ echo '2^10' | bc #ok
+
+$ read a b c <<< 'one two three' # FreeBSD fail
+$ echo $a $b $c

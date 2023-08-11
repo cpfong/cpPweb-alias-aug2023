@@ -1,0 +1,8 @@
+public (external) ip :  whatismyip
+private (internal) ip : 10.0.0.1 192.168.0.1 172.16.1.1
+
+Q: 為何二個 ip ? 內部及外部?
+A:
+每個電腦都要一個 ip, 教室有40台則要有 40 個 ips 公用的沒有如此多? 所以借私有（內部）要外出時再轉成公用的出去
+
+Q:

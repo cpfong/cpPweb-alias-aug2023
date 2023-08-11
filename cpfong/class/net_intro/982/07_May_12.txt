@@ -1,0 +1,12 @@
+7-4 ip 位址的使用
+
+以下為一些特殊的位址:
+* loopback 位址: 127.0.0.1 在 tcp/ip 中不必有網卡即存在的 "自身" ip 位址
+* router gateway 位址: 封包不屬於同一子網域的全送到 gateway 處理
+* broadcast 址址: 子網路內的電腦使用 broadcast 來廣播給其它電腦
+
+arp: Address Resolution Protocol
+mac: Media Access Control addresses
+
+電腦的備份及復原
+

@@ -1,0 +1,11 @@
+        Dim a() As Integer = {4, 1, 2, 3}
+        Dim xn() As Integer = {0, 25, 50, 100}
+
+        Dim fx As Integer = 0
+        Dim x As Integer = TextBox1.Text()
+
+        For i As Integer = 0 To a.GetUpperBound(0)
+            fx += a(i) * x ^ xn(i)
+        Next
+
+        TextBox2.Text = fx

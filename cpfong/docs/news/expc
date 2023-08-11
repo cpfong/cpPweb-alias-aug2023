@@ -1,0 +1,107 @@
+
+  ◇ expire 的問題
+
+------------------------------------------------------------------------
+From: shuo@BBS.me.nctu.edu.tw (小碩碩)
+Newsgroups: tw.bbs.netnews
+Subject: Re: expire 的問題
+Date: 14 Sep 1996 18:37:25 GMT
+Organization: 國立交通大學機械系 News Server
+
+Apache Lin (apache@pdplab.iecs.fcu.edu.tw) 提到:
+:       弟的 news server 有個奇怪的問題. 請不吝幫忙.
+:       在 news server 運作後約 3 個星期, 才發現未曾跑過 expire. 而追加
+:       了跑 expire 的 crontab. 可是, 卻發現幾乎所有 group 都有 Old articles.
+:       也就是, expire 雖然開始刪除文章, 但之前留下的文章均不被刪除.
+: crontab:
+:       40 5 * * * /usr/local/news/bin/news.daily delayrm /dev/null 2>&amp1
+
+In the man page of news.daily :
+
+     delayrm
+          This uses the `-z''  flag  when  invoking  expire  and
+          expireover.   The  names  of articles to be removed are
+          written to a temporary file,  and  then  removed  after
+          expiration by calling expirerm.
+                        ^^^^^^^^^^^^^^^^^
+:       想請問如何將這些 old articles 刪除掉呢 ?!
+
+run expireover ... you may add an entry like the following line
+
+30 6 * * * /usr/local/news/bin/expireover -s -a
+
+:       請不吝解答, 謝謝.
+
+BTW.. you may need to rebuild history file or some articles that are
+
+not in history file will not be expired ...
+
+------------------------------------------------------------------------
+_ __/|    Yen-Shuo Su. (蘇彥碩) of National Chiao Tung University
+\`o.O'    交通大學機械工程學系87 Mechanical Engineering Department
+=(_ _)=   交大機械系 BBS 站      URL: telnet://bbs.me.nctu.edu.tw/
+   U      E-Mail Address: shuo@bbs.me.nctu.edu.tw.
+
+> -------------------------------------------------------------------------- <
+
+From: chen@cc.nctu.edu.tw (C.S.Chen)
+Newsgroups: tw.bbs.netnews
+Subject: Re: expire 的問題
+Date: 17 Sep 1996 03:05:29 GMT
+Organization: National Chiao-Tung University, Taiwan
+
+Apache Lin (apache@pdplab.iecs.fcu.edu.tw),14 Sep 1996 11:12:18 GMT wrote:
+:       在 news server 運作後約 3 個星期, 才發現未曾跑過 expire. 而追加
+:       了跑 expire 的 crontab. 可是, 卻發現幾乎所有 group 都有 Old articles.
+:       也就是, expire 雖然開始刪除文章, 但之前留下的文章均不被刪除.
+
+三個星期, 有 20 幾天. 都沒跑過 news.daily. 如果貴站接的 newsgroups 很多的話,
+history 檔已經長到非常大了 ( 有沒有超過 100M bytes ?)
+
+
+有一個可能, 是 history database 所在的 filesystem 不夠大, 在每次 news.daily
+expire 要刪掉舊 articles 前, 會先待 remove 的 articles 整理出來, 因此
+會產生一個新的 history 檔, 這個時候, 系統可能會佔用到原 history 兩倍大的
+空間. 如果空間不夠, 新檔無法順利產生, expire 就無法順利做下去..
+
+再則, delayrm 的 option, 必須經過 sorting 的階段. 像你的例子, 很可能會
+因為所產生的 /var/log/news/expire.rm 必須經過 sorting, 而 sort 通常會在
+
+ /tmp 下來作 ( 會有中間檔產生 ), 如果 /tmp 不夠大. 前面的過程就做不完.
+ 接下來的 expirerm (fastrm) 就做不下去.
+
+
+:       40 5 * * * /usr/local/news/bin/news.daily delayrm /dev/null 2>&amp1
+
+                                                 delayrm > /dev/null 2>&amp1
+
+: expire.ctl:
+:
+:       /remember/:15
+:       *:A:1:10:never
+:       alt.*:A:1:15:20
+
+你的系統 HD 空間, 夠大嗎 ? 保留 15 天.
+
+:     expire begin Sat Sep 14 18:58:28 CST 1996: (-v1 -z/var/log/news/expire.rm)
+:     Article lines processed   838646
+:     Articles retained         837797       &lt--- /var/spool/news
+:     Entries expired              849
+:     Files unlinked              1514
+:     Old entries dropped         3396
+:     Old entries retained       26402      &lt-- history
+:                              ^^^^^
+:                               保留這麼多 old articles ?!
+:
+:       想請問如何將這些 old articles 刪除掉呢 ?!
+:       請不吝解答, 謝謝.
+
+建議你要好好再看看, history 和  expire.ctl 的 manual page.
+
+-- man history
+-- man expire.ctl
+
+
+------------------------------------------------------------------------
+Joe. C.S.Chen,  chen@cc.nctu.edu.tw
+

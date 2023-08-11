@@ -1,0 +1,17 @@
+pkg
+--
+cpfong@nginx:~/unit/102-using-perl-config % pkg search catalyst | grep Runtime
+p5-Catalyst-Runtime-5.90128    Elegant MVC Web Application Framework (Runtime)
+
+cpfong@nginx:~/unit/102-using-perl-config % pkg search catalyst | grep Devel
+p5-Catalyst-Devel-1.42         Catalyst Development Tools
+
+cpfong@nginx:~/unit/102-using-perl-config % pkg search catalyst | grep View-TT
+p5-Catalyst-View-TT-0.45       Template Toolkit view class for Catalyst
+
+cpan
+--
+Installation of Catalyst should be straightforward:
+# perl -MCPAN -e 'install Catalyst::Runtime'
+# perl -MCPAN -e 'install Catalyst::Devel'
+# perl -MCPAN -e 'install Catalyst::View::TT'

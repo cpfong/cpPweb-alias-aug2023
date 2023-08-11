@@ -1,0 +1,4 @@
+Dec 25 09:09:33 bbs innd: tradindexed: could not create 
+/usr/local/news/spool/overview/group.index: Permission denied
+
+Dec 25 09:09:33 bbs innd: SERVER cant open overview method

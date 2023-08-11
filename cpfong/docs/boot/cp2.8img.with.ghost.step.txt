@@ -1,0 +1,15 @@
+ref
+--
+https://sites.google.com/a/rmprepusb.com/www/tutorials/winimage#TOC-3-Using-mtools-to-create-a-1.4MB-or-2.8MB-raw-floppy-image
+
+step by step
+--
+get freedos288_img_with_ghost here https://sites.google.com/a/rmprepusb.com/www/tutorials/winimage/FREEDOS_SATA_FOR_GHOST_288.zip?attredirects=0
+# note: you can dl from Koofr:software_DB/freedos/288wGhost.iso/FREEDOS_SATA_FOR_GHOST_288.IMA
+
+#in mintLinux
+mount -o loop ./FREEDOS_SATA_FOR_GHOST_288.IMA /mnt
+cp ghost9.exe /mnt
+umount /mnt
+
+dd if=./FREEDOS_SATA_FOR_GHOST_288.IMA of=/dev/sdb

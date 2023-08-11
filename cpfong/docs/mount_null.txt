@@ -1,0 +1,1 @@
+## sudo mount -t nullfs /usr/ports /home/j/myutil/usr/ports

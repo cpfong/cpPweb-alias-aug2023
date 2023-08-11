@@ -1,0 +1,10 @@
+203.67.10.0/0 is the ip (which means 203.67.10.0 --> 203.67.10.255 can be used) 
+32 ips for each 8 sections.
+
+host1 	203.67.10.1   netmask 255.255.255.224 (which is 11100000)
+router1	203.67.10.30  netmask 255.255.255.224
+router2 203.67.10.29  netmask 255.255.255.224
+
+router3 203.67.10.222 netmask 255.255.255.224 (hosts 193 -> 221)
+
+router4 203.67.10.94  netmask 255.255.255.224 (hosts 65 -> 93)

@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<title>PICOBSD</title>
+<link href="/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<p>PICOBSD</p>
+<p><font color="#CC3300">檔案介紹：</font>/usr/src/release/picobsd/xxx/ 〈使用的 picobsd 
+  設定目錄〉</p>
+<table width="100%" border="1" cellpadding="2" cellspacing="0">
+  <tr>
+    <td>PICOBSD</td>
+    <td>核心設定檔，設定方式和 FreeBSD Kernel 相似</td>
+  </tr>
+  <tr>
+    <td>config</td>
+    <td>要啟動的裝置</td>
+  </tr>
+  <tr>
+    <td>crunch.conf</td>
+    <td>picobsd 要使用的程式</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<p><font color="#CC3300">檔案介紹：</font>/usr/src/release/picobsd/floppy.tree/etc/</p>
+<table width="100%" border="1" cellpadding="2" cellspacing="0">
+  <tr> 
+    <td>rc.conf.defaults</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td>master.passwd</td>
+    <td>帳號設定，和 FreeBSD 的作用相同</td>
+  </tr>
+  <tr> 
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<p><font color="#CC3300">安裝一</font></p>
+<pre><font color="#006633">mkdir /usr/src/release/picobsd/test
+cp -R bridge test
+cd /usr/src/release/picobsd/test
+/usr/src/release/picobsd/build/picobsd</font>
+
+<font color="#CC3300">錯誤一：</font> crunchgen: Can't execute: cd /usr/ports/picobsd/ssh-picobsd/work/ssh-1.2.27 &amp;&amp; echo -n /bin/pwd
+</pre>
+<p>方法一：不使用 ssh，將 crunch.conf 以下程式加上 # 註解即可</p>
+<pre>
+progs sshd
+special sshd objvar SSHD_OBJS
+special sshd srcdir /usr/ports/picobsd/ssh-picobsd/word/ssh-1.2.27
+special sshd objdir /usr/ports/picobsd/ssh-picobsd/word/ssh-1.2.27
+ln sshd ssh
+ln sshd ssh1
+ln sshd scp
+</pre>
+<p>方法二：將 ssh 的套件補上</p>
+<pre>cd /usr/ports/security/openssh
+
+make install
+</pre>
+<p><font color="#CC3300">安裝二</font></p>
+<p>&nbsp;</p>
+<p><font color="#CC3300">安裝</font>：製作軟磁片</p>
+<p>Windows：請到<a href="ftp://ftp.freebsd.org/pub/FreeBSD/tools/fdimage.exe">這裡</a>下載 
+  fdimage.exe<br>
+  <font color="#006633">fdimage picobsd.bin a:</font></p>
+<p>UNIX：使用 dd 即可<br>
+  <font color="#006633">dd if=picobsd.bin of=/dev/fd0</font></p>
+<p>錯誤二：</p>
+</body>
+</html>

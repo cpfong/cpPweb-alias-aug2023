@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <title>Installing FreeBSD via serial console and PXE</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <style type="text/css">
+	code	{ color: #bf0000; background-color: inherit; }
+	h2	{ margin-top: 4%; }
+	.number	{ list-style-type: decimal; }
+	.alpha	{ list-style-type: lower-alpha; }
+	.roman	{ list-style-type: lower-roman; }
+  </style>
+</head>
+
+<body>
+<h1>Installing FreeBSD via serial console and PXE</h1>
+<p>&mdash; by Jeremy Chadwick &lt;jdc@parodius.com&gt;</p>
+
+
+<h2>Choose one:</h2>
+<ol class="alpha">
+<li><a href="pxeboot_serial_install_7.html">Installing FreeBSD 7.x via serial console and PXE</a></li>
+<li><a href="pxeboot_serial_install_8.html">Installing FreeBSD 8.x via serial console and PXE</a></li>
+</ol>
+
+
+<h2>An author's preface...</h2>
+<p>Before I get started, I want to take a moment to remind readers of an obvious
+fact which, apparently, some have forgotten:</p>
+
+<p><b>The year is 2010, not 1989.</b></p>
+
+<p>FreeBSD was originally considered the "die-hard server operating system",
+which means it was intended for servers.  It was used as such back when the
+2.2.x series was available.  Datacenters today are usually massive (read: have
+a very large number of servers), and require the need of 3 simple things, all
+of which are well-established and common:</p>
+
+<ol class="number">
+<li>Installation of an entire OS without physical access to the box</li>
+<li>Heavy reliance on the network for installation (e.g. network install)</li>
+<li>Use of high speed serial console (9600+bps) from start to finish to assist
+    or automate said installation.</li>
+</ol>
+
+<p>For sake of comparison, both Linux and Solaris (sparc and i386) have the above
+needs addressed, but FreeBSD trails behind.  Accomplishing the above on FreeBSD
+requires the knowledge which I think many administrators lack &mdash; and that's
+not their fault.  Things like:</p>
+
+<ol class="roman">
+<li>Intricate knowledge of how the FreeBSD multi-stage (boot0/boot1/boot2/loader)
+    bootstrap behaves, and what <code>pxeboot(8)</code> really is</li>
+<li>Rebuilding above bootstraps with custom options during compile</li>
+<li>Implementation of said bootstraps into PXE-based installation environments</li>
+<li>Knowledge of how TFTP and DHCP work, and how to debug them if they break,</li>
+<li>Familiarity with NFS (configuration and security awareness), and any one-off
+    quirks that pertain to a specific FreeBSD release/version</li>
+<li>Familiarity with tftpd (specifically permissions quirks it has in its code</li>
+<li>Intricate knowledge of configuring a DHCP server (common question: "what's
+    the 'next-server' and 'option root-path' stuff?  Is it needed?  Why?")</li>
+<li>Disk label/GEOM changes (particular to 8.x)</li>
+<li>Caveats/bugs with all of the above, and more.  Examples: how out-of-the-box
+    FreeBSD sets the maximum serial port speed to 9600bps, not being able to do a
+    complete 100% TFTP-based (e.g. no NFS) install, security issues surrounding
+    use of rpcbind/mountd/nfsd (daemons binding to INADDR_ANY despite use of -h,
+    using arbitrary port numbers which make it difficult to firewall off, etc.),
+    undocumented <code>pxeboot(8)</code> options which are more or less
+    and many other things.</li>
+</ol>
+
+<p>If you're not "acceptably" familiar with all of the above, you'll end up
+smashing your head against your monitor for days before posting to a mailing
+list &mdash; only to hear leaves rustle, or possibly someone saying "me too!" Most
+administrators do not know how to program, and even if they did (like myself),
+lack knowledge of the inner-workings of the above.  Therefore, we can't
+realistically expect administrators of systems to provide patches or
+enhancements to make this process easier (for sake of comparison, it took me 7
+hours just to get it all up and working) &mdash; we can only expect them to report
+the problems and hope someone more technical steps up to the plate.</p>
+
+<p>With the introduction of FreeBSD 8.x into the fray, things became more
+irritating.  The procedure for 8.x is more or less the same as 7.x, except there
+are numerous things which will catch you off-guard.  For example, I received a
+couple of reports from other administrators following my 7.x guide for 8.x, but
+were running into issues.  It wasn't until I tried it myself on 8.x that I was
+able to share their pain, thus working out the quirks.</p>
+
+<p>Rant over.</p>
+
+<p>I hope the above documents help anyone/everyone who is looking to do a
+remote installation of present-day FreeBSD via PXE using serial console rather
+than over VGA.</p>
+
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><!-- saved from url=(0068)http://www.ins.tku.edu.tw/~yosuke/cup_new/upload/cu3b2e05dee52f8.htm --><!-- saved from url=(0031)http://ohaha.ks.edu.tw/find.htm --><title>find的用法</title>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<meta content="MSHTML 6.00.2600.0" name="GENERATOR"></head>
+
+<body background="find_files/_001">
+<h3>find的介紹-- (OS版本:FreeBSD 4.3-STABLE #4)</h3><pre>find 其實是一個很有用的工具，且常用的工具。
+
+<b>◎find</b> - walk a file hierarchy  
+          在一個檔案等級制度中遊走 顧名思義 也就是搜尋
+<b>◎語法:</b> <font color="red">find  path  operators</font>
+                path:路徑  operators:運算子(參數)
+           
+<b>◎operators:</b> 常用的參數如下 (若有疑義請參閱man page 為準
+               ★號表示重要... 
+       1. <font color="blue">-atime n</font>: 用檔案存取時間(access)為搜尋條件，n 為數字代表週期，
+                     單位是24小時。
+                     
+         ★註解:     n不帶正負時，表示距今從目前這個週期到下個週期為止 
+                     n為負號時(-)，表示距今這個週期之前。
+                     n為正號時(+)，表示距今大於這個週期的時間。
+                     
+                     舉例說明：
+                     若n為3(不帶正負號)，表示距今72～96小時。
+                     若n為-3(帶負號)，表示距今0~72小時內。 
+                     若n為+3(帶正號)，表示距今超過72小時，也就是&gt;72小時。
+       
+       2.<font color="blue">-mtime n</font>: 用檔案修改時間(modification)為搜尋條件，n以24小時為週期。
+       
+       3.<font color="blue">-ctime n</font>: 用檔案inode更動時間為條件，n以24小時為週期。
+       
+       4.<font color="blue">-inum  n</font>: 用inode值來作為搜尋條件，n為該檔案的inode值。       
+       
+       5.<font color="blue">-name  filename</font>：後接檔案名稱，若包含"萬用字元"，則要括起來，
+                           避免shell解讀之。
+       6.<font color="blue">-perm mode</font>: 以存取權限為搜尋條件。         
+       
+       7.<font color="blue">-user name</font>: 以檔案的所有者為搜尋條件，用uid也可。
+       
+       8.<font color="blue">-group name</font>: 以檔案的群組為搜尋條件，用gid亦可。
+       註：7.8 find會先用name搜尋，若找不到才試著用uid或gid搜尋
+       
+       9.<font color="blue">-type t</font>: t的代表的是檔案的類型，類型常用的如下：
+                     d   --&gt;  資料夾
+                     f   --&gt;  一般檔案
+                     l   --&gt;  符號連結檔
+                     
+      10.<font color="blue">-size n</font>: n表示區塊數，通常是512-byte bolck，
+                 若n後接c (nc) 表示為n bytes。 
+                 
+    ★11.<font color="blue">operator1 -a operator2</font>: -a 等同於邏輯上的 AND   
+         <font color="blue">operator1 -o operator2</font>: -o 等同於邏輯上的 OR
+         <font color="blue"> ! operator1 </font>: ! 等同於邏輯上的 NOT
+          
+        註：<font color="blue">operator1 -a operator2</font> 與<font color="blue">operator1 operator2</font>
+            是相同的...同樣代表當運算子1成立且運算子2成立
+             
+    ★12.<font color="blue">\( expression \)</font>: 在複雜的情況下，括號表示先運算。
+              加上反斜線\ 為的是不要讓shell誤判。    
+                          
+      13.<font color="blue">-print</font>: 將搜尋結果送到標準輸出stdout，一般來說也就是螢幕。
+               註:最常用到 但也常被遺忘的參數。                         
+      
+    ★14.<font color="blue">-exec command</font>: 表示將搜尋的結果，再導入某一命令。
+               註:搜尋出的結果可用兩個大括號{} 替代，命令後接 \; 表示結束。
+            
+            ex:將目前目錄 搜尋出檔案以.o結尾的檔案 刪除！！
+               <font color="red">find . -name "*.o" -exec rm -f {} \;  </font>                   
+               
+    ★15.<font color="blue">-maxdepth n</font>: n 表示搜尋的深度。1表示目前這個資料夾。
+    
+    ★16.<font color="blue">-ok command</font>: -ok跟-exec相同，不過執行前會詢問。通常用來測試。
+    
+    ★17.<font color="blue">-newer file</font>: 比file修改(modification)的時間更早為搜尋條件    
+
+<b>◎實例應用:</b>
+      1.修改時間: 假設是此目錄 7天前(當天)修改過的檔案
+                  <font color="red">find . -mtime 7 -print </font>
+                  <font color="red">find . -mtime +6 -mtime -8 -print </font>
+      2.檔案大小: 檔案介於於1000byte到32000byte之間 
+                      <font color="red">find . -size +1000c -size -32000c -print</font>
+      
+    ★3.刪除某些詭異的檔案: 某些檔案因含有特殊字元而無法刪除，
+                      <font color="red">find . -inum 31246 -exec rm -rf {} \;</font>
+                      註：31246為其inode值，可用<font color="red">ls -i </font>察看..
+      
+    ★4.以精確的時間搜尋：搜尋2001年5月28日11時59分到2001年5月29日0時10分間所有的檔案
+                      a. <font color="red">touch -t 200105281159 file1</font>
+                      b. <font color="red">touch -t 200105290010 file2</font>
+                      c. <font color="red">fine . -newer file1 ! -newer file2 -print</font> 
+                         如此就會搜尋出數個檔案 扣除file2的就是所得...
+                         
+    ★5.將檔案更名:把搜尋出來的更名為
+                   <font color="red">find . -maxdepth 1 -name "*.o"  -exec mv {} {}.orig  </font>
+                   將檔名符合*.o的檔案名稱附加上.orig
+                   
+           ★註解：若您第五個無法執行的話也可以這樣做：
+                  $<font color="red">find . -maxdepth 1 -name "*.o" |
+                   &gt; while read file
+                   &gt; do mv "$file" "$file".orig
+                   &gt; done</font>
+                   
+                   &gt; 乃是換行後自動出現的提示符號...                    
+                    
+<b>◎重要觀念:</b>
+    ★1.搜尋參數 都是find懂的常規表示法，若表示法為真，就執行一些設定好的動作。
+      
+    ★2.括號中的先運算: <font color="red">-atime +5 \( -name "*.o" -o -name "*.tmp" \)</font>
+                        表示搜尋 存取時間大於5天 且(名稱為*.o或是*.tmp)的檔案         
+                        
+      3.規則式中兩個運算子間若用空白隔開表示 -a 也就是AND
+      
+    ★4.find任務就是判定整個運算式，而不是找到檔案，
+        當然，會找到檔案，但那只是一個副作用。 
+        
+      5.儘量不要搜尋NFS檔案，因為萬一NFS server 掛了，會讓整個搜尋停頓。
+        可以用-maxdepth 或 -prune 限制                 
+                 
+<b>◎困難排除:</b>
+       
+       ★xargs的使用: 有時您會遇到向下面這種情況...語法無誤 但卻無法顯示
+                    <font size="+0">find / -print | ls -al</font>     顯示根目錄下的所有檔案
+                    系統會直接出現Broken pine 然後就結束了...
+                    或是出現too many argument ..則表示輸出超出指令列上的長度。
+                    這時就要用到xargs了...整個命令列如下
+                    <font color="red">find / -print | xargs ls -al </font>
+                    結果就會很順利的出現..因為xargs將輸入一個一個依序輸出，
+                    而非一次全部。 
+                            
+                                  <a href="mailto:panda@ks.edu.tw">藍色泡泡</a> 敬上
+</pre><a href="http://ohaha.ks.edu.tw/main.htm">回首頁</a> </body></html>

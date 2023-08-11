@@ -1,0 +1,23 @@
+Setup Type: Standard
+SDK Folder: /Users/cpfongsmacmini/Library/Android/sdk
+JDK Location: /Applications/Android Studio.app/Contents/jre/Contents/Home
+Total Download Size: 484 MB
+
+Android Emulator 299 MB
+Android SDK Build-Tools 32 50.4 MB
+Android SDK Build-Tools 32.1-rc1 56.7 MB
+Android SDK Platform 32 63 MB
+Android SDK Platform-Tools 12.5 MB
+SDK Patch Applier v4 1.74 MB
+
+-- correct install procedure will ask you to verify setting (sdk and software)
+
+sdk manager
+--
+only android API 32 installed (note: higtest API level)
+i install manually Lollipop Android 5.1 API 22
+
+Device manager (for simulation)
+--
+API 32 need to be installed manually (not the same as SDK: using sdk manager to install sdk does NOT mean you have device manager need sdk)
+i also download Lollipop API 22

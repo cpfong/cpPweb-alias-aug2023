@@ -1,0 +1,51 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import java.io.*;
+
+class FileDialogDemo extends JFrame 
+    implements ActionListener {
+    private JButton loadButton;
+    private JFileChooser getNameBox;  // bad name *****
+    private JTextField nameField;
+
+    public static void main(String [] args) {
+        FileDialogDemo frame = new FileDialogDemo();
+
+        frame.setSize(400, 300);
+        frame.createGUI();
+        frame.show();
+    }
+
+    private void createGUI() {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        Container window = getContentPane();
+        window.setLayout(new FlowLayout());
+    
+
+        loadButton = new JButton("load");
+        window.add(loadButton);
+        loadButton.addActionListener(this);
+        nameField = new JTextField(30);
+        window.add(nameField);
+  
+    }
+///lots of changes re flichooser below*****
+    public void actionPerformed(ActionEvent evt) { 
+        File  fileName;
+// do i rewritre this whole eg????
+
+        if (evt.getSource() == loadButton) {
+//------------------------STARTEXTRACT=showchooser.xtr
+            getNameBox = new JFileChooser("get Name");   // set mode  ********
+            getNameBox.showSaveDialog(this);
+//------------------------ENDEXTRACT=showchooser.xtr
+
+            // display the name
+            fileName = getNameBox.getSelectedFile();
+            nameField.setText(fileName.getName());
+        }
+    }
+   
+}
+

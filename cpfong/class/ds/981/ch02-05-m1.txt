@@ -1,0 +1,7 @@
+        For i = 0 To 9
+            If (i Mod 2 = 0) Then
+                iNo(i) = i / 2 * 10 + 1
+            Else
+                iNo(i) = -(i - 1) / 2 * 10
+            End If
+        Next

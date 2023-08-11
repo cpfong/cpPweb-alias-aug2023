@@ -1,0 +1,43 @@
+$ cat foo
+abcd line1
+defg line2
+
+$ cat foo | { while IFS= read line; do printf "$line\n"; done; }
+abcd line1
+defg line2
+
+# ok, this fail. I keep just for reference
+#IFS= read var << EOF
+
+read var << EOF
+$(printf "1a\n2b\n")
+EOF
+
+set -- $var
+printf "%s" $var
+
+# another working example: 
+#(note: 1 each line for only one number)
+#       2 cat won't finish until key in Ctrl+d
+--
+sum=0
+for num in `cat`; do
+   sum=$((sum+num))
+done
+
+printf "sum=%s\n" $sum
+
+
+# other way
+--
+cat "$@" |
+while read -r line
+do
+    echo "$line"
+done
+
+# this work too
+while read -r line
+do
+    echo "$line"
+done < /dev/stdin

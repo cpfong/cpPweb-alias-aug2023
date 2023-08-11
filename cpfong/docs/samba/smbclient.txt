@@ -1,0 +1,29 @@
+ 這是一個類似 ftp 能讓您連結到一個執行視窗之 PC 的系統工具（utilities）。
+
+    *
+
+      要想從 SMB 知道 PC win 可分享檔案清單，請啟動 smbclient -L win -N 。  
+    *
+
+      啟動 smbclient //win/work 以連結到 PC 上稱為 win 之分享工作（work share）。您亦可用 smbclient \\\\win\\work。  
+    *
+
+      要建立一個分享工作之 tar archive，啟動 smbclient //win/work -Tc work.tar。  
+    *
+
+      要列印一個檔案 letter.txt 到連結至 PC win 之印表機— my_printer，請鍵入：
+
+cat letter.txt | smbclient //win/printer_name my_password \
+  -N -c "put - darth"   
+
+想知道更多資訊，請執行 man smbclient。
+※ 引述《SuTseng.bbs@csie.nctu.edu.tw (Blue)》之銘言：
+: 再請教一下,smbclient該如何使用?假設欲連往win95的機器.
+: 因我都無法進入smb:\>的提示下...:(
+: 我曾下過一指令為
+: smbclient -L SHYNJENG -W WORKGROUP -I 111.112.113.101
+: 但只有出現一些說明該server的網路資源的訊息.
+: 用smbclient \\SHYNJENG\C ""時,卻出現
+: \SHYNJENGC: Not enough "\" characters in service
+: 不知道這是什麼意思呢?
+改為 smbclient '\\SHYNJENG\C' -I 111.112.113.101試試

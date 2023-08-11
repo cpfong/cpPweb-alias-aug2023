@@ -1,0 +1,123 @@
+vi /usr/local/etc/ezjail.conf
+--
+ezjail_use_zfs="YES"
+ezjail_jailzfs="tank/jails"
+ezjail_jaildir=/usr/local/jails
+
+hv# zfs create -o mountpoint=/usr/local/jails tank/jails
+hv# chmod 700 /usr/local/jails && chown root:wheel /usr/local/jails
+
+ezjail-admin install -h ftp.tw.freebsd.org
+
+ezjail-admin create -c zfs apachejail 163.15.203.149
+
+#comment
+hv# zfs destroy tank/jails/apachejail
+
+Q: named with ZFS
+A: 
+ezjail-admin create -c zfs bindjail 163.15.203.149
+ezjail-admin start bindjail
+ezjail-admin console bindjail
+fetch http://163.15.203.149/bindjail-files.tgz	# named not yet
+ezjail-admin restart bindjail
+
+Q: ldap Jail
+A:
+do named above steps
+
+ports needed
+as host root
+--
+setenv D /usr/local/jails/ldapjail
+mkdir -p $D/usr/ports
+mount_nullfs /usr/ports $D/usr/ports
+
+as jailed root
+--
+install openldap from ports ( openldap-server-2.4 since 2.3 failed )
+rc.conf
+slapd.conf
+
+others check ldapjail/rootHomeDir
+
+Q: ftp with LDAP auth
+A: 
+using pureftpd
+http://pureftpd.sourceforge.net/README.LDAP
+http://www.howtoforge.com/virtual-mail-and-ftp-hosting-with-iredmail-and-pure-ftpd-on-freebsd
+
+* enable ldap when compile pureftpd
+ldapjail# tail -1 /etc/syslog.conf 
+local4.*					/var/log/slapd.log
+* slapd.conf
+pureftpd.schema
+access to *		---> this one has to be very carefull
+        by self write
+        by anonymous auth
+        by users read
+        by * none
+
+no need to creat directory for an user, pure ftp will open for him
+no touch for /usr/local/etc/ldap.conf (but need client ldap lib in)
+
+Q: ssh with ldap
+A:
+http://www.freebsd.org/doc/en/articles/ldap-auth/article.html
+comment: sshd commnicate with ldap by ldap.conf, pureftpd communcitate pureftpd-ldap.conf
+
+ports
+--
+/usr/ports/security/pam_ldap
+/usr/ports/net/nss_ldap
+/usr/ports/security/pam_mkhomedir
+
+conf
+--
+/usr/local/etc/ldap.conf
+/usr/local/etc/nss_ldap.conf
+/etc/nsswitch.conf
+/etc/pam.d/sshd
+ 
+sshjail# pwd
+/usr/local/etc
+sshjail# cp ldap.conf.dist ldap.conf
+sshjail# mv nss_ldap.conf nss_ldap.conf.orig
+sshjail# ln -sf ldap.conf nss_ldap.conf
+
+vi /usr/local/etc/ldap.conf (note: NOT /usr/local/etc/openldap/ldap.conf !!)
+	host 166.1.23.149
+	base ou=VIPuser,dc=mydomain
+	ri ldap://166.1.23.149/
+	binddn cn=bind_4_sshd,dc=mydomain
+	bindpw secret
+	pam_login_attribute uid
+
+vi /etc/pam.d/sshd (BOTH auth and account)
+	auth 		sufficient	/usr/local/lib/pam_ldap.so no_warn
+	auth		required	pam_unix.so		no_warn try_first_pass
+
+	account 	sufficient	/usr/local/lib/pam_ldap.so
+	account		required	pam_unix.so
+
+	session		required	pam_permit.so
+	session         required       /usr/local/lib/pam_mkhomedir.so
+
+# cat /etc/nsswitch.conf
+--
+group: files ldap
+#group: compat
+passwd: files ldap
+#passwd: compat
+
+Q: vncserver?
+A:
+sshjail first
+
+vi /usr/local/bin/vncserver  search for CheckDisplayNumber
+--
+-    if (!bind(S, pack('S n x12', $AF_INET, 6000 + $n))) {
++    if (!bind(S, sockaddr_in(6000 + $n, &INADDR_ANY))) {
+
+-    if (!bind(S, pack('S n x12', $AF_INET, 5900 + $n))) {
++    if (!bind(S, sockaddr_in(5900 + $n, &INADDR_ANY))) {

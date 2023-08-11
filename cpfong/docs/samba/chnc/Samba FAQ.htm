@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0054)http://www.linpus.com.tw/nicedoc/samba/sambafaq-1.html -->
+<!-- saved from url=(0022)http://internet.e-mail --><HTML><HEAD><TITLE>Samba FAQ: 一般資訊</TITLE>
+<META content="text/html; charset=big5" http-equiv=Content-Type>
+<META content="Microsoft FrontPage 4.0" name=GENERATOR></HEAD>
+<BODY> 
+<P align="center"><img border="0" src="Samba_5.gif" width="195" height="51"></P>
+<H2><A name=ss1.8><font color="#0000FF">&nbsp;出狀況時我怎麼辦?</font> </A></H2>
+<P><B><F>#</F> *** 重要步驟! *** <F>#</F></B></P> 
+<P>別張貼訊息至郵遞清單或新聞群組要直到你已經完成前三個步驟如以下所示 </P> 
+<P>第一看看是否有任何可在FAQ裡找到答案，假如你剛安裝Samba是否你有徹底看過 Diagnosis.txt也可在Samba散發目錄"docs"找到。 <A  
+href="ftp://samba.org/pub/samba/DIAGNOSIS.txt">DIAGNOSIS.txt</A>? 這可節省你 許多時間與精力.  
+ 
+<P>第二看man pages的smbd,nmbd和smb.conf的說明。 </P> 
+<P>第三假如手頭上沒有具体的解決辦法，試著去看logs檔跟smbd和nmbd相關的日誌檔，正跟你遇到問題這段期間，你可能需要重新組態伺服器提供更廣闊除錯的資訊通常二級或三級;提供足夠的除錯資訊，仔細地檢查日誌，尋找特定的字串出現"錯誤"的字樣?</P> 
+<P>第四假如你仍然不能解決，詢問郵遞清單或新聞群組大体而言沒有人在意遵照以上所談的步驟回答問題，審視郵遞清單t的文件記錄也許是個好點子，當然可透過samba網站假如你解決了問題，請寄給FAQ維護者一份簡潔的問題形態說明，如此我可融入至下一個版  
+本，假如你對原始程式碼做了變更，請提出這些(修正檔)以便大家因你受益，這是Samba最重要的維護面，送所有修正檔到 </P> 
+<P><A href="mailto:samba-bugs@samba.org">samba-bugs@samba.org</A>. 請別送修正檔給  
+Andrew Tridgell假如你這麼做的話，這些東西將會遺失。 </P> 
+<p class="MsoPlainText"><span lang="EN-US"><span style="mso-spacerun:
+yes">&nbsp;</span>(黃力生):SAMBA 下的OUTLOOK EXPRESS問題</span></p>
+<p class="MsoPlainText"><span lang="EN-US">Q:各位好 
+請教一亟待解決的問題</span></p>
+<p class="MsoPlainText">前陣子架了<span lang="EN-US">SAMBA SERVER</span></p>
+<p class="MsoPlainText">讓校內所有電腦、所有帳號（老師及學生）皆登入</p>
+<p class="MsoPlainText"><span lang="EN-US">SAMBA所架之網域，在登入及個人目錄方面似乎都沒問題</span></p>
+<p class="MsoPlainText">但是在使用<span lang="EN-US">OUTLOOKEXPRESS時</span></p>
+<p class="MsoPlainText">發現信箱設定值能夠存至<span lang="EN-US">SAMBA中個人目錄內</span></p>
+<p class="MsoPlainText">但是信件卻不會跟著過去</p>
+<p class="MsoPlainText">前一個使用者的信件會保留在收件匣、寄件匣<span lang="EN-US">...內</span></p>
+<p class="MsoPlainText">下個使用者能一封不漏的看到前人信件</p>
+<p class="MsoPlainText">如此一來電子郵件幾乎沒有任何的隱私可言</p>
+<p class="MsoPlainText">請教可有什麼方法能改善此一情況</p>
+<p class="MsoPlainText">這個問題主要是在<span lang="EN-US">SAMBA還是在OUTLOOKEXPRESS？</span></p>
+<p class="MsoPlainText">急！！ 請幫忙 感激不盡</p>
+<p class="MsoPlainText"><span lang="EN-US">&nbsp;<o:p>
+</o:p>
+</span></p>
+<p class="MsoPlainText"><span lang="EN-US"><span style="mso-spacerun:
+yes">&nbsp;</span><font color="#0000FF">SAMBA 下的OUTLOOK EXPRESS問題</font></span></p>
+<p class="MsoPlainText"><span lang="EN-US">A:samba必須和windows 98的多使用者功能配合才可發揮完整的個人環境效果。</span></p>
+<p class="MsoPlainText">前提<span lang="EN-US">: 您的samba設定檔案要將profile的資料夾設定指向個人目錄內</span></p>
+<p class="MsoPlainText"><span lang="EN-US">1.控制台-&gt;使用者: 
+去設定一個新的使用者</span></p>
+<p class="MsoPlainText"><span lang="EN-US">2.登出後重新以samba上的帳號去登入(或重新開機後)</span></p>
+<p class="MsoPlainText"><span lang="EN-US">3.登入後, 進入windows 98前,系統會問您是否保留個人設定值, 
+必須回答是, 才能保留每個人不同的環境參數。也就是說, 
+每個人均可以任意更改您的桌面或其他環境,而不會去影響到別人!</span></p>
+<p class="MsoPlainText"><span lang="EN-US">4.使用outlook express 5.0後, 
+要先將資料存放的目錄變更到/windows/profiles/中您的帳號目錄底下的Application 
+Data/Microsoft/Outlook Express底下</span></p>
+<p class="MsoPlainText"><span lang="EN-US">5.設定完成後, 
+登出時就會將您在/windows/profiles/您帳號目錄中的各項目錄, 
+copy 到您server上的私人目錄底下</span></p>
+<p class="MsoPlainText"><span lang="EN-US">6.每次登入便會將您的profiles目錄搬到windows/profiles/您帳號目錄中</span></p>
+<p class="MsoPlainText">如此<span lang="EN-US">, 
+每個人便有自己的環境與outlook express了, 不會去影響到別人, 
+只不過您的server必須要大一點, 因為新設定完成的profiles檔(不含mail信件)就將近4MB, 
+通常我都會就限每個人25mb!</span></p>
+<p class="MsoPlainText"><span lang="EN-US">&nbsp;<o:p>
+</o:p>
+</span></p>
+</BODY></HTML>

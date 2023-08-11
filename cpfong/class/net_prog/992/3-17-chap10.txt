@@ -1,0 +1,74 @@
+10.6 自動遞增興與自動遞減
+	10.6.1 自動遞增的值
+10.7 for 控制結構
+	10.7.1 foreach 和 for 之間的祕密關聯
+10.8 迴圈控制
+	10.8.1 last 算符
+	10.8.2 next 算符
+	10.8.3 redo 算符
+	10.8.4 帶有標籤的區塊
+10.9 三元算符 ?:
+10.10 邏輯算符
+	10.10.1 短路算符的值
+	10.10.2 defined-or 算符
+	10.10.3 使用局部執行算符的控制結構 
+
+10.6 ++ 為自動遞增
+	my @people=qw{ fred barney fred wilma };
+	my %count;
+	$count{$_}++ foreach @people;
+	print "$k $v\n" while (($k,$v)= each %count);
+
+10.7.1 事實上 for 和 foreach 在 perl 的剖析器中是相同的, 但是 for 存在一些
+潛在的問題, 所以 foreach 才是迴圈的王道. 因為 for 才 3 個字 (比 foreach 7 個字少), 
+所以如果 for 好則 perl 愛省字的特性應會使用才是.
+
+	for ($i=1; $i<10; $i++){
+		print $i, "\n";
+	}
+
+10.8 三個圈控制算符: last next redo 圈: foreach while until {} 未修飾區塊
+	while (<>){
+		if (/__END__/){
+			last;
+		}
+	}
+
+	while(<>){
+		foreach (split){
+			next if /\W/;
+			$valid++;
+			$count{$_}++;
+		}
+	}
+	print "total = $valid\n";
+	foreach $w (sort keys %count){
+		print "$w show up $count{$w} times\n";
+	}
+
+10.9 三元算符
+	print "input a number: ";
+	chomp($width=<>);	
+
+	my $size=
+	($width < 10) ? " 小" :
+	($width < 20) ? " 中" :
+	($width < 50) ? " 大" :
+			" 超大"; #default
+
+10.10 邏輯算符 && ||
+	pls check p168
+	10.10.1 短路算符的值
+	my $last_name=$last_name{$someone} || '(No last name)';
+	|| 和 or 有何不同: 沒有
+	10.10.2 defined-or 為了能區分 0 和 undefined 所以多了一個 // 名為 define-or 的算符
+
+%last_name = (
+	'三' => '張',
+	'四' => '李',
+	'五' => '王');
+
+print "input name: "; chomp($n=<>);
+$last_name=$last_name{$n} || "no last name";
+
+print $last_name, "\n";

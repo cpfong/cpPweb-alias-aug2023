@@ -1,0 +1,29 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.05 [en] (X11; I; FreeBSD 2.2.6-RELEASE i386) [Netscape]">
+   <TITLE>Document @ Local</TITLE>
+</HEAD>
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H2>
+DataBase</H2>
+
+<HR NOSHADE>
+<TABLE COLS=1 WIDTH="100%" NOSAVE >
+<TR NOSAVE>
+<TD NOSAVE><FONT SIZE=+1></FONT>
+
+<P><FONT SIZE=+1><A HREF="php.html">PHP</A></FONT></TD>
+</TR>
+
+<TR>
+<TD><FONT SIZE=+1><A HREF="postgresql.html">PostgreSQL</A></FONT></TD>
+</TR>
+</TABLE>
+
+
+<P>
+<HR NOSHADE>
+</BODY>
+</HTML>

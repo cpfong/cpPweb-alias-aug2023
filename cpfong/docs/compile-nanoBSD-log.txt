@@ -1,0 +1,52 @@
+Q: who compile first?
+A: time seq as this
+--
+
+00:00:00 # NanoBSD image qemu-i386 build starting
+00:00:00 ## Clean and create object directory (/usr/embedded/obj)
+00:00:09 ## run buildworld
+00:00:09 ### log: /usr/embedded/obj/_.bw
+04:54:13 ## build kernel (FOO)
+04:54:13 ### log: /usr/embedded/obj/_.bk
+05:34:45 ## Clean and create world directory (/usr/embedded/qemu-i386/_.w)
+05:34:46 ## installworld
+05:34:46 ### log: /usr/embedded/qemu-i386/_.iw
+05:35:38 ### log: /usr/embedded/qemu-i386/_.etc
+05:32:59 ## customize "add_etc_make_conf"
+05:32:59 ### log: /usr/embedded/qemu-i386/_.cust.add_etc_make_conf
+05:32:59 ## customize "cust_install_files"
+05:36:07 ### log: /usr/embedded/qemu-i386/_.cust.cust_install_files
+05:36:07 ## customize "cust_install_machine_files"
+05:36:07 ### log: /usr/embedded/qemu-i386/_.cust.cust_install_machine_files
+05:36:07 ## customize "typical_embedded"
+05:36:07 ### log: /usr/embedded/qemu-i386/_.cust.typical_embedded
+05:36:07 ## customize "fix_pkg"
+05:36:07 ### log: /usr/embedded/qemu-i386/_.cust.fix_pkg
+05:36:07 ## customize "save_build"
+05:36:07 ### log: /usr/embedded/qemu-i386/_.cust.save_build
+05:36:07 ## customize "shrink_md_fbsize"
+05:36:07 ### log: /usr/embedded/qemu-i386/_.cust.shrink_md_fbsize
+05:36:07 ## customize "cust_comconsole"
+05:36:07 ### log: /usr/embedded/qemu-i386/_.cust.cust_comconsole
+05:36:07 ## configure nanobsd setup
+05:36:07 ### log: /usr/embedded/qemu-i386/_.dl
+05:36:08 ## run late customize scripts
+05:36:08 ## late customize "product_custom"
+05:36:08 ### log: /usr/embedded/qemu-i386/_.late_cust.product_custom
+05:36:08 ## Fixing metalog
+05:36:09 ## build diskimage qemu-i386
+05:36:09 ### log: /usr/embedded/qemu-i386/_.di
+05:36:09 ### image in: /usr/embedded/images/_.disk.image.qemu-i386.qcow2
+05:41:39 # NanoBSD image qemu-i386 completed
+
+@venus-> ls -l /usr/embedded/obj/_.*
+-rw-r--r--  1 root  wheel      1591  1月  7 14:59 /usr/embedded/obj/_.env
+-rw-r--r--  1 root  wheel  25743450  1月  7 19:53 /usr/embedded/obj/_.bw
+-rw-r--r--  1 root  wheel   8093255  1月  7 20:33 /usr/embedded/obj/_.bk
+-rw-r--r--  1 root  wheel    432969  1月  7 20:35 /usr/embedded/obj/_.metalog
+-rw-r--r--  1 root  wheel    483928  1月  7 20:35 /usr/embedded/obj/_.metalog.pre
+
+@venus-> ls -l images/ (note: _.disk.image 20:35 is SAME as _metalog.pre)
+total 204800
+-rw-r--r--  1 root  wheel  180027392  1月  7 20:35 _.disk.image.qemu-i386.qcow2
+-rw-r--r--  1 root  wheel   29987656  1月  7 20:35 _.disk.image.qemu-i386.qcow2.xz

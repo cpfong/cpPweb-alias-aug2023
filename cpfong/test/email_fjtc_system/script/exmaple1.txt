@@ -1,0 +1,8 @@
+joe=> \t
+turned off output headings and row count
+joe=> \f :
+field separator changed to ':'
+joe=> select * from btmm;
+
+if you type \o file_name
+the result will be stored to a file named "file_name".

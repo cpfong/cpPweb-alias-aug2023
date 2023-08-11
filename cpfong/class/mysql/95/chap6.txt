@@ -1,0 +1,30 @@
+chap 6 結構化查詢語言 (SQL)
+
+第四代程式語言:
+	SQL 可以接受大及小寫的指令, 也就是不分大小寫
+	SQL 允許把敘述寫成數行, 如此可以讓查詢更容易看懂, 結束時加 ; 或 \g
+
+新建一資料庫  (在 vnc 伺服器一般的使用者不能使用)
+	create database store;
+
+刪除資料庫 
+	drop database store;
+
+看某一資料庫的某個 table: 
+	show tables from test;
+	select * from test.shop;
+
+固定預設的資料庫
+	use o1506mysql;
+
+看某一 table 的欄位定義:
+	desc test.shop;
+
+如何使用轉檔方式把 sql 指令輸入
+vi mytest.sql
+use o1506mysql;
+create table if not exists test(id int);
+insert into test values(1);
+insert into test values(2);
+
+mysql -p o1506mysql < ./mytest.sql

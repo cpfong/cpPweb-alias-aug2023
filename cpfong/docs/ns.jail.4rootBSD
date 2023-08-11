@@ -1,0 +1,19 @@
+mount -t nullfs -r /home/j/mroot /home/j/ns
+mount -t nullfs /home/js/ns /home/j/ns/s
+mount -t devfs devfs /home/j/ns/dev
+mount -t fdescfs fdescfs /home/j/ns/dev/fd
+mount -t procfs procfs /home/j/ns/proc
+
+ifconfig epair create
+ifconfig bridge create
+
+ifconfig epair0b 192.168.0.2/30 up
+ifconfig bridge0 addm epair0b
+
+jail -c vnet name=ns host.hostname=ns.myVM.rootBSD path=/home/j/ns persist
+ifconfig epair0a vnet 1
+
+jexec 1 ifconfig epair0a 192.168.0.1/30 up
+jexec 1 route add default 192.168.0.2
+jexec 1 /etc/rc.d/ipfw restart
+jexec 1 /etc/rc.d/ldconfig restart

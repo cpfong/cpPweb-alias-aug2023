@@ -1,0 +1,56 @@
+ref--
+fong@n4jj % ls ~/00bsd_my_doc/aws/ | grep vpn
+https://holgr.com/blog/2009/06/setting-up-openvpn-on-amazons-ec2.html
+make ddns (no-ip) work first http://199.102.79.18:8080/~cpfong/docs/cp_class/ami_linux_ddns.txt
+
+--
+
+AWS console : security group (sg) open UDP port 1194
+
+user.data
+--
+#!/bin/bash
+yum install -y openvpn
+cd /etc/openvpn/
+curl -O http://199.102.79.18:8080/tmp/openvpn.config.tgz
+tar xfvz openvpn.config.tgz
+service openvpn start
+cat ./rc.local >> /etc/rc.local
+
+
+ref below
+--
+
+vi /etc/openvpn/openvpn.conf
+----
+port 1194
+proto udp
+dev tun
+secret openvpn-key.txt
+ifconfig 192.168.2.1 192.168.2.2
+keepalive 10 120
+comp-lzo
+persist-key
+persist-tun
+status server-tcp.log
+verb 3
+--
+
+service openvpn start
+
+-- firewall part
+modprobe iptable_nat
+echo 1 | tee /proc/sys/net/ipv4/ip_forward
+iptables -t nat -A POSTROUTING -s 192.168.2.1/2 -d 0.0.0.0/0 -o eth0 -j MASQUERADE
+
+as ec2-user
+sudo cp /etc/openvpn/openvpn-key.txt new-vpn.key
+sudo chown ec2-user new-vpn.key
+--end of server part
+
+
+-- client mac tunnelblick
+scp ec2-user@vpn.mic.ifong.org:~/new-vpn.key
+install tunnelblick.config
+
+now client vpn UP

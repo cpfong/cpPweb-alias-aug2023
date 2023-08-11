@@ -1,0 +1,13 @@
+tmux mutiple and attach old session
+--
+tmux attach-session -t 0
+
+7z
+tar
+
+tar cfv  foo.tar foo/			# tar create file verbose
+tar cfvz foo.tgz foo/			# zip gunzip format
+tar cfv  - foo/ | gzip > foo.tgz	# using pipe
+tar cfvJ foo.txz foo/			# zip xz format (better compression)
+
+xz -d < foo.txz | tar xvf -

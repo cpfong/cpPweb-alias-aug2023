@@ -1,0 +1,32 @@
+<html>
+<HEAD>
+<TITLE></TITLE>
+</HEAD>
+
+<P align="center"><BR><BR>
+Login Sample Page
+</P>
+<form method="post" action="login.php"><BR>
+<CENTER>
+<TABLE border="1">
+  <TBODY>
+    <TR>
+      <TD>LoginID</TD>
+      <TD><INPUT text="20" name="userid"></TD>
+    </TR>
+    <TR>
+      <TD>Password</TD>
+      <TD><INPUT text="20" type="password" name="password"></TD>
+    </TR>
+    <TR>
+      <TD colspan="2" align="center"><INPUT type="submit" value="LOGIN"></TD>
+    </TR>
+  </TBODY>
+</TABLE>
+LoginID="demo"<BR>
+Password="demo"
+</CENTER>
+<BR>
+<input type="hidden" name="check" value="1">
+</form>
+</html>

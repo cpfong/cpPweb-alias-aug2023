@@ -1,0 +1,31 @@
+1. 寫一程式可以測試使用者是否鍵入 Yes 或 y (大小寫不限), 如輸入為
+y 或 yes 則表示要繼續, 應印出 continue 後結束, 若輸入不是 y 或 yes
+則應印出輸入的東西且結束
+
+while (<>){
+        chomp;
+        if (/\by\b/i | /\byes\b/i){
+                print "continue\n";
+        }
+        else {
+                print "$_\n";
+        }
+}
+
+2. 寫一程式可以由 STD 輸入任一字串, 把輸入字中的整數部份印出
+例如 I was born at 2001. 應印出  2001
+
+while (<>){
+	chomp;
+	if (/(\d+)/){
+		print $1;
+	}
+}
+
+3. 寫一程式可以把在鍵盤上輸入沒有 John 的部份印出
+例如 My name is John, and my sister is Mary. 應印出 My name is , and my sister is Mary.
+while (<>){
+	/John/ ;
+	print $`;
+	print $';
+}

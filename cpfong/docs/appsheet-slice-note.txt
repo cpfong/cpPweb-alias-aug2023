@@ -1,0 +1,3 @@
+slice template: create a blood pressure look after delete app
+
+row filter condition --> like excel start from =, var is [var], function as () ex [date] >= today()-3 (latest 3 days)

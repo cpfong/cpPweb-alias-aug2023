@@ -1,0 +1,724 @@
+<HTML><head>
+<TITLE>ＨＴＭＬ之介紹與使用</TITLE></head>
+<H1>ＨＴＭＬ之介紹與使用</H1>
+<UL>
+<LI><A  href="netscape.html">（一）ＭＳ　Netscape 之環境介紹與使用</A>
+<LI><A  HREF="#html-use">（二）ＨＴＭＬ之介紹與使用</a>
+ <ul> 
+    <li><a href="#2.1"> 2.1 HTML之架構</a>
+    <Li><a href="#2.2"> 2.2 文件的連結關係 </a>
+      <ul>
+      <li><a href="#2.2.1"> 2.2.1 與其他的文件（系統）做連結</a>
+      <li><a href="#2.2.2"> 2.2.2與其他文件的章節作連結</a>
+      <li><a href="#2.2.3"> 2.2.3 與同一份文件中的其他章節作連結 </a>
+      </ul>
+    <Li><a href="#2.3">2.3 列表(Lists)</a> 
+      <ul>
+      <li><a href="#2.3.1"> 2.3.1有序編號列表</a>
+      <li><a href="#2.3.2">2.3.2 無序編號列表</a>
+      <li><a href="#2.3.3"> 2.3.3 敘述式列表</a>
+      </ul>
+    <Li><a href="#2.4">2.4 預先格式化的文章 </a>
+    <Li><a href="#2.5">2.5 字元的格式化 </a>
+    <Li><a href="#2.6">2.6 特殊字元</a>
+    <Li><a href="#2.7">2.7 線上秀圖（Inline Images）</a>
+    <Li><a href="#2.8">2.8 外在呼叫的圖形、聲音與動畫</a>
+    <Li><a href="www-cgi.html#form-cgi">2.9 填表（ＦＯＲＭ）</a>　
+       <ul>
+       <li><a href="www-cgi.html#form-cgi"> 2.9.1 INPUT 標籤 </a>
+       <li><a href="www-cgi.html#form-cgi"> 2.9.2 SELECT 標籤</a>
+       <li><a href="www-cgi.html#form-cgi"> 2.9.3 TEXTAREA 標籤</a>
+       </ul>
+    <Li><a href="bg-how.html">2.10 背景設定的方法</a>
+<!-- http://home.netscape.com/home/demo/1.1b1/table.html -->
+    <Li><a href="table.html">2.11 表格（Tables）</a>
+       <ul>
+<!-- http://home.netscape.com/home/demo/1.1b1/tableSample.html -->
+       <li><a href="tableSample.html"> 範例</a>
+       </ul>
+    <Li><a href="#2.12">2.12 子畫面（Frames）</a>
+    <ul>
+    <Li><a href="//sharky.nomius.com/frames/menu.htm">Frames Lesson</a>
+    <li><a href="findex.html">範例</a>
+    </ul>
+    <Li><a href="#2.13">2.13 其它</a>
+    <ul>
+    <Li><a href="#2.13.1">2.13.1 水平線(Horizontal Rule,HR)</a>
+    <Li><a href="#2.13.2">2.13.2 強迫換行（Line Break,BR）</a>
+    <Li><a href="#2.13.3">2.13.3 BLOCKQUOTE</a>
+    <Li><a href="#2.13.4">2.13.4 註解(comment)</a>
+    <Li><a href="#2.13.5">2.13.5 位址(Addresses)</a>
+    <Li><a href="//r703a.chem.nthu.edu.tw/handbook/handbook.html">2.10.6 Ｗ３新樂園之出版手冊</a>
+    <Li><a href="//www.isl.net.tw/books/html/index.html">2.10.7 一日學會HTML/WWW編輯</a>
+    <Li><a href="http://formosa.iis.sinica.edu.tw/~iap/barebones/barebone_table_tw.html">2.10.8 超文標記語言簡明導引</a>
+    <Li><a href="Frame/html_design.html">2.10.9 另一個HTML之使用手冊(請用Netscape 2.0 觀看)</a>
+    </ul>
+  </ul>
+<LI><A  HREF="#ozhome-use">（三）如何在Oz domain建HOME PAGE與使用</a>
+</ul>
+
+<hr>
+<a name="html-use"><h2>（二）ＨＴＭＬ之介紹與使用。</h2></a>
+   超文件標示語言（HyperText Markup Language,HTML）提供一個精簡卻強而有力
+的文件建構機能，使你輕易地設計出多采多姿的超媒體文件（Hypermedia document）
+作品（取決於瀏覽器對HTML標籤之展現能力），並透過HTTP(HyperText Transfer
+Protocl)網路通訊協定，能在全球資訊網(World Wide Web,WWW)架構上作跨平台的
+流通。目前您只要擁有諸如 mosaic、netscape、cello等WWW的瀏覽器（Brower），
+就能輕易藉Internet感受漫遊全球多媒體資訊網之樂趣。
+<hr>
+<a name="2.1"><h4>2.1 HTML之架構</h4></a><p>
+<pre>
+  HTML文件是像一般文字(如ascii)格式檔一樣,，可用任何文書編輯器（例如pe2，
+vi等）來編輯產生。只不過是文件中有一些字元由一些富有不同意義的標籤(tags)所
+標示，以定義文件之結構性與其文件間之邏輯關連。簡言之，ＨＴＭＬ是以各式各樣
+的標籤在文件中來描述多媒體的資訊（以超連結的方式個別儲存於外部的檔案中）
+而已。下面是一個HTML文件範例的骨架：
+<hr>
+&lt;html&gt;&lt;head&gt;
+&lt;title&gt;結構文件範例&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;第一層標題&lt;/h1&gt;
+&lt;p&gt;這是html文件範例，必須注意title文字不會顯示於本文區，而由h1定義的
+標題會顯示於本文區，title之&quot;結構文件範例&quot;文字會顯示在視窗的頂部。
+&lt;ul&gt;
+&lt;li&gt;無編號列表之第一項
+&lt;li&gt;無編號列表之第二項
+&lt;/ul&gt;
+&lt;p&gt;這是另一段落，對段落而言雖應有尾標籤&lt;/p&gt;與之成對，在技術上
+是可省略。在段落內之文字可作顯目效果，&lt;i&gt;This sentence of the paragraph
+ is in italics.&lt;/i&gt;
+&lt;img align=bottom src=&quot;nthumap.gif&quot; alt=&quot;Warning:&quot;&gt; 歡迎蒞臨清大
+&lt;a href=&quot;/ccc/index.html&quot;&gt;電算中心&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+<hr>
+<img src="html-etc.gif" >
+<hr>
+      HTML的標籤是用小於(&lt;)的符號和大於(&gt;)符號中間夾著標籤名稱所組成。
+  標籤通常都是成對的。例如：&lt;H1>和&lt;/H1>，&lt;TITLE>和&lt;/TITLE>。
+  前標籤和尾標籤不同處在於結束標籤多了斜線(/)的符號。例如：&lt;H1>告訴瀏覽
+  器現在是一個第一層（共六層H1~H6）標題的開始，緊隨著的是標籤元件內容
+  （例如：第一層標題），最後以&lt;/H1&gt;告訴瀏覽器第一層標題到此結束。
+
+前標籤前界符號  標籤(元件)名稱      屬性名稱    屬性值   前標籤尾界符號
+      ＜             H1               無         無        ＞
+
+     
+尾標籤前界符號  標籤(元件)名稱      屬性名稱    屬性值   尾標籤尾界符號
+      ＜/ 　         H1               無         無         ＞
+
+</pre>
+<hr>
+<a name="2.2"><h4>2.2 文件的連結關係 </h4></a>
+<a name="2.2.1"><h5>2.2.1 與其他的文件（系統）做連結</h5></a>
+<pre>
+HTML主要的能力是:在於它可以把某一串文字或某個圖片連結到另一個由一致資源
+定位器URL(Uniform Resource Locator,URL)所描述的文件。該串文字將會被瀏覽
+器以高亮度的方式顯示在螢幕，一般是以呈藍色加底線來表示這是一個超文字的
+連結(hyperlinkt) 。當游標移至連結物件時游標立即會呈佛手狀。
+
+HTML的超文字連結標籤是一個&lt;A&gt;，用來代表一個定位錨(Anchor)，若要包含
+一個定位錨在你的文件中，則以下方式行之：
+<hr>
+  1.定位錨的標籤是以小於的符號加在字母A之前 (&lt;A) 作為開始。
+  2.空一格後，利用參數 HERF=&quot;URL filename&quot; 來指定所要連結的文件。
+    然後以大於的符號 (&gt;) 作為結束。
+  3.在大於符號之後，鍵入要在文件中顯示代表該連結的文字或某個圖片(元件內容)。
+  4.最後以尾標籤 &lt;/A&gt; 作為結束。
+<hr>
+其格式如下：
+
+<strong>&lt;A HREF=&quot;scheme://host[:port]/dir/subdir/filename&quot;&gt;anchor name&lt;/A&gt;</strong>
+
+其中&quot;scheme://host[:port]/dir/subdir/filename&quot; 就是一致資源定位器
+(URL )， URL 的格式是被WWW 文件用來要取得資料或服務時能快速確定資料之位置與
+取得方式(Access Method)。例如參考到其他伺服器上（諸如gopher,wais,http）的
+檔案。其中scheme是取得方式,其有下列其中之一:
+
+http ：一個WWW 伺服器的檔案。 
+file ：一個本地系統的檔案,或是在一個不具名(anonymours)FTP伺服器的檔案。 
+gopher：在Gopher伺服器上的一個目錄或檔案。
+        例如： gopher://gopher.nthu.edu.tw:70/11/ccc/faq。
+WAIS： 在WAIS伺服器上的檔案。 
+news ： 一個Usenet newsgroup。例如：news:nthu.ccc 
+       ＊對netscape特例:
+         news://NewsServer/newsgroup      -->載入某個NewsServer之某個newsgroup
+         newspost://NewsServer/newsgroup  -->對某個NewsServer之某個newsgroup
+                                             post 文章.
+telnet ： 連結到一個Telnet-base 的伺服器上。例如：telnet://y14/。
+ftp ： 連結到一個不具名(anonymous)FTP伺服器上的檔案。例如：ftp://y5/
+mailto：例如：&quot;mailto:your_email@address&quot;。 注意：mailto後沒有"//"。
+              "mailto:wjchou@oz.nthu.edu.tw"。
+       ＊對netscape特例:
+              "mailto:wjchou@oz.nthu.edu.tw?subject=SUBJECT_STIRNG"。
+               
+
+若服務需要user_id與passwd時，用「scheme://user_id:passwd@host/」
+例如：ftp://user_id:passwd@y14/。但務必注意：若你的瀏覽器有設定
+Proxies且WWW主機（HOME PAGE）也有設定Proxis cashe功能時，則您的
+user_id與passwd會儲存於WWW主機的磁碟上，這對個人使用安全上是很大
+的冒險，故建議不要隨意使用此法。
+
+
+以下為一個超文字連結的範例：
+
+<strong>登記前請參閱&lt;a href=&quot;domi_mger.html&quot;&gt;學生宿舍網路管理辦法!!&lt;/a&gt;</strong>
+
+其中「學生宿舍網路管理辦法!!」為元件內容，是進入點的標示字, 連結到名稱為
+domi_mger.html的文件中。在本例中該文件務必和目前的文件置於同一個目錄之下
+才行。你也可以以絕對路徑或相對路徑的方式 ，與其他目錄下的文件建立連結關係。
+例如:若domi_mail.html是在目前子目錄ccc之下的檔案, 你可以以下面的方式作相對
+連結(Relative Links):<p>
+<strong>&lt;A HERF=&quot;ccc/domi_mail.html&quot;&gt;wjchou&lt;/A&gt;聯絡</strong>
+
+你也可以用絕對路徑作連結。例如你想要連到一份html user guide, 你可以在你
+的文件中鍵入:<p>
+<strong>&lt;A HERF=&quot;http://www.ncsa.uiuc.edu/General/Internet/HTMLPrimer.html&quot;&gt;
+  NCSA's  Beginner's Guide to HTML&lt;/A&gt;</strong>
+
+這樣你就可以產生一個超連結(hyperlink)到&quot;NCSA's Beginner's Guide to HTML&quot;。
+
+一般而言儘量以相對連結的方式較好。除了可少打幾個的字之外,更重要的是當你要移
+動一群的文件到其他的地方時, 相對路徑仍然有效又好用。相對地當你在連結一份文
+件時, 若採用絕對路徑的方式，則所連結目錄將不再具有相對性。例如:考慮要編寫諸
+如使用手冊的文件, 在這群內文件的連結應該採用相對連結。連結至其他群（手冊）的
+文件時,則應該採用完整路徑的方式。如此一來, 當你將該文件整個搬到別的目錄下時,
+對於這些連結都不用再加以修改了。
+</pre>
+<hr>
+<a name="2.2.2"><h5>2.2.2與其他文件的章節作連結</h5></a>
+
+定位錨(Anchors) 也可以被用來指定到某文件中的某一章節。假如你想要從文件A連
+結到文件B 的某個特定的章節。首先你需要在文件B 中設定一個定位錨名稱(例如是
+summary)，以便被參考連結，例如：Here's &lt;A NAME=&quot;summary&quot;&gt;結語
+&lt;/A&gt; 。之後當你要在文件A 中建立一個連結時, 你需要同時包含B檔名以及該定位
+錨名稱, 並以「＃」字符號作為分隔。例如：
+
+ This is my &lt;A HERF=&quot;documentB.html#summary&quot;&gt;link&lt;/a&gt; to summary of
+ document B.
+
+你只要在文件A 中的&quot;link&quot;這個字上用滑鼠按一下, 就可以連結到在文件B
+中的該段章節了。
+</pre>
+<hr>
+<a name="2.2.3"><h5>2.2.3 與同一份文件中的其他章節作連結</h5></a>
+此法和上面的技巧完全一樣, 只是少了檔名而已。例如:在文件B中的某個地方想要
+連到&quot;summary&quot;, 你只要鍵入:
+
+This is &lt;A HERF=&quot;#summary&quot;&gt;summary link&lt;/A&gt; form within  Document B.
+<hr>
+<a name="2.3"><h4>2.3 列表(Lists) </h4></a>
+ HTML提供有序編號列表（Ordered List）, 無序編號列表（Unordered List）,
+ 以及敘述式列表（Definition List）。
+
+<hr>
+<a name="2.3.1"><h5>2.3.1有序編號列表</h5></a>
+<pre>
+   通常也稱為Numbered List。其用法如下: 
+     1.由&lt;OL&gt;標籤為開始。
+     2.每個列表項都以&lt;LI&gt;標籤為開始(沒有&lt;/LI&gt;標籤的必要)。
+     3.以&lt;/OL&gt;標籤為結束。
+ 例如: 
+     &lt;OL&gt;
+     &lt;LI&gt; 工學院.
+     &lt;LI&gt; 理學院.
+     &lt;LI&gt; 文學院.
+     &lt;/OL&gt;
+ 
+其輸出結果如下: 
+       1 工學院.
+       2 理學院.
+       3 文學院.
+</pre>
+<hr>
+<a name="2.3.2"><h5>2.3.2 無序編號列表</h5></a>
+<pre>
+ 通常也稱為Unnumbered List。其與有序編號列表一樣，只是用&lt;UL&gt;來
+ 作為列表的開始, 而不是&lt;OL&gt;。
+ 例如: 
+     &lt;UL&gt;
+     &lt;LI&gt; 工學院.
+     &lt;LI&gt; 理學院.
+     &lt;LI&gt; 文學院.
+     &lt;/UL&gt;
+ 
+其輸出結果如下: 
+     ‧ 工學院.
+     ‧ 理學院.
+     ‧ 文學院.
+
+列表可以在&lt;body&gt;內任意放置, 當然也允許多階層次的列表排列，我們稱之巢式
+列表（Nested List）。例如一個多階層次無序編號列表（有序編號列表亦同）如下：
+
+     &lt;UL&gt;
+     &lt;LI&gt; 工學院
+         &lt;UL&gt;
+         &lt;LI&gt; 電機系
+         &lt;LI&gt; 化工系
+         &lt;/UL&gt;
+     &lt;LI&gt; 理學院
+         &lt;UL&gt;
+         &lt;LI&gt; 物理系
+         &lt;/UL&gt;
+     &lt;/UL&gt;
+ 
+其結果如下: 
+    ‧工學院
+            ‧電機系 
+            ‧化工系 
+    ‧理學院 
+            ‧物理系
+</pre>
+<hr>
+<a name="2.3.3"><h5>2.3.3 敘述式列表</h5></a>
+<pre>
+ 一個敘述式列表是以&lt;DL&gt;標籤為起頭，緊隨以主題置於敘述標籤(&lt;DT&gt;)
+ 之後面，,再來就是以敘述部份附加於敘述標籤(&lt;DD&gt; )後面，最後以&lt;/DL&gt;
+ 結尾。瀏覽器會將敘述部份變為新的一行，且其文字串內容會自動遇視窗邊緣轉折。
+ &lt;DT&gt;與&lt;DD&gt;一般是成對使用。在&lt;DT&gt;和&lt;DD&gt;中也可以包含
+ 多個段落(以&lt;p&gt; 來加以分隔) 、列表、或是其他的連結。
+例如: 
+     &lt;DL&gt;
+     &lt;DT&gt;學生宿舍網路的建立
+     &lt;DD&gt;為將實驗室的網路使用環境擴充至各學生寢室，免除學生往返穿梭苦，
+         本校全部學生宿舍十九棟，皆已完成 10 BASE-T 乙太網路，並與校園光纖
+         網路連結。學生只需經 WWW 或 GOPHER 登記即可使用。
+     &lt;DT&gt;校園資訊系統的逐步擴充
+     &lt;DD&gt;81年起將學校的各項重要資訊納入GOPHER系統。83年起再
+         利用 WWW 系統，將各項資訊逐步擴充，並多媒体化。
+     &lt;/DL&gt;
+ 
+其結果如下: 
+ 學生宿舍網路的建立
+    為將實驗室的網路使用環境擴充至各學生寢室，免除學生往返穿梭苦，本校全部
+    學生宿舍十九棟，皆已完成 10 BASE-T 乙太網路，並與校園光纖網路連結。學
+    生只需經 WWW 或 GOPHER 登記即可使用。
+ 校園資訊系統的逐步擴充
+    81年起將學校的各項重要資訊納入GOPHER系統。83年起再利用 WWW 系統，將各
+    項資訊逐步擴充，並多媒体化。
+
+若需要如下排列顯示時：
+    1
+      1.1
+         1.1.1
+         1.1.2
+      1.2
+    2
+      2.1
+    3 
+
+可用下列排列結構： 
+   &lt;dl&gt;
+   &lt;dt&gt;1
+   &lt;dd&gt;1.1&lt;dl&gt;
+         &lt;dd&gt;1.1.1&lt;dd&gt;1.1.2&lt;/dl&gt;
+   &lt;dd&gt;1.2
+   &lt;dt&gt;2
+   &lt;dd&gt;2.1
+   &lt;dt&gt;3&lt;/dl&gt;
+   </pre>
+<hr>
+<a name="2.4"><h4>2.4 預先格式化的文章( Preformatted Text ) </h4></a>
+<pre>
+ HTML一般文件裡對空白或換行等字元會失去效用。若使用&lt;PRE&gt;與&lt;/PRE&gt;
+ 標籤時，則可引入一段固定寬度字形的文章，且能發揮換行、空白應有的功能。若未在
+ &lt;PRE&gt;內之章節中需有空白時，須使用全形空白；而換行字元須以強迫換行標籤
+ （Line Break）&quot;&lt;BR&gt;"代替。在&lt;PRE&gt;內之章節中除保留原有文件
+ 格式外，是允許其他標籤存在（例如連結、列表、字元格式等）。 這對諸如
+ 「程式文件」般的表達是十分有用的。但其文字串內容是不會遇到視窗邊緣而自動
+ 轉折，故最好以 WIDTH屬性設定每行的長度（需視瀏覽器之功能）。例如:
+<hr>
+ &lt;PRE WIDTH=60&gt;
+ #!/usr/local/bin/perl
+ $| = 1;  #flush on
+ print &amp;quot;Content-type: text/html\n\n&amp;quot;;
+ print &amp;quot;&amp;lt;Head&amp;gt;&amp;lt;Title&amp;gt;學生宿舍網路&amp;lt;/Title&amp;gt;&amp;lt;/Head&amp;gt;&amp;quot;;
+ print &amp;quot;&amp;lt;Body&amp;gt;&amp;lt;H1&amp;gt;Thank you, NTHU CCC&amp;lt;/H1&amp;gt;&amp;quot;;
+ if ($ENV{'REQUEST_METHOD'} eq &amp;quot;POST&amp;quot;) {
+   read(STDIN, $buffer, $ENV{'CONTENT_LENGTH'});
+    }
+    elsif ($ENV{'REQUEST_METHOD'} eq &amp;quot;GET&amp;quot;) {
+          $buffer=$ENV{'QUERY_STRING'};
+          }
+ # Split the name-value pairs
+ @pairs = split(/&amp;amp;amp;/, $buffer);
+ foreach $pair (@pairs)
+ {
+     ($name, $value) = split(/=/, $pair);
+     $value =~ tr/+/ /;
+     $value =~ s/%([a-fA-F0-9][a-fA-F0-9])/pack(&amp;quot;C&amp;quot;, hex($1))/eg;
+     # associative array  ---indexed by string 
+     $IN{$name} = $value;
+ }
+   &lt;/PRE&gt;
+<hr>
+結果為
+ #!/usr/local/bin/perl
+ $| = 1;  #flush on
+ print &quot;Content-type: text/html\n\n&quot;;
+ print &quot;&lt;Head&gt;&lt;Title&gt;學生宿舍網路&lt;/Title&gt;&lt;/Head&gt;&quot;;
+ print &quot;&lt;Body&gt;&lt;H1&gt;Thank you, NTHU CCC&lt;/H1&gt;&quot;;
+ if ($ENV{'REQUEST_METHOD'} eq &quot;POST&quot;) {
+   read(STDIN, $buffer, $ENV{'CONTENT_LENGTH'});
+    }
+    elsif ($ENV{'REQUEST_METHOD'} eq &quot;GET&quot;) {
+          $buffer=$ENV{'QUERY_STRING'};
+          }
+ # Split the name-value pairs
+ @pairs = split(/&/, $buffer);
+ foreach $pair (@pairs)
+ {
+     ($name, $value) = split(/=/, $pair);
+     $value =~ tr/+/ /;
+     $value =~ s/%([a-fA-F0-9][a-fA-F0-9])/pack(&quot;C&quot;, hex($1))/eg;
+     # associative array  ---indexed by string 
+     $IN{$name} = $value;
+ }
+
+請注意：在&lt;PRE&gt;的章節中若有『 &lt; ， &gt; ， &amp;』等字元時，因在
+HTML中其有特別的意義, 故應該用所謂的「跳脫字序」(escape sequences)
+『&amp;lt;，&amp;gt;，&amp;amp;』來代替這些字元。
+</pre>
+<hr>
+<a name="2.5"><h4>2.5 字元的格式化( Character Formatting ) </h4></a>
+<pre>
+ 文章內字元格式的多樣化，有助於文意的表達。其字元樣式的型態有：邏輯（logical）
+ 和實體（physical）兩種 。邏輯樣式標籤是根據文字的意義來加以標示, 而實體
+ 樣式標籤則是指定字元要在螢幕上以何種固定的樣式顯現。例如：我們要在 前面
+ 句子所提到的「邏輯樣式」的字串上以 斜體字顯示，可以利用邏輯樣式標籤（如
+ &lt;em&gt;）把他像定義般的加以標示。當然我們也可以利用實體樣式標籤（如&lt;
+ i&gt;）所提供的功能來達到相同的效果。
+ 
+在字元樣式的使用上，建議盡可能使用邏輯樣式標籤， 基本上文章是應該和其表示
+方法分開的，故用邏輯樣式的好處是：當你想以另一種文字樣式來展現文章時， 你
+只要改變定義在瀏覽器中原有的定義即可，例如：MOSAIC之Choose Font或NETSCAPE
+之PERFERANCE。
+
+另一個採用邏輯樣式標籤的優點是他可以加強文意的一慣性。即同樣性質的文字都以
+同樣式來展現。例如在文字上標示&lt;H1&gt;的標籤要比去記住第一層的標題是採用
+什麼樣的文字型態要簡單的多。同理其他同樣字元的樣式設定也是如此用意。例如:就
+&lt;STRONG&gt;這個標籤而言， 大部分的瀏覽器都是產生一個較粗的字元（如同&lt;
+B&gt;設定）。但如有人想要以紅色字來顯示時。則邏輯樣式就能輕易地提供使用者如
+此般的彈性。
+<hr>
+※一般邏輯樣式有：
+&lt;DFN&gt;
+        用來表示被定義字元, 通常是斜體字。 
+&lt;EM&gt;
+        強調字元。通常是斜體字。 
+&lt;CITE&gt;
+        用在書的標頭(title)。 通常是斜體字。 
+&lt;CODE&gt;
+        用在顯示程式碼的片段。通常以較寬的字元來顯示。 
+&lt;KBD&gt;
+        表示由使用者鍵盤的輸入。應該是以加粗的較寬字元來表示, 但許多的瀏 
+        覽器是以正常的較寬字元來表示。 
+&lt;SAMP&gt;
+        用來表示電腦狀態的描述字元。以較寬的字元來表示。 
+&lt;STRONG&gt;
+        表示特別強調的意思。以加粗的字元來表示。 
+&lt;VAR&gt;
+        給在句子構造中的變數使用。通常以斜體字來表示。 
+<hr>
+※實體樣式(physical Styles) 
+&lt;B&gt;
+        加粗字體。 
+&lt;I&gt;
+        斜體字體。 
+&lt;TT&gt;
+        打字機文字。即較寬的文字。 
+ 
+某些瀏覽器支援將標籤以一組的方式表現出來(例:&lt;B&gt;&lt;I&gt;Sometext&lt;/I&gt;
+&lt;/B&gt;來表示加粗的斜體字元) 。在其他的瀏覽器可能只會處理最內部的標籤。
+在這裡還是勸告各位不要用字元樣式標籤弄成一組的方式。
+<hr>
+<a name="2.6"><h4>2.6 特殊字元</h4></a><p>
+<pre>
+在HTML中有四個ASCII字元集( &gt; , &lt; , &amp; , &quot; ) 是有其特殊意義,
+不能像其他字元一般的正常顯示，甚至會讓瀏覽器誤解原意。所以若要顯示的話，
+就需要所謂「跳脫字序」(ESCAPE SEQUENCES)的方法。
+ 
+若想要在HTML文件中鍵入上面所提到的四個字元中的任何一個，則需用下列的方式
+來代替。例如：
+                 
+         字元                  表示字元（跳脫字序）
+    Less-than sign ( &lt; )            &amp;lt;
+    Greater-than ( &gt; )              &amp;gt;
+    Ampersand sign itself ( & )        &amp;amp;
+    Double quote sign ( &quot; )       &amp;quot;
+    <a href="http://www.hpl.hp.co.uk/people/dsr/html/latin1.html">可參閱 ISO Latin-1 字元</a>
+
+ 
+跳脫字序不像HTML的標籤一樣, 他是屬於大小寫相關的。你不可以用&amp;LT來取代
+「&lt;」。這取決於瀏覽器.
+</pre>
+<hr>
+<a name="2.7"><h4>2.7 線上秀圖（Inline Images）</h4></a>
+<pre>
+NCSA Mosaic可以在HTML文件中顯示X Bitmap(XBM)或GIF 格式的圖形。每個圖形會
+需較長的時間來處理，致使延長顯現整個文件的時間，故儘可能不要包含太大太多
+或重疊的圖。此一般用於小的圖行或圖示(icon)。
+    
+想要將一個圖形引入你的文件中你要使用下列的語法:
+
+例如&lt;img align=top src=&quot;nthumap.gif&quot; alt=&quot;Warning:&quot;&gt; 歡迎蒞臨清大
+
+     符號             名稱                       功能
+======================================================================
+     ＜               前標籤前界符號
+----------------------------------------------------------------------
+     img              標籤名稱（元件名稱）
+----------------------------------------------------------------------
+     src              屬性名稱               其屬性值應為URL。
+----------------------------------------------------------------------
+     ＝               屬性值界定符號
+----------------------------------------------------------------------
+     &quot;nthumap.gif&quot;    屬性值                 欲顯示目前目錄之圖形檔名稱。
+----------------------------------------------------------------------
+     align            屬性名稱               圖片與說明文字對齊(選項)
+-----------------------------------------------------------------------
+     ＝               屬性值界定符號
+-----------------------------------------------------------------------
+     top              屬性值                  將圖片與說明文字「歡迎蒞
+                                              臨清大」與圖片上方對齊。
+     middle                                   與圖片中間對齊。
+     bottom                                   與圖片底部對齊。(內定)
+-----------------------------------------------------------------------
+    alt               屬性名稱                圖形的替換文字顯示
+-----------------------------------------------------------------------
+    ＝                屬性值界定符號
+-----------------------------------------------------------------------
+    &quot;Warning：&quot;       屬性值                  當軟硬體環境無法顯示圖形
+                                              檔案時，以此字串代替。
+----------------------------------------------------------------------
+     ＞               前標籤尾界符號
+----------------------------------------------------------------------
+
+除了以上所介紹之屬性名稱（align等），尚有 ismap屬性名稱，其用於地圖導引，
+由圖面裡某位置之參考座標，連結至相關的物件。例如：
+&lt;a href=&quot;/cgi-bin/htimage/ccc/index.conf&quot;&gt;
+&lt;img src=&quot;index.gif&quot; ismap&gt;&lt;/a&gt;
+
+index.conf 定義圖面裡index.gif某位置之參考座標，與其連結關係。有興趣請
+參考：http://wintermute.ncsa.uiuc.edu:8080/map-tutorial/image-maps.html。
+</pre>
+<hr>
+<a name="2.8"><h4>2.8 外在呼叫的圖形、聲音與動畫</h4></a>
+<pre>
+上節曾提過：文件若以線上秀圖 方法去顯示太多太大的圖形，會影響整個HTML文件
+的展現速度。故當你的圖形很大，或是想要讓使用者能選擇性地覽圖時，你可以考慮
+以外在呼叫圖形的方式來秀圖，此法可讓使用者以一字串或一小圖示，連結至另一
+個文件、圖形、聲音或動畫（由外在軀動程式獨立另開新的視窗來展現物件）。這種
+外在呼叫的方式有助於減少整個文件的展現時間。其表式方法如下：
+
+    &lt;a href=&quot;http://www.nthu.edu.tw/bobodog/nthu01.gif&quot;&gt;清大封面檔&lt;/a&gt;
+
+
+至於聲音與動畫之展現方式，與上述方法相同。唯一不同之處在於副檔名。
+   
+檔案形態                副檔名           MOSAIC  NETSCAPE
+==============================================================
+一般文字                txt              int     int
+HTML文件                html             int     int
+GIF圖形檔               gif              int     int
+JPEG圖形檔              jpg或jpeg        ext     int      (in:可線上秀圖
+TIFF圖形檔              tiff             ext     ext       ext: 外在呼叫)
+XBM圖形檔               xbm              ext     ext
+PostScript檔案          ps               ext     ext
+AIFF聲音檔              aiff             ext     ext
+AU聲音檔                AU               ext     ext
+QuickTime動畫檔         mov              ext     ext
+MPEG動畫檔              mpeg 或 mpg      ext     ext
+--------------------------------------------------------------
+</pre>
+<hr>
+<a href="www-cgi.html#form-cgi"><h4>2.9 填表（ＦＯＲＭ）</h4></a>　
+<hr>
+
+<a name="2.12"><h4>2.12 子畫面(Frames)</h4></a>
+<xmp>
+Netscape 2.0 瀏覽器提供使用者能很方便地利用"母子畫面"的觀念, 將瀏覽
+器視窗分割成大小不同且可捲動的子畫面(Frame), 而能使每個子畫面各自獨立
+載入新頁。在某子畫面內文件所超連結的新頁, 不僅能展現在自己的畫面內,
+而且也能控制他顯示在其他畫面內, 甚至顯示在另一個瀏覽器視窗(Brewser
+Window)。所以使用者能利用多視窗多子畫面的技巧, 設計出精巧的瀏覽器之界
+面。
+
+一般對子畫面(Frame)文件分成兩種類型文件: 畫面安排(layout)文件與內容
+(contents)文件。
+
+畫面安排文件: 即定義文件的畫面架構層次關係, 畫面大小, 比例與位置。而
+內容文件: 即跟一般 HTML 文件一樣, 包括實際要展現的文件內容, 其可單獨
+          在全螢幕或在某子畫面內顯示, 都取決於畫面安排文件內的設定。
+
+(1)有關畫面安排的標籤使用
+(a)<FRAMESET ...> ....</FRAMESET>
+畫面安排文件內容是用"畫面集"<FRAMESET>標籤取代一般文件中的<BODY>標籤
+, <FRAMESET>標籤內有 rows 與 cols 兩屬性值來定義畫面集的內部每列(行)
+中有幾個子畫面與其大小比例。<FRAMESET>標籤對之間只能使用以下的標籤
+ <FRAMESET>, <FRAME>或<NOFRAME>等。例如:
+
+<FRAMESET ROWS="30,15%,*,3*">
+
+表示這個畫面集內有四列(rows)等寬而不同高度的子畫面(或畫面集), 其中最
+上一個子畫面有 30 點圖素(pixels), 第二個為視窗其餘高度的 15%, 第三個
+為其餘 85% 中的1/4, 第四個為另外的3/4。
+
+<FRAMESET COLS="30,15%,*,3*">
+
+表示這個畫面集有四行(columns)等高而不同寬度的子畫面(或畫面集), 其屬性
+之用意與上例ROWS同, 只是行列對調而已。
+
+(b)<FRAME ...>
+這個標籤是定義在<FRAMESET>內用來描述一個子畫面的展現行為, 其中包括下
+列屬性質:
+
+.SRC="URL"
+  這個屬性質敘述要載入新頁的URL, 此新頁來源文件可以是內容文件或畫面
+  安排文件。
+
+.NAME="window-name"
+  這個屬性質是指定子畫面一個名稱, 以便此子畫面允許作為其他畫面內, 超
+  連結後, 展示內容的目標。
+
+.NORESIZE
+  一般子畫面的大小由<FRAMESET>內定義後, 皆可在子畫面之邊界線上做"線上"
+  的改變, 若設定此 NORESIZE 參數, 則此調大小的能力失去功能。
+
+.SCROLLING="yes|no|auto"
+  此屬性值敘述子畫面的邊界是否需要捲動棒。"yes"不管子畫面內的文件有多
+  少, 一定含有捲動棒; 若"no"則不出現捲動棒; 若是"auto", 則當子畫面無
+  法一次展現整個文件時, 會自動產生捲動棒, 內定值為"yes"。
+
+.MARGINHEIGHT="value", MARGINWIDTH="value"
+  此兩個屬性決定子畫面內的內容距子畫面邊界需要空多少圖素(pixels)。
+
+(c)<NOFRAMES>...</NOFRAMES>
+並非每一個瀏覽器皆有解釋子畫面(frame)的能力, 所以需要以<NOFRAMES>
+ .. </NOFRAMES>標籤對之間的敘述內容, 作為使用者警告語, 當然有支援子畫
+ 面的瀏覽器對此標籤的敘述是視而不見的。
+
+(2)有關內容文件的標籤使用
+內容文件才是子畫面內真正顯示的內容, 其使用標籤除了與一般 HTML 標籤用
+法相同之外, 還提供了超連結所傳回來的資料應顯示在哪一個子畫面內的表示法
+。簡言之, 就是當使用者按下某一個超連結時, 其所傳回來的文件都會傳到由
+TARGET 屬性所指定的目標名稱(target name), 而這個目標可以是代表某個子
+畫面或某個瀏覽器視窗。一般具有 TARGET 標籤的連結格式有下列幾種:
+
+(A)<A HREF="url" TARGET="windos-name">Targeted Anchor</A>
+此種是最常見的超連結用法, 意思是當按下"Targeted Anchor"時, 系統會把
+"URL"所連結的文件顯示在名稱為"window-name"的視窗。
+
+(b)<BASE TARGET="window-name">
+一般是將此標籤寫法放在文件的最前面, 其用意是設定所有超連結 TARGET 的
+內容目標值, 作為沒有 TARGET 設定的超連結有共同顯示的地方。
+
+(c)<FORM ACTION="url" TARGET="window-name">
+一般在 FORM 下啟動"url"所指的 CGI 程式時, 其執行後所得的結果, 都會顯
+示在同一個視窗裡, 若在此增加 TARGET 屬性值, 則會將其執行結果載入所指
+定的目標視窗。若在 FORM 裡沒有定義 TARGET 屬性, 也可由 CGI 程式以輸出
+表頭(header)內增加 "Window-target: window-name"表頭, 來達到顯示於目標
+視窗的效果。例如 CGI 程式的表頭如下:
+
+#!/usr/local/bin/perl
+print "Content-Type: text/html\n";
+print "Window-target: window-name\n\n";
+  .
+  .
+
+(d)<AREA SHAPE="shape" COORDS="x,y,.." HREF="url" TARGET="window-name">
+這是 Client-Side Image Map 裡定義某影像區域內的連結用法。
+
+(3)有關 window-name 的進一步說明
+到目前為止我們都知道在超連結標籤內, 假如有 TARGET="window-1" 屬性時,
+會將新文件載入曾經由 NAME 所定義的 "window-1" 視窗內。若找不到被參考
+的視窗名稱, 則會產生新的瀏覽器視窗(New Web Browser) 以供載入新頁, 並
+且會命名該視窗名稱為"window-1", 以便作為其他目標視窗的參考。
+一般視窗名稱的命名規則, 只要首位字元是文數字皆可, 若違反此規則, 則就
+會失去視窗名稱的功能, 但有幾個以"_"為首的視窗名稱,有其特殊的意義, 例如:
+
+.TARGET="_blank"
+  產生新的瀏覽器視窗並載入新頁, 但並未將視窗命名。換言之, 每次選取定
+  會產生一個新的全畫面視窗。
+
+.TARGET="_self"
+  將新頁載入原來文件的視窗內。
+
+.TARGET="_parent"
+  將新頁載入原來文件畫面集的上一個視窗, 若原來視窗並無上一層視窗, 則
+  其效果與"_self"相同。
+
+.TARGET="_top"
+  使瀏覽器清除所有視窗的從屬關係, 而回到最上層全畫面視窗, 並載入新頁。
+
+</xmp>
+(4) 有一些<a href="/wjchou/Frame/frame/findex.html">範例</a>
+<hr>
+<a name="2.13"><h4>2.13 其它</h4></a>
+
+<a name="2.13.1"><h5>2.13.1 水平線(Horizontal Rule,HR)</h5></a>
+<pre>
+ &lt;HR&gt;標籤會在瀏覽器視窗產生一個等寬的行，其常用於標題（heading）、
+ 章節與敘述內容間之分隔物件。
+     &lt;HR ALIGN=left|right|center  WIDTH=percent | number  SIZE=number&gt;
+     ALIGN值內定為center.
+例如：
+     &lt;HR&gt;
+     &lt;HR ALIGN=&quot;left&quot; WIDTH=60%  SIZE=3&gt;
+
+<a name="2.13.2"><h5>2.13.2 強迫換行（Line Break,BR）</h5></a>
+    &lt;BR&gt;標籤是用來強迫換行用的一個標籤。
+<a name="2.13.3"><h5>2.13.3 BLOCKQUOTE</h5></a>
+    若在&lt;BLOCKQUOTE&gt;與&lt;/BLOCKQUOTE&gt;標籤間有文章時，其格式在螢幕上
+    將成為往內凹且前後留出段落的獨立區塊。
+ 
+<a name="2.13.4"><h5>2.13.4 註解(comment)</h5></a>
+
+      註解以 &lt;!-- 註解內容   --&gt; 來表示.
+
+<a name="2.13.5"><h5>2.13.5 位址(Addresses)</h5></a>
+    &lt;ADDRESS&gt;標籤在HTML的文件中通常是用來介紹文件作者，同時提供
+與作者聯絡的方式(例如:E-Mail Address)。一般是放在檔案的最末端。例如：<p>
+&lt;ADDRESS&gt;
+周文正(Wen-Jeng Chou)，清大電算中心(CCC NTHU)&lt;p&gt;
+E_MAIL: wjchou@cc.nthu.edu.tw&lt;br&gt;
+02/27/95&lt;br&gt;
+&lt;/ADDRESS&gt;
+</pre>
+<hr>
+<a name="ozhome-use"><h2>（三）如何在Oz domain建HOME PAGE與使用</h2></a>
+<pre> 
+若要在Oz domain內（y11～y16）建立自己的HOME PAGE,可依下列步驟完成：
+      1.將自己$HOME（例如:使用者ID是u812345）改變存取權限
+        chmod 711 u812345 ( or chmod 711 .)
+      2.在自己$HOME下建立子目錄WWW（大寫）:
+        mkdir WWW
+        chmod 711 WWW
+      3. cd  WWW
+      4.在WWW下建立index.html檔，此檔就是你的HOME PAGE檔
+
+如何在瀏覽器下使用你的HOME PAGE:
+      Open URL ===> http://www.oz.nthu.edu.tw/~u812345/
+
+
+    5.常見問題
+     Ｑ、我的 Browser 出現 "403 Forbidden, Your client dose not have
+	 permission to get URL/~xxxxxx/ from this server.
+
+     Ａ、這表示你的目錄權限(permission)未開放，請將你的目錄權限打開。
+	 將自己的目錄(Home Directory)存取權限至少改為為 711 (drwx--x--x)。
+	 在 login 自己的帳號後，可用如下的指令：
+
+	   > chmod 711	.
+
+</pre>
+<p>
+<hr>
+<ADDRESS>
+周文正(Wen-Jeng Chou)，清大電算中心(CCC NTHU)<br>
+E_MAIL: wjchou@cc.nthu.edu.tw<br>
+03/17/95<br>
+</ADDRESS>
+</body>
+
+

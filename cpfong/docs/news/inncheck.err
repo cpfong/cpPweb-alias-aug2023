@@ -1,0 +1,3 @@
+/usr/local/news/db/active:0: mode 644, should be 664
+/usr/local/news/etc/inn.conf:97: fromhost isn't a valid FQDN
+/usr/local/news/etc/inn.conf:99: modmailer has bad address

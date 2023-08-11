@@ -1,0 +1,27 @@
+sshd port change
+--
+
+shell
+--
+how to change default shell
+
+which bash
+
+chsh
+
+csh
+--
+https://en.wikipedia.org/wiki/C_shell
+cmd line editing: search for 'String Editing (Colon) Operators'
+https://www.cs.ait.ac.th/~on/O/oreilly/unix/upt/ch09_06.htm
+
+.cshrc
+prompt
+alias
+ s sudo
+alias tmux      tmux ls
+alias tmuxatts0 /usr/local/bin/tmux attach-session -t 0
+
+PATH
+env
+

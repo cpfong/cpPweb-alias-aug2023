@@ -1,0 +1,113 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<STYLE type=text/css>
+DIV.container {
+	BORDER-RIGHT: gray 1px solid; BORDER-TOP: gray 1px solid; MARGIN: 0px; BORDER-LEFT: gray 1px solid; WIDTH: 80%; LINE-HEIGHT: 150%; BORDER-BOTTOM: gray 1px solid
+}
+DIV.header {
+	CLEAR: left; PADDING-RIGHT: 0.5em; PADDING-LEFT: 0.5em; BORDER-LEFT-COLOR: #003366; BORDER-BOTTOM-COLOR: #003366; PADDING-BOTTOM: 0.5em; COLOR: white; BORDER-TOP-STYLE: dotted; BORDER-TOP-COLOR: #003366; PADDING-TOP: 0.5em; FONT-FAMILY: arial; BORDER-RIGHT-STYLE: dotted; BORDER-LEFT-STYLE: dotted; BACKGROUND-COLOR: #336699; BORDER-RIGHT-COLOR: #003366; BORDER-BOTTOM-STYLE: dotted
+}
+DIV.footer {
+	CLEAR: left; PADDING-RIGHT: 0.5em; PADDING-LEFT: 0.5em; BORDER-LEFT-COLOR: #003366; BORDER-BOTTOM-COLOR: #003366; PADDING-BOTTOM: 0.5em; COLOR: white; BORDER-TOP-STYLE: dotted; BORDER-TOP-COLOR: #003366; PADDING-TOP: 0.5em; FONT-FAMILY: arial; BORDER-RIGHT-STYLE: dotted; BORDER-LEFT-STYLE: dotted; BACKGROUND-COLOR: #336699; BORDER-RIGHT-COLOR: #003366; BORDER-BOTTOM-STYLE: dotted
+}
+H1.header {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+DIV.left {
+	PADDING-RIGHT: 1em; PADDING-LEFT: 1em; FLOAT: left; PADDING-BOTTOM: 1em; MARGIN: 0px; WIDTH: 100px; PADDING-TOP: 1em
+}
+DIV.content {
+	PADDING-RIGHT: 1em; PADDING-LEFT: 1em; BORDER-LEFT-COLOR: #a3b2c1; BORDER-BOTTOM-COLOR: #a3b2c1; PADDING-BOTTOM: 1em; BORDER-TOP-STYLE: dashed; BORDER-TOP-COLOR: #a3b2c1; PADDING-TOP: 1em; FONT-FAMILY: arial; BORDER-RIGHT-STYLE: dashed; BORDER-LEFT-STYLE: dashed; TEXT-ALIGN: left; BORDER-RIGHT-COLOR: #a3b2c1; BORDER-BOTTOM-STYLE: dashed
+}
+IMG {
+	FLOAT: left
+}
+.style1 {
+	color: #FF0000;
+	font-weight: bold;
+}
+</STYLE>
+
+<META content="MSHTML 6.00.2900.2722" name=GENERATOR><title>Special Topics on Social Network Analysis and Data Mining</title>
+</HEAD>
+<BODY>
+<CENTER>
+  <DIV class=container> 
+    <DIV class=header align=center>      N958500: 
+
+
+ Special Topics on Social Network 
+Analysis and Data Mining  (Spring 2011) </DIV>
+    <DIV class=content> 
+          <p><span class="style1">期末書面報告：</span>碩一以下的同學須於2011/6/1前繳交期末書面報告的初稿，請見 <a href="SurveyReport_Template.doc">書寫範本</a> 與 下列注意事項：<br>
+          (1) 全文以英文撰寫，包含三個章節 (分別說明背景、相關研究現況、小結與未來展望)。<br>
+          (2) 參考文獻應有10~15篇，全文總字數應介於1000~1500字 (不含參考文獻列表)。<br>
+          (3) 寫作深度與廣度可參考 <a href="http://citeseer.ist.psu.edu/viewdoc/download;jsessionid=4B491779BD9BEE3AB25E815755111129?doi=10.1.1.107.2790&rep=rep1&type=pdf">範例論文</a>。<br>
+          碩二以上同學請個別與老師確認論文投稿進度。
+          </p>
+      <P><span class="style1">重要：</span>請參閱自己的 <a href="MidtermEvaluation.htm">期中評價</a> (參考迄今之出席、課堂參與及作業品質等因素)，以調整本課程之學習狀況。</P>
+      <P><a href="#CourseMaterial">Course Materials</a> <font color="#FF0000" size="-1">(Last 
+        updated: 2010/6/5)<br>
+	  </font><font color="#FF0000"><a href="#CourseMaterial">Assignments</a> </font><font color="#FF0000" size="-1"><font color="#FF0000" size="-1">(Last updated: 2010/5/21)</font></font></P>
+      <H3>Course Overview</H3>
+      <UL>
+        <LI>Instructor: Prof. Wei-Guang Teng 
+          <ul>
+            <li>Office: Rm. 41301</li>
+            <li>Email: <font color="#0000FF">wgteng (at) mail.ncku.edu.tw</font></li>
+            <li>Phone: #63339</li>
+          </ul>
+        <li>TA:
+N/A</li>
+        <li>Grading policy: 
+          <ul>
+            <li>60% Class participation</li>
+          <li>40% Term Report </li>
+          </ul>
+        </li>
+        <li>Textbook: N/A </li>
+      </UL>
+      <H3><a name="CourseMaterial"></a>Course Materials</H3>
+      <ul>
+        <LI><a href="Template.ppt">投影片樣板</a> =&gt; 請據以記錄每次上課的重點內容</LI>
+      </ul>
+    <ul>
+        <LI>#0: <a href="0_CourseOverview.pdf">課程簡介</a></LI>
+        <LI>#1: <a href="1_PaperSearch.pdf">搜尋文獻的方法與技巧</a></LI>
+        <LI>#2:  <a href="2_GlanceAndRead.pdf">如何選擇該閱讀的文獻並快速抓到重點</a></LI>
+        <LI>#3: <a href="3_PreparingAPresentation.pdf">如何針對文獻內容準備投影片並進行簡報</a></LI>
+        <LI>#4: <a href="4_WritingPapersInEnglish.pdf">英文撰寫技巧與科技論文概論</a></LI>
+        <LI>#5: 摘要撰寫練習 (HW#1) 與 <a href="5_CommonProblems.pdf">寫作時常見之錯誤與問題</a></LI>
+      <LI>#6: <a href="6_EndNote.pdf">EndNote使用簡介</a></LI>
+    <LI>#7: [2011/4/27] <a href="7_ToStartAResearchWork.pdf">如何開始一個研究工作</a> &amp; 主題報告 (HW#2)：李坤敏、文偉勳、王翔</LI>
+      <LI> #8: [2011/5/4] 主題報告：吳怡靜、錢雅馨、林芳瑜</LI>
+      <LI>#9: [2011/5/11] 主題報告：黃拓業、洪偉欽、許孟勤、黃傑琦、林彥成</LI>
+      <LI>#10: [2011/5/18] 主題報告：馮治平、林崑發、林映凡、陳泠伃、林顗諾</LI>
+      <LI>#11: <a href="8_MSOffice.pdf">善用Office軟體來幫助作研究</a></LI>
+      <LI>#12: <a href="9_PublishingAPaper.pdf">論文的發表場合</a></LI>
+    </ul>
+      <H3><a name="Assignments" id="Assignments"></a>Assignments</H3>
+      <ul>
+        <LI>HW#0:
+          <ul>
+            <li>請 <a href="http://cdnete.lib.ncku.edu.tw/93cdnet/libref/index.html">報名參加</a> 2011/3/24 之EndNote書目管理軟體教育訓練課程，已參加過或無法參加之同學請務必仔細閱讀 <a href="http://muse.lib.ncku.edu.tw:8080/SSO/ResourceStation/pages/resourceUserMain.jsp?item=dialog">說明網頁</a> 並試用此軟體</li>
+          </ul>
+        </LI>
+      <LI>HW#1: 閱讀/統整相關文獻 (<a href="HW1.pdf">說明</a>)
+          <ul>
+            <li>須於2011/4/13上課時進行簡報，請以 <a href="HW1_Template.ppt">此樣板檔案</a> 準備投影片</li>
+          </ul>
+        </LI>
+      <li>HW#2: 主題報告
+        <ul>
+          <li>須完成一特定主題之研讀，並於2011/4/27~5/28間上課時進行簡報。</li>
+        </ul>
+      </li>
+      <li>論文投稿或期末書面報告</li>
+      </ul>
+    </DIV>
+    <DIV class=footer>Copyright 2011 by Wei-Guang Teng</DIV>
+  </DIV>
+</CENTER>
+</BODY></HTML>

@@ -1,0 +1,36 @@
+1st. check /home/cpfong/00bsd_my_doc/apache_modules/httpd_perl.txt
+
+@gaia-> pwd
+/usr/home/cpfong/00bsd_my_doc
+
+perl can run as an apache module # note: this is DIFF than perl as cgi. 
+perl apache module is more secure and also speed up than CGI
+
+two files need to take care
+--
+httpd.conf
+modules.d/260_mod_perl.conf
+
+-- detail note
+sep19@mars% pwd
+/usr/local/etc/apache24
+
+sep19@mars% cat httpd.conf | grep Include | tail -n1
+Include etc/apache24/Includes/*.conf	#this include all conf files in
+sep19@mars% ls Includes/
+no-accf.conf            perl-apache-module.conf perl-as-cgi.conf
+-- end note
+
+http://perl.apache.org/docs/2.0/user/intro/start_fast.html
+
+Registry Scripts
+ - using CGI, 
+ - do NOT use this cgi
+ - since i fail on this even follow start_fast.html steps
+
+Handler Modules
+ - use this (module handler)
+
+<Location>
+ Require all granted # need this to run, or it will keep complain about permission deny
+</Location>

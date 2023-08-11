@@ -1,0 +1,225 @@
+@venus-> sh ./test-nanobsd-img.sh
+
+SeaBIOS (version rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org)
+
+iPXE (http://ipxe.org) 00:03.0 CA00 PCI2.10 PnP PMM+07F908D0+07EF08D0 CA00
+
+Booting from Hard Disk...
+
+1  FreeBSD
+3  FreeBSD
+
+F6 PXE
+Boot:  1
+/boot/config: -h -S115200
+Consoles: serial port
+B
+
+IOS drive A: is fd0
+BIOS drive C: is disk0
+BIOS 639kB/129920kB available memory
+
+FreeBSD/x86 bootstrap loader, Revision 1.1
+Loading /boot/defaults/loader.conf
+Loading /boot/device.hints
+Loading /boot/loader.conf
+Loading /boot/loader.conf.local
+|
+-  ______               ____   _____ _____
+  |  ____|             |  _ \ / ____|  __ \
+  | |___ _ __ ___  ___ | |_) | (___ | |  | |
+  |  ___| '__/ _ \/ _ \|  _ < \___ \| |  | |
+  | |   | | |  __/  __/| |_) |____) | |__| |
+  | |   | | |    |    ||     |      |      |
+  |_|   |_|  \___|\___||____/|_____/|_____/
+                                                 ```                        `
+ +-----------Welcome to FreeBSD------------+    s` `.....---.......--.```   -/
+ |                                         |    +o   .--`         /y:`      +.
+ |  1. Boot Multi user [Enter]             |     yo`:.            :o      `+-
+ |  2. Boot Single user                    |      y/               -/`   -o/
+ |  3. Escape to loader prompt             |     .-                  ::/sy+:.
+ |  4. Reboot                              |     /                     `--  /
+ |                                         |    `:                          :`
+ |  Options:                               |    `:                          :`
+ |  5. Kernel: default/2kernel (1 of 1)    |     /                          /
+ |  6. Boot Options                        |     .-                        -.
+ |                                         |      --                      -.
+ |                                         |       `:`                  `:`
+ |                                         |         .--             `--.
+ +-----------------------------------------+            .---.....----.
+   Autoboot in 0 seconds, hit [Enter] to boot or any other key to stop
+
+Loading kernel...
+/boot/kernel/kernel text=0x71ff99 data=0x708f0+0x1fb768 syms=[0x4+0x898b0+0x4+0xf100d]
+Loading configured modules...
+can't find '/boot/entropy'
+---<<BOOT>>---
+Copyright (c) 1992-2019 The FreeBSD Project.
+Copyright (c) 1979, 1980, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994
+        The Regents of the University of California. All rights reserved.
+FreeBSD is a registered trademark of The FreeBSD Foundation.
+FreeBSD 12.1-RELEASE TINYBSD i386
+FreeBSD clang version 8.0.1 (tags/RELEASE_801/final 366581) (based on LLVM 8.0.1)
+VT(vga): text 80x25
+CPU: QEMU Virtual CPU version 2.5+ (2491.68-MHz 686-class CPU)
+  Origin="AuthenticAMD"  Id=0x663  Family=0x6  Model=0x6  Stepping=3
+  Features=0x783fbfd<FPU,DE,PSE,TSC,MSR,PAE,MCE,CX8,APIC,SEP,MTRR,PGE,MCA,CMOV,PAT,PSE36,MMX,FXSR,SSE,SSE2>
+  Features2=0x80002001<SSE3,CX16,HV>
+  AMD Features=0x20100800<SYSCALL,NX,LM>
+  AMD Features2=0x5<LAHF,SVM>
+  SVM: NAsids=16
+Hypervisor: Origin = "TCGTCGTCGTCG"
+real memory  = 134217728 (128 MB)
+avail memory = 110227456 (105 MB)
+Event timer "LAPIC" quality 100
+ACPI APIC Table: <BOCHS  BXPCAPIC>
+arc4random: no preloaded entropy cache
+ioapic0 <Version 2.0> irqs 0-23 on motherboard
+Timecounter "TSC-low" frequency 1245837621 Hz quality 800
+random: entropy device external interface
+kbd0 at kbdmux0
+module_register_init: MOD_LOAD (vesa, 0xdef710, 0) error 19
+nexus0
+vtvga0: <VT VGA driver> on motherboard
+cryptosoft0: <software crypto> on motherboard
+acpi0: <BOCHS BXPCRSDT> on motherboard
+acpi0: Power Button (fixed)
+cpu0: <ACPI CPU> on acpi0
+atrtc0: <AT realtime clock> port 0x70-0x71,0x72-0x77 irq 8 on acpi0
+atrtc0: registered as a time-of-day clock, resolution 1.000000s
+Event timer "RTC" frequency 32768 Hz quality 0
+hpet0: <High Precision Event Timer> iomem 0xfed00000-0xfed003ff on acpi0
+Timecounter "HPET" frequency 100000000 Hz quality 950
+Timecounter "ACPI-fast" frequency 3579545 Hz quality 900
+acpi_timer0: <24-bit timer at 3.579545MHz> port 0x608-0x60b on acpi0
+pcib0: <ACPI Host-PCI bridge> port 0xcf8-0xcff on acpi0
+pcib0: Ignoring 3 range above 4GB (0x100000000-0x17fffffff)
+pci0: <ACPI PCI bus> on pcib0
+isab0: <PCI-ISA bridge> at device 1.0 on pci0
+isa0: <ISA bus> on isab0
+atapci0: <Intel PIIX3 WDMA2 controller> port 0x1f0-0x1f7,0x3f6,0x170-0x177,0x376,0xc040-0xc04f at device 1.1 on pci0
+ata0: <ATA channel> at channel 0 on atapci0
+ata1: <ATA channel> at channel 1 on atapci0
+pci0: <bridge> at device 1.3 (no driver attached)
+vgapci0: <VGA-compatible display> mem 0xfd000000-0xfdffffff,0xfebf0000-0xfebf0fff at device 2.0 on pci0
+vgapci0: Boot video device
+em0: <Intel(R) PRO/1000 Network Connection> port 0xc000-0xc03f mem 0xfebc0000-0xfebdffff irq 11 at device 3.0 on pci0
+em0: Using 1024 TX descriptors and 1024 RX descriptors
+em0: Ethernet address: 52:54:00:12:34:56
+acpi_syscontainer0: <System Container> on acpi0
+acpi_syscontainer1: <System Container> port 0xaf00-0xaf0b on acpi0
+acpi_syscontainer2: <System Container> port 0xafe0-0xafe3 on acpi0
+acpi_syscontainer3: <System Container> port 0xae00-0xae13 on acpi0
+uart0: <16550 or compatible> port 0x3f8-0x3ff irq 4 flags 0x10 on acpi0
+uart0: console (115200,n,8,1)
+orm0: <ISA Option ROM> at iomem 0xeb000-0xeffff pnpid ORM0000 on isa0
+vga0: <Generic ISA VGA> at port 0x3c0-0x3df iomem 0xa0000-0xbffff pnpid PNP0900 on isa0
+attimer0: <AT timer> at port 0x40 on isa0
+Timecounter "i8254" frequency 1193182 Hz quality 0
+Event timer "i8254" frequency 1193182 Hz quality 100
+Timecounters tick every 10.000 msec
+ada0 at ata1 bus 0 scbus1 target 0 lun 0
+ada0: <QEMU HARDDISK 2.5+> ATA-7 device
+ada0: Serial Number QM00003
+ada0: 16.700MB/s transfers (WDMA2, PIO 8192bytes)
+ada0: 199MB (409216 512 byte sectors)
+Trying to mount root from ufs:/dev/ada0s1a [ro]...
+random: unblocking device.
+Growing root partition to fill device
+ada0s1 resized
+ada0s1a resized
+gpart: arg0 'ada0s1a': Invalid argument
+growfs: requested size 168MB is not larger than the current filesystem size 168MB
+/etc/rc: WARNING: hostid: unable to figure out a UUID from DMI data, generating a new one
+Setting hostuuid: 8cb6a8f0-552d-11eb-a494-b7b4ffce6830.
+Setting hostid: 0xc77d4e30.
+Starting file system checks:
+/dev/ada0s1a: FILE SYSTEM CLEAN; SKIPPING CHECKS
+/dev/ada0s1a: clean, 2613 free (5 frags, 326 blocks, 0.0% fragmentation)
+/dev/ada0s3: FILE SYSTEM CLEAN; SKIPPING CHECKS
+/dev/ada0s3: clean, 8158 free (6 frags, 1019 blocks, 0.1% fragmentation)
+Mounting local filesystems:.
+ELF ldconfig path: /lib /usr/lib /usr/lib/compat
+a.out ldconfig path: /usr/lib/aout /usr/lib/compat/aout
+Setting hostname: nanobsd-qemu-i386.
+Setting up harvesting: [UMA],[FS_ATIME],SWI,INTERRUPT,NET_NG,NET_ETHER,NET_TUN,MOUSE,KEYBOARD,ATTACH,CACHED
+Feeding entropy: dd: /boot/entropy: Read-only file system
+.
+lo0: link state changed to UP
+em0: link state changed to UP
+Starting Network: lo0 em0.
+lo0: flags=8049<UP,LOOPBACK,RUNNING,MULTICAST> metric 0 mtu 16384
+        options=680003<RXCSUM,TXCSUM,LINKSTATE,RXCSUM_IPV6,TXCSUM_IPV6>
+        inet 127.0.0.1 netmask 0xff000000
+        groups: lo
+em0: flags=8843<UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> metric 0 mtu 1500
+        options=81209b<RXCSUM,TXCSUM,VLAN_MTU,VLAN_HWTAGGING,VLAN_HWCSUM,WOL_MAGIC,VLAN_HWFILTER>
+        ether 52:54:00:12:34:56
+        media: Ethernet autoselect (1000baseT <full-duplex>)
+        status: active
+Starting devd.
+devmatch: Can't read linker hints file.
+devmatch: Can't read linker hints file.
+devmatch: Can't read linker hints file.
+devmatch: Can't read linker hints file.
+devmatch: Can't read linker hints file.
+devmatch: Can't read linker hints file.
+devmatch: Can't read linker hints file.
+devmatch: Can't read linker hints file.
+devmatch: Can't read linker hints file.
+devmatch: Can't read linker hints file.
+devmatch: Can't read linker hints file.
+devmatch: Can't read linker hints file.
+devmatch: Can't read linker hints file.
+power_profile does not exist in /etc/rc.d or the local startup
+directories (/usr/local/etc/rc.d), or is not executable
+Starting dhclient.
+DHCPDISCOVER on em0 to 255.255.255.255 port 67 interval 4
+DHCPOFFER from 10.0.2.2
+DHCPREQUEST on em0 to 255.255.255.255 port 67
+DHCPACK from 10.0.2.2
+bound to 10.0.2.15 -- renewal in 43200 seconds.
+add host 127.0.0.1: gateway lo0 fib 0: route already in table
+Generating host.conf.
+Creating and/or trimming log files.
+Starting syslogd.
+Setting date via ntp.
+12 Jan 23:29:18 ntpdate[470]: step time server 62.149.0.30 offset 0.398950 sec
+Clearing /tmp (X related).
+Updating motd:.
+Mounting late filesystems:.
+Configuring vt: blanktime.
+Starting cron.
+devmatch: Can't read linker hints file.
+Starting background file system checks in 60 seconds.
+rm: /firstboot: Read-only file system
+
+Tue Jan 12 23:29:53 UTC 2021
+
+FreeBSD/i386 (nanobsd-qemu-i386) (ttyu0)
+
+login: root
+Jan 12 23:29:58 nanobsd-qemu-i386 login[666]: ROOT LOGIN (root) ON ttyu0
+FreeBSD 12.1-RELEASE TINYBSD
+
+Welcome to FreeBSD!
+
+Release Notes, Errata: https://www.FreeBSD.org/releases/
+Security Advisories:   https://www.FreeBSD.org/security/
+FreeBSD Handbook:      https://www.FreeBSD.org/handbook/
+FreeBSD FAQ:           https://www.FreeBSD.org/faq/
+Questions List: https://lists.FreeBSD.org/mailman/listinfo/freebsd-questions/
+FreeBSD Forums:        https://forums.FreeBSD.org/
+
+Documents installed with the system are in the /usr/local/share/doc/freebsd/
+directory, or can be installed later with:  pkg install en-freebsd-doc
+For other languages, replace "en" with a language code like de or fr.
+
+Show the version of FreeBSD installed:  freebsd-version ; uname -a
+Please include that output and any error messages when posting questions.
+Introduction to manual pages:  man man
+FreeBSD directory layout:      man hier
+
+Edit /etc/motd to change this login announcement.
+root@nanobsd-qemu-i386:~ #
+

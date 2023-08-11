@@ -1,0 +1,54 @@
+發信人: DarkKiller.bbs@Deer.twbbs.org (悸動), 看板: BSD
+標  題: Re: pgp問題
+發信站: 小鹿鹿 BBS (Wed Nov 27 16:28:37 2002) news.math.nctu.edu.tw
+轉信站: Maxwell!bbs.ee.ntu!freebsd.ntu!ctu-peer!ctu-reader!news.nctu!abpe.org
+
+※ 引述《ruthenium.bbs@bbs.ntnu.edu.tw (Enigma...)》之銘言：
+> 請問各位：
+> 像bind的軟體都會有pgp認証碼，請問這要怎麼確認呢？
+> 是下載pgp的軟體嗎？
+> 而且要怎麼做呢？
+
+如果你適用 pgp5，那麼...
+
+gslin@Infomath [~] [16:25/W4] pgpk -a http://www.isc.org/ISC/isckey.txt
+Looking up host www.isc.org
+Establishing connection
+Sending request
+Receiving data
+Cleaning up
+Complete.
+
+Adding keys:
+
+Key ring: 'http://www.isc.org/ISC/isckey.txt'
+Type Bits KeyID      Created    Expires    Algorithm       Use
+pub  1024 0x51BAB2ED 1997-01-29 ---------- RSA             Sign & Encrypt
+uid  Internet Software Consortium <pgpkey@isc.org>
+
+1 matching key found
+
+Add these keys to your keyring? [Y/n] y
+
+Keys added successfully.
+
+然後...
+
+gslin@Infomath [~] [16:27/W4] pgpv bind-9.2.2rc1.tar.gz.asc
+This signature applies to another message
+File to check signature against [bind-9.2.2rc1.tar.gz]:
+Good signature made 2002-08-13 23:11 GMT by key:
+  1024 bits, Key ID 51BAB2ED, Created 1997-01-29
+   "Internet Software Consortium <pgpkey@isc.org>"
+
+WARNING: The signing key is not trusted to belong to:
+Internet Software Consortium <pgpkey@isc.org>
+
+重點就在那個 Good signature...
+
+--
+                                                Resistance is futile.
+                                    <gslin@infomath.math.nctu.edu.tw>
+--
+※ Origin: 邪惡小鹿鹿 <Deer.twbbs.org> ◆ From: news.math.nctu.edu.tw
+

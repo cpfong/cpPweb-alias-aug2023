@@ -1,0 +1,51 @@
+import yfinance as yf # yahoo stock
+import csv
+import pandas as pd
+
+tsmc = yf.download('2330.TW',
+        start='2021-01-01',
+        end='2021-12-05',
+        progress=False,)
+
+file = './tsmc.csv'
+tsmc.to_csv(file, index=True)
+
+#Date,Open,High,Low,Close,Adj Close,Volume
+
+df = pd.read_csv(file,parse_dates=['Date'],index_col=0).dropna()
+
+df_kd = df[['Open','High','Low','Close']] # local header
+
+def KD(data):
+        data_df = data.copy() #local copy
+
+        data_df['min'] = data_df['Low'].rolling(9).min() # KD usually  get 9 days
+        data_df['max'] = data_df['High'].rolling(9).max()
+        data_df['RSV'] = (data_df['Close'] - data_df['min'])/(data_df['max'] - data_df['min']) * 100
+
+        data_df = data_df.dropna() #clean it up
+
+        # init K as 50 days
+        K_list = [50]
+        for num,rsv in enumerate(list(data_df['RSV'])):
+                K_yestarday = K_list[num]
+                K_today = 2/3 * K_yestarday + 1/3 * rsv
+                K_list.append(K_today)
+        data_df['K'] = K_list[1:] #skip header
+
+        # init D as 50
+        D_list = [50]
+        for num,K in enumerate(list(data_df['K'])):
+                D_yestarday = D_list[num]
+                D_today = 2/3 * D_yestarday + 1/3 * K
+                D_list.append(D_today)
+        data_df['D'] = D_list[1:]
+
+        use_df = pd.merge(data,data_df[['K','D','RSV']],left_index=True,right_index=True,how='left')
+        return use_df
+#end KD
+
+# main start
+
+r = KD(df_kd)
+print(r)

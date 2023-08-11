@@ -1,0 +1,52 @@
+//--------------STARTEXTRACT=allcarcounter.xtr
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+//------------STARTEXTRACT=carcountertop.xtr
+//------------STARTEXTRACT=classlinecar.xtr
+public class CarCounter extends JFrame
+    implements ActionListener {
+//------------ENDEXTRACT=classlinecar.xtr
+
+    private int carCount = 0;
+
+//-----------ENDEXTRACT=carcountertop.xtr
+//-------------------STARTEXTRACT=privatebutton.xtr
+    private JButton button;
+//--------------------ENDEXTRACT=privatebutton.xtr
+
+    public static void main(String[] args) {
+        CarCounter frame = new CarCounter();
+        frame.setSize(300, 200);
+        frame.createGUI();
+        frame.setVisible(true);
+    }
+
+    private void createGUI() {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        Container window = getContentPane();
+        window.setLayout(new FlowLayout());
+
+//-----------STARTEXTRACT=initbutton.xtr
+        button = new JButton("Car Entering");
+//--------------ENDEXTRACT=initbutton.xtr
+//-----------STARTEXTRACT=addbutton.xtr
+        window.add(button);
+//-------------ENDEXTRACT=addbutton.xtr
+//----------------------STARTEXTRACT=registerbutton.xtr
+        button.addActionListener(this);
+//------------------------ENDEXTRACT=registerbutton.xtr
+    }
+//---------------STARTEXTRACT=carcounterbot.xtr
+    
+//-------------------STARTEXTRACT=actionperformed.xtr
+    public void actionPerformed(ActionEvent event) {
+//---------------------ENDEXTRACT=actionperformed.xtr
+        carCount = carCount + 1;
+        JOptionPane.showMessageDialog(null, "Cars:" + carCount);
+    }
+}
+//-------------ENDEXTRACT=carcounterbot.xtr
+//---------------------ENDEXTRACT=allcarcounter.xtr
+

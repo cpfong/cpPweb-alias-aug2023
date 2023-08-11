@@ -1,0 +1,91 @@
+chapter 5 input/output
+
+$line=<STDIN>;
+chomp($line);
+
+while ( defined($line=<>) ){
+ chomp($line);
+ printf "i saw $line\n";
+}
+
+while ( defined($_=<>) ){
+ chomp($_);
+ printf "i saw $_\n";
+}
+
+p91 foreach vs while
+--
+foreach (<STDIN>){ #load everything once, take lots of resources
+}
+
+while (<STDIN>){ #load one line at a time
+}
+
+p92
+--
+./my_program fred.txt barney.csv betty	# run current directory file my_program 
+					# and it should hand file: fred.txt barney.csv betty accordingly
+					# if no invocation argument, then read from STDIN
+
+./my_program fred.txt - betty		# take care of fred.txt then STDIN then betty (note: - means STDIN)
+
+vi file_a.txt: 3 lines a b c
+vi file_b.txt: 3 lines d e f
+
+test.pl file_a.txt file_b.txt
+while (<>){
+ chomp;
+ print "$_\n";
+}
+
+p94 <> read @ARGV
+--
+@ARGV=qw / larry moe curly /;
+while (<>){
+}
+
+p96
+--
+$a[0]="ab\n";
+$a[1]="cd\n";
+
+print @a;
+print "@a\n";
+
+p97 function 
+--
+print (2+3)*4
+
+p98 print format
+--
+printf "in %d days!\n", 17.85 # in 17 days
+
+
+p100: unknown items number can be fixed
+-- 
+printf "The items are: \n%10s\n%10s\n%10s\n", @items # but i don't know how many items
+printf "The items are: \n" . ("%10s\n" x @items), @items; # need NOT to know, scalar @itmes will do counting for me
+
+p101: file handler
+--
+reserved: STDIN STDOUT STDERR DATA ARGV ARGVOUT
+
+p103
+--
+open CONFIG, 'dion';
+open CONFIG, '<dion';
+open CONFIG, '>fred';
+open LOG, '>>logfil';
+
+p104 utf8
+--
+open CONFIG, '<:encoding(UTF-8)', 'dino';
+
+open F, '<:crlf', './notepad1toa-ansi.txt';
+#open F, '< ./notepad1toa-ansi.txt';
+
+while (<F>){ print; } # note: print out the same, but you can ./cmd >res then cat res to see the different
+
+p105 open as binary
+--
+binmode STDOUT;

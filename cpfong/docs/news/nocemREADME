@@ -1,0 +1,290 @@
+
+                      c-nocem - NoCeM for C News and INN
+
+   This is a program for the easy and efficient application of the NoCeM
+   protocol on the news spool. Which means, articles for which a NoCeM
+   with "action=hide" is accepted, will be deleted from your news system
+   as if they had been cancelled. With the installation described below,
+   these will be processed as fast as possible and should work like real
+   cancels.
+
+   Unlike the standard implementation of NoCeM, this version is optimized
+   for the most common case of "spam cancels". In fact, it can do nothing
+   else. It can not be run by a normal user, it does not need or
+   manipulate state like .newsrc files, it processes only "hide" actions,
+   and that only by actually deleting the articles.
+
+   c-nocem is designed for easy setup and fast run and needs no
+   maintenance.
+
+Installation
+
+   This describes c-nocem version 3.6.
+
+   You need:
+     * Perl version 4 or 5.
+     * PGP version MIT 2.6 or 2.6i, or GnuPG version 0.9.1 or later.
+     * A running news system, and knowledge on how to configure it. This
+       program supports C News and INN.
+     * The compiled source code for the news system. c-nocem needs the
+       libraries and configuration files used for building the news
+       system.
+     * A customized PGP public keyring containing the keys of all people
+       from whom you accept NoCeM notices. See below.
+
+   Run the configure script. Give it the --with-cnews=dir or
+   --with-inn=dir options to point to the top of the news system's source
+   tree. Run make install. Copy ncmperm into the right place. Create
+   ncmgroups there if needed, see below. Look at the top of c-nocem and
+   correct any wrong parameters. Make sure the programs created by the
+   make, as well as pgp are in the news system's PATH (configure usually
+   gets that right). Create a temp directory as indicated in c-nocem, if
+   you don't have it already. Do not use /tmp or any other globally
+   writable directory for this purpose - that would be a serious security
+   problem. Note for users of previous versions: The programs are now
+   installed in the main news binary directory. Make sure to correct any
+   wrong paths. For INN 2.0 and newer, the configuration files like
+   ncmperm belong into the etc directory.
+
+  C News special
+
+   Arrange for the NoCeM newsgroups to be feeded to the c-nocem program.
+   The means for this is the standard batching system. (The setup below
+   is for the Cleanup Release of C News, older versions use a different
+   batchparms file format.)
+     * Set up a feed in the sys file:
+       nocem-extractor:alt.nocem.misc,news.lists.filters/all:F:
+       Insert the newsgroups containing relevant NoCeM notices.
+     * Create a batch directory $NEWSARTS/out.going/nocem-extractor.
+     * Set up a special batching method in the batchparms file:
+       nocem-extractor N 1000000- - c-nocem -b -s
+       (note: no "batcher" invocation here). Make sure the class letter
+       "N" is unique. You can use any letter, but use the same one in the
+       next step.
+     * Replace the command "newsrun" in your crontab with "newsrun;
+       sendbatches -c N -p".
+
+   That's it. Now incoming news will be processed by NoCeM as soon as
+   possible. You may want to watch the progress, at least at the
+   beginning. For this purpose, change the batchparms line to:
+   nocem-extractor N 100000 - c-nocem -b | report "NoCeM"
+
+  INN special
+
+   Arrange for the NoCeM newsgroups to be feeded to the c-nocem program.
+   The means for this is a channel feed.
+     * Set up a feed in the newsfeeds file:
+       nocem!:!*,alt.nocem.misc,news.lists.filters\
+         :Tc,Wn:/var/lib/news/bin/c-nocem -c200 -t600 -s
+     * If you want logging, replace the -s with
+       >>/var/log/news/nocem.log.
+     * If running under INN 2.4 (currently in beta testing), use the
+       following instead:
+       nocem!:!*,alt.nocem.misc,news.lists.filters\
+         :Tc,Wn:/var/lib/news/bin/c-nocem -C
+
+   That's it. Now incoming news will be processed by NoCeM as soon as
+   possible.
+
+Configuration
+
+   Configuration consists of the permissions file and the public key
+   ring. Every NoCeM notice is checked for a PGP signature with the NoCeM
+   key ring (usually $NEWSLIB/ncmring.pgp). If no known and valid
+   signature is found, the notice is ignored entirely. If the signature
+   is good, the NCM headers are checked:
+     * Version: must be 0.9 or 0.9x (for any x)
+     * Action: must be "hide"
+     * Type and Issuer: must be allowed by the permissions file.
+
+  The key ring
+
+   Every NoCeM notice carries a PGP signature. A public key ring is
+   needed to check the validity and integrity. This key ring should
+   contain exactly the keys of those people from whom you want to accept
+   NoCeM notices. You should use a version of PGP which supports the
+   "+pubring=filename" argument (MIT, 2.6i, 2.6in do; 2.6ui does not).
+
+   The c-nocem distribution contains some keys of frequent NoCeM issuers.
+   Check for yourself from whom you want to accept the NoCeM notices, and
+   try to verify the keys e.g. via a public key server instead of blindly
+   trusting them.
+
+   Create the key ring or add a key to it with a command like
+   pgp +pubring=ncmring.pgp -ka ncmring.asc
+   Be sure to specify the right key ring file, i.e. the same as in the
+   c-nocem script.
+
+  The permissions file
+
+   ncmperm contains a permission table, similar to
+   "controlperm"/"control.ctl". Each entry in this table consists of
+   three whitespace-separated fields: issuer, type, permission. "Issuer"
+   is a string that is checked against the Issuer NCM header, "type" is
+   checked against the Type NCM header. If both match, the permission is
+   determined from the third field as "yes" or "no". First match wins. If
+   no entry matches, it defaults to "no". Only a NoCeM notice with "yes"
+   permission is processed.
+
+   The issuer field of the ncmperm file may contain a substring of the
+   actual Issuer header (e.g. "clewis@ferret" matches Chris Lewis' spam
+   cancels). The type field may be "*" which means "everything".
+
+   c-nocem re-reads this file when it changes immediately.
+
+  The groups file
+
+   You can control for which groups you accept NoCeMs, i.e. articles in
+   which groups are cancelled by NoCeM notices. This is useful to limit
+   NoCeM processing to the groups you actually get from your feeds.
+   (Example: if you have excluded alt.binaries, you don't need NoCeMs for
+   alt.binaries either.) To implement this restriction, you need a file
+   $NEWSLIB/ncmgroups which contains a subscription list.
+
+   For C News
+          The subscription list is a sys file pattern. Whitespace,
+          newline etc. are equivalent to a comma. Example:
+          all,!alt.binaries
+
+   For INN
+          The subscription list is a list of wildmat patterns, like a GUP
+          subscription list. The patterns are separated with commas,
+          whitespace or newlines. Example: *,!alt.binaries.*
+
+   You can add an -a option to the c-nocem command to ignore groups which
+   are not in your active file.
+
+  Using GnuPG
+
+   c-nocem can run with GnuPG instead of PGP. The configure script checks
+   for gpg and uses it if available. Because NoCeM issuers use PGP 2.6
+   keys, you have to install an RSA extension to GnuPG. It is available
+   from the GnuPG Web page (under "More crypto") as a file rsa.c, which
+   has to be compiled according to a comment in the file and placed in
+   the extensions directory (default /usr/local/lib/gnupg). Then put the
+   following line in ~/.gnupg/options:
+   load-extension rsa
+
+How it works
+
+   c-nocem does its work in two stages: first, it reads the NoCeM notices
+   and checks the permissions as described above. It collects all
+   Message-IDs mentioned in the accepted notices, (if the associated
+   newsgroups list matches active and ncmgroups if that check is
+   requested), into a batch file (tmp/nocem). In the second stage, these
+   IDs are processed: for each Message-ID, if the article is on the
+   system, the article is deleted. If it is not there, a history entry is
+   generated which prevents later arrival. A log file entry is emitted
+   for each of these entries. The result is like that from a regular
+   cancel.
+
+   When getting end-of-input in channel mode (i.e. after a flush or
+   shutdown) c-nocem writes a batch file tmp/nocem.input of all
+   unprocessed input lines (NoCeM notice file names/tokens) and quits
+   immediately. The next invocation of c-nocem will pick up this batch
+   file, a la "innfeed".
+
+  Invocation
+
+   c-nocem must be run under the news UID. For C News, it takes on
+   standard input either a single NoCeM notice (in unbatched mode) or a
+   batch file (in batched mode). For INN, it runs in channel mode. The
+   possible arguments to c-nocem are:
+     -b: run in batched mode.
+     -cn: run in channel mode. Spawn delete process every (n) articles.
+     -ts: timeout. Spawn delete process every (s) seconds.
+     -n: testing. Don't delete articles or manipulate the history.
+     -s: silent. Do not give any output except for fatal errors.
+     -dn: delay. See below.
+     -k: kill cancels. See below.
+     -l: no logging. Don't emit logfile entries.
+     -r: remove only. Don't add history entries.
+     -a: active-file check. Don't cancel articles in groups not in the
+       active file.
+     -zf: Leave list of deleted articles in file (f) (relative to spool
+       directory). This can be fed into expireover -z.
+     -C: Run in channel mode and use cancelfeed. See below. Do not use
+       -b, -c, -t with this.
+
+   Do not use unbatched mode except for testing. Batching saves on
+   resources.
+   On INN, use only channel mode - the -c or -C flag tells c-nocem that
+   it runs under INN.
+
+  Helper programs
+
+   c-nocem comes with three little C programs that it calls to do part of
+   its work. Each of them is only compiled on systems where it is needed.
+
+   The "fastcancel" program takes a list of Message-IDs and locally
+   cancels them, i.e. deletes the article files or notes the IDs in the
+   history file. It must run with the news system locked/paused. On INN,
+   fastcancel emits a list of articles to remove which c-nocem feeds to
+   "fastrm". This keeps the actual article deletion out of the paused
+   time, like with "news.daily delayrm".
+
+   The "groupcheck" program takes a list of Message-IDs with newsgroups
+   and checks them against a subscription list. This is only needed for
+   INN; C News uses the "gngp" program (part of C News) instead.
+
+   The "cancelfeed" program works with the special cancel mode NNTP
+   channel found in INN 2.4 and above. It works like "groupcheck" and
+   instructs the server to cancel the matching articles, eliminating the
+   need for "fastcancel".
+
+  Logging
+
+   The "fastcancel" program emits logfile entries for every processed
+   Message-ID which look just like the news system's logfile entries.
+   Here the "+" mark is used for added IDs, the "-" mark for removed
+   articles. This matches C News' behaviour for cancels. Note: INN's log
+   analyzer counts the "-" entries as "bad articles", so the cancelled
+   articles (not the NoCeM notices) show up in the daily log summary as
+   "bad articles sent by '(NoCeM)'". The "fastcancel" program also logs
+   statistics via syslog. c-nocem itself logs debugging messages and
+   performance statistics on stdout, if called without the -s flag.
+
+  Delay mode
+
+   Delay mode helps spreading out the load c-nocem generates over an
+   extended period of time. This helps to keep system load low when news
+   traffic comes in bursts, e.g. for UUCP sites. Call c-nocem with the -d
+   n parameter, where n is an estimate on the numbers of NoCeM notices
+   received per day. (You can find this number by running c-nocem for at
+   least two days in undelayed mode, then do a grep nocem-extractor
+   /var/log/news/OLD/log.1.gz | wc -l, or whatever the right feed name
+   and file location is.) In channel mode, c-nocem will count the actual
+   NoCeM notices received and adjust the delay dynamically.
+
+  Kill cancel mode
+
+   With "kill cancel" mode, for any article that is cancelled by NoCeM,
+   the corresponding "canonical cancel" will be added to the history file
+   so that any regular spam cancel arriving later is ignored. This can
+   help to cut down on the size of the control.cancel newsgroup, but it
+   can also disturb the propagation of regular cancels. (Ultimately they
+   should all be replaced by NoCeM, but by now it depends on your site's
+   position in the network whether this is a problem.)
+
+  System dependencies
+
+   c-nocem needs the flock() system call and a correctly compiled version
+   of perl which supports that call. If your system does not have the
+   select() system call (INN systems must have this call, but perhaps
+   your perl is broken), the -t option won't work correctly.
+
+Getting the software
+
+   The c-nocem package is available from my Web page
+   http://sites.inka.de/~bigred/sw/c-nocem-3.6.tar.gz. The software is in
+   the public domain.
+
+   Since release 3.3, c-nocem comes with the default permissions file and
+   public key ring from The NoCeM Registry at
+   http://www.xs4all.nl/~rosalind/nocemreg/nocemreg.html. Look there and
+   in the news.admin.nocem newsgroup for updates.
+     _________________________________________________________________
+
+
+    2000-06-26 Olaf Titz
+    http://sites.inka.de/~bigred/

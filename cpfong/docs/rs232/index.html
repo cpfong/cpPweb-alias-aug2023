@@ -1,0 +1,681 @@
+<html><head>
+
+
+
+<title>DB9 serial (RS232) port. Pinout and signals for the PC RS232 connector</title><meta name="Description" content="DB9 serial (RS232) port. Pinout and signals for the PC RS232 connector">
+<meta name="Keywords" content="db9, serial, rs232, eia232, pinout, signal, hardware">
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="rating" content="General">
+<meta name="revisit" content="10 days">
+<meta name="revisit-after" content="10 days">
+<meta name="Content-Language" content="english">
+<meta name="audience" content="all">
+<meta name="robots" content="index,all">
+
+<style type="text/css">
+
+body {
+    height: 100%;
+} 
+td {
+    font-family: Tahoma;
+    font-size: 71%;
+    color: #38454D;
+}
+th {
+    font-family: Tahoma;
+    font-size: 71%;
+    font-weight: bold;
+    color: #38454D;
+}
+
+h1 {
+    font-family: Tahoma;
+    font-size: 120%;
+    color: #701181;
+}
+
+
+h2 {
+    font-family: Verdana, Tahoma;
+    font-size: 120%;
+    font-weight: bold;
+    color: #701181;
+    margin-left: 10px; 
+}
+
+h3 {
+    font-family: Verdana, Tahoma;
+    font-size: 110%;
+    font-weight: bold;
+    margin-left: 10px; 
+}
+
+
+.subtitle {
+    font-family: Verdana, Tahoma;
+    font-size: 120%;
+    font-weight: bold;
+    color: #701181;
+}
+
+a{
+    font-size: 100%;
+    font-family: Tahoma;
+    text-decoration: underline;
+    color: #1C70B1;
+}
+.supports {
+    font-family: Verdana, Tahoma;
+    font-size: 93%;
+    color: #1C70B1;
+    font-style: italic;
+}
+
+.n_header {
+    font-family: Tahoma;
+    font-weight: bold;
+    font-size: 100%;
+    color: #1C70B1;
+}
+.n_header2 {
+    font-family: Tahoma;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 100%;
+    color: #1C70B1;
+}
+.notes1 {
+    font-family: Verdana;
+    font-size: 100%;
+    color: #4C98FA;
+    font-weight: bold;
+    font-style: italic;
+}
+.notes2 {
+    font-family: Verdana;
+    font-size: 100%;
+    color: #1C70B1;
+    font-style: italic;
+}
+.ver1 {
+    font-family: Tahoma;
+    font-size: 95%;
+    color: #1C70B1;
+}
+.ver2 {
+    font-family: Verdana;
+    font-size: 92%;
+    color: #4C98FA;
+    font-weight:bold;
+    font-style: italic;
+}
+.ver3 {
+    font-family: Verdana;
+    font-size: 90%;
+    color: #1C70B1;
+    font-style: italic;
+}
+.more {
+    font-family: Tahoma;
+    font-size: 80%;
+    color: #3A81DB;
+    font-weight: bold;
+}
+p {
+
+    margin: 10px;
+}
+.client_login_pass{
+    font-family: Tahoma;
+    font-size: 9px;
+    border-width: 1px;
+    background-color: #F6F8E1;
+    width: 78px;
+    height: 15px;
+}
+.news{
+    color: #cf9999;
+    letter-spacing:normal;
+    line-height:normal;
+}
+.news_data{
+    color: #eac3c3;
+}
+.clients_text{
+    color: #ffffff;
+}
+.client_desc_area{
+    color: #ffffcf;
+    background-color: #7f0101;
+    border: 0px solid;
+}
+.downlinks{
+    font-family: Tahoma; 
+    font-weight:bold; 
+    color: #ffffff; 
+    text-decoration:none;
+}
+.header2{
+	color: #701181;
+	font-family: Tahoma;
+	font-weight: bold;
+}
+.n_header3{
+	color: #CC0000;
+	font-family: Verdana;
+	font-style: italic;
+}
+.text1{
+	color:#FF5833;
+	font-family: Verdana;
+	font-size: 10px;
+	font-style: italic;
+}
+.text2{
+	color:#FF0000;
+	font-family: Verdana;
+	font-size: 11px;
+	font-weight: bold;
+}
+
+</style>
+<style>.mi {font-size: 8pt; font-weight: bolder;Tahoma;}</style></head>
+<body leftmargin="9" topmargin="0" bgcolor="#ffffff">
+<table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%">
+  <tbody><tr>
+    <td align="right" valign="top"> 
+      <script language="JavaScript">
+//<!-- 
+hl = 'http://www.aggsoft.com';
+dom = (document.getElementById)? true : false;
+nn4 = (document.layers)? true : false;
+ie4 = (!dom && document.all)? true : false;
+
+var occupied_header = new Array();
+var occupied_menu = new Array();
+var menuitemstyle = "<style>.mi {font-size: 8pt; font-weight: bolder;Tahoma;}</style>";
+document.write(menuitemstyle);
+
+for(i=1;i<=8;i++) {
+ occupied_header[i] = 0;
+ occupied_menu[i] = 0; 
+}
+
+
+function n_GetWidth(El) {
+    var X = 0;
+    if(!El){return X;}
+        if(document.layers){X =  El.x;}
+        else{
+               X = El.offsetWidth;
+            }
+    return X;
+}
+
+function n_GetX(El) {
+    var X = 0;
+    var W = 0;
+    if(!El){return X;}
+        if(document.layers){X =  El.x;}
+        else{
+               do { X += El.offsetLeft } while ((El = El.offsetParent) != null);
+            }
+    return X;
+}
+
+function n_GetY(El) {
+    var Y = 0;
+    if(!El){return Y;}
+        if(document.layers){Y =  El.y;}
+        else{Y = El.offsetTop;}
+    return Y;
+}
+
+function AddMenu(){
+  arg=AddMenu.arguments;
+  if(arg.length>3){
+   text = "<table id=\"tab"+arg[0]+"\" border=0 cellspacing=0 cellpadding=0><tr><td><table width=100% border=0 cellspacing=0 cellpadding=0 bgcolor=#4c98fa>";
+   for(i=3;i<arg.length;i+=3){
+    text = text+"<tr><td height=1 bgcolor=white><img src=\"\/img\/t.gif\" width=1 height=1></td></tr></tr><tr><td align=right  onMouseOver=\"this.setAttribute('bgcolor','#00B9F2',0);\" onMouseOut=\"this.setAttribute('bgcolor','#4c98fa',0);\"><a class=\"headmenu\" onmouseover=\";\" href=\""+arg[i+2]+"\"><img alt=\""+arg[i]+"\"src=\""+arg[i+1]+"\" width=81 height=20 border=0 onMouseOver=\"this.src='"+arg[i+1]+"'\" onMouseOut=\"this.src='"+arg[i+1]+"'\"><\/a><\/td><\/tr>\n";
+   }////onMouseOver=\"this.setAttribute('bgcolor','#CBDAE2',0); this.style.cursor='hand'\" onMouseOut=\"this.setAttribute('bgcolor','#e5ebee',0);\"
+   text += '</table></td></tr></table>';
+  }else{text="";}
+  CreateLayer(text, arg[0],arg[1],arg[2],0);  
+}
+
+function CreateLayer(text, id, t, l,m) {
+  if (dom && !document.all) {
+        var strng="<div id=sub" + id + " style=\"position:absolute;top:" + t + ";left:" + l + ";visibility:hidden;z-index:1;\" onmouseover=\"occupied_menu[" + id + "]=1;\" onmouseout=\"Turn(this,'" + id + "',0);occupied_menu[" + id + "]=0;\">" + text + "</div>";
+        document.write(strng);
+  }
+  else {
+    if(document.layers) {
+      var str="<LAYER ID=sub" + id + " TOP=" + t + " LEFT=" + l + " onmouseover=\"occupied_menu[" + id + "]=1;\" onmouseout=\"Turn(this,'" + id + "',0);occupied_menu[" + id + "]=0;\" VISIBILITY=\"hide\" Z-INDEX=2 bgcolor=\"#FFFFFF\">" + text + "</LAYER>";
+      document.write(str);
+    }
+    else{
+      if(document.all) {
+        var strng="<div id=sub" + id + " style=\"position:absolute;top:" + t + ";left:" + l + ";visibility:hidden;z-index:1;\" onmouseover=\"occupied_menu[" + id + "]=1;\" onmouseout=\"Turn(this,'" + id + "',0);occupied_menu[" + id + "]=0;\">" + text + "</div>";
+        document.write(strng);
+      }
+    }
+  }
+}
+
+ 
+function Turn(el, id, mode) {
+ if(document.layers || document.all || dom) {
+  if(mode){
+   var X = n_GetX(el);
+   var Y = n_GetY(el);
+   var W = n_GetWidth(el);
+   eval("setTimeout(\"On(" + id + "," + X + "," + Y + "," + W + ");\",100)");
+  }
+  else{
+   eval("setTimeout(\"Off(" + id + ");\",100)");
+  }
+ }
+}
+
+function On(id,x,y,w){
+  if(occupied_header[id]) {
+  if (dom && !document.all) {
+    document.getElementById("sub" +id).style.left = x;
+    document.getElementById("sub" + id).style.visibility = 'visible';
+    document.getElementById("tab" + id).style.width = w;
+  }
+  else {
+    if(document.all) {
+      document.all["sub" +id].style.left = x;
+      document.all["sub" + id].style.visibility = 'visible';
+      document.all["tab" + id].style.width = w;
+    }    
+    else 
+      if(document.layers) {
+        eval('document.layers["sub" +id].left = x');    
+        eval("document.layers['sub" + id + "']").visibility = "show";
+      }    
+  }
+  }
+}
+ 
+function Off(id){
+ if(!occupied_menu[id]) {
+  if (dom && !document.all) {
+      document.getElementById("sub" + id).style.visibility = 'hidden';
+  }
+  else {
+    if(document.all) {
+      eval("sub" + id).style.visibility = 'hidden';
+    }
+    else{ 
+      if(document.layers) {
+        eval("document.layers['sub" + id + "']").visibility = "hide";
+      }    
+    }
+  }
+ }
+}
+/////////////////////////////////////////////////////////////////////////////
+AddMenu(1, 60, 75, 
+  "Advanced Serial Port Monitor","/img/menu/subprod_1_sel.gif",hl+'/serial-port-monitor/',
+  "Advanced Serial Port Monitor Plugins","/img/menu/subprod_2_sel.gif",hl+'/serial-port-monitor/plugins.htm',
+  "Advanced Serial Data Logger","/img/menu/subprod_3_sel.gif",hl+'/serial-data-logger/',
+  "Advanced Serial Data Logger Plugins","/img/menu/subprod_4_sel.gif",hl+'/serial-data-logger/plugins/',
+  "Virtual Null Modem","/img/menu/subprod_10_sel.gif",'http://www.virtual-null-modem.com/',
+  "DNC Precision","/img/menu/subprod_6_sel.gif",hl+'/dnc-precision/',
+  "CNC Syntax Editor","/img/menu/subprod_9_sel.gif",'http://www.cnc-syntax-editor.com/',
+  "Modem Monitor","/img/menu/subprod_7_sel.gif",hl+'/modem-monitor/',
+  "System Monitor","/img/menu/subprod_8_sel.gif",hl+'/system-monitor/',
+  "Fast Submit","/img/menu/subprod_5_sel.gif",hl+'/fast-submit/'
+);
+/////////////////////////////////////////////////////////////////////////////
+AddMenu(2, 60, 75, 
+  "Order Now!","/img/menu/suborder_1_sel.gif",hl+'/order/',
+  "Online Orders","/img/menu/suborder_2_sel.gif",hl+'/order/#www',
+  "Fax Orders","/img/menu/suborder_3_sel.gif",hl+'/order/#fax',
+  "Post Orders","/img/menu/suborder_4_sel.gif",hl+'/order/#www',
+  "Wire transfer","/img/menu/suborder_5_sel.gif",hl+'/order/#wire'
+);
+/////////////////////////////////////////////////////////////////////////////
+AddMenu(3, 60, 75, 
+  "Download Now!","/img/menu/subdown_1_sel.gif",'/download/',
+  "Registered Download","/img/menu/subdown_2_sel.gif",'/download/registered.htm',
+  "Advanced Serial Port Monitor Plugins","/img/menu/subdown_3_sel.gif",hl+'/serial-port-monitor/plugins.htm',
+  "Advanced Serial Data Logger Plugins","/img/menu/subdown_4_sel.gif",hl+'/serial-data-logger/plugins/',
+  "Windows Updates","/img/menu/subdown_5_sel.gif",'/download/win95updates.htm'
+);
+/////////////////////////////////////////////////////////////////////////////
+AddMenu(4, 60, 75, 
+  "Support","/img/menu/subsup_1_sel.gif",'/support/',
+  "RS232 pinout and cables","/img/menu/subsup_2_sel.gif",hl+'/rs232-pinout-cable/'
+);
+/////////////////////////////////////////////////////////////////////////////
+for(i=8;i<9;i++){AddMenu(i, 145, 115);}
+
+//-->
+</script><div id="sub1" style="position: absolute; top: 60px; left: 75px; z-index: 1; visibility: hidden;" onmouseover="occupied_menu[1]=1;" onmouseout="Turn(this,'1',0);occupied_menu[1]=0;"><table id="tab1" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><table bgcolor="#4c98fa" border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td bgcolor="white" height="1"><img src="serial-port-db9_files/t.gif" height="1" width="1"></td></tr><tr><td onmouseover="this.setAttribute('bgcolor','#00B9F2',0);" onmouseout="this.setAttribute('bgcolor','#4c98fa',0);" align="right"><a class="headmenu" onmouseover=";" href="http://www.aggsoft.com/serial-port-monitor/"><img alt="Advanced Serial Port Monitor" src="serial-port-db9_files/subprod_1_sel.gif" onmouseover="this.src='/img/menu/subprod_1_sel.gif'" onmouseout="this.src='/img/menu/subprod_1_sel.gif'" border="0" height="20" width="81"></a></td></tr>
+<tr><td bgcolor="white" height="1"><img src="serial-port-db9_files/t.gif" height="1" width="1"></td></tr><tr><td onmouseover="this.setAttribute('bgcolor','#00B9F2',0);" onmouseout="this.setAttribute('bgcolor','#4c98fa',0);" align="right"><a class="headmenu" onmouseover=";" href="http://www.aggsoft.com/serial-port-monitor/plugins.htm"><img alt="Advanced Serial Port Monitor Plugins" src="serial-port-db9_files/subprod_2_sel.gif" onmouseover="this.src='/img/menu/subprod_2_sel.gif'" onmouseout="this.src='/img/menu/subprod_2_sel.gif'" border="0" height="20" width="81"></a></td></tr>
+<tr><td bgcolor="white" height="1"><img src="serial-port-db9_files/t.gif" height="1" width="1"></td></tr><tr><td onmouseover="this.setAttribute('bgcolor','#00B9F2',0);" onmouseout="this.setAttribute('bgcolor','#4c98fa',0);" align="right"><a class="headmenu" onmouseover=";" href="http://www.aggsoft.com/serial-data-logger/"><img alt="Advanced Serial Data Logger" src="serial-port-db9_files/subprod_3_sel.gif" onmouseover="this.src='/img/menu/subprod_3_sel.gif'" onmouseout="this.src='/img/menu/subprod_3_sel.gif'" border="0" height="20" width="81"></a></td></tr>
+<tr><td bgcolor="white" height="1"><img src="serial-port-db9_files/t.gif" height="1" width="1"></td></tr><tr><td onmouseover="this.setAttribute('bgcolor','#00B9F2',0);" onmouseout="this.setAttribute('bgcolor','#4c98fa',0);" align="right"><a class="headmenu" onmouseover=";" href="http://www.aggsoft.com/serial-data-logger/plugins/"><img alt="Advanced Serial Data Logger Plugins" src="serial-port-db9_files/subprod_4_sel.gif" onmouseover="this.src='/img/menu/subprod_4_sel.gif'" onmouseout="this.src='/img/menu/subprod_4_sel.gif'" border="0" height="20" width="81"></a></td></tr>
+<tr><td bgcolor="white" height="1"><img src="serial-port-db9_files/t.gif" height="1" width="1"></td></tr><tr><td onmouseover="this.setAttribute('bgcolor','#00B9F2',0);" onmouseout="this.setAttribute('bgcolor','#4c98fa',0);" align="right"><a class="headmenu" onmouseover=";" href="http://www.virtual-null-modem.com/"><img alt="Virtual Null Modem" src="serial-port-db9_files/subprod_10_sel.gif" onmouseover="this.src='/img/menu/subprod_10_sel.gif'" onmouseout="this.src='/img/menu/subprod_10_sel.gif'" border="0" height="20" width="81"></a></td></tr>
+<tr><td bgcolor="white" height="1"><img src="serial-port-db9_files/t.gif" height="1" width="1"></td></tr><tr><td onmouseover="this.setAttribute('bgcolor','#00B9F2',0);" onmouseout="this.setAttribute('bgcolor','#4c98fa',0);" align="right"><a class="headmenu" onmouseover=";" href="http://www.aggsoft.com/dnc-precision/"><img alt="DNC Precision" src="serial-port-db9_files/subprod_6_sel.gif" onmouseover="this.src='/img/menu/subprod_6_sel.gif'" onmouseout="this.src='/img/menu/subprod_6_sel.gif'" border="0" height="20" width="81"></a></td></tr>
+<tr><td bgcolor="white" height="1"><img src="serial-port-db9_files/t.gif" height="1" width="1"></td></tr><tr><td onmouseover="this.setAttribute('bgcolor','#00B9F2',0);" onmouseout="this.setAttribute('bgcolor','#4c98fa',0);" align="right"><a class="headmenu" onmouseover=";" href="http://www.cnc-syntax-editor.com/"><img alt="CNC Syntax Editor" src="serial-port-db9_files/subprod_9_sel.gif" onmouseover="this.src='/img/menu/subprod_9_sel.gif'" onmouseout="this.src='/img/menu/subprod_9_sel.gif'" border="0" height="20" width="81"></a></td></tr>
+<tr><td bgcolor="white" height="1"><img src="serial-port-db9_files/t.gif" height="1" width="1"></td></tr><tr><td onmouseover="this.setAttribute('bgcolor','#00B9F2',0);" onmouseout="this.setAttribute('bgcolor','#4c98fa',0);" align="right"><a class="headmenu" onmouseover=";" href="http://www.aggsoft.com/modem-monitor/"><img alt="Modem Monitor" src="serial-port-db9_files/subprod_7_sel.gif" onmouseover="this.src='/img/menu/subprod_7_sel.gif'" onmouseout="this.src='/img/menu/subprod_7_sel.gif'" border="0" height="20" width="81"></a></td></tr>
+<tr><td bgcolor="white" height="1"><img src="serial-port-db9_files/t.gif" height="1" width="1"></td></tr><tr><td onmouseover="this.setAttribute('bgcolor','#00B9F2',0);" onmouseout="this.setAttribute('bgcolor','#4c98fa',0);" align="right"><a class="headmenu" onmouseover=";" href="http://www.aggsoft.com/system-monitor/"><img alt="System Monitor" src="serial-port-db9_files/subprod_8_sel.gif" onmouseover="this.src='/img/menu/subprod_8_sel.gif'" onmouseout="this.src='/img/menu/subprod_8_sel.gif'" border="0" height="20" width="81"></a></td></tr>
+<tr><td bgcolor="white" height="1"><img src="serial-port-db9_files/t.gif" height="1" width="1"></td></tr><tr><td onmouseover="this.setAttribute('bgcolor','#00B9F2',0);" onmouseout="this.setAttribute('bgcolor','#4c98fa',0);" align="right"><a class="headmenu" onmouseover=";" href="http://www.aggsoft.com/fast-submit/"><img alt="Fast Submit" src="serial-port-db9_files/subprod_5_sel.gif" onmouseover="this.src='/img/menu/subprod_5_sel.gif'" onmouseout="this.src='/img/menu/subprod_5_sel.gif'" border="0" height="20" width="81"></a></td></tr>
+</tbody></table></td></tr></tbody></table></div><div id="sub2" style="position: absolute; top: 60px; left: 75px; z-index: 1; visibility: hidden;" onmouseover="occupied_menu[2]=1;" onmouseout="Turn(this,'2',0);occupied_menu[2]=0;"><table id="tab2" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><table bgcolor="#4c98fa" border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td bgcolor="white" height="1"><img src="serial-port-db9_files/t.gif" height="1" width="1"></td></tr><tr><td onmouseover="this.setAttribute('bgcolor','#00B9F2',0);" onmouseout="this.setAttribute('bgcolor','#4c98fa',0);" align="right"><a class="headmenu" onmouseover=";" href="http://www.aggsoft.com/order/"><img alt="Order Now!" src="serial-port-db9_files/suborder_1_sel.gif" onmouseover="this.src='/img/menu/suborder_1_sel.gif'" onmouseout="this.src='/img/menu/suborder_1_sel.gif'" border="0" height="20" width="81"></a></td></tr>
+<tr><td bgcolor="white" height="1"><img src="serial-port-db9_files/t.gif" height="1" width="1"></td></tr><tr><td onmouseover="this.setAttribute('bgcolor','#00B9F2',0);" onmouseout="this.setAttribute('bgcolor','#4c98fa',0);" align="right"><a class="headmenu" onmouseover=";" href="http://www.aggsoft.com/order/#www"><img alt="Online Orders" src="serial-port-db9_files/suborder_2_sel.gif" onmouseover="this.src='/img/menu/suborder_2_sel.gif'" onmouseout="this.src='/img/menu/suborder_2_sel.gif'" border="0" height="20" width="81"></a></td></tr>
+<tr><td bgcolor="white" height="1"><img src="serial-port-db9_files/t.gif" height="1" width="1"></td></tr><tr><td onmouseover="this.setAttribute('bgcolor','#00B9F2',0);" onmouseout="this.setAttribute('bgcolor','#4c98fa',0);" align="right"><a class="headmenu" onmouseover=";" href="http://www.aggsoft.com/order/#fax"><img alt="Fax Orders" src="serial-port-db9_files/suborder_3_sel.gif" onmouseover="this.src='/img/menu/suborder_3_sel.gif'" onmouseout="this.src='/img/menu/suborder_3_sel.gif'" border="0" height="20" width="81"></a></td></tr>
+<tr><td bgcolor="white" height="1"><img src="serial-port-db9_files/t.gif" height="1" width="1"></td></tr><tr><td onmouseover="this.setAttribute('bgcolor','#00B9F2',0);" onmouseout="this.setAttribute('bgcolor','#4c98fa',0);" align="right"><a class="headmenu" onmouseover=";" href="http://www.aggsoft.com/order/#www"><img alt="Post Orders" src="serial-port-db9_files/suborder_4_sel.gif" onmouseover="this.src='/img/menu/suborder_4_sel.gif'" onmouseout="this.src='/img/menu/suborder_4_sel.gif'" border="0" height="20" width="81"></a></td></tr>
+<tr><td bgcolor="white" height="1"><img src="serial-port-db9_files/t.gif" height="1" width="1"></td></tr><tr><td onmouseover="this.setAttribute('bgcolor','#00B9F2',0);" onmouseout="this.setAttribute('bgcolor','#4c98fa',0);" align="right"><a class="headmenu" onmouseover=";" href="http://www.aggsoft.com/order/#wire"><img alt="Wire transfer" src="serial-port-db9_files/suborder_5_sel.gif" onmouseover="this.src='/img/menu/suborder_5_sel.gif'" onmouseout="this.src='/img/menu/suborder_5_sel.gif'" border="0" height="20" width="81"></a></td></tr>
+</tbody></table></td></tr></tbody></table></div><div id="sub3" style="position: absolute; top: 60px; left: 75px; z-index: 1; visibility: hidden;" onmouseover="occupied_menu[3]=1;" onmouseout="Turn(this,'3',0);occupied_menu[3]=0;"><table id="tab3" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><table bgcolor="#4c98fa" border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td bgcolor="white" height="1"><img src="serial-port-db9_files/t.gif" height="1" width="1"></td></tr><tr><td onmouseover="this.setAttribute('bgcolor','#00B9F2',0);" onmouseout="this.setAttribute('bgcolor','#4c98fa',0);" align="right"><a class="headmenu" onmouseover=";" href="http://www.aggsoft.com/download/"><img alt="Download Now!" src="serial-port-db9_files/subdown_1_sel.gif" onmouseover="this.src='/img/menu/subdown_1_sel.gif'" onmouseout="this.src='/img/menu/subdown_1_sel.gif'" border="0" height="20" width="81"></a></td></tr>
+<tr><td bgcolor="white" height="1"><img src="serial-port-db9_files/t.gif" height="1" width="1"></td></tr><tr><td onmouseover="this.setAttribute('bgcolor','#00B9F2',0);" onmouseout="this.setAttribute('bgcolor','#4c98fa',0);" align="right"><a class="headmenu" onmouseover=";" href="http://www.aggsoft.com/download/registered.htm"><img alt="Registered Download" src="serial-port-db9_files/subdown_2_sel.gif" onmouseover="this.src='/img/menu/subdown_2_sel.gif'" onmouseout="this.src='/img/menu/subdown_2_sel.gif'" border="0" height="20" width="81"></a></td></tr>
+<tr><td bgcolor="white" height="1"><img src="serial-port-db9_files/t.gif" height="1" width="1"></td></tr><tr><td onmouseover="this.setAttribute('bgcolor','#00B9F2',0);" onmouseout="this.setAttribute('bgcolor','#4c98fa',0);" align="right"><a class="headmenu" onmouseover=";" href="http://www.aggsoft.com/serial-port-monitor/plugins.htm"><img alt="Advanced Serial Port Monitor Plugins" src="serial-port-db9_files/subdown_3_sel.gif" onmouseover="this.src='/img/menu/subdown_3_sel.gif'" onmouseout="this.src='/img/menu/subdown_3_sel.gif'" border="0" height="20" width="81"></a></td></tr>
+<tr><td bgcolor="white" height="1"><img src="serial-port-db9_files/t.gif" height="1" width="1"></td></tr><tr><td onmouseover="this.setAttribute('bgcolor','#00B9F2',0);" onmouseout="this.setAttribute('bgcolor','#4c98fa',0);" align="right"><a class="headmenu" onmouseover=";" href="http://www.aggsoft.com/serial-data-logger/plugins/"><img alt="Advanced Serial Data Logger Plugins" src="serial-port-db9_files/subdown_4_sel.gif" onmouseover="this.src='/img/menu/subdown_4_sel.gif'" onmouseout="this.src='/img/menu/subdown_4_sel.gif'" border="0" height="20" width="81"></a></td></tr>
+<tr><td bgcolor="white" height="1"><img src="serial-port-db9_files/t.gif" height="1" width="1"></td></tr><tr><td onmouseover="this.setAttribute('bgcolor','#00B9F2',0);" onmouseout="this.setAttribute('bgcolor','#4c98fa',0);" align="right"><a class="headmenu" onmouseover=";" href="http://www.aggsoft.com/download/win95updates.htm"><img alt="Windows Updates" src="serial-port-db9_files/subdown_5_sel.gif" onmouseover="this.src='/img/menu/subdown_5_sel.gif'" onmouseout="this.src='/img/menu/subdown_5_sel.gif'" border="0" height="20" width="81"></a></td></tr>
+</tbody></table></td></tr></tbody></table></div><div id="sub4" style="position: absolute; top: 60px; left: 75px; visibility: hidden; z-index: 1;" onmouseover="occupied_menu[4]=1;" onmouseout="Turn(this,'4',0);occupied_menu[4]=0;"><table id="tab4" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><table bgcolor="#4c98fa" border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td bgcolor="white" height="1"><img src="serial-port-db9_files/t.gif" height="1" width="1"></td></tr><tr><td onmouseover="this.setAttribute('bgcolor','#00B9F2',0);" onmouseout="this.setAttribute('bgcolor','#4c98fa',0);" align="right"><a class="headmenu" onmouseover=";" href="http://www.aggsoft.com/support/"><img alt="Support" src="serial-port-db9_files/subsup_1_sel.gif" onmouseover="this.src='/img/menu/subsup_1_sel.gif'" onmouseout="this.src='/img/menu/subsup_1_sel.gif'" border="0" height="20" width="81"></a></td></tr>
+<tr><td bgcolor="white" height="1"><img src="serial-port-db9_files/t.gif" height="1" width="1"></td></tr><tr><td onmouseover="this.setAttribute('bgcolor','#00B9F2',0);" onmouseout="this.setAttribute('bgcolor','#4c98fa',0);" align="right"><a class="headmenu" onmouseover=";" href="http://www.aggsoft.com/rs232-pinout-cable/"><img alt="RS232 pinout and cables" src="serial-port-db9_files/subsup_2_sel.gif" onmouseover="this.src='/img/menu/subsup_2_sel.gif'" onmouseout="this.src='/img/menu/subsup_2_sel.gif'" border="0" height="20" width="81"></a></td></tr>
+</tbody></table></td></tr></tbody></table></div><div id="sub8" style="position: absolute; top: 145px; left: 115px; visibility: hidden; z-index: 1;" onmouseover="occupied_menu[8]=1;" onmouseout="Turn(this,'8',0);occupied_menu[8]=0;"></div>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tbody><tr>
+  <td><img src="serial-port-db9_files/t.gif" height="1" width="1"></td>
+  </tr>
+  <tr> 
+    <td height="60"> 
+      <!-- menu -->
+      <table bgcolor="#4b96fa" border="0" cellpadding="0" cellspacing="0" height="60" width="100%">
+        <tbody><tr> 
+          <td bgcolor="#4b96fa" width="5"><img src="serial-port-db9_files/t.gif" height="1" width="5"></td>
+          <td align="center" bgcolor="#ffffff" valign="center" width="234"><a href="http://www.aggsoft.com/" title="AGG Software"><img src="serial-port-db9_files/agg_logo.gif" alt="AGG Software" border="0" height="44" width="215"></a></td>
+          <td valign="bottom"> 
+            <table style="background-repeat: no-repeat;" background="serial-port-db9_files/menu_bg.jpg" bgcolor="#4b96fa" border="0" cellpadding="0" cellspacing="0" height="60" width="100%">
+              <tbody><tr> 
+                <!-- products -->
+                <td> 
+                  <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%">
+                    <tbody><tr> 
+                      <td></td>
+                    </tr>
+                    <tr> 
+                      <td style="" id="products" onmouseover="this.style.backgroundColor='#00B9F2'; Turn(this,'1',1); occupied_header[1]=1;" onmouseout="this.style.backgroundColor=''; Turn(this,'1',0);occupied_header[1]=0;" align="right" height="15" valign="bottom"><a href="http://www.aggsoft.com/"><img src="serial-port-db9_files/products_off.gif" alt="products" border="0" height="15" width="81"></a></td>
+                    </tr>
+                  </tbody></table>
+                </td>
+                <td bgcolor="#ffffff" valign="bottom" width="3"><img src="serial-port-db9_files/t.gif" height="1" width="3"></td>
+                <!-- !products -->
+                <!-- order -->
+                <td> 
+                  <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%">
+                    <tbody><tr> 
+                      <td></td>
+                    </tr>
+                    <tr> 
+                      <td style="" id="order" onmouseover="this.style.backgroundColor='#00B9F2'; Turn(this,'2',1);occupied_header[2]=1;" onmouseout="this.style.backgroundColor=''; Turn(this,'2',0);occupied_header[2]=0;" align="right" height="15" valign="bottom"><a href="http://www.aggsoft.com/order/"><img src="serial-port-db9_files/order_off.gif" alt="order now" border="0" height="15" width="81"></a></td>
+                    </tr>
+                  </tbody></table>
+                </td>
+                <td bgcolor="#ffffff" valign="bottom" width="3"><img src="serial-port-db9_files/t.gif" height="1" width="3"></td>
+                <!-- !order -->
+                <!-- download -->
+                <td> 
+                  <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%">
+                    <tbody><tr> 
+                      <td></td>
+                    </tr>
+                    <tr> 
+                      <td style="" id="download" onmouseover="this.style.backgroundColor='#00B9F2'; Turn(this,'3',1);occupied_header[3]=1;" onmouseout="this.style.backgroundColor=''; Turn(this,'3',0);occupied_header[3]=0;" align="right" height="15" valign="bottom"><a href="http://www.aggsoft.com/download/"><img src="serial-port-db9_files/download_off.gif" alt="download" border="0" height="15" width="81"></a></td>
+                    </tr>
+                  </tbody></table>
+                </td>
+                <td bgcolor="#ffffff" valign="bottom" width="3"><img src="serial-port-db9_files/t.gif" height="1" width="3"></td>
+                <!-- !download -->
+                <!-- support -->
+                <td> 
+                  <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%">
+                    <tbody><tr> 
+                      <td></td>
+                    </tr>
+                    <tr> 
+                      <td id="support" onmouseover="this.style.backgroundColor='#00B9F2'; Turn(this,'4',1);occupied_header[4]=1;" onmouseout="this.style.backgroundColor=''; Turn(this,'4',0);occupied_header[4]=0;" align="right" height="15" valign="bottom"><a href="http://www.aggsoft.com/support/"><img src="serial-port-db9_files/support_off.gif" alt="support" border="0" height="15" width="81"></a></td>
+                    </tr>
+                  </tbody></table>
+                </td>
+                <td bgcolor="#ffffff" valign="bottom" width="3"><img src="serial-port-db9_files/t.gif" height="1" width="3"></td>
+                <!-- !support -->
+                <!-- contact -->
+                <td> 
+                  <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%">
+                    <tbody><tr> 
+                      <td></td>
+                    </tr>
+                    <tr> 
+                      <td id="contact" onmouseover="this.style.backgroundColor='#00B9F2'" onmouseout="this.style.backgroundColor=''" align="right" height="15" valign="bottom"><a href="http://www.aggsoft.com/support/contact.htm"><img src="serial-port-db9_files/contact_off.gif" alt="contact us" border="0" height="15" width="81"></a></td>
+                    </tr>
+                  </tbody></table>
+                </td>
+                <td bgcolor="#ffffff" valign="bottom" width="3"><img src="serial-port-db9_files/t.gif" height="1" width="3"></td>
+                <!-- !contact -->
+                <!-- links -->
+                <td> 
+                  <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%">
+                    <tbody><tr> 
+                      <td></td>
+                    </tr>
+                    <tr> 
+                      <td id="links" onmouseover="this.style.backgroundColor='#00B9F2'" onmouseout="this.style.backgroundColor=''" align="right" height="15" valign="bottom"><a href="http://www.aggsoft.com/links.htm"><img src="serial-port-db9_files/links_off.gif" alt="links" border="0" height="15" width="81"></a></td>
+                    </tr>
+                  </tbody></table>
+                </td>
+                <td bgcolor="#ffffff" valign="bottom" width="3"><img src="serial-port-db9_files/t.gif" height="1" width="3"></td>
+                <!-- !links -->
+              </tr>
+            </tbody></table>
+          </td>
+        </tr>
+      </tbody></table>
+      <!-- !menu -->
+    </td>
+  </tr>
+  <tr> 
+    <td height="10" width="100%"><img src="serial-port-db9_files/t.gif" border="0" height="10" width="1"></td>
+  </tr>
+</tbody></table>
+
+
+      <table style="background-repeat: repeat-x; background-position: center top;" background="serial-port-db9_files/gray_bg.gif" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%">
+        <tbody><tr> 
+          <td rowspan="5" valign="top" width="100%"> 
+            <!-- links -->
+            <table align="center" cellpadding="0" cellspacing="0" width="96%">
+              <tbody><tr> 
+                <td valign="top"> 
+                  <br>
+                  <h1>DB9 serial (RS232) port. Pinout and signals for the PC RS232 connector</h1>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="80%">
+  <tbody><tr> 
+    <td><div align="right"><img src="serial-port-db9_files/conn_dsub9m.gif" alt="DB9 pin D-SUB male" height="65" width="83"></div></td>
+    <td>DB9 pin D-SUB male</td>
+  </tr>
+</tbody></table>
+<br>
+<div align="center">
+  <table align="center" border="0" cellpadding="3" cellspacing="0" width="80%">
+    <tbody><tr> 
+      <th>Pin</th>
+      <th>Name</th>
+      <th>Direction</th>
+      <th>Description</th>
+    </tr>
+    <tr> 
+      <td><div align="center">1</div></td>
+      <td>CD</td>
+      <td><div align="center">«—</div></td>
+      <td>Carrier Detect</td>
+    </tr>
+    <tr> 
+      <td><div align="center">2</div></td>
+      <td>RXD</td>
+      <td><div align="center">«—</div></td>
+      <td>Receive Data</td>
+    </tr>
+    <tr> 
+      <td><div align="center">3</div></td>
+      <td>TXD</td>
+      <td><div align="center">—»</div></td>
+      <td>Transmit Data</td>
+    </tr>
+    <tr> 
+      <td><div align="center">4</div></td>
+      <td>DTR</td>
+      <td><div align="center">—»</div></td>
+      <td>Data Terminal Ready</td>
+    </tr>
+    <tr> 
+      <td><div align="center">5</div></td>
+      <td>GND</td>
+      <td><div align="center"></div></td>
+      <td>System Ground</td>
+    </tr>
+    <tr> 
+      <td><div align="center">6</div></td>
+      <td>DSR</td>
+      <td><div align="center">«—</div></td>
+      <td>Data Set Ready</td>
+    </tr>
+    <tr> 
+      <td><div align="center">7</div></td>
+      <td>RTS</td>
+      <td><div align="center">—»</div></td>
+      <td>Request to Send</td>
+    </tr>
+    <tr> 
+      <td><div align="center">8</div></td>
+      <td>CTS</td>
+      <td><div align="center">«—</div></td>
+      <td>Clear to Send</td>
+    </tr>
+    <tr> 
+      <td><div align="center">9</div></td>
+      <td>RI</td>
+      <td><div align="center">«—</div></td>
+      <td>Ring Indicator</td>
+    </tr>
+  </tbody></table>
+  <address> Note: Direction is DTE (Computer) relative DCE (Modem). </address>
+</div>
+                  
+                </td>
+              </tr>
+            </tbody></table>
+            <!-- end links -->
+          </td>
+          <td valign="top" width="200"> <br>
+            <script language="JavaScript">
+<!--
+function MM_jumpMenu(targ,selObj,restore){ //v3.0
+  if(selObj.options[selObj.selectedIndex].value!=''){
+   eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'");
+   if (restore) selObj.selectedIndex=0;
+  } else{
+   selObj.selectedIndex = 0;
+  }
+}
+//-->
+</script>
+<form name="navigation">
+  <select name="select" onchange="MM_jumpMenu('parent',this,0)"><option selected="selected">Please, select datasheet page</option><option value="/rs232-pinout-cable/">Index</option><option>--------- Serial port interface ---------</option><option value="serial-port-interface.htm">Introduction</option><option>--------- Pinout and signal ---------</option><option value="serial-cable-connections.htm">Connectors and signals</option><option value="pinout-and-signal.htm">PC pinout and signals</option><option value="RS232.htm">Full DB25 RS232 port pinout and signals</option><option value="serial-data-transfer-cable.htm">Serial data transfer cable</option><option value="serial-port-db9.htm">PC DB9 RS232 port pinout and 
+    signals</option><option value="serial-port-db25.htm">PC DB25 RS232 port pinout and 
+    signals</option><option value="serial-port-loopback-db25-c.htm">PC DB25 serial (RS232) loopback 
+    (CheckIt)</option><option value="serial-port-loopback-db25-n.htm">PC DB25 serial (RS232) loopback 
+    (Norton)</option><option value="serial-port-loopback-db9-c.htm">PC DB9 serial (RS232) loopback 
+    (CheckIt)</option><option value="serial-port-loopback-db9-n.htm">PC DB9 serial (RS232) loopback 
+    (Norton)</option><option value="serial-printer-connector.htm">Serial printer</option><option>--------- Cables and signals --------- </option><option value="serial-port-monitor-cable.htm">Serial and RS232 port monitor 
+    cables</option><option value="2w-modem-db25-to-db25.htm">RS232 two-wire modem cable 
+    (DB25-DB25)</option><option value="2w-modem-db9-to-db25.htm">RS232 two-wire modem cable 
+    (DB9-DB25)</option><option value="modem-db25-to-db25.htm">RS232 modem cable (DB25-DB25)</option><option value="modem-db9-to-db25.htm">RS232 modem cable (DB9-DB25)</option><option value="modem-db9-to-db15.htm">RS232 modem cable (DB9-DB15)</option><option value="nullmodem-db25-to-db25.htm">Null modem cable (DB25-DB25)</option><option value="nullmodem-db9-to-db25.htm">Null modem cable (DB9-DB25)</option><option value="nullmodem-db9-to-db9.htm">Null modem cable (DB9-DB9)</option><option value="serial-printer-db25-to-db25-cable.htm">Serial printer cable 
+    (DB25-DB25)</option><option value="serial-printer-db9-to-db25-cable.htm">Serial printer cable 
+    (DB9-DB25)</option></select>
+</form>
+
+            
+
+
+
+<table border="0" cellpadding="0" cellspacing="0" width="250">
+  <tbody><tr> 
+    <td align="center"><img src="serial-port-db9_files/t.gif" height="34" width="1"><br>
+      <a href="http://www.cnc-syntax-editor.com/"><img src="serial-port-db9_files/cncsyn_box_t.jpg" alt="CNC Syntax Editor" border="0" height="173" width="141"></a></td>
+  </tr>
+  <tr> 
+    <td style="background-repeat: no-repeat; background-position: center top;" align="left" background="serial-port-db9_files/cncsyn_box_reflection.gif"><img src="serial-port-db9_files/t.gif" height="60" width="1"><br>
+      <p>
+CNC Syntax Editor is a popular tool for writing, editing, and studying
+CNC programs with G codes. It has a comfortable and intuitive interface
+both for beginners and advanced programmers. CNC Syntax Editor is
+deceptively simple, but really powerful.</p>
+      <div align="center"><img src="serial-port-db9_files/t.gif" height="1" width="10"> <a href="http://www.cnc-syntax-editor.com/download/#cncsyn"><img src="serial-port-db9_files/download_blue.gif" alt="Download Now!" border="0" height="35" width="90"></a>  <a href="http://www.cnc-syntax-editor.com/"><img src="serial-port-db9_files/readmore_blue.gif" alt="Read more..." border="0" height="35" width="90"></a> 
+      </div>
+    </td>
+  </tr>
+</tbody></table>
+
+ 
+
+          </td>
+        </tr>
+      </tbody></table>
+    </td>
+  </tr>
+  <tr>
+    <td height="1"> 
+      
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tbody><tr>
+    <td><img src="serial-port-db9_files/t.gif" height="25" width="1"></td>
+  </tr>
+  <tr>
+    <td height="60" width="100%"> 
+      <table background="serial-port-db9_files/botbg.gif" border="0" cellpadding="0" cellspacing="0" height="55" width="100%">
+        <tbody><tr> 
+          <td bgcolor="#ffffff" width="5"><img src="serial-port-db9_files/t.gif" height="1" width="5"></td>
+          <td height="30" width="100%"><a href="http://www.devoler.com/" target="_blank"><img src="serial-port-db9_files/webmaster.gif" alt="Made in Devoler" border="0" height="18" hspace="10" width="75"></a></td>
+        </tr>
+        <tr> 
+          <td colspan="2" height="25"> 
+            <table cellpadding="0" cellspacing="0" height="25" width="100%">
+              <tbody><tr> 
+                <td bgcolor="#4c98fa" width="5"><img src="serial-port-db9_files/t.gif" height="1" width="5"></td>
+                <td nowrap="nowrap">
+                  <p style="margin: 7px; font-family: Tahoma; font-size: 10px; color: rgb(160, 160, 160);">Copyright 
+                    © 1999-2004, AGG Software.<br>
+                    All rights reserved. <a href="http://www.aggsoft.com/terms.htm" style="color: rgb(160, 160, 160);">Terms 
+                    of use</a> | <a href="http://www.aggsoft.com/privacy.htm" style="color: rgb(160, 160, 160);">Privacy policy</a></p>
+                </td>
+                <td align="center" bgcolor="#4c98fa" width="100%"> 
+                  <p class="downlinks"> <a class="downlinks" href="http://www.aggsoft.com/">Home</a> 
+                    | <a class="downlinks" href="http://www.aggsoft.com/">Products</a> | <a class="downlinks" href="http://www.aggsoft.com/order/">Order</a> 
+                    | <a class="downlinks" href="http://www.aggsoft.com/download/">Download</a> | <a class="downlinks" href="http://www.aggsoft.com/support/">Support</a> 
+                    | <a class="downlinks" href="http://www.aggsoft.com/sitemap.htm">Site map</a>
+                    | <a class="downlinks" href="http://www.aggsoft.com/support/contact.htm">Contact</a> 
+                    | <a class="downlinks" href="http://www.aggsoft.com/links.htm">Links</a> | <a class="downlinks" href="http://www.aggsoft.com/serial-port-monitor/RS232-monitor.htm">RS232 
+                    monitor</a> | <a class="downlinks" href="http://www.aggsoft.com/rs232-pinout-cable/">RS232 
+                    pinout</a> </p>
+                </td>
+              </tr>
+            </tbody></table>
+          </td>
+        </tr>
+      </tbody></table>
+    </td>
+  </tr>
+</tbody></table>
+
+
+    </td>
+  </tr>
+</tbody></table>
+</body></html>

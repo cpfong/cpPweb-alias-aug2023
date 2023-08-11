@@ -1,0 +1,35 @@
+-- user.data (new advance way to config ami linux inst ec2 to work on ddns)
+note: 
+ 0. new instance installed with ddns capability (2016/12/20 14:51 v0 working)
+ 1. login to n4jj
+ 2. cd 00bsd_my_doc/aws/ddns/ddns
+ 3. check 00ReadME.txt and modify at most 2 files (4 files are needed: build.sh rc.conf secret secret.pri)
+ 4. put ddns.tgz into n4jj:/tmp for next bash to download
+
+#!/bin/bash
+cd ~ec2-user
+curl -O http://199.102.79.18:8080/tmp/ddns.tgz
+tar xfvz ddns.tgz
+cd ddns
+cat ./rc.local >> /etc/rc.local
+# that's it. Done with bash
+
+
+####### the following is as ref only ####### 
+
+setup user.data when launch AMI Linux 
+check file of this directory n4jj:~user/00bsd_my_doc/aws/ddns
+
+ssh to n4jj
+cd ~user/00bsd_my_doc/aws/
+tar cfvz ~/tmp/trash/ddns.tgz ddns
+
+back to ME (exit ssh)
+scp -P 1234 user@n4jj:~/tmp/trash/ddns.tgz .
+tar xfvz ddns.tgz
+
+cd ddns
+as root
+vi ddns/make-ami-linux-ddns-work.sh
+modify host variable to new name
+cat rc.local >>  /etc/rc.local

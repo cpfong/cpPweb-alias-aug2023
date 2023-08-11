@@ -1,0 +1,16 @@
+# both local user and ldap work ok
+# auth
+auth		sufficient	pam_ldap.so		no_warn try_first_pass debug
+auth		required	pam_unix.so		no_warn try_first_pass
+
+# account
+account         sufficient	pam_ldap.so
+account		required	pam_unix.so
+
+# session
+#session 	optional	pam_ssh.so
+session		required	pam_permit.so
+
+# password
+password	sufficient	pam_ldap.so		use_authok
+password	required	pam_unix.so		no_warn try_first_pass

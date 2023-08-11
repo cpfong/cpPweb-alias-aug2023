@@ -1,0 +1,4 @@
+#!/bin/sh
+sudo iptables -t nat -A POSTROUTING -s 172.16.0.0/16 -o ppp0 -j MASQUERADE
+sudo iptables -t nat -A POSTROUTING -s 172.16.0.0/16 -o eth0 -j MASQUERADE
+sudo iptables -A FORWARD -s 172.16.0.0/16 -o ppp0 -j ACCEPT

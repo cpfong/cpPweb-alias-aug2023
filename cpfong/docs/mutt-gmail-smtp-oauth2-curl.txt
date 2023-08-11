@@ -1,0 +1,43 @@
+token returned in the web browser we just send it urn:ietf:wg:oauth:2.0:oob as our redirect uri.
+
+Q: how to use curl to get oauth2 token that can use on gmail smtp?
+A: scope you should use https://mail.google.com/
+
+steps
+--
+browser link (note: must have right scope)
+ret code (different scope has different code and if you do not get right scope, it will FAIL)
+curl get oauth2 refresh token
+put it in ~/.muttrc
+
+@gaia-> cat 10-clientID-get-code-link.sh
+--
+cname='foo'
+c_id=$(cat ~/bin/d.google/proj.jupiter-aug20-mutt-gmail | grep ${cname} | cut -f2)
+c_se=$(cat ~/bin/d.google/proj.jupiter-aug20-mutt-gmail | grep ${cname} | cut -f3)
+#scope='https://www.googleapis.com/auth/cloud-platform.read-only'
+# note: must use this scope (mail.....), the above read-only canNOT do the job
+scope='https://mail.google.com/'
+printf "https://accounts.google.com/o/oauth2/auth?client_id=%s&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code&scope=%s" ${c_id} ${scope}
+
+
+@gaia-> cat 11-curl-get-access-token.sh
+--
+auth_code='4/1AX4XfWhtXVKYQnq6vUmDG5iULnreX-An60M'
+
+# gaia mutt use google smtp at HOST client id
+cname=foo
+c_id=$(cat ~/bin/d.google/proj.jupiter-aug20-mutt-gmail | grep ${cname} | cut -f2)
+c_se=$(cat ~/bin/d.google/proj.jupiter-aug20-mutt-gmail | grep ${cname} | cut -f3)
+
+printf "curl --silent --request POST --data \"code=%s&client_id=%s&client_secret=%s&redirect_uri=urn:ietf:wg:oauth:2.0:oob&grant_type=authorization_code\" https://accounts.google.com/o/oauth2/token\n" ${auth_code} ${c_id} ${c_se}
+
+
+@gaia-> cat 12-muttrc-generator.sh
+--
+cname='foo'
+c_id=$(cat ~/bin/d.google/proj.jupiter-aug20-mutt-gmail | grep ${cname} | cut -f2)
+c_se=$(cat ~/bin/d.google/proj.jupiter-aug20-mutt-gmail | grep ${cname} | cut -f3)
+r_token='1//0e_vqReUuYtvrCgYIA-L9Irslo2sbmzD8cu59Hssssss7tmMgvm05L-qavSNssCkaXPNZgB-yoRgqE'
+
+printf "set smtp_oauth_refresh_command = \"curl --silent --request POST --data 'client_id=${c_id}' --data 'client_secret=${c_se}' --data 'refresh_token=${r_token}' --data 'grant_type=refresh_token' https://accounts.google.com/o/oauth2/token | jq --raw-output '.access_token'\""

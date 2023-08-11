@@ -1,0 +1,26 @@
+default		0
+timeout		10
+splashimage=/boot/grub/gnu-tux-usb.xpm.gz
+
+## End Default Options ##
+
+title		ttylinux
+kernel		/boot/ttylinux/isolinux/bzImage load_ramdisk=1 prompt_ramdisk=0 ramdisk_size=8192 ro root=/dev/ram0
+initrd		/boot/ttylinux/isolinux/filesys
+
+title		Damn Small Linux 4.2.5
+kernel		(hd0,4)/boot/isolinux/linux24 ramdisk_size=100000 init=/etc/init lang=us apm=power-off vga=791 nomce noapic quiet BOOT_IMAGE=knoppix
+initrd		(hd0,4)/boot/isolinux/minirt24.gz 
+
+title		slax 6.0.7
+kernel		(hd0,5)/boot/vmlinuz ramdisk_size=6666 root=/dev/ram0 rw autoexec=xconf;telinit~4 changes=/slax/
+initrd		(hd0,5)/boot/initrd.gz
+
+title		otg linux (Taiwan education edition)
+kernel		(hd0,6)/isolinux/vmlinuzlive boot=casper splash noquiet ip=frommedia break=nobreak noprompt
+initrd		(hd0,6)/isolinux/initrdlive.img 
+
+# title		Edubuntu
+# kernel		(hd0,7)/casper/vmlinuz file=/cdrom/preseed/edubuntu.seed boot=casper quiet splash --
+# initrd		(hd0,7)/casper/initrd.gz 
+

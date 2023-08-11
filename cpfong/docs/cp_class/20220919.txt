@@ -1,0 +1,16 @@
+page 34
+
+== != < 
+eq ne
+
+if ($i != 3)
+
+<STDIN>
+
+chomp
+
+while
+
+page 39
+exercise
+

@@ -1,0 +1,19 @@
+6 As stated elsewhere it is probably encryption.  Here is what I have and what I did for it:
+My Linux server is a test bed and thus is "officially" joined to the domain.  I
+use security = server most of the time and point Samba at the NT PDC for password
+resolution.  I also have encrypted password = no and update encrypted = yes so I
+can collect usernames, etc.  Works great for NT but 98 has some issues with this.
+Instead of letting samba create all accounts on the fly I physically created the
+98 account on the Linux box with the same username and password as exists on the
+NT PDC.  It now browses the shares like the NT boxes.  Once in a while Linux will
+not be able to validate the 98 password and will ask the PDC which will reject it
+9 out of 10 times.  Don't know why.  It also kicks the 98 boxes off the NT
+network.  I go back to Linux, re input the password for the account, unlock the
+account on the NT PDC and everything works again.
+If you decide to set up encrypted passwords and use smbpasswd file be sure to
+ENABLE the 98's account in the smbpaswd file "smbpasswd -e <username> it will ask
+for a password, put in the one that exists in the both the passwd file and the NT
+PDC and encryption should work with no trouble for the 98 box.
+
+Another suggestion is go NT.  I have had zero problems with NT accessing the Linux
+box and have Linux authenticate to the NT PDC.

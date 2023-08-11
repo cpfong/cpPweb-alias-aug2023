@@ -1,0 +1,51 @@
+chap 11 perl module
+
+11.1 找到模組
+11.2 安裝模組
+11.3 使用簡單的模組
+	11.3.1 File::Basename
+	11.3.2 只選用模組中部分的函式
+	11.3.3 File::Spec 模組
+	11.3.4 CGI.pm
+	11.3.5 資料庫與 DBI
+
+11.1 http://serach.cpan.org
+	http://www.cpan.org
+	cpan: comprehensive perl archive network
+	使用 perldoc 可以看是否某個 module 是否己安上了. 
+
+11.2 如何安裝
+	perl Makefile.PL
+	make install
+
+11.3.1 要看看是否有安 File::Basename 則可以鍵入 perldoc File::Basename
+	即可以看到這個 module 的使用範例.
+
+	要使用則要在開頭加入一個 use File::Basename
+	use File::Basename;
+	$n=`pwd`;
+	print "the dirname is ", dirname($n) , " and the basename is " ,  basename($n), "\n";
+
+	#想分開檔名和副檔名 ?
+	$n='/home/cpfong/tmp/trash/t.pl';
+	($name, $path, $suffix) = fileparse($n, '.pl');
+	print "name is ", $name, "and path is ", $path, " the suffixe is ", $suffix ;
+
+11.3.2 File::Basename 可以用來取檔案的檔名和目錄, 但要仔細的操作時則
+	使用 File::Spec 會更為便利, 但 File::Spec 為 oo (object oriented) 的
+	然 File::Spec::Functions 模組即可以和 File::Basename 相同, 不是 oo 的
+
+	#!/usr/bin/perl
+
+	use File::Basename;
+	use File::Spec;
+
+	print "input file name: ";
+	chomp(my $old_name=<STDIN>);
+	my $dirname =  dirname $old_name;
+	my $basename= basename $old_name;
+
+	$basename =~ s/^/not/;
+	my $new_name=File::Spec->catfile($dirname, $basename);
+	print $new_name, "\n";
+

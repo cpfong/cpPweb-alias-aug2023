@@ -1,0 +1,13 @@
+news-> vi readers.conf
+
+auth "hiedoc" {
+    hosts: "hiedoc.fjtc.edu.tw,cpfong.fjtc.edu.tw"
+    default: "<local>@hiedoc.fjtc.edu.tw"
+}
+  
+access "hiedoc" {
+    users: "<read>"
+    newsgroups: "pub.post"
+    access: RPA
+}
+

@@ -1,0 +1,41 @@
+第 9 章 網路
+
+網路的使用: 同時存取, 分享週邊, 個人通訊
+http://www.4shared.com
+http://10minutemail.com
+http://www.filzmail.com
+
+同時存取: network server 可以分享資料和程式.
+分享週邊: 例如 printer 
+個人通訊: 電傳會議, 音訊會議, VoIP voice over internet protocol 網際網路通訊協定的語音
+
+常見的網路類型:
+LAN (local area network) 區域網路
+WAN (wide  area network) 廣域網路
+CAN (campus network)     校園網路
+MAN (metropolitan network) 都會網路
+HAN (home network) 	 家庭網路
+
+Intranet 和 internet
+intranet: 內部網路
+internet: 外部網路
+
+網路的構成:
+以伺服器為基礎的網路
+node: 節點為一個處理的位置, 可以是一台 pc 或其它裝置.
+
+主從式: 一台為 server, 其它的為 client
+對等式: peer-to-peer network, P2PN
+
+網路拓撲和協定:
+topolody: 拓撲是連結網路各節點所需的設備之實體配置.
+packet: 封包為電腦傳送的資料, 封包分成二部份: 表頭及資料
+
+由 windows 的網路上可以看到許多的通訊協定. 我們最常使用的為 tcp/ip 的通訊協定
+
+ip 電腦的網路身份
+mask 遮罩, 用來表明那些電腦是同一個區域的群組
+gateway 閘道器為電腦向外的連結 
+
+Q: 請指出目前電腦所使用的 ip netmask default gateway
+A: cmd 下命令 ipconfig /all 來看

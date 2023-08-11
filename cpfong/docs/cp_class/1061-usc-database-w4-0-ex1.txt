@@ -1,0 +1,5 @@
+show databases;
+use world;
+show tables;
+desc City;
+desc world.City;

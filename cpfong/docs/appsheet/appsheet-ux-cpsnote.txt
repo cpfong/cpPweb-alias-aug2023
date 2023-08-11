@@ -1,0 +1,5 @@
+UX: user experience, GUI ie. user interfaace
+
+views: Each page you see in your app is known as a view
+ Primary views are accessed via the bottom bar of the app.
+ Menu views from top

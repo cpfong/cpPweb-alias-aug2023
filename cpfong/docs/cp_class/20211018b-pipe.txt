@@ -1,0 +1,8 @@
+pipe | ( A Unix pipe provides a one-way flow of data )
+
+seq 1 5 
+seq 1 5 > data
+cat data
+wc data
+who
+who | grep 'A1' | sort | uniq

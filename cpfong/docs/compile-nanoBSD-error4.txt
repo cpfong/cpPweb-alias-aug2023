@@ -1,0 +1,15 @@
+Q: simulate ok, but no root password prompt show up 
+A: 
+i think it is because i reboot the system, original swap maybe mix up (buildworld many times, build kernel many times) 
+after reboot, i rebuild world once, then do all kind of rebuild kernel
+
+Q: i386/GERERIC compiled, root prompt does NOT show (type in root, but hang there)
+A: 
+ 1 modify GENERIC to SUN, get rid of something then ./nanobsd.sh -w (skip buildworld to save time)
+ 2 try again (SUN) FAIL too (not buildworld)
+ 3 with buildworld (FAIL)
+ 4 rm /usr/embedded/* then build whole thing again (FAIL)
+ 5 at host root change its password by typing passwd and then ../nanobsd.sh -k -w (go directly into build image FAIL)
+ 6 single user mode to reset root password (succeed!)
+
+solved: single user mode reset root password (by qemu-system-x86_64 -singlestep)

@@ -1,0 +1,16 @@
+modfiy login ID (this is the ONLY thing you need to do) at 874 can save $89
+check his orig file at ./20150413.garden.friend.orig.backupsettings.conf
+
+modify WiFi setting login cht chtsvdsl then Hinet Wifi On! 
+(note: use just hinet offer web GUI, no need to backup to download 2 pc then vi setting.conf then restore)
+
+2015/04/14 20150413.garden.friend.orig.backupsettings.conf does not work on soekirs
+why? P874 login id is 12345678@wifi.hinet.net, soekris cannot talk to P874
+
+2015/04/18 check those 2 20150419* file
+
+login as supervisor: backup conf
+login as user: modify 12345678@wifi.hinet.net --> real_id@hinet.net then keyin passwd
+then pc can goto internet without auth, and soekris WORK!! 
+
+after modify login ID, wifi OK, no need to pay $89 monthly fee to hinet --> happy

@@ -1,0 +1,6 @@
+關於, newsfeeds 這個檔, 其中, ME 這一項, 有兩個特別功能:
+  1) 定義所有 site, 共同的 pre-subscription list.
+  2) 定義, 本站所特別 care 的 distributions ( 不是 newsgroups ).
+     - 這一個功能, 是多加一個過濾的動作, 就是在根據 active 檔的紀錄中,
+       接取近來的 articles, 再加以比對. 在 distribution 的範圍內,
+       或者沒有 distribution 限制, 就接收. 否則, 就捨棄.

@@ -1,0 +1,120 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<title>Javascript Screen BPMF Keyboard</title>
+<!--Modified and simplified after keyboard with ov2.1.js -->
+	<script type="text/javascript" src="bpmf_data_utf8.js"></script>
+	<script type="text/javascript" src="bpmf_functions3.js"></script>
+</head>
+<body style="font-family: Times, '標楷體'" onload="init();">
+<h1>Javascript 螢幕注音鍵盤</h1>
+
+<!--
+<p onMouseOver="status='Use screen keyboard to enter Chinese and actual keyboard for other characters.';">
+目前可支援 Firefox 3.6.3 及 IE 6.0 (also good for Chrome, Safari, and NE)。
+用螢幕上虛擬鍵盤輸入注音符號(Tone in Pink)及中文標點(Blue)，實體鍵盤輸入英文及其他字元。 </p>
+-->
+
+<form name="words" action="append_word();">
+
+<textarea name="textpad" id="textpad" cols="96" rows="1"  ONCHANGE="setCursorPos(this);" ONCLICK="setCursorPos(this);"></textarea>
+
+<br><textarea name="buffer" id="buffer" cols="96" rows="3"></textarea>
+
+<br>選字:<input type="text" name="word_choice" id="word_choice" value="0" size=3 maxlength=3 >
+<input value="確認" onclick="append_word();" type="button">
+
+</form>
+
+<p><table style="font-size:24pt">
+<form name="keyboard1" action="">
+
+<tr align="left"><th>
+<input value="一聲一" onclick="kb_on_click(' ');" type="button" style="background-color: #FFC0CB">
+
+<!--
+<input value="ˊ" onclick="kb_on_click(this.value);" type="button" style="background-color: #FFC0CB">
+<input value="ˇ" onclick="kb_on_click(this.value);" type="button" style="background-color: #FFC0CB">
+<input value="ˋ" onclick="kb_on_click(this.value);" type="button" style="background-color: #FFC0CB">
+<input value="˙" onclick="kb_on_click(this.value);" type="button" style="background-color: #FFC0CB">
+-->
+
+<input value="二聲宜" onclick="kb_on_click('ˊ');" type="button" style="background-color: #FFC0CB">
+<input value="三聲已" onclick="kb_on_click('ˇ');" type="button" style="background-color: #FFC0CB">
+<input value="四聲異" onclick="kb_on_click('ˋ');" type="button" style="background-color: #FFC0CB">
+<input value="輕聲" onclick="kb_on_click('˙');" type="button" style="background-color: #FFC0CB">
+<input value="Clear" onclick="document.getElementById('buffer').value = ''" type="button" style="background-color:yellow">
+
+
+</tr><tr align="left"><th>
+
+<tr align="left"><th>
+<input value="ㄅ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄉ" onclick="kb_on_click(this.value);" type="button">
+<input value="ˇ" onclick="kb_on_click(this.value);" type="button" style="background-color: #00FFFF">
+<input value="ˋ" onclick="kb_on_click(this.value);" type="button" style="background-color: #00FFFF">
+<input value="ㄓ" onclick="kb_on_click(this.value);" type="button">
+<input value="ˊ" onclick="kb_on_click(this.value);" type="button" style="background-color: #00FFFF">
+<input value="˙" onclick="kb_on_click(this.value);" type="button" style="background-color: #00FFFF">
+<input value="ㄚ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄞ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄢ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄦ" onclick="kb_on_click(this.value);" type="button">
+<input value="ˊ" onclick="kb_on_click(this.value);" type="button" style="background-color: #FFC0CB">
+</tr><tr align="left"><th>
+<input value="ㄆ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄊ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄍ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄐ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄔ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄗ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄧ" onclick="kb_on_click(this.value);" type="button" style="background-color: #FFFF00">
+<input value="ㄛ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄟ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄣ" onclick="kb_on_click(this.value);" type="button">
+<input value="「" onclick="kb_on_click(this.value);" type="button" style="background-color: #00FFFF">
+<input value="ˇ" onclick="kb_on_click(this.value);" type="button" style="background-color: #FFC0CB">
+</tr><tr align="left"><th>
+<input value="ㄇ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄋ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄎ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄑ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄕ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄘ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄨ" onclick="kb_on_click(this.value);" type="button" style="background-color: #FFFF00">
+<input value="ㄜ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄠ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄤ" onclick="kb_on_click(this.value);" type="button">
+<input value="」" onclick="kb_on_click(this.value);" type="button" style="background-color: #00FFFF">
+<input value="ˋ" onclick="kb_on_click(this.value);" type="button" style="background-color: #FFC0CB">
+</tr><tr align="left"><th>
+<input value="ㄈ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄌ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄏ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄒ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄖ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄙ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄩ" onclick="kb_on_click(this.value);" type="button" style="background-color: #FFFF00">
+<input value="ㄝ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄡ" onclick="kb_on_click(this.value);" type="button">
+<input value="ㄥ" onclick="kb_on_click(this.value);" type="button">
+<input value="：" onclick="kb_on_click(this.value);" type="button" style="background-color: #00FFFF">
+<input value="˙" onclick="kb_on_click(this.value);" type="button" style="background-color: #FFC0CB">
+</tr>
+<!--
+<tr><th>
+<input value="一聲(無聲調記號)點擊此鍵" onclick="kb_on_click(' ');" type="button" style="background-color: #FFC0CB">
+</tr>
+-->
+</form></table>
+
+<div style="display: none; position: absolute; top: 100px; left: 100px;
+width: 360px; border: 2px solid gray;" id="imeblock">
+<div style="background: none repeat scroll 0% 0% rgb(204, 204, 204); padding:
+ 2px; height: 1.2em;" id="input"></div>
+</div>
+註:<ol> <li>網上雖有各種中文輸入的工具，但臺灣所普及的注音法卻極有限，有的需外掛安裝(如Flash)，有的只能在特定瀏覽器中用，故動手改寫成此一輸入健盤。
+(No installation needed, written in pure html and javascirpt.)
+<li>The top text area is main textpad to compose Chinese charcters and the second long strip text area is a working buffer. Use physical keyboard to key in the standard keys (ASCII).  Currently this IME has been tested out for IE, Firefox, Chrome, Safari (iPad), and NE to allow the Chinese character to be inserted at cursor position.  The text displayed on the main text area is ready to be copied to other palces (textpad, search engine, form, etc.) by Ctrl+C and Ctrl+V.
+<li>To convert between BPMF and Pinyin, go to:
+ <a href="http://chinese.dsturgeon.net/pinyin.pl">Phonetic conversion tool</a>
+</ol></body></html>

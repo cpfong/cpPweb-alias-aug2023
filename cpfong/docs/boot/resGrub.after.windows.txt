@@ -1,0 +1,25 @@
+Johnny Chadda  in Technology	| February 17, 2007
+
+Restore Grub in Ubuntu after installing Windows
+When you install some operating systems such as Windows or Mac OS X, they will overwrite your master boot record. If you have Linux installed you will be unable to access it, until you restore Grub on the MBR.
+
+The easiest way is to find your Ubuntu or other Linux rescue/live/installation CD and boot it. Pop open a terminal and first find which partition is your root using fdisk.
+
+$ sudo fdisk -l
+Device Boot Start End Blocks Id System
+/dev/hda1 * 1 2550 20482843+ af Unknown
+/dev/hda2 2551 3825 10241437+ 83 Linux
+/dev/hda3 3826 3890 522112+ 82 Linux swap / Solaris
+/dev/hda4 3891 12161 66436807+ 7 HPFS/NTFS
+
+Here we see that /dev/hda2 is our Linux partition, so we will want to mount it in order to read the Grub configuration.
+
+sudo mount /dev/hda2 /mnt
+
+If your don't get any errors now your root partition should be mounted under /mnt. You can check for the grub configuration by listing the contents of the directory /mnt/boot/grub.
+
+Now to restore the configuration just write the following.
+
+$ sudo grub-install --root-directory=/mnt /dev/hda
+
+This will install Grub to MBR and use the configuration files in /mnt/boot/grub. Now just reboot your computer and you will hopefully be greeted with the ever friendly Grub menu once again.

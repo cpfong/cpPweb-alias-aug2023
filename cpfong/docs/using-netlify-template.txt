@@ -1,0 +1,4 @@
+github copy repo to my account (and rename template repo to new name)
+login to netlify
+use existing github repo at netlify and deploy it
+done and you have a new web site

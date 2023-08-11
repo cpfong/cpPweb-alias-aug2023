@@ -1,0 +1,40 @@
+        Dim arr(20, 2) As Integer
+        Dim index As Integer = 1
+
+        For i As Integer = 1 To 20
+            arr(i, 0) = 0
+        Next
+        Randomize()
+
+        Dim noden As Integer
+        Dim p As Integer
+
+        For i As Integer = 1 To 10
+            While (1)
+                noden = r()
+                If (arr(noden, 0) = 0) Then
+                    Exit While
+                End If
+            End While
+            arr(p, 1) = noden
+            arr(noden, 0) = Int(100 * Rnd() + 1)
+
+            p = noden
+            arr(noden, 1) = -1
+            If (i = 1) Then
+                index = noden
+            End If
+        Next
+
+        While (index <> -1)
+            Console.WriteLine("node " & index & " = " & arr(index, 0))
+            index = arr(index, 1)
+        End While
+
+        Console.ReadKey()
+    End Sub
+    Function r() As Integer
+        Randomize()
+        Return Int(10 * Rnd() + 1)
+    End Function
+

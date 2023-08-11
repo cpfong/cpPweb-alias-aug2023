@@ -1,0 +1,120 @@
+dn: o=delta
+objectClass: top
+objectClass: organization
+o: delta
+description: Delta House
+
+dn: cn=DeanWormer,o=delta
+objectClass: organizationalRole
+cn: DeanWormer
+description: LDAP Directory Administrator
+
+dn: ou=1959,o=delta
+ou: 1959
+objectClass: top
+objectClass: organizationalUnit
+description: Year of Graduation 1959
+
+dn: ou=1960,o=delta
+ou: 1960
+objectClass: top
+objectClass: organizationalUnit
+description: Year of Graduation 1960
+
+dn: ou=1961,o=delta
+ou: 1961
+objectClass: top
+objectClass: organizationalUnit
+description: Year of Graduation 1961
+
+dn: ou=1962,o=delta
+ou: 1962
+objectClass: top
+objectClass: organizationalUnit
+description: Year of Graduation 1962
+
+dn: ou=1963,o=delta
+ou: 1963
+objectClass: top
+objectClass: organizationalUnit
+description: Year of Graduation 1963
+
+dn: cn=Bluto Butarsky,ou=1961,o=delta
+cn: Bluto Butarsky
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+mail: BButarsky@isp.com
+givenname: John
+sn: Butarsky
+ou: 1961
+uid: 1961
+employeeType: S
+postalAddress: 14 Cherry St.
+l: Austin
+st: TX
+postalcode: 76888
+telephoneNumber: (800)555-1212
+homePhone: 800-555-1313
+facsimileTelephoneNumber: 800-555-1414
+
+dn: cn=Flounder Smith,ou=1963,o=delta
+cn: Flounder Smith
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+mail: FSmith@isp.com
+givenname: Flounder
+sn: Smith
+ou: 1961
+uid: 1961
+employeeType: P
+postalAddress: 14 Cherry St.
+l: Austin
+st: TX
+postalcode: 76888
+telephoneNumber: (800)555-1212
+homePhone: 800-555-1313
+facsimileTelephoneNumber: 800-555-1414
+
+dn: cn=Otter Anderson,ou=1960,o=delta
+cn: Otter Anderson
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+mail: OAnderson@isp.com
+givenname: Otter
+sn: Anderson
+ou: 1960
+uid: 1960
+employeeType: S
+postalAddress: 14 Cherry St.
+l: Austin
+st: TX
+postalcode: 76888
+pager: 800-555-1319
+homePhone: 800-555-1313
+mobile: 800-555-1318
+
+dn: cn=D-day Johnson,ou=1959,o=delta
+cn: D-day Johnson
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+mail: DJohnson@isp.com
+givenname: D-day
+sn: Johnson
+ou: 1959
+uid: 1959
+employeeType: A
+postalAddress: 14 Cherry St.
+l: Austin
+st: TX
+postalcode: 76888
+pager: 800-555-1319
+homePhone: 800-555-1313
+mobile: 800-555-1318

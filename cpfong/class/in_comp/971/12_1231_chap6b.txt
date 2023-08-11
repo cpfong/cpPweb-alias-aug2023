@@ -1,0 +1,34 @@
+6B 測量且改善設備的績效
+
+評估儲存裝置的二種普遍測量方式為:
+1. 平均存取時間
+2. 資料傳輸速度. 
+
+平均存取時間要越短越好, 而傳輸速度也是短為佳.
+
+硬碟按數據介面不同，大致分為
+ATA: 傳統的 40-pin 數據線連接主板與硬碟 (ide)
+SATA: Serial ATA, 即串列的 ATA 介面
+SCSI: Small Computer System Interface, 廣為工作站級個人電腦以及伺服器所使用
+SAS: 是新一代的 SCSI 技術, 即串列的 SCSI 介面
+
+硬碟機的尺寸和用途可分為：
+
+    * 1英寸(MICRODRIVE), 用於數位相機。
+    * 1.8英寸, 多用於筆記型電腦及外置硬碟盒中。
+    * 2.5英寸, 多用於筆記型電腦及外置硬碟盒中。
+    * 3.5英寸, 多用於桌上型電腦及外置硬碟盒中。
+
+硬碟製造商
+
+   1. Seagate Technology 提供桌上型之 IDE 及 SCSI 硬碟。
+   2. Western Digital (簡稱 WD) 提供桌上型及筆記本 IDE 介面硬碟。
+   3. FUJITSU 提供桌上型 SCSI 介面及筆記本 IDE 介面硬碟。
+   4. HITACHI 提供桌上型 SCSI 及 IDE 介面硬碟，以及筆記本 IDE 介面硬碟；之前收購 IBM 硬碟部門。
+   5. Maxtor 提供桌上型 IDE 介面硬碟。
+   6. SAMSUNG 提供桌上型及筆記本 IDE 介面硬碟。
+   7. Seagate-Maxtor Seagate收購了Maxtor後新公司的網址。
+   8. Toshiba 提供筆記本IDE介面硬碟。
+
+Bps 和 bps 是不同的, Bps (byte per second) bps (bit per second)
+

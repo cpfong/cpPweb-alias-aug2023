@@ -1,0 +1,357 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="Author" CONTENT="Tein H. Yuan">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.04 [en] (Win95; I) [Netscape]">
+   <TITLE>Shell Environment Note</TITLE>
+</HEAD>
+<BODY>
+Shell Environment Note:
+
+<P>Conventional UNIX shell is an interpreter and shell script is a <A HREF="#macro">macro-expansion
+based</A> language.&nbsp; Actually, shell script can be any kind of language.&nbsp;
+For example, scsh use 'scheme-48' as its control language.&nbsp; I remember
+BASIC is designed to be the OS control language as well.&nbsp; At least,
+people should remember Apple BASIC on Apple II.&nbsp; Of course, we should
+remember a terrific language, FORTH.&nbsp; Unfortunately, all the language
+I mentioned, BASIC, Scheme, FORTH are better languages than shells we used
+in UNIX environment.&nbsp; Although conventional UNIX shells like sh, ksh,
+bash, csh and tcsh are not perfect enough, they bind all UNIX software
+tools as the power tools with UNIX IPC mechanism.
+
+<P>Input/Ouput Redirection:
+<BR>&nbsp;
+<CENTER><TABLE BORDER COLS=3 WIDTH="76%" >
+<TR>
+<TD></TD>
+
+<TD>
+<CENTER>csh</CENTER>
+</TD>
+
+<TD>
+<CENTER>sh,bash</CENTER>
+</TD>
+</TR>
+
+<TR>
+<TD>input from infile</TD>
+
+<TD>
+<CENTER>&lt; infile</CENTER>
+</TD>
+
+<TD>
+<CENTER>&lt; infile</CENTER>
+</TD>
+</TR>
+
+<TR>
+<TD>output to outfile</TD>
+
+<TD>
+<CENTER>> outfile</CENTER>
+</TD>
+
+<TD>
+<CENTER>> outfile</CENTER>
+</TD>
+</TR>
+
+<TR>
+<TD>append to outfile</TD>
+
+<TD>
+<CENTER>>> outfile</CENTER>
+</TD>
+
+<TD>
+<CENTER>>> outfile</CENTER>
+</TD>
+</TR>
+
+<TR>
+<TD>write to noclobber outfile</TD>
+
+<TD>
+<CENTER>>! outfile</CENTER>
+</TD>
+
+<TD>
+<CENTER>&nbsp;</CENTER>
+</TD>
+</TR>
+
+<TR>
+<TD>append to noclobber outfile</TD>
+
+<TD>
+<CENTER>>>! outfile</CENTER>
+</TD>
+
+<TD>
+<CENTER>&nbsp;</CENTER>
+</TD>
+</TR>
+
+<TR>
+<TD></TD>
+
+<TD>
+<CENTER>&lt;&lt; [delimiter string]</CENTER>
+</TD>
+
+<TD>
+<CENTER>&lt;&lt; [delimiter string]</CENTER>
+</TD>
+</TR>
+
+<TR>
+<TD></TD>
+
+<TD>
+<CENTER>>&amp; outfile</CENTER>
+</TD>
+
+<TD>
+<CENTER>2>&amp;1 outfile</CENTER>
+</TD>
+</TR>
+
+<TR>
+<TD></TD>
+
+<TD>
+<CENTER>>>&amp; outfile</CENTER>
+</TD>
+
+<TD>
+<CENTER>2>>&amp;1 outfile</CENTER>
+</TD>
+</TR>
+
+<TR>
+<TD></TD>
+
+<TD>
+<CENTER>|&amp; outfile</CENTER>
+</TD>
+
+<TD>
+<CENTER>2>&amp;1| outfile</CENTER>
+</TD>
+</TR>
+
+<TR>
+<TD></TD>
+
+<TD>
+<CENTER>&nbsp;</CENTER>
+</TD>
+
+<TD>
+<CENTER>3&lt;&amp; infile</CENTER>
+</TD>
+</TR>
+
+<TR>
+<TD></TD>
+
+<TD>
+<CENTER>&nbsp;</CENTER>
+</TD>
+
+<TD>
+<CENTER>2|</CENTER>
+</TD>
+</TR>
+
+<TR>
+<TD>close stdin (fd:0)</TD>
+
+<TD>
+<CENTER>&nbsp;exec &lt;&amp;-</CENTER>
+</TD>
+
+<TD>
+<CENTER>exec &lt;&amp;-</CENTER>
+</TD>
+</TR>
+
+<TR>
+<TD>close stdout (fd:1)</TD>
+
+<TD>
+<CENTER>&nbsp;</CENTER>
+</TD>
+
+<TD>
+<CENTER>exec 1>&amp;-</CENTER>
+</TD>
+</TR>
+
+<TR>
+<TD>close stderr (fd:2)</TD>
+
+<TD>
+<CENTER>&nbsp;</CENTER>
+</TD>
+
+<TD>
+<CENTER>exec 2&lt;&amp;-</CENTER>
+</TD>
+</TR>
+
+<TR>
+<TD>Write to file descriptor 4</TD>
+
+<TD>
+<CENTER>&nbsp;</CENTER>
+</TD>
+
+<TD>
+<CENTER>>&amp;4</CENTER>
+</TD>
+</TR>
+</TABLE></CENTER>
+&nbsp;
+<BR>&nbsp;
+<CENTER><TABLE BORDER COLS=3 WIDTH="100%" >
+<TR>
+<TD></TD>
+
+<TD>csh</TD>
+
+<TD>sh,bash</TD>
+</TR>
+
+<TR>
+<TD></TD>
+
+<TD>if ( ... ) then&nbsp;
+<BR>...&nbsp;
+<BR>else&nbsp;
+<BR>...&nbsp;
+<BR>endif</TD>
+
+<TD>if [ ... ] ; then&nbsp;
+<BR>...&nbsp;
+<BR>else&nbsp;
+<BR>...&nbsp;
+<BR>fi</TD>
+</TR>
+
+<TR>
+<TD></TD>
+
+<TD>foreach x in ( ... )&nbsp;
+<BR>...&nbsp;
+<BR>end</TD>
+
+<TD>for x ... ; do&nbsp;
+<BR>...&nbsp;
+<BR>done</TD>
+</TR>
+
+<TR>
+<TD></TD>
+
+<TD>while ( ... )&nbsp;
+<BR>...&nbsp;
+<BR>end</TD>
+
+<TD>while ... ; do&nbsp;
+<BR>...&nbsp;
+<BR>done</TD>
+</TR>
+
+<TR>
+<TD></TD>
+
+<TD></TD>
+
+<TD>until ... ; do&nbsp;
+<BR>...&nbsp;
+<BR>done</TD>
+</TR>
+
+<TR>
+<TD></TD>
+
+<TD></TD>
+
+<TD></TD>
+</TR>
+
+<TR>
+<TD></TD>
+
+<TD></TD>
+
+<TD></TD>
+</TR>
+
+<TR>
+<TD></TD>
+
+<TD></TD>
+
+<TD></TD>
+</TR>
+
+<TR>
+<TD></TD>
+
+<TD></TD>
+
+<TD></TD>
+</TR>
+
+<TR>
+<TD></TD>
+
+<TD></TD>
+
+<TD></TD>
+</TR>
+</TABLE></CENTER>
+
+
+<P>
+<HR WIDTH="100%">
+<BR><A NAME="macro"></A>Here is an example, which is OK in most of the
+case but ...
+
+<P><FONT COLOR="#000099">if&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; $VAR
+!= "Hello World"&nbsp;&nbsp;&nbsp; ]&nbsp;&nbsp;&nbsp; ;&nbsp;&nbsp;&nbsp;
+then</FONT>
+<BR><FONT COLOR="#000099">&nbsp;&nbsp;&nbsp; echo $VAR</FONT>
+<BR><FONT COLOR="#000099">fi</FONT>
+
+<P>Because 'sh' is a macro expantion language.&nbsp; If $VAR is not exist,
+the code will be expanded as
+
+<P><FONT COLOR="#000099">if&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp; != "Hello World"&nbsp;&nbsp;&nbsp;
+]&nbsp;&nbsp;&nbsp; ;&nbsp;&nbsp;&nbsp; then</FONT>
+<BR><FONT COLOR="#000099">&nbsp;&nbsp;&nbsp; echo $VAR</FONT>
+<BR><FONT COLOR="#000099">fi</FONT>
+
+<P>And the shell will complain `!=' is not a unary operator and return
+an error.&nbsp; If we use double quote to quote $VAR, <B><U><FONT COLOR="#000099">"$VAR"</FONT></U></B>
+, then the code will be expanded as
+
+<P><FONT COLOR="#000099">if&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;&nbsp; "" !=
+"Hello World"&nbsp;&nbsp;&nbsp; ]&nbsp;&nbsp;&nbsp; ;&nbsp;&nbsp;&nbsp;
+then</FONT>
+<BR><FONT COLOR="#000099">&nbsp;&nbsp;&nbsp; echo $VAR</FONT>
+<BR><FONT COLOR="#000099">fi</FONT>
+
+<P>Therefore, to write a safe code to operate string, we should remember
+to add double quotes for variable.
+<BR>
+<HR WIDTH="100%">
+<BR>Last updated on 03/09/98
+<BR>Any comment or suggestion, email <A HREF="mailto://tyuan@sinica.edu.tw">tyuan@sinica.edu.tw</A>
+<BR>&nbsp;
+</BODY>
+</HTML>

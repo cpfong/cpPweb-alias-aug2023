@@ -1,0 +1,33 @@
+9/29 第一次上課
+Introduction (簡介)
+
+公理和定理有何不同: 公理不必加以証明, 是一個已廣為接納的定理, 定理則必需加以証明
+p2 
+sample spaces: 取樣空間, 
+outcomes: 為 sample spaces 中的 elements
+event: outcome 所形成的集合, 即子集合
+
+以骰子為例: sample spaces = {1,2,3,4,5,6} outcomes=1 or 2 or 3... , event={1,2,3} or {2,4,6} 偶數集合...
+Oi 為 outcome of i, 其中 i =1 到 6
+
+p5
+A={2,4,6} 表示偶數所形成的集合 P(A) = |A|/|sp| 其中這個|| 不是絕對值
+而是指 A 中元素的個數 (即為 3) P(A) = 3/6 = 1/2 (偶數的個數為3,全體為6)
+|A| no of outcome (元素的個數)
+
+p7
+Ac 為 A 的互補集合, 即不存在 A 所形成的集合
+
+p8
+set diff B-A 把 B 中那些和 A 相關的刪除 {1,2,3}-{2}={1,3}
+B 若和 A 有相連的部份, 則 B-A 會形成圓月小缺了一角
+exclusive or 即成為 B-A 和 A-B 的union
+
+p11
+交換: 換來換去, 左到右, 右到左 
+結合: 先和前面的配 或 先和後面的配
+分配: 分開來配
+De Morgan 要以 venn diagram 來考慮為佳: 即 (A un B)c 
+A union B 的 complement 為外 sp - (A and B) 這個外圍的部份剛好
+為 A 的 complement 去交集 Bc ( B 的 complement ) 註: 畫圖即可直接看出
+

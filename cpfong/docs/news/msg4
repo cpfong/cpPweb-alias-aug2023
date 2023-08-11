@@ -1,0 +1,9 @@
+Comaq-> tin -g localhost
+
+tail news.notice
+Dec 28 11:01:22 hiedoc nnrpd[34122]: localhost post ok <auj462$11aa$1@hiedoc.fjtc.edu.tw>
+Dec 28 11:01:29 hiedoc nnrpd[34122]: localhost group pub.post 0
+Dec 28 11:01:29 hiedoc nnrpd[34122]: localhost posts received 1 rejected 0
+
+posting 沒問題,  
+但 innfeed 的不在此, 所以應把 innfeed.conf 的 debug 給開了

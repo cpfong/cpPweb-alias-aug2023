@@ -1,0 +1,5 @@
+<powershell>
+# pwd Wh@tEverS1cret must fit windows password rule, so better test in powershell first
+net user john 'Wh@tEverS1cret' /add
+net localgroup Administrators john /add
+</powershell>

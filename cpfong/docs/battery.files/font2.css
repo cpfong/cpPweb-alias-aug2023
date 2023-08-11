@@ -1,0 +1,18 @@
+A:link {
+	COLOR: rgb(0,0,255); TEXT-DECORATION: none
+}
+A:visited {
+	COLOR: rgb(0,0,255); TEXT-DECORATION: none
+}
+A:active {
+	COLOR: rgb(222,181,54); TEXT-DECORATION: none
+}
+A:hover {
+	COLOR: rgb(153,0,0); TEXT-DECORATION: underline
+}
+.menu {
+	COLOR: rgb(57,49,26)
+}
+.EntryText {
+	TEXT-ALIGN: justify
+}

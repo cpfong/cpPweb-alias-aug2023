@@ -1,0 +1,32 @@
+function onOpen(e) {
+ var n='Run Script';
+ var fn='main';
+ var m='hello'; // menu name
+
+ var subMenu = [{name: n, functionName: fn}];
+ SpreadsheetApp.getActiveSpreadsheet().addMenu(m, subMenu);
+}
+
+function main() {
+ var sht = "Sheet1";
+ var moneycol=5;
+ var startrow=2;
+ var cols=1;
+  
+ var ss = SpreadsheetApp.getActiveSpreadsheet();
+ var s = ss.getSheetByName(sht);
+ var dataRange = s.getDataRange();
+ var lastrow = dataRange.getLastRow();
+   
+ var values = s.getRange(startrow, moneycol,lastrow,cols).getValues();
+ var sum = 0;
+  
+ for (var row in values) {
+   for (var col in values[row]) {
+      sum += (values[row][col]);
+   }
+ }
+
+ ss.appendRow(['','','','',sum]);  
+}
+// end main

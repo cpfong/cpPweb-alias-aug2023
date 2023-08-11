@@ -1,0 +1,2758 @@
+  <HTML>
+  <HEAD>
+  
+  <TITLE>MySQL Reference Manual for version 5.0.3-alpha - 11  Column Types</TITLE>
+   <style> code {color:purple} tt {color:green} samp {color:navy} pre {color:maroon} </style>
+  </HEAD>
+  <BODY BGCOLOR=silver TEXT=#000000 LINK=#101090 VLINK=#7030B0>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_Charset.html">previous</A>, <A HREF="manual_Functions.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="Column_types" HREF="manual_toc.html#Column_types">11  Column Types</A></H1>
+
+<P>
+MySQL supports a number of column types in several categories: numeric
+types, date and time types, and string (character) types.  This chapter
+first gives an overview of these column types, and then provides a more
+detailed description of the properties of the types in each category, and a
+summary of the column type storage requirements.  The overview is
+intentionally brief.  The more detailed descriptions should be consulted for
+additional information about particular column types, such as the allowable
+formats in which you can specify values.
+
+</P>
+<P>
+MySQL versions 4.1 and up support extensions for handing spatial
+data.  Information about spatial types is provided in
+section <A HREF="manual_Spatial_extensions_in_MySQL.html#Spatial_extensions_in_MySQL">18  Spatial Extensions in MySQL</A>.
+
+</P>
+<P>
+<A NAME="IDX1083"></A>
+<A NAME="IDX1084"></A>
+<A NAME="IDX1085"></A>
+<A NAME="IDX1086"></A>
+
+</P>
+<P>
+Several of the column type descriptions use these conventions:
+
+</P>
+<DL COMPACT>
+
+<DT><code><var>M</var></code>
+<DD>
+<A NAME="IDX1087"></A>
+<A NAME="IDX1088"></A>
+<A NAME="IDX1089"></A>
+<A NAME="IDX1090"></A>
+Indicates the maximum display width.  The maximum legal display width is 255.
+
+<DT><code><var>D</var></code>
+<DD>
+<A NAME="IDX1091"></A>
+<A NAME="IDX1092"></A>
+Applies to floating-point and fixed-point types and indicates the number of
+digits following the decimal point.  The maximum possible value is 30, but
+should be no greater than <var>M</var>-2.
+
+<DT><code></code>
+<DD>
+<A NAME="IDX1093"></A>
+<A NAME="IDX1094"></A>
+Square brackets (<samp>`['</samp> and <samp>`]'</samp>) indicate parts of type specifiers
+that are optional.
+
+</DL>
+
+<P>
+<A NAME="IDX1095"></A>
+
+</P>
+
+
+<H2><A NAME="Column_type_overview" HREF="manual_toc.html#Column_type_overview">11.1  Column Type Overview</A></H2>
+
+
+
+<H3><A NAME="Numeric_type_overview" HREF="manual_toc.html#Numeric_type_overview">11.1.1  Overview of Numeric Types</A></H3>
+
+<P>
+A summary of the numeric column types follows. For additional information, see
+section <A HREF="manual_Column_types.html#Numeric_types">11.2  Numeric Types</A>.
+Column storage requirements are given in section <A HREF="manual_Column_types.html#Storage_requirements">11.5  Column Type Storage Requirements</A>.
+
+</P>
+<P>
+<var>M</var> indicates the maximum display width.  The maximum legal display
+width is 255.  Display width is unrelated to the storage size or range of
+values a type can contain, as described in section <A HREF="manual_Column_types.html#Numeric_types">11.2  Numeric Types</A>.
+
+</P>
+<P>
+If you specify <code>ZEROFILL</code> for a numeric column, MySQL
+automatically adds the <code>UNSIGNED</code> attribute to the column.
+
+</P>
+<P>
+<strong>Warning:</strong> You should be aware that when you use subtraction
+between integer values where one is of type <code>UNSIGNED</code>, the result
+will be unsigned! See section <A HREF="manual_Functions.html#Cast_Functions">12.7  Cast Functions and Operators</A>.
+
+</P>
+<DL COMPACT>
+
+<DT><code>TINYINT[(<var>M</var>)] [UNSIGNED] [ZEROFILL]</code>
+<DD>
+<A NAME="IDX1096"></A>
+
+A very small integer. The signed range is <code>-128</code> to <code>127</code>. The
+unsigned range is <code>0</code> to <code>255</code>.
+
+<DT><code>BIT</code>
+<DD>
+<DT><code>BOOL</code>
+<DD>
+<DT><code>BOOLEAN</code>
+<DD>
+<A NAME="IDX1097"></A>
+<A NAME="IDX1098"></A>
+<A NAME="IDX1099"></A>
+These are synonyms for <code>TINYINT(1)</code>.
+The <code>BOOLEAN</code> synonym was added in MySQL 4.1.0.
+A value of zero is considered false. Non-zero values are considered true.
+
+In the future,
+full boolean type handling will be introduced in accordance with standard SQL.
+
+<DT><code>SMALLINT[(<var>M</var>)] [UNSIGNED] [ZEROFILL]</code>
+<DD>
+<A NAME="IDX1100"></A>
+
+A small integer. The signed range is <code>-32768</code> to <code>32767</code>. The
+unsigned range is <code>0</code> to <code>65535</code>.
+
+<DT><code>MEDIUMINT[(<var>M</var>)] [UNSIGNED] [ZEROFILL]</code>
+<DD>
+<A NAME="IDX1101"></A>
+
+A medium-size integer. The signed range is <code>-8388608</code> to
+<code>8388607</code>. The unsigned range is <code>0</code> to <code>16777215</code>.
+
+<DT><code>INT[(<var>M</var>)] [UNSIGNED] [ZEROFILL]</code>
+<DD>
+<A NAME="IDX1102"></A>
+
+A normal-size integer. The signed range is <code>-2147483648</code> to
+<code>2147483647</code>.  The unsigned range is <code>0</code> to <code>4294967295</code>.
+
+<DT><code>INTEGER[(<var>M</var>)] [UNSIGNED] [ZEROFILL]</code>
+<DD>
+<A NAME="IDX1103"></A>
+
+This is a synonym for <code>INT</code>.
+
+<DT><code>BIGINT[(<var>M</var>)] [UNSIGNED] [ZEROFILL]</code>
+<DD>
+<A NAME="IDX1104"></A>
+A large integer. The signed range is <code>-9223372036854775808</code> to
+<code>9223372036854775807</code>. The unsigned range is <code>0</code> to
+<code>18446744073709551615</code>.
+Some things you should be aware of with respect to <code>BIGINT</code> columns:
+
+
+<UL>
+<LI>
+
+<A NAME="IDX1105"></A>
+All arithmetic is done using signed <code>BIGINT</code> or <code>DOUBLE</code>
+values, so you shouldn't use unsigned big integers larger than
+<code>9223372036854775807</code> (63 bits) except with bit functions! If you
+do that, some of the last digits in the result may be wrong because of
+rounding errors when converting a <code>BIGINT</code> value to a <code>DOUBLE</code>.
+
+MySQL 4.0 can handle <code>BIGINT</code> in the following cases:
+
+
+<UL>
+<LI>
+
+When using integers to store big unsigned values in a <code>BIGINT</code> column.
+<LI>
+
+In <code>MIN(<var>col_name</var>)</code> or <code>MAX(<var>col_name</var>)</code>, where
+<var>col_name</var> refers to a <code>BIGINT</code> column.
+<LI>
+
+When using operators (<code>+</code>, <code>-</code>, <code>*</code>, and so on) where
+both operands are integers.
+</UL>
+
+<LI>
+
+You can always store an exact integer value in a <code>BIGINT</code> column by
+storing it using a string.  In this case, MySQL performs a string-to-number
+conversion that involves no intermediate double-precision representation.
+<LI>
+
+The <code>-</code>, <code>+</code>, and <code>*</code> operators will use <code>BIGINT</code>
+arithmetic when both operands are integer values!  This means that if
+you multiply two big integers (or results from functions that return
+integers), you may get unexpected results when the result is larger than
+<code>9223372036854775807</code>.
+</UL>
+
+<DT><code>FLOAT(<var>p</var>) [UNSIGNED] [ZEROFILL]</code>
+<DD>
+<A NAME="IDX1106"></A>
+<A NAME="IDX1107"></A>
+<A NAME="IDX1108"></A>
+
+A floating-point number.  <var>p</var> represents the precision. It can be from
+0 to 24 for a single-precision floating-point number and from 25 to 53 for a
+double-precision floating-point number. These types are like the <code>FLOAT</code>
+and <code>DOUBLE</code> types described immediately following.  <code>FLOAT(p)</code>
+has the same range as the corresponding <code>FLOAT</code> and <code>DOUBLE</code>
+types, but the display width and number of decimals are undefined.
+
+As of MySQL 3.23, this is a true floating-point value.  In
+earlier MySQL versions, <code>FLOAT(<var>p</var>)</code> always has two decimals.
+
+<A NAME="IDX1109"></A>
+<A NAME="IDX1110"></A>
+This syntax is provided for ODBC compatibility.
+
+Using <code>FLOAT</code> might give you some unexpected problems because
+all calculations in MySQL are done with double precision.
+See section <A HREF="manual_Problems.html#No_matching_rows">A.5.7  Solving Problems with No Matching Rows</A>.
+
+<DT><code>FLOAT[(<var>M</var>,<var>D</var>)] [UNSIGNED] [ZEROFILL]</code>
+<DD>
+<A NAME="IDX1111"></A>
+<A NAME="IDX1112"></A>
+<A NAME="IDX1113"></A>
+
+A small (single-precision) floating-point number.  Allowable values are
+<code>-3.402823466E+38</code> to <code>-1.175494351E-38</code>, <code>0</code>,
+and <code>1.175494351E-38</code> to <code>3.402823466E+38</code>.  If
+<code>UNSIGNED</code> is specified, negative values are disallowed.  <var>M</var>
+is the display width and <var>D</var> is the number of decimals.  <code>FLOAT</code>
+without arguments or <code>FLOAT(<var>p</var>)</code> (where <var>p</var> is in the range from
+0 to 24) stands for a single-precision floating-point number.
+
+<DT><code>DOUBLE[(<var>M</var>,<var>D</var>)] [UNSIGNED] [ZEROFILL]</code>
+<DD>
+<A NAME="IDX1114"></A>
+<A NAME="IDX1115"></A>
+<A NAME="IDX1116"></A>
+
+A normal-size (double-precision) floating-point number.
+Allowable values are <code>-1.7976931348623157E+308</code> to
+<code>-2.2250738585072014E-308</code>, <code>0</code>, and
+<code>2.2250738585072014E-308</code> to <code>1.7976931348623157E+308</code>.  If
+<code>UNSIGNED</code> is specified, negative values are disallowed.
+<var>M</var> is the display width and <var>D</var> is the number of decimals.
+<code>DOUBLE</code> without arguments or <code>FLOAT(<var>p</var>)</code> (where
+<var>p</var> is in the
+range from 25 to 53) stands for a double-precision floating-point number.
+
+<DT><code>DOUBLE PRECISION[(<var>M</var>,<var>D</var>)] [UNSIGNED] [ZEROFILL]</code>
+<DD>
+<DT><code>REAL[(<var>M</var>,<var>D</var>)] [UNSIGNED] [ZEROFILL]</code>
+<DD>
+<A NAME="IDX1117"></A>
+<A NAME="IDX1118"></A>
+
+These are synonyms for <code>DOUBLE</code>.
+Exception: If the server SQL mode includes the <code>REAL_AS_FLOAT</code> option,
+<code>REAL</code> is a synonym for <code>FLOAT</code> rather than <code>DOUBLE</code>.
+
+<DT><code>DECIMAL[(<var>M</var>[,<var>D</var>])] [UNSIGNED] [ZEROFILL]</code>
+<DD>
+<A NAME="IDX1119"></A>
+
+An unpacked fixed-point number.  Behaves like a <code>CHAR</code> column;
+``unpacked'' means the number is stored as a string, using one character for
+each digit of the value.  <var>M</var> is the total number of digits and
+<var>D</var> is the number of decimals.  The decimal point and (for negative
+numbers) the <samp>`-'</samp> sign are not counted in <var>M</var>, although space for
+them is reserved. If <var>D</var> is 0, values have no decimal point or
+fractional part.  The maximum range of <code>DECIMAL</code> values is the same as
+for <code>DOUBLE</code>, but the actual range for a given <code>DECIMAL</code> column
+may be constrained by the choice of <var>M</var> and <var>D</var>.  If
+<code>UNSIGNED</code> is specified, negative values are disallowed.
+
+If <var>D</var> is omitted, the default is 0.  If <var>M</var> is omitted, the
+default is 10.
+
+Prior to MySQL 3.23, the <var>M</var> argument must be large enough to
+include the space needed for the sign and the decimal point.
+
+<DT><code>DEC[(<var>M</var>[,<var>D</var>])] [UNSIGNED] [ZEROFILL]</code>
+<DD>
+<DT><code>NUMERIC[(<var>M</var>[,<var>D</var>])] [UNSIGNED] [ZEROFILL]</code>
+<DD>
+<DT><code>FIXED[(<var>M</var>[,<var>D</var>])] [UNSIGNED] [ZEROFILL]</code>
+<DD>
+<A NAME="IDX1120"></A>
+<A NAME="IDX1121"></A>
+<A NAME="IDX1122"></A>
+
+These are synonyms for <code>DECIMAL</code>.
+
+The <code>FIXED</code> synonym was added in MySQL 4.1.0 for compatibility
+with other servers.
+
+</DL>
+
+
+
+<H3><A NAME="Date_and_time_type_overview" HREF="manual_toc.html#Date_and_time_type_overview">11.1.2  Overview of Date and Time Types</A></H3>
+
+<P>
+A summary of the temporal column types follows. For additional information, see
+section <A HREF="manual_Column_types.html#Date_and_time_types">11.3  Date and Time Types</A>.
+Column storage requirements are given in section <A HREF="manual_Column_types.html#Storage_requirements">11.5  Column Type Storage Requirements</A>.
+
+</P>
+<DL COMPACT>
+
+<DT><code>DATE</code>
+<DD>
+<A NAME="IDX1123"></A>
+
+A date.  The supported range is <code>'1000-01-01'</code> to <code>'9999-12-31'</code>.
+MySQL displays <code>DATE</code> values in <code>'YYYY-MM-DD'</code> format, but
+allows you to assign values to <code>DATE</code> columns using either strings or
+numbers.
+
+<DT><code>DATETIME</code>
+<DD>
+<A NAME="IDX1124"></A>
+
+A date and time combination.  The supported range is <code>'1000-01-01
+00:00:00'</code> to <code>'9999-12-31 23:59:59'</code>.  MySQL displays
+<code>DATETIME</code> values in <code>'YYYY-MM-DD HH:MM:SS'</code> format, but allows you
+to assign values to <code>DATETIME</code> columns using either strings or numbers.
+
+<DT><code>TIMESTAMP[(<var>M</var>)]</code>
+<DD>
+<A NAME="IDX1125"></A>
+
+A timestamp.  The range is <code>'1970-01-01 00:00:00'</code> to partway through the
+year <code>2037</code>.
+
+A <code>TIMESTAMP</code> column is useful for recording the date and time of an
+<code>INSERT</code> or <code>UPDATE</code> operation. The first <code>TIMESTAMP</code> column
+in a table is automatically set to the date and time of the most recent
+operation if you don't assign it a value yourself.  You can also set any
+<code>TIMESTAMP</code> column to the current date and time by assigning it a
+<code>NULL</code> value.
+
+From MySQL 4.1 on, <code>TIMESTAMP</code> is returned as a string with the format
+<code>'YYYY-MM-DD HH:MM:SS'</code>. If you want to obtain the value as a number,
+you should add <code>+0</code> to the timestamp column. Different timestamp
+display widths are not supported.
+
+In MySQL 4.0 and earlier, <code>TIMESTAMP</code> values are displayed in
+<code>YYYYMMDDHHMMSS</code>, <code>YYMMDDHHMMSS</code>, <code>YYYYMMDD</code>, or <code>YYMMDD</code>
+format, depending on whether <var>M</var> is 14 (or missing), 12,
+8, or 6, but allows you to assign values to <code>TIMESTAMP</code>
+columns using either strings or numbers.
+The <var>M</var> argument affects only how a <code>TIMESTAMP</code> column is displayed,
+not storage.  Its values always are stored using four bytes each.
+From MySQL 4.0.12, the <code>--new</code> option can be used
+to make the server behave as in MySQL 4.1.
+
+Note that <code>TIMESTAMP(<var>M</var>)</code> columns where <var>M</var> is 8 or 14 are reported to
+be numbers, whereas other <code>TIMESTAMP(<var>M</var>)</code> columns are reported to be
+strings.  This is just to ensure that you can reliably dump and restore
+the table with these types.
+
+<DT><code>TIME</code>
+<DD>
+<A NAME="IDX1126"></A>
+
+A time.  The range is <code>'-838:59:59'</code> to <code>'838:59:59'</code>.
+MySQL displays <code>TIME</code> values in <code>'HH:MM:SS'</code> format, but
+allows you to assign values to <code>TIME</code> columns using either strings or
+numbers.
+
+<DT><code>YEAR[(2|4)]</code>
+<DD>
+<A NAME="IDX1127"></A>
+
+A year in two-digit or four-digit format. The default is four-digit format.
+In four-digit format, the
+allowable values are <code>1901</code> to <code>2155</code>, and <code>0000</code>.
+In two-digit format, the allowable values are
+<code>70</code> to <code>69</code>, representing years from
+1970 to 2069.  MySQL displays <code>YEAR</code> values in
+<code>YYYY</code> format, but allows you to assign values to <code>YEAR</code> columns
+using either strings or numbers. The <code>YEAR</code> type is unavailable prior
+to MySQL 3.22.
+
+</DL>
+
+
+
+<H3><A NAME="String_type_overview" HREF="manual_toc.html#String_type_overview">11.1.3  Overview of String Types</A></H3>
+
+<P>
+A summary of the string column types follows.
+For additional information, see section <A HREF="manual_Column_types.html#String_types">11.4  String Types</A>.
+Column storage requirements are given in section <A HREF="manual_Column_types.html#Storage_requirements">11.5  Column Type Storage Requirements</A>.
+
+</P>
+<P>
+In some cases, MySQL may change a string column to a type different from
+that given in a <code>CREATE TABLE</code> or <code>ALTER TABLE</code> statement.
+See section <A HREF="manual_SQL_Syntax.html#Silent_column_changes">13.2.6.1  Silent Column Specification Changes</A>.
+
+</P>
+<P>
+A change that affects many string column types is that, as of MySQL 4.1,
+character column definitions can include a <code>CHARACTER SET</code> attribute to
+specify the character set and, optionally, a collation. This
+applies to <code>CHAR</code>, <code>VARCHAR</code>, the <code>TEXT</code> types, <code>ENUM</code>,
+and <code>SET</code>. For example:
+
+</P>
+
+<PRE>
+CREATE TABLE t
+(
+    c1 CHAR(20) CHARACTER SET utf8,
+    c2 CHAR(20) CHARACTER SET latin1 COLLATE latin1_bin
+);
+</PRE>
+
+<P>
+This table definition creates a column named <code>c1</code> that has a character
+set of <code>utf8</code> with the default collation for that character set, and a
+column named <code>c2</code> that has a character set of <code>latin1</code> and the
+binary collation for the character set. The binary collation is not case
+sensitive.
+
+</P>
+<P>
+Character column sorting and comparison are based on the character set
+assigned to the column. Before MySQL 4.1, sorting and comparison are based
+on the collation of the server character set. For <code>CHAR</code> and
+<code>VARCHAR</code> columns, you can declare the column with the <code>BINARY</code>
+attribute to cause sorting and comparison to be case sensitive using the
+underlying character code values rather then a lexical ordering.
+
+</P>
+<P>
+For more details, see section <A HREF="manual_Charset.html#Charset">10  Character Set Support</A>.
+
+</P>
+<P>
+Also as of 4.1, MySQL interprets length specifications in character column
+definitions in characters. (Earlier versions interpret them in bytes.)
+
+</P>
+<DL COMPACT>
+
+<DT><code>[NATIONAL] CHAR(<var>M</var>) [BINARY | ASCII | UNICODE]</code>
+<DD>
+<A NAME="IDX1128"></A>
+<A NAME="IDX1129"></A>
+<A NAME="IDX1130"></A>
+<A NAME="IDX1131"></A>
+
+A fixed-length string that is always right-padded with spaces to the
+specified length when stored.  <var>M</var> represents the column length.  The
+range of <var>M</var> is 0 to 255 characters (1 to 255 prior to MySQL 3.23).
+
+<strong>Note</strong>: Trailing spaces are removed when <code>CHAR</code> values are
+retrieved.
+
+From MySQL 4.1.0, a <code>CHAR</code> column with a length specification greater
+than 255 is converted to the smallest <code>TEXT</code> type that can hold values
+of the given length.  For example, <code>CHAR(500)</code> is converted to
+<code>TEXT</code>, and <code>CHAR(200000)</code> is converted to <code>MEDIUMTEXT</code>.
+This is a compatibility feature.  However, this conversion causes the
+column to become a variable-length column, and also affects trailing-space
+removal.
+
+<code>CHAR</code> is shorthand for <code>CHARACTER</code>.
+<code>NATIONAL CHAR</code> (or its equivalent short form, <code>NCHAR</code>) is the
+standard SQL way to define that a <code>CHAR</code> column should use the default
+character set.  This is the default in MySQL.
+
+As of MySQL 4.1.2, the <code>BINARY</code> attribute is shorthand for specifying
+the binary collation of the column character set. Before 4.1.2, <code>BINARY</code>
+attribute causes the column to be treated as a binary string.  In either
+case, sorting and comparisons become case sensitive.
+
+From MySQL 4.1.0 on, the <code>ASCII</code> attribute can be specified. It
+assigns the <code>latin1</code> character set to a <code>CHAR</code> column.
+
+From MySQL 4.1.1 on, the <code>UNICODE</code> attribute can be specified. It
+assigns the <code>ucs2</code> character set to a <code>CHAR</code> column.
+
+MySQL allows you to create a column of type <code>CHAR(0)</code>. This is mainly
+useful when you have to be compliant with some old applications that depend
+on the existence of a column but that do not actually use the value.  This
+is also quite nice when you need a column that can take only two values: A
+<code>CHAR(0)</code> column that is not defined as <code>NOT NULL</code> occupies only
+one bit and can take only the values <code>NULL</code> and <code>''</code> (the empty
+string).
+
+<DT><code>CHAR</code>
+<DD>
+This is a synonym for <code>CHAR(1)</code>.
+
+<DT><code>[NATIONAL] VARCHAR(<var>M</var>) [BINARY]</code>
+<DD>
+<A NAME="IDX1132"></A>
+<A NAME="IDX1133"></A>
+<A NAME="IDX1134"></A>
+<A NAME="IDX1135"></A>
+
+A variable-length string.  <var>M</var> represents the maximum column length.
+The range of <var>M</var> is 0 to 255 characters (1 to 255 prior to MySQL 4.0.2).
+In MySQL 5.0.3 this is extended to <code>65535</code> bytes. (The exact number of
+characters is depending on the character set).
+
+<strong>Note</strong>: Before 5.0.3, trailing spaces where removed when
+<code>VARCHAR</code> values was stored, which differs from the standard SQL
+specification.
+
+From MySQL 4.1.0 - 5.0.2 on, a <code>VARCHAR</code> column with a length
+specification greater than 255 is converted to the smallest <code>TEXT</code>
+type that can hold values of the given length.  For example,
+<code>VARCHAR(500)</code> is converted to <code>TEXT</code>, and
+<code>VARCHAR(200000)</code> is converted to <code>MEDIUMTEXT</code>.  This is a
+compatibility feature.  However, this conversion affects trailing-space
+removal.
+
+<code>VARCHAR</code> is shorthand for <code>CHARACTER VARYING</code>.
+
+As of MySQL 4.1.2, the <code>BINARY</code> attribute is shorthand for specifying
+the binary collation of the column character set. Before 4.1.2, <code>BINARY</code>
+attribute causes the column to be treated as a binary string.  In either
+case, sorting and comparisons become case sensitive.
+
+Starting from MySQL 5.0.3, <code>VARCHAR</code> is stored with a 1 byte or 2
+byte length prefix + data.  The length prefix is 1 byte if the storage
+size for the <code>VARCHAR</code> column is less than 256.
+
+<DT><code>BINARY(<var>M</var>)</code>
+<DD>
+<A NAME="IDX1136"></A>
+
+The <code>BINARY</code> type is similar to the <code>CHAR</code> type, but stores
+binary strings rather than non-binary strings.
+
+This type was added in MySQL 4.1.2.
+
+<DT><code>VARBINARY(<var>M</var>)</code>
+<DD>
+<A NAME="IDX1137"></A>
+
+The <code>VARBINARY</code> type is similar to the <code>VARCHAR</code> type, but stores
+binary strings rather than non-binary strings.
+
+This type was added in MySQL 4.1.2.
+
+<DT><code>TINYBLOB</code>
+<DD>
+<DT><code>TINYTEXT</code>
+<DD>
+<A NAME="IDX1138"></A>
+<A NAME="IDX1139"></A>
+
+A <code>BLOB</code> or <code>TEXT</code> column with a maximum length of 255 (2^8
+- 1)
+characters.
+
+<DT><code>BLOB</code>
+<DD>
+<DT><code>TEXT</code>
+<DD>
+<A NAME="IDX1140"></A>
+<A NAME="IDX1141"></A>
+
+A <code>BLOB</code> or <code>TEXT</code> column with a maximum length of 65,535 (2^16
+-1)
+characters.
+
+<DT><code>MEDIUMBLOB</code>
+<DD>
+<DT><code>MEDIUMTEXT</code>
+<DD>
+<A NAME="IDX1142"></A>
+<A NAME="IDX1143"></A>
+
+A <code>BLOB</code> or <code>TEXT</code> column with a maximum length of 16,777,215
+(2^24 - 1) characters.
+
+<DT><code>LONGBLOB</code>
+<DD>
+<DT><code>LONGTEXT</code>
+<DD>
+<A NAME="IDX1144"></A>
+<A NAME="IDX1145"></A>
+
+A <code>BLOB</code> or <code>TEXT</code> column with a maximum length of 4,294,967,295 or
+4GB (2^32 - 1) characters.  Up to MySQL
+3.23, the client/server protocol and <code>MyISAM</code> tables had a limit
+of 16MB per communication packet / table row. From MySQL 4.0, the maximum
+allowed length of <code>LONGBLOB</code> or <code>LONGTEXT</code> columns depends on the
+configured maximum packet size in the client/server protocol and available
+memory.
+
+<DT><code>ENUM('<var>value1</var>','<var>value2</var>',...)</code>
+<DD>
+<A NAME="IDX1146"></A>
+
+An enumeration.  A string object that can have only one value, chosen
+from the list of values <code>'<var>value1</var>'</code>, <code>'<var>value2</var>'</code>, <code>...</code>,
+<code>NULL</code> or the special <code>''</code> error value.  An <code>ENUM</code> column can
+have a maximum of 65,535 distinct values.
+<code>ENUM</code> values are represented internally as integers.
+
+<DT><code>SET('<var>value1</var>','<var>value2</var>',...)</code>
+<DD>
+<A NAME="IDX1147"></A>
+
+A set.  A string object that can have zero or more values, each of which must
+be chosen from the list of values <code>'<var>value1</var>'</code>, <code>'<var>value2</var>'</code>,
+<code>...</code> A <code>SET</code> column can have a maximum of 64 members.
+<code>SET</code> values are represented internally as integers.
+</DL>
+
+
+
+<H2><A NAME="Numeric_types" HREF="manual_toc.html#Numeric_types">11.2  Numeric Types</A></H2>
+
+<P>
+MySQL supports all of the standard SQL numeric data types.  These
+types include the exact numeric data types (<code>INTEGER</code>,
+<code>SMALLINT</code>, <code>DECIMAL</code>, and <code>NUMERIC</code>), as well as the
+approximate numeric data types (<code>FLOAT</code>, <code>REAL</code>, and
+<code>DOUBLE PRECISION</code>). The keyword <code>INT</code> is a synonym for
+<code>INTEGER</code>, and the keyword <code>DEC</code> is a synonym for
+<code>DECIMAL</code>.
+
+</P>
+<P>
+As an extension to the SQL standard, MySQL also supports the integer
+types <code>TINYINT</code>, <code>MEDIUMINT</code>, and <code>BIGINT</code> as listed in
+the following table.
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Type</strong> </TD><TD> <strong>Bytes</strong> </TD><TD> <strong>Minimum Value</strong> </TD><TD> <strong>Maximum Value</strong>
+</TD></TR>
+<TR><TD></TD><TD> </TD><TD> <strong>(Signed/Unsigned)</strong> </TD><TD> <strong>(Signed/Unsigned)</strong>
+</TD></TR>
+<TR><TD><code>TINYINT</code> </TD><TD> 1 </TD><TD> <code>-128</code> </TD><TD> <code>127</code>
+</TD></TR>
+<TR><TD></TD><TD> </TD><TD> <code>0</code> </TD><TD> <code>255</code>
+</TD></TR>
+<TR><TD><code>SMALLINT</code> </TD><TD> 2 </TD><TD> <code>-32768</code> </TD><TD> <code>32767</code>
+</TD></TR>
+<TR><TD></TD><TD> </TD><TD> <code>0</code> </TD><TD> <code>65535</code>
+</TD></TR>
+<TR><TD><code>MEDIUMINT</code> </TD><TD> 3 </TD><TD> <code>-8388608</code> </TD><TD> <code>8388607</code>
+</TD></TR>
+<TR><TD></TD><TD> </TD><TD> <code>0</code> </TD><TD> <code>16777215</code>
+</TD></TR>
+<TR><TD><code>INT</code> </TD><TD> 4 </TD><TD> <code>-2147483648</code> </TD><TD> <code>2147483647</code>
+</TD></TR>
+<TR><TD></TD><TD> </TD><TD> <code>0</code> </TD><TD> <code>4294967295</code>
+</TD></TR>
+<TR><TD><code>BIGINT</code> </TD><TD> 8 </TD><TD> <code>-9223372036854775808</code> </TD><TD> <code>9223372036854775807</code>
+</TD></TR>
+<TR><TD></TD><TD> </TD><TD> <code>0</code> </TD><TD> <code>18446744073709551615</code>
+</TD></TR>
+</TABLE>
+
+<P>
+Another extension is supported by MySQL for optionally
+specifying the display width of an integer value in parentheses following
+the base keyword for the type (for example, <code>INT(4)</code>).  This optional
+display width specification is used to left-pad the display of values
+having a width less than the width specified for the column.
+
+</P>
+<P>
+The display width does not constrain the range of values that can be stored
+in the column, nor the number of digits that will be displayed for values
+having a width exceeding that specified for the column.
+
+</P>
+<P>
+When used in conjunction with the optional extension attribute
+<code>ZEROFILL</code>, the default padding of spaces is replaced with zeros.
+For example, for a column declared as <code>INT(5) ZEROFILL</code>, a value
+of <code>4</code> is retrieved as <code>00004</code>.  Note that if you store larger
+values than the display width in an integer column, you may experience
+problems when MySQL generates temporary tables for some
+complicated joins, because in these cases MySQL trusts that the
+data did fit into the original column width.
+
+</P>
+<P>
+All integer types can have an optional (non-standard) attribute
+<code>UNSIGNED</code>.  Unsigned values can be used when you want to allow only
+non-negative numbers in a column and you need a bigger upper numeric
+range for the column.
+
+</P>
+<P>
+As of MySQL 4.0.2, floating-point and fixed-point types also can be
+<code>UNSIGNED</code>.  As with integer types, this attribute prevents negative
+values from being stored in the column.  However, unlike the integer types,
+the upper range of column values remains the same.
+
+</P>
+<P>
+If you specify <code>ZEROFILL</code> for a numeric column, MySQL
+automatically adds the <code>UNSIGNED</code> attribute to the column.
+
+</P>
+<P>
+The <code>DECIMAL</code> and <code>NUMERIC</code> types are implemented as the same
+type by MySQL.  They are
+used to store values for which it is important to preserve exact precision,
+for example with monetary data.  When declaring a column of one of these
+types, the precision and scale can be (and usually is) specified; for
+example:
+
+</P>
+
+<PRE>
+salary DECIMAL(5,2)
+</PRE>
+
+<P>
+In this example, <code>5</code> is the precision and <code>2</code> is the scale.  The
+precision represents the number of significant decimal digits that will be
+stored for values, and the scale represents the number of digits that will
+be stored following the decimal point.
+
+</P>
+<P>
+MySQL stores <code>DECIMAL</code> and <code>NUMERIC</code> values as strings, rather
+than as binary floating-point numbers, in order to preserve the decimal
+precision of those values.  One character is used for each digit of the
+value, the decimal point (if the scale is greater than 0), and the <samp>`-'</samp> sign
+(for negative numbers).  If the scale is 0, <code>DECIMAL</code> and
+<code>NUMERIC</code> values contain no decimal point or fractional part.
+
+</P>
+<P>
+Standard SQL requires that the <code>salary</code> column
+be able to store any value with five digits and two decimals. In this case,
+therefore, the range of values that can be stored in the <code>salary</code>
+column is from <code>-999.99</code> to <code>999.99</code>.  MySQL varies from this in
+two ways:
+
+</P>
+
+<UL>
+
+<LI>
+
+On the positive end of the range, the column actually can store numbers up to
+<code>9999.99</code>. For positive numbers, MySQL uses the
+byte reserved for the sign to extend the upper end of the range.
+
+<LI>
+
+<code>DECIMAL</code> columns in MySQL before 3.23 are stored differently and
+cannot represent all the values required by standard SQL. This is because
+for a type of <code>DECIMAL(<var>M</var>,<var>D</var>)</code>, the value of <var>M</var> includes the bytes
+for the sign and the decimal point.  The range of the <code>salary</code> column
+before MySQL 3.23 would be <code>-9.99</code> to <code>99.99</code>.
+
+</UL>
+
+<P>
+In standard SQL, the syntax <code>DECIMAL(<var>M</var>)</code> is equivalent to
+<code>DECIMAL(<var>M</var>,0)</code>.  Similarly, the syntax <code>DECIMAL</code> is equivalent
+to <code>DECIMAL(<var>M</var>,0)</code>, where the implementation is allowed to decide the
+value of <var>M</var>.  As of MySQL 3.23.6, both of these variant forms of the
+<code>DECIMAL</code> and <code>NUMERIC</code> data types are supported.  The default value
+of <var>M</var> is 10. Before 3.23.6,
+<var>M</var> and <var>D</var> both must be specified explicitly.
+
+</P>
+<P>
+The maximum range of <code>DECIMAL</code> and <code>NUMERIC</code> values is the
+same as for <code>DOUBLE</code>, but the actual range for a given
+<code>DECIMAL</code> or <code>NUMERIC</code> column can be constrained by the
+precision or scale for a given column.  When such a column
+is assigned a value with more digits following the decimal point than
+are allowed by the specified scale, the value is converted to that
+scale.  (The precise behavior is operating system-specific, but
+generally the effect is truncation to the allowable number of digits.)
+When a <code>DECIMAL</code> or <code>NUMERIC</code> column is
+assigned a value that exceeds the range implied by the
+specified (or default) precision and scale,
+MySQL stores the value representing the corresponding end
+point of that range.
+
+</P>
+<P>
+For floating-point column types, MySQL uses four bytes for single-precision
+values and eight bytes for double-precision values.
+
+</P>
+<P>
+The <code>FLOAT</code> type is used to represent approximate numeric data types.
+The SQL standard allows an optional specification of the precision
+(but not the range of the exponent) in bits following the keyword
+<code>FLOAT</code> in parentheses.  The MySQL implementation also supports this
+optional precision specification, but the precision value is used only to
+determine storage size.  A precision from 0 to 23 results in four-byte
+single-precision <code>FLOAT</code> column. A precision from 24 to 53 results
+in eight-byte double-precision <code>DOUBLE</code> column.
+
+</P>
+<P>
+When the keyword
+<code>FLOAT</code> is used for a column type without a precision specification,
+MySQL uses four bytes to store the values.  MySQL also supports variant
+syntax with two numbers given in parentheses following the <code>FLOAT</code>
+keyword.  The first number represents the display width
+and the second number specifies the number of digits to be stored and
+displayed following the decimal point (as with <code>DECIMAL</code> and
+<code>NUMERIC</code>).  When MySQL is asked to store a number for
+such a column with more decimal digits following the decimal point than
+specified for the column, the value is rounded to eliminate the extra
+digits when the value is stored.
+
+</P>
+<P>
+In standard SQL, the <code>REAL</code> and <code>DOUBLE PRECISION</code> types do not accept
+precision specifications.  MySQL supports a variant syntax with two numbers
+given in parentheses following the type name.  The first number represents
+the display width and the second number specifies the number of digits to
+be stored and displayed following the decimal point.
+As an extension to the SQL standard, MySQL recognizes <code>DOUBLE</code>
+as a synonym for the <code>DOUBLE PRECISION</code> type.  In contrast with the
+standard's requirement that the precision for <code>REAL</code> be smaller than
+that used for <code>DOUBLE PRECISION</code>, MySQL implements both as eight-byte
+double-precision floating-point values (unless the server SQL mode
+includes the <code>REAL_AS_FLOAT</code> option).
+
+</P>
+<P>
+For maximum portability, code requiring storage of approximate numeric
+data values should use <code>FLOAT</code> or <code>DOUBLE PRECISION</code> with no
+specification of precision or number of decimal points.
+
+</P>
+<P>
+When asked to store a value in a numeric column that is outside the column
+type's allowable range, MySQL clips the value to the appropriate
+endpoint of the range and stores the resulting value instead.
+
+</P>
+<P>
+For example, the range of an <code>INT</code> column is <code>-2147483648</code>
+to <code>2147483647</code>.  If you try to insert <code>-9999999999</code> into an
+<code>INT</code> column, MySQL clips the value to the lower endpoint of the
+range and stores <code>-2147483648</code> instead. Similarly, if you try to
+insert <code>9999999999</code>, MySQL clips the value to the upper endpoint of
+the range and stores <code>2147483647</code> instead.
+
+</P>
+<P>
+If the <code>INT</code> column is <code>UNSIGNED</code>, the size of the column's
+range is the same but its endpoints shift up to <code>0</code> and <code>4294967295</code>.
+If you try to store <code>-9999999999</code> and <code>9999999999</code>,
+the values stored in the column are <code>0</code> and <code>4294967296</code>.
+
+</P>
+<P>
+Conversions that occur due to clipping are reported as ``warnings'' for
+<code>ALTER TABLE</code>, <code>LOAD DATA INFILE</code>, <code>UPDATE</code>, and
+multiple-row <code>INSERT</code> statements.
+
+</P>
+
+
+
+<H2><A NAME="Date_and_time_types" HREF="manual_toc.html#Date_and_time_types">11.3  Date and Time Types</A></H2>
+
+<P>
+<A NAME="IDX1148"></A>
+<A NAME="IDX1149"></A>
+
+</P>
+
+<P>
+The date and time types for representing temporal values are <code>DATETIME</code>, <code>DATE</code>,
+<code>TIMESTAMP</code>, <code>TIME</code>, and <code>YEAR</code>.  Each temporal type has a
+range of legal values, as well as a ``zero'' value that is used when you
+specify an illegal value that MySQL cannot represent. The <code>TIMESTAMP</code>
+type has special automatic updating behavior, described later on.
+
+</P>
+<P>
+Starting from MySQL 5.0.2, MySQL will give warnings/errors if you try to insert
+an illegal date. You can get MySQL to accept certain dates, such as
+<code>'1999-11-31'</code>, by using the <code>ALLOW_INVALID_DATES</code> SQL mode.
+(Before 5.0.2, this mode was the default behavior for MySQL).
+This is useful when you want to store the ``possibly wrong'' value the user has
+specified (for example, in a web form) in the database for future processing.
+Under this mode, MySQL verifies only that the month is in the range from 0
+to 12 and that the day is in the range from 0 to 31. These ranges
+are defined to include zero because MySQL allows you to store dates where the
+day or month and day are zero in a <code>DATE</code> or <code>DATETIME</code> column.
+This is extremely useful for applications that need to store a birthdate for
+which you don't know the exact date.  In this case, you simply store the date
+as <code>'1999-00-00'</code> or <code>'1999-01-00'</code>.  If you store dates such as
+these, you should not expect to get correct results for functions such as
+<code>DATE_SUB()</code> or <code>DATE_ADD</code> that require complete dates.  (If you
+don't want to allow zero in dates, you can use the <code>NO_ZERO_IN_DATE</code>
+SQL mode).
+
+</P>
+<P>
+MySQL also allows you to store <code>'0000-00-00'</code> as a ``dummy date''
+(if you are not using the <code>NO_ZERO_DATE</code> SQL mode).  This is in some
+cases is more convenient than using <code>NULL</code> values.
+
+</P>
+<P>
+By setting the <code>sql_mode</code> system variable to the appropriate mode
+values, You can more exactly what kind of dates you want MySQL to support.
+See section <A HREF="manual_MySQL_Database_Administration.html#Server_SQL_mode">5.2.2  The Server SQL Mode</A>.
+
+</P>
+<P>
+Here are some general considerations to keep in mind when working
+with date and time types:
+
+</P>
+
+<UL>
+<LI>
+
+MySQL retrieves values for a given date or time type in a standard output
+format, but it attempts to interpret a variety of formats for input values
+that you supply (for example, when you specify a value to be assigned to
+or compared to a date or time type).  Only the formats described in the
+following sections are supported.  It is expected that you will supply
+legal values, and unpredictable results may occur if you use values in
+other formats.
+
+<LI>
+
+Dates containing two-digit year values are ambiguous because the century is
+unknown.  MySQL interprets two-digit year values using the following
+rules:
+
+
+<UL>
+<LI>
+
+Year values in the range <code>00-69</code> are converted to <code>2000-2069</code>.
+
+<LI>
+
+Year values in the range <code>70-99</code> are converted to <code>1970-1999</code>.
+</UL>
+
+<LI>
+
+Although MySQL tries to interpret values in several formats, 
+dates always must be
+given in year-month-day order (for example, <code>'98-09-04'</code>), rather than
+in the month-day-year or day-month-year orders commonly used elsewhere (for
+example, <code>'09-04-98'</code>, <code>'04-09-98'</code>).
+
+<LI>
+
+MySQL automatically converts a date or time type value to a number
+if the value is used in a numeric context and vice versa.
+
+<LI>
+
+When MySQL encounters a value for a date or time type that is out of
+range or otherwise illegal for the type (as described at the beginning of
+this section), it converts the value to the ``zero'' value for that type.
+The exception is that out-of-range <code>TIME</code> values are clipped to the
+appropriate endpoint of the <code>TIME</code> range.
+
+The following table shows the format of the ``zero'' value for each
+type.  Note that the use of these values produces warnings if the
+<code>NO_ZERO_DATE</code> SQL mode is enabled.
+
+<TABLE BORDER>
+<TR><TD><strong>Column Type</strong> </TD><TD> <strong>``Zero'' Value</strong>
+</TD></TR>
+<TR><TD><code>DATETIME</code> </TD><TD> <code>'0000-00-00 00:00:00'</code>
+</TD></TR>
+<TR><TD><code>DATE</code> </TD><TD> <code>'0000-00-00'</code>
+</TD></TR>
+<TR><TD><code>TIMESTAMP</code> </TD><TD> <code>00000000000000</code>
+</TD></TR>
+<TR><TD><code>TIME</code> </TD><TD> <code>'00:00:00'</code>
+</TD></TR>
+<TR><TD><code>YEAR</code> </TD><TD> <code>0000</code>
+</TD></TR>
+</TABLE>
+
+<LI>
+
+The ``zero'' values are special, but you can store or refer to them
+explicitly using the values shown in the table.  You can also do this
+using the values <code>'0'</code> or <code>0</code>, which are easier to write.
+
+<LI>
+
+``Zero'' date or time values used through MyODBC are converted
+automatically to <code>NULL</code> in MyODBC 2.50.12 and above,
+because ODBC can't handle such values.
+</UL>
+
+
+
+<H3><A NAME="DATETIME" HREF="manual_toc.html#DATETIME">11.3.1  The <code>DATETIME</code>, <code>DATE</code>, and <code>TIMESTAMP</code> Types</A></H3>
+
+<P>
+<A NAME="IDX1150"></A>
+<A NAME="IDX1151"></A>
+<A NAME="IDX1152"></A>
+
+</P>
+
+<P>
+The <code>DATETIME</code>, <code>DATE</code>, and <code>TIMESTAMP</code> types are related.
+This section describes their characteristics, how they are similar, and how
+they differ.
+
+</P>
+<P>
+The <code>DATETIME</code> type is used when you need values that contain both date
+and time information.  MySQL retrieves and displays <code>DATETIME</code>
+values in <code>'YYYY-MM-DD HH:MM:SS'</code> format.  The supported range is
+<code>'1000-01-01 00:00:00'</code> to <code>'9999-12-31 23:59:59'</code>.  (``Supported''
+means that although earlier values might work, there is no guarantee that
+they will.)
+
+</P>
+<P>
+The <code>DATE</code> type is used when you need only a date value, without a time
+part.  MySQL retrieves and displays <code>DATE</code> values in
+<code>'YYYY-MM-DD'</code> format.  The supported range is <code>'1000-01-01'</code> to
+<code>'9999-12-31'</code>.
+
+</P>
+<P>
+The <code>TIMESTAMP</code> column type has varying properties,
+depending on the MySQL version and the SQL mode the server is running in.
+These properties are described later in this section.
+
+</P>
+<P>
+You can specify <code>DATETIME</code>, <code>DATE</code>, and <code>TIMESTAMP</code> values using
+any of a common set of formats:
+
+</P>
+
+<UL>
+<LI>
+
+As a string in either <code>'YYYY-MM-DD HH:MM:SS'</code> or <code>'YY-MM-DD
+HH:MM:SS'</code> format.  A ``relaxed'' syntax is allowed: Any punctuation
+character may be used as the delimiter between date parts or time parts.
+For example, <code>'98-12-31 11:30:45'</code>, <code>'98.12.31 11+30+45'</code>,
+<code>'98/12/31 11*30*45'</code>, and <code>'98@12@31 11^30^45'</code> are
+equivalent.
+
+<LI>
+
+As a string in either <code>'YYYY-MM-DD'</code> or <code>'YY-MM-DD'</code> format.
+A ``relaxed'' syntax is allowed here, too.  For example, <code>'98-12-31'</code>,
+<code>'98.12.31'</code>, <code>'98/12/31'</code>, and <code>'98@12@31'</code> are
+equivalent.
+
+<LI>
+
+As a string with no delimiters in either <code>'YYYYMMDDHHMMSS'</code> or
+<code>'YYMMDDHHMMSS'</code> format, provided that the string makes sense as a
+date.  For example, <code>'19970523091528'</code> and <code>'970523091528'</code> are
+interpreted as <code>'1997-05-23 09:15:28'</code>, but <code>'971122129015'</code> is
+illegal (it has a nonsensical minute part) and becomes <code>'0000-00-00
+00:00:00'</code>.
+
+<LI>
+
+As a string with no delimiters in either <code>'YYYYMMDD'</code> or <code>'YYMMDD'</code>
+format, provided that the string makes sense as a date.  For example,
+<code>'19970523'</code> and <code>'970523'</code> are interpreted as
+<code>'1997-05-23'</code>, but <code>'971332'</code> is illegal (it has nonsensical month
+and day parts) and becomes <code>'0000-00-00'</code>.
+
+<LI>
+
+As a number in either <code>YYYYMMDDHHMMSS</code> or <code>YYMMDDHHMMSS</code>
+format, provided that the number makes sense as a date.  For example,
+<code>19830905132800</code> and <code>830905132800</code> are interpreted as
+<code>'1983-09-05 13:28:00'</code>.
+
+<LI>
+
+As a number in either <code>YYYYMMDD</code> or <code>YYMMDD</code>
+format, provided that the number makes sense as a date.  For example,
+<code>19830905</code> and <code>830905</code> are interpreted as <code>'1983-09-05'</code>.
+
+<LI>
+
+As the result of a function that returns a value that is acceptable
+in a <code>DATETIME</code>, <code>DATE</code>, or <code>TIMESTAMP</code> context, such as
+<code>NOW()</code> or <code>CURRENT_DATE</code>.
+</UL>
+
+<P>
+Illegal <code>DATETIME</code>, <code>DATE</code>, or <code>TIMESTAMP</code> values are converted
+to the ``zero'' value of the appropriate type (<code>'0000-00-00 00:00:00'</code>,
+<code>'0000-00-00'</code>, or <code>00000000000000</code>).
+
+</P>
+<P>
+For values specified as strings that include date part delimiters, it is not
+necessary to specify two digits for month or day values that are less than
+<code>10</code>.  <code>'1979-6-9'</code> is the same as <code>'1979-06-09'</code>.  Similarly,
+for values specified as strings that include time part delimiters, it is not
+necessary to specify two digits for hour, minute, or second values that are
+less than <code>10</code>.  <code>'1979-10-30 1:2:3'</code> is the same as
+<code>'1979-10-30 01:02:03'</code>.
+
+</P>
+<P>
+Values specified as numbers should be 6, 8, 12, or 14 digits long.  If a
+number is 8 or 14 digits long, it is assumed to be in <code>YYYYMMDD</code> or
+<code>YYYYMMDDHHMMSS</code> format and that the year is given by the first 4
+digits.  If the number is 6 or 12 digits long, it is assumed to be in
+<code>YYMMDD</code> or <code>YYMMDDHHMMSS</code> format and that the year is given by the
+first 2 digits.  Numbers that are not one of these lengths are interpreted
+as though padded with leading zeros to the closest length.
+
+</P>
+<P>
+<A NAME="IDX1153"></A>
+<A NAME="IDX1154"></A>
+Values specified as non-delimited strings are interpreted using their length
+as given.  If the string is 8 or 14 characters long, the year is assumed to
+be given by the first 4 characters.  Otherwise, the year is assumed to be
+given by the first 2 characters.  The string is interpreted from left to
+right to find year, month, day, hour, minute, and second values, for as many
+parts as are present in the string.  This means you should not use strings
+that have fewer than 6 characters.  For example, if you specify <code>'9903'</code>,
+thinking that will represent March, 1999, you will find that MySQL
+inserts a ``zero'' date into your table.  This is because the year and month
+values are <code>99</code> and <code>03</code>, but the day part is completely missing, so
+the value is not a legal date.  However, as of MySQL 3.23, you can explicitly
+specify a value of zero to represent missing month or day parts.  For example,
+you can use <code>'990300'</code> to insert the value <code>'1999-03-00'</code>.
+
+</P>
+<P>
+You can to some extent assign values of one date type to an object
+of a different date type.  However, there may be some alteration
+of the value or loss of information:
+
+</P>
+
+<UL>
+<LI>
+
+If you assign a <code>DATE</code> value to a <code>DATETIME</code> or <code>TIMESTAMP</code>
+object, the time part of the resulting value is set to <code>'00:00:00'</code>
+because the <code>DATE</code> value contains no time information.
+
+<LI>
+
+If you assign a <code>DATETIME</code> or <code>TIMESTAMP</code> value to a <code>DATE</code>
+object, the time part of the resulting value is deleted because the
+<code>DATE</code> type stores no time information.
+
+<LI>
+
+Remember that although <code>DATETIME</code>, <code>DATE</code>, and <code>TIMESTAMP</code>
+values all can be specified using the same set of formats, the types do not
+all have the same range of values.  For example, <code>TIMESTAMP</code> values
+cannot be earlier than <code>1970</code> or later than <code>2037</code>.  This means
+that a date such as <code>'1968-01-01'</code>, while legal as a <code>DATETIME</code> or
+<code>DATE</code> value, is not a valid <code>TIMESTAMP</code> value and will be
+converted to <code>0</code> if assigned to such an object.
+</UL>
+
+<P>
+<A NAME="IDX1155"></A>
+<A NAME="IDX1156"></A>
+Be aware of certain pitfalls when specifying date values:
+
+</P>
+
+<UL>
+<LI>
+
+The relaxed format allowed for values specified as strings can be deceiving.
+For example, a value such as <code>'10:11:12'</code> might look like a time value
+because of the <samp>`:'</samp> delimiter, but if used in a date context will be
+interpreted as the year <code>'2010-11-12'</code>.  The value <code>'10:45:15'</code>
+will be converted to <code>'0000-00-00'</code> because <code>'45'</code> is not a legal
+month.
+
+<LI>
+
+The MySQL server performs only basic checking on the validity of a date:
+The ranges for year, month, and day are 1000 to 9999, 00 to 12, and 00
+to 31, respectively.  Any date containing parts not within these ranges is subject to
+conversion
+to <code>'0000-00-00'</code>.  Please note that this still allows you to store
+invalid dates such as <code>'2002-04-31'</code>.  To ensure that a date is valid,
+perform a check in your application.
+
+<LI>
+
+Dates containing two-digit year values are ambiguous because the century is
+unknown.  MySQL interprets two-digit year values using the following
+rules:
+
+
+<UL>
+<LI>
+
+Year values in the range <code>00-69</code> are converted to <code>2000-2069</code>.
+
+<LI>
+
+Year values in the range <code>70-99</code> are converted to <code>1970-1999</code>.
+</UL>
+
+</UL>
+
+
+
+<H4><A NAME="TIMESTAMP_pre-4.1" HREF="manual_toc.html#TIMESTAMP_pre-4.1">11.3.1.1  <code>TIMESTAMP</code> Properties Prior to MySQL 4.1</A></H4>
+
+<P>
+The <code>TIMESTAMP</code> column type provides a type that you can use to
+automatically mark <code>INSERT</code> or <code>UPDATE</code> operations with the current
+date and time.  If you have multiple <code>TIMESTAMP</code> columns in a table,
+only the first one is updated automatically. (From MySQL 4.1.2 on, you can
+specify which <code>TIMESTAMP</code> column updates;
+see section <A HREF="manual_Column_types.html#TIMESTAMP_4.1">11.3.1.2  <code>TIMESTAMP</code> Properties as of MySQL 4.1</A>.)
+
+</P>
+<P>
+Automatic updating of the first <code>TIMESTAMP</code> column in a table occurs
+under any of the following conditions:
+
+</P>
+
+<UL>
+
+<LI>
+
+You explicitly set the column to <code>NULL</code>.
+
+<LI>
+
+The column is not specified explicitly in an <code>INSERT</code> or
+<code>LOAD DATA INFILE</code> statement.
+
+<LI>
+
+The column is not specified explicitly in an <code>UPDATE</code> statement and some
+other column changes value.  An <code>UPDATE</code> that sets a column
+to the value it already has does not cause the <code>TIMESTAMP</code> column to be
+updated; if you set a column to its current value, MySQL
+ignores the update for efficiency.
+
+</UL>
+
+<P>
+<code>TIMESTAMP</code> columns other than the first can also be set to the current
+date and time.  Just set the column to <code>NULL</code> or to any function that
+produces the current date and time (<code>NOW()</code>, <code>CURRENT_TIMESTAMP</code>).
+
+</P>
+<P>
+You can set any <code>TIMESTAMP</code> column to a value different from the current
+date and time by setting it explicitly to the desired value.  This is true
+even for the first <code>TIMESTAMP</code> column.  You can use this property if,
+for example, you want a <code>TIMESTAMP</code> to be set to the current date and
+time when you create a row, but not to be changed whenever the row is updated
+later:
+
+</P>
+
+<UL>
+<LI>
+
+Let MySQL set the column when the row is created.
+This initializes it to the current date and time.
+
+<LI>
+
+When you perform subsequent updates to other columns in the row, set
+the <code>TIMESTAMP</code> column explicitly to its current value:
+
+
+<PRE>
+UPDATE <var>tbl_name</var>
+    SET <var>timestamp_col</var> = <var>timestamp_col</var>,
+        <var>other_col1</var> = <var>new_value1</var>,
+        <var>other_col2</var> = <var>new_value2</var>, ...
+</PRE>
+
+</UL>
+
+<P>
+Another way to maintain a column that records row-creation time is to use
+a <code>DATETIME</code> column that you initialize to <code>NOW()</code> when the row
+is created and leave alone for subsequent updates.
+
+</P>
+<P>
+<code>TIMESTAMP</code> values may range from the beginning of 1970 to partway
+through the year 2037, with a resolution of one second.  Values are displayed
+as numbers.  When you store a value in a <code>TIMESTAMP</code> column, it is
+assumed to be represented in the current time zone, and is converted to
+UTC for storage. When you retrieve the value, it is converted from UTC
+back to the local time zone for display.  Before MySQL 4.1.3, the server
+has a single time zone. As of 4.1.3, clients can set their time zone on
+a per-connection basis, as described in <code>Time zone support</code>.
+
+</P>
+<P>
+The format in which MySQL retrieves and displays <code>TIMESTAMP</code>
+values depends on the display size, as illustrated by the following table.  The
+``full'' <code>TIMESTAMP</code> format is 14 digits, but <code>TIMESTAMP</code> columns may
+be created with shorter display sizes:
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Column Type</strong> </TD><TD> <strong>Display Format</strong>
+</TD></TR>
+<TR><TD><code>TIMESTAMP(14)</code> </TD><TD> <code>YYYYMMDDHHMMSS</code>
+</TD></TR>
+<TR><TD><code>TIMESTAMP(12)</code> </TD><TD> <code>YYMMDDHHMMSS</code>
+</TD></TR>
+<TR><TD><code>TIMESTAMP(10)</code> </TD><TD> <code>YYMMDDHHMM</code>
+</TD></TR>
+<TR><TD><code>TIMESTAMP(8)</code> </TD><TD> <code>YYYYMMDD</code>
+</TD></TR>
+<TR><TD><code>TIMESTAMP(6)</code> </TD><TD> <code>YYMMDD</code>
+</TD></TR>
+<TR><TD><code>TIMESTAMP(4)</code> </TD><TD> <code>YYMM</code>
+</TD></TR>
+<TR><TD><code>TIMESTAMP(2)</code> </TD><TD> <code>YY</code>
+</TD></TR>
+</TABLE>
+
+<P>
+All <code>TIMESTAMP</code> columns have the same storage size, regardless of
+display size.  The most common display sizes are 6, 8, 12, and 14.  You can
+specify an arbitrary display size at table creation time, but values of 0 or
+greater than 14 are coerced to 14.  Odd-valued sizes in the range from 1 to
+13 are coerced to the next higher even number.
+
+</P>
+<P>
+<code>TIMESTAMP</code> columns store legal values using the full precision with
+which the value was specified, regardless of the display size.  This has
+several implications:
+
+</P>
+
+<UL>
+<LI>
+
+Always specify year, month, and day, even if your column types are
+<code>TIMESTAMP(4)</code> or <code>TIMESTAMP(2)</code>.  Otherwise, the value is not
+a legal date and <code>0</code> will be stored.
+
+<LI>
+
+If you use <code>ALTER TABLE</code> to widen a narrow <code>TIMESTAMP</code> column,
+information will be displayed that previously was ``hidden.''
+
+<LI>
+
+Similarly, narrowing a <code>TIMESTAMP</code> column does not cause information to
+be lost, except in the sense that less information is shown when the values
+are displayed.
+
+<LI>
+
+Although <code>TIMESTAMP</code> values are stored to full precision, the only
+function that operates directly on the underlying stored value is
+<code>UNIX_TIMESTAMP()</code>.  Other functions operate on the formatted retrieved
+value.  This means you cannot use a function such as <code>HOUR()</code> or
+<code>SECOND()</code> unless the relevant part of the <code>TIMESTAMP</code> value is
+included in the formatted value.  For example, the <code>HH</code> part of a
+<code>TIMESTAMP</code> column is not displayed unless the display size is at least
+10, so trying to use <code>HOUR()</code> on shorter <code>TIMESTAMP</code> values
+produces a meaningless result.
+</UL>
+
+
+
+<H4><A NAME="TIMESTAMP_4.1" HREF="manual_toc.html#TIMESTAMP_4.1">11.3.1.2  <code>TIMESTAMP</code> Properties as of MySQL 4.1</A></H4>
+
+<P>
+In MySQL 4.1 and up, the properties of the <code>TIMESTAMP</code> column type change
+in the ways described in this section.
+
+</P>
+<P>
+From MySQL 4.1.0 on, <code>TIMESTAMP</code> display format differs from that of
+earlier MySQL releases:
+
+</P>
+
+<UL>
+
+<LI>
+
+<code>TIMESTAMP</code> columns are displayed in the same format as <code>DATETIME</code>
+columns.
+
+<LI>
+
+Display widths (used as described in the preceding section) are no longer
+supported. In other words, for declarations such as <code>TIMESTAMP(2)</code>,
+<code>TIMESTAMP(4)</code>, and so on, the display width is ignored.
+
+</UL>
+
+<P>
+Beginning with MySQL 4.1.1, the MySQL server can be run in <code>MAXDB</code>
+mode.  When the server runs in this mode, <code>TIMESTAMP</code> is identical
+with <code>DATETIME</code>. That is, if the server is running in <code>MAXDB</code>
+mode at the time that a table is created, <code>TIMESTAMP</code> columns
+are created as <code>DATETIME</code> columns.  As a result, such columns use
+<code>DATETIME</code> display format, have the same range of values, and there is
+no automatic initialization or updating to the current date and time.
+
+</P>
+<P>
+To enable <code>MAXDB</code> mode,
+set the server SQL mode to <code>MAXDB</code> at startup using the
+<code>--sql-mode=MAXDB</code> server option or by setting the global
+<code>sql_mode</code> variable at runtime:
+
+</P>
+
+<PRE>
+mysql&#62; SET GLOBAL sql_mode=MAXDB;
+</PRE>
+
+<P>
+A client can cause the server to run in <code>MAXDB</code> mode for its own
+connection as follows:
+
+</P>
+
+<PRE>
+mysql&#62; SET SESSION sql_mode=MAXDB;
+</PRE>
+
+<P>
+As of MySQL 5.0.2, MySQL will not accept timestamp values that includes
+a zero in the day or month column or values that are not a valid date.
+(The execption is the special value '0000-00-00 00:00:00'.)
+
+</P>
+<P>
+Beginning with MySQL 4.1.2, you have more flexible control over when
+automatic <code>TIMESTAMP</code> initialization and updating occur and which
+column should have those behaviors:
+
+</P>
+
+<UL>
+
+<LI>
+
+You can assign the current timestamp as the default value and the
+auto-update value, as before. But now it is possible to have just one
+automatic behavior or the other, or neither of them.
+
+<LI>
+
+You can specify which <code>TIMESTAMP</code> column to automatically initialize
+or update to the current date and time. This no longer need be the first
+<code>TIMESTAMP</code> column.
+
+</UL>
+
+<P>
+The following discussion describes the revised syntax and behavior.
+Note that this information applies only to <code>TIMESTAMP</code> columns for
+tables not created with <code>MAXDB</code> mode enabled. As noted earlier in
+this section, <code>MAXDB</code> mode causes columns to be created as
+<code>DATETIME</code> columns.
+
+</P>
+<P>
+The following items summarize the pre-4.1.2 properties for <code>TIMESTAMP</code>
+initialization and updating:
+
+</P>
+<P>
+The first <code>TIMESTAMP</code> column in table row automatically is set to
+the current timestamp when the record is created if the column is set to
+<code>NULL</code> or is not specified at all.
+
+</P>
+<P>
+The first <code>TIMESTAMP</code> column in table row automatically is updated
+to the current timestamp when the value of any other column in the row
+is changed, unless the <code>TIMESTAMP</code> column explicitly is assigned a
+value other than <code>NULL</code>.
+
+</P>
+<P>
+If a <code>DEFAULT</code> value is specified for the first <code>TIMESTAMP</code>
+column when the table is created, it is silently ignored.
+
+</P>
+<P>
+Other <code>TIMESTAMP</code> columns in the table can be set to the current
+<code>TIMESTAMP</code> by assigning <code>NULL</code> to them, but they do not update
+automatically.
+
+</P>
+<P>
+As of 4.1.2, you have more flexibility in deciding which <code>TIMESTAMP</code>
+column automatically is initialized and updated to the current timestamp.
+The rules are as follows:
+
+</P>
+<P>
+If a <code>DEFAULT</code> value is specified for the first <code>TIMESTAMP</code> column
+in a table, it is not ignored.  The default can be <code>CURRENT_TIMESTAMP</code>
+or a constant date and time value.
+
+</P>
+<P>
+<code>DEFAULT NULL</code> is the same as <code>DEFAULT CURRENT_TIMESTAMP</code> for
+the <em>first</em> <code>TIMESTAMP</code> column.  For any other <code>TIMESTAMP</code>
+column, <code>DEFAULT NULL</code> is treated as <code>DEFAULT 0</code>.
+
+</P>
+<P>
+Any single <code>TIMESTAMP</code> column in a table can be set to be the one that
+is initialized to the current timestamp and/or updated automatically.
+
+</P>
+<P>
+In a <code>CREATE TABLE</code> statement, the first <code>TIMESTAMP</code> column can
+be declared in any of the following ways:
+
+</P>
+
+<UL>
+
+<LI>
+
+With both <code>DEFAULT CURRENT_TIMESTAMP</code> and <code>ON UPDATE
+CURRENT_TIMESTAMP</code> clauses, the column has the current timestamp for its
+default value, and is automatically updated.
+
+<LI>
+
+With neither <code>DEFAULT</code> nor <code>ON UPDATE</code> clauses, it is the same
+as <code>DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP</code>.
+
+<LI>
+
+With a <code>DEFAULT CURRENT_TIMESTAMP</code> clause and no <code>ON UPDATE</code>
+clause, the column has the current timestamp for its default value but is
+not automatically updated.
+
+<LI>
+
+With no <code>DEFAULT</code> clause and with an <code>ON UPDATE CURRENT_TIMESTAMP</code>
+clause, the column has a default of 0 and is automatically updated.
+
+<LI>
+
+With a constant <code>DEFAULT</code> value and with <code>ON UPDATE
+CURRENT_TIMESTAMP</code> clause, the column has the given default and is
+automatically updated.
+
+</UL>
+
+<P>
+In other words, you can use the current timestamp for both the initial
+value and the auto-update value, or either one, or neither.  (For example,
+you can specify <code>ON UPDATE</code> to get auto-update without also having
+the column auto-initialized.)
+
+</P>
+<P>
+Any of <code>CURRENT_TIMESTAMP</code>, <code>CURRENT_TIMESTAMP()</code>, or <code>NOW()</code>
+can be used in the <code>DEFAULT</code> and <code>ON UPDATE</code> clauses. They
+all have the same effect.
+
+</P>
+<P>
+The order of the two attributes does not matter.  If both <code>DEFAULT</code>
+and <code>ON UPDATE</code> are specified for a <code>TIMESTAMP</code> column, either
+can precede the other.
+
+</P>
+<P>
+Example.  These statements are equivalent:
+
+</P>
+
+<PRE>
+CREATE TABLE t (ts TIMESTAMP);
+CREATE TABLE t (ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                             ON UPDATE CURRENT_TIMESTAMP);
+CREATE TABLE t (ts TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                             DEFAULT CURRENT_TIMESTAMP);
+</PRE>
+
+<P>
+To specify automatic default or updating for a <code>TIMESTAMP</code> column other
+than the first one, you must suppress the automatic initialization and update behaviors
+for the first <code>TIMESTAMP</code> column by explicitly assigning it a constant
+<code>DEFAULT</code> value (for example, <code>DEFAULT 0</code> or <code>DEFAULT
+'2003-01-01 00:00:00'</code>). Then for the other <code>TIMESTAMP</code> column, the
+rules are the same as for the first <code>TIMESTAMP</code> column, except that
+you cannot omit both of the <code>DEFAULT</code> and <code>ON UPDATE</code> clauses.
+If you do that, no automatic initialization or updating occurs.
+
+</P>
+<P>
+Example.  These statements are equivalent:
+
+</P>
+
+<PRE>
+CREATE TABLE t (
+    ts1 TIMESTAMP DEFAULT 0,
+    ts2 TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                  ON UPDATE CURRENT_TIMESTAMP);
+CREATE TABLE t (
+    ts1 TIMESTAMP DEFAULT 0,
+    ts2 TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                  DEFAULT CURRENT_TIMESTAMP);
+</PRE>
+
+<P>
+Beginning with MySQL 4.1.3, you can set the current time zone on a
+per-connection basis, as described in <code>Time zone support</code>.
+<code>TIMESTAMP</code> values still are stored in UTC, but are converted
+from the current time zone for storage, and converted back to the
+current time zone for retrieval.  As long as the time zone setting
+remains the same, you will get back the same value you store.  If you
+store a <code>TIMESTAMP</code> value, then change the time zone and
+retrieve the value, it will be different than the value you stored.
+This occurs because the same time zone is not used for conversion in
+both directions.  The current time zone is available as the value of
+the <code>time_zone</code> system variable.
+
+</P>
+<P>
+Beginning with MySQL 4.1.6, you can include the <code>NULL</code> attribute
+in the definition of a <code>TIMESTAMP</code> column to allow the column
+to contain <code>NULL</code> values. Before MySQL 4.1.6 (and even as of 4.1.6
+if the <code>NULL</code> attribute is not specified), setting the column to
+<code>NULL</code> sets it to the current timestamp.
+
+</P>
+
+
+
+<H3><A NAME="TIME" HREF="manual_toc.html#TIME">11.3.2  The <code>TIME</code> Type</A></H3>
+
+<P>
+<A NAME="IDX1157"></A>
+
+</P>
+<P>
+MySQL retrieves and displays <code>TIME</code> values in <code>'HH:MM:SS'</code>
+format (or <code>'HHH:MM:SS'</code> format for large hours values).  <code>TIME</code>
+values may range from <code>'-838:59:59'</code> to <code>'838:59:59'</code>.  The reason
+the hours part may be so large is that the <code>TIME</code> type may be used not
+only to represent a time of day (which must be less than 24 hours), but also
+elapsed time or a time interval between two events (which may be much greater
+than 24 hours, or even negative).
+
+</P>
+<P>
+You can specify <code>TIME</code> values in a variety of formats:
+
+</P>
+
+<UL>
+<LI>
+
+As a string in <code>'D HH:MM:SS.fraction'</code> format.
+You can also use one of the following ``relaxed'' syntaxes:
+<code>'HH:MM:SS.fraction'</code>, <code>'HH:MM:SS'</code>, <code>'HH:MM'</code>, <code>'D
+HH:MM:SS'</code>, <code>'D HH:MM'</code>, <code>'D HH'</code>, or <code>'SS'</code>.  Here <code>D</code>
+represents days and can have a value from 0 to 34.
+Note that MySQL doesn't yet store the fraction part.
+
+<LI>
+
+As a string with no delimiters in <code>'HHMMSS'</code> format, provided that
+it makes sense as a time.  For example, <code>'101112'</code> is understood as
+<code>'10:11:12'</code>, but <code>'109712'</code> is illegal (it has a nonsensical
+minute part) and becomes <code>'00:00:00'</code>.
+
+<LI>
+
+As a number in <code>HHMMSS</code> format, provided that it makes sense as a time.
+For example, <code>101112</code> is understood as <code>'10:11:12'</code>.  The following
+alternative formats are also understood: <code>SS</code>, <code>MMSS</code>, <code>HHMMSS</code>,
+<code>HHMMSS.fraction</code>.  Note that MySQL doesn't yet store the
+fraction part.
+
+<LI>
+
+As the result of a function that returns a value that is acceptable
+in a <code>TIME</code> context, such as <code>CURRENT_TIME</code>.
+</UL>
+
+<P>
+For <code>TIME</code> values specified as strings that include a time part
+delimiter, it is not necessary to specify two digits for hours, minutes, or
+seconds values that are less than <code>10</code>.  <code>'8:3:2'</code> is the same as
+<code>'08:03:02'</code>.
+
+</P>
+<P>
+Be careful about assigning ``short'' <code>TIME</code> values to a <code>TIME</code>
+column. Without colons, MySQL interprets values using the
+assumption that the rightmost digits represent seconds. (MySQL
+interprets <code>TIME</code> values as elapsed time rather than as time of
+day.) For example, you might think of <code>'1112'</code> and <code>1112</code> as
+meaning <code>'11:12:00'</code> (12 minutes after 11 o'clock), but
+MySQL interprets them as <code>'00:11:12'</code> (11 minutes, 12 seconds).
+Similarly, <code>'12'</code> and <code>12</code> are interpreted as <code>'00:00:12'</code>.
+<code>TIME</code> values with colons, by contrast, are always treated as
+time of the day. That is <code>'11:12'</code> will mean <code>'11:12:00'</code>,
+not <code>'00:11:12'</code>.
+
+</P>
+<P>
+Values that lie outside the <code>TIME</code> range
+but are otherwise legal are clipped to the closest
+endpoint of the range.  For example, <code>'-850:00:00'</code> and
+<code>'850:00:00'</code> are converted to <code>'-838:59:59'</code> and
+<code>'838:59:59'</code>.
+
+</P>
+<P>
+Illegal <code>TIME</code> values are converted to <code>'00:00:00'</code>.  Note that
+because <code>'00:00:00'</code> is itself a legal <code>TIME</code> value, there is no way
+to tell, from a value of <code>'00:00:00'</code> stored in a table, whether the
+original value was specified as <code>'00:00:00'</code> or whether it was illegal.
+
+</P>
+
+
+
+<H3><A NAME="YEAR" HREF="manual_toc.html#YEAR">11.3.3  The <code>YEAR</code> Type</A></H3>
+
+<P>
+<A NAME="IDX1158"></A>
+
+</P>
+<P>
+The <code>YEAR</code> type is a one-byte type used for representing years.
+
+</P>
+
+<P>
+MySQL retrieves and displays <code>YEAR</code> values in <code>YYYY</code>
+format.  The range is <code>1901</code> to <code>2155</code>.
+
+</P>
+<P>
+You can specify <code>YEAR</code> values in a variety of formats:
+
+</P>
+
+<UL>
+<LI>
+
+As a four-digit string in the range <code>'1901'</code> to <code>'2155'</code>.
+
+<LI>
+
+As a four-digit number in the range <code>1901</code> to <code>2155</code>.
+
+<LI>
+
+As a two-digit string in the range <code>'00'</code> to <code>'99'</code>.  Values in the
+ranges <code>'00'</code> to <code>'69'</code> and <code>'70'</code> to <code>'99'</code> are
+converted to <code>YEAR</code> values in the ranges <code>2000</code> to <code>2069</code> and
+<code>1970</code> to <code>1999</code>.
+
+<LI>
+
+As a two-digit number in the range <code>1</code> to <code>99</code>.  Values in the
+ranges <code>1</code> to <code>69</code> and <code>70</code> to <code>99</code> are converted to
+<code>YEAR</code> values in the ranges <code>2001</code> to <code>2069</code> and <code>1970</code>
+to <code>1999</code>.  Note that the range for two-digit numbers is slightly
+different from the range for two-digit strings, because you cannot specify zero
+directly as a number and have it be interpreted as <code>2000</code>.  You
+must specify it as a string <code>'0'</code> or <code>'00'</code> or it will be
+interpreted as <code>0000</code>.
+
+<LI>
+
+As the result of a function that returns a value that is acceptable
+in a <code>YEAR</code> context, such as <code>NOW()</code>.
+</UL>
+
+<P>
+Illegal <code>YEAR</code> values are converted to <code>0000</code>.
+
+</P>
+
+
+
+<H3><A NAME="Y2K_issues" HREF="manual_toc.html#Y2K_issues">11.3.4  Y2K Issues and Date Types</A></H3>
+
+<P>
+<A NAME="IDX1159"></A>
+<A NAME="IDX1160"></A>
+
+</P>
+<P>
+MySQL itself is year 2000 (Y2K) safe (see section <A HREF="manual_Introduction.html#Year_2000_compliance">1.2.5  Year 2000 Compliance</A>),
+but input values presented to MySQL may not be.  Any input
+containing two-digit year values is ambiguous, because the century is unknown.
+Such values must be interpreted into four-digit form because MySQL stores
+years internally using four digits.
+
+</P>
+<P>
+For <code>DATETIME</code>, <code>DATE</code>, <code>TIMESTAMP</code>, and <code>YEAR</code> types,
+MySQL interprets dates with ambiguous year values using the
+following rules:
+
+</P>
+
+<UL>
+<LI>
+
+Year values in the range <code>00-69</code> are converted to <code>2000-2069</code>.
+
+<LI>
+
+Year values in the range <code>70-99</code> are converted to <code>1970-1999</code>.
+</UL>
+
+<P>
+Remember that these rules provide only reasonable guesses as to what your
+data values mean.  If the heuristics used by MySQL do not produce the
+correct values, you should provide unambiguous input containing four-digit
+year values.
+
+</P>
+<P>
+<code>ORDER BY</code> properly sorts <code>TIMESTAMP</code> or <code>YEAR</code> values that
+have two-digit years.
+
+</P>
+<P>
+Some functions like <code>MIN()</code> and <code>MAX()</code> will convert a
+<code>TIMESTAMP</code> or <code>YEAR</code> to a number. This means that a value with a
+two-digit year will not work properly with these functions.  The fix in this
+case is to convert the <code>TIMESTAMP</code> or <code>YEAR</code> to four-digit year
+format or use something like <code>MIN(DATE_ADD(timestamp,INTERVAL 0
+DAYS))</code>.
+
+</P>
+
+
+
+<H2><A NAME="String_types" HREF="manual_toc.html#String_types">11.4  String Types</A></H2>
+
+<P>
+<A NAME="IDX1161"></A>
+<A NAME="IDX1162"></A>
+
+</P>
+<P>
+<A NAME="IDX1163"></A>
+<A NAME="IDX1164"></A>
+
+</P>
+
+<P>
+The string types are <code>CHAR</code>, <code>VARCHAR</code>, <code>BINARY</code>,
+<code>VARBINARY</code>, <code>BLOB</code>, <code>TEXT</code>, <code>ENUM</code>, and <code>SET</code>.
+This section describes how these types work and how to use them in your
+queries.
+
+</P>
+
+
+
+<H3><A NAME="CHAR" HREF="manual_toc.html#CHAR">11.4.1  The <code>CHAR</code> and <code>VARCHAR</code> Types</A></H3>
+
+<P>
+The <code>CHAR</code> and <code>VARCHAR</code> types are similar, but differ in the
+way they are stored and retrieved.
+
+</P>
+<P>
+The length of a <code>CHAR</code> column is fixed to the length that you declare
+when you create the table.  The length can be any value from 0 to 255.
+(Before MySQL 3.23, the length of <code>CHAR</code> may be from 1 to 255.)
+When <code>CHAR</code> values are stored, they are right-padded with spaces to the
+specified length.  When <code>CHAR</code> values are retrieved, trailing spaces are
+removed.
+
+</P>
+<P>
+Values in <code>VARCHAR</code> columns are variable-length strings.  You can
+declare a <code>VARCHAR</code> column to be any length from 0 to 255, just as
+for <code>CHAR</code> columns.  (Before MySQL 4.0.2, the length of <code>VARCHAR</code>
+may be from 1 to 255.) However, in contrast to <code>CHAR</code>, <code>VARCHAR</code>
+values are stored using only as many characters as are needed, plus one byte
+to record the length.  Values are not padded; instead, trailing spaces are
+removed when values are stored.  This space removal differs from the
+standard SQL specification.
+
+</P>
+<P>
+No lettercase conversion takes place during storage or retrieval.
+
+</P>
+<P>
+If you assign a value to a <code>CHAR</code> or <code>VARCHAR</code> column that
+exceeds the column's maximum length, the value is truncated to fit.
+
+</P>
+<P>
+If you need a column for which trailing spaces are not removed, consider using
+a <code>BLOB</code> or <code>TEXT</code> type.
+If you want to store binary values such as results from an encryption
+or compression function that might contain arbitrary byte values, use a
+<code>BLOB</code> column rather than a <code>CHAR</code> or <code>VARCHAR</code> column, to
+avoid potential problems with trailing space removal that would change
+data values.
+
+</P>
+<P>
+The following table illustrates the differences between the two types of columns
+by showing the result of storing various string values into <code>CHAR(4)</code>
+and <code>VARCHAR(4)</code> columns:
+
+</P>
+
+<TABLE BORDER>
+<TR><TD><strong>Value</strong> </TD><TD> <code>CHAR(4)</code> </TD><TD> <strong>Storage Required</strong> </TD><TD> <code>VARCHAR(4)</code> </TD><TD> <strong>Storage Required</strong>
+</TD></TR>
+<TR><TD><code>''</code> </TD><TD> <code>'    '</code> </TD><TD> 4 bytes </TD><TD> <code>''</code> </TD><TD> 1 byte
+</TD></TR>
+<TR><TD><code>'ab'</code> </TD><TD> <code>'ab  '</code> </TD><TD> 4 bytes </TD><TD> <code>'ab'</code> </TD><TD> 3 bytes
+</TD></TR>
+<TR><TD><code>'abcd'</code> </TD><TD> <code>'abcd'</code> </TD><TD> 4 bytes </TD><TD> <code>'abcd'</code> </TD><TD> 5 bytes
+</TD></TR>
+<TR><TD><code>'abcdefgh'</code> </TD><TD> <code>'abcd'</code> </TD><TD> 4 bytes </TD><TD> <code>'abcd'</code> </TD><TD> 5 bytes
+</TD></TR>
+</TABLE>
+
+<P>
+The values retrieved from the <code>CHAR(4)</code> and <code>VARCHAR(4)</code> columns
+are the same in each case, because trailing spaces are removed from
+<code>CHAR</code> columns upon retrieval.
+
+</P>
+<P>
+As of MySQL 4.1, values in <code>CHAR</code> and <code>VARCHAR</code> columns are sorted
+and compared according to the collation of the character set assigned to
+the column.  Before MySQL 4.1, sorting and comparison are based on
+the collation of the server character set; you can declare the column
+with the <code>BINARY</code> attribute to cause sorting and comparison to be
+case sensitive using the underlying character code values rather then a
+lexical ordering.  <code>BINARY</code> doesn't affect how the column is stored
+or retrieved.
+
+</P>
+<P>
+From MySQL 4.1.0 on, column type <code>CHAR BYTE</code> is an alias for
+<code>CHAR BINARY</code>. This is a compatibility feature.
+
+</P>
+<P>
+The <code>BINARY</code> attribute is sticky.  This means that if a column marked
+<code>BINARY</code> is used in an expression, the whole expression is treated as a
+<code>BINARY</code> value.
+
+</P>
+<P>
+From MySQL 4.1.0 on, the <code>ASCII</code> attribute can be specified for
+<code>CHAR</code>. It assigns the <code>latin1</code> character set.
+
+</P>
+<P>
+From MySQL 4.1.1 on, the <code>UNICODE</code> attribute can be specified for
+<code>CHAR</code>. It assigns the <code>ucs2</code> character set.
+
+</P>
+<P>
+MySQL may silently change the type of a <code>CHAR</code> or <code>VARCHAR</code>
+column at table creation time.
+See section <A HREF="manual_SQL_Syntax.html#Silent_column_changes">13.2.6.1  Silent Column Specification Changes</A>.
+
+</P>
+
+
+
+<H3><A NAME="BINARY_VARBINARY" HREF="manual_toc.html#BINARY_VARBINARY">11.4.2  The <code>BINARY</code> and <code>VARBINARY</code> Types</A></H3>
+
+<P>
+The <code>BINARY</code> and <code>VARBINARY</code> types are like <code>CHAR</code> and
+<code>VARCHAR</code>, except that they contain binary strings rather than
+non-binary strings. That is, they contain byte strings rather than character
+strings. This means they have no character set and compare in case sensitive
+fashion.
+
+</P>
+<P>
+Before MySQL 4.1.2, <code>BINARY(<var>M</var>)</code> and <code>VARBINARY(<var>M</var>)</code> are
+treated as <code>CHAR(<var>M</var>) BINARY</code> and <code>VARCHAR(<var>M</var>) BINARY</code>.
+As of MySQL 4.1.2, <code>BINARY</code> and <code>VARBINARY</code> are available as distinct
+data types, and for <code>CHAR(<var>M</var>) BINARY</code> and <code>VARCHAR(<var>M</var>)
+BINARY</code>, the <code>BINARY</code> attribute does not cause the column to be treated
+as a binary string column. Instead, it causes the binary collation for the
+column character set to be used, but the column itself contains non-binary
+character strings rather than binary byte strings. For example, in 4.1
+and up, <code>CHAR(5) BINARY</code> is treated as <code>CHAR(5) CHARACTER SET
+latin1 COLLATE latin1_bin</code>, assuming that the default character set is
+<code>latin1</code>.
+
+</P>
+
+
+
+<H3><A NAME="BLOB" HREF="manual_toc.html#BLOB">11.4.3  The <code>BLOB</code> and <code>TEXT</code> Types</A></H3>
+
+<P>
+<A NAME="IDX1165"></A>
+<A NAME="IDX1166"></A>
+<A NAME="IDX1167"></A>
+
+</P>
+<P>
+A <code>BLOB</code> is a binary large object that can hold a variable amount of
+data.  The four <code>BLOB</code> types, <code>TINYBLOB</code>, <code>BLOB</code>,
+<code>MEDIUMBLOB</code>, and <code>LONGBLOB</code>, differ only in the maximum length of
+the values they can hold.
+See section <A HREF="manual_Column_types.html#Storage_requirements">11.5  Column Type Storage Requirements</A>.
+
+</P>
+<P>
+The four <code>TEXT</code> types, <code>TINYTEXT</code>, <code>TEXT</code>, <code>MEDIUMTEXT</code>,
+and <code>LONGTEXT</code>, correspond to the four <code>BLOB</code> types and have
+the same maximum lengths and storage requirements.
+
+</P>
+<P>
+<code>BLOB</code> columns are treated as binary strings, whereas <code>TEXT</code>
+columns are treated according to their character set.  For <code>BLOB</code>
+columns, sorting and comparison is case sensitive.  For <code>TEXT</code> columns,
+values are sorted and compared based on the collation of the character set
+assigned to the column as of MySQL 4.1.  Before 4.1, <code>TEXT</code> sorting and
+comparison are based on the collation of the server character set.
+
+</P>
+<P>
+No lettercase conversion takes place during storage or retrieval.
+
+</P>
+<P>
+If you assign a value to a <code>BLOB</code> or <code>TEXT</code> column that exceeds
+the column type's maximum length, the value is truncated to fit.
+
+</P>
+<P>
+In most respects, you can regard a <code>TEXT</code> column as a <code>VARCHAR</code>
+column that can be as big as you like.  Similarly, you can regard a
+<code>BLOB</code> column as a <code>VARCHAR BINARY</code> column.  The ways in which
+<code>BLOB</code> and <code>TEXT</code> differ from <code>CHAR</code> and <code>VARCHAR</code> are:
+
+</P>
+
+<UL>
+
+<LI>
+
+There is no trailing-space removal for <code>BLOB</code> and <code>TEXT</code>
+columns when values are stored or retrieved. This differs from <code>CHAR</code>
+columns (trailing spaces are removed when values are retrieved) and from
+<code>VARCHAR</code> columns (trailing spaces are removed when values are stored).
+
+<LI>
+
+You can have indexes on <code>BLOB</code> and <code>TEXT</code> columns only as of MySQL
+3.23.2 for <code>MyISAM</code> tables or MySQL 4.0.14 for <code>InnoDB</code> tables.
+Older versions of MySQL did not support indexing these column types.
+
+<LI>
+
+For indexes on <code>BLOB</code> and <code>TEXT</code> columns, you must specify an index
+prefix length. For <code>CHAR</code> and <code>VARCHAR</code>, a prefix length is
+optional.
+
+<LI>
+
+<A NAME="IDX1168"></A>
+<A NAME="IDX1169"></A>
+<A NAME="IDX1170"></A>
+<code>BLOB</code> and <code>TEXT</code> columns cannot have <code>DEFAULT</code> values.
+</UL>
+
+<P>
+From MySQL 4.1.0 on, <code>LONG</code> and <code>LONG VARCHAR</code> map to the
+<code>MEDIUMTEXT</code> data type. This is a compatibility feature.
+
+</P>
+<P>
+MySQL Connector/ODBC defines <code>BLOB</code> values as <code>LONGVARBINARY</code> and
+<code>TEXT</code> values as <code>LONGVARCHAR</code>.
+
+</P>
+<P>
+Because <code>BLOB</code> and <code>TEXT</code> values may be extremely long, you
+may encounter some constraints in using them:
+
+</P>
+
+<UL>
+<LI>
+
+Only the first <code>max_sort_length</code> bytes of the
+column are used when sorting.  The default value of <code>max_sort_length</code>
+is 1024; this value can be changed using the <code>--max_sort_length</code>
+option when starting the <code>mysqld</code> server.
+See section <A HREF="manual_MySQL_Database_Administration.html#Server_system_variables">5.2.3  Server System Variables</A>.
+
+As of MySQL 4.0.3, you can make more bytes signficant in sorting or grouping
+by increasing the value of <code>max_sort_length</code> at runtime. Any client
+can change the value of its session <code>max_sort_length</code> variable:
+
+
+<PRE>
+mysql&#62; SET max_sort_length = 2000;
+mysql&#62; SELECT id, comment FROM <var>tbl_name</var>
+    -&#62; ORDER BY comment;
+</PRE>
+
+Another way to use <code>GROUP BY</code> or <code>ORDER BY</code> on a <code>BLOB</code> or
+<code>TEXT</code> column containing long values when you want more than
+<code>max_sort_length</code> bytes to be significant is to convert the column
+value into a fixed-length object. The standard way to do this is with the
+<code>SUBSTRING</code> function.  For example, the following statement causes
+2000 bytes of the <code>comment</code> column to be taken into account for sorting:
+
+
+<PRE>
+mysql&#62; SELECT id, SUBSTRING(comment,1,2000) FROM <var>tbl_name</var>
+    -&#62; ORDER BY SUBSTRING(comment,1,2000);
+</PRE>
+
+Before MySQL 3.23.2, you can group on an expression involving <code>BLOB</code> or
+<code>TEXT</code> values by using a column alias or by specifying the column
+position:
+
+
+<PRE>
+mysql&#62; SELECT id, SUBSTRING(comment,1,2000) AS b
+    -&#62; FROM <var>tbl_name</var> GROUP BY b;
+mysql&#62; SELECT id, SUBSTRING(comment,1,2000)
+    -&#62; FROM <var>tbl_name</var> GROUP BY 2;
+</PRE>
+
+<LI>
+
+The maximum size of a <code>BLOB</code> or <code>TEXT</code> object is determined by its
+type, but the largest value you actually can transmit between the client and
+server is determined by the amount of available memory and the size of the
+communications buffers.  You can change the message buffer size by changing
+the value of the
+<code>max_allowed_packet</code> variable, but you must
+do so for both the server and your client program.
+For example, both <code>mysql</code> and <code>mysqldump</code> allow you to change the
+client-side
+<code>max_allowed_packet</code> value.
+See
+section <A HREF="manual_MySQL_Optimization.html#Server_parameters">7.5.2  Tuning Server Parameters</A>,
+section <A HREF="manual_Client-Side_Scripts.html#mysql">8.3  <code>mysql</code>, the Command-Line Tool</A>,
+and
+section <A HREF="manual_Client-Side_Scripts.html#mysqldump">8.8  The <code>mysqldump</code> Database Backup Program</A>.
+</UL>
+
+<P>
+Each <code>BLOB</code> or <code>TEXT</code> value is represented
+internally by a separately allocated object. This is in contrast to all
+other column types, for which storage is allocated once per column when
+the table is opened.
+
+</P>
+
+
+
+<H3><A NAME="ENUM" HREF="manual_toc.html#ENUM">11.4.4  The <code>ENUM</code> Type</A></H3>
+
+<P>
+<A NAME="IDX1171"></A>
+
+</P>
+<P>
+An <code>ENUM</code> is a string object with a value chosen from a list
+of allowed values that are enumerated explicitly in the column specification
+at table creation time.
+
+</P>
+<P>
+The value may also be the empty string (<code>''</code>) or <code>NULL</code> under
+certain circumstances:
+
+</P>
+
+<UL>
+<LI>
+
+If you insert an invalid value into an <code>ENUM</code> (that is, a string not
+present in the list of allowed values), the empty string is inserted
+instead as a special error value. This string can be distinguished from a
+``normal'' empty string by the fact that this string has the numerical value
+0. More about this later.
+
+<LI>
+
+If an <code>ENUM</code> column is declared to allow <code>NULL</code>, the <code>NULL</code>
+value is a legal value for the column, and the default value is <code>NULL</code>.
+If an <code>ENUM</code> column is declared <code>NOT NULL</code>, its default value
+is the first element of the list of allowed values.
+</UL>
+
+<P>
+Each enumeration value has an index:
+
+</P>
+
+<UL>
+<LI>
+
+Values from the list of allowable elements in the column specification are
+numbered beginning with 1.
+
+<LI>
+
+The index value of the empty string error value is 0.  This means that you
+can use the following <code>SELECT</code> statement to find rows into which invalid
+<code>ENUM</code> values were assigned:
+
+
+<PRE>
+mysql&#62; SELECT * FROM <var>tbl_name</var> WHERE <var>enum_col</var>=0;
+</PRE>
+
+<LI>
+
+The index of the <code>NULL</code> value is <code>NULL</code>.
+</UL>
+
+<P>
+For example, a column specified as <code>ENUM('one', 'two', 'three')</code> can
+have any of the values shown here.  The index of each value is also shown:
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Value</strong> </TD><TD> <strong>Index</strong>
+</TD></TR>
+<TR><TD><code>NULL</code> </TD><TD> <code>NULL</code>
+</TD></TR>
+<TR><TD><code>''</code> </TD><TD> 0
+</TD></TR>
+<TR><TD><code>'one'</code> </TD><TD> 1
+</TD></TR>
+<TR><TD><code>'two'</code> </TD><TD> 2
+</TD></TR>
+<TR><TD><code>'three'</code> </TD><TD> 3
+</TD></TR>
+</TABLE>
+
+<P>
+An enumeration can have a maximum of 65,535 elements.
+
+</P>
+<P>
+Starting from MySQL 3.23.51, trailing spaces are automatically deleted from
+<code>ENUM</code> member values when the table is created.
+
+</P>
+<P>
+Lettercase is irrelevant when you assign values to an <code>ENUM</code> column.
+However, values retrieved from the column later are displayed using the
+lettercase that was used in the column definition.
+
+</P>
+<P>
+If you retrieve an <code>ENUM</code> value in a numeric context, the column value's
+index is returned.  For example, you can retrieve numeric values from
+an <code>ENUM</code> column like this:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT <var>enum_col</var>+0 FROM <var>tbl_name</var>;
+</PRE>
+
+<P>
+If you store a number into an <code>ENUM</code> column, the number is treated as an
+index, and the value stored is the enumeration member with that index.
+(However, this will not work with <code>LOAD DATA</code>, which treats all
+input as strings.)
+It's not advisable to define an <code>ENUM</code> column with enumeration values
+that look like numbers, because this can easily become confusing. For example,
+the following column has enumeration members with string values of
+<code>'0'</code>, <code>'1'</code>, and <code>'2'</code>,
+but numeric index values of
+<code>1</code>, <code>2</code>, and <code>3</code>:
+
+</P>
+
+<PRE>
+numbers ENUM('0','1','2')
+</PRE>
+
+<P>
+<code>ENUM</code> values are sorted according to the order in which the enumeration
+members were listed in the column specification.  (In other words,
+<code>ENUM</code> values are sorted according to their index numbers.)  For
+example, <code>'a'</code> sorts before <code>'b'</code> for <code>ENUM('a', 'b')</code>, but
+<code>'b'</code> sorts before <code>'a'</code> for <code>ENUM('b', 'a')</code>.  The empty
+string sorts before non-empty strings, and <code>NULL</code> values sort before
+all other enumeration values.
+To prevent unexpected results, specify the <code>ENUM</code> list in alphabetical
+order. You can also use <code>GROUP BY CAST(col AS VARCHAR)</code> or
+<code>GROUP BY CONCAT(col)</code> to make sure that the column
+is sorted lexically rather than by index number.
+
+</P>
+<P>
+If you want to determine all possible values for an <code>ENUM</code> column,
+use <code>SHOW COLUMNS FROM <var>tbl_name</var> LIKE <var>enum_col</var></code> and parse
+the <code>ENUM</code> definition in the second column of the output.
+
+</P>
+
+
+
+<H3><A NAME="SET" HREF="manual_toc.html#SET">11.4.5  The <code>SET</code> Type</A></H3>
+
+<P>
+<A NAME="IDX1172"></A>
+
+</P>
+<P>
+A <code>SET</code> is a string object that can have zero or more values, each of
+which must be chosen from a list of allowed values specified when the table
+is created.  <code>SET</code> column values that consist of multiple set members
+are specified with members separated by commas (<samp>`,'</samp>).  A consequence of
+this is that <code>SET</code> member values cannot themselves contain commas.
+
+</P>
+<P>
+For example, a column specified as <code>SET('one', 'two') NOT NULL</code> can have
+any of these values:
+
+</P>
+
+<PRE>
+''
+'one'
+'two'
+'one,two'
+</PRE>
+
+<P>
+A <code>SET</code> can have a maximum of 64 different members.
+
+</P>
+<P>
+Starting from MySQL 3.23.51, trailing spaces are automatically deleted from
+<code>SET</code> member values when the table is created.
+
+</P>
+<P>
+MySQL stores <code>SET</code> values numerically, with the low-order bit
+of the stored value corresponding to the first set member.  If you retrieve a
+<code>SET</code> value in a numeric context, the value retrieved has bits set
+corresponding to the set members that make up the column value.  For example,
+you can retrieve numeric values from a <code>SET</code> column like this:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT <var>set_col</var>+0 FROM <var>tbl_name</var>;
+</PRE>
+
+<P>
+If a number is stored into a <code>SET</code> column, the bits that
+are set in the binary representation of the number determine the
+set members in the column value.  For a column specified as
+<code>SET('a','b','c','d')</code>, the members have the following decimal and
+binary values:
+
+</P>
+<TABLE BORDER>
+<TR><TD><code>SET</code> <strong>Member</strong> </TD><TD> <strong>Decimal Value</strong> </TD><TD> <strong>Binary Value</strong>
+</TD></TR>
+<TR><TD><code>'a'</code> </TD><TD> <code>1</code> </TD><TD> <code>0001</code>
+</TD></TR>
+<TR><TD><code>'b'</code> </TD><TD> <code>2</code> </TD><TD> <code>0010</code>
+</TD></TR>
+<TR><TD><code>'c'</code> </TD><TD> <code>4</code> </TD><TD> <code>0100</code>
+</TD></TR>
+<TR><TD><code>'d'</code> </TD><TD> <code>8</code> </TD><TD> <code>1000</code>
+</TD></TR>
+</TABLE>
+
+<P>
+If you assign a value of <code>9</code> to this column, that is <code>1001</code> in
+binary, so the first and fourth <code>SET</code> value members <code>'a'</code> and
+<code>'d'</code> are selected and the resulting value is <code>'a,d'</code>.
+
+</P>
+<P>
+For a value containing more than one <code>SET</code> element, it does not matter
+what order the elements are listed in when you insert the value.  It also
+does not matter how many times a given element is listed in the value.
+When the value is retrieved later, each element in the value will appear
+once, with elements listed according to the order in which they were
+specified at table creation time.  If a column is specified as
+<code>SET('a','b','c','d')</code>, then <code>'a,d'</code>, <code>'d,a'</code>, and
+<code>'d,a,a,d,d'</code> all will appear as <code>'a,d'</code> when retrieved.
+
+</P>
+<P>
+If you set a <code>SET</code> column to an unsupported value, the value will
+be ignored.
+
+</P>
+<P>
+<code>SET</code> values are sorted numerically.  <code>NULL</code> values sort before
+non-<code>NULL</code> <code>SET</code> values.
+
+</P>
+<P>
+Normally, you search for <code>SET</code> values using
+the <code>FIND_IN_SET()</code> function or the <code>LIKE</code> operator:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT * FROM <var>tbl_name</var> WHERE FIND_IN_SET('<var>value</var>',<var>set_col</var>)&#62;0;
+mysql&#62; SELECT * FROM <var>tbl_name</var> WHERE <var>set_col</var> LIKE '%<var>value</var>%';
+</PRE>
+
+<P>
+The first statement finds rows where <var>set_col</var> contains the
+<var>value</var> set member. The second is similar, but not the same:
+It finds rows where <var>set_col</var> contains <var>value</var> anywhere, even as a
+substring of another set member.
+
+</P>
+<P>
+The following statements also are legal:
+
+</P>
+
+<PRE>
+mysql&#62; SELECT * FROM <var>tbl_name</var> WHERE <var>set_col</var> &#38; 1;
+mysql&#62; SELECT * FROM <var>tbl_name</var> WHERE <var>set_col</var> = '<var>val1</var>,<var>val2</var>';
+</PRE>
+
+<P>
+The first of these statements looks for values containing the first set
+member.  The second looks for an exact match. Be careful with comparisons
+of the second type. Comparing set values to <code>'<var>val1</var>,<var>val2</var>'</code> will
+return different results than comparing values to <code>'<var>val2</var>,<var>val1</var>'</code>.
+You should specify the values in the same order they are listed in the
+column definition.
+
+</P>
+<P>
+If you want to determine all possible values for a <code>SET</code> column,
+use <code>SHOW COLUMNS FROM <var>tbl_name</var> LIKE <var>set_col</var></code> and parse
+the <code>SET</code> definition in the second column of the output.
+
+</P>
+
+
+
+<H2><A NAME="Storage_requirements" HREF="manual_toc.html#Storage_requirements">11.5  Column Type Storage Requirements</A></H2>
+
+<P>
+<A NAME="IDX1173"></A>
+<A NAME="IDX1174"></A>
+
+</P>
+<P>
+The storage requirements for each of the column types supported by
+MySQL are listed by category.
+
+</P>
+<P>
+<A NAME="IDX1175"></A>
+The maximum size of a row in a <code>MyISAM</code> table is 65,534 bytes. Each 
+<code>BLOB</code> and <code>TEXT</code> column accounts for only five to nine bytes 
+toward this size.
+
+</P>
+<P>
+If a <code>MyISAM</code> or <code>ISAM</code> table includes any variable-length column
+types, the record format will also be variable length.  When a table
+is created, MySQL may, under certain conditions, change a column from a
+variable-length type to a fixed-length type or vice versa.  See section <A HREF="manual_SQL_Syntax.html#Silent_column_changes">13.2.6.1  Silent Column Specification Changes</A>.
+
+</P>
+<P>
+<A NAME="IDX1176"></A>
+<A NAME="IDX1177"></A>
+
+</P>
+
+<H3>11.5.1  Storage Requirements for Numeric Types</H3>
+
+<TABLE BORDER>
+<TR><TD><strong>Column Type</strong> </TD><TD> <strong>Storage Required</strong>
+</TD></TR>
+<TR><TD><code>TINYINT</code> </TD><TD> 1 byte
+</TD></TR>
+<TR><TD><code>SMALLINT</code> </TD><TD> 2 bytes
+</TD></TR>
+<TR><TD><code>MEDIUMINT</code> </TD><TD> 3 bytes
+</TD></TR>
+<TR><TD><code>INT</code>, <code>INTEGER</code> </TD><TD> 4 bytes
+</TD></TR>
+<TR><TD><code>BIGINT</code> </TD><TD> 8 bytes
+</TD></TR>
+<TR><TD><code>FLOAT(<var>p</var>)</code> </TD><TD> 4 bytes if 0 &#60;= <var>p</var> &#60;= 24, 8 bytes if 25 &#60;= <var>p</var> &#60;= 53
+</TD></TR>
+<TR><TD><code>FLOAT</code> </TD><TD> 4 bytes
+</TD></TR>
+<TR><TD><code>DOUBLE [PRECISION]</code>, item <code>REAL</code> </TD><TD> 8 bytes
+</TD></TR>
+<TR><TD><code>DECIMAL(<var>M</var>,<var>D</var>)</code>, <code>NUMERIC(<var>M</var>,<var>D</var>)</code> </TD><TD> <var>M</var>+2 bytes if <var>D</var> &#62; 0, <code><var>M</var>+1</code> bytes if <var>D</var> = 0 (<var>D</var>+2, if <code><var>M</var> &#60; <var>D</var></code>)
+</TD></TR>
+</TABLE>
+
+<P>
+<A NAME="IDX1178"></A>
+<A NAME="IDX1179"></A>
+<A NAME="IDX1180"></A>
+<A NAME="IDX1181"></A>
+
+</P>
+
+<H3>11.5.2  Storage Requirements for Date and Time Types</H3>
+
+<TABLE BORDER>
+<TR><TD><strong>Column Type</strong> </TD><TD> <strong>Storage Required</strong>
+</TD></TR>
+<TR><TD><code>DATE</code> </TD><TD> 3 bytes
+</TD></TR>
+<TR><TD><code>DATETIME</code> </TD><TD> 8 bytes
+</TD></TR>
+<TR><TD><code>TIMESTAMP</code> </TD><TD> 4 bytes
+</TD></TR>
+<TR><TD><code>TIME</code> </TD><TD> 3 bytes
+</TD></TR>
+<TR><TD><code>YEAR</code> </TD><TD> 1 byte
+</TD></TR>
+</TABLE>
+
+
+<H3>11.5.3  Storage Requirements for String Types</H3>
+
+<TABLE BORDER>
+<TR><TD><strong>Column Type</strong> </TD><TD> <strong>Storage Required</strong>
+</TD></TR>
+<TR><TD><code>CHAR(<var>M</var>)</code> </TD><TD> <code><var>M</var></code> bytes, 0 <code>&#60;= <var>M</var> &#60;=</code> 255
+</TD></TR>
+<TR><TD><code>VARCHAR(<var>M</var>)</code> </TD><TD> <var>L</var>+1 bytes, where <code><var>L</var> &#60;= <var>M</var></code> and 0 <code>&#60;= <var>M</var> &#60;=</code> 255
+</TD></TR>
+<TR><TD><code>TINYBLOB</code>, <code>TINYTEXT</code> </TD><TD> <var>L</var>+1 bytes,
+where <var>L</var> &#60; 2^8
+</TD></TR>
+<TR><TD><code>BLOB</code>, <code>TEXT</code> </TD><TD> <var>L</var>+2 bytes,
+where <var>L</var> &#60; 2^16
+</TD></TR>
+<TR><TD><code>MEDIUMBLOB</code>, <code>MEDIUMTEXT</code> </TD><TD> <var>L</var>+3 bytes,
+where <var>L</var> &#60; 2^24
+</TD></TR>
+<TR><TD><code>LONGBLOB</code>, <code>LONGTEXT</code> </TD><TD> <var>L</var>+4 bytes,
+where <var>L</var> &#60; 2^32
+</TD></TR>
+<TR><TD><code>ENUM('<var>value1</var>','<var>value2</var>',...)</code> </TD><TD> 1 or 2 bytes, depending on
+the number of enumeration values (65,535 values maximum)
+</TD></TR>
+<TR><TD><code>SET('<var>value1</var>','<var>value2</var>',...)</code> </TD><TD> 1, 2, 3, 4, or 8 bytes, depending
+on the number of set members (64 members maximum)
+</TD></TR>
+</TABLE>
+
+<P>
+<A NAME="IDX1182"></A>
+<A NAME="IDX1183"></A>
+<A NAME="IDX1184"></A>
+
+</P>
+<P>
+<code>VARCHAR</code> and the <code>BLOB</code> and <code>TEXT</code> types are variable-length
+types. For each, the storage requirements depend on the actual length of
+column values (represented by <var>L</var> in the preceding table), rather than
+on the type's maximum possible size.  For example, a <code>VARCHAR(10)</code>
+column can hold a string with a maximum length of 10 characters.  The actual
+storage required is the length of the string (<var>L</var>), plus 1 byte to
+record the length of the string.  For the string <code>'abcd'</code>, <var>L</var> is 4
+and the storage requirement is 5 bytes.
+
+</P>
+<P>
+The <code>BLOB</code> and <code>TEXT</code> types require 1, 2, 3, or 4 bytes to record
+the length of the column value, depending on the maximum possible length of
+the type.  See section <A HREF="manual_Column_types.html#BLOB">11.4.3  The <code>BLOB</code> and <code>TEXT</code> Types</A>.
+
+</P>
+<P>
+<A NAME="IDX1185"></A>
+The size of an <code>ENUM</code> object is determined by the number of
+different enumeration values.  One byte is used for enumerations with up
+to 255 possible values.  Two bytes are used for enumerations with up to
+65,535 values. See section <A HREF="manual_Column_types.html#ENUM">11.4.4  The <code>ENUM</code> Type</A>.
+
+</P>
+<P>
+<A NAME="IDX1186"></A>
+The size of a <code>SET</code> object is determined by the number of different
+set members.  If the set size is <var>N</var>, the object occupies <code>(<var>N</var>+7)/8</code>
+bytes, rounded up to 1, 2, 3, 4, or 8 bytes.  A <code>SET</code> can have a maximum
+of 64 members. See section <A HREF="manual_Column_types.html#SET">11.4.5  The <code>SET</code> Type</A>.
+
+</P>
+
+
+
+<H2><A NAME="Choosing_types" HREF="manual_toc.html#Choosing_types">11.6  Choosing the Right Type for a Column</A></H2>
+
+<P>
+<A NAME="IDX1187"></A>
+<A NAME="IDX1188"></A>
+
+</P>
+<P>
+For the most efficient use of storage, try to use the most precise type in
+all cases. For example, if an integer column will be used for values in the
+range from <code>1</code> to <code>99999</code>, <code>MEDIUMINT UNSIGNED</code> is the
+best type.  Of the types that represent all the required values, it uses
+the least amount of storage.
+
+</P>
+<P>
+Accurate representation of monetary values is a common problem. In MySQL,
+you should use the <code>DECIMAL</code> type. This is stored as a string, so no
+loss of accuracy should occur.  (Calculations on <code>DECIMAL</code> values may
+still be done using double-precision operations, however.)  If accuracy
+is not too important, the <code>DOUBLE</code> type may also be good enough.
+
+</P>
+<P>
+For high precision, you can always convert to a fixed-point type stored
+in a <code>BIGINT</code>. This allows you to do all calculations with integers
+and convert results back to floating-point values only when necessary.
+
+</P>
+
+
+
+<H2><A NAME="Other-vendor_column_types" HREF="manual_toc.html#Other-vendor_column_types">11.7  Using Column Types from Other Database Engines</A></H2>
+
+<P>
+<A NAME="IDX1189"></A>
+<A NAME="IDX1190"></A>
+<A NAME="IDX1191"></A>
+
+</P>
+<P>
+To make it easier to use code written for SQL implementations from other
+vendors, MySQL maps column types as shown in the following table.  These
+mappings make it easier to import table definitions from other database engines
+into MySQL:
+
+</P>
+<TABLE BORDER>
+<TR><TD><strong>Other Vendor Type</strong> </TD><TD> <strong>MySQL Type</strong>
+</TD></TR>
+<TR><TD><code>BINARY(<var>M</var>)</code> </TD><TD> <code>CHAR(<var>M</var>) BINARY</code> (before MySQL 4.1.2)
+</TD></TR>
+<TR><TD><code>CHAR VARYING(<var>M</var>)</code> </TD><TD> <code>VARCHAR(<var>M</var>)</code>
+</TD></TR>
+<TR><TD><code>FLOAT4</code> </TD><TD> <code>FLOAT</code>
+</TD></TR>
+<TR><TD><code>FLOAT8</code> </TD><TD> <code>DOUBLE</code>
+</TD></TR>
+<TR><TD><code>INT1</code> </TD><TD> <code>TINYINT</code>
+</TD></TR>
+<TR><TD><code>INT2</code> </TD><TD> <code>SMALLINT</code>
+</TD></TR>
+<TR><TD><code>INT3</code> </TD><TD> <code>MEDIUMINT</code>
+</TD></TR>
+<TR><TD><code>INT4</code> </TD><TD> <code>INT</code>
+</TD></TR>
+<TR><TD><code>INT8</code> </TD><TD> <code>BIGINT</code>
+</TD></TR>
+<TR><TD><code>LONG VARBINARY</code> </TD><TD> <code>MEDIUMBLOB</code>
+</TD></TR>
+<TR><TD><code>LONG VARCHAR</code> </TD><TD> <code>MEDIUMTEXT</code>
+</TD></TR>
+<TR><TD><code>LONG</code> </TD><TD> <code>MEDIUMTEXT</code> (MySQL 4.1.0 on)
+</TD></TR>
+<TR><TD><code>MIDDLEINT</code> </TD><TD> <code>MEDIUMINT</code>
+</TD></TR>
+<TR><TD><code>VARBINARY(<var>M</var>)</code> </TD><TD> <code>VARCHAR(<var>M</var>) BINARY</code> (before MySQL 4.1.2)
+</TD></TR>
+</TABLE>
+
+<P>
+As of MySQL 4.1.2, <code>BINARY</code> and <code>VARBINARY</code> are distinct data types
+and are not converted to <code>CHAR BINARY</code> and <code>VARCHAR BINARY</code>.
+
+</P>
+<P>
+Column type mapping occurs at table creation time, after which the original
+type specifications are discarded.  If you create a table with types used
+by other vendors and then issue a <code>DESCRIBE <var>tbl_name</var></code> statement,
+MySQL reports the table structure using the equivalent MySQL types.
+
+</P>
+
+<P><HR><P>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_Charset.html">previous</A>, <A HREF="manual_Functions.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+ </BODY>
+ </HTML>

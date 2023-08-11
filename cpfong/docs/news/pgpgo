@@ -1,0 +1,32 @@
+news@News-> pgp -ka ./nocem-key-at-newsgate.nctu 
+Pretty Good Privacy(tm) Version 6.5.8
+Internal development version only - not for general release.
+(c) 1999 Network Associates Inc.
+
+Export of this software may be restricted by the U.S. government.
+
+Looking for new keys...
+RSA  1024      0xBF5261B1 1999/03/01 nocem@newsgate.nctu.edu.tw
+sig?           0xBF5261B1             (Unknown signator, can't be checked)
+
+keyfile contains 1 new keys. Add these keys to keyring ? (Y/n) y
+New userid: "nocem@newsgate.nctu.edu.tw".
+New signature from keyID 0xBF5261B1 on userid nocem@newsgate.nctu.edu.tw
+ASSERTION FAILED at pgpKeySet.c line 473:
+  (dependency->keyDBDependencies[i] != db) not true
+
+Keyfile contains:
+   1 new key(s)
+   1 new signatures(s)
+   1 new user ID(s)
+
+Summary of changes : 
+
+New userid: "nocem@newsgate.nctu.edu.tw".
+New signature from keyID 0xBF5261B1 on userid nocem@newsgate.nctu.edu.tw
+
+Added :
+   1 new key(s)
+   1 new signatures(s)
+   1 new user ID(s)
+

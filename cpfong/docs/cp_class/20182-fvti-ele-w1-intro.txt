@@ -1,0 +1,10 @@
+OFF 	on
+COM	common
+V	voltage
+A	Ampere 
+m	milli 10^-3
+u	micro 10^-6
+n	nano 10^-9
+k	kilo 10^3
+M	Mega 10^6
+G	Giga 10^9

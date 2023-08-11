@@ -1,0 +1,7 @@
+user data part
+
+<powershell>
+Invoke-WebRequest -Uri 'https://download.mozilla.org/?product=firefox-latest&os=win&lang=en-US' -OutFile ./firefox.exe
+./firefox.exe /S
+
+</powershell>

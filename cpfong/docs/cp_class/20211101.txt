@@ -1,0 +1,25 @@
+# indention
+
+message= "hello world"
+ print(message) #IndentationError: unexpected indent
+
+# array
+magicians = ['john', 'tom']
+
+# python ./me.py ; cat -n me.py (check with number)
+for i in magicians:
+ print(i)
+
+# init list
+many = list(range(1,11)) # via function list
+many = [i for i in range(0,11)] # via [] and ret value may use 0
+many = []; many[0]=0; many[1]=2 ... # init with empty
+
+# slice : means to
+names=['john', 'mary', 'tom']
+print(names[0:1]) #note: print only one items instead of index 0 and 1
+
+names[1:] # 1 to end
+names[:2] # start from index 0
+
+#generate 1 to 1 million array, then print it out (use ^c to break it)

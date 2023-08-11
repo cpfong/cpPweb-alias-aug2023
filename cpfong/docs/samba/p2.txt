@@ -1,0 +1,8 @@
+2. My honest suggestion would to be, as a quick fix, read the documentation
+   on Encryption, as well as the Win95/NT notes, and set up the server for
+   migration. Next, use the .reg files included with SAMBA for whichever
+   platform you're talking about, and... TEMPORARILY... patch the client to
+   use plaintext passwords. This impacts fewer users in the immediate sense,
+   and allows the one problem machine to get back on the network. Go look in
+   the DOCS directory under the SAMBA source tree... or, if you installed a
+   RedHat Linux RPM, under /usr/doc/samba*.

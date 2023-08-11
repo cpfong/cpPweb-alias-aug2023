@@ -1,0 +1,80 @@
+// import stuff
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+// class start
+public class test_1 extends JFrame {
+   private char c;
+   private int digit, radix;
+   private JLabel prompt1, prompt2, disp;
+   private JTextField input, radixField;
+   private JButton toChar, toInt;
+
+   // constructor
+   public test_1()
+   {
+      super( "quiz 2" );		// parents constructor
+      Container con = getContentPane();	// 1/4
+      con.setLayout( new FlowLayout() );// 2/4
+
+      prompt1 = new JLabel( "String 1" );// new label
+      input = new JTextField(10);	// EditBox
+      con.add( prompt1 );		// 3/4
+      con.add( input );			// 3/4
+
+      prompt2 = new JLabel( "String 2 " );
+      radixField = new JTextField(10);
+      disp = new JLabel( "result is here " ); // result display here
+      con.add( prompt2 );
+      con.add( radixField );
+      con.add( disp );
+
+      toChar = new JButton( "add" );	// put button in
+
+      toChar.addActionListener(		// ActionListener for button!
+         new ActionListener() {
+            public void actionPerformed( ActionEvent e )
+            {  
+               disp.setText(input.getText() + radixField.getText());
+		// display the result
+            }
+         }
+      );
+      con.add( toChar );		// add button to container
+
+      toInt = new JButton( "find first" );
+      toInt.addActionListener(
+         new ActionListener() {		// another button action
+            public void actionPerformed( ActionEvent e )
+            {  
+               String s = input.getText();
+	       String d = radixField.getText();
+	       int ttt  = s.indexOf(d);
+	       String t = "" + ttt;
+	       disp.setText(t);
+            }
+         }
+      );
+      con.add( toInt );
+
+
+
+      setSize( 275, 150 );  // set the window size
+      show();               // show the window
+   }
+
+   public static void main( String args[] )
+   {
+      test_1 app = new test_1();
+
+      app.addWindowListener(
+         new WindowAdapter() {
+            public void windowClosing( WindowEvent e )
+            {
+               System.exit( 0 );
+            }
+         }
+      );
+   }
+}

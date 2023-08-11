@@ -1,0 +1,9 @@
+putty
+
+host: fvti.ifong.org
+port: 22
+
+login: s181205043101
+password: xxxxdddd
+
+

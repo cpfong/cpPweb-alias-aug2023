@@ -1,0 +1,396 @@
+<HTML>
+<HEAD><TITLE>mysql backup</TITLE>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+</HEAD>
+<BODY>
+<TABLE border=0 align="center" width=80%>
+<TR><TD>
+<PRE>
+
+<center>
+<H1>MySQL簡易備份方法
+</H1>
+<HR>
+作者: Duncan Lo &lt;<a href="mailto:Duncan Lo%3cduncan@twn.wox.org %3e?subject=mysql bakup">duncan@twn.wox.org</a>&gt;
+</center>
+
+
+
+
+更新日期: 2002.06.24
+適用對象: MySQL DB管理員.
+適用條件: 對 Linux 環境有基礎的管理及操作能力.
+文章附註: 本篇文章為自由文件,歡迎非商業性質轉載,並請註明出處!
+          商業性質轉載請來信告知!
+特別注意: 1.本篇文章提供之程式及設定*不一定*符合您的環境,
+            請依您的系統環境適當地修改程式及設定.
+          2.在執行任何具破壞性的動作及行為前,
+            請確認您已作好完整可用的資料備份工作.
+
+
+-
+
+
+目錄內容
+一.前言
+二.錯誤修正
+三.開始備份
+四.如何回存
+五.MySQL線上備份
+六.MySQL線上回存
+七.開始排定備份
+八.結語
+九.參考資料
+十.附錄-備份Script原始檔
+
+
+-
+
+
+一.前言
+
+  2002年端午節前幾週,正當我在網上快樂的衝浪,在酷!學園快樂的灌口水時,
+竟蹦出一頁 "phpBB critical error",查詢 Database 出現錯誤的訊息,中斷了
+各學員在各系版唇槍舌戰,熱烈的討論,雖然過了不久,系統管理工友把網頁
+修好,但開始連續幾個星期,phpBB 討論區有時還是很容易掛掉,頻率大約是
+一至二週一次,通常都是在週末大家最閒的時侯發生的,幸好此時剛好世界杯
+足球賽正好開打,不能到學園灌水,最少還有足球賽可以看.
+
+  當時修護的方式,是將 MySQL 服務停止,再把前一次可用的DB檔案蓋回去,
+然後再重新啟動 MySQL 服務來測試 phpBB 是否正常,這樣子的作法通常都有效,
+但總是會遺失某一段時間內的文章,這不是大家所希望的...
+
+  為了保存許多珍貴的資料和學園們噁心的口水,我開始著手準備 DB 的備份
+工作,準備重建這個有問題 DB ,更為將來校園的遷址作 DB 移轉準備.
+
+  (DB: Database的簡稱,以下都以 DB 取代 Database,
+   phpBB: 酷!學園討論區系統的軟體名稱)
+
+二.錯誤修正
+
+  花了一些時間熟悉主機的環境後,我開始尋找錯誤在那裡...
+
+  檢測 MySQL 內 phpBB 的 DB 後發現,有個 users 的 table 是有問題的,
+使用 myisamchk 嚐試去修護,發現還不行用預設方式修護,還要多加個 "-o"
+的參數才行,在使用 myisamchk 時,為避免還有用戶來存取 DB ,最好是能夠
+將 MySQL 服務停止,不然最少也要下個 "mysqladmin flush-tables" 後,
+再作 myisamchk 指令,像:
+
+    myisamchk -o phpbb2_users.MYI
+
+  這個動作,可能要作個2~3次,直到沒有錯誤的訊息出現!
+
+  修護完,重新啟動 MySQL 服務後,就可以用 mysql 這個 client 的指令,
+去 Query 一下 DB 內容,測試看是否正常.很幸運的,DB的部份在此時,
+運作是正常的.
+
+  當然,在你要備份之前,假如能先檢測資料是否正確,那是最好不過了,
+假如有需要,可以把檢測的工作,排定在備份工作之前,但是記得,這個檢測
+DB 的動作不要排定在 DB 高用量的那段時間,深夜無人上線的時段是個
+不錯的選擇!
+
+
+三.開始備份
+
+  phpBB 討論區的資料檔,主要有兩個部份,就是 php 主程式和 DB 內容,
+php 主程式的備份就比較簡單,只要把全部檔案 tar 起來就行了,就像:
+
+    tar cvfz phpbb2_20020601.tgz phpbb
+
+    (上面的 phpbb 是指 phpBB 的 php 網頁程式存放目錄.)
+    
+  以後有改到 phpBB 網頁程式部份再重新備份一次就行,它的內容資料都寫在
+DB 內,所以 php 程式檔部份異動性應該不大.
+
+  再來就是 MySQL DB 部份了,預設 MySQL 的 DB 檔案是存在 /var/lib/mysql 內,
+以 DB 名稱為目錄,目錄內就是該 DB 的所有資料,像 phpbb2 這個 DB,
+就是存在 /var/lib/mysql/phpbb2 內,在備份前,因為怕資料尚未完全寫入磁碟,
+而且 MySQL 會 Lock 在使用的 DB 檔案,所以應該是要先把 MySQL 先 Shutdown 一下,
+整個備份的程序可以下像下面的指令去完成:
+
+    /etc/rc.d/init.d/mysqld stop
+    tar cvfz phpbb2_db_20020601.tgz phpbb2
+    /etc/rc.d/init.d/mysqld start
+    
+    (上面的 phpbb2 是指存放 phpbb2 這個 DB 的目錄.)
+    
+  Ok!這樣就完成了! (什麼?就這樣! 3行就結束了?!)
+
+  對!這樣就可以了! 不過要注意的是,怕 DB 內每個 Tables 間的資料有關關聯性,
+所以最好是把整個 DB 一次備起來,單獨只備哪個 Tables 的檔案,以後回存時,
+怕會有資料關聯不一致的問題!
+
+  以酷!學園的口水討論區為例,有21000筆左右的文章加上1200名註冊會員,資料庫
+整個 tar 起來大約30幾 MB 左右,每天備份,以一週為週期來計算,備份大約只需要
+(35*7=245) 200 多 MB 左右的空間,一星期的備份燒在一張光碟還夠!
+
+
+四.如何回存
+
+  phpBB 討論區的回存,只需把檔案解回原來存放網頁的路徑就可以,用以下指令解開:
+  
+    tar xvfz phpbb2_20020601.tgz
+    
+  DB 發生錯誤而要回存時,其實也不難,先找出最近一次完整正常的備份,先把現在錯誤
+的網頁或 DB 先更名或 tar 起來,再把好的備份給解開回原來目錄位置就行了,需要
+注意的是, MySQL 服務最好也是要先停止,回存完成後再啟動服務,回存 DB 的整個程序
+可能像下面:
+
+    /etc/rc.d/init.d/mysqld.stop
+    mv phpbb2 phpbb2_error
+    tar xvfz phpbb2_db_20020601.tgz
+    /etc/rc.d/init.d/mysqld.start
+    
+  然後再去測試一下網頁及資料庫! 看使用上是否正常就行了...
+
+  
+五.MySQL線上備份
+
+  使用像上面的"檔案"方式備份是個不錯的方法,它最少可以保持該主機某個時間點
+的完整檔案備份,但還是有一些問題需要考慮到,有些主機就不只建立一個 DB 而已,
+總不能為了備份某個 DB 而把整個 MySQL 服務停止,備份檔案的方式,回存在原主機上
+一定適用,但假如 MySQL 版本升級,或是在那天,該網頁空間需遷機移機到別的主機時,
+那就沒人敢保證備出來的資料檔可以用,所以我們可以考慮另一種備份的方式,是使用
+MySQL 本身提供的功能: "MySQL Data Dump",指令是 "mysqldump".
+
+  使用 MySQL 的 Dump 功能可以把 DB 的"結構","資料"或"結構加資料" Dump 成
+文字檔, mysqldump 指令提供的彈性很大,你可以選擇把整個 DB Dump 成一個檔,
+或是每個 Table 為一個檔,甚至是把結構檔和資料分開儲存都可以.
+
+  檢測酷!學園的 phpBB 資料庫後發現,以結構加資料 Full Dump 成一個檔案,
+檔案的大小大約也是30幾MB左右. 在 Dump 之前最好多下個 Flush-Logs 更新 LOG,
+所以整個 Dump 的指令如下:
+
+    mysqladmin -uroot -p flush-logs 
+    mysqldump phpbb2 -uroot -p --opt &gt; phpbb2_20020601.sql
+
+    (phpbb2 是 DB 名稱, opt 是一個使用完整 Dump 參數)
+    
+  再使用 time 指令去測試執行時間,這個30幾 MB 的 DB , Dump 出來竟只要15秒左右,
+Query 的速度還真是快,假如只是要單獨 Dump 某個 Table 時,只要在上面的指令後,
+轉出符號 "&gt;" 前加個 Table 名稱就可以,如只要 phpbb2_users 這個 Table 的 Dump 時,
+只要下:
+
+    mysqldump phpbb2 -uroot -p --opt phpbb2_users &gt; phpbb2_users_20020601.sql
+    
+  Dump 出來的檔案是個純文字檔,你可以用 tar 把它壓起來,以上面30幾 MB 的 DB 為例,
+大約可以把檔案大小壓到1/3左右的大小,因為 Dump 出是文字檔,所有的資料都是以明文
+顯示,所以必須注意一下備份檔保存的安全性,而且建議備份檔最好再另外儲存於異地以及
+其他易於保存的媒體上,像光碟片或磁帶,這樣的備份才有意義.
+
+
+六.MySQL線上回存
+
+  若要回存整個資料庫,只需將壓縮的備份檔還原成 Dump 的檔案,再用下面的指令回存:
+  
+    mysql phpbb2 -uroot -p < phpbb2_20020601.sql
+    
+  這邊需注意的是,若建立備份時是以"--opt"或"--add-drop-table"為參數時,回存的
+動作是先將舊的 Table 先刪除,重建 Table 的結構後再把 Data 匯入,所以回存後,
+所有的資料會回到你當時備份那個時間點,因此在回存資料時,可以考慮把現有錯誤或
+不完整的 DB 先備份一份下來,以備不時之需,或是拿來比對錯誤的地方在那裡,當然你也
+可以把資料回存到另一個測試用的 DB 內,只要把上面指令的 DB 名稱改成你的測試
+用 DB 名稱即可.
+
+  使用這種回存方式, MySQL 服務不需停止,也不會動到其他正在使用的 DB ,在一些提供
+MySQL 服務的虛擬主機,可用這種方式作你自己的 DB 備份及回存.
+
+  另外,假如你是系統重建或是移機時,切需在新的 MySQL 內,新建一個空白 DB 後,才行
+作回存的工作,你可以用下面的指令建立:
+
+    mysql -uroot -p -e "CREATE DATABASE phpbb2"
+    
+    (上面的phpbb2是你要新建的 DB 名稱)
+    
+  另一種作法,先用 "mysql" 指令進入 "mysql client console", 然後再用:
+  
+    CREATE DATABASE phpbb2;
+    
+  這樣就行了,記得尾端要加個 ";" 符號該行指令才會執行.
+
+  
+七.開始排定備份
+
+  知道備份的方法之後,就可以把整個備份的動作作成一個 Scirpt ,指定 DB 相關參數後,
+便可利用 Crontab 排定備份的週期和時間,可以把下面的指令加入 Crontab 內:
+
+    00 04 * * * /home/dbadmin/backup
+  
+    (backup 是 Script 的檔名)
+    
+  排定的時間當然最好是夜間離峰時. (酷!學園常24hr都有人在線上)
+    
+  以本文附錄提供的 Script 作備份規則說明,每日執行備份作業,以一週為一個週期,所以
+最近的資料是昨天,最久的資料是一星期前,每次備份是將指定的 DB Full Dump 成一個檔,
+用 tar 壓縮後存入指定的路徑. 備份檔以 DB 的名稱加上星期來命名,星期的表示為"0"
+代表星期日,"1"代表星期一,以此類推.
+
+  目前該 Scirpt 一次只能備份一個 DB 而已,你可以加以修改以符合你的系統環境及需求.
+
+
+八.結語
+
+  目前這個 Script 在測試機上測試的效果還不錯,以酷!學園討論區的2萬多篇討論文章,
+DB 總大小有30幾 MB, 跑這個 Script 大約只需要30幾秒就完成,下面是以 time 指令測試
+數次計算的結果:
+
+    [root@demo tmp]# time backup
+
+    real    0m32.788s
+    user    0m22.770s
+    sys     0m4.610s
+    [root@demo tmp]# time backup
+
+    real    0m33.898s
+    user    0m24.740s
+    sys     0m4.590s
+    [root@demo tmp]# time backup
+
+    real    0m32.808s
+    user    0m23.710s
+    sys     0m4.750s
+    
+  測試機的硬體配備是Intel Celeron 600 + 256mb SDRAM, 作業系統是CLE Linux 1.0.
+
+  因為 Dump 備份的速度很快,大部份作 MySQL 的備份都是這樣作的,假如是大型大量的
+DB 環境時,就需要考慮以 Incremental 的備份方式,而 MySQL 本身也提供這種備份方式,
+這種備份方式,一週作一次完整的備份,每天只要作異動作業檔(LOG)的備份就行,在備份的
+成本上,可以節省備份時間和儲存空間.
+
+  完成了備份的工作安排,現在又可以和學園們一起快樂的上網衝浪去了...
+
+
+九.參考資料
+
+  1.MySQL中文參考手冊
+    http://cnpa.yzu.edu.tw/~cfc/docs/mysqldoc_big5/manual_toc.html
+
+  2.MySQL man page
+
+  3.Study-area - Shell和Shell Script 
+    http://www.study-area.org/linux/linuxfr1.htm
+
+
+十.附錄-備份Script原始檔
+
+#!/bin/sh
+#
+#   Title: MySQL Backup Script
+# Created: 2002.06.01
+# Current: 2002.06.23
+# Contact: Duncan Lo &lt;duncan@twn.wox.org &gt;
+#    Note: This script just only backup one database!
+#
+
+#
+# Variables define for your server
+#
+
+# Database name
+DBNAME="phpbb2"
+
+# Database admin's name
+DBUSER="root"
+
+# Database admin's password
+DBPASS="password"
+
+# MySQL command's path
+# default: /usr/bin
+BINPATH="/usr/bin"
+
+# Backup date format
+BAKDATE=`date +%w`
+
+# Path for backup files save to
+BAKPATH="/usr/backup/phpbb"
+
+# Temp directory's name
+TMPDIR="tmp.db_bak".$BAKDATE
+
+# Backup files's directory 
+BAKDIR="$DBNAME"_$BAKDATE
+
+# Database tables list files name
+TABLST="tables_list"
+
+# Backup Type
+# 0: All tables in one dump file
+# 1: Pre table in one dump file
+BAKTYPE="0"
+
+#
+# Script Start
+#
+
+#
+# Create backup temp directory
+#
+cd /tmp
+rm -rf $TMPDIR
+mkdir $TMPDIR
+cd $TMPDIR
+mkdir $BAKDIR
+cd $BAKDIR
+
+#
+# Create database's table list
+#
+$BINPATH/mysql $DBNAME -u$DBUSER -p$DBPASS -N -e "show tables" &gt; $TABLST
+
+#
+# Flush database's LOG before dump
+#
+$BINPATH/mysqladmin -u$DBUSER -p$DBPASS flush-logs
+
+#
+# Choice one type to dump datebase
+#
+case $BAKTYPE in
+0)
+ #
+ # Dump database all table in one file
+ #
+ $BINPATH/mysqldump $DBNAME -u$DBUSER -p$DBPASS --opt &gt; $DBNAME.sql
+;;
+1)
+ #
+ # Dump database pre table in one file
+ #
+ awk '{ print BINPATH"/mysqldump "DBNAME" -u"DBUSER" -p"DBPASS" \
+      --opt " $1 " &gt; " $1".sql" }' \
+      BINPATH="$BINPATH" DBNAME="$DBNAME" DBUSER="$DBUSER" DBPASS="$DBPASS" \
+      $TABLST \
+      | /bin/sh
+;;
+*);;
+esac
+
+cd ..
+
+#
+# Compress backup files
+#
+tar cfz $BAKDIR.tgz $BAKDIR
+
+#
+# Move file to backup directory 
+#
+mv $BAKDIR.tgz $BAKPATH 
+
+cd ..
+#
+# Clean temp files and directory
+#
+rm -rf $TMPDIR
+
+#
+# Script End
+#
+
+
+</PRE>
+</TD></TR>
+</TABLE>
+</BODY>
+<HTML>

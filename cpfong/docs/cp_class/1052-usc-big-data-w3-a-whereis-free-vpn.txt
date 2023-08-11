@@ -1,0 +1,4 @@
+http://www.vpngate.net/
+why vpn? and its algorithms
+install SoftEther vpn client
+check you ip (whatismyip.com or ipconfig)

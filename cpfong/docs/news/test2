@@ -1,0 +1,6 @@
+%telnet news.fjtc.edu.tw 119
+Trying 163.15.196.12...
+Connected to news.fjtc.edu.tw.
+Escape character is '^]'.
+502 You have no permission to talk.  Goodbye.
+Connection closed by foreign host.

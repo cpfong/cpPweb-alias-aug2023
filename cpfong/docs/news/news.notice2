@@ -1,0 +1,13 @@
+bbs# tail ../log/news.notice
+Dec 25 11:52:08 bbs innd: SERVER descriptors 5000
+Dec 25 11:52:08 bbs innd: SERVER outgoing 4987
+Dec 25 11:52:08 bbs innd: SERVER ccsetup control:12
+Dec 25 11:52:08 bbs innd: SERVER lcsetup localconn:14
+Dec 25 11:52:08 bbs innd: SERVER rcsetup remconn:4
+Dec 25 11:52:08 bbs innd: SERVER bad_newsfeeds no feeding sites
+Dec 25 11:52:08 bbs innd: CNFS-sm: file '/export/cycbuffs/one' : No such file or
+ directory, ignoring 'ONE' cycbuff
+Dec 25 11:52:08 bbs innd: SM storage method 'cnfs' failed initialization
+Dec 25 11:52:08 bbs innd: SM one or more storage methods failed initialization
+Dec 25 11:52:08 bbs innd: SERVER cant initialize the storage subsystem one or mo
+re storage methods failed initialization

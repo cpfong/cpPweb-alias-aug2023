@@ -1,0 +1,148 @@
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+<style type="text/css">
+<!--
+        a               { color:blue; text-decoration:none;}
+        a:hover         { text-decoration:underline; color:orange}
+        a:active        { color:#99cccc}
+
+//-->
+</style>
+
+<!--
+        a:visited       { color:purple }
+        a{color:#0000ff; text-decoration:none;font-size:9pt}
+        a:hover         { text-decoration:underline; color:red}
+-->
+after DSL: TC TinyCoreLinux<br>
+<a href=./cp-init.sh> cp init shell </a> --
+<a href=http://forum.tinycorelinux.net/index.php?topic=10430.0> grub4dos orig@forum </a> --
+<a href=./tc-usb.txt> usb cp.ReadME </a> --
+<a href=http://distro.ibiblio.org/tinycorelinux/>TinyCore</a> --
+<a href=http://etherboot.org/wiki/howtos> gPXE: bootable pxe@usb </a> --
+<a href=./gpxe.txt>gPXE.txt</a> --
+<a href=http://ipxe.org/> ipxe (after gPXE) </a> -- 
+<br><br>
+tc pxe<br>
+<a href=./go-pxe-v3.sh> my new shell 4 pxe@TC </a> --
+<a href=./go-pxe.sh> orig my shell for pxe@TC clean version </a> --
+<a href=./go-pxe-untar.sh> untar version (no good) </a> --
+<a href=./dnsmasq-AT-etc-ok.conf> dnsmasq-ok.conf </a> --
+<a href=./tftpboot.tgz> tftpboot.tgz </a> --
+<a href=./my-pxei-ReadME.txt> ReadME</a>
+<br><br>
+gPXE <br>
+<a href=http://etherboot.org/>@gPXE</a> --
+<a href=http://rom-o-matic.net/>preBuild gpxe</a> --
+<a href=http://etherboot.org/wiki/download> download src </a> -- 
+<a href=http://etherboot.org/wiki/syslinux> sysLinux </a> --
+<a href=./win32diskimager-binary.zip> W32Imager</a> --
+<a href=./gpxe-1.0.1-gpxe.usb> gpxe.usb </a> --
+<br>
+<a href=./pxe-on-xp-working.zip>pxe installed on XP ok </a> <br>
+links --
+<a href=http://diddy.boot-land.net/pxe/index.htm>Windows XP draft</a> --
+<a href=./xp-pxe-readme.txt> ReadME </a> --
+<a href=http://tftpd32.jounin.net/> @tftpd32 </a> --
+<a href=http://www.kernel.org/pub/linux/utils/boot/syslinux/index.html>kern.org</a> --
+<br>
+files --
+<a href=./Tftpd32-4.00-setup.exe>tftpd32</a> --
+<a href=./syslinux-4.05.zip>syslinux.zip</a> --
+<a href=./odin1440.img>1440.img</a> --
+<br><br>
+
+PicoBSD<br>
+<a href=http://thewall.sourceforge.net/> Wall </a> --
+<a href=http://people.freebsd.org/~picobsd/> @Home </a> --
+<a href=http://www.cse.ucsc.edu/~brucem/pico_notes.htm>@brucem</a> --
+<a href=http://lists.freebsd.org/pipermail/freebsd-small/>MailingList</a>
+<br><br>
+Another BSD<br>
+<a href=http://www.freebsd.nfo.sk/maheshaeng.htm>maheshaeng</a> --
+<br><br>
+2003/12/17<br>
+<a href=http://mulinux.sunsite.dk/> Mulinux closed</a><br>
+<a href=http://www.toms.net/rb/>Tomsrtbt 2002/11/1</a> --
+<a href=http://tuma.stc.cx/nuclinux.php> NucLinux 2003/4/1</a>--
+<br>
+<a href=http://trinux.sourceforge.net/> Trinux 2003/8/29</a> --
+<a href=http://www.tux.org/pub/people/kent-robotti/looplinux/rip/> rip 2003/11/1 </a> --
+<a href=http://www.coyotelinux.com/> coyote </a> --
+<a href=http://www.zelow.no/floppyfw/> floppyfw 2003/12/11 </a> <br>
+<a href=http://www.ibiblio.org/pub/Linux/system/recovery/!INDEX.html> ibiblio </a> --
+<a href=http://boot.everywhere.dk/> everywhere </a> --
+<a href=http://orangelin.sourceforge.net/> orange </a> --
+<br><br>
+DSL --
+<a href=./pkg.install.dsl.txt>ReadMe.txt</a> --
+<a href=http://www.damnsmalllinux.org>@Home</a> --
+<a href=./damnsmalllinux/index.html>cp mirror </a> --
+<a href=http://damnsmalllinux.org/cgi-bin/forums/ikonboard.cgi> forum </a> --
+<a href=./dsl-4.4.10.iso>4.4.10.iso</a> --
+<a href=ftp://mirror.internode.net/pub/damnsmalllinux> effective download </a> --
+<a href=http://dsl.thegeekery.com/current/>dsl download 1 </a> --
+<a href=http://darkstar.ist.utl.pt/damnsmalllinux/> 2 </a> --
+<br>
+<a href=http://www.damnsmalllinux.org/wiki/index.php/Install_to_USB_From_within_Linux> install to usb in Linux </a> --
+<a href=http://www.pendrivelinux.com/all-in-one-usb-dsl/> dsl2usb how2</a> --
+<a href=http://fedoraproject.org/wiki/How_to_create_and_use_Live_USB#Run_livecd-iso-to-disk_script> liveCD 2 usb 1 </a> --
+<a href=http://www.pendrivelinux.com/liveusb-install-live-usb-creator/> 2 pendrive </a> --
+<a href=http://www.damnsmalllinux.org/wiki/index.php/Persistence> Backup/Restore</a> --
+<br>
+remaster --
+<a href=http://damnsmalllinux.org/cgi-bin/forums/ikonboard.cgi?act=ST;f=12;t=7177;st=305> newer remas </a> --
+<a href=http://damnsmalllinux.org/cgi-bin/forums/ikonboard.cgi?act=ST;f=12;t=7177;hl=dsl+and+toram+and+default> old ver remaster </a> -- 
+<br>
+font --
+<a href=http://www.linuxquestions.org/questions/linux-newbie-8/damn-small-linux-fonts-657798/> ttf </a> -- 
+<a href=http://damnsmalllinux.org/f/topic-3-26-18569-0.html> 2 </a> --
+<a href=http://www.damnsmalllinux.org/f/topic-3-16-3779-0.html> 3 </a> --
+<a href=http://mail.mis.fotech.edu.tw/~cp/tmp/droid.font.base-39b04dd.tar.gz> droid ttf font</a> --
+<a href=http://damnsmalllinux.org/cgi-bin/forums/ikonboard.cgi?act=ST;f=26;t=13782;hl=ttf> chinese font </a> --
+<a href=./dsl.big5.font.sh>my shell</a> --
+<a href=./get-firefly-fonts>my perl</a> --
+<a href=./newsh.sh> new sh </a> --
+<a href=./dirty.sh> quick </a> --
+<a href=http://www.ibiblio.org/pub/packages/ccic/software/fonts/> ibiblio dir </a> --
+<a href=http://cle.linux.org.tw/fonts/> cle dir </a> --
+<br>
+gcin -- 
+<a href=http://www.inputking.com/> input oneline</a> --
+<a href=http://www.chinesecj.com/ime/cj5.php> cj </a> --
+<a href=http://people.linux.org.tw/~pofeng/ov-webime/zhuyin-kb.html> zhuyin </a> --
+<a href=http://www.damnsmalllinux.org/wiki/index.php/Language_Support#Chinese>chinese@dsl</a> --
+<br>
+cp --
+<a href=./dsl-4.4.10-firefly.embedded.zip> firefly.embedded.zip </a> --
+<a href=./eth0.txt> no eth0 </a>
+<br>
+BV1AL -- 
+<a href=http://bv1al.blogspot.com> blog </a> --
+<a href=ftp://cle.linux.org.tw/pub/KNOPPIX/bv1al> download site 1</a> --
+<a href=http://ftp.isu.edu.tw/pub/Linux/Knoppix/bv1al/> 2@isu</a> --
+<a href=./DSL-BV1AL-20050729.txt> how install BV1AL to USB </a> --
+<br>
+Bblog --
+<a href=http://bv1al.blogspot.com/2008_10_01_archive.html>terminator </a> --
+<a href=http://bv1al.blogspot.com/2008_08_01_archive.html>font</a> -- 
+<a href=http://bv1al.blogspot.com/2007_09_01_archive.html>伺服器</a> --
+<a href=http://bv1al.blogspot.com/2007_04_01_archive.html>廣告</a> --
+<a href=http://bv1al.blogspot.com/2007_03_01_archive.html>USB audio</a> --
+<a href=http://bv1al.blogspot.com/2007_02_01_archive.html>LiveCD </a> --
+<a href=http://bv1al.blogspot.com/2007_01_01_archive.html>冰箱</a> --
+<a href=http://bv1al.blogspot.com/2006_04_01_archive.html>沒有不能開機的USB隨身碟</a> --
+<br>
+Oss --
+<a href=http://www.pendrivelinux.com/multiboot-create-a-multiboot-usb-from-linux/> MultiBoot usb </a> --
+<br>
+flash player --
+<a href=./fl.txt>readME</a> --
+<a href=./install_flash_player_7_linux_r73.tar.gz> flash player 7 linux gz </a> -- 
+<a href=./install_flash_player_9r48_linux.tar.gz> ver 9 </a> --
+<a href=http://damnsmalllinux.org/cgi-bin/forums/ikonboard.cgi?act=ST;f=7;t=20635;hl=mozilla> @original forum</a> --
+<a href=./flash.sh> flash.sh </a> --
+<br><br>
+<a href=http://www.tux.org/pub/people/kent-robotti/looplinux/rip/> RIP (Recover is possible) Linux 救援大隊</a> --
+<a href=http://drbl.nchc.org.tw>drbl 企鵝龍</a> --
+<a href=http://clonezilla.org/>CloneZilla</a> --
+00-TC-ReadME.txt

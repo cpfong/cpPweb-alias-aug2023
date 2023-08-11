@@ -1,0 +1,5 @@
+物件導向程式設計(二)期末考
+
+1. 何謂 two dimention array, 請寫程式來舉一個例子
+2. 撰寫介面, 以描述代表正方刑的類別, 類別名為 Square, 
+具有 getside, setside, getarea 方法, 請自行決定合適的方法參數.

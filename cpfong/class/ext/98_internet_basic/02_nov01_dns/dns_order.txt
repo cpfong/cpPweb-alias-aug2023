@@ -1,0 +1,7 @@
+cat /etc/nsswitch.conf --> hosts: files dns  (/etc/hosts 1st then DNS)
+cat /etc/hosts --> the hosts I want to defined myself
+cat /etc/resolv.conf
+
+<ex> 
+	add one record into /etc/hosts then telnet it too see the result
+	change order of /etc/nsswitch.conf hosts: files dns --> dns files

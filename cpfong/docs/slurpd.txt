@@ -1,0 +1,65 @@
+* slurpd runs on the same host as the master slapd instance
+
+1. configure the master and slave slapd instances for replication, 
+2. shut down the master slapd to copy
+3. bring up the master slapd instance, the slave slapd instance, and the slurpd instance.
+
+step by step
+--
+master
+ #vi /etc/openldap/slapd.conf
+
+replogfile      /var/openldap-slurp/slurpd.replog    
+replica         host=ldap-slave.mos.tw:389                
+                suffix="dc=mos"
+                binddn="cn=Manager22,dc=mos"
+                bindmethod=simple                               
+                credentials=ManagerSecret
+
+slave
+setup a regular ldap server first. The configuration of the slave server should be identical 
+to that of the master, with the following exceptions:
+1. NO replica
+2. NO replogfile
+3. With updatedn updateref
+ex:
+
+rootdn          "cn=Manager22,dc=mos"
+rootpw          ManagerSecret
+#
+updatedn        "cn=Manager22,dc=mos"
+updateref       ldap://ldap-master.mos.tw
+
+
+BETTER way is the following!
+master
+--
+add cn=SLURPD,dc=mos
+objectClass: organizationalRole
+objectClass: simpleSecurityObject
+cn: SLURPD
+userPassword: {SSHA}mZnpdd9ZbK5AI9YhfLlZKaPE77lrdWZ2Y3JmZg==
+
+binddn="cn=Replica,dc=mos"
+bindmethod=simple                               
+credentials=ManagerSecret
+
+slave
+--
+access to * 
+        by dn.exact="cn=Replica,dc=mos" =xw		--> must first line!!
+	...
+updatedn        "cn=Replica,dc=mos"
+updateref       ldap://ldap-master.mos.tw
+
+AT master
+--
+# /usr/local/libexec/slurpd -f /etc/openldap/slapd.conf &
+
+NOTE: use DNS tenique to switch between master and slave
+just use ldap.com
+
+ldap.com.	A	1.1.1.1
+		A	2.2.2.2
+ldap-master.com A	1.1.1.1
+ldap-slave.com	A	2.2.2.2

@@ -1,0 +1,10 @@
+webhook at port 9000
+turn on debug  (i use my own starup script at FreeBSD)
+
+note:
+1 must https
+2 turn the debug on can see userid
+
+/usr/local/sbin/webhook -debug -hooks /usr/local/etc/webhook.yaml -verbose -secure -cert /usr/local/etc/letsencrypt/live/myZone/fullchain.pem -key /usr/local/etc/letsencrypt/live/myZone/privkey.pem -nopanic
+
+[dedcce] {"destination":"U0d873d7cb5","events":[{"type":"message","message":{"type":"text","id":"16096","text":"hi"},"webhookEventId":"01G26MBFRK5","deliveryContext":{"isRedelivery":false},"timestamp":1652273938699,"source":{"type":"user","userId":"U038e4d0f4"},"replyToken":"65dd0eb8c056","mode":"active"}]} #note: i deinfo it, however it is a REAL message

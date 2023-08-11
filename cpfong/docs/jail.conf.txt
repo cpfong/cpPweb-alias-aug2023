@@ -1,0 +1,18 @@
+# common part for every jail
+exec.start  = "/bin/sh /etc/rc";
+exec.stop   = "/bin/sh /etc/rc.shutdown";
+exec.clean;
+
+mount.devfs;
+allow.raw_sockets = 1; # in jail you can ping 127.0.1.254 (solve this: ssend socket: Operation not permitted)
+allow.socket_af = 1;
+
+path = "/srv/j/${name}"; # i use ZFS
+host.hostname = "${name}.local";
+#exec.consolelog = "/var/log/jail_${name}_console.log";
+
+www {
+ jid=1;
+ ip4.addr = "vtnet0|10.0.0.${jid}";
+ ip4.addr +=  "lo1|127.0.1.${jid}";
+}

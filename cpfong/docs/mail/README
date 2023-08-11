@@ -1,0 +1,305 @@
+junkfilter
+
+a junk e-mail filter system for procmail
+
+Copyright 1997-2002 Gregory Sutter <gsutter@zer0.org>
+
+$Id: README,v 2.25 2002/04/21 03:16:14 gsutter Exp $
+
+Contents:
+	0.  What is junkfilter?
+	1.  Use of junkfilter
+	2.  How to get junkfilter
+	3.  Mailing lists
+	4.  Installation instructions
+	5.  Sample .procmailrc file
+	6.  Helping improve junkfilter
+	7.  Customizing junkfilter
+	8.  Contributors
+
+0.  What is junkfilter?
+
+	junkfilter is a spam filtering program built on top of the
+	procmail email delivery system.  The goal is to create filter
+	sets that will block as much spam as possible.  junkfilter
+	functions equally well at the individual-user level or at the
+	system level; however, since procmail can be slow and mail
+	volumes high, its general use at the system level is discouraged.
+	junkfilter makes an an excellent second stage spam filter when
+	coupled with a first-stage MTA-based ruleset.
+
+	As junkfilter requires the procmail system, it can only be
+	used on a Unix-like system.  procmail does not work on
+	Windows; this is a procmail FAQ:
+	http://www.zer0.org/procmail/mini-faq.html#nt
+	
+1.  Use of junkfilter
+	junkfilter is Copyright 1997-2002 Gregory Sutter.
+	All rights reserved.
+
+	junkfilter is licensed under a BSD-style license.  See the
+	LICENSE file for the full text.
+
+2.  How to get junkfilter
+	The junkfilter web page is: http://junkfilter.zer0.org/
+	junkfilter and this documentation are available at the web site.
+
+	junkfilter has also been instantiated as a SourceForge
+	project.  The URL there is:
+	http://sourceforge.net/projects/junkfilter/
+
+	junkfilter's CVS tree is available from:
+	http://sourceforge.net/cvs/?group_id=13498
+
+3.  Mailing lists
+	junkfilter has two mailing lists, an announce list and a
+	general-purpose list.  If you wish to receive announcements
+	of new releases, subscribe by sending a message to
+	junkfilter-announce-subscribe@yahoogroups.com.  If you wish
+	to also receive general mail from a two-way mailing list,
+	subscribe by sending a message to
+	junkfilter-users-subscribe@yahoogroups.com.  Thanks to
+	eGroups.com, now part of Yahoo!, for hosting these lists.
+
+4.  Installation of junkfilter
+	We assume you've already got procmail installed and running
+	properly, as this is explicitly a "junk email filter system for
+	procmail".  Consult the procmail documentation or the FAQ,
+	http://www.zer0.org/procmail/
+	if you need help installing procmail.
+
+	Set the $PMDIR variable.  It is recommended that you make a
+	directory ".procmail" in your home directory and a symlink from
+	$HOME/.procmailrc to $HOME/.procmail/procmailrc:
+		mkdir -m 755 $HOME/.procmail
+		mv -i $HOME/.procmailrc $HOME/.procmail/procmailrc
+		ln -s $HOME/.procmail/procmailrc $HOME/.procmailrc
+	If you do this, you can set PMDIR=$HOME/.procmail
+
+	Place the junkfilter files wherever you want them.
+	$PMDIR/junkfilter is a likely choice.  Set $JFDIR in
+	your procmailrc (for junkfilter to run) and in your shell
+	configuration files (for the Makefile) to the directory in
+	which you placed junkfilter.
+
+	In addition to the junkfilter files and default lists, you
+	can make blocklists of your own.  To use these user blocklists,
+	set $JFUSERDIR to the directory in which you want your user
+	blocklists.  If you're installing junkfilter all for yourself,
+	this can be the same as $JFDIR.  If you share the base
+	junkfilter installation with other users on the system and
+	don't want to share the blocklists, then put these user lists
+	elsewhere, like $PMDIR/lists or $PMDIR.
+
+	To update the lists after modifying them, be sure that $JFDIR
+	and $JFUSERDIR are set in your current session, and use the
+	Makefile to parse the data files and build regular expressions
+	from them:
+		cd $JFDIR
+		make create
+		make all
+	You will find your $JFDIR populated with the default regexp
+	data files, and your $JFUSERDIR populated likewise for your own
+	data files.  When you modify the data files, you'll have to
+	run 'make all'.
+
+	To begin using junkfilter to filter incoming mail, either follow
+	the instructions below to add to your existing .procmailrc file
+	or just use the included file procmailrc.sample by copying it to
+	your $PMDIR.
+
+	To use your existing procmailrc, place the following line in an
+	appropriate place in your procmailrc file:
+		INCLUDERC=$JFDIR/junkfilter
+	This will call junkfilter.  All other junkfilter files are called
+	from within this first file.  After mail finishes passing through
+	the included junkfilter system, it will not be changed or 
+	filtered anywhere, but several procmail variables may be set.
+	Depending upon the contents of these variables, the message can
+	be filtered away to another mailbox so you don't have to read it.
+
+	After the INCLUDERC statement, this procmail recipe will filter
+	mail depending on whether junkfilter has marked the message as
+	spam.  This example sends the junkmail to a mailbox called
+	"junkmail" in your $MAILDIR directory.
+
+	# Deal with mail that junkfilter has flagged.
+	:0
+	* JFEXP ?? .
+	{
+		# Check for whitelisted mail
+		:0 f
+		* JFSTATUS ?? 1
+		| formail -i "X-junkfilter: $JFVERSION" \
+			-i "X-Spammer: $JFEXP"
+
+		# File as spam
+		:0 E :
+		| formail -i "X-junkfilter: $JFVERSION" \
+			-i "X-Spammer: $JFEXP" >> junkmail
+	}
+
+	Here is an example demonstrating how to process mail, yet
+	perform the filtering within your e-mail program instead of
+	sending spam to a different directory.  (Tell your email
+	program to check for the presence of an X-Is-Spam: header.)
+
+	# Deal with mail that junkfilter has flagged.
+	:0
+	* JFEXP ?? .
+	{
+		# Check for whitelisted mail
+		:0 f
+		* JFSTATUS ?? 1
+		| formail -i "X-junkfilter: $JFVERSION" \
+			-i "X-Spammer: $JFEXP"
+ 
+		# File as spam
+		:0 E f
+		| formail -i "X-junkfilter: $JFVERSION" \
+			-i "X-Spammer: $JFEXP" \
+			-i "X-Is-Spam: YES"
+	}
+
+	In addition to these examples, you can change the action recipe
+	to whatever you prefer.  The most common change will be the name
+	of the mailbox in which the junk mail is stored.  You can change
+	it to /dev/null if you wish, but remember that no matter how good
+	the filter, mistakes will be made.  The author does NOT recommend
+	immediately discarding any mail filtered by junkfilter.
+
+	You now have a basic junkfilter setup.  You now need to configure
+	junkfilter to fit your every desire.  Edit junkfilter.config and
+	change the various options from 0 to 1 and vice-versa.  0 means
+	"false"; 1 means "true".  A given piece of code will only
+	execute if it is set true.  Please read the comments at the
+	beginning of each one before changing anything.
+
+	If you are installing junkfilter as a systemwide solution, and
+	want each user to have customizable defaults, you can copy the
+	junkfilter.config file to their home directories, calling it
+	".junkfilterrc".  junkfilter will check $HOME/.junkfilterrc for
+	local configuration overrides each time it is called.
+	
+	You can change the default action of jf to whatever you prefer.
+	The only action command in junkfilter is to set the variable
+	JFEXP to a relevant piece of text.  It is up to you to then
+	take some action.  Since you've called junkfilter from your
+	.procmailrc file, you can easily take action depending on the
+	output (in the JFEXP variable) of junkfilter.
+
+	The whitelist feature is a way of making sure that certain
+	people/mails are not blocked, even if junkfilter would block
+	them ordinarily.  The implementation of the whitelist does not
+	break compatibility with older releases of junkfilter, but
+	does require that a more complex set of recipes be used to
+	decide whether or not to take action on the message.
+
+5. Sample .procmailrc file that calls junkfilter
+	Please see the file procmailrc.sample for a working example
+	of how to call junkfilter from your procmailrc.  If you have
+	no other procmail recipes, you can simply install this in
+	$PMDIR and make a symbolic link to it from your $HOME.
+
+6.  Helping improve junkfilter
+	If you know procmail, or would like an example of a working
+	procmail-based tool of medium complexity to play with or
+	hack around on, take a look at the junkfilter code.  There
+	are lots of ways to improve the system.  Please submit
+	bugs (and preferably patches) to the management systems at
+	SourceForge:
+		bugs:
+	http://sourceforge.net/tracker/?atid=113498&group_id=13498&func=browse
+		patches:
+	http://sourceforge.net/tracker/?atid=313498&group_id=13498&func=browse
+
+	Bugs, patches, questions, and comments may also be posted
+	to the junkfilter-users mailing list or to the author.  Note
+	that emailing the author directly has the lowest probability
+	of receiving a timely response.
+
+	junkfilter users who wish to see more of their spam caught by
+	the filter in the future may wish to forward their spam which
+	was _not_ caught by junkfilter to an email address set up for
+	this purpose.  To do this, you should enable JF_OPT_SENDBACK in
+	your junkfilter.config file.  It's near the end.  This will
+	enable some settings that will mark each email that passes
+	through junkfilter.  If a spam has the headers added by this
+	setting, it will be accepted at the email address
+	<junkfilter-misses@lists.sourceforge.net>.  Spam sent here may
+	be analyzed and used to improve junkfilter.
+
+	Only spam that has been processed by junkfilter, yet not
+	caught, will be of use.  junkfilter must have JF_OPT_SENDBACK
+	enabled to be of use.
+
+	An easy way to test junkfilter when modifying the code is to
+	put a sample e-mail in a file such as 'test-mail' then invoke
+	procmail directly with:
+		procmail < test-mail > test-output 2>&1
+	If you're using a csh variant, the command line is:
+		procmail < test-mail >& test-output
+
+	You can then look at the test-output file to see how procmail
+	handled the test e-mail. The sample e-mail you put in
+	'test-mail' should be the raw source of the message including
+	all headers.
+
+7.  Customizing junkfilter
+	junkfilter can be customized in three ways: through the
+	junkfilter.user file, through the individual section user
+	files, or by modifying the procmail code directly.
+
+	The file junkfilter.user is provided as a convenient place for
+	you to store your own personal junk filtration recipes.  If you
+	follow the recommended format (given at the beginning of that
+	file), junkfilter will treat your recipes the same as the rest
+	of the files.  The "user" section is the first section checked
+	when junkfilter is called.  In the distribution, the stock
+	junkfilter.user is called junkfilter.user-default so that your
+	personalized copy is not overwritten when you upgrade later.
+
+	The user files for each individual section (domains, bodychk,
+	etc.) are made up of lists of regular expressions.  For each
+	file, which has the same name as the corresponding built-in
+	section, suffixed with "-user", as in 'bodychk-user', add
+	each entry on its own line.  To compile your lists into the
+	format that junkfilter can use, run the 'jf' utility with the
+	arguments 'build' and the section name you're building:
+		jf build bodychk-user
+		jf build domains-user
+	The shortcut section name "all-user" will build all of the 
+	user configurable data files:
+		jf build all-user
+	When you use the 'jf' utility in this manner, it will take
+	your raw data files and build files with names like 
+	'jf-bodychk-user' or 'jf-ip-user'.  These files should not
+	be edited directly, or your changes will be lost when you 
+	next use 'jf' to rebuild them.
+	
+	If you enable any of the user- rules or options in junkfilter,
+	you MUST be sure that the files referenced by them in
+	junkfilter.config exist!  This means that you must rename the
+	files distributed as *-default, removing the dash and the word
+	"default". If you don't do this, the most likely occurrence is
+	that all your mail will be classified as junk.
+
+8.  Contributors to junkfilter
+	Many people have contributed to junkfilter in various ways; the
+	author would like to thank the following people in particular:
+
+	Matthew Hunt <mph@pobox.com>, who co-developed junkfilter for the
+			 	      first few months.  Thanks, Matt!
+	Jeff A. Earickson <jaearick@colby.edu>
+	Era Eriksson <era@iki.fi>
+	Brian Goetz <brian@quiotix.com>
+	Philip Guenther <guenther@gac.edu>
+	Brad Knowles <brad@his.com>
+	Bryan D. McMeen <bryan.mcmeen@symtecinc.com>
+	John Perry <perry@jpunix.com>
+	Edward Sabol <sabol@alderaan.gsfc.nasa.gov>
+	David Tamkin <dattier@wwa.com>
+	John Wilkes <john@wilkes.com>
+	and
+	the procmail mailing list <procmail@Informatik.RWTH-Aachen.DE>
+

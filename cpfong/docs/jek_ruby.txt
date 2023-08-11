@@ -1,0 +1,4 @@
+sudo apt remove ruby bundler jekyll --purge
+rm -rf ~/.gem ~/.ruby ~/.rvm
+sudo apt clean && sudo apt autoremove && sudo apt autoclean
+sudo apt update && sudo apt upgrade

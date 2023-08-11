@@ -1,0 +1,521 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <title>Installing FreeBSD 7.x via serial console and PXE</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <style type="text/css">
+	pre	{ margin-left: 5%; color: #006f6f; background-color: inherit; }
+	code	{ color: #bf0000; background-color: inherit; }
+	h2	{ margin-top: 4%; }
+	td.mono	{ font-family: monospace; }
+	p.note  {
+		background-color: #fff3b9;
+		border-top: #ff6600 2px solid;
+		border-bottom: #ff6600 2px solid;
+		padding: 6px 20px 6px 20px;
+		font-weight: bold;
+	}
+	.number	{ list-style-type: decimal; }
+	.alpha	{ list-style-type: lower-alpha; }
+  </style>
+</head>
+
+<body>
+<h1>Installing FreeBSD 7.x via serial console and PXE</h1>
+<p>&mdash; by Jeremy Chadwick &lt;freebsd@jdc.parodius.com&gt;</p>
+
+
+<h2>Sections</h2>
+<ol class="number">
+<li><a href="#requirements">Requirements</a></li>
+<li><a href="#common">Common Paths/Terms Used</a></li>
+<li><a href="#step1">Step 1: Configuring DHCP</a></li>
+<li><a href="#step2">Step 2: Configuring TFTP</a></li>
+<li><a href="#step3">Step 3: Configuring NFS</a></li>
+<li><a href="#step4">Step 4: Copying the FreeBSD CD contents to an exported NFS mount</a></li>
+<li><a href="#step5">Step 5: Rebuilding pxeboot(8)</a></li>
+<li><a href="#step6">Step 6: Configuring loader.conf</a></li>
+<li><a href="#step7">Step 7: Workaround for a bug in mfs_root</a></li>
+<li><a href="#step8">Step 8: Attempting your first PXE boot</a></li>
+<li><a href="#step9">Step 9: Choosing an installation medium</a></li>
+<li><a href="#step10">Step 10: Important Networking options</a></li>
+<li><a href="#step11">Step 11: Post-installation Configuration options</a></li>
+</ol>
+
+
+
+<h2><a id="requirements">Requirements</a></h2>
+
+<p>These are the things you are absolutely going to need &mdash; no questions asked.
+If you don't have any of these, you should stop here.</p>
+
+<ul>
+<li>Above boxes' MAC address on its NIC (needed for DHCP configuration)</li>
+<li>DHCP server</li>
+<li>TFTP server</li>
+<li>NFS server</li>
+<li>FreeBSD 7.x "disc1" installation CD &mdash; either the ISO or physical CD</li>
+<li>Confirmed working serial console on the box you wish to install on &mdash; make
+    sure it does in fact work at speeds higher than 9600bps.  Connect it with
+    a null modem cable to another machine, use <code>cu -l ttyd0 -s 115200</code>
+    and make sure it works</li>
+<li>A FreeBSD box where you can rebuild pieces of the base system (read: boot
+    blocks) on &mdash; that means a full <code>/usr/src</code> tree</li>
+<li>Ability to reboot the machine you plan on installing FreeBSD on.  This is NOT
+    a requirement, but highly recommended regardless.  There are numerous places
+    during the remote installation procedure where you may not end up with a
+    prompt to log in, thus having remote reboot capability is needed.</li>
+</ul>
+
+<p class="note">This procedure works for i386 and amd64.  There's no need to change
+any of the below pathnames for amd64.  It also doesn't matter if you build
+the pxeboot(8) binary on an amd64 box while the machine that plans on using it
+is i386; the bootstraps are purely i386.</p>
+
+
+
+<h2><a id="common">Common Paths/Terms Used</a></h2>
+
+<div style="margin-left: 5%"><table border="1" width="75%" cellpadding="4" cellspacing="0">
+<tr><th>Term</th><th>Description</th></tr>
+<tr>
+  <td class="mono">192.168.1.88</td>
+  <td>The IP of the DHCP, TFTP, and NFS server.</td>
+</tr>
+<tr>
+  <td class="mono">192.168.1.100</td>
+  <td>The IP of the box which we're doing the PXE boot on.</td>
+</tr>
+<tr>
+  <td class="mono">newbox.home.lan</td>
+  <td>FQDN of 192.168.1.100</td>
+</tr>
+<tr>
+  <td class="mono">/usr/local/freebsd7</td>
+  <td>Contains contents of the FreeBSD 7.x "disc1" CD; you will be modifying some
+  files in this directory, so it cannot be a mounted CD (e.g. read-only).</td>
+</tr>
+<tr>
+  <td class="mono">boot0<br />boot1<br />boot2<br />loader<br /></td>
+  <td>All of these are the different stages of the FreeBSD bootstraps.  All are
+  used when physical media is used for installation (e.g. floppies, CDROM, hard
+  disk, USB thumb drive, etc.), but aren't used when PXE booting. <code>loader(8)</code>
+  is technically used, but it's actually called <code>pxeboot(8)</code>.  See below
+  for details on that.</td>
+</tr>
+<tr>
+  <td class="mono">pxeboot<br />pxeldr<br /></td>
+  <td>This is the sole binary that gets fetched via TFTP after the Intel PXE boot ROM gets
+  an IP via DHCP.  The binary itself is actually a modified version of <code>loader(8)</code>,
+  and includes some extra (undocumented) features.</td>
+</tr>
+<tr>
+  <td class="mono">mfsroot</td>
+  <td>This is a UFS filesystem in a file.  It contains a "bare bones" root filesystem,
+  including such things as <code>init(8)</code> and other necessities.  It's loaded by
+  <code>loader(8)</code> (a.k.a. <code>pxeboot(8)</code>) into memory, and then referenced
+  as a UFS disk known as /dev/md0c.  mfsroot is usually found gzip'd.</td>
+</tr>
+</table></div>
+
+
+
+<h2><a id="step1">Step 1: Configuring DHCP</a></h2>
+
+<p>I'm familiar with ISC's DHCP server, available as <code>ports/net/isc-dhcp3-server</code>.
+The important pieces you need to add to your <code>/usr/local/etc/dhcpd.conf</code> are here:</p>
+
+<pre>
+host newbox.home.lan {
+	  hardware ethernet 00:11:22:33:44:55;
+	  fixed-address newbox.home.lan;
+	  next-server 192.168.1.88;
+	  filename "freebsd7/boot/pxeboot";
+	  option root-path "/usr/local/freebsd7";
+}
+</pre>
+
+<p>Since not a single other document on the Web has described what the important
+options do, I'll describe their purpose:</p>
+
+<pre>
+next-server 192.168.1.88;
+</pre>
+
+<p>This line isn't necessary if the NFS server and the DHCP server are on the
+same machine.  Including it doesn't hurt.</p>
+
+<pre>
+filename "freebsd7/boot/pxeboot";
+</pre>
+
+<p>When a DHCP request is made from the Intel PXE boot ROM on the NIC, there are
+additional parameters you can tell it besides just an IP number.  This argument
+tells the PXE boot ROM what filename to do a TFTP request for now that it has
+an IP address.  It's the first piece of code which gets run after the initial
+DHCP IP negotiation is completed.</p>
+
+<pre>
+option root-path "/usr/local/freebsd7";
+</pre>
+
+<p>This is for FreeBSD.  It tells <code>pxeboot(8)</code> where the root filesystem
+should be mounted from, NFS-wise.  Thus, the kernel will do the equivalent of the
+following, in an attempt to get a working root filesystem, and then start
+<code>init(8)</code>:</p>
+
+<pre>
+mount -t nfs 192.168.1.88:/usr/local/freebsd7 /
+</pre>
+
+<p>At this point, you should enable the ISC DHCP server in /etc/rc.conf, and
+start the daemon using the appropriate rc.d script in <code>/usr/local/etc/rc.d</code>.</p>
+
+
+
+<h2><a id="step2">Step 2: Configuring TFTP</a></h2>
+
+<p>Uncomment the following line in <code>/etc/inetd.conf</code>, and modify it so that
+the <code>-s</code> flag points to /usr/local (that's where tftpd will chroot() before
+serving content):</p>
+
+<pre>tftp    dgram   udp     wait    root    /usr/libexec/tftpd      tftpd -l -s /usr/local</pre>
+
+<p>Add the following to <code>/etc/rc.conf</code> (assuming it's not already there):</p>
+
+<pre>inetd_enable="yes"</pre>
+
+<p>Now start the inetd service (thus starting tftpd):</p>
+
+<pre>/etc/rc.d/inetd start</pre>
+
+<p>If you already had inetd running prior to modifying <code>/etc/inetd.conf</code>, all you
+need to do is send a SIGHUP to it: <code>killall -HUP inetd</code></p>
+
+
+
+<h2><a id="step3">Step 3: Configuring NFS</a></h2>
+
+<p>Add the following to <code>/etc/rc.conf</code>, again assuming they're not already there:</p>
+
+<pre>
+rpcbind_enable="yes"
+mountd_enable="yes"
+nfs_server_enable="yes"
+</pre>
+
+<p>Now we need to add an NFS export.  Edit <code>/etc/exports</code> and add the following
+lines to it:</p>
+
+<pre>/usr/local/freebsd7	-network 192.168.1 -mask 255.255.255.0</pre>
+
+<p>This example assumes your network is 192.168.1.0/24; if it's something
+else, you'll need to make appropriate changes.</p>
+
+<p>Don't forget to make the exported directory:</p>
+
+<pre>
+mkdir /usr/local/freebsd7
+chmod 755 /usr/local/freebsd7
+</pre>
+
+<p>Now start all of the above services:</p>
+
+<pre>
+/etc/rc.d/rpcbind start
+/etc/rc.d/mountd start
+/etc/rc.d/nfsd start
+</pre>
+
+<p>If these were running beforehand and you simply edited <code>/etc/exports</code>,
+all you need to do is send a SIGHUP to <code>mountd(8)</code> to get it to re-read
+the exports: <code>killall -HUP mountd</code>.</p>
+
+<p>You should verify the NFS mount which was added is being exported:</p>
+
+<pre>
+# showmount -e
+Exports list on localhost:
+/usr/local/freebsd7		192.168.1.0
+</pre>
+
+
+
+<h2><a id="step4">Step 4: Copying the FreeBSD CD contents to an exported NFS mount</a></h2>
+
+<p>We're going to need to copy all the contents off the FreeBSD 7.x "disc1" CD
+to <code>/usr/local/freebsd7</code> before continuing.  We can't mount the CD
+and use it directly because we're going to modify some of the contents after
+the copy.  Choose one of the following:</p>
+
+<ol class="alpha">
+<li>Download a FreeBSD 7.x ISO image and untar it (see below)</li>
+<li>Download a FreeBSD 7.x ISO image and mount it using <code>mdconfig(8)</code>
+    and <code>mount_cd9660</code></li>
+<li>Physically insert and mount the CD in the NFS server</li>
+</ol>
+
+<p>I highly recommend the first choice.  Recent FreeBSD 7.x builds (starting with
+7.1-STABLE, if I remember correctly) contain an updated libarchive, which now
+understands the ISO9660 format and Joliet extensions.  Simply put, this means you
+can extract the contents of an .iso file without having to mount it.  Convenient,
+isn't it:</p>
+
+<pre>tar -C /usr/local/freebsd7 -pxvf 7.1-STABLE-200902-amd64-disc1.iso</pre>
+
+<p>If this option isn't available to you, you'll have to copy the contents of the
+FreeBSD ISO (or mounted CD) directly.  You can do using one of the following methods:</p>
+
+<ul>
+<li><code>rsync -avH /mnt/ /usr/local/freebsd7/</code> (the trailing slash is needed)</li>
+<li><code>cp -pR /mnt/* /usr/local/freebsd7</code></li>
+</ul>
+
+
+
+<h2><a id="step5">Step 5: Rebuilding pxeboot(8)</a></h2>
+
+<p>FreeBSD out-of-the-box has a hard-set serial port speed of 9600bps built in
+to the boot2 bootstrap.  "So I can just pick a higher speed, right?" Nope &mdash; if
+you try to do so, it'll stay at 9600bps.  If you tell boot2 to set the speed to
+115200 (e.g. <code>comconsole_speed="115200"</code>), it won't work &mdash; you'll
+still get 9600bps.  The best solution <b>for systems that boot off of a hard
+disk</b> is to tell the boot2 bootstrap what to set the serial port speed to.
+You end up putting <code>-S115200</code> in <code>/boot.config</code> and
+reboot &mdash; no need to rebuild the boot blocks.  Nothing else is needed.</p>
+
+<p>But when PXE booting, there's only one piece of the bootstrap used:
+<code>pxeboot(8)</code>.  This means the only solution is to rebuild the boot
+blocks with a serial port speed that has the speed you want &mdash; in this case,
+115200bps.  But first, let's clear something up: <code>pxeboot(8)</code> is
+actually nothing more than <code>loader(8)</code> with some extra code (see
+<code>src/sys/boot/i386/pxeldr.S</code>) in it.  <code>loader(8)</code> uses a
+library called libi386, which is a library used by the bootstraps only &mdash; it's
+it's not something you'll find in /usr/lib or /usr/libexec.  libi386 is what
+actually controls what the serial port speed is set to, thus, anything using
+libi386 should have support for higher serial console speeds.  The
+<code>BOOT_COMCONSOLE_SPEED</code> and <code>BOOT_COMCONSOLE_PORT</code>
+variables are used in libi386.</p>
+
+<p>Anyway, on the NFS server, do the following:</p>
+
+<pre>
+rm -fr /usr/obj/*
+cd /sys/boot
+make clean
+make BOOT_COMCONSOLE_SPEED=115200
+</pre>
+
+<p class="note">DO NOT type "make install" after this step!  We don't want to
+modify the bootstraps on the NFS server itself &mdash; we just want a
+115200bps-capable pxeboot(8) binary!</p>
+
+<p>The removal of all contents within <code>/usr/obj</code> may seem crazy, but
+it's actually required for some of the below steps to work properly.  If
+<code>/usr/obj</code> is populated from an old buildworld/buildkernel, "make"
+will end up storing files there rather than in the current working directory.</p>
+
+<p>There are two additional (undocumented) options which are specific to
+<code>pxeboot(8)</code> and aren't part of lib386.  These are OPTIONAL; you
+do not need to define or use either of them:</p>
+
+<pre style="font-weight:bold">
+BOOT_PXELDR_PROBE_KEYBOARD=1
+BOOT_PXELDR_ALWAYS_SERIAL=1
+</pre>
+
+<p><code>BOOT_PXELDR_PROBE_KEYBOARD</code> is similar to the -P flag documented
+in <code>boot(8)</code>.  It causes <code>pxeboot(8)</code> to look for an
+attached PS/2 or AT keyboard &mdash; and if there is one, use VGA/keyboard,
+otherwise assume serial console.  <code>BOOT_PXELDR_ALWAYS_SERIAL</code> tells
+<code>pxeboot(8)</code> to always use the serial port, and never do anything
+with a locally-attached VGA console or keyboard.</p>
+
+<p>Now that we have a 115200bps-capable <code>pxeboot(8)</code> binary, let's
+use it instead of the one originally on the CD image:</p>
+
+<pre>
+cd /sys/boot/i386/pxeldr
+cp pxeboot /usr/local/freebsd7/boot
+</pre>
+
+<p>At this point, a PXE booting client should now have the capability to set the
+serial port speed to 115200bps.  And don't forget to clean up the /sys/boot
+directory too!  We don't want cruft laying around in there:</p>
+
+<pre>
+cd /sys/boot
+make clean
+</pre>
+
+
+
+<h2><a id="step6">Step 6: Configuring loader.conf</a></h2>
+
+<p>Now we have to update <code>/usr/local/freebsd7/boot/loader.conf</code> to
+tell it to utilise serial console, and more importantly, point to where the
+root filesystem (for booting) will be.  The lines <b>in bold</b> are the ones
+you want to add; the others shown should already be there (don't mess with
+them!):</p>
+
+<pre>
+mfsroot_load="YES"
+mfsroot_type="mfs_root"
+mfsroot_name="/boot/mfsroot"
+<b>comconsole_speed="115200"</b>
+<b>console="comconsole"</b>
+<b>vfs.root.mountfrom="ufs:/dev/md0c"</b>
+</pre>
+
+<p>The serial console lines should be obvious.</p>
+
+<p>vfs.root.mountfrom tells the kernel that after it's done booting, to try to
+load the root filesystem from <code>ufs:/dev/md0c</code> before starting
+<code>init(8)</code>.  Without this line, the system will attempt to mount the
+root filesystem via NFS, which is not what we want.  If you want to know more
+about this part of the booting procedure, you should look at the related Forth
+files, as well as loader.rc in the same directory.</p>
+
+<p>Also, some clarification (since other documentation I've read seems to
+indicate that you want /dev/md0 and not /dev/md0c): /dev/md0c is what points to
+the beginning of the filesystem (block 0).  The FreeBSD Handbook goes over such
+filesystem lettering semantics.  So trust me, it's /dev/md0c.  :-)</p>
+
+<p>The mfs_root loading mechanism is also programmed to support gzip decompression
+automatically, so it will also look for the /boot/mfsroot.gz file &mdash; which is
+what comes on the FreeBSD 7.0 "disc1" CD.  However.....</p>
+
+
+
+<h2><a id="step7">Step 7: Workaround for a bug in mfs_root</a></h2>
+
+<p>I've confirmed that there is in fact a bug in the mfs_root loading
+mechanism.  It's likely been there for a very long time, since a couple other
+guides state that after rebuilding their mfsroot, if they re-gzip'd the mfsroot
+image, their machines would reboot.</p>
+<p>On our servers, something bizarre happens: the kernel appears to get reloaded,
+all of the environment variables are lost (which means serial console is lost),
+and then there's some nastiness on the console about how it can't find
+"kernel", and some weird Device ID 0xffffffff error.  I'd have to take a photo
+of the monitor to provide additional details, but regardless, this problem is
+easily reproducible.  I filed a PR for this problem,
+<a href="http://www.freebsd.org/cgi/query-pr.cgi?pr=kern/120127">kern/120127</a>,
+but as of this writing not a single developer has bothered to look into it.  I'm
+willing to bet this bug has bitten the EtherBoot folks as well.</p>
+
+<p>The workaround is simple: remove the gzip compression on the mfsroot.gz image,
+and everything should work:</p>
+
+<pre>
+# cd /usr/local/freebsd7/boot
+# gzip -d mfsroot.gz
+</pre> 
+
+
+
+<h2><a id="step8">Step 8: Attempting your first PXE boot</a></h2>
+
+<p>Alright, it's time to give it a try and see if it breaks!  Be patient, since
+most of the TFTP loading is slow (it's UDP-based, and uses small UDP packets).
+If all goes well, you should see something like this appear:</p>
+
+<pre>
+/boot/kernel/kernel text=0x71b90c data=0xadb60+0x5ac20 syms=[0x4+0x70fc0+0x4+0x90e69]
+
+ +-----------------------------------------+
+ |                                         |
+ |                                         |      ______
+ |                                         |     |  ____| __ ___  ___
+ |          Welcome to FreeBSD!            |     | |__ | '__/ _ \/ _ \
+ |                                         |     |  __|| | |  __/  __/
+ |                                         |     | |   | | |    |    |
+ |  1. Boot FreeBSD [default]              |     |_|   |_|  \___|\___|
+ |  2. Boot FreeBSD with ACPI disabled     |      ____   _____ _____
+ |  3. Boot FreeBSD in Safe Mode           |     |  _ \ / ____|  __ \
+ |  4. Boot FreeBSD in single user mode    |     | |_) | (___ | |  | |
+ |  5. Boot FreeBSD with verbose logging   |     |  _ &lt; \___ \| |  | |
+ |  6. Escape to loader prompt             |     | |_) |____) | |__| |
+ |  7. Reboot                              |     |     |      |      |
+ |                                         |     |____/|_____/|_____/
+ |                                         |
+ |                                         |
+ |                                         |
+ |  Select option, [Enter] for default     |
+ |  or [Space] to pause timer  10          |
+ +-----------------------------------------+
+</pre>
+
+
+<p>Hit Enter here, and let things boot normally.  If all goes well, you should
+begin to see the acpi.ko module load, and then standard kernel output.  Near
+the end, you should be shown something similar to the following:</p>
+
+<pre>
+md0: Preloaded image &lt;/boot/mfsroot&gt; 4423680 bytes at 0xc0d26ed4
+Trying to mount root from ufs:/dev/md0c
+/stand/sysinstall running as init on serial console
+
+These are the predefined terminal types available to
+sysinstall when running stand-alone.  Please choose the
+closest match for your particular terminal.
+
+1 ...................... Standard ANSI terminal.
+2 ...................... VT100 or compatible terminal.
+3 ...................... FreeBSD system console (color).
+4 ...................... FreeBSD system console (monochrome).
+
+5 ...................... xterm terminal emulator.
+</pre>
+
+<p>Pick a terminal type, and the rest should be obvious: the standard
+<code>sysinstall(8)</code> selection menu, and all that jazz.</p>
+
+
+
+<h2><a id="step9">Step 9: Choosing an installation medium</a></h2>
+
+<p>When prompted what installation medium you want to install from, you
+should pick <b>Install over NFS</b> and enter the name of the share
+path manually, e.g.:</p>
+
+<pre>192.168.1.88:/usr/local/freebsd7</pre>
+
+<p>From there, the installation should go smoothly.  But there are some
+pending things you should remember to configure after the installation
+but before rebooting...</p>
+
+
+
+<h2><a id="step10">Step 10: Important Networking options</a></h2>
+
+<p><code>This section is under development.</code></p>
+<p>
+When configuring your network interface, remember to set a DNS server!
+Otherwise, things like <code>sshd(8)</code> (see below) won't start.
+</p>
+
+
+
+<h2><a id="step11">Step 11: Post-installation Configuration options</a></h2>
+
+<p><code>This section is under development.</code></p>
+
+<p>Things I strongly recommend setting when given the chance to "set any
+last configuration options" prior to the machine rebooting:</p>
+<ul>
+<li>Root Password</li>
+<li>Time Zone</li>
+<li>Networking &mdash; Enable sshd</li>
+<li>User Account &mdash; </li>
+<li>TTYs &mdash; Turn on <code>ttyd0</code>, with a getty type of
+    <code>std.115200</code> (for 115200bps)</li>
+</ul>
+
+<p>The last item is incredibly important.  Without it, your machine will
+boot as normal, but you'll never see a <code>login:</code> prompt on
+the serial port.</p>
+
+</body>
+</html>

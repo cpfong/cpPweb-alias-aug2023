@@ -1,0 +1,57 @@
+chapter 6
+knowledge 
+	KB: knowledge base, ex prolog rule 來構成 kb
+
+外界的 percept 形成 kb
+
+KB 中也要建立 world base 來瞭解外界的變化及 believe
+本章要討論如何 logical reasoning: 二種為 propositional reason, first-order logic
+
+p2 kb: facts, knowledge
+
+p4 epistemological :knowlege 如何來表示 ? 因為不同的語言表示的方式不同.
+
+p5 要 run 時要先有 initial kb 即 background knowledge
+knowlege 高時放入會有較高的
+PIT: 媒礦, 無底洞, breeze warning, strench 
+
+p9 sentence  --> semantic (interpreate) 成 facts --> 可以推出其它的新的 fact : 新的 facts 也由 senmatic 所推出
+entails: 保証
+
+p11 i 是一個 inference procedure
+
+p13
+representaion: 1,2 和 3,4 為 trade-off 
+
+p15
+validity: 事實, 變動時空亦不改變
+satisfiability: 滿足, 可証明的, 在某個 kb 是正確的.
+
+p16
+無法隨時可以加事實進來
+
+prolog
+p73 input/output
+
+back tracking: 由一個 subgoal subtrack to 另外一個 subgoal 變數
+原先的 binding 會先 unbind
+write(+Term) 
+read(-Term)
+
+write_ln
+
+p75
+p76
+variable is local, 不和 c 一樣 var 是 global variable
+variable 只限於這個 predicate 而已, 除非變數可以一路串下
+
+所以程式寫作時 predicate 原本 var 只可以存在這行之中, 後來
+有 database 可以把結果寫到 database 之中, 所以 program 可以產生新的 program
+(即把東西加到原先的程式之中)
+
+如何在 predicate 中做一個 queue ?
+2 個 op 為  enqueue, and dequeue
+
+op(40,xfx,\) priority 40 的 op 且為中序的 \
+
+限制為: 不 flexible, 只能在一行中完成

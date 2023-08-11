@@ -1,0 +1,193 @@
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+
+<style type="text/css">
+<!--
+	a		{ color:blue; text-decoration:none;}
+	a:hover		{ text-decoration:underline; color:orange}
+	a:active	{ color:#99cccc}
+
+//-->
+</style>
+
+<!--
+	a:visited	{ color:purple }
+	a{color:#0000ff; text-decoration:none;font-size:9pt}
+	a:hover		{ text-decoration:underline; color:red}
+-->
+
+<html>
+<head><title>CPFong 首頁</title><body bgcolor=white>
+
+<table border=0 cellspacing=0 cellpadding=2>
+<tr><th rowspan=2>
+<img width=250 height=59 align=left border=0 src=./img/ver7.gif usemap="#cplogo"  alt=CP_Home>
+<map name="cplogo">
+<area shape="rect" coords="0,1,20,56" href="./h" title="H">
+<area shape="rect" coords="24,1,59,56" href="http://www.google.com/calendar" title="calendar">
+<area shape="rect" coords="61,1,97,56" href="./personal" title="personal">
+<area shape="rect" coords="99,1,132,56" href="http://myweb.ncku.edu.tw/~n9897112" title="cp@ncku">
+<area shape="rect" coords="133,1,164,57" href="http://docs.google.com" title="docs">
+<area shape="rect" coords="166,1,195,38"  href="http://mail.mis.fotech.edu.tw/cgi-bin/openwebmail/openwebmail.pl" title="mail.WebMail">
+<area shape="rect" coords="166,39,195,58" href="http://vnc.mis.fotech.edu.tw/cgi-bin/openwebmail/openwebmail.pl" title="cp.WebMail">
+<area shape="rect" coords="196,1,228,58" href="http://vnc.mis.fotech.edu.tw/cgi-bin/openwebmail/openwebmail.pl" title="vnc">
+<area shape="default" nohref>
+</map>
+
+<td nowrap align=left>
+<small>
+<a href="http://www.google.com.tw/ig">ig-台灣</a>-
+<a href="http://www.google.com/intl/en/index.html">en google</a>-
+<a href="http://groups.google.com">deja</a>-
+<a href="http://del.icio.us/">Delicious</a>-
+<a href="http://ermg.lib.ncku.edu.tw/cgi-bin/smartweaver/browse.cgi?o=der&p=/smartweaver/login.htm">成圖</a>-
+<a href="http://www.yam.com">蕃薯</a>-
+<a href="http://www.hotbot.com">Hot</a>-
+<a href="http://tw.yahoo.com">奇摩</a>-
+<a href="http://www.metacrawler.com/">Craw</a>-
+<a href="./search_engine/other_search_engine.html">其它</a>
+</small>
+
+<tr><td>
+
+<small>
+<a href="http://gais.cs.ccu.edu.tw/GaisFtp/">GaisA</a> - 
+<a href="http://www.filesearching.com">FFtp</a> - 
+<a href="http://archie.edu.tw">Ar</a> - 
+<a href="./drivers/index.html">驅動</a> - 
+<a href="http://www.slime.com.tw/">slime</a> - 
+<a href="./3c/index.html">買賣</a> - 
+<a href="http://ftp.ee.ncku.edu.tw">nckuee</a> - 
+<a href="ftp://ftp.nsysu.edu.tw">NSYSU</a> - 
+<a href="http://www.simtel.net/">simtel</a> - 
+<a href="./ftp/ftp.html">Other</a>
+</small>
+</table>
+
+<table border=0 cellspacing=2 cellpadding=2 width="100%">
+<tr><td VALIGN=TOP WIDTH="28%">
+  <table BORDER=0 CELLSPACING=0 WIDTH="100%">
+    <tr><td>
+    <table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="100%" bgcolor="white">
+        <tr><th colspan=4 align=middle bgcolor="#ffcc00"><b> Company </b>
+	<tr><td><a href="./ipod/index.html">蘋果</a>
+	    <td><a href="./palm/palm.html">麵包</a>
+	    <td><a href="./microsoft/index.html">Windows</a>
+	<tr><td><a href="http://www.nytimes.com">紐時</a>  
+	    <td><a href=http://www.latimes.com/>洛時</a>
+	    <td><a href="./time.html">Time</a>
+
+        <tr><td><a href="./hinet/index.html">華電</a>
+	    <td><a href="./micron/">桌上</a>
+	    <td><a href="http://www.dell.com">Dell</a>
+
+	<tr><td><a href="http://hiedoc.fjtc.edu.tw/cgi-bin/openwebmail/openwebmail.pl">DocM</a>
+	    <td><a href="ftp://cpfong@ms24.hinet.net">ms24</a>
+	    <td><a href=http://www.time.com/time/magazine/coversearch/>TimeC</a>
+    </table>         
+    <tr><td>
+    <table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="100%" BGCOLOR="white" >
+        <tr><th colspan=4 align=middle bgcolor="#ffcc00"><b> FreeStuff</b>
+	<tr>
+            <td><a href="http://blog.cp.mis.fotech.edu.tw/">blog</a> -
+            <td><a href="http://mail.yahoo.com">c@Y</a> -
+            <td><a href="./free/other.html">免費</a>
+        <tr><td><a href="http://30boxes.com/?themeUri=http://cp.mis.fotech.edu.tw/30b/cp">行事</a>
+            <td><a href="./ftp/lftp.html">Lftp</a>
+            <td><a href="./mountain">登山</a>
+        <tr><td><a href="http://www.flickr.com/">相片</a>
+            <td><a href="./tools">Tools</a>
+<!--	    <td><a href=./tmp/linklink.exe>連連看</a> -->
+    </table>         
+  </table>         
+
+<td VALIGN=TOP WIDTH="44%" bgcolor="#dddddd">
+
+  <table BORDER=0 CELLSPACING=0 >
+	<tr><td align=center valign=top>
+
+
+	<!-- This OneLook(R) search form may be added to your web page. -->
+	<!-- You may change the look and feel of the form, but be careful -->
+	<!-- not to change the parameter names, or your form might not work! -->
+
+<!--
+	<FORM method=get action=http://www.google.com/custom>
+	<p>
+	<INPUT TYPE=text name=q size=50>
+	<INPUT type=submit VALUE="開始搜尋">
+	</p>
+	<p><input type=radio name=sitesearch value="cp.mis.fotech.edu.tw" checked>
+	cpfong 站內搜尋</p>
+	<input type=radio name=sitesearch value="">
+	Google 徹底搜尋</p>
+	</FORM>
+-->
+	<form method="GET" action="http://www.onelook.com/">
+		<input type="hidden" name="loc" value="pub">
+		<b>Enter word or phrase</b>: <input name="w" value="">
+		<input type="submit" value="查字典">
+	</form>
+
+  </table>
+
+  <table border=0 cellspacing=2 cellpadding=2 width="100%">
+	<tr><td width="33%"> <small>
+	  <a href="http://netlab.cse.yzu.edu.tw/~statue/freebsd/">statue</a><br>
+	  <a href="http://freebsd.ntu.edu.tw">NTU</a><br>
+	  <a href="./os/chinese.html">中文環境</a><br>
+	  <a href="http://freebsd.org/zh/FAQ/FAQ.html">zh FAQ</a><br>
+	  <a href="http://freebsd.ntu.edu.tw/bsd/6/2/index.html">jdli</a><br>
+	  <a href="http://www.google.com/bsd">Google</a><br>
+	  <a href="./os/freebsd.html"> Others</a></td>
+	<td width="33%"> <small>
+	  <a href="http://www.tldp.org/">LDP</a></br>
+	  <a href="http://www.linux.org.tw">Linux@Twn</a><br> 
+<!--
+	  <a href="http://linuxfab.cx/">LinuxFab</a><br>
+-->
+	  <a href=./os/knoppix/index.html> knoppix</a><br>
+	  <a href="./os/dos/index.html">DOS</a><br>
+	  <a href=./os/one_floppy_unix.html>SP小而美</a><br>
+	  <a href="os/linux.html"> Other</a></td>
+	<td width="33%"> <small>
+	  <a href="./os/solaris.html"> Solaris </a><br>
+	  <a href="http://freeware.sgi.com">SGI</a><br>
+	  <a href="./edu/edu.html">TW 3W</a><br>
+	  <a href="./misc/misc.html">misc</a><br>
+	  <a href="./database/database.html">DataBase</a>
+  </table>
+
+<td VALIGN=TOP WIDTH="28%">
+<table BORDER=0 CELLSPACING=0 WIDTH="100%" >
+<small>
+<tr><th colspan=3 bgcolor="#99cccc"> Misc
+<!--
+<tr><td><a href="http://mtir.csie.ntu.edu.tw/mtir/mtir.html">翻譯</a> - 
+-->
+<tr><td><a href="exam/exam.html">翻譯</a> --
+    <td><a href=phd/index.html>phd</a> --
+    <td><a href="spam/procmail.html">spam</a>
+<tr><td><a href="http://www.PLiG.org/xwinman/">XW</a> - 
+    <td><a href=http://www.radioswissclassic.ch/>SW</a> -
+    <td><a href="./music/index.html">音樂</a> - 
+<tr><td><a href="http://www.enlightenment.org">Enl</a> - 
+    <td><a href="http://wm.themes.org/">The</a>
+    <td><a href="./quick_tools/index.html">快查</a>
+<tr><td><a href="http://www.stic.gov.tw/">科資</a>
+    <td><a href="x_win/xm.html">Oth</a> -  
+    <td><a href="./virus/index.html">病毒</a>
+<tr><td><a href="docs/index.html"> 學習 </a> - 
+    <td><a href="auto_rental/index.html">Car</a> - 
+    <td><a href="tmp/linklink.exe"> link</a>
+<tr><td><a href="http://www.fotech.edu.tw">和春</a>
+    <td><a href=http://ntu.csie.org/~piaip/pietty/>pieTTY</a>
+    <td><a href="./class/index.html">資甲乙</a>
+<!--<tr><td><a href="http://accounting.202.ddns.fjtc.edu.tw/FJA/"> 學校會計 </a>-->
+<tr><td><a href=./vncviewer.exe>vncviewer</a>
+    <td><a href="./fjtc/index.html">和春教師</a> 
+    <td><a href=http://fireftp.mozdev.org>ftp</a> 
+<!--    <td><A HREF=http://www.livejournal.com/community/manage.bml>論壇</a> -->
+</small>
+</table>
+</table>         
+</body></html>

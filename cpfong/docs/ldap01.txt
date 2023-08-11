@@ -1,0 +1,11 @@
+access to attrs=userPassword by self write
+        by anonymous auth
+
+access to * by self write
+        by dn.children="ou=staff,dc=comp,dc=com" write
+        by users read
+        by anonymous auth
+#
+TLSCertificateFile /home/cpfong/TLS-ldap-ca/public/server.crt
+TLSCertificateKeyFile /home/cpfong/TLS-ldap-ca/private/server.key
+TLSCACertificateFile /home/cpfong/TLS-ldap-ca/public/ca.crt

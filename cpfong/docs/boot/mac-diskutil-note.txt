@@ -1,0 +1,18 @@
+Q: how to launch mac disk utility to help on partition usb?
+A: launcher / others / disk utility can find GUI disk util 
+
+Q: find info about "going-to-be-formatted-usb" info
+A: $diskutil list --> /dev/disk2
+
+Q: erase all disk
+A: 
+ disk_util / click on disk (not any vol) / erase
+ 	name: this is volume name (disk2_vol)
+	format: ntfs (note: if use APFS then windows system cannot read it)
+	arch: GUID
+
+Q: after erase disk then what?
+A: it will create a BIG partition table for this disk
+ $ diskutil eraseDisk JHFS+ disk2_vol disk2 #Formatting disk2s2 as Mac OS Extended (Journaled) with name disk2_vol
+ # look like this erase will create a JHFS+ file system for disk
+ # if you more partition, then + one (note: it will always cut a slice from this BIG partition)

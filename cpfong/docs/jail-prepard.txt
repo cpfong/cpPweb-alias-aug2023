@@ -1,0 +1,5 @@
+@SaTurn-> s zfs create -p zroot/srv/jails/foo
+@SaTurn-> s zfs set mountpoint=/srv zroot/srv
+@SaTurn-> fetch ftp://ftp.freebsd.org/pub/FreeBSD/releases/amd64/amd64/12.2-RELEASE/base.txz -o /tmp/b.txz
+@SaTurn-> sudo tar xf /tmp/b.txz -C /srv/jails/foo
+@SaTurn-> s rm /tmp/b.txz

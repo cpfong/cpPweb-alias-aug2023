@@ -1,0 +1,53 @@
+Module Module1
+    Dim a(10) As Integer
+    Sub Main()
+        For i As Integer = 1 To a.GetUpperBound(0)
+            a(i) = Rnd() * 100 + 1
+            Console.Write(a(i) & " ")
+        Next
+        Console.WriteLine()
+        quick_sort(1, a.GetUpperBound(0))
+    End Sub
+
+    Sub quick_sort(ByVal l As Integer, ByVal r As Integer)
+        Dim lower, upper, point As Integer
+        If (l < r) Then
+            point = l
+            lower = l + 1
+            upper = r
+            While (lower <= upper)
+
+                While (a(lower) < a(point) And lower < r)
+                    lower += 1
+                End While
+                While (a(upper) > a(point) And upper > l)
+                    upper -= 1
+                End While
+
+                If (lower >= upper) Then Exit While
+
+                'swapping
+                Dim t As Integer = a(lower)
+                a(lower) = a(upper)
+                a(upper) = t
+            End While
+
+            Dim tt As Integer
+            tt = a(point)
+            a(point) = a(upper)
+            a(upper) = tt
+
+            quick_sort(l, upper - 1)
+            quick_sort(upper + 1, r)
+        End If
+
+        For i As Integer = 1 To a.GetUpperBound(0)
+            Console.Write(a(i) & " ")
+        Next
+
+        Console.WriteLine()
+        Console.ReadLine()
+    End Sub
+
+End Module
+

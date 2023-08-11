@@ -1,0 +1,226 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>例外處理</title>
+</head>
+<body>
+<h3>簡介</h3>
+<p>所謂例外(Exception),指的是程式發生不正常的錯誤,而導致無法繼續執行的情形。例外處理(Exception Handling)顧名思義,就是當例外發生時的處理機制。
+<p>C語言裡並沒有例外處理的機制,使用函數庫時,可能會發生無法處理的狀況,此時必須由呼叫者小心檢查傳回值才行。如果不檢查,就會發生無法預期的結果</p>
+<pre>
+#include &lt;stdio.h&gt;
+main() {
+    int data;
+    FILE* f = fopen("sample.txt", "r"); // sample.txt may not exist, fopen returns NULL
+    fscanf(f, "%d", &amp;data); // may result segmentation fault;
+}
+</pre>
+<p>上述例子裡,如果檔案sample.txt不存在,則無法開啟該檔案,因此fopen傳回NULL。如果不檢查傳回值,則會產生segmentation fault。比較好的寫法是:</p>
+<pre>
+#include &lt;stdio.h&gt;
+main() {
+    int data;
+    FILE* f = fopen("sample.txt", "r"); // sample.txt may not exist, fopen returns NULL
+    if (f == NULL) {
+        printf("Can't open file sample.txt. Please check if it exists and you have privilege to access.\n");
+        return;
+    }
+    fscanf(f, "%d", &amp;data); // may result segmentation fault;
+}
+</pre>
+<p>又例如sqrt()可以用來求平方根,但如果我們給他負數,sqrt該如何處理?根據手冊,sqrt遇到負數參數,會傳回NaN(Not a Number,是浮點數裡的一個特別數值)。使用sqrt的函數必須特別檢查該值,否則計算出來的東西都變成了NaN。又例如除法運算時分母是0的情況,嚴格說起來也是一種錯誤,某些系統也會產生floating exception (core dumped)。
+<p>沒有提供例外處理機制的語言,程式的正確性必須靠極端小心的設計者才行。為了減少程式錯誤的機會,讓軟體很強固(robust),Java提供了例外處理的機制。
+<h3>相關語法</h3>
+<p>在Java裡,Exception是一個Class。Exception extends Throwable, Throwable extends Object。Exception,Throwable這兩個類別均定義於java.lang這個package內。設計者也可以自訂自己的Exception類別。相關的Exception語法如下:</p>
+<ul>
+<li>自訂Exception類別
+<pre>
+public class MyException extends Exception {
+}
+</pre>
+<li>宣告某method會產生例外
+<pre>
+<font color="#a020f0">import</font> java.io.*;
+<font color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>class</b></font> ExceptionExample {
+    <font color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>void</b></font> someMethod() <font color="#2e8b57"><u color = "red"><b>throws</b></font> Exception</U> { // 請注意throws最後面是s
+        <font color="#0000ff">// some code may fail</font>
+        FileInputStream f;
+        <font color="#804040"><b>try</b></font> {
+            f = <font color="#804040"><b>new</b></font> FileInputStream(<font color="#ff00ff">"abc.txt"</font>); <font color="#0000ff">// if abc.txt does not exist, FileNotFoundException will be caught</font>
+        } <font color="#804040"><b>catch</b></font>(FileNotFoundException fnf) {
+            System.out.println(<font color="#ff00ff">"File not found. Generate an exception and throw it"</font>);
+            <font color="#804040"><b>throw</b></font> fnf; <font color="#0000ff">// 注意throw後面沒有s</font>
+            <font color="#0000ff">// throw new Exception(); // or you can throw a new Exception object</font>
+        }
+    }
+    <font color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>void</b></font> main(String[] argv) {
+        ExceptionExample s = <font color="#804040"><b>new</b></font> ExceptionExample();
+        <font color="#804040"><b>try</b></font> {
+            s.someMethod();
+        } <font color="#804040"><b>catch</b></font>(Exception epp) {
+            System.out.println(<font color="#ff00ff">"An Exception has been caught."</font>);
+        }
+    }
+}
+</pre>
+<li>攔截exception的語法
+<pre>
+<font color="#804040"><b>try</b></font> {
+} <font color="#804040"><b>catch</b></font> (TypeOneException e1) {
+} <font color="#804040"><b>catch</b></font> (TypeTwoException e2) {
+} <font color="#804040"><b>catch</b></font> (TypeThreeException e3) {
+} <font color="#804040"><b>finally</b></font> {
+}
+</pre></li>
+</ul>
+try {} catch{}類似像if then else if的結構。當try {}裡面某一行指令產生Exception時,try區塊會立刻中斷執行,然後到第一個catch判斷抓到的Exception是否instanceof TypeOneException,如果是則執行該catch區塊;如果不是,則進一步比較instanceof TypeTwoException。也就是說雖然可以寫很多個catch區塊,但執行時最多只有一塊會執行到。離開try或catch區塊以前,如果有finally區塊,則finally區塊一定會被執行到。一般來說finally區塊裡面的程式碼大多用來作資源回收,或清理資料結構的工作,以確保不論有無發生狀況,程式都能繼續正常執行。
+<pre>
+<font color="#804040"><b>try</b></font> {
+    System.out.println(<font color="#ff00ff">"Opening FileInputStream"</font>);
+    FileInputStream f = <font color="#804040"><b>new</b></font> FileInputStream("abc.txt"); <font color="#0000ff">// assume this operation generate FileNotFoundException</font>
+    System.out.println(<font color="#ff00ff">"File Opened"</font>);
+} <font color="#804040"><b>catch</b></font> (FileNotFoundException e1) {
+    System.out.println(<font color="#ff00ff">"FileNotFoundException caught"</font>);
+} <font color="#804040"><b>catch</b></font> (Exception e2) {
+    System.out.println(<font color="#ff00ff">"Exception caught"</font>);
+} <font color="#804040"><b>finally</b></font> {
+    System.out.println(<font color="#ff00ff">"Execute finally block"</font>);
+}
+</pre>
+<p>上述的範例會印出
+<pre>
+Opening FileInputStream
+FileNotFoundException caught
+Execute finally block
+</pre>
+<p>如果把上面例子稍微改一下:</p>
+<pre>
+<font color="#804040"><b>try</b></font> {
+    System.out.println(<font color="#ff00ff">"Opening FileInputStream"</font>);
+    FileInputStream f = <font color="#804040"><b>new</b></font> FileInputStream("abc.txt"); <font color="#0000ff">// assume this operation generate FileNotFoundException</font>
+    System.out.println(<font color="#ff00ff">"File Opened"</font>);
+} <font color="#804040"><b>catch</b></font> (Exception e2) {
+    System.out.println(<font color="#ff00ff">"Exception caught"</font>);
+} <font color="#804040"><b>catch</b></font> (FileNotFoundException e1) {
+    System.out.println(<font color="#ff00ff">"FileNotFoundException caught"</font>);
+} <font color="#804040"><b>finally</b></font> {
+    System.out.println(<font color="#ff00ff">"Execute finally block"</font>);
+}
+</pre>
+<p>則聰明一點的Compiler會抱怨FileNotFoundException的區塊unreachable(執行不到)。這是因為FileNotFoundException是Exception的子類別,因此如果產生的例外是instanceof Exception,則FileNotFoundException就不會執行了;若產生的例外不是instanceof Exception,那就更不會執行到FileNotFoundException區塊了。
+<h3>是否所有的Exception都要處理?</h3>
+<p>原則上是的。只要用到的method有宣告throws SomeException,則呼叫該method的地方,就要使用try {} catch(SomeException)的語法。當然像是try {} catch(SuperClassOfSomeException)的用法也行。唯一的例外是java.lang.RuntimeException及其子類別可以不必處理。
+<p>哪些屬於RuntimeException呢?像是ArrayIndexOutOfBoundException就是其中之一,它發生在陣列索引不合法的情況下:</p>
+<pre>
+<font color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>class</b></font> Test {
+    <font color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>void</b></font> main(String[] argv) {
+        <font color="#2e8b57"><b>int</b></font>[] x = <font color="#804040"><b>new</b></font> <font color="#2e8b57"><b>int</b></font>[<font color="#ff00ff">10</font>];
+        x[<font color="#ff00ff">100</font>] = <font color="#ff00ff">0</font>; <font color="#0000ff">// will generate ArrayIndexOutOfBoundException</font>
+    }
+}
+</pre>
+<p>exception產生時,JVM會由堆疊追蹤此錯誤點的呼叫資訊,並一一向外檢查,直到有try catch區塊攔截此exception為止。在上述的例子中,沒有任何try catch的宣告,則JVM會終止該<A href="J_Chapter11.htm">執行緒</a>。
+<h3>類別Exception的相關方法</h3>
+<p>抓到例外後,可透過該例外物件,得到有趣的資訊
+<ul>
+<li>toString()以簡單的字串描述該例外
+<li>getMessage()列出細節訊息
+<li>printStackTrace()將堆疊資訊印在螢幕上,可幫助設計者快速找到錯誤點</li>
+</ul>
+<h3>Error</h3>
+<p>前面提到Exception是Throwable的子類別。另一個Throwable的子類別是java.lang.Error。所謂Error指的是嚴重的錯誤情況。當Error產生時,其行為和Exceptio類似,但是try 
+catch區塊沒有辦法攔下它們,最後會由JVM來處理Error,並中斷執行緒的執行。像OutOfMemoryError,StackOverflowError都是Error的子類別。</p> 
+<h2>範例</h2>
+<h3>用Link List實作Stack</h3>
+<pre>
+public class Stack {
+    private Node head;
+    private int size;
+    class Node {
+        Object data;
+        Node next;
+    }
+    public void push(Object s) {
+        Node tmp = new Node();
+        tmp.next = head;
+        tmp.data = s;
+        size++;
+        head = tmp;
+    }
+    public Object pop() throws Exception {
+        if (head == null) {
+            throw new Exception();
+        }
+        Object tmp = head.data;
+        head = head.next;
+        size--;
+        return tmp;
+    }
+}
+</pre>    
+<pre>
+public class Example {
+    public static void main(String[] argv) {
+        Stack s1 = new Stack();
+        Stack s2 = new Stack();
+        s1.push("abc");
+        s1.push("def");
+        s2.push("123");
+        s2.push("456");
+        try {
+            s1.pop();
+        } catch(Exception e) {}
+    }
+}
+</pre>
+<pre>
+public class Example2 {
+    public static void main(String[] argv) throws Exception {
+        Stack s1 = new Stack();
+        Stack s2 = new Stack();
+        s1.push("abc");
+        s1.push("def");
+        s2.push("123");
+        s2.push("456");
+        s1.pop();
+    }
+}
+</pre>
+
+<h3>用Link List實作Queue</h3>
+<pre>
+public class Queue {
+    private Node head, tail;
+    private int size;
+    class Node {
+        Object data;
+        Node next;
+    }
+    public void put(Object s) {
+        Node tmp = new Node();
+        tmp.data = s;
+        if (tail != null) {
+            tail.next = tmp;
+        } else {
+            head = tmp;
+        }
+        tail = tmp;
+        size++;
+    }
+    public Object get() throws Exception {
+        if (head == null) {
+            throw new Exception();
+        }
+        Object tmp = head.data;
+        head = head.next;
+        if (head == null) {
+            tail = null;
+        }
+        size--;
+        return tmp;
+    }
+}
+</pre>
+</body>
+</html>

@@ -1,0 +1,33 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class Quiz2 extends JFrame implements ActionListener {
+	private JButton but;
+	private JPanel  pan;
+	
+	public static void main(String[] args){
+		Quiz2 frame = new Quiz2();
+		frame.setSize(400,300);
+		frame.createGUI(frame);
+		frame.setVisible(true);
+	}
+	
+	private void createGUI(Quiz2 mw){
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		mw.setLayout(new FlowLayout());
+
+		pan =new JPanel();  pan.setPreferredSize(new Dimension(120,80));
+		pan.setBackground(Color.white); mw.add(pan );
+
+		but =new JButton("Draw Triangle");mw.add(but ); but.addActionListener(this);
+		
+	}
+
+	public void actionPerformed(ActionEvent e){
+		Graphics paper  =  pan.getGraphics();
+		paper.drawLine  (0 ,  0, 50, 50);
+		paper.drawLine  (0 ,  0, 50,  0);
+		paper.drawLine  (50,  0, 50, 50);
+	}
+}

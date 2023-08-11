@@ -1,0 +1,26 @@
+1. printf "curl --silent --request POST -d \"client_id=${c_id}&scope=${scope}\" ${dst_link}\n"
+   will ask you login using browser
+#{
+#  "device_code": "AH-1N
+#  "user_code": "BYHZ-
+#  "expires_in": 1800,
+#  "interval": 5,
+#  "verification_url": "https://www.google.com/device"
+#}
+  login http://www.google.com/device
+
+2. printf "curl --silent --request POST -d \"client_id=$c_id&client_secret=$c_se&grant_type=$g_type&code=$d_code\" $dst_link\n"
+#result
+#{
+#  "access_token": "ya29.
+#  "expires_in": 3599,
+#  "refresh_token": "1//0e4n
+#  "scope": "https://www.googleapis.com/auth/docs",
+#  "token_type": "Bearer"
+#
+
+3. real action (to access files on gDrive)
+printf "curl --silent --request POST -H 'GData-Version: 3.0' -H 'Authorization: Bearer ${token}' ${dst_link}\n"
+
+4. after 3600 secs, one can get access token using refresh token
+printf "curl -d \"client_id=${c_id}&client_secret=${c_se}&refresh_token=$t&grant_type=refresh_token\" $dst_link\n";

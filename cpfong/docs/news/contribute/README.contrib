@@ -1,0 +1,19 @@
+This directory contains unsupported contributions to INN. Programs in here
+may or may not have been tested by me on the latest version of INN, so keep
+that in mind when trying them out. I cannot accept bug reports on them--I
+suggest you send them to the original author.
+
+			 -------------------------
+
+expirectl:	Automatically builds expire.ctl file based on current disk 
+		space and a template.
+
+inn-ldapcheck:	User authentication for INN with OpenLDAP server
+
+newsbot:	Instantly grep and trigger actions on news articles
+
+newsgate:	An old mail to news gateway.
+
+pathinfo:	Scan news headers and summarize and report various info.
+
+pwcheck.c:	Cyrus pwcheck authenticator for INN 2.4-to-be and newer.

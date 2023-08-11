@@ -1,0 +1,31 @@
+#
+#unix command
+#
+#mkdir abc
+#cd abc
+#
+
+# two ways: vi or 
+#!/usr/local/bin/python
+#p23.py
+
+first= 'john'
+last= 'chen'
+
+print(first, last)
+print(f"{first}{last}")
+
+#!/usr/local/bin/python
+#p38.py bikes-list.py
+
+bikes = ['giant', 'merida', 'joker']
+print (bikes)
+
+print (bikes[0])
+print (bikes[-1]) #last one
+
+# list methods: insert, append, del, pop, push
+bikes.append('trek')
+bikes.insert(0, 'colnago')
+
+

@@ -1,0 +1,14 @@
+phisical connect map:
+--                
+Vigor2910 WAN port to Hinet any port (W1 light should be ON)
+Phone line to FXS1 or FXS2 (light will be on when you call) 
+NoteBook connect to any P1-4
+--                         
+ 
+Softpart:
+--       
+WAN use static IP 192.168.1.123 and gateway to 192.168.1.1 (hinet)
+192.168.1.1 (defulat Vigor2910 ip), @NoteBook you may http://192.168.1.1
+VoIP - SIP Accounts - Index 1 - Domain/Realm msw1.mky.com -            
+Account Number 0702175300 - Password 64060                  
+~

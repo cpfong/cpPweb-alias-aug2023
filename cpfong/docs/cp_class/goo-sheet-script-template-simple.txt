@@ -1,0 +1,16 @@
+function onOpen(e) {
+ var n='Run Script';
+ var fn='main';
+ var m='hello'; // menu name
+
+ var subMenu = [{name: n, functionName: fn}];
+ SpreadsheetApp.getActiveSpreadsheet().addMenu(m, subMenu);
+}
+
+function main() {
+ var sheet = SpreadsheetApp.getActiveSheet();
+ var t1 = 'hello';
+ var t2 = 'world';
+ sheet.appendRow([t1, t2]);
+}
+// end main

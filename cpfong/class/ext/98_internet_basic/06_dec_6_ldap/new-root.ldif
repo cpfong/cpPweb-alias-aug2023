@@ -1,0 +1,13 @@
+dn: dc=fotech,dc=edu
+dc: fotech
+objectClass: dcObject
+objectClass: organizationalUnit
+ou: FOTECH Dot Edu
+
+dn: ou=電子系,dc=fotech,dc=edu
+ou: 電子系
+objectClass: organizationalUnit
+
+dn: ou=資管系,dc=fotech,dc=edu
+ou: 資管系
+objectClass: organizationalUnit

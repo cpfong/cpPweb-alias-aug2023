@@ -1,0 +1,42 @@
+<meta http-equiv='Content-Type' content='text/html; charset=big5'>
+<html>
+
+如何去找相關的資料 
+<li><a href=http://mysql.nctu.edu.tw/> MySQL 站台@台灣 </a> 
+<li><a href=http://www.mysql.com/search/>搜尋 </a>
+</ol>
+<br>
+
+第四章 新建資料庫
+<ol type=disc>
+
+<li>簽入系統:
+<ol>
+	<li> ssh yourname@cpfong.fjtc.edu.tw
+	<li> mysql -u yourname -p -h localhost   註: u為user, p為password, h為host
+</ol><br>
+
+<li>SQL 語法: 
+<ol>
+	<li>SELECT select_list FROM table_list WHERE condition 大寫為關鍵字, 小寫為自選
+	<li>BUY thing = price AS {cash | check} [, thing_name= ] {} 一定, | 或, [] 選擇
+</ol><br>
+
+<li> <a href=http://www.mysql.com/doc/en/SHOW.html> 顯示資料庫 </a>( SHOW DATABASES )
+<ol>
+	<li>  SHOW DATABASES [LIKE wild]
+</ol><br>
+
+<li> <a href=http://www.mysql.com/doc/en/USE.html> 使用資料庫 </a>( USE database )
+<ol>
+	<li>  USE db1;
+</ol><br>
+
+<li> <a href=http://www.mysql.com/doc/en/CREATE_TABLE.html> 新建表格 </a> (CREATE TABLE table_name) or <a href= http://www.mysql.com/search/index.php?q=create&doc=0&m=o > CREATE </a> 
+<ol>
+	<li> CREATE TABLE table_name (column_name datatype [NULL|NOT NULL] [,column_name datatype [NULL|NOT NULL]]...)
+	<li> create table authors (au_id char(11) not null, state char(2) null);
+</ol><br>
+
+</ol>
+</html>

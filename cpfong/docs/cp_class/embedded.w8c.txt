@@ -1,0 +1,6 @@
+vi ~/.cshrc
+--
+#alias tmux      tmux ls
+alias  tmuxatts0  /usr/local/bin/tmux  attach-session  -t  0 
+
+https://www.freebsd.org/doc/handbook/

@@ -1,0 +1,52 @@
+# these two same
+print 61_298_000, "\n";
+print 61298000  , "\n";
+
+# octal (1st zero not char o)
+print 0377 # 255 in oct
+print 0xff # 255 in hex 
+
+print 7.25e45 # 7.25 time 10^45
+
+perl sopport Unicode, you need to add 
+use utf8;
+
+escape sequence symbol \
+
+'hello
+there'	# hello + new line + there (total 11 characters)
+
+single quote is different than double quote
+print 'hello\nworld';
+print "hello\nworld";
+
+p34
+different of single quote and double quote
+
+p36
+string operator
+"hello" . "world"
+fred x 3 	# fredfredfred
+5 x 4.8 	# 5555
+Z . 5 * 7 	# x string operator, * number operator
+
+P37
+internal warning
+use warnings;
+
+p39
+scalar variable
+
+p41
+assign value to scalar variable
++= *= .=
+
+p43
+insert variable into string
+$meal = "steak";
+$barney = "fred ate a $meal";
+
+print "$fred"; #no need
+print $fred; #clean
+
+

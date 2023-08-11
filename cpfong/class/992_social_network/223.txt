@@ -1,0 +1,8 @@
+社群網路資料探勘專論
+研究方法論文寫作
+
+w2 literature survey 文獻探討, 如何找到
+w3 paper evaluation 挑出讀不讀
+w4 quick glance
+
+http://kdd.es.ncku.edu.tw

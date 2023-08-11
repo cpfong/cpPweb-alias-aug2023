@@ -1,0 +1,7 @@
+1. root can write only (when notepad open remember to use root privilege)
+2. c:\inetpub\wwwroot
+3. Win+R cmd
+4. get private IP (use ipconfig 
+5. http://127.0.0.1 to test
+6. http://192.168.3.4 to test
+7. <a href=></a>

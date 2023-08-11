@@ -1,0 +1,30 @@
+sun.ifong.org (x)
+gaia.ifong.org (v)
+
+# one.py
+r=eval(input("input radius: "))
+print("area = %f" % (2*3.14*r))
+
+# two.py
+n = eval(input("input a number: "))
+
+if n % 3 == 0:
+ print("ok")
+else:
+ print("no")
+
+# three.py
+n1 = eval(input("input a number: "))
+n2 = eval(input("input another number: "))
+
+if n1 > n2:
+ print("%f  > " % n1 , "%f" %  n2)
+else:
+ print("%f <= " % n1 , "%f" %  n2)
+
+# four.py
+score={
+'A107500333' : 'A' ,
+'A107500327' : 'A' ,
+'A109500371' : 'A'
+} 

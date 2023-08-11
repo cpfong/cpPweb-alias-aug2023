@@ -1,0 +1,41 @@
+chap10A 連上網際網路
+撥接上網: 家中有 modem 及電話線即可以使用撥接上網
+	免費的撥接號碼:
+		http://www.pchome.com.tw 找免費撥接
+		http://www.yam.com 
+		http://www.sina.com.tw
+	練習如何找到電話及進入的帳號及密碼
+
+chap10B 全球資訊網的商機
+線上購物: 
+	台灣較佳的線上購物商店
+	1. yahoo 二手購物 http://tw.bid.yahoo.com
+	2. pchome 全新物品 http://shopping.pchome.com.tw
+	3. ruten 露天拍賣網站 http://www.ruten.com.tw
+
+	國外較佳的線上購物商店
+	1. 亞馬遜 http://www.amazon.com
+	2. EBay http://www.ebay.com
+
+如何安全的在線上購物
+	1. 價錢過高的商品不在網上向個人購買, 宜到有店面的店
+		當場購買為佳
+	2. 購買物品如可以面交, 以面交為佳
+	3. 付款前一定先連絡一次才付錢
+	4. 仔細檢查個人的信用, 信用點太少者一定不交易
+
+付款:
+	1. 信用卡付款
+	2. paypal http://www.paypal.com 
+
+網路銀行和金融
+	各家銀行幾乎全有網路銀行
+	例如: 玉山銀行, 第一銀行, 土地銀行
+
+
+10.6 安全性: 
+	銀行可以建立安全的  https:// 之網站來保障使用人安全
+的到提供的站台, 此種站台是以 ssl 的方式來保護資料的.
+
+	使用公眾電腦不輸入個人資訊 (例如: 身份証號, 出生年月日)
+以免遭人側錄

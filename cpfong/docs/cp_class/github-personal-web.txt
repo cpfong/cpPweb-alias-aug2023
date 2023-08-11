@@ -1,0 +1,12 @@
+Q: how to make github as my personal web ?
+A:
+1. create my 1st repository
+2. name it as: gFooHub.github.io (note: must your account and append with github.io)
+3. public
+4. create
+
+--
+a new file name index.html (must upload first)
+commit new file
+
+goto page/github page/ (note: show nothing if you do NOT upload index.html first)

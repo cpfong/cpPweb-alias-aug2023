@@ -1,0 +1,5 @@
+Q: swap_pager: indefinite wait buffer: bufobj: 0, blkno: 372914, size: 20480
+A:
+
+kernel config is not right, you have to vi it again to solve it
+look like previous thing in swap conflict with new one

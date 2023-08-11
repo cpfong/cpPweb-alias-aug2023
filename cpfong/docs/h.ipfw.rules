@@ -1,0 +1,80 @@
+/sbin/ipfw -q -f flush # flush out fw rules 1st
+
+##### global varialbes
+cmd="ipfw -q add"
+pif="em0" # public interface
+
+## interfaces for jail in FreeBSD
+jnsif="epair0b" # dns service jail interface
+jvncif="epair1b" # vnc and mail j interface
+
+## define private jail ip
+jnsip="192.168.0.1"     # jail ns ip
+jnship="192.168.0.2"    # jail ns HOST ip
+
+## define public ip variables
+vmip="163.28.129.137" # ME, my ip which is teach.kpprc
+vip="163.15.203.138" # who is VIP
+nsip="163.15.203.1"
+fozone="163.15.196.0/24,163.15.197.0/24,163.15.198.0/24,163.15.199.0/24,163.15.200.0/24,163.15.201.0/24,163.15.202.0/24,163.15.203.0/24,163.15.204.0/24,163.15.205.0/24" # fotech zone
+kpprcdns="163.28.129.1/32,163.28.129.2/32"
+
+##### main; ipfw rules START here
+$cmd 00010 allow all from any to any via lo0 # this is loopback
+
+# IPv6 stuff to not showing those annoying fw log
+$cmd 00030 deny ip6 from any to ::1
+$cmd 00031 deny ip6 from ::1 to any
+$cmd 00032 allow ipv6-icmp from :: to ff02::/16
+$cmd 00033 allow ipv6-icmp from fe80::/10 to fe80::/10
+$cmd 00034 allow ipv6-icmp from fe80::/10 to ff02::/16
+
+# 1st priority AID, only VIP can ssh me 
+$cmd 00101 allow ip from $vip to $vmip 22 in via $pif
+$cmd 00102 allow ip from $vmip 22 to $vip out
+
+# what can ME do (nsysuvm ie 28.129.137)
+$cmd 00150 allow ip from $vmip to any 53 out via $pif # dns
+$cmd 00151 allow tcp from $vmip to any 53 out via $pif
+$cmd 00152 allow ip from $vmip to any 123 out via $pif
+$cmd 00153 allow UDP from $vmip 123 to any out via $pif
+$cmd 00154 allow TCP from $vmip 123 to any out via $pif
+
+# EACH jail has to do this part
+$cmd 01000 divert natd ip from $jnsip to not me out xmit $pif
+
+# natd part
+$cmd 02000 skipto 09999 ip from any to any diverted
+$cmd 02010 divert natd ip from not me to any in recv $pif
+$cmd 02020 skipto 09999 ip from any to any diverted
+
+# ok, now are all jails part
+# dns come in first
+$cmd 03011 allow udp from $jnsip to any 53 in via $jnsif #192.168.0.1->all dns 
+$cmd 03012 allow udp from $kpprcdns 53 to $jnsip out via $jnsif
+
+$cmd 03021 allow udp from $jnship to $jnsip 53 out via $jnsif
+$cmd 03022 allow udp from $jnsip 53 to $jnship in via $jnsif
+$cmd 03023 allow tcp from $jnship to $jnsip 53 out via $jnsif
+$cmd 03024 allow TCP from $vmip 53 to any out via $pif
+
+$cmd 03030 allow udp from $fozone to $jnsip 53 out via $jnsif # all fotech zone can query my DNS
+$cmd 03031 allow udp from $jnsip 53 to $fozone in via $jnsif # all fotech zone can query my DNS
+$cmd 03032 allow tcp from $jnsip to any 53 in via $jnsif
+$cmd 03033 allow tcp from $kpprcdns to $jnsip out via $jnsif
+$cmd 03100 deny udp from any 53 to $jnsip out via $jnsif # Deny chatty UDP broadcast without logging
+$cmd 03101 allow UDP from $jnsip to $nsip in via $jnsif # 203.1 <-> ME
+
+$cmd 05011 allow ICMP from $jnsip to $vip in via $jnsif icmptype 3
+$cmd 05020 allow ICMP from $nsip to $jnsip out via $jnsif icmptype 3 # jns <-> ns
+$cmd 05021 allow ICMP from $jnsip to $nsip in via $jnsif icmptype 3
+$cmd 05022 allow ICMP from $jnsip to $kpprcdns in via $jnsif icmptype 3
+
+$cmd 05030 allow ICMP from $jnsip to $jnship in via $jnsif
+$cmd 05040 allow ICMP from $vmip to $kpprcdns out via $pif
+$cmd 05041 allow ICMP from $jnship to $jnsip out via $jnsif
+
+#####  logging every rejecting reason
+$cmd 05270 deny log logamount 80000 ip from any to any
+$cmd 09999 allow ip from any to any
+# end main

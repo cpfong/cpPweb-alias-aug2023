@@ -1,0 +1,12 @@
+zyXel ip 192.168.1.1 
+--
+user login account and password
+	user user # this is the default login
+	user k7digitals # after change password
+
+administrator login account and password
+	cht chtsvdsl
+	cht k7digitals # new login 
+
+when login as cht, you can logout by
+http://192.168.1.1/ulogout.cgi

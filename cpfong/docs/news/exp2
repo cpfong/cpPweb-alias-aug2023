@@ -1,0 +1,69 @@
+
+  ◇ news expire 的過程
+
+------------------------------------------------------------------------
+Path: news.csie.nctu.edu.tw!skhuang
+From: skhuang@csie.nctu.edu.tw (Shih-Kun Huang)
+Newsgroups: csie.sysadmin.news
+Subject: news expire 的過程
+Date: 29 Oct 1994 20:44:10 GMT
+Organization: Dep. Computer Sci. & Information Eng., Chiao Tung Univ., Taiwan, R.O.C
+Lines: 52
+Message-ID: &lt38uc6q$r47@news.csie.nctu.edu.tw>
+Reply-To: skhuang@csie.nctu.edu.tw
+NNTP-Posting-Host: skhuang@phoenix.csie.nctu.edu.tw
+X-Newsreader: TIN [version 1.2 PL2]
+
+expire 五部曲:
+1. expire
+   掃描 history file, 找出應被 expire 的 article pathname,
+   寫到 /home/inn/log/expire.rm.
+   此一過程很短, 只要10分鐘即可找到10萬封該 expire 掉的 article.
+   (3:40 ~ 3:50) load 不重, 因為只涉及open 及 scan history file.
+2. expireover
+   讀入 /home/inn/log/expire.rm, 把此檔案內所有 entry 位於
+   overview db 對應之 index 移除.
+   (3:50 ~ 4:10) load 稍重, 必須在短時間內 open,lock,read/write
+   4-5000 個 .overview file.
+3. fastrm
+   根據 /home/inn/log/expire.rm, 把內含之 pathname 全數移除,
+   相當於完成:
+   cat /home/inn/log/expire.rm | xargs rm
+   但在找尋 path 和 unlink 上有最佳化.
+   (4:10 ~ 6,7,8:00, 視 article 量不同)
+   即使有最佳化, load 仍最重. 必須 open/search dir 4,5千次,
+   unlink 幾萬個 files.
+4. expired entries in history removed,  active renumber,
+   o 疑除該 expire 掉 article 的 history entries,
+   o rebuild dbz database (history.pag,.dir)
+   o 根據 spool 內 article low/high number 調整 active 的 low/high number.
+   此過程約數分鐘, 此時不接受 nnrp connection request, post request
+   會延遲.
+5. innstat
+   o run awk -f /home/inn/news/innlog.awk /home/inn/log/news.notice
+   o df spool-dir, overview-dir, newslib-dir, out.going-dir
+   o cat /home/inn/log/errlog
+   o mail result to user usenet.
+
+
+所以 history entries lost 會造成 article 無法 expire 掉.
+
+另外對於 overview index 必須定期做以下維護:
+1. run expireover -a
+   o expireover -a 會 scan 整個 spool dir 把 missed article entries
+     加到適當的 .overview file.
+     為何有此需求 ? 因為有時 overchan 來不及處理, innd 轉為 file feed.
+     多久跑一次 ? 一週或至少一個月.
+   o 重建 .overview index 也是跑 expireover -a
+
+2. run expireover -s
+   o expireover 只把該 expire 的 entries 移除, 但是被 cancel
+     掉的 article 其對應之 overview index 還在.
+   o 跑 expireover -s 會 scan spool dir 把多餘的 article entries
+     從 .overview 中移除.
+   o 每天做完 article expire 後跑一次.
+   o 不跑也行. nnrpd 會處理好. 但我的 gonnrpd 則不會.
+------------------------------------------------------------------------
+Shih-Kun Huang
+EC638, CSIE, NCTU, Taiwan, R.O.C. Phone: 886-35-712121 (x54765, x54709)
+

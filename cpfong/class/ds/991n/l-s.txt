@@ -1,0 +1,18 @@
+        Dim target As Integer = TextBox1.Text
+        'Dim found As Boolean = False
+        Dim ii As Integer = -1
+
+        For i As Integer = 0 To n - 1
+            If (target = data(i)) Then
+                'found = True
+                ii = i
+            End If
+        Next
+
+        'If (found = True) Then
+        If (ii <> -1) Then
+            'TextBox2.Text = "find it and index is " & ii
+            ListBox1.SelectedIndex = ii
+        Else
+            TextBox2.Text = "NOT FOUND"
+        End If

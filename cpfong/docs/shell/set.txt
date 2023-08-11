@@ -1,0 +1,8 @@
+set - Set or unset values of shell options and positional parameters.
+
+set -- cmd a b c
+echo $0 $1 $2
+
+$ list='this is a test'
+$ set -- $list
+$ printf "$1"	# this

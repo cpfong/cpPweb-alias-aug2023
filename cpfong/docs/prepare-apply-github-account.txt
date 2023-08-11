@@ -1,0 +1,6 @@
+
+login account name: (ex: cpfong)
+email address: (ex: cp.ifong4@gmail.com)
+password: 
+
+

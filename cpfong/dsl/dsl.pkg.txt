@@ -1,0 +1,5 @@
+wget http://distro.ibiblio.org/damnsmall/mydsl/system/dsl-dpkg.dsl
+on desktop myDSL/myDSL/Install Local/ --> hit OK
+
+apt-get update
+apt-get install syslinux

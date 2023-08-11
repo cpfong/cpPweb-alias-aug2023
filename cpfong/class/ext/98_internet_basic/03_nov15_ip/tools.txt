@@ -1,0 +1,32 @@
+Q: how to find the import files of network setting (ip,netmask,gateway ...) ?
+A: 1. use ifconfig eth0 to find the ip 
+   2. grep -r 192.168.1.254 /etc/*
+
+[root@redhat ~]# cat /etc/sysconfig/network |grep GATEWAY
+GATEWAY=163.15.205.254
+
+[root@redhat ~]# grep -r 163.15.205.200 /etc
+/etc/sysconfig/network-scripts/ifcfg-eth0:IPADDR=163.15.205.200
+
+Q: switch static ip 2 DHCP how ?
+A: [root@redhat ~]# cat /etc/sysconfig/network-scripts/ifcfg-eth0 |grep static
+	BOOTPROTO=static --> BOOTPROTO=dhcp 
+
+Q: how to restart the network card interface ?
+A: after modify related files, /etc/init.d/network restart  
+	this way, once can permontly change ip,netmask,gateway
+
+Q: change static ip
+A: /sbin/ifconfig eth0 address 192.168.1.222 netmask 255.255.255.0 broadcast 192.168.1.255
+	[root@redhat Desktop]# service network restart
+
+Q: how to setup Linux default gateway with route command ?
+A: route add default gw 192.168.1.254 eth0
+
+Q: what is this means ? 192.168.1.0/29
+A: the ips you can use are from 192.168.1.0 to 192.168.1.7 (since 32-29=3 , and 2^3=8)
+	netmask is 255.255.255.248 , note: 192.168.1.0 is network addr
+	192.168.1.7 is broadcase addr, the other 6 addr can be used by hosts 
+
+	192.168.1.0/27 then the netmask should be (256-2^(32-27))=224
+	there will be 8(3 bits) of 32(5 bits0

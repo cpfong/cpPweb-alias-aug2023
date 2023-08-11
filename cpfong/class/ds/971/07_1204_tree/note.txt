@@ -1,0 +1,10 @@
+chapter 7 Tree
+
+Tree: 由一個或多個 node 組成, 其中有一 node 為 root , 由
+root 開始經由 特定的 path 可以到達每一子樹
+
+degree: 分支度代表每個 node 的分支, 分支為 0 的 node 稱為
+terminal node (終端節點) 
+
+父節點: 節點 x 的子樹之根稱為 x 的兒子, ，x 則為兒子的父節點,
+

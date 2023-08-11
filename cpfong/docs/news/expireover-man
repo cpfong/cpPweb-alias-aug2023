@@ -1,0 +1,93 @@
+EXPIREOVER(8)					    EXPIREOVER(8)
+
+
+
+NAME
+       expireover   -  Expire  entries	from  the  news  overview
+       database
+
+SYNOPSIS
+       expireover [ -e ] [ -f file ] [ -k ] [ -N ] [ -p ] [ -q	]
+       [ -s ] [ -w number ] [ -z rmfile ] [ -Z lofile ]
+
+DESCRIPTION
+       Expireover   expires   entries	from  the  news  overview
+       database.   It  reads  a  list	of   newsgroup	 list	(
+       <pathdb in inn.conf>/active).   (A  file name of ``-'' may
+       be used to specify the standard input.)	It  then  removes
+       any   mention  of  those  articles  from  the  appropriate
+       overview database.  If ``groupbaseexpiry'' in inn.conf  is
+       ``true'',  expireover  also  expires  articles.	 If  it's
+       ``false'', ``-e'', ``-k'', ``-N'', ``-p'', ``-q'',  ``-w''
+       and ``-z'' flags are ignored.
+
+OPTIONS
+       -e     If  the  ``-e''  flag  is used, then as soon as the
+	      first cross posting of  the  article  expires,  all
+	      overview	 entries  relevant  to	the  article  are
+	      removed.	Note that you cannot use both ``-e''  and
+	      ``-k'' flag at the same time.
+
+       -f     When  the ``-f'' flag is used, then expireover will
+	      use it as newsgroup  list  instead  of  <pathdb  in
+	      inn.conf>/active file.  A name of ``-'' is taken to
+	      mean the standard input.
+
+       -k     When the ``-k'' flag is  used,  then  articles  are
+	      removed  when  they  have been expired from all the
+	      groups they appear in.  Note that  you  cannot  use
+	      both ``-e'' and ``-k'' flag at the same time.
+
+       -N     If  the  storing method has self expire functional-
+	      ity, then the control  file  is  ignored	for  that
+	      article  by  default.   If the ``-N'' flag is used,
+	      expireover purges  articles  and	overview  entries
+	      with the control file.
+
+       -p     Expireover  makes  its  decisions  on  the time the
+	      article arrived by default.   This  means  articles
+	      are  often  kept	a  little  longer than with other
+	      expiration programs that base  their  decisions  on
+	      the  article's  posting date.  To use the article's
+	      posting date, use the ``-p'' flag.
+
+       -q     Expireover normally prints statistics at the end of
+	      process.	 To  suppress this action, use the ``-q''
+	      flag.
+
+       -s     Expireover normally checks the existense	of  arti-
+	      cles  only  if  ``EXPENSIVESTAT''  of  its  storage
+	      method is set to ``FALSE''.  To do stat  all  arti-
+	      cles   regardless  of  ``EXPENSIVESTAT'',  use  the
+	      ``-s'' flag.  See storage.conf(5) for ``EXPENSIVES-
+	      TAT''.
+
+       -w     Use  the	``-w''	flag  to  ``warp''  time  so that
+	      expireover thinks it is running at some time  other
+	      then  the  current  time.   The  value  should be a
+	      signed floating point number of the number of  days
+	      to use as the offset.
+
+       -z     If  the  ``-z'' flag is used, then articles are not
+	      removed, but their toknes are appended to the spec-
+	      ified  file.   See  the  description  of delayrm in
+	      news.daily(8).
+
+       -Z     If the ``-Z'' flag is used, then the lowest article
+	      numbers for each newsgroup after expiry are written
+	      to the specified lofile with newsgroup name.   This
+	      flag  can  be  used  when  doing	``ctlinnd  lomark
+	      lofile''.
+
+HISTORY
+       Written by  Rob	Robertson  <rob@violet.berkeley.edu>  and
+       Rich   $alz  <rsalz@uunet.uu.net>  (with  help  from  Dave
+       Lawrence <tale@uunet.uu.net>) for InterNetNews.	 This  is
+       revision 1.9.2.3, dated 2002/04/14.
+
+SEE ALSO
+       active(5), ctlinnd(8).  inn.conf(5), news.daily(8).
+
+
+
+						    EXPIREOVER(8)

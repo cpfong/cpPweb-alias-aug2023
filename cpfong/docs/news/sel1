@@ -1,0 +1,11 @@
+if you want to get comp.foo and the subgroups under it 
+(comp.foo.bar, comp.foo.baz, etc.) you have to use a statement like:
+
+comp.foo,comp.foo.*
+OR
+comp.foo*
+
+BUT NOT
+comp.foo.*
+
+However, "comp.foo*" will match "comp.foobar", as well as "comp.foo.bang".

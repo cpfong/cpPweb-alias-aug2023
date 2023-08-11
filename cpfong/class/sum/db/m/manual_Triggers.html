@@ -1,0 +1,370 @@
+  <HTML>
+  <HEAD>
+  
+  <TITLE>MySQL Reference Manual for version 5.0.3-alpha - 20  Triggers</TITLE>
+   <style> code {color:purple} tt {color:green} samp {color:navy} pre {color:maroon} </style>
+  </HEAD>
+  <BODY BGCOLOR=silver TEXT=#000000 LINK=#101090 VLINK=#7030B0>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_Stored_Procedures.html">previous</A>, <A HREF="manual_MySQL_APIs.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="Triggers" HREF="manual_toc.html#Triggers">20  Triggers</A></H1>
+
+<P>
+Rudimentary support for triggers is included beginning with MySQL 5.0.2.
+A trigger is a named database object that is associated with a table, and
+that activates when a particular event occurs for the table.  For example,
+the following statements set up a table, as well as a trigger for <code>INSERT</code>
+statements into the table. The trigger sums the values inserted into one of
+the table's columns:
+
+</P>
+
+<PRE>
+mysql&#62; CREATE TABLE account (acct_num INT, amount DECIMAL(10,2));
+mysql&#62; CREATE TRIGGER ins_sum BEFORE INSERT ON account
+    -&#62; FOR EACH ROW SET @sum = @sum + NEW.amount;
+</PRE>
+
+<P>
+This chapter describes the syntax for creating and dropping triggers,
+and show some examples of how to use them.
+
+</P>
+
+
+
+<H2><A NAME="CREATE_TRIGGER" HREF="manual_toc.html#CREATE_TRIGGER">20.1  <code>CREATE TRIGGER</code> Syntax</A></H2>
+
+
+<PRE>
+CREATE TRIGGER <var>trigger_name</var> <var>trigger_time</var> <var>trigger_event</var>
+    ON <var>tbl_name</var> FOR EACH ROW <var>trigger_stmt</var>
+</PRE>
+
+<P>
+A trigger is a named database object that is associated with a table, and
+that activates when a particular event occurs for the table.
+
+</P>
+<P>
+The trigger becomes associated with the table named <var>tbl_name</var>.
+<var>tbl_name</var> must refer to a permanent table. You cannot associate a
+trigger with a <code>TEMPORARY</code> table or a view.
+
+</P>
+<P>
+<var>trigger_time</var> is the trigger action time.  It can be <code>BEFORE</code> or
+<code>AFTER</code> to indicate that the trigger activates before or after the
+statement that activated it.
+
+</P>
+<P>
+<var>trigger_event</var> indicates the kind of statement that activates the
+trigger.  It can be <code>INSERT</code>, <code>UPDATE</code>, or <code>DELETE</code>.
+For example, a <code>BEFORE</code> trigger for <code>INSERT</code> statements could be
+used to check the values to be inserted into new rows.
+
+</P>
+<P>
+There cannot be two triggers for a given table that have the same trigger
+action time and event. For example, you cannot have two <code>BEFORE
+UPDATE</code> triggers for a table. But you can have a <code>BEFORE UPDATE</code>
+and a <code>BEFORE INSERT</code> trigger, or a <code>BEFORE UPDATE</code> and an
+<code>AFTER UPDATE</code> trigger.
+
+</P>
+<P>
+<var>trigger_stmt</var> is the statement to execute when the trigger activates.
+If you want to execute multiple statements, use the <code>BEGIN ... END</code>
+compound statement construct.  This also enables you to use the same
+statements that are allowable within stored routines.
+See section <A HREF="manual_Stored_Procedures.html#BEGIN_END">19.1.4  <code>BEGIN ... END</code> Compound Statement</A>.
+
+</P>
+<P>
+<strong>Note</strong>:
+Currently, triggers have the same limitation as stored functions that they
+may not contain direct references to tables by name.  This limitation will
+be lifted as soon as possible.
+
+</P>
+<P>
+However, in the triggered statement, you can refer to columns in the table
+associated with the trigger by using the names <code>OLD</code> and <code>NEW</code>.
+<code>OLD.<var>col_name</var></code> refers to a column of a an existing row before
+it is updated or deleted.  <code>NEW.<var>col_name</var></code> refers to the column
+of a new row to be inserted or an existing row after it is updated.
+
+</P>
+<P>
+Use of <code>SET NEW.<var>col_name</var> = <var>value</var></code> requires the <code>UPDATE</code>
+privilege on the column.  Use of <code>SET <var>value</var> = NEW.<var>col_name</var></code>
+requires the <code>SELECT</code> privilege on the column.
+
+</P>
+<P>
+The <code>CREATE TRIGGER</code> statement requires the <code>SUPER</code> privilege.
+It was added in MySQL 5.0.2.
+
+</P>
+
+
+
+<H2><A NAME="DROP_TRIGGER" HREF="manual_toc.html#DROP_TRIGGER">20.2  <code>DROP TRIGGER</code> Syntax</A></H2>
+
+
+<PRE>
+DROP TRIGGER <var>tbl_name</var>.<var>trigger_name</var>
+</PRE>
+
+<P>
+Drops a trigger.  The name of the trigger to drop must include the table
+name because each trigger is associated with a particular table.
+
+</P>
+<P>
+The <code>DROP TRIGGER</code> statement requires the <code>SUPER</code> privilege.
+It was added in MySQL 5.0.2.
+
+</P>
+
+
+
+<H2><A NAME="Using_triggers" HREF="manual_toc.html#Using_triggers">20.3  Using Triggers</A></H2>
+
+<P>
+Support for triggers is included beginning with MySQL 5.0.2.  Currently,
+trigger support is rudimentary, so there are certain limitations on what you
+can do with them.  This section discusses how to use triggers and what the
+current limitations are.
+
+</P>
+<P>
+A trigger is a named database object that is associated with a table, and
+that activates when a particular event occurs for the table.  Some uses
+for triggers are to perform checks of values to be inserted into a table
+or to perform calculations on values involved in an update.
+
+</P>
+<P>
+A trigger is associated with a table and is defined to activate when an
+<code>INSERT</code>, <code>DELETE</code>, or <code>UPDATE</code> statement for the table
+executes.  A trigger can be set to activate either before or after the
+triggering statement.  For example, you can have a trigger activate before
+each row that is deleted from a table or after each row that is updated.
+
+</P>
+<P>
+To create a trigger or drop a trigger, use the <code>CREATE TRIGGER</code> or
+<code>DROP TRIGGER</code> statement.  The syntax for these statements is described
+in section <A HREF="manual_Triggers.html#CREATE_TRIGGER">20.1  <code>CREATE TRIGGER</code> Syntax</A> and
+section <A HREF="manual_Triggers.html#DROP_TRIGGER">20.2  <code>DROP TRIGGER</code> Syntax</A>.
+
+</P>
+<P>
+Here is a simple example that associates a trigger with a table for
+<code>INSERT</code> statements.  It acts as an accumulator to sum the values
+inserted into one of the columns of the table.
+
+</P>
+<P>
+The following statements create a table and a trigger for it:
+
+</P>
+
+<PRE>
+mysql&#62; CREATE TABLE account (acct_num INT, amount DECIMAL(10,2));
+mysql&#62; CREATE TRIGGER ins_sum BEFORE INSERT ON account
+    -&#62; FOR EACH ROW SET @sum = @sum + NEW.amount;
+</PRE>
+
+<P>
+The <code>CREATE TRIGGER</code> statement creates a trigger named <code>ins_sum</code>
+that is associated with the <code>account</code> table.  It also includes clauses
+that specify the trigger activation time, the triggering event, and what to
+do with the trigger activates:
+
+</P>
+
+<UL>
+
+<LI>
+
+The keyword <code>BEFORE</code> indicates the trigger action time.  In this case,
+the trigger should activate before each row inserted into the table.  The
+other allowable keyword here is <code>AFTER</code>.
+
+<LI>
+
+The keyword <code>INSERT</code> indicates the event that activates the trigger.
+In the example, <code>INSERT</code> statements cause trigger activation.  You can
+also create triggers for <code>DELETE</code> and <code>UPDATE</code> statements.
+
+<LI>
+
+The statement following <code>FOR EACH ROW</code> defines the statement to execute
+each time the trigger activates, which occurs once for each row affected by
+the triggering statement  In the example, the triggered statement is a
+simple <code>SET</code> that accumulates the values inserted into the
+<code>amount</code> column.  The statement refers to the column as
+<code>NEW.amount</code> which means ``the value of the <code>amount</code> column to be
+inserted into the new row.''
+
+</UL>
+
+<P>
+To use the trigger, set the accumlator variable to zero, execute an
+<code>INSERT</code> statement, and then see what value the variable has afterward:
+
+</P>
+
+<PRE>
+mysql&#62; SET @sum = 0;
+mysql&#62; INSERT INTO account VALUES(137,14.98),(141,1937.50),(97,-100.00);
+mysql&#62; SELECT @sum AS 'Total amount inserted';
++-----------------------+
+| Total amount inserted |
++-----------------------+
+| 1852.48               |
++-----------------------+
+</PRE>
+
+<P>
+In this case, the value of <code>@sum</code> after the <code>INSERT</code> statement
+has executed is <code>14.98 + 1937.50 - 100</code> or <code>1852.48</code>.
+
+</P>
+<P>
+To destroy the trigger, use a <code>DROP TRIGGER</code> statement.  The
+trigger name must include the table name:
+
+</P>
+
+<PRE>
+mysql&#62; DROP TRIGGER account.ins_sum;
+</PRE>
+
+<P>
+Because a trigger is associated with a particular table, you cannot have
+multiple triggers for a table that have the same name.  You should also be
+aware that the namespace for triggers might change in the future from table
+to database.  That is, the requirement that trigger names be unique for a
+given table might be strengthened to the requirement that they be unique
+within the database.  For better forward compatibility with future
+development, try to use trigger names that do not overlap within a database.
+
+</P>
+<P>
+In addition to the requirement that trigger names be unique for a table,
+there are other limitations on the types of triggers you can create.
+In particular, you cannot have two triggers for a table that have the same
+activate time and activation event.  For example, you cannot define two
+<code>BEFORE INSERT</code> triggers or two <code>AFTER UPDATE</code> triggers for a table.
+This should rarely be a significant limitation, because it is possible to
+define a trigger that executes multiple statements by using the <code>BEGIN
+&hellip; END</code> compound statement construct after <code>FOR EACH ROW</code>. (An example
+appears later in this section.)
+
+</P>
+<P>
+There are also limitations on what can appear in the statement that the
+trigger executes when activated:
+
+</P>
+
+<UL>
+
+<LI>
+
+The trigger cannot refer directly to tables by name, including the table
+with which the table is associated.  You can, however, use the keywords
+<code>OLD</code> and <code>NEW</code>.  <code>OLD</code> refers to an existing row to be
+deleted or a row to be updated before the update occurs.  <code>NEW</code> refers
+to a new row to be inserted or an updated row after the update occurs.
+
+<LI>
+
+The trigger cannot invoke stored procedures using the <code>CALL</code> statement.
+(This means, for example, that you cannot get around the prohibition on
+referring to tables by name by invoking a stored procedure that refers to
+the tables.)
+
+<LI>
+
+The trigger cannot use statements that begin or end a transaction such as
+<code>START TRANSACTION</code>, <code>COMMIT</code>, or <code>ROLLBACK</code>.
+
+</UL>
+
+<P>
+The <code>OLD</code> and <code>NEW</code> keywords enable you to access columns in
+the rows affected by a trigger.  (<code>OLD</code> and <code>NEW</code> are not case
+sensitive.)  In an <code>INSERT</code> trigger, only <code>NEW.<var>col_name</var></code>
+can be used; there is no old row. In a <code>DELETE</code> trigger, only
+<code>OLD.<var>col_name</var></code> can be used; there is no new row.  In an
+<code>UPDATE</code> trigger, you can use <code>OLD.<var>col_name</var></code> to refer to
+the columns of a row before it is updated and <code>NEW.<var>col_name</var></code>
+to refer to the columns of the row after it is updated.
+
+</P>
+<P>
+A column named with <code>OLD</code> is read-only. You can refer to it but not
+modify it.  A column named with <code>NEW</code> can be referred to if you have
+the <code>SELECT</code> privilege for it. In a <code>BEFORE</code> trigger, you can also
+change its value with <code>SET NEW.<var>col_name</var> = <var>value</var></code> if you
+have the <code>UPDATE</code> privilege for it.  This means you can use a trigger to
+modify the values to be inserted into a new row or that are used to update a
+row.
+
+</P>
+<P>
+<code>OLD</code> and <code>NEW</code> are MySQL extensions to triggers.
+
+</P>
+<P>
+By using the <code>BEGIN &hellip; END</code> construct, you can define a trigger
+that executes multiple statements. Within the <code>BEGIN</code> block, you also
+can use other syntax that is allowed within stored routines such as
+conditionals and loops. However, just as for stored routines, when you
+define a trigger that executes multiple statements, it becomes necessary to
+redefine the statement delimiter if you are entering the trigger with the
+<code>mysql</code> program so that you can use the <samp>`;'</samp> character within
+the trigger definition.  The following example illustrates these points. It
+defines an <code>UPDATE</code> trigger that checks the new value to be used for
+updating each row, and modifies the value to be within the range
+from 0 to 100.  This must be a <code>BEFORE</code> trigger because the value needs
+to be checked before it is used to update the row:
+
+</P>
+
+<PRE>
+mysql&#62; delimiter //
+mysql&#62; CREATE TRIGGER upd_check BEFORE UPDATE ON account
+    -&#62; FOR EACH ROW
+    -&#62; BEGIN
+    -&#62;     IF NEW.amount &#60; 0 THEN
+    -&#62;         SET NEW.amount = 0;
+    -&#62;     ELSEIF NEW.amount &#62; 100 THEN
+    -&#62;         SET NEW.amount = 100;
+    -&#62;     END IF;
+    -&#62; END//
+mysql&#62; delimiter ;
+</PRE>
+
+<P>
+It might occur to you that it would be easier to define a stored procedure
+separately and then invoke it from the trigger using a simple <code>CALL</code>
+statement.  That would also be advantageous if you wanted to invoke the same
+routine from within several triggers. However, a limitation on triggers
+currently is that <code>CALL</code> cannot be used. So for now you have to write
+out the compound statement in each <code>CREATE TRIGGER</code> statement where you
+want to use it.
+
+</P>
+
+<P><HR><P>
+Go to the <A HREF="manual_Introduction.html">first</A>, <A HREF="manual_Stored_Procedures.html">previous</A>, <A HREF="manual_MySQL_APIs.html">next</A>, <A HREF="manual_Concept_Index.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+ </BODY>
+ </HTML>

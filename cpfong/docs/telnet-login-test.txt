@@ -1,0 +1,20 @@
+telnet -e + pluto.ifong.org 80	#escape using + now ( orig Ctrl[ ) 
+-- copy & paste
+POST /cgi-bin/telnet-parameters-passing-test-cgi HTTP/1.0
+Referer: file:/cpfong/docs/login-test.html
+User-Agent: Mozilla/1.1N (X11; I; SunOS 5.3 sun4m)
+Accept: */*
+Accept: image/gif
+Accept: image/x-xbitmap
+Accept: image/jpeg
+Content-type: application/x-www-form-urlencoded
+Content-length: 38
+			#note: MUST new line here, 
+fie_uname=jack&fie_psw=Secret
+-- end copy & paste
+
+keep pressing ENTER! then you got reply
+enter
+enter
+enter
+enter
